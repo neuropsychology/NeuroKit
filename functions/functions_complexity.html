@@ -523,6 +523,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-correlation">
+     <em>
+      fractal_correlation()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -754,6 +761,13 @@ title="Print to PDF"
    Utilities
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-mandelbrot">
+     <em>
+      fractal_mandelbrot()
+     </em>
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#complexity-simulate">
      <em>
@@ -913,6 +927,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-correlation">
+     <em>
+      fractal_correlation()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -1145,6 +1166,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-mandelbrot">
+     <em>
+      fractal_mandelbrot()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#complexity-simulate">
      <em>
       complexity_simulate()
@@ -1271,8 +1299,8 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 
 <span class="gp">In [6]: </span><span class="n">df</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
-<span class="go">         CD       DFA   FuzzyEn  ...  MFDFA_ExpRange    RCMSEn   RangeEn</span>
-<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.706035  0.188515</span>
+<span class="go">        CD       DFA   FuzzyEn  ...  MFDFA_ExpRange    RCMSEn   RangeEn</span>
+<span class="go">0  0.83216  1.389359  0.128788  ...        0.348173  0.706035  0.188515</span>
 
 <span class="go">[1 rows x 13 columns]</span>
 </pre></div>
@@ -1522,7 +1550,7 @@ the embedding.</p>
 different numerical methods to guide the choice of <em>m</em>:</p>
 <ul class="simple">
 <li><p><strong>Correlation Dimension</strong> (CD): One of the earliest method to estimate the optimal <em>m</em>
-was to calculate the <code class="xref py py-func docutils literal notranslate"><span class="pre">correlation</span> <span class="pre">dimension</span></code> for embeddings of
+was to calculate the <a class="reference internal" href="#neurokit2.complexity.fractal_correlation" title="neurokit2.complexity.fractal_correlation"><code class="xref py py-func docutils literal notranslate"><span class="pre">correlation</span> <span class="pre">dimension</span></code></a> for embeddings of
 various sizes and look for a saturation (i.e., a plateau) in its value as the embedding
 dimension increases. One of the limitation is that a saturation will also occur when there is
 not enough data to adequately fill the high-dimensional space (note that, in general, having
@@ -1802,7 +1830,7 @@ to compute optimal kmax.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_k1.png"><img alt="../_images/p_complexity_k1.png" src="../_images/p_complexity_k1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">k_max</span>
-<span class="gh">Out[4]: </span><span class="go">21</span>
+<span class="gh">Out[4]: </span><span class="go">43</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1884,7 +1912,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.7316530372377916</span>
+<span class="gh">Out[12]: </span><span class="go">1.6311007907615889</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1894,7 +1922,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.8538169399449265</span>
+<span class="gh">Out[16]: </span><span class="go">3.748485393610461</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2097,7 +2125,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5979374283864874</span>
+<span class="gh">Out[10]: </span><span class="go">0.5789535594083144</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -2170,10 +2198,12 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="go"># Compute the Fractal Dimension from PSD slope</span>
-<span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.428554350679168</span>
+<span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_fractal_psdslope1.png"><img alt="../_images/p_fractal_psdslope1.png" src="../_images/p_fractal_psdslope1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">psdslope</span>
+<span class="gh">Out[4]: </span><span class="go">2.4560842771400786</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2237,7 +2267,7 @@ to compute Higuchi’s fractal dimension.</p></li>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi1.png"><img alt="../_images/p_fractal_higuchi1.png" src="../_images/p_fractal_higuchi1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi2.png"><img alt="../_images/p_fractal_higuchi2.png" src="../_images/p_fractal_higuchi2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hfd</span>
-<span class="gh">Out[5]: </span><span class="go">1.9322162853007139</span>
+<span class="gh">Out[5]: </span><span class="go">1.9555301885645215</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2247,6 +2277,71 @@ Physica D: Nonlinear Phenomena, 31(2), 277-283.</p></li>
 <li><p>Vega, C. F., &amp; Noel, J. (2015, June). Parameters analyzed of Higuchi’s fractal dimension for
 EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE.
 <a class="reference external" href="https://ieeexplore.ieee.org/document/7168285">https://ieeexplore.ieee.org/document/7168285</a></p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="fractal-correlation">
+<h3><em>fractal_correlation()</em><a class="headerlink" href="#fractal-correlation" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.fractal_correlation">
+<span class="sig-name descname"><span class="pre">fractal_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_correlation" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Correlation Dimension (CD)</strong></p>
+<p>The Correlation Dimension (CD, also denoted <em>D2</em>) is a lower bound estimate of the fractal
+dimension of a signal.</p>
+<p>The time series is first <code class="xref py py-func docutils literal notranslate"><span class="pre">time-delay</span> <span class="pre">embedded</span></code>, and distances
+between all points in the trajectory are calculated. The “correlation sum” is the computed,
+which is the proportion of pairs of points which distance is smaller than a given radius. The
+final correlation dimension is then approximated by a log-log graph of correlation sum vs. a
+sequence of radiuses.</p>
+<p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">fractal_correlation()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_cd()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted <em>Tau</em> <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as <em>lag</em>) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to estimate the optimal value for this parameter.</p></li>
+<li><p><strong>dimension</strong> (<em>int</em>) – Embedding Dimension (<em>m</em>, sometimes referred to as <em>d</em> or <em>order</em>). See
+<a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_dimension()</span></code></a> to estimate the optimal value for this parameter.</p></li>
+<li><p><strong>radius</strong> (<em>Union[str, int, list]</em>) – The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
+of length <code class="docutils literal notranslate"><span class="pre">radius</span></code> ranging from 2.5% to 50% of the distance range. Methods implemented in
+other packages can be used via setting <code class="docutils literal notranslate"><span class="pre">r='nolds'</span></code>, <code class="docutils literal notranslate"><span class="pre">r='Corr_Dim'</span></code> or <code class="docutils literal notranslate"><span class="pre">r='boon2008'</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Plot of correlation dimension if True. Defaults to False.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed (not used for now).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>cd</strong> (<em>float</em>) – The Correlation Dimension (CD) of the time series.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute the correlation dimension.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+
+<span class="gp">In [3]: </span><span class="n">cd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">cd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="s2">&quot;nolds&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">cd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="s1">&#39;boon2008&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_fractal_correlation1.png"><img alt="savefig/p_fractal_correlation1.png" src="savefig/p_fractal_correlation1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_fractal_correlation2.png"><img alt="savefig/p_fractal_correlation2.png" src="savefig/p_fractal_correlation2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_fractal_correlation3.png"><img alt="savefig/p_fractal_correlation3.png" src="savefig/p_fractal_correlation3.png" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., &amp; Bailón, R. (2014).
+Methodological framework for estimating the correlation dimension in HRV signals.
+Computational and mathematical methods in medicine, 2014.</p></li>
+<li><p>Boon, M. Y., Henry, B. I., Suttle, C. M., &amp; Dain, S. J. (2008). The correlation dimension:
+A useful objective measure of the transient visual evoked potential?. Journal of vision,
+8(1), 6-6.</p></li>
 </ul>
 </dd></dl>
 
@@ -2321,9 +2416,9 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [6]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_shannon1.png"><img alt="savefig/p_entropy_shannon1.png" src="savefig/p_entropy_shannon1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">shanen</span>
-<span class="gh">Out[7]: </span><span class="go">1.5519649482482534</span>
+<span class="gh">Out[7]: </span><span class="go">1.5612540793636713</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -2333,19 +2428,19 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [9]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [10]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[10]: </span><span class="go">1.0757401282061385</span>
+<span class="gh">Out[10]: </span><span class="go">1.0821788632486418</span>
 
 <span class="gp">In [11]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">shanen</span>
-<span class="gh">Out[12]: </span><span class="go">1.0757401282061383</span>
+<span class="gh">Out[12]: </span><span class="go">1.0821788632486418</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
 <ul class="simple">
-<li><p>Shannon, C. E. (1948). A mathematical theory of communication. The Bell system technical</p></li>
+<li><p>Shannon, C. E. (1948). A mathematical theory of communication. The Bell system technical
+journal, 27(3), 379-423.</p></li>
 </ul>
-<p>journal, 27(3), 379-423.</p>
 </dd></dl>
 
 </section>
@@ -2390,7 +2485,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.36575102977701224</span>
+<span class="gh">Out[4]: </span><span class="go">0.3563045454918422</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2583,7 +2678,7 @@ for details.</p></li>
 <span class="gp">In [3]: </span><span class="n">cren</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_cumulativeresidual</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_cumulativeresidual1.png"><img alt="../_images/p_entropy_cumulativeresidual1.png" src="../_images/p_entropy_cumulativeresidual1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_cumulativeresidual1.png"><img alt="savefig/p_entropy_cumulativeresidual1.png" src="savefig/p_entropy_cumulativeresidual1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">cren</span>
 <span class="gh">Out[4]: </span><span class="go">0.8706159142657933</span>
 </pre></div>
@@ -2685,7 +2780,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.356605006406068</span>
+<span class="gh">Out[4]: </span><span class="go">0.14106757319260185</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2746,14 +2841,14 @@ graining parameter that defines how fine the grid is. It is recommended to use e
 <span class="gp">In [3]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_phase1.png"><img alt="../_images/p_entropy_phase1.png" src="../_images/p_entropy_phase1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_phase1.png"><img alt="savefig/p_entropy_phase1.png" src="savefig/p_entropy_phase1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">1.209049899208258</span>
+<span class="gh">Out[4]: </span><span class="go">1.1363585961393712</span>
 
 <span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_phase2.png"><img alt="../_images/p_entropy_phase2.png" src="../_images/p_entropy_phase2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_phase2.png"><img alt="savefig/p_entropy_phase2.png" src="savefig/p_entropy_phase2.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Rohila, A., &amp; Sharma, A. (2019). Phase entropy: A new complexity measure for heart rate
@@ -2810,16 +2905,16 @@ graining parameter that defines how fine the grid is.</p></li>
 <span class="gp">In [3]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_grid</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_grid1.png"><img alt="../_images/p_entropy_grid1.png" src="../_images/p_entropy_grid1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_grid1.png"><img alt="savefig/p_entropy_grid1.png" src="savefig/p_entropy_grid1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">2.1933666910471565</span>
+<span class="gh">Out[4]: </span><span class="go">2.165137288335489</span>
 
 <span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_grid</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_grid2.png"><img alt="../_images/p_entropy_grid2.png" src="../_images/p_entropy_grid2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_grid2.png"><img alt="savefig/p_entropy_grid2.png" src="savefig/p_entropy_grid2.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;GDR&quot;</span><span class="p">]</span>
-<span class="gh">Out[6]: </span><span class="go">0.59</span>
+<span class="gh">Out[6]: </span><span class="go">0.62</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2872,7 +2967,7 @@ subsequent maxima ).</p></li>
 <span class="gp">In [3]: </span><span class="n">atten</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">atten</span>
-<span class="gh">Out[4]: </span><span class="go">1.16531523690307</span>
+<span class="gh">Out[4]: </span><span class="go">1.1512794657267003</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2940,13 +3035,13 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">incren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_increment</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">incren</span>
-<span class="gh">Out[4]: </span><span class="go">2.7759350947408272</span>
+<span class="gh">Out[4]: </span><span class="go">2.7774121523054207</span>
 
 <span class="go"># Multiscale IncrEn (MSIncrEn)</span>
 <span class="gp">In [5]: </span><span class="n">msincren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSIncrEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_increment1.png"><img alt="../_images/p_entropy_increment1.png" src="../_images/p_entropy_increment1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_increment1.png"><img alt="savefig/p_entropy_increment1.png" src="savefig/p_entropy_increment1.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Liu, X., Jiang, A., Xu, N., &amp; Xue, J. (2016). Increment entropy as a measure of complexity
@@ -3007,18 +3102,18 @@ range [0, 90] degrees.</p></li>
 <span class="gp">In [3]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">45</span><span class="p">])</span>
 
 <span class="gp">In [4]: </span><span class="n">slopen</span>
-<span class="gh">Out[4]: </span><span class="go">3.788402684508575</span>
+<span class="gh">Out[4]: </span><span class="go">3.9057654484421374</span>
 
 <span class="gp">In [5]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
 
 <span class="gp">In [6]: </span><span class="n">slopen</span>
-<span class="gh">Out[6]: </span><span class="go">4.869887470852523</span>
+<span class="gh">Out[6]: </span><span class="go">5.1335620308458125</span>
 
 <span class="go"># Compute Multiscale Slope Entropy (MSSlopEn)</span>
 <span class="gp">In [7]: </span><span class="n">msslopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSlopEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_slope1.png"><img alt="../_images/p_entropy_slope1.png" src="../_images/p_entropy_slope1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_slope1.png"><img alt="savefig/p_entropy_slope1.png" src="savefig/p_entropy_slope1.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Cuesta-Frau, D. (2019). Slope entropy: A new time series complexity estimator based on both
@@ -3070,12 +3165,12 @@ details.</p></li>
 <span class="gp">In [3]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MEP&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">sydyen</span>
-<span class="gh">Out[4]: </span><span class="go">3.7541761240386426</span>
+<span class="gh">Out[4]: </span><span class="go">3.6987858275812964</span>
 
 <span class="gp">In [5]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">sydyen</span>
-<span class="gh">Out[6]: </span><span class="go">3.1365969711556474</span>
+<span class="gh">Out[6]: </span><span class="go">3.529516305368877</span>
 
 <span class="go"># Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)</span>
 <span class="gp">In [7]: </span><span class="n">mssydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSyDyEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3084,8 +3179,8 @@ details.</p></li>
 <span class="gp">In [8]: </span><span class="n">mmsydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MMSyDyEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_symbolicdynamic1.png"><img alt="../_images/p_entropy_symbolicdynamic1.png" src="../_images/p_entropy_symbolicdynamic1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<a class="reference internal image-reference" href="../_images/p_entropy_symbolicdynamic2.png"><img alt="../_images/p_entropy_symbolicdynamic2.png" src="../_images/p_entropy_symbolicdynamic2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_symbolicdynamic1.png"><img alt="savefig/p_entropy_symbolicdynamic1.png" src="savefig/p_entropy_symbolicdynamic1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_symbolicdynamic2.png"><img alt="savefig/p_entropy_symbolicdynamic2.png" src="savefig/p_entropy_symbolicdynamic2.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Li, Y., Yang, Y., Li, G., Xu, M., &amp; Huang, W. (2017). A fault diagnosis scheme for planetary
@@ -3142,17 +3237,17 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [3]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">dispen</span>
-<span class="gh">Out[4]: </span><span class="go">1.3982701910216644</span>
+<span class="gh">Out[4]: </span><span class="go">1.411842696462034</span>
 
 <span class="go"># Get Reverse Dispersion Entropy (RDEn)</span>
 <span class="gp">In [5]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RDEn&quot;</span><span class="p">]</span>
-<span class="gh">Out[5]: </span><span class="go">0.007914038689776677</span>
+<span class="gh">Out[5]: </span><span class="go">0.005173723274276291</span>
 
 <span class="go"># Fluctuation-based DispEn with &quot;finesort&quot;</span>
 <span class="gp">In [6]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;finesort&quot;</span><span class="p">,</span> <span class="n">fluctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">dispen</span>
-<span class="gh">Out[7]: </span><span class="go">1.3982701910216644</span>
+<span class="gh">Out[7]: </span><span class="go">1.4118426964620343</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3206,7 +3301,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">enofen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_ofentropy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">enofen</span>
-<span class="gh">Out[4]: </span><span class="go">4.04289660841911</span>
+<span class="gh">Out[4]: </span><span class="go">4.208694969562843</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3406,31 +3501,31 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [2]: </span><span class="n">pen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">pen</span>
-<span class="gh">Out[3]: </span><span class="go">2.579329172225967</span>
+<span class="gh">Out[3]: </span><span class="go">2.566750276623741</span>
 
 <span class="go"># Weighted Permutation Entropy (WPEn)</span>
 <span class="gp">In [4]: </span><span class="n">wpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">wpen</span>
-<span class="gh">Out[5]: </span><span class="go">0.9989604519892521</span>
+<span class="gh">Out[5]: </span><span class="go">0.9933673468467427</span>
 
 <span class="go"># Conditional Permutation Entropy (CPEn)</span>
 <span class="gp">In [6]: </span><span class="n">cpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">cpen</span>
-<span class="gh">Out[7]: </span><span class="go">0.42161695243652686</span>
+<span class="gh">Out[7]: </span><span class="go">0.42537906779576123</span>
 
 <span class="go"># Conditional Weighted Permutation Entropy (CWPEn)</span>
 <span class="gp">In [8]: </span><span class="n">cwpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">cwpen</span>
-<span class="gh">Out[9]: </span><span class="go">0.40184378711212115</span>
+<span class="gh">Out[9]: </span><span class="go">0.41412427346054126</span>
 
 <span class="go"># Conditional Renyi Permutation Entropy (CRPEn)</span>
 <span class="gp">In [10]: </span><span class="n">crpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">entropy_renyi</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">crpen</span>
-<span class="gh">Out[11]: </span><span class="go">0.2857327871448457</span>
+<span class="gh">Out[11]: </span><span class="go">0.29096876825537255</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3667,8 +3762,12 @@ argument). To address this, Costa et al. (2002) proposed the multiscale entropy 
 which compute sample entropies at multiple scales.</p>
 <p>The conventional MSEn algorithm consists of two steps:</p>
 <ol class="arabic simple">
-<li><p>A <a class="reference internal" href="#neurokit2.complexity.complexity_coarsegraining" title="neurokit2.complexity.complexity_coarsegraining"><code class="xref py py-func docutils literal notranslate"><span class="pre">coarse-graining</span></code></a> procedure is used to represent the
-signal at different time scales.</p></li>
+<li><p>A <a class="reference internal" href="#neurokit2.complexity.complexity_coarsegraining" title="neurokit2.complexity.complexity_coarsegraining"><code class="xref py py-func docutils literal notranslate"><span class="pre">coarse-graining</span></code></a> procedure is used to represent the</p></li>
+</ol>
+<blockquote>
+<div><p>signal at different time scales.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
 <li><p><a class="reference internal" href="#neurokit2.complexity.entropy_sample" title="neurokit2.complexity.entropy_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">entropy</span></code></a> (or other function) is used to quantify the</p></li>
 </ol>
 <blockquote>
@@ -3743,37 +3842,37 @@ factor are stored under the <code class="docutils literal notranslate"><span cla
 <span class="gp">In [3]: </span><span class="n">msen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale1.png"><img alt="../_images/p_entropy_multiscale1.png" src="../_images/p_entropy_multiscale1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale1.png"><img alt="savefig/p_entropy_multiscale1.png" src="savefig/p_entropy_multiscale1.png" /></a>
 <p><strong>CMSEn</strong> (time-shifted coarse-graining)</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">cmsen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;CMSEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale2.png"><img alt="../_images/p_entropy_multiscale2.png" src="../_images/p_entropy_multiscale2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale2.png"><img alt="savefig/p_entropy_multiscale2.png" src="savefig/p_entropy_multiscale2.png" /></a>
 <p><strong>RCMSEn</strong> (refined composite MSEn)</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">rcmsen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale3.png"><img alt="../_images/p_entropy_multiscale3.png" src="../_images/p_entropy_multiscale3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale3.png"><img alt="savefig/p_entropy_multiscale3.png" src="savefig/p_entropy_multiscale3.png" /></a>
 <p><strong>MMSEn</strong> (rolling-window coarse-graining)</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">mmsen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MMSEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale4.png"><img alt="../_images/p_entropy_multiscale4.png" src="../_images/p_entropy_multiscale4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale4.png"><img alt="savefig/p_entropy_multiscale4.png" src="savefig/p_entropy_multiscale4.png" /></a>
 <p><strong>IMSEn</strong> (interpolated coarse-graining)</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">imsen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;IMSEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale5.png"><img alt="../_images/p_entropy_multiscale5.png" src="../_images/p_entropy_multiscale5.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale5.png"><img alt="savefig/p_entropy_multiscale5.png" src="savefig/p_entropy_multiscale5.png" /></a>
 <p><strong>MSApEn</strong> (based on ApEn instead of SampEn)</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">msapen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSApEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale6.png"><img alt="../_images/p_entropy_multiscale6.png" src="../_images/p_entropy_multiscale6.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale6.png"><img alt="savefig/p_entropy_multiscale6.png" src="savefig/p_entropy_multiscale6.png" /></a>
 <p><strong>MSPEn</strong> (based on PEn), <strong>CMSPEn</strong>, <strong>MMSPEn</strong> and <strong>IMSPEn</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">mspen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale7.png"><img alt="../_images/p_entropy_multiscale7.png" src="../_images/p_entropy_multiscale7.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale7.png"><img alt="savefig/p_entropy_multiscale7.png" src="savefig/p_entropy_multiscale7.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">cmspen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;CMSPEn&quot;</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">cmspen</span>
@@ -3804,7 +3903,7 @@ factor are stored under the <code class="docutils literal notranslate"><span cla
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="n">fuzzymsen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSEn&quot;</span><span class="p">,</span> <span class="n">fuzzy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_multiscale8.png"><img alt="../_images/p_entropy_multiscale8.png" src="../_images/p_entropy_multiscale8.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_multiscale8.png"><img alt="savefig/p_entropy_multiscale8.png" src="savefig/p_entropy_multiscale8.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">fuzzycmsen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;CMSEn&quot;</span><span class="p">,</span> <span class="n">fuzzy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [22]: </span><span class="n">fuzzycmsen</span>
@@ -3889,7 +3988,7 @@ differently here, see <code class="xref py py-func docutils literal notranslate"
 <span class="gp">In [3]: </span><span class="n">hen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_hierarchical</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_hierarchical1.png"><img alt="../_images/p_entropy_hierarchical1.png" src="../_images/p_entropy_hierarchical1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_entropy_hierarchical1.png"><img alt="savefig/p_entropy_hierarchical1.png" src="savefig/p_entropy_hierarchical1.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Jiang, Y., Peng, C. K., &amp; Xu, Y. (2011). Hierarchical entropy analysis for biological
@@ -4087,25 +4186,25 @@ to compute LZC.</p></li>
 <span class="gp">In [3]: </span><span class="n">lzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">lzc</span>
-<span class="gh">Out[4]: </span><span class="go">1.1020916641962775</span>
+<span class="gh">Out[4]: </span><span class="go">1.0588723832474038</span>
 
 <span class="go"># PLZC</span>
 <span class="gp">In [5]: </span><span class="n">plzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plzc</span>
-<span class="gh">Out[6]: </span><span class="go">0.6883678475327589</span>
+<span class="gh">Out[6]: </span><span class="go">0.6799731176847983</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># MSLZC</span>
 <span class="gp">In [7]: </span><span class="n">mslzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;LZC&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_lempelziv1.png"><img alt="../_images/p_complexity_lempelziv1.png" src="../_images/p_complexity_lempelziv1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_lempelziv1.png"><img alt="savefig/p_complexity_lempelziv1.png" src="savefig/p_complexity_lempelziv1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># MSPLZC</span>
 <span class="gp">In [8]: </span><span class="n">msplzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;LZC&quot;</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_lempelziv2.png"><img alt="../_images/p_complexity_lempelziv2.png" src="../_images/p_complexity_lempelziv2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_lempelziv2.png"><img alt="savefig/p_complexity_lempelziv2.png" src="savefig/p_complexity_lempelziv2.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Lempel, A., &amp; Ziv, J. (1976). On the complexity of finite sequences. IEEE Transactions on
@@ -4308,7 +4407,7 @@ to compute LLE.</p></li>
 <span class="gp">In [3]: </span><span class="n">lle</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lyapunov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rosenstein1993&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">lle</span>
-<span class="gh">Out[4]: </span><span class="go">0.04330454071923163</span>
+<span class="gh">Out[4]: </span><span class="go">0.04805775500060031</span>
 
 <span class="go"># Eckman&#39;s method is broken. Please help us fix-it!</span>
 <span class="go"># lle, info = nk.complexity_lyapunov(signal, dimension=2, method=&quot;eckmann1996&quot;)</span>
@@ -4395,11 +4494,11 @@ recurrences (<code class="docutils literal notranslate"><span class="pre">info['
 <span class="gp">In [3]: </span><span class="n">results</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_rqa</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_rqa1.png"><img alt="../_images/p_complexity_rqa1.png" src="../_images/p_complexity_rqa1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_rqa1.png"><img alt="savefig/p_complexity_rqa1.png" src="savefig/p_complexity_rqa1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">results</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">   RecurrenceRate  Determinism  ...  WMax       WEn</span>
-<span class="go">0        0.057162     0.586514  ...   387  3.752407</span>
+<span class="go">0        0.074608     0.617242  ...   369  3.559708</span>
 
 <span class="go">[1 rows x 14 columns]</span>
 
@@ -4418,6 +4517,99 @@ long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.</p><
 </section>
 <section id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">#</a></h2>
+<section id="fractal-mandelbrot">
+<h3><em>fractal_mandelbrot()</em><a class="headerlink" href="#fractal-mandelbrot" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.fractal_mandelbrot">
+<span class="sig-name descname"><span class="pre">fractal_mandelbrot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">2,</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imaginary_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-</span> <span class="pre">2,</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buddha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_mandelbrot" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Mandelbrot (or a Buddhabrot) Fractal</strong></p>
+<p>Vectorized function to efficiently generate an array containing values corresponding to a
+Mandelbrot fractal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>int</em>) – The size in pixels (corresponding to the width of the figure).</p></li>
+<li><p><strong>real_range</strong> (<em>tuple</em>) – The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
+the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the
+figure.</p></li>
+<li><p><strong>imaginary_range</strong> (<em>tuple</em>) – The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
+the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the
+figure.</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>threshold</strong> (<em>int</em>) – The threshold used, increasing it will increase the sharpness (not used for buddhabrots).</p></li>
+<li><p><strong>buddha</strong> (<em>bool</em>) – Whether to return a buddhabrot.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Visualize the fractal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>ndarray</em> – Array of values.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create the Mandelbrot fractal</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">m</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_fractal_mandelbrot1.png"><img alt="savefig/p_fractal_mandelbrot1.png" src="savefig/p_fractal_mandelbrot1.png" /></a>
+<p>Zoom at the Seahorse Valley</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">m</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">real_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.76</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.74</span><span class="p">),</span> <span class="n">imaginary_range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">),</span>
+<span class="gp">   ...: </span>                          <span class="n">iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_fractal_mandelbrot2.png"><img alt="savefig/p_fractal_mandelbrot2.png" src="savefig/p_fractal_mandelbrot2.png" /></a>
+<p>Draw manually</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="gp">In [5]: </span><span class="n">m</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">real_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">imaginary_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">))</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7f3bafcfe050&gt;</span>
+
+<span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="gh">Out[7]: </span><span class="go">(-0.5, 908.5, 999.5, -0.5)</span>
+
+<span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_fractal_mandelbrot3.png"><img alt="savefig/p_fractal_mandelbrot3.png" src="savefig/p_fractal_mandelbrot3.png" /></a>
+<p>Generate a Buddhabrot fractal</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">real_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">imaginary_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">),</span>
+<span class="gp">   ...: </span>                          <span class="n">buddha</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7f3bac2c39a0&gt;</span>
+
+<span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="gh">Out[11]: </span><span class="go">(-0.5, 1363.5, 1499.5, -0.5)</span>
+
+<span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_fractal_mandelbrot4.png"><img alt="savefig/p_fractal_mandelbrot4.png" src="savefig/p_fractal_mandelbrot4.png" /></a>
+<p>Mixed MandelBuddha</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">m</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">()</span>
+
+<span class="gp">In [14]: </span><span class="n">b</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">buddha</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="gp">In [15]: </span><span class="n">mixed</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">b</span>
+
+<span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mixed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="gh">Out[16]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7f3bb0178280&gt;</span>
+
+<span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="gh">Out[17]: </span><span class="go">(-0.5, 999.5, 999.5, -0.5)</span>
+
+<span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_fractal_mandelbrot5.png"><img alt="savefig/p_fractal_mandelbrot5.png" src="savefig/p_fractal_mandelbrot5.png" /></a>
+</dd></dl>
+
+</section>
 <section id="complexity-simulate">
 <h3><em>complexity_simulate()</em><a class="headerlink" href="#complexity-simulate" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -4458,48 +4650,48 @@ equation, or <code class="docutils literal notranslate"><span class="pre">random
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate1.png"><img alt="../_images/p_complexity_simulate1.png" src="../_images/p_complexity_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate1.png"><img alt="savefig/p_complexity_simulate1.png" src="savefig/p_complexity_simulate1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">5</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate2.png"><img alt="../_images/p_complexity_simulate2.png" src="../_images/p_complexity_simulate2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate2.png"><img alt="savefig/p_complexity_simulate2.png" src="savefig/p_complexity_simulate2.png" /></a>
 <p><strong>Ornstein System</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ornstein&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate3.png"><img alt="../_images/p_complexity_simulate3.png" src="../_images/p_complexity_simulate3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate3.png"><img alt="savefig/p_complexity_simulate3.png" src="savefig/p_complexity_simulate3.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
 <span class="gh">Out[7]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate4.png"><img alt="../_images/p_complexity_simulate4.png" src="../_images/p_complexity_simulate4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate4.png"><img alt="savefig/p_complexity_simulate4.png" src="savefig/p_complexity_simulate4.png" /></a>
 <p><strong>Mackey-Glass System</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mackeyglass&quot;</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate5.png"><img alt="../_images/p_complexity_simulate5.png" src="../_images/p_complexity_simulate5.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate5.png"><img alt="savefig/p_complexity_simulate5.png" src="savefig/p_complexity_simulate5.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">25</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
 <span class="gh">Out[10]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate6.png"><img alt="../_images/p_complexity_simulate6.png" src="../_images/p_complexity_simulate6.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate6.png"><img alt="savefig/p_complexity_simulate6.png" src="savefig/p_complexity_simulate6.png" /></a>
 <p><strong>Random walk</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;randomwalk&quot;</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;orange&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate7.png"><img alt="../_images/p_complexity_simulate7.png" src="../_images/p_complexity_simulate7.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate7.png"><img alt="savefig/p_complexity_simulate7.png" src="savefig/p_complexity_simulate7.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
 <span class="gh">Out[13]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate8.png"><img alt="../_images/p_complexity_simulate8.png" src="../_images/p_complexity_simulate8.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_simulate8.png"><img alt="savefig/p_complexity_simulate8.png" src="savefig/p_complexity_simulate8.png" /></a>
 </dd></dl>
 
 </section>
@@ -4539,18 +4731,18 @@ to the Lorenz system simulator, such as <code class="docutils literal notranslat
 <span class="gp">In [2]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;last_dim&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor1.png"><img alt="../_images/p_complexity_attractor1.png" src="../_images/p_complexity_attractor1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor1.png"><img alt="savefig/p_complexity_attractor1.png" src="savefig/p_complexity_attractor1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Fast result (fixed alpha and color)</span>
 <span class="gp">In [3]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor2.png"><img alt="../_images/p_complexity_attractor2.png" src="../_images/p_complexity_attractor2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor2.png"><img alt="savefig/p_complexity_attractor2.png" src="savefig/p_complexity_attractor2.png" /></a>
 <p><strong>Rössler attractors</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="s2">&quot;rossler&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor3.png"><img alt="../_images/p_complexity_attractor3.png" src="../_images/p_complexity_attractor3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor3.png"><img alt="savefig/p_complexity_attractor3.png" src="savefig/p_complexity_attractor3.png" /></a>
 <p><strong>2D Attractors using a signal</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Simulate Signal</span>
 <span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
@@ -4563,13 +4755,13 @@ to the Lorenz system simulator, such as <code class="docutils literal notranslat
 <span class="gh">Out[7]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor4.png"><img alt="../_images/p_complexity_attractor4.png" src="../_images/p_complexity_attractor4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor4.png"><img alt="savefig/p_complexity_attractor4.png" src="savefig/p_complexity_attractor4.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Slow</span>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;last_dim&quot;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="s2">&quot;time&quot;</span><span class="p">)</span>
 <span class="gh">Out[8]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor5.png"><img alt="../_images/p_complexity_attractor5.png" src="../_images/p_complexity_attractor5.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor5.png"><img alt="savefig/p_complexity_attractor5.png" src="savefig/p_complexity_attractor5.png" /></a>
 <p><strong>3D Attractors using a signal</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># 3D Attractor</span>
 <span class="gp">In [9]: </span><span class="n">embedded</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">dimension</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
@@ -4579,13 +4771,13 @@ to the Lorenz system simulator, such as <code class="docutils literal notranslat
 <span class="gh">Out[10]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor6.png"><img alt="../_images/p_complexity_attractor6.png" src="../_images/p_complexity_attractor6.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor6.png"><img alt="savefig/p_complexity_attractor6.png" src="savefig/p_complexity_attractor6.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Slow</span>
 <span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;last_dim&quot;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="s2">&quot;time&quot;</span><span class="p">)</span>
 <span class="gh">Out[11]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_attractor7.png"><img alt="../_images/p_complexity_attractor7.png" src="../_images/p_complexity_attractor7.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_attractor7.png"><img alt="savefig/p_complexity_attractor7.png" src="savefig/p_complexity_attractor7.png" /></a>
 <p><strong>Animated Rotation</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
 
@@ -4669,49 +4861,49 @@ has already been done before).</p>
 <span class="gp">In [3]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize1.png"><img alt="../_images/p_complexity_symbolize1.png" src="../_images/p_complexity_symbolize1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize1.png"><img alt="savefig/p_complexity_symbolize1.png" src="savefig/p_complexity_symbolize1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize2.png"><img alt="../_images/p_complexity_symbolize2.png" src="../_images/p_complexity_symbolize2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize2.png"><img alt="savefig/p_complexity_symbolize2.png" src="savefig/p_complexity_symbolize2.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize3.png"><img alt="../_images/p_complexity_symbolize3.png" src="../_images/p_complexity_symbolize3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize3.png"><img alt="savefig/p_complexity_symbolize3.png" src="savefig/p_complexity_symbolize3.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize4.png"><img alt="../_images/p_complexity_symbolize4.png" src="../_images/p_complexity_symbolize4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize4.png"><img alt="savefig/p_complexity_symbolize4.png" src="savefig/p_complexity_symbolize4.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize5.png"><img alt="../_images/p_complexity_symbolize5.png" src="../_images/p_complexity_symbolize5.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize5.png"><img alt="savefig/p_complexity_symbolize5.png" src="savefig/p_complexity_symbolize5.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;binning&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize6.png"><img alt="../_images/p_complexity_symbolize6.png" src="../_images/p_complexity_symbolize6.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize6.png"><img alt="savefig/p_complexity_symbolize6.png" src="savefig/p_complexity_symbolize6.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;MEP&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize7.png"><img alt="../_images/p_complexity_symbolize7.png" src="../_images/p_complexity_symbolize7.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize7.png"><img alt="savefig/p_complexity_symbolize7.png" src="savefig/p_complexity_symbolize7.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;NCDF&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize8.png"><img alt="../_images/p_complexity_symbolize8.png" src="../_images/p_complexity_symbolize8.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize8.png"><img alt="savefig/p_complexity_symbolize8.png" src="savefig/p_complexity_symbolize8.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize9.png"><img alt="../_images/p_complexity_symbolize9.png" src="../_images/p_complexity_symbolize9.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize9.png"><img alt="savefig/p_complexity_symbolize9.png" src="savefig/p_complexity_symbolize9.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize10.png"><img alt="../_images/p_complexity_symbolize10.png" src="../_images/p_complexity_symbolize10.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize10.png"><img alt="savefig/p_complexity_symbolize10.png" src="savefig/p_complexity_symbolize10.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_symbolize11.png"><img alt="../_images/p_complexity_symbolize11.png" src="../_images/p_complexity_symbolize11.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_symbolize11.png"><img alt="savefig/p_complexity_symbolize11.png" src="savefig/p_complexity_symbolize11.png" /></a>
 </dd></dl>
 
 </section>
@@ -4799,17 +4991,17 @@ plt.close()</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interpolate&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_coarsegraining2.png"><img alt="../_images/p_complexity_coarsegraining2.png" src="../_images/p_complexity_coarsegraining2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_coarsegraining2.png"><img alt="savefig/p_complexity_coarsegraining2.png" src="savefig/p_complexity_coarsegraining2.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rolling&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_coarsegraining3.png"><img alt="../_images/p_complexity_coarsegraining3.png" src="../_images/p_complexity_coarsegraining3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_coarsegraining3.png"><img alt="savefig/p_complexity_coarsegraining3.png" src="savefig/p_complexity_coarsegraining3.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
 
 <span class="gp">In [4]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;timeshift&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_coarsegraining4.png"><img alt="../_images/p_complexity_coarsegraining4.png" src="../_images/p_complexity_coarsegraining4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_complexity_coarsegraining4.png"><img alt="savefig/p_complexity_coarsegraining4.png" src="savefig/p_complexity_coarsegraining4.png" /></a>
 <p><strong>Benchmarking</strong>
 .. ipython:: python</p>
 <blockquote>
@@ -4961,21 +5153,21 @@ thumb is to set <em>r</em> so that the percentage of points classified as recurr
 <span class="gp">In [3]: </span><span class="n">rc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">recurrence_matrix</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_recurrence_matrix1.png"><img alt="../_images/p_recurrence_matrix1.png" src="../_images/p_recurrence_matrix1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_recurrence_matrix1.png"><img alt="savefig/p_recurrence_matrix1.png" src="savefig/p_recurrence_matrix1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Larger radius</span>
 <span class="gp">In [4]: </span><span class="n">rc</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">recurrence_matrix</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_recurrence_matrix2.png"><img alt="../_images/p_recurrence_matrix2.png" src="../_images/p_recurrence_matrix2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_recurrence_matrix2.png"><img alt="savefig/p_recurrence_matrix2.png" src="savefig/p_recurrence_matrix2.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Optimization of tolerance via recurrence matrix</span>
 <span class="gp">In [5]: </span><span class="n">tol</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;recurrence&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_recurrence_matrix3.png"><img alt="../_images/p_recurrence_matrix3.png" src="../_images/p_recurrence_matrix3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_recurrence_matrix3.png"><img alt="savefig/p_recurrence_matrix3.png" src="savefig/p_recurrence_matrix3.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">rc</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">recurrence_matrix</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_recurrence_matrix4.png"><img alt="../_images/p_recurrence_matrix4.png" src="../_images/p_recurrence_matrix4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_recurrence_matrix4.png"><img alt="savefig/p_recurrence_matrix4.png" src="savefig/p_recurrence_matrix4.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Rawald, T., Sips, M., Marwan, N., &amp; Dransch, D. (2014). Fast computation of recurrences

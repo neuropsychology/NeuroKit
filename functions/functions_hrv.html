@@ -578,7 +578,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="gp">In [5]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv1.png"><img alt="../_images/p_hrv1.png" src="../_images/p_hrv1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv1.png"><img alt="savefig/p_hrv1.png" src="savefig/p_hrv1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">hrv_indices</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">   HRV_MeanNN   HRV_SDNN  HRV_SDANN1  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
@@ -692,22 +692,22 @@ the total power.</p></li>
 <span class="gp">In [4]: </span><span class="n">hrv_welch</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq1.png"><img alt="../_images/p_hrv_freq1.png" src="../_images/p_hrv_freq1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq1.png"><img alt="savefig/p_hrv_freq1.png" src="savefig/p_hrv_freq1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method =&#39;burg&#39;</span>
 <span class="gp">In [5]: </span><span class="n">hrv_burg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;burg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq2.png"><img alt="../_images/p_hrv_freq2.png" src="../_images/p_hrv_freq2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq2.png"><img alt="savefig/p_hrv_freq2.png" src="savefig/p_hrv_freq2.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method = &#39;lomb&#39; (requires installation of astropy)</span>
 <span class="gp">In [6]: </span><span class="n">hrv_lomb</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;lomb&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq3.png"><img alt="../_images/p_hrv_freq3.png" src="../_images/p_hrv_freq3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq3.png"><img alt="savefig/p_hrv_freq3.png" src="savefig/p_hrv_freq3.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method=&#39;multitapers&#39;</span>
 <span class="gp">In [7]: </span><span class="n">hrv_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;multitapers&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq4.png"><img alt="../_images/p_hrv_freq4.png" src="../_images/p_hrv_freq4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq4.png"><img alt="savefig/p_hrv_freq4.png" src="savefig/p_hrv_freq4.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in
@@ -799,7 +799,7 @@ HRV.</p></li>
 <li><p><strong>MSE</strong>: See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.entropy_multiscale" title="neurokit2.complexity.entropy_multiscale"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_multiscale()</span></code></a>.</p></li>
 <li><p><strong>CMSE</strong>: See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.entropy_multiscale" title="neurokit2.complexity.entropy_multiscale"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_multiscale()</span></code></a>.</p></li>
 <li><p><strong>RCMSE</strong>: See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.entropy_multiscale" title="neurokit2.complexity.entropy_multiscale"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_multiscale()</span></code></a>.</p></li>
-<li><p><strong>CD</strong>: See <code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_correlation()</span></code>.</p></li>
+<li><p><strong>CD</strong>: See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_correlation" title="neurokit2.complexity.fractal_correlation"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_correlation()</span></code></a>.</p></li>
 <li><p><strong>HFD</strong>: See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_higuchi" title="neurokit2.complexity.fractal_higuchi"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_higuchi()</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">kmax</span></code> set to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>).</p></li>
 <li><p><strong>KFD</strong>: See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_katz" title="neurokit2.complexity.fractal_katz"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_katz()</span></code></a>.</p></li>
 <li><p><strong>LZC</strong>: See <code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_lempelziv()</span></code>.</p></li>
@@ -862,7 +862,7 @@ the next successive one. The ellipse centers around the average RR interval. By 
 <span class="gp">In [4]: </span><span class="n">hrv</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_nonlinear1.png"><img alt="../_images/p_hrv_nonlinear1.png" src="../_images/p_hrv_nonlinear1.png" style="width: 800.0px; height: 800.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_nonlinear1.png"><img alt="savefig/p_hrv_nonlinear1.png" src="savefig/p_hrv_nonlinear1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hrv</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">     HRV_SD1    HRV_SD2  HRV_SD1SD2  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
