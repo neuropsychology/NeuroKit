@@ -53,6 +53,11 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_higuchi
 
+*fractal_correlation()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_correlation
+
+
 
 Entropy
 ^^^^^^^^^^^^^^^^^
@@ -182,6 +187,10 @@ Other
 
 Utilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*fractal_mandelbrot()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_mandelbrot
+
 *complexity_simulate()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_simulate

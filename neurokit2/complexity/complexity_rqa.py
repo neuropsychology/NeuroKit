@@ -44,7 +44,8 @@ def complexity_rqa(
 
     .. note::
 
-      More feature exist for RQA, such as the `trend <https://juliadynamics.github.io/DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend>`_
+      More feature exist for RQA, such as the `trend <https://juliadynamics.github.io/
+      DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend>`_
 
     Parameters
     ----------

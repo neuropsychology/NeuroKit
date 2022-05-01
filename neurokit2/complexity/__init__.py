@@ -39,7 +39,6 @@ from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
-from .fractal_mandelbrot import fractal_mandelbrot
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
 from .fractal_psdslope import fractal_psdslope
@@ -59,6 +58,7 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 from .utils_complexity_simulate import complexity_simulate
 from .utils_complexity_symbolize import complexity_symbolize
+from .utils_fractal_mandelbrot import fractal_mandelbrot
 from .utils_recurrence_matrix import recurrence_matrix
 from .utils_transition_matrix import transition_matrix, transition_matrix_simulate
 

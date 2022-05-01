@@ -62,6 +62,12 @@ def time_function(
 # nk.complexity_attractor(nk.complexity_embedding(signal, delay=10, dimension=3), show=True)
 # _, _ = nk.complexity_k(signal, k_max=100, show=True)
 
+# signal = df[df["Noise_Intensity"] == 0.01][df["Method"] == "fractal"]["Signal"].values
+# _, _ = nk.complexity_delay(signal, show=True)
+# _, _ = nk.complexity_dimension(signal, delay=10, show=True)
+# nk.complexity_attractor(nk.complexity_embedding(signal, delay=3, dimension=3), show=True)
+# _, _ = nk.complexity_k(signal, k_max=100, show=True)
+
 # ================
 # Generate Signal
 # ================
@@ -119,7 +125,7 @@ def run_benchmark(noise_intensity=0.01):
                     frequency=[5, 11, 18, 24, 42, 60, 63],
                 )
             elif method == "fractal":
-                delay = 10
+                delay = 3
                 k = 30
                 signal = nk.signal_simulate(
                     duration=duration,
@@ -263,6 +269,19 @@ def run_benchmark(noise_intensity=0.01):
                         index="HFD",
                         name="nk_fractal_higuchi",
                         k_max=k,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fractal_correlation,
+                        index="CD",
+                        name="nk_fractal_correlation",
+                        delay=delay,
+                        dimension=3,
                     ),
                 ]
             )
