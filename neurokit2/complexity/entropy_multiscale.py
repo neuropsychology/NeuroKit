@@ -36,7 +36,7 @@ def entropy_multiscale(
     The conventional MSEn algorithm consists of two steps:
 
     1. A :func:`coarse-graining <complexity_coarsegraining>` procedure is used to represent the
-       signal at different time scales.
+      signal at different time scales.
     2. :func:`Sample entropy <entropy_sample>` (or other function) is used to quantify the
       regularity of a coarse-grained time series at each time scale factor.
 
@@ -45,15 +45,15 @@ def entropy_multiscale(
     coarse-grained series estimated by SampEn increases as the time scale factor increases, making
     it problematic for shorter signals.
 
-    - **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et
+    * **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et
       al. (2013) introduced the **Composite Multiscale Entropy** algorithm, which computes
       multiple coarse-grained series for each scale factor (via the **time-shift** method for
       :func:`coarse-graining <complexity_coarsegraining>`).
-    - **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy
+    * **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy
       values of each subcoarsed vector, but its components at a lower level.
-    - **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**
+    * **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**
       algorithm, which is based on rolling-average :func:`coarse-graining <complexity_coarsegraining>`.
-    - **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
+    * **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
       coarse-grained series. We implement a generalization of this via interpolation that can be
       referred to as **Interpolated Multiscale Entropy**.
 

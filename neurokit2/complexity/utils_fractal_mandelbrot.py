@@ -83,7 +83,7 @@ def fractal_mandelbrot(
       plt.close()
 
 
-      Generate a Buddhabrot fractal
+    Generate a Buddhabrot fractal
 
     .. ipython:: python
 
@@ -98,7 +98,7 @@ def fractal_mandelbrot(
       plt.close()
 
 
-    # Mixed MandelBuddha
+    Mixed MandelBuddha
 
     .. ipython:: python
 

@@ -102,7 +102,7 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
     References
     -----------
     * Shannon, C. E. (1948). A mathematical theory of communication. The Bell system technical
-    journal, 27(3), 379-423.
+      journal, 27(3), 379-423.
 
     """
     if freq is None:
