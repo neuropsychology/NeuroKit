@@ -18,10 +18,9 @@ def fractal_dfa(
     show=False,
     **kwargs,
 ):
-    """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA).
+    """**(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)**
 
-    Python implementation of Detrended Fluctuation Analysis (DFA) or
-    Multifractal DFA of a signal. Detrended fluctuation analysis, much like the
+    Detrended fluctuation analysis, much like the
     Hurst exponent, is used to find long-term statistical dependencies in time
     series.
 
@@ -36,7 +35,7 @@ def fractal_dfa(
         or dataframe.
     windows : list
         A list containing the lengths of the windows (number of data points in
-        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
+        each subseries). Also referred to as 'lag' or 'scale'. If ``"default"``,
         will set it to a logarithmic scale (so that each window scale has the
         same weight) with a minimum of 4 and maximum of a tenth of the length
         (to have more than 10 windows to calculate the average fluctuation).
@@ -55,16 +54,15 @@ def fractal_dfa(
        The order of the polynomial trend for detrending, 1 for the linear trend.
     multifractal : bool
         If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in
-        which case the argument `q` is taken into account.
+        which case the argument ``q`` is taken into account.
     q : Union[int, list, np.array]
-        The sequence of fractal exponents when `multifractal=True`. Must be a
-        sequence between `-10` and `10` (note that zero will be removed, since
-        the code does not converge there). Setting `q = 2` (default for DFA) gives a
-        result of a standard DFA. For instance, Ihlen (2012) uses
-        `q = [-5, -3, -1, 0, 1, 3, 5]` (default when for multifractal).
-        In general, positive q moments amplify the contribution of fractal components with larger
-        amplitude and negative q moments amplify the contribution of fractal with smaller
-        amplitude (Kantelhardt et al., 2002).
+        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between
+        -10 and 10 (note that zero will be removed, since the code does not converge there).
+        Setting ``q = 2`` (default for DFA) gives a result of a standard DFA. For instance, Ihlen
+        (2012) uses ``q = [-5, -3, -1, 0, 1, 3, 5]`` (default when for multifractal). In general,
+        positive q moments amplify the contribution of fractal components with larger amplitude and
+        negative q moments amplify the contribution of fractal with smaller amplitude (Kantelhardt
+        et al., 2002).
     show : bool
         Visualise the trend between the window size and the fluctuations.
     **kwargs : optional
@@ -89,34 +87,45 @@ def fractal_dfa(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=10, noise=0.05)
-    >>> dfa1, parameters1 = nk.fractal_dfa(signal, show=True)
-    >>> dfa1 #doctest: +SKIP
-    >>> dfa2, parameters2 = nk.fractal_mfdfa(signal, q=[-5, -3, -1, 0, 1, 3, 5], show=True)
-    >>> dfa2 #doctest: +SKIP
+    **DFA**
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=10, noise=0.05)
+
+      @savefig p_fractal_dfa1.png scale=100%
+      dfa1, parameters1 = nk.fractal_dfa(signal, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      dfa1
+
+    **MFDFA**
+
+      @savefig p_fractal_dfa1.png scale=100%
+      dfa2, parameters2 = nk.fractal_mfdfa(signal, q=[-5, -3, -1, 0, 1, 3, 5], show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      dfa2
 
     References
     -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
+    * Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
       fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
-
-    - Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S.,
+    * Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S.,
       Bunde, A., & Stanley, H. E. (2002). Multifractal detrended fluctuation
       analysis of nonstationary time series. Physica A: Statistical
       Mechanics and its Applications, 316(1-4), 87-114.
-
-    - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V.,
+    * Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V.,
       Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended
       fluctuation analysis: a scale-free view on neuronal oscillations.
       Frontiers in physiology, 3, 450.
-
-    - `nolds <https://github.com/CSchoel/nolds/>`_
-
-    - `MFDFA <https://github.com/LRydin/MFDFA/>`_
-
-    - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
 
     """
     # Sanity checks
@@ -163,9 +172,6 @@ def fractal_dfa(
         )
         parameters.update(singularity)
 
-
-
-
     # Plot if show is True.
     if show is True:
         if multifractal is True:
@@ -200,7 +206,6 @@ def _fractal_dfa(
     ----------
     windows : list
         A list containing the lengths of the windows
-
     fluctuations : np.ndarray
         The detrended fluctuations, from DFA or MFDFA.
     """
@@ -269,10 +274,8 @@ def _singularity_spectrum(windows, fluctuations, q, slopes):
     ----------
     windows : list
         A list containing the lengths of the windows. Output of `_fractal_dfa()`.
-
     fluctuations : np.ndarray
         The detrended fluctuations, from DFA or MFDFA. Output of `_fractal_dfa()`.
-
     q : list or np.array (default `np.linspace(-10,10,41)`)
         The sequence of fractal exponents. Must be a sequence between -10
         and 10 (note that zero will be removed, since the code does not converge
@@ -288,12 +291,10 @@ def _singularity_spectrum(windows, fluctuations, q, slopes):
         which the fractality of the data can be determined by its shape. A truly
         linear tau indicates monofractality, whereas a curved one (usually
         curving around small `q` values) indicates multifractality.
-
     hq: np.array
         Singularity strength `hq`. The width of this function indicates the
         strength of the multifractality. A width of `max(hq) - min(hq) ≈ 0`
         means the data is monofractal.
-
     Dq: np.array
         Singularity spectrum `Dq`. The location of the maximum of `Dq` (with
          `hq` as the abscissa) should be 1 and indicates the most prominent

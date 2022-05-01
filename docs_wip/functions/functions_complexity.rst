@@ -54,7 +54,7 @@ Fractal Dimension
 .. autofunction:: neurokit2.complexity.fractal_higuchi
 
 *fractal_correlation()*
-""""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_correlation
 
 
@@ -130,7 +130,7 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_sample
 
 *entropy_permutation()*
-""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
 
 *entropy_bubble()*
@@ -165,11 +165,11 @@ Other
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
 *complexity_lempelziv()*
-""""""""""""""""""
+""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_lempelziv
 
 *complexity_relativeroughness()*
-""""""""""""""""""
+""""""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_relativeroughness
 
 *complexity_hurst()*
@@ -177,7 +177,7 @@ Other
 .. autofunction:: neurokit2.complexity.complexity_hurst
 
 *complexity_lyapunov()*
-"""""""""""""""""""""
+"""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_lyapunov
 
 *complexity_rqa()*

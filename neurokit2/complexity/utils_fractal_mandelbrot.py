@@ -90,7 +90,7 @@ def fractal_mandelbrot(
       b = nk.fractal_mandelbrot(size=1500, real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25),
                                 buddha=True, iterations=200)
 
-      @savefig p_fractal_mandelbrot4.png scale
+      @savefig p_fractal_mandelbrot4.png scale=100%
       plt.imshow(b.T, cmap="gray")
       plt.axis("off")
       plt.show()
@@ -106,7 +106,7 @@ def fractal_mandelbrot(
       b = nk.fractal_mandelbrot(buddha=True, iterations=200)
       mixed = m - b
 
-      @savefig p_fractal_mandelbrot5.png scale
+      @savefig p_fractal_mandelbrot5.png scale=100%
       plt.imshow(mixed.T, cmap="gray")
       plt.axis("off")
       plt.show()
