@@ -199,7 +199,7 @@ def fractal_dfa(
         slopes = slopes[0]
 
     # Prepare output
-    info["Fluctuations"] = fluctuations
+    info["Fluctuation"] = fluctuations
     info["Alpha"] = slopes
 
     # Extract features

@@ -46,6 +46,7 @@ from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_mutual import mutual_information
+from .markov_transition_matrix import transition_matrix, transition_matrix_simulate
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 from .optim_complexity_k import complexity_k
@@ -60,7 +61,6 @@ from .utils_complexity_simulate import complexity_simulate
 from .utils_complexity_symbolize import complexity_symbolize
 from .utils_fractal_mandelbrot import fractal_mandelbrot
 from .utils_recurrence_matrix import recurrence_matrix
-from .utils_transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases
 complexity_se = entropy_shannon
