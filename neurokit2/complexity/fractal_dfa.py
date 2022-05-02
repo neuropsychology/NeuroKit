@@ -24,10 +24,10 @@ def fractal_dfa(
     statistical dependencies in time series.
 
     For monofractal DFA, the output *alpha* :math:`\\alpha` corresponds to the slope of the linear
-    trend between the scale factors and the fluctuations. For multifractal DFA, the slope values under different *q* values are actually generalised Hurst exponents *h*.
+    trend between the scale factors and the fluctuations. For multifractal DFA, the slope values
+    under different *q* values are actually generalised Hurst exponents *h*.
 
-    The output is a
-    dataframe containing the following features:
+    The output is for multifractal DFA is a dataframe containing the following features:
 
     * TODO.
 

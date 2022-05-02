@@ -3,7 +3,6 @@ import functools
 
 from .complexity import complexity
 from .complexity_hjorth import complexity_hjorth
-from .fractal_hurst import fractal_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
@@ -38,6 +37,7 @@ from .entropy_tsallis import entropy_tsallis
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
+from .fractal_hurst import fractal_hurst
 from .fractal_katz import fractal_katz
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian

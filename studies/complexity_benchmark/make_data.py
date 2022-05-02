@@ -27,10 +27,9 @@ def time_function(
     if name == "nk_complexity_rqa":
         rez = rez.add_prefix("RQA_")
         out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
-    if index == "MFDFA":
+    elif index == "MFDFA":
         rez = rez.add_prefix("MFDFA_")
         out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
-
     else:
         out = pd.DataFrame({"Result": [rez], "Index": [index]})
     out["Duration"] = t1
@@ -293,6 +292,30 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
+                        nk.fractal_hurst,
+                        index="H (corrected)",
+                        name="nk_fractal_hurst",
+                        corrected=True,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fractal_hurst,
+                        index="H (uncorrected)",
+                        name="nk_fractal_hurst",
+                        corrected=False,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
                         nk.fractal_dfa,
                         index="DFA",
                         name="nk_fractal_dfa",
@@ -360,7 +383,7 @@ def run_benchmark(noise_intensity=0.01):
                         time_function(
                             signal_,
                             nk.entropy_spectral,
-                            index=f"SPEn {bins}",
+                            index=f"SPEn ({bins})",
                             name="entropy_spectral",
                             c=bins,
                         ),
@@ -1137,43 +1160,6 @@ def run_benchmark(noise_intensity=0.01):
                 ]
             )
 
-            rez = pd.concat(
-                [
-                    rez,
-                    time_function(
-                        signal_,
-                        nk.complexity_hurst,
-                        index="H (corrected)",
-                        name="nk_complexity_hurst",
-                        corrected=True,
-                    ),
-                ]
-            )
-            rez = pd.concat(
-                [
-                    rez,
-                    time_function(
-                        signal_,
-                        nk.complexity_hurst,
-                        index="H (uncorrected)",
-                        name="nk_complexity_hurst",
-                        corrected=False,
-                    ),
-                ]
-            )
-            rez = pd.concat(
-                [
-                    rez,
-                    time_function(
-                        signal_,
-                        nk.fractal_correlation,
-                        index="CD",
-                        name="nk_fractal_correlation",
-                        delay=delay,
-                        dimension=3,
-                    ),
-                ]
-            )
             rez = pd.concat(
                 [
                     rez,

@@ -152,7 +152,6 @@ colors <- c(
   "ApEn" = "#E91E63",
   "cApEn" = "#E91E63",
   "PEn" = "#E91E63",
-  "SPEn" = "#E91E63",
   "WPEn" = "#E91E63",
   "SampEn" = "#E91E63",
   "FuzzyEn" = "#E91E63",
@@ -211,6 +210,9 @@ colors <- c(
   "RangeEn (A)" = "#E91E63",
   "RangeEn (Ac)" = "#E91E63",
   "RangeEn (B)" = "#E91E63",
+  "SPEn (10)" = "#E91E63",
+  "SPEn (50)" = "#E91E63",
+  "SPEn (100)" = "#E91E63",
   "HEn" = "#E91E63",
   "H (corrected)" = "#2196F3",
   "H (uncorrected)" = "#2196F3",
@@ -238,7 +240,15 @@ colors <- c(
   "RQA_VEn" = "#4CAF50",
   "RQA_W" = "#4CAF50",
   "RQA_WMax" = "#4CAF50",
-  "RQA_WEn" = "#4CAF50"
+  "RQA_WEn" = "#4CAF50",
+  "DFA" = "#4CAF50",
+  "MFDFA_ExpRange" = "#4CAF50",
+  "MFDFA_ExpMean" = "#4CAF50",
+  "MFDFA_DimRange" = "#4CAF50",
+  "MFDFA_DimMean" = "#4CAF50",
+  "MFDFA_HMax" = "#4CAF50",
+  "MFDFA_HDelta" = "#4CAF50",
+  "MFDFA_HAR" = "#4CAF50"
 )
 
 # unique(df$Index)[!unique(df$Index) %in% names(colors)]
