@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from .complexity_hjorth import complexity_hjorth
-from .complexity_hurst import complexity_hurst
+from .fractal_hurst import fractal_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
@@ -214,7 +214,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         )
 
         # Other
-        df["Hurst"], info["Hurst"] = complexity_hurst(signal)
+        df["Hurst"], info["Hurst"] = fractal_hurst(signal)
         df["LZC"], info["LZC"] = complexity_lempelziv(signal, dimension=dimension, delay=delay)
         df["PLZC"], info["PLZC"] = complexity_lempelziv(
             signal, dimension=dimension, delay=delay, permutation=True

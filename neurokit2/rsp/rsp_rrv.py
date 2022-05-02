@@ -264,10 +264,10 @@ def _rsp_rrv_nonlinear(bbi):
 
     # DFA
     if len(bbi) / 10 > 16:
-        out["DFA_alpha1"] = fractal_dfa(bbi, windows=np.arange(4, 17), multifractal=False)[0]
+        out["DFA_alpha1"] = fractal_dfa(bbi, scale=np.arange(4, 17), multifractal=False)[0]
         # For multifractal
         mdfa_alpha1 = fractal_dfa(
-            bbi, multifractal=True, q=np.arange(-5, 6), windows=np.arange(4, 17)
+            bbi, multifractal=True, q=np.arange(-5, 6), scale=np.arange(4, 17)
         )[1]
 
         out["DFA_alpha1_ExpRange"] = mdfa_alpha1["ExpRange"]
@@ -275,10 +275,10 @@ def _rsp_rrv_nonlinear(bbi):
         out["DFA_alpha1_DimRange"] = mdfa_alpha1["DimRange"]
         out["DFA_alpha1_DimMean"] = mdfa_alpha1["DimMean"]
     if len(bbi) > 65:
-        out["DFA_alpha2"] = fractal_dfa(bbi, windows=np.arange(16, 65), multifractal=False)[0]
+        out["DFA_alpha2"] = fractal_dfa(bbi, scale=np.arange(16, 65), multifractal=False)[0]
         # For multifractal
         mdfa_alpha2 = fractal_dfa(
-            bbi, multifractal=True, q=np.arange(-5, 6), windows=np.arange(16, 65)
+            bbi, multifractal=True, q=np.arange(-5, 6), scale=np.arange(16, 65)
         )[1]
 
         out["DFA_alpha2_ExpRange"] = mdfa_alpha2["ExpRange"]

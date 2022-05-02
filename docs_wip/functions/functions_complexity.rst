@@ -172,9 +172,9 @@ Other
 """"""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_relativeroughness
 
-*complexity_hurst()*
+*fractal_hurst()*
 """""""""""""""""""""
-.. autofunction:: neurokit2.complexity.complexity_hurst
+.. autofunction:: neurokit2.complexity.fractal_hurst
 
 *complexity_lyapunov()*
 """""""""""""""""""""""""

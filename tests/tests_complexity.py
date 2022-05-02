@@ -40,7 +40,7 @@ def test_complexity_sanity():
     assert np.allclose(parameters["ExpMean"], 2.350615727142904, atol=0.000001)
     assert np.allclose(parameters["ExpRange"], 0.9937858280904406, atol=0.000001)
 
-    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7884473170763334, atol=0.000001)
+    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7930504156910694, atol=0.000001)
     assert np.allclose(
         nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.0001
     )

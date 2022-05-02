@@ -445,10 +445,10 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # Compute DFA alpha1
     short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
     # For monofractal
-    out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)[0]
+    out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)[0]
     # For multifractal
     mdfa_alpha1 = fractal_dfa(
-        rri, multifractal=True, q=np.arange(-5, 6), windows=short_window, **kwargs
+        rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs
     )[1]
     out["DFA_alpha1_ExpRange"] = mdfa_alpha1["ExpRange"]
     out["DFA_alpha1_ExpMean"] = mdfa_alpha1["ExpMean"]
@@ -461,7 +461,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         warn(
             "DFA_alpha2 related indices will not be calculated. "
             "The maximum duration of the windows provided for the long-term correlation is smaller "
-            "than the minimum duration of windows. Refer to the `windows` argument in `nk.fractal_dfa()` "
+            "than the minimum duration of windows. Refer to the `scale` argument in `nk.fractal_dfa()` "
             "for more information.",
             category=NeuroKitWarning,
         )
@@ -469,10 +469,10 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     else:
         long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
         # For monofractal
-        out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)[0]
+        out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)[0]
         # For multifractal
         mdfa_alpha2 = fractal_dfa(
-            rri, multifractal=True, q=np.arange(-5, 6), windows=long_window, **kwargs
+            rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs
         )[1]
         out["DFA_alpha2_ExpRange"] = mdfa_alpha2["ExpRange"]
         out["DFA_alpha2_ExpMean"] = mdfa_alpha2["ExpMean"]

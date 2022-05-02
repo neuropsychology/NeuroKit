@@ -27,6 +27,9 @@ def time_function(
     if name == "nk_complexity_rqa":
         rez = rez.add_prefix("RQA_")
         out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
+    if index == "MFDFA":
+        rez = rez.add_prefix("MFDFA_")
+        out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
 
     else:
         out = pd.DataFrame({"Result": [rez], "Index": [index]})
@@ -282,6 +285,29 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_fractal_correlation",
                         delay=delay,
                         dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fractal_dfa,
+                        index="DFA",
+                        name="nk_fractal_dfa",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fractal_dfa,
+                        index="MFDFA",
+                        name="nk_fractal_dfa",
+                        multifractal=True,
                     ),
                 ]
             )

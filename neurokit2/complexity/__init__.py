@@ -3,7 +3,7 @@ import functools
 
 from .complexity import complexity
 from .complexity_hjorth import complexity_hjorth
-from .complexity_hurst import complexity_hurst
+from .fractal_hurst import fractal_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
@@ -113,7 +113,7 @@ __all__ = [
     "complexity_optimize",
     "complexity_simulate",
     "complexity_hjorth",
-    "complexity_hurst",
+    "fractal_hurst",
     "complexity_tolerance",
     "complexity_lempelziv",
     "complexity_lzc",

@@ -36,9 +36,9 @@ def entropy_multiscale(
     The conventional MSEn algorithm consists of two steps:
 
     1. A :func:`coarse-graining <complexity_coarsegraining>` procedure is used to represent the
-      signal at different time scales.
+       signal at different time scales.
     2. :func:`Sample entropy <entropy_sample>` (or other function) is used to quantify the
-      regularity of a coarse-grained time series at each time scale factor.
+       regularity of a coarse-grained time series at each time scale factor.
 
     However, in the traditional coarse-graining procedure, the larger the scale factor is, the
     shorter the coarse-grained time series is. As such, the variance of the entropy of the

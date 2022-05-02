@@ -51,7 +51,6 @@ def fractal_mandelbrot(
 
       import neurokit2 as nk
 
-
       @savefig p_fractal_mandelbrot1.png scale=100%
       m = nk.fractal_mandelbrot(show=True)
       @suppress
