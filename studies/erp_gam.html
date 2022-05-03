@@ -164,33 +164,13 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_data.html">
-     Data
+    <a class="reference internal" href="../functions/functions_bio.html">
+     Bio
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../functions/functions_ecg.html">
      ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_rsp.html">
-     RSP
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_hrv.html">
-     HRV
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_ppg.html">
-     PPG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_complexity.html">
-     Complexity
     </a>
    </li>
   </ul>
@@ -773,7 +753,7 @@ a baseline to check if our regression approach is on track.</p>
   <span class="nf">theme_eeg</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-8-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-8-12.png" /><!-- --></p>
 </section>
 <section id="spline-regression">
 <h3>Spline Regression<a class="headerlink" href="#spline-regression" title="Permalink to this headline">#</a></h3>
@@ -825,7 +805,7 @@ of freedom as a function of the epoch length. As our epoch is 600 ms
 <span class="nf">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-10-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-10-12.png" /><!-- --></p>
 <p>This plot shows the original raw averages (dotted lines), the predicted
 values by the model and their confidence interval (CI), as well as the
 difference between the two conditions (estimated as marginal contrasts).</p>
@@ -898,7 +878,7 @@ data could reinforce our model.</p>
   <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Average effet of each channel&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-15-1.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-15-11.png" /><!-- --></p>
 <p>We will add use the data from all the channels of the cluster by adding
 them as a random factor in the model (random slopes are added for the
 condition factor).</p>
@@ -907,7 +887,7 @@ condition factor).</p>
 <span class="nf">plot_model</span><span class="p">(</span><span class="n">model_full</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-16-1.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-16-11.png" /><!-- --></p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">performance</span><span class="o">::</span><span class="nf">compare_performance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_full</span><span class="p">)</span>
 <span class="c1">## # Comparison of Model Performance Indices</span>
 <span class="c1">##</span>

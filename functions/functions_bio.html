@@ -1,0 +1,755 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bio &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ECG" href="functions_ecg.html" />
+    <link rel="prev" title="Functions" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Functions
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_ecg.html">
+     ECG
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/erp_gam.html">
+     An GAM-based Approach to EEG/ERP Analysis using Python and R
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/ecg_benchmark.html">
+     Benchmarking of ECG Preprocessing Methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/eog_blinktemplate.html">
+     Blink Template Estimation for Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/complexity_benchmark.html">
+     Measuring Chaos: Empirical Relationship between Complexity Indices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/functions_bio.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs_wip/functions/functions_bio.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/functions/functions_bio.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main">
+   Main
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bio-process">
+     <em>
+      bio_process()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bio-analyze">
+     <em>
+      bio_analyze()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Bio</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main">
+   Main
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bio-process">
+     <em>
+      bio_process()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bio-analyze">
+     <em>
+      bio_analyze()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="bio">
+<h1>Bio<a class="headerlink" href="#bio" title="Permalink to this headline">#</a></h1>
+<section id="main">
+<h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="bio-process">
+<h3><em>bio_process()</em><a class="headerlink" href="#bio-process" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.bio_process">
+<span class="sig-name descname"><span class="pre">bio_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.bio_process" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Automated processing of bio signals</strong></p>
+<p>Wrapper for other bio processing functions of
+electrocardiography signals (ECG), respiration signals (RSP),
+electrodermal activity (EDA) and electromyography signals (EMG).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>DataFrame</em>) – The DataFrame containing all the respective signals (e.g., ecg, rsp, Photosensor etc.). If
+provided, there is no need to fill in the other arguments denoting the channel inputs.
+Defaults to None.</p></li>
+<li><p><strong>ecg</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw ECG channel.</p></li>
+<li><p><strong>rsp</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw RSP channel (as measured, for instance, by a respiration belt).</p></li>
+<li><p><strong>eda</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA channel.</p></li>
+<li><p><strong>emg</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EMG channel.</p></li>
+<li><p><strong>ppg</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw PPG channel.</p></li>
+<li><p><strong>eog</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EOG channel, extracted from <code class="xref py py-func docutils literal notranslate"><span class="pre">mne_channel_extract().()</span></code></p></li>
+<li><p><strong>keep</strong> (<em>DataFrame</em>) – Dataframe or channels to add by concatenation
+to the processed dataframe (for instance, the Photosensor channel).</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signals (in Hz, i.e., samples/second).
+Defaults to 1000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>bio_df</strong> (<em>DataFrame</em>) – DataFrames of the following processed bio features:</p>
+<ul>
+<li><p><em>”ECG”</em>: the raw signal, the cleaned signal, the heart rate, and the R peaks indexes.
+Also generated by <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a>.</p></li>
+<li><p><em>”RSP”</em>: the raw signal, the cleaned signal, the rate, and the amplitude. Also generated
+by <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code>.</p></li>
+<li><p><em>”EDA”</em>: the raw signal, the cleaned signal, the tonic component, the phasic component,
+indexes of the SCR onsets, peaks, amplitudes, and half-recovery times. Also generated by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">eda_process()</span></code>.</p></li>
+<li><p><em>”EMG”</em>: the raw signal, the cleaned signal, and amplitudes. Also generated by <code class="xref py py-func docutils literal notranslate">
+<span class="pre">emg_process()</span></code>.</p></li>
+<li><p><em>”PPG”</em>: the raw signal, the cleaned signal, rate and peaks. Also generated by <code class="xref py py-func docutils literal notranslate">
+<span class="pre">ppg_process()</span></code>.</p></li>
+<li><p><em>”RSA”</em>: Respiratory Sinus Arrhythmia features generated by <code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_rsa()</span></code>, if both
+ECG and RSP are provided.</p></li>
+<li><p><em>”EOG”</em>: the raw signal, the cleaned signal, the indexes of EOG blinks, and the blink
+rate.</p></li>
+</ul>
+</li>
+<li><p><strong>bio_info</strong> (<em>dict</em>) – A dictionary containing the samples of peaks, troughs, amplitudes, onsets, offsets, periods
+of activation, recovery times of the respective processed signals,
+as well as the signals’ sampling rate.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_process</span></code></p>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># With Simulated Data</span>
+<span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">bio_df</span><span class="p">,</span> <span class="n">bio_info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rsp</span><span class="o">=</span><span class="n">rsp</span><span class="p">,</span> <span class="n">eda</span><span class="o">=</span><span class="n">eda</span><span class="p">,</span> <span class="n">emg</span><span class="o">=</span><span class="n">emg</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="gp">   ...: </span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [7]: </span><span class="n">bio_df</span>
+<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="go">       ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
+<span class="go">0     1.088487  -0.068513  70.086180  ...            0    0.028   7.924515</span>
+<span class="go">1     1.036022  -0.191584  70.086180  ...            0    0.028   7.924515</span>
+<span class="go">2     0.899896  -0.327714  70.086180  ...            0    0.028   7.924515</span>
+<span class="go">3     0.705777  -0.481619  70.086180  ...            0    0.028   7.924515</span>
+<span class="go">4     0.481102  -0.650403  70.086180  ...            0    0.028   7.924515</span>
+<span class="go">...        ...        ...        ...  ...          ...      ...        ...</span>
+<span class="go">9995 -0.088146  -0.040605  71.428571  ...            0    0.004   7.994140</span>
+<span class="go">9996 -0.085252  -0.037403  71.428571  ...            0    0.004   7.994140</span>
+<span class="go">9997 -0.081602  -0.033686  71.428571  ...            0    0.004   7.994140</span>
+<span class="go">9998 -0.077005  -0.029530  71.428571  ...            0    0.004   7.994140</span>
+<span class="go">9999 -0.071302  -0.025106  71.428571  ...            0    0.004   7.994140</span>
+
+<span class="go">[10000 rows x 46 columns]</span>
+
+<span class="go"># Visualize all signals</span>
+<span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">bio_df</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># With Actual Data</span>
+<span class="gp">In [9]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_eventrelated_100hz&#39;</span><span class="p">)[:</span><span class="nb">len</span><span class="p">(</span><span class="n">eog</span><span class="p">)]</span>
+
+<span class="gp">In [11]: </span><span class="n">bio_df2</span><span class="p">,</span> <span class="n">bio_info2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ECG&#39;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;RSP&#39;</span><span class="p">],</span> <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;EDA&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span><span class="n">emg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="n">eog</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [12]: </span><span class="n">bio_df2</span>
+<span class="gh">Out[12]: </span><span class="go"></span>
+<span class="go">        ECG_Raw  ECG_Clean   ECG_Rate  ...  Photosensor  RSA_P2T  RSA_Gates</span>
+<span class="go">0     -0.015869   0.001499  61.486770  ...          5.0     0.09   8.372153</span>
+<span class="go">1     -0.011703   0.004621  61.486770  ...          5.0     0.09   8.372153</span>
+<span class="go">2     -0.009766   0.005260  61.486770  ...          5.0     0.09   8.372153</span>
+<span class="go">3     -0.013321   0.004423  61.486770  ...          5.0     0.09   8.372153</span>
+<span class="go">4     -0.009583   0.005670  61.486770  ...          5.0     0.09   8.372153</span>
+<span class="go">...         ...        ...        ...  ...          ...      ...        ...</span>
+<span class="go">11995 -0.078903  -0.100016  70.588235  ...          5.0     0.06   8.547471</span>
+<span class="go">11996 -0.070740  -0.089212  70.588235  ...          5.0     0.06   8.547471</span>
+<span class="go">11997 -0.062714  -0.077518  70.588235  ...          5.0     0.06   8.547471</span>
+<span class="go">11998 -0.052139  -0.065251  70.588235  ...          5.0     0.06   8.547471</span>
+<span class="go">11999 -0.045425  -0.054046  70.588235  ...          5.0     0.06   8.547471</span>
+
+<span class="go">[12000 rows x 45 columns]</span>
+
+<span class="go"># Visualize all signals</span>
+<span class="gp">In [13]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">bio_df2</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_bio_process2.png"><img alt="../_images/p_bio_process2.png" src="../_images/p_bio_process2.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="bio-analyze">
+<h3><em>bio_analyze()</em><a class="headerlink" href="#bio-analyze" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.bio_analyze">
+<span class="sig-name descname"><span class="pre">bio_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'constant'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.bio_analyze" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Automated analysis of physiological signals</strong></p>
+<p>Wrapper for other bio analyze functions of electrocardiography signals (ECG), respiration
+signals (RSP), electrodermal activity (EDA), electromyography signals (EMG) and
+electrooculography signals (EOG).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>DataFrame</em>) – The DataFrame containing all the processed signals, typically
+produced by <a class="reference internal" href="#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">eda_process()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">emg_process()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">eog_process()</span></code>. Can also be an
+epochs object.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signals (in Hz, i.e., samples/second).
+Defaults to 1000.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of ‘event-related’ for event-related analysis on epochs,
+or ‘interval-related’ for analysis on longer periods of data. Defaults
+to ‘auto’ where the right method will be chosen based on the
+mean duration of the data (‘event-related’ for duration under 10s).</p></li>
+<li><p><strong>window_lengths</strong> (<em>dict</em>) – If ‘constant’ (default), will use the full epoch for all the signals. Can also
+be a dictionary with the epoch start and end times for different
+types of signals, e.g., <cite>window_lengths = {‘ECG’: [0.5, 1.5], ‘EDA’: [0.5, 3.5]}</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – DataFrame of the analyzed bio features. See docstrings of <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_analyze" title="neurokit2.ecg.ecg_analyze"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_analyze()</span></code></a>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_analyze()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">eda_analyze()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">emg_analyze()</span></code> and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">eog_analyze()</span></code> for more details. Also returns Respiratory Sinus Arrhythmia features
+produced by <code class="xref py py-func docutils literal notranslate"><span class="pre">hrv_rsa()</span></code> if interval-related analysis is carried out.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_analyze</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Example 1: Event-related analysis ==================================================</span>
+<span class="go"># Download data</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Process the data</span>
+<span class="gp">In [3]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                         <span class="n">keep</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># Build epochs around photosensor-marked events</span>
+<span class="gp">In [4]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                       <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                         <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">   ...: </span>                         <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># Analyze</span>
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime   RSA_P2T  RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN  0.012143   0.000000</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -0.001503   0.072881</span>
+<span class="go">3     3   Neutral         9224  ...               NaN -0.003509   0.056925</span>
+<span class="go">4     4  Negative        12984  ...               NaN  0.002043  -0.056213</span>
+
+<span class="go">[4 rows x 43 columns]</span>
+
+<span class="go"># Example 2: Interval-related analysis =================================================</span>
+<span class="go"># Download data</span>
+<span class="gp">In [7]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Process the data</span>
+<span class="gp">In [8]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">ppg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;PPG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Analyze</span>
+<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">   ECG_Rate_Mean  HRV_MeanNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
+<span class="go">0      86.392105  694.756381  ...            2.046078      0.156442</span>
+
+<span class="go">[1 rows x 202 columns]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Functions</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="functions_ecg.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ECG</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
