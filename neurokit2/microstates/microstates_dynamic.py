@@ -32,11 +32,8 @@ def microstates_dynamic(microstates):
     >>> import neurokit2 as nk
     >>>
     >>> microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
-    >>> nk.microstates_dynamic(microstates)  #doctest: +ELLIPSIS
-           Microstate_0_to_0  ...  Microstate_Symmetry_p
-    0                    ...  ...                    ...
+    >>> nk.microstates_dynamic(microstates)
 
-    [1 rows x 15 columns]
     """
     out = {}
 

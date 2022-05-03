@@ -2,8 +2,6 @@
 import numpy as np
 import scipy.stats
 
-from .markov_transition_matrix import _sanitize_tm_input
-
 
 def markov_test_homogeneity(sequence, size=10):
     """**Is the Markov process homogeneous?**
