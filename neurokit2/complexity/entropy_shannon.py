@@ -33,8 +33,9 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     base: float
-        The logarithmic base to use, defaults to ``2``. Note that ``scipy.stats.entropy()``
-        uses ``np.e`` as default (the natural logarithm).
+        The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.
+        stats.entropy()`` uses Euler's number (``np.e``) as default (the natural logarithm), giving
+        a measure of information expressed in *nats*.
     method : str or int
         Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
         ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in

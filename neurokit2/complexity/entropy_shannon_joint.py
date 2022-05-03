@@ -5,7 +5,7 @@ from .entropy_shannon import _entropy_freq
 
 
 def entropy_shannon_joint(x, y, base=2):
-    """Shannon's Joint Entropy**
+    """**Shannon's Joint Entropy**
 
     The joint entropy measures how much entropy is contained in a joint system of two random
     variables.
