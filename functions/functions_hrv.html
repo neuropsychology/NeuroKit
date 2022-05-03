@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Studies" href="../studies/index.html" />
+    <link rel="next" title="RSP" href="functions_rsp.html" />
     <link rel="prev" title="PPG" href="functions_ppg.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -181,6 +181,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_rsp.html">
+     RSP
     </a>
    </li>
   </ul>
@@ -465,6 +470,13 @@ title="Print to PDF"
    </li>
   </ul>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-neurokit2.hrv">
+   <em>
+    Other
+   </em>
+  </a>
+ </li>
 </ul>
 
     </nav>
@@ -533,6 +545,13 @@ title="Print to PDF"
    </li>
   </ul>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-neurokit2.hrv">
+   <em>
+    Other
+   </em>
+  </a>
+ </li>
 </ul>
 
                         </nav>
@@ -578,7 +597,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_rsa</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code></p>
+<p><a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_rsa" title="neurokit2.hrv.hrv_rsa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_rsa</span></code></a>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <p><strong>Example 1</strong>: Only using a list of R-peaks locations</p>
@@ -1048,7 +1067,7 @@ correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-3
 <h3><em>hrv_rqa()</em><a class="headerlink" href="#hrv-rqa" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_rqa">
-<span class="sig-name descname"><span class="pre">hrv_rqa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zimatore2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_linelength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_rqa" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv_rqa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zimatore2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_rqa" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV)</strong></p>
 <p>RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal
 dimensions). See <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code> for more information.</p>
@@ -1064,8 +1083,8 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>dimension</strong> (<em>int</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code> for more information.</p></li>
 <li><p><strong>tolerance</strong> (<em>float</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code> for more information. If “zimatore2021”, will be set to half
 of the mean pairwise distance between points.</p></li>
-<li><p><strong>min_linelength</strong> (<em>int</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code> for more information.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code> for more information.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1092,6 +1111,14 @@ of the mean pairwise distance between points.</p></li>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_hrv_rqa1.png"><img alt="../_images/p_hrv_rqa1.png" src="../_images/p_hrv_rqa1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hrv_rqa</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">   RecurrenceRate  Determinism  ...  WMax       WEn</span>
+<span class="go">0        0.003145      0.70922  ...   423  5.413819</span>
+
+<span class="go">[1 rows x 14 columns]</span>
+</pre></div>
+</div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M., De Spirito, M.,
@@ -1104,6 +1131,126 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 </dd></dl>
 
 </section>
+</section>
+<section id="module-neurokit2.hrv">
+<span id="other"></span><h2><em>Other</em><a class="headerlink" href="#module-neurokit2.hrv" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.hrv.hrv_rsa">
+<span class="sig-name descname"><span class="pre">hrv_rsa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_rsa" title="Permalink to this definition">#</a></dt>
+<dd><p>Respiratory Sinus Arrhythmia (RSA)</p>
+<p>Respiratory sinus arrhythmia (RSA), also referred to as ‘cardiac coherence’ or ‘physiological
+coherence’ (though these terms are often encompassing a wider meaning), is the naturally occurring
+variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a
+measure of parasympathetic nervous system activity. Neurophysiology informs us that the functional
+output of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm.
+Thus, there would a temporal relation between the respiratory rhythm being expressed in the firing
+of these efferent pathways and the functional effect on the heart rate rhythm manifested as RSA.
+Importantly, several methods exist to quantify RSA:</p>
+<ul class="simple">
+<li><p>The <em>Peak-to-trough (P2T)</em> algorithm measures the statistical range in milliseconds of the heart</p></li>
+</ul>
+<p>period oscillation associated with synchronous respiration. Operationally, subtracting the shortest
+heart period during inspiration from the longest heart period during a breath cycle produces an estimate
+of RSA during each breath. The peak-to-trough method makes no statistical assumption or correction
+(e.g., adaptive filtering) regarding other sources of variance in the heart period time series that
+may confound, distort, or interact with the metric such as slower periodicities and baseline trend.
+Although it has been proposed that the P2T method “acts as a time-domain filter dynamically centered
+at the exact ongoing respiratory frequency” (Grossman, 1992), the method does not transform the time
+series in any way, as a filtering process would. Instead the method uses knowledge of the ongoing
+respiratory cycle to associate segments of the heart period time series with either inhalation or
+exhalation (Lewis, 2012).</p>
+<ul class="simple">
+<li><p>The <em>Porges-Bohrer (PB)</em> algorithm assumes that heart period time series reflect the sum of several</p></li>
+</ul>
+<p>component time series. Each of these component time series may be mediated by different neural
+mechanisms and may have different statistical features. The Porges-Bohrer method applies an algorithm
+that selectively extracts RSA, even when the periodic process representing RSA is superimposed on a
+complex baseline that may include aperiodic and slow periodic processes. Since the method is designed
+to remove sources of variance in the heart period time series other than the variance within the
+frequency band of spontaneous breathing, the method is capable of accurately quantifying RSA when
+the signal to noise ratio is low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <cite>ecg_process()</cite>. Should contain columns <cite>ECG_Rate</cite> and <cite>ECG_R_Peaks</cite>.
+Can also take a DataFrame comprising of both ECG and RSP signals, generated by <cite>bio_process()</cite>.</p></li>
+<li><p><strong>rsp_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <cite>rsp_process()</cite>. Should contain columns <cite>RSP_Phase</cite> and <cite>RSP_PhaseCompletion</cite>.
+No impact when a DataFrame comprising of both the ECG and RSP signals are passed as <cite>ecg_signals</cite>.
+Defaults to None.</p></li>
+<li><p><strong>rpeaks</strong> (<em>dict</em>) – The samples at which the R-peaks of the ECG signal occur. Dict returned by <cite>ecg_peaks()</cite>,
+<cite>ecg_process()</cite>, or <cite>bio_process()</cite>. Defaults to None.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of signals (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>continuous</strong> (<em>bool</em>) – If False, will return RSA properties computed from the data (one value per index).
+If True, will return continuous estimations of RSA of the same length as the signal.
+See below for more details.</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – For calculating RSA second by second. Length of each segment in seconds. If None (default),
+window will be set at 32 seconds.</p></li>
+<li><p><strong>window_number</strong> (<em>int</em>) – Between 2 and 8. For caculating RSA second by second. Number of windows to be calculated in
+Peak Matched Multiple Window. If None (default), window_number will be set at 8.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>rsa</strong> (<em>dict</em>) – A dictionary containing the RSA features, which includes:</p>
+<ul class="simple">
+<li><p>”<em>RSA_P2T_Values</em>”: the estimate of RSA during each breath cycle, produced by subtracting
+the shortest heart period (or RR interval) from the longest heart period in ms.</p></li>
+<li><p>”<em>RSA_P2T_Mean</em>”: the mean peak-to-trough across all cycles in ms</p></li>
+<li><p>”<em>RSA_P2T_Mean_log</em>”: the logarithm of the mean of RSA estimates.</p></li>
+<li><p>”<em>RSA_P2T_SD</em>”: the standard deviation of all RSA estimates.</p></li>
+<li><p>”<em>RSA_P2T_NoRSA</em>”: the number of breath cycles
+from which RSA could not be calculated.</p></li>
+<li><p>”<em>RSA_PorgesBohrer</em>”: the Porges-Bohrer estimate of RSA, optimal
+when the signal to noise ratio is low, in ln(ms^2).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Download data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get RSA features</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> 
+<span class="go">{&#39;RSA_P2T_Mean&#39;: ...,</span>
+<span class="go"> &#39;RSA_P2T_Mean_log&#39;: ...,</span>
+<span class="go"> &#39;RSA_P2T_SD&#39;: ...,</span>
+<span class="go"> &#39;RSA_P2T_NoRSA&#39;: ...,</span>
+<span class="go"> &#39;RSA_PorgesBohrer&#39;: ...,</span>
+<span class="go"> &#39;RSA_Gates_Mean&#39;: ...,</span>
+<span class="go"> &#39;RSA_Gates_Mean_log&#39;: ...,</span>
+<span class="go"> &#39;RSA_Gates_SD&#39;: ...}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get RSA as a continuous signal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> 
+<span class="go">        RSA_P2T  RSA_Gates</span>
+<span class="go">0         ...         ...</span>
+<span class="go">1         ...         ...</span>
+<span class="go">2         ...         ...</span>
+<span class="gp">... </span>      <span class="o">...</span>         <span class="o">...</span>
+</pre></div>
+</div>
+<p>[15000 rows x 2 columns]
+&gt;&gt;&gt; nk.signal_plot([ecg_signals[“ECG_Rate”], rsp_signals[“RSP_Rate”], rsa], standardize=True)</p>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Servant, D., Logier, R., Mouster, Y., &amp; Goudemand, M. (2009). La variabilité de la fréquence
+cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016</p></li>
+<li><p>Lewis, G. F., Furman, S. A., McCool, M. F., &amp; Porges, S. W. (2012). Statistical strategies to
+quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology,
+89(2), 349-364.</p></li>
+<li><p>Zohar, A. H., Cloninger, C. R., &amp; McCraty, R. (2013). Personality and heart rate variability:
+exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences,
+1(06), 32.</p></li>
+</ul>
+</dd></dl>
+
 </section>
 </section>
 
@@ -1122,10 +1269,10 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
             <p class="prev-next-title">PPG</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../studies/index.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_rsp.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Studies</p>
+        <p class="prev-next-title">RSP</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
