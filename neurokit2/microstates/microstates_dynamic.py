@@ -29,10 +29,12 @@ def microstates_dynamic(microstates):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
-    >>> nk.microstates_dynamic(microstates)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
+      nk.microstates_dynamic(microstates)
 
     """
     out = {}
