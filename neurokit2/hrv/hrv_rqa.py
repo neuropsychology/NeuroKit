@@ -13,17 +13,13 @@ def hrv_rqa(
     dimension=7,
     delay=1,
     tolerance="zimatore2021",
-    linelength=4,
+    min_linelength=4,
     show=False,
 ):
     """**Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV)**
 
-    RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal dimensions).
-    See :func:`.complexity_rqa()` for more information.
-
-    This function is not run routinely as part of ``hrv_nonlinear()`` or ``hrv()`` because its
-    main function, ``complexity_rqa()``, relies on the ``PyRQA`` package, which is not trivial to install.
-    You will need to successfully install it first before being able to run ``hrv_rqa()``.
+    RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal
+    dimensions). See :func:`.complexity_rqa()` for more information.
 
     Parameters
     ----------
@@ -35,16 +31,16 @@ def hrv_rqa(
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
     delay : int
-        See ``complexity_rqa()`` for more information.
+        See :func:`.complexity_rqa()` for more information.
     dimension : int
-        See ``complexity_rqa()`` for more information.
+        See :func:`.complexity_rqa()` for more information.
     tolerance : float
-        See ``complexity_rqa()`` for more information. If "zimatore2021", will be set to half of the
-        mean pairwise distance between points.
-    linelength : int
-        See ``complexity_rqa()`` for more information.
+        See :func:`.complexity_rqa()` for more information. If "zimatore2021", will be set to half
+        of the mean pairwise distance between points.
+    min_linelength : int
+        See :func:`.complexity_rqa()` for more information.
     show : bool
-        See ``complexity_rqa()`` for more information.
+        See :func:`.complexity_rqa()` for more information.
 
     See Also
     --------
@@ -67,9 +63,11 @@ def hrv_rqa(
       # Find peaks
       peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
 
-      # Compute HRV indices  (don't run the example as it requires PyRQA)
-      # hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
-
+      # Compute HRV RQA indices
+      @savefig p_hrv_rqa1.png scale=100%
+      hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
+      @suppress
+      plt.close()
 
     References
     ----------
@@ -103,7 +101,7 @@ def hrv_rqa(
         dimension=dimension,
         delay=delay,
         tolerance=tolerance,
-        linelength=linelength,
+        min_linelength=min_linelength,
         show=show,
     )
 

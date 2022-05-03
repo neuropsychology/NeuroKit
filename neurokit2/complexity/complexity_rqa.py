@@ -140,6 +140,9 @@ def complexity_rqa(
             plt.imshow(rc, cmap="Greys")
             # Flip the matrix to match traditional RQA representation
             plt.gca().invert_yaxis()
+            plt.title("Recurrence Matrix")
+            plt.ylabel("Time")
+            plt.xlabel("Time")
         except MemoryError as e:
             raise MemoryError(
                 "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
