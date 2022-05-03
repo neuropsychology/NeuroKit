@@ -18,6 +18,8 @@ jobs:
         fetch-depth: 0 # To be able to push refs to destination repo
     - name: Set up Python 🐍
       uses: actions/setup-python@v3
+      with:
+        cache: 'pip'
 
     - name: Install dependencies 🏭
       run: |

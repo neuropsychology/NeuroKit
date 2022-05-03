@@ -95,6 +95,7 @@ add_module_names = False  # If true, the current module name will be prepended t
 
 # -- Options for myst_nb ---------------------------------------------------
 nb_execution_mode = "force"
+nb_execution_raise_on_error = True
 
 # googleanalytics_id = "G-DVXSEGN5M9"
 
