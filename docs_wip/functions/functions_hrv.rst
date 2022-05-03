@@ -27,4 +27,10 @@ Sub-domains
 .. autofunction:: neurokit2.hrv.hrv_rqa
 
 
+*Other*
+^^^^^^^^^
+
+.. automodule:: neurokit2.hrv
+   :members:
+   :exclude-members: hrv, hrv_time, hrv_frequency, hrv_nonlinear, hrv_rqa
 

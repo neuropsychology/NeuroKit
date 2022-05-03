@@ -13,8 +13,8 @@ def hrv_rqa(
     dimension=7,
     delay=1,
     tolerance="zimatore2021",
-    min_linelength=4,
     show=False,
+    **kwargs,
 ):
     """**Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV)**
 
@@ -37,10 +37,10 @@ def hrv_rqa(
     tolerance : float
         See :func:`.complexity_rqa()` for more information. If "zimatore2021", will be set to half
         of the mean pairwise distance between points.
-    min_linelength : int
-        See :func:`.complexity_rqa()` for more information.
     show : bool
         See :func:`.complexity_rqa()` for more information.
+    **kwargs
+        Other arguments to be passed to :func:`.complexity_rqa()`.
 
     See Also
     --------
@@ -68,6 +68,10 @@ def hrv_rqa(
       hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      hrv_rqa
 
     References
     ----------
@@ -101,8 +105,8 @@ def hrv_rqa(
         dimension=dimension,
         delay=delay,
         tolerance=tolerance,
-        min_linelength=min_linelength,
         show=show,
+        **kwargs,
     )
 
     return rqa
