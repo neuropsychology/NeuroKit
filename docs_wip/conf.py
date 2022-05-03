@@ -94,7 +94,7 @@ add_module_names = False  # If true, the current module name will be prepended t
 
 
 # -- Options for myst_nb ---------------------------------------------------
-jupyter_execute_notebooks = "force"
+nb_execution_mode = "force"
 
 # googleanalytics_id = "G-DVXSEGN5M9"
 

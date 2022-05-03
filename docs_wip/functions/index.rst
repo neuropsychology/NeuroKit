@@ -9,13 +9,5 @@ You can find here the API documentation of NeuroKit, with a description of all t
    :titlesonly:
 
    functions_bio
-   functions_ecg
-   functions_ppg
-   functions_hrv
-   functions_eda
-   functions_rsp
-   functions_data
-   functions_signal
-   functions_complexity
-   functions_markov
+
 
