@@ -67,10 +67,7 @@ def signal_findpeaks(
     ---------
     .. ipython:: python
 
-      import numpy as np
-      import pandas as pd
       import neurokit2 as nk
-      import scipy.misc
 
       # Simulate a Signal
       signal = nk.signal_simulate(duration=5)
@@ -96,6 +93,8 @@ def signal_findpeaks(
 
     .. ipython:: python
 
+      import scipy.misc
+
       # Load actual ECG Signal
       ecg = scipy.misc.electrocardiogram()
       signal = ecg[0:1000]
@@ -113,8 +112,7 @@ def signal_findpeaks(
 
     See Also
     --------
-    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths,
-    eda_findpeaks, ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
+    signal_fixpeaks
 
     """
     info = _signal_findpeaks_scipy(signal)
@@ -155,7 +153,13 @@ def signal_findpeaks(
 
 
 def _signal_findpeaks_keep(
-    info, what="Height", below=None, above=None, relative_mean=False, relative_median=False, relative_max=False
+    info,
+    what="Height",
+    below=None,
+    above=None,
+    relative_mean=False,
+    relative_median=False,
+    relative_max=False,
 ):
 
     if below is None and above is None:
