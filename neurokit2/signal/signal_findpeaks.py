@@ -81,18 +81,6 @@ def signal_findpeaks(
 
     .. ipython:: python
 
-      # Add Noise to Simulated Signal
-      signal = nk.signal_distort(signal)
-      info = nk.signal_findpeaks(signal, height_min=1)
-
-      # Visualize Unfiltered Peaks
-      @savefig p_signal_findpeaks_2.png scale=100%
-      fig2 = nk.events_plot(info["Peaks"], signal)
-      @suppress
-      plt.close()
-
-    .. ipython:: python
-
       import scipy.misc
 
       # Load actual ECG Signal
@@ -104,8 +92,8 @@ def signal_findpeaks(
       info2 = nk.signal_findpeaks(signal, relative_height_min=1)
 
       # Visualize Peaks
-      @savefig p_signal_findpeaks_3.png scale=100%
-      fig3 = nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
+      @savefig p_signal_findpeaks_2.png scale=100%
+      fig2 = nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
       @suppress
       plt.close()
 
