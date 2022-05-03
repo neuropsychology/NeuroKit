@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Studies" href="../studies/index.html" />
+    <link rel="next" title="EDA" href="functions_eda.html" />
     <link rel="prev" title="HRV" href="functions_hrv.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -186,6 +186,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_eda.html">
+     EDA
     </a>
    </li>
   </ul>
@@ -1380,8 +1385,8 @@ dimensions.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  714.700011      4159.6  518.635193  ...    1.009967  0.018896         inf</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1014.019094      4053.0  591.774544  ...    0.535395  0.019858         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1455,9 +1460,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.575295</span>
-<span class="go">2     2        10000  ...        0.0              0.271719</span>
-<span class="go">3     3        15000  ...        0.0              0.494700</span>
+<span class="go">1     1         5000  ...        1.0              0.863188</span>
+<span class="go">2     2        10000  ...        0.0              0.381897</span>
+<span class="go">3     3        15000  ...        0.0              0.697206</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1624,10 +1629,10 @@ waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical
             <p class="prev-next-title">HRV</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../studies/index.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_eda.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Studies</p>
+        <p class="prev-next-title">EDA</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
