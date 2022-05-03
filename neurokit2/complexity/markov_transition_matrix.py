@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import itertools
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy.stats
 
 from ..misc import as_vector
 
 
-def transition_matrix(sequence):
+def transition_matrix(sequence, show=False):
     """**Transition Matrix**
 
     A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
@@ -22,17 +22,20 @@ def transition_matrix(sequence):
     ----------
     sequence : Union[list, np.array, pd.Series]
         A list of discrete states.
+    show : bool
+        Displays the transition matrix heatmap.
 
     See Also
     --------
-    markov_simulate, markov_test_random
+    markov_simulate, markov_test_random, markov_test_symmetry
 
     Returns
     -------
     pd.DataFrame
         The empirical (observed) transition matrix.
     dict
-        A dictionnary containing additional information.
+        A dictionnary containing additional information, such as the Frequency Matrix (**fm**;
+        accessible via the key ``"Occurrences"``), useful for some tests.
 
     Examples
     --------
@@ -41,12 +44,17 @@ def transition_matrix(sequence):
       import neurokit2 as nk
 
       sequence = [0, 0, 1, 2, 2, 2, 1, 0, 0, 3]
-      tm, _ = nk.transition_matrix(sequence)
+
+      @savefig p_transition_matrix1.png scale=100%
+      tm, _ = nk.transition_matrix(sequence, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
       tm
 
     """
-    out = {}
-
     sequence = as_vector(sequence)
 
     # Observed transition matrix
@@ -73,19 +81,27 @@ def transition_matrix(sequence):
     tm = pd.DataFrame(tm, index=states, columns=states)
     freqs = pd.DataFrame(freqs, index=states, columns=states)
 
-    # # Expect transition matrix (theoretical)
-    # out["Expected"] = _transition_matrix_expected(tm)
+    if show is True:
+        fig, ax = plt.subplots()
+        ax.imshow(tm, cmap="Reds", interpolation="nearest")
+        ax.set_xticks(np.arange(len(tm)))
+        ax.set_yticks(np.arange(len(tm)))
+        ax.set_xticklabels(tm.columns)
+        ax.set_yticklabels(tm.index)
 
-    # # Test against theoretical transitions
-    # results = scipy.stats.chisquare(f_obs=tm, f_exp=out["Expected"], axis=None)
-    # out["Transition_Chisq"] = results[0]
-    # out["Transition_df"] = len(tm) * (len(tm) - 1) / 2
-    # out["Transition_p"] = results[1]
-
-    # # Symmetry test
-    # out.update(_transition_matrix_symmetry(sequence))
+        # Loop over data dimensions and create text annotations.
+        for i, row in enumerate(tm.index):
+            for j, col in enumerate(tm.columns):
+                ax.text(j, i, f"{tm.loc[row, col]:.2f}", ha="center", va="center", color="w")
+        ax.set_title("Transition Matrix")
+        fig.tight_layout()
 
     return tm, {"Occurrences": freqs}
+
+
+# =============================================================================
+# Utils
+# =============================================================================
 
 
 def _sanitize_tm_input(tm, probs=True):
@@ -114,146 +130,29 @@ def _sanitize_tm_input(tm, probs=True):
         return transition_matrix(tm)
 
 
-# def transition_matrix_plot(matrix):
-#    """
-#    """
-#    print("Sorry, we didn't find a statisfactory way of plotting the transition graphs. Consider ",
-#          "helping if you have some plotting skills!")
-#
-#    try:
-#        import networkx as nx
-#    except ImportError:
-#        raise ImportError(
-#            "NeuroKit error: transition_matrix_plot(): the 'networkx' module is required for this ",
-#            "function to run. Please install it first (`pip install networkx`).",
-#        )
-#
-#    def _get_markov_edges(matrix):
-#        edges = {}
-#        for col in matrix.columns:
-#            for idx in matrix.index:
-#                edges[(idx,col)] = matrix.loc[idx,col]
-#        return edges
-#
-#    states = matrix.columns.values
-#
-#    # create graph object
-#    G = nx.MultiDiGraph()
-#
-#    # nodes correspond to states
-#    G.add_nodes_from(states)
-#
-#    # edges represent transition probabilities
-#    for k, v in _get_markov_edges(matrix).items():
-#        tmp_origin, tmp_destination = k[0], k[1]
-#        G.add_edge(tmp_origin, tmp_destination, weight=v, label=v)
-#
-#    # Create edge labels for jupyter plot but is not necessary
-#    edge_labels = {(n1,n2):"%.2f" %d['label'] for n1, n2, d in G.edges(data=True)}
-#
-#    pos = nx.spring_layout(G)
-#    pos = nx.circular_layout(G)
-#    nx.draw_networkx_edges(G , pos=pos, edge_color="grey")
-#    nx.draw_networkx_edge_labels(G , pos=pos, edge_labels=edge_labels, clip_on=False)
-#
-#    nx.draw_networkx_nodes(G, pos=pos, node_color="red")
-#    nx.draw_networkx_labels(G , pos=pos)
-#
-#    nx.drawing.nx_pydot.to_pydot(G, 'markov.dot')
-#    A = nx.nx_agraph.to_agraph(G)
+# def transition_matrix_plot(tm):
+#     """Graph of Transition Matrix
 
+#     Abandonned for now because networkx gives ugly results. Please do help!
+#     """
+#     try:
+#         import networkx as nx
+#     except ImportError:
+#         raise ImportError(
+#             "NeuroKit error: transition_matrix_plot(): the 'networkx' module is required for this ",
+#             "function to run. Please install it first (`pip install networkx`).",
+#         )
 
-# =============================================================================
-# Internals
-# =============================================================================
-def _transition_matrix_expected(observed_matrix):
+#     # create graph object
+#     G = nx.MultiDiGraph(tm)
 
-    expected_matrix = scipy.stats.contingency.expected_freq(observed_matrix.values)
-    expected_matrix = pd.DataFrame(
-        expected_matrix, index=observed_matrix.index, columns=observed_matrix.columns
-    )
-    return expected_matrix
+#     edge_labels = {}
+#     for col in tm.columns:
+#         for row in tm.index:
+#             G.add_edge(row, col, weight=tm.loc[row, col])
+#             edge_labels[(row, col)] = label = "{:.02f}".format(tm.loc[row, col])
 
-
-def _transition_matrix_symmetry(sequence):
-    """Symmetry Test
-
-    If significant, then then transition matrix is considered as asymmetric.
-
-    Based on https://github.com/Frederic-vW/eeg_microstates
-    """
-    states = np.unique(sequence)
-    n_states = len(states)
-    n = len(sequence)
-    f_ij = np.zeros((n_states, n_states))
-
-    for t in range(n - 1):
-        i = sequence[t]
-        j = sequence[t + 1]
-        f_ij[states == i, states == j] += 1.0
-
-    T = 0.0
-    for i, j in np.ndindex(f_ij.shape):
-        if i != j:
-            f = f_ij[i, j] * f_ij[j, i]
-            if f > 0:
-                T += f_ij[i, j] * np.log((2.0 * f_ij[i, j]) / (f_ij[i, j] + f_ij[j, i]))
-
-    out = {}
-    out["Symmetry_t"] = T * 2.0
-    out["Symmetry_df"] = n_states * (n_states - 1) / 2
-    out["Symmetry_p"] = scipy.stats.chi2.sf(out["Symmetry_t"], out["Symmetry_df"], loc=0, scale=1)
-    return out
-
-
-def _transition_matrix_stationarity(sequence, size=100):
-    """Test conditional homogeneity of non-overlapping blocks of
-    length l of symbolic sequence X with ns symbols
-    cf. Kullback, Technometrics (1962), Table 9.1.
-
-    based on https://github.com/Frederic-vW/eeg_microstates
-    """
-    states = np.unique(sequence)
-    n_states = len(states)
-    n = len(sequence)
-    r = int(np.floor(n / size))  # number of blocks
-    if r < 5:
-        raise ValueError(
-            "NeuroKit error: _transition_matrix_stationarity(): the size of the blocks is too high.",
-            " Decrease the 'size' argument.",
-        )
-
-    #    nl =  r* size
-
-    f_ijk = np.zeros((r, n_states, n_states))
-    f_ij = np.zeros((r, n_states))
-    f_jk = np.zeros((n_states, n_states))
-    f_i = np.zeros(r)
-    f_j = np.zeros(n_states)
-
-    # calculate f_ijk (time / block dep. transition matrix)
-    for i in range(r):  # block index
-        for ii in range(size - 1):  # pos. inside the current block
-            j = sequence[i * size + ii]
-            k = sequence[i * size + ii + 1]
-            f_ijk[i, j, k] += 1.0
-            f_ij[i, j] += 1.0
-            f_jk[j, k] += 1.0
-            f_i[i] += 1.0
-            f_j[j] += 1.0
-
-    # conditional homogeneity (Markovianity stationarity)
-    T = 0.0
-    for i, j, k in np.ndindex(f_ijk.shape):
-        # conditional homogeneity
-        f = f_ijk[i, j, k] * f_j[j] * f_ij[i, j] * f_jk[j, k]
-        if f > 0:
-            T += f_ijk[i, j, k] * np.log((f_ijk[i, j, k] * f_j[j]) / (f_ij[i, j] * f_jk[j, k]))
-
-    out = {}
-    out["Stationarity_t"] = T * 2.0
-    out["Stationarity_df"] = (r - 1) * (n_states - 1) * n_states
-    out["Stationarity_p"] = scipy.stats.chi2.sf(
-        out["Stationarity_t"], out["Stationarity_df"], loc=0, scale=1
-    )
-    return out
+#     pos = nx.circular_layout(G)
+#     nx.draw_networkx_edges(G, pos, width=2.0, alpha=0.5)
+#     nx.draw_networkx_edge_labels(G, pos, edge_labels)
+#     nx.draw_networkx(G, pos)

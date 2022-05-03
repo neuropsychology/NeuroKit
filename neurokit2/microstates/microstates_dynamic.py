@@ -41,14 +41,14 @@ def microstates_dynamic(microstates):
     out = {}
 
     # Transition matrix
-    T, results = transition_matrix(microstates)
+    tm, info = transition_matrix(microstates)
 
-    for row in T.index:
-        for col in T.columns:
-            out[str(T.loc[row].name) + "_to_" + str(T[col].name)] = T[col][row]
+    for row in tm.index:
+        for col in tm.columns:
+            out[str(tm.loc[row].name) + "_to_" + str(tm[col].name)] = tm[col][row]
 
-    out.update(results)
-    out.pop("Expected")
+    # out.update(results)
+    # out.pop("Expected")
 
     df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
 

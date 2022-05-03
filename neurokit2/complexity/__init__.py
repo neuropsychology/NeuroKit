@@ -47,7 +47,9 @@ from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_mutual import mutual_information
 from .markov_simulate import markov_simulate
+from .markov_test_homogeneity import markov_test_homogeneity
 from .markov_test_random import markov_test_random
+from .markov_test_symmetry import markov_test_symmetry
 from .markov_transition_matrix import transition_matrix
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
@@ -191,4 +193,6 @@ __all__ = [
     "transition_matrix",
     "markov_simulate",
     "markov_test_random",
+    "markov_test_symmetry",
+    "markov_test_homogeneity",
 ]

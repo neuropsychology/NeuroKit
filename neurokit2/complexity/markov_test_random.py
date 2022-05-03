@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import itertools
-
-import numpy as np
 import pandas as pd
 import scipy.stats
 
