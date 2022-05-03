@@ -229,3 +229,11 @@ Markov Chains
 *markov_test_random()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.markov_test_random
+
+*markov_test_symmetry()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.markov_test_symmetry
+
+*markov_test_homogeneity()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.markov_test_homogeneity
