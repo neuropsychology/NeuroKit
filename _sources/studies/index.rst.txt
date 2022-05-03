@@ -6,7 +6,7 @@ Some of the work-in-progress studies.
 .. toctree::
    :maxdepth: 1
 
-   erp_gam
-   ecg_benchmark
-   eog_blinktemplate
-   complexity_benchmark
+   ECG Benchmark <ecg_benchmark>
+   Complexity Benchmark <complexity_benchmark>
+   EEG Analysis with GAMs <erp_gam>
+   EOG blink template <eog_blinktemplate>
