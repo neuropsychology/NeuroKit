@@ -14,5 +14,6 @@ You can find here the API documentation of NeuroKit, with a description of all t
    functions_hrv
    functions_rsp
    functions_eda
+   functions_data
 
 
