@@ -29,6 +29,7 @@ from .entropy_range import entropy_range
 from .entropy_renyi import entropy_renyi
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
+from .entropy_shannon_joint import entropy_shannon_joint
 from .entropy_slope import entropy_slope
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
@@ -144,6 +145,7 @@ __all__ = [
     "complexity_relativeroughness",
     "complexity_rqa",
     "entropy_shannon",
+    "entropy_shannon_joint",
     "entropy_tsallis",
     "entropy_renyi",
     "entropy_kolmogorov",

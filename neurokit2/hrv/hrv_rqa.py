@@ -16,9 +16,9 @@ def hrv_rqa(
     show=False,
     **kwargs,
 ):
-    """**Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV)**
+    """**Recurrence Quantification Analysis (RQA) of Heart Rate Variability (HRV)**
 
-    RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal
+    RQA is a type of complexity analysis used in non-linear dynamics (related to entropy and fractal
     dimensions). See :func:`.complexity_rqa()` for more information.
 
     Parameters
