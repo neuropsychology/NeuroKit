@@ -32,12 +32,12 @@ You can navigate to the different sections using the left panel. We recommend ch
 
    introduction
    authors
-   installation
    cite_us
+   installation
    resources/index
    functions/index
    studies/index
-   Changelog <https://github.com/neuropsychology/NeuroKit/releases>
+   Repository <https://github.com/neuropsychology/NeuroKit>
 
 
 .. include::  ../README.rst

@@ -33,6 +33,8 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
         for details.
     show : bool
         If ``True``, will show the discrete the signal.
+    freq : np.array
+        Instead of a signal, a vector of probabilities can be provided.
     **kwargs
         Optional arguments. Not used for now.
 
@@ -77,9 +79,9 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
 
     """
     if freq is None:
-        freq = _entropy_freq(signal, method=method, show=show)
-
+        _, freq = _entropy_freq(signal, method=method, show=show)
     freq = freq / np.sum(freq)
+
     if np.isclose(alpha, 1):
         ren = -np.sum(freq * np.log(freq))
     else:

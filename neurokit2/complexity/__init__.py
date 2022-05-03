@@ -2,42 +2,43 @@
 import functools
 
 from .complexity import complexity
-from .complexity_attractor import complexity_attractor
-from .complexity_coarsegraining import complexity_coarsegraining
-from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
-from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
-from .complexity_ordinalpatterns import complexity_ordinalpatterns
-from .complexity_recurrence import complexity_recurrence
+from .complexity_relativeroughness import complexity_relativeroughness
 from .complexity_rqa import complexity_rqa
-from .complexity_rr import complexity_rr
-from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
 from .entropy_attention import entropy_attention
 from .entropy_bubble import entropy_bubble
 from .entropy_coalition import entropy_coalition
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
-from .entropy_cumulative_residual import entropy_cumulative_residual
+from .entropy_cumulativeresidual import entropy_cumulativeresidual
 from .entropy_differential import entropy_differential
+from .entropy_dispersion import entropy_dispersion
 from .entropy_distribution import entropy_distribution
 from .entropy_fuzzy import entropy_fuzzy
+from .entropy_grid import entropy_grid
+from .entropy_hierarchical import entropy_hierarchical
+from .entropy_increment import entropy_increment
 from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
+from .entropy_ofentropy import entropy_ofentropy
 from .entropy_permutation import entropy_permutation
+from .entropy_phase import entropy_phase
 from .entropy_range import entropy_range
 from .entropy_renyi import entropy_renyi
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
+from .entropy_slope import entropy_slope
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
+from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .entropy_tsallis import entropy_tsallis
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
+from .fractal_hurst import fractal_hurst
 from .fractal_katz import fractal_katz
-from .fractal_mandelbrot import fractal_mandelbrot
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
 from .fractal_psdslope import fractal_psdslope
@@ -45,18 +46,30 @@ from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_mutual import mutual_information
+from .markov_simulate import markov_simulate
+from .markov_test_homogeneity import markov_test_homogeneity
+from .markov_test_random import markov_test_random
+from .markov_test_symmetry import markov_test_symmetry
+from .markov_transition_matrix import transition_matrix
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 from .optim_complexity_k import complexity_k
 from .optim_complexity_optimize import complexity_optimize
 from .optim_complexity_tolerance import complexity_tolerance
 from .TODO_entropy_wiener import entropy_wiener
-from .transition_matrix import transition_matrix, transition_matrix_simulate
+from .utils_complexity_attractor import complexity_attractor
+from .utils_complexity_coarsegraining import complexity_coarsegraining
+from .utils_complexity_embedding import complexity_embedding
+from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
+from .utils_complexity_simulate import complexity_simulate
+from .utils_complexity_symbolize import complexity_symbolize
+from .utils_fractal_mandelbrot import fractal_mandelbrot
+from .utils_recurrence_matrix import recurrence_matrix
 
 # Aliases
 complexity_se = entropy_shannon
 complexity_diffen = entropy_differential
-complexity_cren = entropy_cumulative_residual
+complexity_cren = entropy_cumulativeresidual
 
 complexity_apen = entropy_approximate
 complexity_capen = functools.partial(entropy_approximate, corrected=True)
@@ -97,13 +110,14 @@ __all__ = [
     "complexity_embedding",
     "complexity_coarsegraining",
     "complexity_ordinalpatterns",
-    "complexity_recurrence",
+    "complexity_symbolize",
+    "recurrence_matrix",
     "complexity_delay",
     "complexity_dimension",
     "complexity_optimize",
     "complexity_simulate",
     "complexity_hjorth",
-    "complexity_hurst",
+    "fractal_hurst",
     "complexity_tolerance",
     "complexity_lempelziv",
     "complexity_lzc",
@@ -132,25 +146,33 @@ __all__ = [
     "complexity_wpe",
     "complexity_mspe",
     "complexity_dfa",
-    "complexity_rr",
+    "complexity_relativeroughness",
     "complexity_rqa",
     "entropy_shannon",
     "entropy_tsallis",
     "entropy_renyi",
     "entropy_kolmogorov",
     "entropy_attention",
+    "entropy_ofentropy",
+    "entropy_slope",
+    "entropy_increment",
     "entropy_differential",
     "entropy_distribution",
-    "entropy_cumulative_residual",
+    "entropy_symbolicdynamic",
+    "entropy_cumulativeresidual",
     "entropy_approximate",
     "entropy_bubble",
     "entropy_coalition",
     "entropy_sample",
+    "entropy_phase",
+    "entropy_dispersion",
+    "entropy_grid",
     "entropy_spectral",
     "entropy_svd",
     "entropy_fuzzy",
     "complexity_fuzzyapen",
     "entropy_multiscale",
+    "entropy_hierarchical",
     "entropy_wiener",
     "entropy_permutation",
     "entropy_range",
@@ -169,5 +191,8 @@ __all__ = [
     "fractal_sda",
     "mutual_information",
     "transition_matrix",
-    "transition_matrix_simulate",
+    "markov_simulate",
+    "markov_test_random",
+    "markov_test_symmetry",
+    "markov_test_homogeneity",
 ]

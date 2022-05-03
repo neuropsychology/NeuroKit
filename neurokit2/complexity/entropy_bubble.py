@@ -68,6 +68,7 @@ def entropy_bubble(signal, dimension=3, delay=1, alpha=2, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
+    # Store parameters
     info = {"Dimension": dimension, "Delay": delay}
 
     H = [

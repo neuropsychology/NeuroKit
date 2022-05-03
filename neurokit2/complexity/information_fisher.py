@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def fisher_information(signal, delay=1, dimension=2):

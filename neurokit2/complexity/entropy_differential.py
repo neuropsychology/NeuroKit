@@ -6,7 +6,7 @@ import scipy.stats
 def entropy_differential(signal, **kwargs):
     """**Differential entropy (DiffEn)**
 
-    Differential entropy (DiffEn; also referred to as continuous entropy) started as a (failed)
+    Differential entropy (DiffEn; also referred to as continuous entropy) started as an
     attempt by Shannon to extend Shannon entropy. However, differential entropy presents some
     issues too, such as that it can be negative even for simple distributions (such as the uniform
     distribution).

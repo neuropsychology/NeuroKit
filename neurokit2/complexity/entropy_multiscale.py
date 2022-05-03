@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
-import functools
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
+from ..misc import copyfunction
+from .complexity_lempelziv import complexity_lempelziv
 from .entropy_approximate import entropy_approximate
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
+from .entropy_increment import entropy_increment
 from .entropy_permutation import entropy_permutation
 from .entropy_sample import entropy_sample
+from .entropy_slope import entropy_slope
+from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
+from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
 
 
 def entropy_multiscale(
@@ -31,29 +34,30 @@ def entropy_multiscale(
     which compute sample entropies at multiple scales.
 
     The conventional MSEn algorithm consists of two steps:
+
     1. A :func:`coarse-graining <complexity_coarsegraining>` procedure is used to represent the
        signal at different time scales.
-    2. SampEn is used to quantify the regularity of a coarse-grained time series at each time scale
-       factor.
+    2. :func:`Sample entropy <entropy_sample>` (or other function) is used to quantify the
+       regularity of a coarse-grained time series at each time scale factor.
 
     However, in the traditional coarse-graining procedure, the larger the scale factor is, the
     shorter the coarse-grained time series is. As such, the variance of the entropy of the
     coarse-grained series estimated by SampEn increases as the time scale factor increases, making
     it problematic for shorter signals.
 
-    - **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et
+    * **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et
       al. (2013) introduced the **Composite Multiscale Entropy** algorithm, which computes
       multiple coarse-grained series for each scale factor (via the **time-shift** method for
       :func:`coarse-graining <complexity_coarsegraining>`).
-    - **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy
+    * **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy
       values of each subcoarsed vector, but its components at a lower level.
-    - **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**
+    * **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**
       algorithm, which is based on rolling-average :func:`coarse-graining <complexity_coarsegraining>`.
-    - **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
+    * **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
       coarse-grained series. We implement a generalization of this via interpolation that can be
       referred to as **Interpolated Multiscale Entropy**.
 
-    Their :func:`**Fuzzy** <entropy_sample>` version can be obtained by setting ``fuzzy=True``.
+    Their :func:`Fuzzy <entropy_fuzzy>` version can be obtained by setting ``fuzzy=True``.
 
     This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``.
     Moreover, variants can be directly accessed via ``complexity_cmse()``, `complexity_rcmse()``,
@@ -69,7 +73,7 @@ def entropy_multiscale(
         ``range(len(signal) / (dimension + 10))`` (see discussion
         `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_).
         If 'max', will use all scales until half the length of the signal. If an integer, will
-        create a range until the specified int.
+        create a range until the specified int. See :func:`complexity_coarsegraining` for details.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension()` to estimate the optimal value for this parameter.
@@ -105,7 +109,8 @@ def entropy_multiscale(
 
     Examples
     ----------
-    * **MSEn** (basic coarse-graining)
+    **MSEn** (basic coarse-graining)
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -117,7 +122,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **CMSEn** (time-shifted coarse-graining)
+    **CMSEn** (time-shifted coarse-graining)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale2.png scale=100%
@@ -125,7 +131,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **RCMSEn** (refined composite MSEn)
+    **RCMSEn** (refined composite MSEn)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale3.png scale=100%
@@ -133,7 +140,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MMSEn** (rolling-window coarse-graining)
+    **MMSEn** (rolling-window coarse-graining)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale4.png scale=100%
@@ -141,7 +149,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **IMSEn** (interpolated coarse-graining)
+    **IMSEn** (interpolated coarse-graining)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale5.png scale=100%
@@ -149,7 +158,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MSApEn** (based on ApEn instead of SampEn)
+    **MSApEn** (based on ApEn instead of SampEn)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale6.png scale=100%
@@ -157,7 +167,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MSPEn** (based on PEn), **CMSPEn**, **MMSPEn** and **IMSPEn**
+    **MSPEn** (based on PEn), **CMSPEn**, **MMSPEn** and **IMSPEn**
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale7.png scale=100%
@@ -174,7 +185,8 @@ def entropy_multiscale(
       imspen, info = nk.entropy_multiscale(signal, method="IMSPEn")
       imspen
 
-    * **MSWPEn** (based on WPEn), **CMSWPEn**, **MMSWPEn** and **IMSWPEn**
+    **MSWPEn** (based on WPEn), **CMSWPEn**, **MMSWPEn** and **IMSWPEn**
+
     .. ipython:: python
 
       mswpen, info = nk.entropy_multiscale(signal, method="MSWPEn")
@@ -182,7 +194,8 @@ def entropy_multiscale(
       mmswpen, info = nk.entropy_multiscale(signal, method="MMSWPEn")
       imswpen, info = nk.entropy_multiscale(signal, method="IMSWPEn")
 
-    * **FuzzyMSEn**, **FuzzyCMSEn** and **FuzzyRCMSEn**
+    **FuzzyMSEn**, **FuzzyCMSEn** and **FuzzyRCMSEn**
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale8.png scale=100%
@@ -234,49 +247,65 @@ def entropy_multiscale(
     # Parameters selection
     algorithm = entropy_sample
     refined = False
-    if method in ["MSEn", "MSApEn", "MSPEn", "MSWPEn"]:
-        coarsegraining = "nonoverlapping"
-        if method in ["MSApEn"]:
+    coarsegraining = "nonoverlapping"
+    if method in ["MSEn", "SampEn"]:
+        pass  # The default arguments are good
+    elif method in ["MSApEn", "ApEn", "MSPEn", "PEn", "MSWPEn", "WPEn"]:
+        if method in ["MSApEn", "ApEn"]:
             algorithm = entropy_approximate
-        if method in ["MSPEn"]:
+        if method in ["MSPEn", "PEn"]:
             algorithm = entropy_permutation
-        if method in ["MSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+        if method in ["MSWPEn", "WPEn"]:
+            algorithm = copyfunction(entropy_permutation, weighted=True)
     elif method in ["MMSEn", "MMSPEn", "MMSWPEn"]:
         coarsegraining = "rolling"
         if method in ["MMSPEn"]:
             algorithm = entropy_permutation
         if method in ["MMSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
     elif method in ["IMSEn", "IMSPEn", "IMSWPEn"]:
         coarsegraining = "interpolate"
         if method in ["IMSPEn"]:
             algorithm = entropy_permutation
         if method in ["IMSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
     elif method in ["CMSEn", "RCMSEn", "CMSPEn", "CMSWPEn"]:
         coarsegraining = "timeshift"
         if method in ["CMSPEn"]:
             algorithm = entropy_permutation
         if method in ["CMSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
         if method in ["RCMSEn"]:
             refined = True
-    elif method in ["MSCoSiEn"]:
-        coarsegraining = "nonoverlapping"
+    elif method in ["MSCoSiEn", "CoSiEn"]:
         algorithm = entropy_cosinesimilarity
+    elif method in ["MSIncrEn", "IncrEn"]:
+        algorithm = entropy_increment
+    elif method in ["MSSlopEn", "SlopEn"]:
+        algorithm = entropy_slope
+    elif method in ["MSLZC", "LZC"]:
+        algorithm = complexity_lempelziv
+    elif method in ["MSPLZC", "PLZC"]:
+        algorithm = copyfunction(complexity_lempelziv, permutation=True)
+    elif method in ["MSSyDyEn", "SyDyEn", "MMSyDyEn"]:
+        algorithm = entropy_symbolicdynamic
+        if method in ["MMSyDyEn"]:
+            coarsegraining = "rolling"
     else:
         raise ValueError(
             "Method '{method}' is not supported. Please use "
             "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'IMSPEn',"
             "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn',"
             "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn',"
+            "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn', 'MSSyDyEn'"
+            "'MSLZC', 'MSPLZC'"
             " or 'MSApEn' (case sensitive)."
         )
 
     # Store parameters
     info = {
         "Method": method,
+        "Algorithm": algorithm.__name__,
         "Coarsegraining": coarsegraining,
         "Dimension": dimension,
         "Scale": _get_scales(signal, scale=scale, dimension=dimension),

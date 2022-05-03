@@ -8,10 +8,10 @@ from ..misc import NeuroKitWarning, find_plateau
 
 
 def complexity_k(signal, k_max="max", show=False):
-    """**Automated selection of k_max parameter for Higuchi Fractal Dimension (HFD)**
+    """**Automated selection of k for Higuchi Fractal Dimension (HFD)**
 
     The optimal *k-max* is computed based on the point at which HFD values plateau for a range of
-    kmax values (see Vega, 2015).
+    *k-max* values (see Vega, 2015).
 
     Parameters
     ----------
@@ -52,13 +52,14 @@ def complexity_k(signal, k_max="max", show=False):
 
       k_max
 
-    Reference
+    References
     ----------
     * Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
       Physica D: Nonlinear Phenomena, 31(2), 277-283.
     * Vega, C. F., & Noel, J. (2015, June). Parameters analyzed of Higuchi's fractal dimension for
       EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://
       ieeexplore.ieee.org/document/7168285
+
     """
     # Get the range of k-max values to be tested
     # ------------------------------------------

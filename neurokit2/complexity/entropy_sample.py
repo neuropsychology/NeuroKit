@@ -10,10 +10,9 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     """**Sample Entropy (SampEn)**
 
     Compute the sample entropy (SampEn) of a signal. SampEn is a modification
-    of ApEn used for assessing complexity of physiological time series signals. Mathematically,
-    it is the negative natural logarithm of the conditional probability that two subseries
-    similar for ``m`` points remain similar for ``m+1``, where self-matches are
-    not included in calculating the probability.
+    of ApEn used for assessing complexity of physiological time series signals. It corresponds to
+    the conditional probability that two vectors that are close to each other for *m* dimensions
+    will remain close at the next *m + 1* component.
 
     This function can be called either via ``entropy_sample()`` or ``complexity_sampen()``.
 

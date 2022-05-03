@@ -14,8 +14,8 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
     against its corresponding k value on a log-log scale. HFD equates to the slope obtained
     from fitting a least-squares method.
 
-    Values should fall between 1 and 2. For more information about k parameter selection, see
-    the ``complexity_k()`` optimization function.
+    Values should fall between 1 and 2. For more information about the *k* parameter selection, see
+    the :func:`complexity_k` optimization function.
 
     Parameters
     ----------
@@ -23,8 +23,7 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     k_max : str or int
         Maximum number of interval times (should be greater than or equal to 2).
-        If "default", then the optimal kmax is computed based on the point at which HFD values plateau
-        for a range of kmax values (see ``complexity_k()`` optimization function).
+        If ``"default"``, the optimal k-max is estimated using :func:`complexity_k`, which is slow.
     show : bool
         Visualise the slope of the curve for the selected k_max value.
     **kwargs : optional
@@ -32,11 +31,15 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
 
     Returns
     ----------
-    slope : float
-        Higuchi's fractal dimension of the single time series.
+    HFD : float
+        Higuchi's fractal dimension of the time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Higuchi's fractal dimension.
+
+    See Also
+    --------
+    complexity_k
 
     Examples
     ----------
@@ -60,13 +63,14 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
 
       hfd
 
-    Reference
+    References
     ----------
     * Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
       Physica D: Nonlinear Phenomena, 31(2), 277-283.
     * Vega, C. F., & Noel, J. (2015, June). Parameters analyzed of Higuchi's fractal dimension for
       EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE.
       https://ieeexplore.ieee.org/document/7168285
+
     """
 
     # Sanity checks

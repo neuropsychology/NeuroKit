@@ -53,6 +53,11 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_higuchi
 
+*fractal_correlation()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_correlation
+
+
 
 Entropy
 ^^^^^^^^^^^^^^^^^
@@ -65,16 +70,16 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_differential
 
 *entropy_tsallis()*
-"""""""""""""""""""
+"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_tsallis
 
 *entropy_renyi()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_renyi
 
-*entropy_cumulative_residual()*
-"""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_cumulative_residual
+*entropy_cumulativeresidual()*
+"""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_cumulativeresidual
 
 *entropy_svd()*
 """""""""""""""""
@@ -84,12 +89,40 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
 
+*entropy_phase()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_phase
+
+*entropy_grid()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_grid
+
 *entropy_attention()*
-"""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_attention
 
+*entropy_increment()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_increment
+
+*entropy_slope()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_slope
+
+*entropy_symbolicdynamic()*
+"""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_symbolicdynamic
+
+*entropy_dispersion()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_dispersion
+
+*entropy_ofentropy()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_ofentropy
+
 *entropy_approximate()*
-""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_approximate
 
 *entropy_sample()*
@@ -97,7 +130,7 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_sample
 
 *entropy_permutation()*
-""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
 
 *entropy_bubble()*
@@ -113,15 +146,12 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_fuzzy
 
 *entropy_multiscale()*
-""""""""""""""""""""
+""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_multiscale
 
-*entropy_permutation()*
-"""""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_permutation
-
-
-
+*entropy_hierarchical()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_hierarchical
 
 
 Other
@@ -131,16 +161,24 @@ Other
 .. autofunction:: neurokit2.complexity.fisher_information
 
 *complexity_hjorth()*
-"""""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
-*complexity_rr()*
-""""""""""""""""""
-.. autofunction:: neurokit2.complexity.complexity_rr
+*complexity_lempelziv()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_lempelziv
 
-*complexity_hurst()*
+*complexity_relativeroughness()*
+""""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_relativeroughness
+
+*fractal_hurst()*
 """""""""""""""""""""
-.. autofunction:: neurokit2.complexity.complexity_hurst
+.. autofunction:: neurokit2.complexity.fractal_hurst
+
+*complexity_lyapunov()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_lyapunov
 
 *complexity_rqa()*
 """"""""""""""""""""
@@ -149,14 +187,53 @@ Other
 
 Utilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*fractal_mandelbrot()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_mandelbrot
+
 *complexity_simulate()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_simulate
 
-*complexity_coarsegraining()*
+*complexity_attractor()*
 """"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_attractor
+
+*complexity_symbolize*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_symbolize
+
+*complexity_coarsegraining()*
+""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
 
-*complexity_ordinalpatterns*
-""""""""""""""""""""""""""
+*complexity_ordinalpatterns()*
+""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
+
+*recurrence_matrix()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.recurrence_matrix
+
+
+Markov Chains
+^^^^^^^^^^^^^^^^^
+*transition_matrix()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.transition_matrix
+
+*markov_simulate()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.markov_simulate
+
+*markov_test_random()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.markov_test_random
+
+*markov_test_symmetry()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.markov_test_symmetry
+
+*markov_test_homogeneity()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.markov_test_homogeneity

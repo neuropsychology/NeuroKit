@@ -65,7 +65,7 @@ Here is some `more information <https://docs.conda.io/projects/conda/en/latest/u
 .. Note:: There should be a name in parentheses before your user's directory, e.g. ``(base) C:\Users\<yourusername>``. That is the name of your computing environment. By default, you have a ``base environment``. We don't want that, so create an environment.
 
 1. Run :code:`conda env create <yourenvname>`; activate it every time you open conda by running :code:`conda activate <yourenvname>`
-2. Now you can proceed to :ref:`the next step<From conda>`
+2. Now you can proceed to the next step.
 
 .. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/tutorial_installation_conda.jpg
 
@@ -76,7 +76,7 @@ From conda
 
 If you have Python installed as part of `Miniconda` or `Anaconda`, please follow these steps:
 
-1. As described in :ref:`above<Miniconda or Anaconda>`, open the `Anaconda Prompt` and activate your conda environment
+1. As described in above, open the `Anaconda Prompt` and activate your conda environment
 2. You can now install NeuroKit2 from `conda-forge <https://anaconda.org/conda-forge/neurokit2>`_ by typing
 
 .. code-block:: console

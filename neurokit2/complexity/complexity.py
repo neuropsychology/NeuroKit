@@ -2,12 +2,12 @@ import numpy as np
 import pandas as pd
 
 from .complexity_hjorth import complexity_hjorth
-from .complexity_hurst import complexity_hurst
+from .fractal_hurst import fractal_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
-from .complexity_rr import complexity_rr
+from .complexity_relativeroughness import complexity_relativeroughness
 from .entropy_approximate import entropy_approximate
-from .entropy_cumulative_residual import entropy_cumulative_residual
+from .entropy_cumulativeresidual import entropy_cumulativeresidual
 from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
@@ -186,7 +186,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         # Other
         df["FI"], info["FI"] = fisher_information(signal, delay=delay, dimension=dimension)
         df["Hjorth"], info["Hjorth"] = complexity_hjorth(signal)
-        df["RR"], info["RR"] = complexity_rr(signal)
+        df["RR"], info["RR"] = complexity_relativeroughness(signal)
 
     if "medium" in which:
 
@@ -196,7 +196,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)
 
         # Entropy
-        df["CREn"], info["CREn"] = entropy_cumulative_residual(signal)
+        df["CREn"], info["CREn"] = entropy_cumulativeresidual(signal)
         df["ApEn"], info["ApEn"] = entropy_approximate(
             signal, delay=delay, dimension=dimension, tolerance=tolerance
         )
@@ -214,7 +214,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         )
 
         # Other
-        df["Hurst"], info["Hurst"] = complexity_hurst(signal)
+        df["Hurst"], info["Hurst"] = fractal_hurst(signal)
         df["LZC"], info["LZC"] = complexity_lempelziv(signal, dimension=dimension, delay=delay)
         df["PLZC"], info["PLZC"] = complexity_lempelziv(
             signal, dimension=dimension, delay=delay, permutation=True

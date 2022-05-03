@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_ordinalpatterns import complexity_ordinalpatterns
 from .entropy_shannon import entropy_shannon
+from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 
 
 def entropy_permutation(
@@ -156,7 +156,7 @@ def _entropy_permutation(
     sorting="quicksort",
     **kwargs
 ):
-    patterns, freq, info = complexity_ordinalpatterns(
+    patterns, info = complexity_ordinalpatterns(
         signal,
         dimension=dimension,
         delay=delay,
@@ -176,6 +176,8 @@ def _entropy_permutation(
         )
         # Normalize
         freq = freq / info["Weights"].sum()
+    else:
+        freq = info["Frequencies"]
 
     # Compute entropy algorithm ------------------------------------------------
     pe, _ = algorithm(freq=freq, **kwargs)

@@ -1,6 +1,13 @@
 name: "📜 Documentation builder"
+
 on:
-- pull_request
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 
 jobs:
   docs:
@@ -30,6 +37,7 @@ jobs:
         pip install matplotlib
         pip install mne
         pip install PyWavelets
+        pip install EMD-signal
         pip install astropy
         pip install seaborn
         pip install EMD-signal
