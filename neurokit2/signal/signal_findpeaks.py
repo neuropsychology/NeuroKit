@@ -17,18 +17,19 @@ def signal_findpeaks(
     relative_median=False,
     relative_max=False,
 ):
-    """Find peaks in a signal.
+    """**Find peaks in a signal**
 
-    Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence),
-    width and distance with other peaks.
+    Locate peaks (local maxima) in a signal and their related characteristics, such as height
+    (prominence), width and distance with other peaks.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     height_min : float
-        The minimum height (i.e., amplitude in terms of absolute values). For example,``height_min=20``
-        will remove all peaks which height is smaller or equal to 20 (in the provided signal's values).
+        The minimum height (i.e., amplitude in terms of absolute values). For example,
+        ``height_min=20`` will remove all peaks which height is smaller or equal to 20 (in the
+        provided signal's values).
     height_max : float
         The maximum height (i.e., amplitude in terms of absolute values).
     relative_height_min : float
@@ -45,50 +46,61 @@ def signal_findpeaks(
         Relative to median uses a more robust form of standardization (see ``standardize()``).
     relative_max : bool
         If a relative threshold is specified, how should it be computed (i.e., relative to what?).
-        Reelative to max will consider the maximum height as the reference.
+        Relative to max will consider the maximum height as the reference.
 
     Returns
     ----------
     dict
         Returns a dict itself containing 5 arrays:
-        - 'Peaks' contains the peaks indices (as relative to the given signal). For instance, the
-        value 3 means that the third data point of the signal is a peak.
-        - 'Distance' contains, for each peak, the closest distance with another peak. Note that these
-        values will be recomputed after filtering to match the selected peaks.
-        - 'Height' contains the prominence of each peak. See `scipy.signal.peak_prominences()`.
-        - 'Width' contains the width of each peak. See `scipy.signal.peak_widths()`.
-        - 'Onset' contains the onset, start (or left trough), of each peak.
-        - 'Offset' contains the offset, end (or right trough), of each peak.
+
+         * 'Peaks' contains the peaks indices (as relative to the given signal). For instance, the
+            value 3 means that the third data point of the signal is a peak.
+         * 'Distance' contains, for each peak, the closest distance with another peak. Note that
+            these values will be recomputed after filtering to match the selected peaks.
+         * 'Height' contains the prominence of each peak.
+            See :func:`.scipy.signal.peak_prominences()`.
+         * 'Width' contains the width of each peak. See :func:`.scipy.signal.peak_widths()`.
+         * 'Onset' contains the onset, start (or left trough), of each peak.
+         * 'Offset' contains the offset, end (or right trough), of each peak.
 
     Examples
     ---------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>> import scipy.misc
-    >>>
-    >>> signal = nk.signal_simulate(duration=5)
-    >>> info = nk.signal_findpeaks(signal)
-    >>> fig1 = nk.events_plot([info["Onsets"], info["Peaks"]], signal)
-    >>> fig1 #doctest: +SKIP
-    >>>
-    >>> signal = nk.signal_distort(signal)
-    >>> info = nk.signal_findpeaks(signal, height_min=1)
-    >>> fig2 = nk.events_plot(info["Peaks"], signal)
-    >>> fig2 #doctest: +SKIP
-    >>>
-    >>> # Filter peaks
-    >>> ecg = scipy.misc.electrocardiogram()
-    >>> signal = ecg[0:1000]
-    >>> info1 = nk.signal_findpeaks(signal, relative_height_min=0)
-    >>> info2 = nk.signal_findpeaks(signal, relative_height_min=1)
-    >>> fig3 = nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
-    >>> fig3 #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal
+      signal = nk.signal_simulate(duration=5)
+      info = nk.signal_findpeaks(signal)
+
+      # Visualize Onsets of Peaks and Peaks of Signal
+      @savefig p_signal_findpeaks_1.png scale=100%
+      fig1 = nk.events_plot([info["Onsets"], info["Peaks"]], signal)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      import scipy.misc
+
+      # Load actual ECG Signal
+      ecg = scipy.misc.electrocardiogram()
+      signal = ecg[0:1000]
+
+      # Find Unfiltered and Filtered Peaks
+      info1 = nk.signal_findpeaks(signal, relative_height_min=0)
+      info2 = nk.signal_findpeaks(signal, relative_height_min=1)
+
+      # Visualize Peaks
+      @savefig p_signal_findpeaks_2.png scale=100%
+      fig2 = nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
+      @suppress
+      plt.close()
+
 
     See Also
     --------
-    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks,
-    ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
+    signal_fixpeaks
 
     """
     info = _signal_findpeaks_scipy(signal)
@@ -129,7 +141,13 @@ def signal_findpeaks(
 
 
 def _signal_findpeaks_keep(
-    info, what="Height", below=None, above=None, relative_mean=False, relative_median=False, relative_max=False
+    info,
+    what="Height",
+    below=None,
+    above=None,
+    relative_mean=False,
+    relative_median=False,
+    relative_max=False,
 ):
 
     if below is None and above is None:

@@ -22,20 +22,23 @@ def signal_fixpeaks(
     method="Kubios",
     **kwargs,
 ):
-    """Correct erroneous peak placements.
+    """**Correct Erroneous Peak Placements**
 
-    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences (period).
+    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences
+    (period).
 
     Parameters
     ----------
     peaks : list or array or DataFrame or Series or dict
-        The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
-        with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed to be obtained with `ecg_findpeaks()`
-        or `ppg_findpeaks()` and to be of the same length as the input signal.
+        The samples at which the peaks occur. If an array is passed in, it is assumed that it was
+        obtained with ``signal_findpeaks``. If a DataFrame is passed in, it is assumed to be
+        obtained with ``ecg_findpeaks`` or ``ppg_findpeaks`` and to be of the same length as the
+        input signal.
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).
     iterative : bool
-        Whether or not to apply the artifact correction repeatedly (results in superior artifact correction).
+        Whether or not to apply the artifact correction repeatedly (results in superior artifact
+        correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
     interval_min : float
@@ -50,7 +53,7 @@ def signal_fixpeaks(
         the sample (expressed in standard deviation from the mean).
     robust : bool
         Only when ``method = "neurokit"``. Use a robust method of standardization (see
-        `standardize()`) for the relative thresholds.
+        `standardize`) for the relative thresholds.
     method : str
         Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
         in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
@@ -63,8 +66,8 @@ def signal_fixpeaks(
     peaks_clean : array
         The corrected peak locations.
     artifacts : dict
-        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with the
-        keys "ectopic", "missed", "extra", and "longshort".
+        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with
+        the keys "ectopic", "missed", "extra", and "longshort".
 
     See Also
     --------
@@ -72,43 +75,65 @@ def signal_fixpeaks(
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import numpy as np
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> # Kubios
-    >>> ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
-    >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
-    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True,
-    ...                                                  show=True, method="Kubios")
-    >>> rate_corrected = nk.signal_rate(rpeaks_corrected, desired_length=len(ecg))
-    >>> rate_uncorrected = nk.signal_rate(rpeaks_uncorrected, desired_length=len(ecg))
-    >>>
-    >>> fig, ax = plt.subplots()
-    >>> ax.plot(rate_uncorrected, label="heart rate without artifact correction") #doctest: +SKIP
-    >>> ax.plot(rate_corrected, label="heart rate with artifact correction") #doctest: +SKIP
-    >>> ax.legend(loc="upper right") #doctest: +SKIP
-    >>>
-    >>> # NeuroKit
-    >>> signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
-    >>> peaks_true = nk.signal_findpeaks(signal)["Peaks"]
-    >>> peaks = np.delete(peaks_true, [1])  # create gaps
-    >>>
-    >>> signal = nk.signal_simulate(duration=20, sampling_rate=1000, frequency=1)
-    >>> peaks_true = nk.signal_findpeaks(signal)["Peaks"]
-    >>> peaks = np.delete(peaks_true, [5, 15])  # create gaps
-    >>> peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
-    >>>
-    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5, method="neurokit")
-    >>> # Plot and shift original peaks to the rightto see the difference.
-    >>> fig = nk.events_plot([peaks + 50, peaks_corrected], signal)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import numpy as np
+      import matplotlib.pyplot as plt
+
+      # Simulate ECG data
+      ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
+
+      # Identify and Correct Peaks using 'Kubios' Method
+      rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
+      @savefig p_sign al_fixpeaks1.png scale=100%
+      artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True,
+                                                    show=True, method="Kubios")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Visualize Artifact Correction
+      rate_corrected = nk.signal_rate(rpeaks_corrected, desired_length=len(ecg))
+      rate_uncorrected = nk.signal_rate(rpeaks_uncorrected, desired_length=len(ecg))
+
+      @savefig p_signal_fixpeaks2.png scale=100%
+      fig, ax = plt.subplots()
+      ax.plot(rate_uncorrected, label="heart rate without artifact correction")
+      ax.plot(rate_corrected, label="heart rate with artifact correction")
+      ax.legend(loc="upper right")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Simulate Abnormal Signals
+      signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
+      peaks_true = nk.signal_findpeaks(signal)["Peaks"]
+      peaks = np.delete(peaks_true, [1])  # create gaps due to missing peaks
+
+      signal = nk.signal_simulate(duration=20, sampling_rate=1000, frequency=1)
+      peaks_true = nk.signal_findpeaks(signal)["Peaks"]
+      peaks = np.delete(peaks_true, [5, 15])  # create gaps
+      peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
+
+      # Identify and Correct Peaks using 'Neurokit' Method
+      peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5,
+      method="neurokit")
+
+      # Plot and shift original peaks to the right to see the difference.
+      @savefig p_signal_fixpeaks3.png scale=100%
+      fig = nk.events_plot([peaks + 50, peaks_corrected], signal)
+      @suppress
+      plt.close()
+
 
     References
     ----------
-    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability time
-    series artefact correction using novel beat classification. Journal of medical engineering & technology,
-    43(3), 173-181. 10.1080/03091902.2019.1640306
+    * Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability time
+      series artefact correction using novel beat classification. Journal of medical engineering &
+      technology, 43(3), 173-181. 10.1080/03091902.2019.1640306
 
     """
     # Format input

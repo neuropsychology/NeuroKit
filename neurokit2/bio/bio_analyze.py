@@ -12,7 +12,7 @@ from ..rsp import rsp_analyze
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constant"):
-    """Automated analysis of physiological signals.
+    """**Automated analysis of physiological signals**
 
     Wrapper for other bio analyze functions of electrocardiography signals (ECG), respiration
     signals (RSP), electrodermal activity (EDA), electromyography signals (EMG) and
@@ -22,8 +22,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     ----------
     data : DataFrame
         The DataFrame containing all the processed signals, typically
-        produced by `bio_process()`, `ecg_process()`, `rsp_process()`,
-        `eda_process()`, `emg_process()` or `eog_process()`. Can also be an epochs object.
+        produced by :func:`.bio_process`, :func:`.ecg_process`, :func:`.rsp_process`,
+        :func:`.eda_process`, :func:`.emg_process` or :func:`.eog_process`. Can also be an
+        epochs object.
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
         Defaults to 1000.
@@ -40,10 +41,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     Returns
     ----------
     DataFrame
-        DataFrame of the analyzed bio features. See docstrings of `ecg_analyze()`,
-        `rsp_analyze()`, `eda_analyze()`, `emg_analyze()` and `eog_analyze()` for more details.
-        Also returns Respiratory Sinus Arrhythmia features produced by
-        `hrv_rsa()` if interval-related analysis is carried out.
+        DataFrame of the analyzed bio features. See docstrings of :func:`.ecg_analyze()`,
+        :func:`.rsp_analyze()`, :func:`.eda_analyze()`, :func:`.emg_analyze()` and
+        :func:`.eog_analyze()` for more details. Also returns Respiratory Sinus Arrhythmia features
+        produced by :func:`.hrv_rsa()` if interval-related analysis is carried out.
 
     See Also
     ----------
@@ -51,46 +52,39 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example 1: Event-related analysis ==================================================
-    >>> # Download data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"],
-    ...                           keep=data["Photosensor"], sampling_rate=100)
-    >>>
-    >>> # Build epochs
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral",
-    ...                                           "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1,
-    ...                           epochs_end=1.9)
-    >>>
-    >>> # Analyze
-    >>> nk.bio_analyze(epochs, sampling_rate=100) #doctest: +ELLIPSIS
-      Label Condition  Event_Onset  ...         RSA_Gates
-    1     1  Negative          ...  ...           ...
-    2     2   Neutral          ...  ...           ...
-    3     3   Neutral          ...  ...           ...
-    4     4  Negative          ...  ...           ...
+    .. ipython:: python
 
-    ...
-    >>>
-    >>> # Example 2: Interval-related analysis =================================================
-    >>> # Download data
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], ppg=data["PPG"], sampling_rate=100)
-    >>>
-    >>> # Analyze
-    >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_MeanNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD
-    0            ...        ...  ...            ...               ...
+      import neurokit2 as nk
 
-    [1 rows x 184 columns]
+      # Example 1: Event-related analysis ==================================================
+      # Download data
+      data = nk.data("bio_eventrelated_100hz")
+
+      # Process the data
+      df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"],
+                               keep=data["Photosensor"], sampling_rate=100)
+
+      # Build epochs around photosensor-marked events
+      events = nk.events_find(data["Photosensor"], threshold_keep='below',
+                             event_conditions=["Negative", "Neutral",
+                                               "Neutral", "Negative"])
+      epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1,
+                               epochs_end=1.9)
+
+      # Analyze
+      nk.bio_analyze(epochs, sampling_rate=100)
+
+
+      # Example 2: Interval-related analysis =================================================
+      # Download data
+      data = nk.data("bio_resting_5min_100hz")
+
+      # Process the data
+      df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], ppg=data["PPG"], sampling_rate=100)
+
+      # Analyze
+      nk.bio_analyze(df, sampling_rate=100)
+
     """
     features = pd.DataFrame()
     method = method.lower()

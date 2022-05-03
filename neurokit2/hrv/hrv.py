@@ -51,6 +51,8 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     .. ipython:: python
 
       import neurokit2 as nk
+      import matplotlib.pyplot as plt
+      plt.rc('font', size=8)
 
       # Download data
       data = nk.data("bio_resting_5min_100hz")
@@ -64,10 +66,6 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
       hrv_indices = nk.hrv(peaks, sampling_rate=100, show=True)
       @suppress
       plt.close()
-
-    .. ipython:: python
-
-      hrv_indices
 
     **Example 2**: Compute HRV directly from processed data
 
@@ -145,6 +143,8 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
     ax_marg_x = fig.add_subplot(spec_within[0, 0:3])
     ax_marg_x.set_title("Poincaré Plot")
     ax_marg_y = fig.add_subplot(spec_within[1:4, 3])
+
+    fig.subplots_adjust(hspace=0.5, wspace=0.5)
 
     # Distribution of RR intervals
     peaks = _hrv_sanitize_input(peaks)
