@@ -9,22 +9,30 @@ from ..misc import as_vector
 
 
 def transition_matrix(sequence):
-    """**Empirical Transition Matrix*
+    """**Transition Matrix**
 
-    Also known as discrete Markov chains. Computes the observed transition matrix and performs a
+    A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
+    describe a sequence of states, also known as **discrete Markov chains**. Each of its entries is
+    a probability of transitioning from one state to the other.
+
+    Computes the observed transition matrix and performs a
     Chi-square test against the expected transition matrix.
-
-    Based on https://github.com/Frederic-vW/eeg_microstates and https://github.com/maximtrp/mchmm
 
     Parameters
     ----------
-    sequence : np.ndarray
-        1D array of numbers.
+    sequence : Union[list, np.array, pd.Series]
+        A list of discrete states.
+
+    See Also
+    --------
+    markov_simulate, markov_test_random
 
     Returns
     -------
+    pd.DataFrame
+        The empirical (observed) transition matrix.
     dict
-        Contains information of the expected and observed transition matrix.
+        A dictionnary containing additional information.
 
     Examples
     --------
@@ -32,7 +40,7 @@ def transition_matrix(sequence):
 
       import neurokit2 as nk
 
-      sequence = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
+      sequence = [0, 0, 1, 2, 2, 2, 1, 0, 0, 3]
       tm, _ = nk.transition_matrix(sequence)
       tm
 
@@ -42,60 +50,68 @@ def transition_matrix(sequence):
     sequence = as_vector(sequence)
 
     # Observed transition matrix
-    tm = _transition_matrix_observed(sequence)
+    states = np.unique(sequence)
+    n_states = len(states)
 
-    # Expect transition matrix (theoretical)
-    out["Expected"] = _transition_matrix_expected(tm)
+    # Get observed transition matrix
+    freqs = np.zeros((n_states, n_states))
+    for x, y in itertools.product(range(n_states), repeat=2):
+        xi = np.argwhere(sequence == states[x]).flatten()
+        yi = xi + 1
+        yi = yi[yi < len(sequence)]
+        freqs[x, y] = np.count_nonzero(sequence[yi] == states[y])
 
-    # Test against theoretical transitions
-    results = scipy.stats.chisquare(f_obs=tm, f_exp=out["Expected"], axis=None)
-    out["Transition_Chisq"] = results[0]
-    out["Transition_df"] = len(tm) * (len(tm) - 1) / 2
-    out["Transition_p"] = results[1]
+    # Convert to probabilities
+    tm = freqs / np.sum(freqs, axis=0)[:, None]
 
-    # Symmetry test
-    out.update(_transition_matrix_symmetry(sequence))
+    # filling in a row containing zeros with uniform p values
+    uniform_p = 1 / n_states
+    zero_row = np.argwhere(tm.sum(axis=1) == 0).ravel()
+    tm[zero_row, :] = uniform_p
 
-    return tm, out
+    # Convert to DataFrame
+    tm = pd.DataFrame(tm, index=states, columns=states)
+    freqs = pd.DataFrame(freqs, index=states, columns=states)
+
+    # # Expect transition matrix (theoretical)
+    # out["Expected"] = _transition_matrix_expected(tm)
+
+    # # Test against theoretical transitions
+    # results = scipy.stats.chisquare(f_obs=tm, f_exp=out["Expected"], axis=None)
+    # out["Transition_Chisq"] = results[0]
+    # out["Transition_df"] = len(tm) * (len(tm) - 1) / 2
+    # out["Transition_p"] = results[1]
+
+    # # Symmetry test
+    # out.update(_transition_matrix_symmetry(sequence))
+
+    return tm, {"Occurrences": freqs}
 
 
-def transition_matrix_simulate(matrix, n=10):
-    """Markov chain simulation
+def _sanitize_tm_input(tm, probs=True):
+    # If symmetric dataframe, then surely a transition matrix
+    if isinstance(tm, pd.DataFrame) and tm.shape[1] == tm.shape[0]:
+        if tm.values.max() > 1:
+            if probs is True:
+                raise ValueError(
+                    "Transition matrix must be a probability matrix (all probabilities must be"
+                    " < 1)."
+                )
+            else:
+                return tm
+        else:
+            if probs is True:
+                return tm
+            else:
+                raise ValueError(
+                    "Transition matrix must be a frequency matrix containing counts and not"
+                    " probabilities. Please pass the `info['Occurrences']` object instead of"
+                    " the transition matrix."
+                )
 
-    The algorithm is based on `scipy.stats.multinomial`. The code is heavily inspired by
-    https://github.com/maximtrp/mchmm.
-
-
-    Examples
-    --------
-    >>> import neurokit2 as nk
-    >>> import numpy as np
-    >>>
-    >>> sequence = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
-    >>> tm, _ = nk.transition_matrix(sequence)
-    >>>
-    >>> x = nk.transition_matrix_simulate(tm, n=10)
-    >>> x #doctest: +SKIP
-    """
-    states = matrix.columns.values
-
-    # Start selection
-    _start = np.argmax(matrix.sum(axis=1) / matrix.sum())
-
-    # simulated sequence init
-    seq = np.zeros(n, dtype=int)
-    seq[0] = _start
-
-    # random seeds
-    random_states = np.random.randint(0, n, n)
-
-    # simulation procedure
-    for i in range(1, n):
-        _ps = matrix.values[seq[i - 1]]
-        _sample = np.argmax(scipy.stats.multinomial.rvs(1, _ps, 1, random_state=random_states[i]))
-        seq[i] = _sample
-
-    return states[seq]
+    # Otherwise, conver to TM
+    else:
+        return transition_matrix(tm)
 
 
 # def transition_matrix_plot(matrix):
@@ -150,35 +166,6 @@ def transition_matrix_simulate(matrix, n=10):
 # =============================================================================
 # Internals
 # =============================================================================
-def _transition_matrix_observed(sequence):
-    """Empirical transition matrix
-
-    Based on https://github.com/Frederic-vW/eeg_microstates and https://github.com/maximtrp/mchmm
-    """
-    states = np.unique(sequence)
-    n_states = len(states)
-
-    # Get observed transition matrix
-    matrix = np.zeros((n_states, n_states))
-    for x, y in itertools.product(range(n_states), repeat=2):
-        xi = np.argwhere(sequence == states[x]).flatten()
-        yi = xi + 1
-        yi = yi[yi < len(sequence)]
-        matrix[x, y] = np.count_nonzero(sequence[yi] == states[y])
-
-    # Convert to probabilities
-    matrix = matrix / np.sum(matrix, axis=0)[:, None]
-
-    # filling in a row containing zeros with uniform p values
-    uniform_p = 1 / n_states
-    zero_row = np.argwhere(matrix.sum(axis=1) == 0).ravel()
-    matrix[zero_row, :] = uniform_p
-
-    # Convert to DataFrame
-    out = pd.DataFrame(matrix, index=states, columns=states)
-    return out
-
-
 def _transition_matrix_expected(observed_matrix):
 
     expected_matrix = scipy.stats.contingency.expected_freq(observed_matrix.values)
@@ -224,7 +211,7 @@ def _transition_matrix_stationarity(sequence, size=100):
     length l of symbolic sequence X with ns symbols
     cf. Kullback, Technometrics (1962), Table 9.1.
 
-    ased on https://github.com/Frederic-vW/eeg_microstates
+    based on https://github.com/Frederic-vW/eeg_microstates
     """
     states = np.unique(sequence)
     n_states = len(states)

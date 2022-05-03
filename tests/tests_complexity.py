@@ -42,7 +42,7 @@ def test_complexity_sanity():
 
     assert np.allclose(nk.fractal_correlation(signal)[0], 0.7930504156910694, atol=0.000001)
     assert np.allclose(
-        nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.0001
+        nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.01
     )
 
 
