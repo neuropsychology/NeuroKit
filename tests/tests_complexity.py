@@ -29,7 +29,7 @@ def test_complexity_sanity():
     )
 
     # Fractal
-    fractal_dfa, parameters = nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))
+    fractal_dfa, parameters = nk.fractal_dfa(signal, scale=np.array([4, 8, 12, 20]))
     assert parameters["Fluctuation"].shape == (4, 1)
     assert np.allclose(fractal_dfa, 2.10090484, atol=0.000001)
 
