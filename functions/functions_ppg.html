@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Studies" href="../studies/index.html" />
+    <link rel="next" title="HRV" href="functions_hrv.html" />
     <link rel="prev" title="ECG" href="functions_ecg.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -176,6 +176,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_hrv.html">
+     HRV
     </a>
    </li>
   </ul>
@@ -486,14 +491,14 @@ title="Print to PDF"
      </em>
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#module-neurokit2.ppg">
-     <em>
-      Other
-     </em>
-    </a>
-   </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-neurokit2.ppg">
+   <em>
+    Other
+   </em>
+  </a>
  </li>
 </ul>
 
@@ -589,14 +594,14 @@ title="Print to PDF"
      </em>
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#module-neurokit2.ppg">
-     <em>
-      Other
-     </em>
-    </a>
-   </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-neurokit2.ppg">
+   <em>
+    Other
+   </em>
+  </a>
  </li>
 </ul>
 
@@ -710,9 +715,9 @@ by the <cite>Label</cite> column. See <a class="reference internal" href="#neuro
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  1.183655           0.842088</span>
-<span class="go">2     2        10000  ...                  0.499596           0.959694</span>
-<span class="go">3     3        15000  ...                  0.491204           0.993295</span>
+<span class="go">1     1         5000  ...                  2.415910           0.736460</span>
+<span class="go">2     2        10000  ...                 -3.280411           0.853043</span>
+<span class="go">3     3        15000  ...                  0.171050           0.745869</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -931,16 +936,16 @@ peaks occur, accessible with the key “PPG_Peaks”.</p>
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f4bbe891ea0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fefe0300d60&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f4bbe56f310&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fefe0329c30&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f4bbe56f4f0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fefe049d2d0&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f4bbe9aa9b0&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fefe37c2920&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1013,9 +1018,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.256406           0.980497</span>
-<span class="go">2     2        10000  ...                 -0.104257           0.971281</span>
-<span class="go">3     3        15000  ...                 -0.750543           0.684680</span>
+<span class="go">1     1         5000  ...                 -0.873470           0.964262</span>
+<span class="go">2     2        10000  ...                 -1.954094           0.924187</span>
+<span class="go">3     3        15000  ...                 -0.571187           0.884412</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1044,7 +1049,7 @@ separately processed DataFrames.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Rate_Mean&quot;</span></code>: the mean heart rate.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_HRV&quot;</span></code>: the different heart rate variability metrices.</p></li>
 </ul>
-<p>See <code class="xref py py-func docutils literal notranslate"><span class="pre">hrv()</span></code> docstrings for details.</p>
+<p>See <a class="reference internal" href="functions_hrv.html#neurokit2.hrv.hrv" title="neurokit2.hrv.hrv"><code class="xref py py-func docutils literal notranslate"><span class="pre">hrv()</span></code></a> docstrings for details.</p>
 </p>
 </dd>
 </dl>
@@ -1085,85 +1090,10 @@ separately processed DataFrames.</p></li>
 </dd></dl>
 
 </section>
-<section id="module-neurokit2.ppg">
-<span id="other"></span><h3><em>Other</em><a class="headerlink" href="#module-neurokit2.ppg" title="Permalink to this headline">#</a></h3>
-<p>Submodule for NeuroKit.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.ppg.ppg_rate">
-<span class="sig-name descname"><span class="pre">ppg_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ppg.ppg_rate" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Signal Rate</strong></p>
-<p>Calculate signal rate (per minute) from a series of peaks. It is a general function that works
-for any series of peaks (i.e., not specific to a particular type of signal). It is computed as
-<code class="docutils literal notranslate"><span class="pre">60</span> <span class="pre">/</span> <span class="pre">period</span></code>, where the period is the time between the peaks (see <code class="docutils literal notranslate"><span class="pre">signal_period()</span></code>).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is implemented under <code class="docutils literal notranslate"><span class="pre">signal_rate()</span></code>, but it also re-exported under
-different names, such as <code class="docutils literal notranslate"><span class="pre">ecg_rate()</span></code>, <code class="docutils literal notranslate"><span class="pre">`ppg_rate()</span></code>, or <code class="docutils literal notranslate"><span class="pre">rsp_rate()</span></code>. The aliases
-provided for consistency.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>Union[list, np.array, pd.DataFrame, pd.Series, dict]</em>) – The samples at which the peaks occur. If an array is passed in, it is assumed that it was
-obtained with <cite>signal_findpeaks()</cite>. If a DataFrame is passed in, it is assumed it is of the
-same length as the input signal in which occurrences of R-peaks are marked as “1”, with
-such containers obtained with e.g., ecg_findpeaks() or rsp_findpeaks().</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal that contains peaks (in Hz, i.e., samples/second).
-Defaults to 1000.</p></li>
-<li><p><strong>desired_length</strong> (<em>int</em>) – If left at the default None, the returned rated will have the same number of elements as
-peaks. If set to a value larger than the sample at which the last peak occurs in the signal
-(i.e., peaks[-1]), the returned rate will be interpolated between peaks over
-<cite>desired_length</cite> samples. To interpolate the rate over the entire duration of the signal,
-set desired_length to the number of samples in the signal. Cannot be smaller than or equal
-to the sample at which the last peak occurs in the signal. Defaults to None.</p></li>
-<li><p><strong>interpolation_method</strong> (<em>str</em>) – Method used to interpolate the rate between peaks. See <cite>signal_interpolate()</cite>.
-‘monotone_cubic’ is chosen as the default interpolation method since it ensures monotone
-interpolation between data points (i.e., it prevents physiologically implausible
-“overshoots” or “undershoots” in the y-direction). In contrast, the widely used cubic
-spline interpolation does not ensure monotonicity.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – A vector containing the rate (peaks per minute).</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_period</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_findpeaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_plot</span></code></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># Create signal of varying frequency</span>
-<span class="gp">In [2]: </span><span class="n">freq</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">freq</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
-
-<span class="go"># Find peaks</span>
-<span class="gp">In [4]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-
-<span class="go"># Compute rate using 2 methods</span>
-<span class="gp">In [5]: </span><span class="n">rate1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">],</span>
-<span class="gp">   ...: </span>                       <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span>
-<span class="gp">   ...: </span>                       <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
-<span class="gp">   ...: </span>
-
-<span class="gp">In [6]: </span><span class="n">rate2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">],</span>
-<span class="gp">   ...: </span>                       <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span>
-<span class="gp">   ...: </span>                       <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">)</span>
-<span class="gp">   ...: </span>
-
-<span class="go"># Visualize signal and rate on the same scale</span>
-<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">rate1</span><span class="p">,</span> <span class="n">rate2</span><span class="p">],</span>
-<span class="gp">   ...: </span>               <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Original signal&quot;</span><span class="p">,</span> <span class="s2">&quot;Rate (nearest)&quot;</span><span class="p">,</span> <span class="s2">&quot;Rate (monotone cubic)&quot;</span><span class="p">],</span>
-<span class="gp">   ...: </span>               <span class="n">standardize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-<span class="gp">   ...: </span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_signal_rate.png"><img alt="../_images/p_signal_rate.png" src="../_images/p_signal_rate.png" style="width: 640.0px; height: 480.0px;" /></a>
-</dd></dl>
-
 </section>
+<section id="module-neurokit2.ppg">
+<span id="other"></span><h2><em>Other</em><a class="headerlink" href="#module-neurokit2.ppg" title="Permalink to this headline">#</a></h2>
+<p>Submodule for NeuroKit.</p>
 </section>
 </section>
 
@@ -1182,10 +1112,10 @@ spline interpolation does not ensure monotonicity.</p></li>
             <p class="prev-next-title">ECG</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../studies/index.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_hrv.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Studies</p>
+        <p class="prev-next-title">HRV</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

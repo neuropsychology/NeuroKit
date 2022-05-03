@@ -42,8 +42,8 @@ Analysis
 .. autofunction:: neurokit2.ppg.ppg_intervalrelated
 
 *Other*
-"""""""""""""
+^^^^^^^^^
 
 .. automodule:: neurokit2.ppg
    :members:
-   :exclude-members: ppg_process, ppg_analyze, ppg_simulate, ppg_plot, ppg_clean, ppg_findpeaks, ppg_eventrelated, ppg_intervalrelated
+   :exclude-members: ppg_process, ppg_analyze, ppg_simulate, ppg_plot, ppg_clean, ppg_findpeaks, ppg_rate, ppg_eventrelated, ppg_intervalrelated
