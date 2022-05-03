@@ -114,9 +114,9 @@ def signal_detrend(
 
     References
     ----------
-    * `Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending
-       method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2),
-       172-175 <https://ieeexplore.ieee.org/document/979357>`_
+    * Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending
+      method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2),
+      172-175
 
     """
     signal = np.array(signal)  # Force vector

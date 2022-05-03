@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..complexity import transition_matrix
+from ..markov import transition_matrix
 
 
 def microstates_dynamic(microstates):

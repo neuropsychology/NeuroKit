@@ -2,7 +2,7 @@
 import numpy as np
 import scipy.stats
 
-from .markov_transition_matrix import _sanitize_tm_input
+from .transition_matrix import _sanitize_tm_input
 
 
 def markov_simulate(tm, n=10):

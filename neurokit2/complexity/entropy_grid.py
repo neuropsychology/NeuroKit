@@ -142,6 +142,5 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
         ax2.set_xticks([])
         ax2.set_yticks([])
         plt.suptitle("Gridded Poincaré Plot and its Density")
-        plt.show()
 
     return griden, info

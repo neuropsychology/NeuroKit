@@ -173,7 +173,6 @@ def entropy_hierarchical(
         ax2.annotate(labx[-1], (x[-1], y[-1]), fontsize=8)
         ax2.invert_yaxis()
         ax2.set_ylabel("Scale Factor")
-        plt.show()
 
     # return MSx, Sn, CI
     return hen, info

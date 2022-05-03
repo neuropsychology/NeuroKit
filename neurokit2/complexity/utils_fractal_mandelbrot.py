@@ -77,8 +77,8 @@ def fractal_mandelbrot(
       @savefig p_fractal_mandelbrot3.png scale=100%
       plt.imshow(m.T, cmap="viridis")
       plt.axis("off")
-      plt.show()
       @suppress
+      plt.show()
       plt.close()
 
 
@@ -92,8 +92,8 @@ def fractal_mandelbrot(
       @savefig p_fractal_mandelbrot4.png scale=100%
       plt.imshow(b.T, cmap="gray")
       plt.axis("off")
-      plt.show()
       @suppress
+      plt.show()
       plt.close()
 
 
@@ -108,8 +108,8 @@ def fractal_mandelbrot(
       @savefig p_fractal_mandelbrot5.png scale=100%
       plt.imshow(mixed.T, cmap="gray")
       plt.axis("off")
-      plt.show()
       @suppress
+      plt.show()
       plt.close()
 
     """
@@ -129,7 +129,6 @@ def fractal_mandelbrot(
     if show is True:
         plt.imshow(img, cmap="rainbow")
         plt.axis("off")
-        plt.show()
 
     return img
 

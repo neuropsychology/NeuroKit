@@ -64,6 +64,8 @@ def entropy_phase(signal, delay=1, n=4, show=False, **kwargs):
 
       phasen
 
+    .. ipython:: python
+
       @savefig p_entropy_phase2.png scale=100%
       phasen, info = nk.entropy_phase(signal, n=8, show=True)
       @suppress
@@ -136,6 +138,5 @@ def entropy_phase(signal, delay=1, n=4, show=False, **kwargs):
         plt.xticks([-limx, 0, limx])
         plt.yticks([-limx, 0, limx])
         plt.title("Second Order Difference Plot (SODP)")
-        plt.show()
 
     return phasen, info
