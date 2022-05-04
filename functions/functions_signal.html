@@ -1147,7 +1147,7 @@ See <a class="reference external" href="https://docs.scipy.org/doc/scipy/referen
 <span class="gp">In [8]: </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
 <span class="gp">In [9]: </span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f84f54de2c0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f8866c189a0&gt;</span>
 
 <span class="gp">In [10]: </span><span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">interpolation_methods</span><span class="p">:</span>
 <span class="go">  Input In [10]</span>
@@ -1156,8 +1156,16 @@ See <a class="reference external" href="https://docs.scipy.org/doc/scipy/referen
 <span class="go">SyntaxError: incomplete input</span>
 
 
-<span class="gp">In [11]: </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f84f6b64bb0&gt;</span>
+<span class="gp">In [11]: </span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="n">signal_interpolated</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">im</span><span class="p">)</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [11],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="n">signal_interpolated</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">im</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;signal_interpolated&#39; is not defined
+
+<span class="gp">In [12]: </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+<span class="gh">Out[12]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f8866c33e80&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
