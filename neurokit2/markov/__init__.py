@@ -1,5 +1,6 @@
 """Submodule for NeuroKit."""
 
+from .markov_mixingtime import markov_mixingtime
 from .markov_simulate import markov_simulate
 from .markov_test_homogeneity import markov_test_homogeneity
 from .markov_test_random import markov_test_random
@@ -12,4 +13,5 @@ __all__ = [
     "markov_test_random",
     "markov_test_homogeneity",
     "markov_simulate",
+    "markov_mixingtime",
 ]

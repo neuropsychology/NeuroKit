@@ -46,8 +46,8 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
       signal = nk.signal_simulate(duration=1, sampling_rate=10)
 
       # List all interpolation methods and interpolation parameters
-      interpolation_methods = ["zero", "linear", "quadratic", "cubic", 'previous', "next",
-      "monotone_cubic"]
+      interpolation_methods = ["zero", "linear", "quadratic", "cubic",
+                               "previous", "next", "monotone_cubic"]
       x_values = np.linspace(0, 1, num=10)
       x_new = np.linspace(0, 1, num=1000)
 
@@ -56,8 +56,8 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
       fig, ax = plt.subplots()
       ax.scatter(x_values, signal, label="original datapoints", zorder=3)
       for im in interpolation_methods:
-        signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
-        ax.plot(x_new, signal_interpolated, label=im)
+          signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
+          ax.plot(x_new, signal_interpolated, label=im)
       ax.legend(loc="upper left")
       @suppress
       plt.close()
