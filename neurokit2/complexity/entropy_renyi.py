@@ -59,6 +59,7 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
       tsen, _ = nk.entropy_renyi(signal, alpha=1)
       tsen
 
+      # Compare to Shannon function
       shanen, _ = nk.entropy_shannon(signal, base=np.e)
       shanen
 

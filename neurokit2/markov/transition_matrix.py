@@ -8,7 +8,7 @@ import pandas as pd
 from ..misc import as_vector
 
 
-def transition_matrix(sequence, show=False):
+def transition_matrix(sequence, order=1, adjust=True, show=False):
     """**Transition Matrix**
 
     A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
@@ -43,7 +43,7 @@ def transition_matrix(sequence, show=False):
 
       import neurokit2 as nk
 
-      sequence = [0, 0, 1, 2, 2, 2, 1, 0, 0, 3]
+      sequence = ["A", "A", "C", "B", "B", "B", "C", "A", "A", "D"]
 
       @savefig p_transition_matrix1.png scale=100%
       tm, _ = nk.transition_matrix(sequence, show=True)
@@ -54,6 +54,23 @@ def transition_matrix(sequence, show=False):
 
       tm
 
+    In this example, the transition from D is unknown, resulting in an absence of transitioning
+    probability. As this can cause issues, unknown probabilities are replaced by a uniform
+    distribution, but this can be turned off using the ``adjust`` argument.
+
+    .. ipython:: python
+
+      tm, _ = nk.transition_matrix(sequence, adjust=False)
+      tm
+
+    Transition matrix of higher order
+
+    .. ipython:: python
+
+      sequence = ["A", "A", "A", "B", "A", "A", "B", "A", "A", "B"]
+      tm, _ = nk.transition_matrix(sequence, order=2)
+      tm
+
     """
     sequence = as_vector(sequence)
 
@@ -61,33 +78,38 @@ def transition_matrix(sequence, show=False):
     states = np.unique(sequence)
     n_states = len(states)
 
-    # order=1
-    # freq = np.zeros((n_states,) * (order + 1))
-    # for _ind in zip(*[sequence[_x:] for _x in range(order + 1)]):
-    #     freq[_ind] += 1
-    # freq
-
     # Get observed transition matrix
-    freqs = np.zeros((n_states, n_states))
-    for x, y in itertools.product(range(n_states), repeat=2):
-        xi = np.argwhere(sequence == states[x]).flatten()
-        yi = xi + 1
-        yi = yi[yi < len(sequence)]
-        freqs[x, y] = np.count_nonzero(sequence[yi] == states[y])
+    freqs = np.zeros((n_states,) * (order + 1))
+    for idx in zip(*[sequence[i:] for i in range(order + 1)]):
+        idx = tuple([np.argwhere(states == k)[0][0] for k in idx])
+        freqs[idx] += 1
+    freqs
+
+    # Find rows containing zeros (unknown transition)
+    idx = freqs.sum(axis=-1) == 0
+
+    # Fillit with uniform probability to avoid problem in division
+    freqs[idx, :] = 1
 
     # Convert to probabilities
-    tm = freqs / np.sum(freqs, axis=0)[:, None]
+    tm = (freqs.T / freqs.sum(axis=-1)).T
 
-    # filling in a row containing zeros with uniform p values
-    uniform_p = 1 / n_states
-    zero_row = np.argwhere(tm.sum(axis=1) == 0).ravel()
-    tm[zero_row, :] = uniform_p
+    # If no adjustment, revert to 0
+    freqs[idx, :] = 0
+    if adjust is False:
+        tm[idx, :] = 0
 
     # Convert to DataFrame
-    tm = pd.DataFrame(tm, index=states, columns=states)
-    freqs = pd.DataFrame(freqs, index=states, columns=states)
+    if order == 1:
+        tm = pd.DataFrame(tm, index=states, columns=states)
+        freqs = pd.DataFrame(freqs, index=states, columns=states)
 
     if show is True:
+        if order > 1:
+            raise ValueError(
+                "Visualization of order > 1 not supported yet. "
+                "Consider helping us to implement it!"
+            )
         fig, ax = plt.subplots()
         ax.imshow(tm, cmap="Reds", interpolation="nearest")
         ax.set_xticks(np.arange(len(tm)))
@@ -102,7 +124,7 @@ def transition_matrix(sequence, show=False):
         ax.set_title("Transition Matrix")
         fig.tight_layout()
 
-    return tm, {"Occurrences": freqs}
+    return tm, {"Occurrences": freqs, "States": states}
 
 
 # =============================================================================

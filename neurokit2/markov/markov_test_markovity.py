@@ -1,19 +1,34 @@
 import numpy as np
+import pandas as pd
 import scipy.stats
 
 from .transition_matrix import transition_matrix
 
 
 def markov_test_markovity(sequence):
-    """Test zero-order Markovianity of symbolic sequence x with ns symbols.
-    Null hypothesis: zero-order MC (iid) <=> p(X[t]), p(X[t+1]) independent
-    cf. Kullback, Technometrics (1962)
-    Args:
-        x: symbolic sequence, symbols = [0, 1, 2, ...]
-        ns: number of symbols
-        alpha: significance level
-    Returns:
-        p: p-value of the Chi2 test for independence
+    """**Test of Markovity**
+
+    The the Markovity (also known as Markovianity) of a symbolic sequence.
+
+    .. note::
+
+      We would like to extend this to different orders (order 1, 2), but we lack the skills. If you
+      are interested, please get in touch!
+
+    Parameters
+    ----------
+    sequence : Union[list, np.array, pd.Series]
+        A list of discrete states.
+
+    See Also
+    --------
+    markov_test_random, markov_test_symmetry
+
+    Returns
+    -------
+    dict
+        Contains indices of the test.
+
 
     Examples
     --------
@@ -25,10 +40,19 @@ def markov_test_markovity(sequence):
 
       nk.markov_test_markovity(sequence)
 
+    References
+    ----------
+    * Kullback, S., Kupperman, M., & Ku, H. H. (1962). Tests for contingency tables and Markov
+      chains. Technometrics, 4(4), 573-608.
+
     """
     _, info = transition_matrix(sequence)
 
-    fm = info["Occurrences"].values
+    # Extract frequency matrix
+    if isinstance(info["Occurrences"], pd.DataFrame):
+        fm = info["Occurrences"].values
+    else:
+        fm = info["Occurrences"]
     k = len(fm)
     valid = fm != 0
 
@@ -65,6 +89,10 @@ def markov_test_markovity(sequence):
 #     Returns:
 #         p: p-value of the Chi2 test for independence
 #     """
+#     sequence = [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1]
+#     _, info = nk.transition_matrix(sequence, order=2)
+#     fm = info["Occurrences"]
+
 #     X = sequence
 #     ns = len(np.unique(X))
 #     n = len(X)
@@ -85,6 +113,7 @@ def markov_test_markovity(sequence):
 #         f = f_ijk[i][j][k] * f_j[j] * f_ij[i][j] * f_jk[j][k]
 #         if f > 0:
 #             num_ = f_ijk[i, j, k] * f_j[j]
+#             print(num_)
 #             den_ = f_ij[i, j] * f_jk[j, k]
 #             T += f_ijk[i, j, k] * np.log(num_ / den_)
 #     T *= 2.0
