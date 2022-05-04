@@ -50,6 +50,6 @@ def entropy_shannon_joint(x, y, base=2):
     labels_x, freq_x = _entropy_freq(x)
     labels_y, freq_y = _entropy_freq(y)
 
-    assert np.all(labels_y == labels_y), f"The labels of x and y are not the same."
+    assert np.all(labels_y == labels_y), "The labels of x and y are not the same."
 
     return scipy.stats.entropy(freq_x, freq_y, base=base), {"Base": base}
