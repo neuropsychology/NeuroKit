@@ -599,17 +599,17 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">       ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0     1.089177  -0.077032  69.991705  ...            0    0.016   7.912380</span>
-<span class="go">1     1.035502  -0.202907  69.991705  ...            0    0.016   7.912380</span>
-<span class="go">2     0.896243  -0.342105  69.991705  ...            0    0.016   7.912380</span>
-<span class="go">3     0.697723  -0.499424  69.991705  ...            0    0.016   7.912380</span>
-<span class="go">4     0.468062  -0.671885  69.991705  ...            0    0.016   7.912380</span>
+<span class="go">0     1.044463  -0.069749  69.998963  ...            0    0.036   7.959054</span>
+<span class="go">1     0.994318  -0.187333  69.998963  ...            0    0.036   7.959054</span>
+<span class="go">2     0.864235  -0.317346  69.998963  ...            0    0.036   7.959054</span>
+<span class="go">3     0.678824  -0.464251  69.998963  ...            0    0.036   7.959054</span>
+<span class="go">4     0.464379  -0.625248  69.998963  ...            0    0.036   7.959054</span>
 <span class="go">...        ...        ...        ...  ...          ...      ...        ...</span>
-<span class="go">9995 -0.109831  -0.044346  68.181818  ...            0    0.020   7.926172</span>
-<span class="go">9996 -0.109235  -0.042215  68.181818  ...            0    0.020   7.926172</span>
-<span class="go">9997 -0.108511  -0.039979  68.181818  ...            0    0.020   7.926172</span>
-<span class="go">9998 -0.107642  -0.037660  68.181818  ...            0    0.020   7.926172</span>
-<span class="go">9999 -0.106652  -0.035294  68.181818  ...            0    0.020   7.926172</span>
+<span class="go">9995 -0.062383  -0.039958  70.422535  ...            0    0.024   7.972909</span>
+<span class="go">9996 -0.061446  -0.037944  70.422535  ...            0    0.024   7.972909</span>
+<span class="go">9997 -0.060394  -0.035843  70.422535  ...            0    0.024   7.972909</span>
+<span class="go">9998 -0.059208  -0.033671  70.422535  ...            0    0.024   7.972909</span>
+<span class="go">9999 -0.057870  -0.031457  70.422535  ...            0    0.024   7.972909</span>
 
 <span class="go">[10000 rows x 46 columns]</span>
 
@@ -715,11 +715,11 @@ produced by <a class="reference internal" href="functions_hrv.html#neurokit2.hrv
 <span class="go"># Analyze</span>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
-<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime   RSA_P2T     RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN  0.012143  1.776357e-15</span>
-<span class="go">2     2   Neutral         4957  ...               NaN -0.001503  7.288086e-02</span>
-<span class="go">3     3   Neutral         9224  ...               NaN -0.003509  5.692481e-02</span>
-<span class="go">4     4  Negative        12984  ...               NaN  0.002043 -5.621310e-02</span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime   RSA_P2T  RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN  0.012143   0.000000</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -0.001503   0.072881</span>
+<span class="go">3     3   Neutral         9224  ...               NaN -0.003509   0.056925</span>
+<span class="go">4     4  Negative        12984  ...               NaN  0.002043  -0.056213</span>
 
 <span class="go">[4 rows x 43 columns]</span>
 
