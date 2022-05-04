@@ -38,29 +38,29 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
     --------
     .. ipython:: python
 
-        import numpy as np
-        import neurokit2 as nk
-        import matplotlib.pyplot as plt
+      import numpy as np
+      import neurokit2 as nk
+      import matplotlib.pyplot as plt
 
-        # Generate Simulated Signal
-        signal = nk.signal_simulate(duration=1, sampling_rate=10)
+      # Generate Simulated Signal
+      signal = nk.signal_simulate(duration=1, sampling_rate=10)
 
-        # List all interpolation methods and interpolation parameters
-        interpolation_methods = ["zero", "linear", "quadratic", "cubic",
-                                 "previous", "next", "monotone_cubic"]
-        x_values = np.linspace(0, 1, num=10)
-        x_new = np.linspace(0, 1, num=1000)
+      # List all interpolation methods and interpolation parameters
+      interpolation_methods = ["zero", "linear", "quadratic", "cubic",
+                               "previous", "next", "monotone_cubic"]
+      x_values = np.linspace(0, 1, num=10)
+      x_new = np.linspace(0, 1, num=1000)
 
-        # Visualize all interpolation methods
-        @savefig p_signal_interpolate1.png scale=100%
-        fig, ax = plt.subplots()
-        ax.scatter(x_values, signal, label="original datapoints", zorder=3)
-        for im in interpolation_methods:
-            signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
-            ax.plot(x_new, signal_interpolated, label=im)
-        ax.legend(loc="upper right")
-        @suppress
-        plt.close()
+      # Visualize all interpolation methods
+      @savefig p_signal_interpolate1.png scale=100%
+      fig, ax = plt.subplots()
+      ax.scatter(x_values, signal, label="original datapoints", zorder=3)
+      for im in interpolation_methods:
+         signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
+         ax.plot(x_new, signal_interpolated, label=im)
+      ax.legend(loc="upper right")
+      @suppress
+      plt.close()
 
     """
     # Sanity checks
