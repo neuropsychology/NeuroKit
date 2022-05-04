@@ -1,0 +1,1520 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Signal &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data" href="functions_data.html" />
+    <link rel="prev" title="EDA" href="functions_eda.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Functions
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_data.html">
+     Data
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/functions_signal.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs_wip/functions/functions_signal.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/functions/functions_signal.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transformation">
+   Transformation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-binarize">
+     <em>
+      signal_binarize()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-decompose">
+     <em>
+      signal.decompose()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-detrend">
+     <em>
+      signal_detrend()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-distort">
+     <em>
+      signal_distort()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-filter">
+     <em>
+      signal_filter()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-flatline">
+     <em>
+      signal_flatline()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-interpolate">
+     <em>
+      signal_interpolate()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#peaks">
+   Peaks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-findpeaks">
+     <em>
+      signal_findpeaks()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-fixpeaks">
+     <em>
+      signal_fixpeaks()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysis">
+   Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-autocor">
+     <em>
+      signal_autocor()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-changepoints">
+     <em>
+      signal_changepoints()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Signal</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transformation">
+   Transformation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-binarize">
+     <em>
+      signal_binarize()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-decompose">
+     <em>
+      signal.decompose()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-detrend">
+     <em>
+      signal_detrend()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-distort">
+     <em>
+      signal_distort()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-filter">
+     <em>
+      signal_filter()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-flatline">
+     <em>
+      signal_flatline()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-interpolate">
+     <em>
+      signal_interpolate()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#peaks">
+   Peaks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-findpeaks">
+     <em>
+      signal_findpeaks()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-fixpeaks">
+     <em>
+      signal_fixpeaks()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysis">
+   Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-autocor">
+     <em>
+      signal_autocor()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-changepoints">
+     <em>
+      signal_changepoints()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="signal">
+<h1>Signal<a class="headerlink" href="#signal" title="Permalink to this headline">#</a></h1>
+<section id="transformation">
+<h2>Transformation<a class="headerlink" href="#transformation" title="Permalink to this headline">#</a></h2>
+<section id="signal-binarize">
+<h3><em>signal_binarize()</em><a class="headerlink" href="#signal-binarize" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_binarize">
+<span class="sig-name descname"><span class="pre">signal_binarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'threshold'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_binarize" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Binarize a continuous signal</strong></p>
+<p>Convert a continuous signal into zeros and ones depending on a given threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The algorithm used to discriminate between the two states. Can be one of ‘mixture’
+(default) or ‘threshold’. If ‘mixture’, will use a Gaussian Mixture Model to categorize
+between the two states. If ‘threshold’, will consider as activated all points which value
+is superior to the threshold.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – If <cite>method</cite> is ‘mixture’, then it corresponds to the minimum probability required to be
+considered as activated (if ‘auto’, then 0.5). If <cite>method</cite> is ‘threshold’, then it
+corresponds to the minimum amplitude to detect as onset. If “auto”, takes the value between
+the max and the min.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>list</em> – A list or array depending on the type passed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+
+<span class="gp">In [5]: </span><span class="n">binary</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_binarize</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span> <span class="s2">&quot;Binary&quot;</span><span class="p">:</span> <span class="n">binary</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;AxesSubplot:&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_binarize.png"><img alt="../_images/p_signal_binarize.png" src="../_images/p_signal_binarize.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="signal-decompose">
+<h3><em>signal.decompose()</em><a class="headerlink" href="#signal-decompose" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_decompose">
+<span class="sig-name descname"><span class="pre">signal_decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_decompose" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Decompose a signal</strong></p>
+<p>Signal decomposition into different sources using different methods, such as Empirical Mode
+Decomposition (EMD) or Singular spectrum analysis (SSA)-based signal separation method.</p>
+<p>The extracted components can then be recombined into meaningful sources using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">signal_recompose()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – Vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The decomposition method. Can be one of ‘emd’ or ‘ssa’.</p></li>
+<li><p><strong>n_components</strong> (<em>int</em>) – Number of components to extract. Only used for ‘ssa’ method. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default
+to 50.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments passed to other functions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Array</em> – Components of the decomposed signal.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_recompose</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Create complex signal</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>  <span class="c1"># High freq</span>
+
+<span class="gp">In [3]: </span><span class="n">signal</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>  <span class="c1"># Higher freq</span>
+
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>  <span class="c1"># Add baseline and trend</span>
+
+<span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_decompose1.png"><img alt="../_images/p_signal_decompose1.png" src="../_images/p_signal_decompose1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 1: Using the EMD method</span>
+<span class="gp">In [7]: </span><span class="n">components</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_decompose</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;emd&quot;</span><span class="p">)</span>
+
+<span class="go"># Visualize Decomposed Signal Components</span>
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_decompose2.png"><img alt="../_images/p_signal_decompose2.png" src="../_images/p_signal_decompose2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: USing the SSA method</span>
+<span class="gp">In [9]: </span><span class="n">components</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_decompose</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ssa&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="go"># Visualize Decomposed Signal Components</span>
+<span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>  <span class="c1"># Visualize components</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_decompose3.png"><img alt="../_images/p_signal_decompose3.png" src="../_images/p_signal_decompose3.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="signal-detrend">
+<h3><em>signal_detrend()</em><a class="headerlink" href="#signal-detrend" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_detrend">
+<span class="sig-name descname"><span class="pre">signal_detrend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'polynomial'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_detrend" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Polynomial detrending of signal</strong></p>
+<p>Apply a baseline (order = 0), linear (order = 1), or polynomial (order &gt; 1) detrending to the
+signal (i.e., removing a general trend). One can also use other methods, such as smoothness
+priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for
+long signals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of ‘polynomial’ (default; traditional detrending of a given order) or
+‘tarvainen2002’ to use the smoothness priors approach described by Tarvainen (2002) (mostly
+used in HRV analyses as a lowpass filter to remove complex trends), ‘loess’ for LOESS
+smoothing trend removal or ‘locreg’ for local linear regression (the ‘runline’ algorithm
+from chronux).</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Only used if <cite>method</cite> is ‘polynomial’. The order of the polynomial. 0, 1 or &gt; 1 for a
+baseline (‘constant detrend’, i.e., remove only the mean), linear (remove the linear trend)
+or polynomial detrending, respectively. Can also be ‘auto’, in which case it will attempt
+to find the optimal order to minimize the RMSE.</p></li>
+<li><p><strong>regularization</strong> (<em>int</em>) – Only used if <cite>method=’tarvainen2002’</cite>. The regularization parameter (default to 500).</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Only used if <cite>method</cite> is ‘loess’. The parameter which controls the degree of smoothing.</p></li>
+<li><p><strong>window</strong> (<em>float</em>) – Only used if <cite>method</cite> is ‘locreg’. The detrending ‘window’ should correspond to the desired
+low frequency band to remove multiplied by the sampling rate (for instance, <code class="docutils literal notranslate"><span class="pre">1.5*1000</span></code>
+will remove frequencies below 1.5Hz for a signal sampled at 1000Hz).</p></li>
+<li><p><strong>stepsize</strong> (<em>float</em>) – Only used if <cite>method</cite> is ‘locreg’. Similarly to ‘window’, ‘stepsize’ should also be
+multiplied by the sampling rate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the detrended signal.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.signal_filter" title="neurokit2.signal_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_filter</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_loess</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [4]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="go"># Simulate signal with low and high frequency</span>
+<span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">amplitude</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)))</span>  <span class="c1"># Add baseline and linear trend</span>
+
+<span class="go"># Apply detrending algorithms</span>
+<span class="go"># Method 1: Default Polynomial Detrending of a Given Order</span>
+<span class="go"># Constant detrend (removes the mean)</span>
+<span class="gp">In [7]: </span><span class="n">baseline</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="go"># Linear Detrend (removes the linear trend)</span>
+<span class="gp">In [8]: </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="go"># Polynomial Detrend (removes the polynomial trend)</span>
+<span class="gp">In [9]: </span><span class="n">quadratic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Quadratic detrend</span>
+
+<span class="gp">In [10]: </span><span class="n">cubic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Cubic detrend</span>
+
+<span class="gp">In [11]: </span><span class="n">poly10</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Linear detrend (10th order)</span>
+
+<span class="go"># Method 2: Tarvainen&#39;s smoothness priors approach (Tarvainen et al., 2002)</span>
+<span class="gp">In [12]: </span><span class="n">tarvainen</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;tarvainen2002&#39;</span><span class="p">)</span>
+
+<span class="go"># Method 3: LOESS smoothing trend removal</span>
+<span class="gp">In [13]: </span><span class="n">loess</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;loess&#39;</span><span class="p">)</span>
+
+<span class="go"># Method 4: Local linear regression (100Hz)</span>
+<span class="gp">In [14]: </span><span class="n">locreg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;locreg&#39;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                           <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="go"># Visualize different methods</span>
+<span class="gp">In [15]: </span><span class="n">axes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Original signal&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Baseline&quot;</span><span class="p">:</span> <span class="n">baseline</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Linear&quot;</span><span class="p">:</span> <span class="n">linear</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Quadratic&quot;</span><span class="p">:</span> <span class="n">quadratic</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Cubic&quot;</span><span class="p">:</span> <span class="n">cubic</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Polynomial (10th)&quot;</span><span class="p">:</span> <span class="n">poly10</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Tarvainen&quot;</span><span class="p">:</span> <span class="n">tarvainen</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;LOESS&quot;</span><span class="p">:</span> <span class="n">loess</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Local Regression&quot;</span><span class="p">:</span> <span class="n">locreg</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="go"># Plot horizontal lines to better visualize the detrending</span>
+<span class="gp">In [16]: </span><span class="k">for</span> <span class="n">subplot</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="n">subplot</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/signal_detrend1.png"><img alt="../_images/signal_detrend1.png" src="../_images/signal_detrend1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Tarvainen, M. P., Ranta-Aho, P. O., &amp; Karjalainen, P. A. (2002). An advanced detrending
+method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2),
+172-175</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="signal-distort">
+<h3><em>signal_distort()</em><a class="headerlink" href="#signal-distort" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_distort">
+<span class="sig-name descname"><span class="pre">signal_distort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'laplace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powerline_amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powerline_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifacts_amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifacts_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifacts_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear_drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_distort" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Signal distortion</strong></p>
+<p>Add noise of a given frequency, amplitude and shape to a signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>noise_shape</strong> (<em>str</em>) – The shape of the noise. Can be one of ‘laplace’ (default) or
+‘gaussian’.</p></li>
+<li><p><strong>noise_amplitude</strong> (<em>float</em>) – The amplitude of the noise (the scale of the random function, relative
+to the standard deviation of the signal).</p></li>
+<li><p><strong>noise_frequency</strong> (<em>float</em>) – The frequency of the noise (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>powerline_amplitude</strong> (<em>float</em>) – The amplitude of the powerline noise (relative to the standard
+deviation of the signal).</p></li>
+<li><p><strong>powerline_frequency</strong> (<em>float</em>) – The frequency of the powerline noise (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>artifacts_amplitude</strong> (<em>float</em>) – The amplitude of the artifacts (relative to the standard deviation of
+the signal).</p></li>
+<li><p><strong>artifacts_frequency</strong> (<em>int</em>) – The frequency of the artifacts (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>artifacts_number</strong> (<em>int</em>) – The number of artifact bursts. The bursts have a random duration
+between 1 and 10% of the signal duration.</p></li>
+<li><p><strong>linear_drift</strong> (<em>bool</em>) – Whether or not to add linear drift to the signal.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator. Keep it fixed for reproducible
+results.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em>) – Whether or not to display warning messages.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the distorted signal.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="go"># Noise</span>
+<span class="gp">In [5]: </span><span class="n">noise</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Freq100&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+<span class="gp">   ...: </span>                     <span class="s2">&quot;Freq50&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+<span class="gp">   ...: </span>                     <span class="s2">&quot;Freq10&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">   ...: </span>                     <span class="s2">&quot;Freq5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                     <span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_distort1.png"><img alt="../_images/p_signal_distort1.png" src="../_images/p_signal_distort1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Artifacts</span>
+<span class="gp">In [6]: </span><span class="n">artifacts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;1Hz&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">artifacts_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">artifacts_amplitude</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                         <span class="s2">&quot;5Hz&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">artifacts_frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">artifacts_amplitude</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                         <span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_distort2.png"><img alt="../_images/p_signal_distort2.png" src="../_images/p_signal_distort2.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="signal-filter">
+<h3><em>signal_filter()</em><a class="headerlink" href="#signal-filter" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_filter">
+<span class="sig-name descname"><span class="pre">signal_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'butterworth'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powerline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_filter" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Filter a signal using ‘butterworth’, ‘fir’ or ‘savgol’ filters</strong></p>
+<p>Apply a lowpass (if ‘highcut’ frequency is provided), highpass (if ‘lowcut’ frequency is
+provided) or bandpass (if both are provided) filter to the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.
+or “bandstop”.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>lowcut</strong> (<em>float</em>) – Lower cutoff frequency in Hz. The default is None.</p></li>
+<li><p><strong>highcut</strong> (<em>float</em>) – Upper cutoff frequency in Hz. The default is None.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of “butterworth”, “fir”, “bessel” or “savgol”. Note that for Butterworth, the
+function uses the SOS method from <code class="docutils literal notranslate"><span class="pre">scipy.signal.sosfiltfilt</span></code>, recommended for general
+purpose filtering. One can also specify “butterworth_ba” for a more traditional and legacy
+method (often implemented in other software).</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Only used if method is “butterworth” or “savgol”. Order of the filter (default is 2).</p></li>
+<li><p><strong>window_size</strong> (<em>int</em>) – Only used if method is “savgol”. The length of the filter window (i.e. the number of
+coefficients). Must be an odd integer. If ‘default’, will be set to the sampling rate
+divided by 10 (101 if the sampling rate is 1000 Hz).</p></li>
+<li><p><strong>powerline</strong> (<em>int</em>) – Only used if method is “powerline”. The powerline frequency (normally 50 Hz or 60 Hz).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, plot the filtered signal as an overlay of the original.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.signal_detrend" title="neurokit2.signal_detrend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_detrend</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_psd</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>array</em> – Vector containing the filtered signal.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># Low freq</span>
+
+<span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">+=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># High freq</span>
+
+<span class="go"># Visualize Lowpass Filtered Signal using Different Methods</span>
+<span class="gp">In [6]: </span><span class="n">fig1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;Butter_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;Butter_2_BA&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth_ba&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;Butter_5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;Butter_5_BA&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth_ba&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;Bessel_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bessel&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;Bessel_5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bessel&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                   <span class="s2">&quot;FIR&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fir&#39;</span><span class="p">)})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_filter1.png"><img alt="../_images/p_signal_filter1.png" src="../_images/p_signal_filter1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize Highpass Filtered Signal using Different Methods</span>
+<span class="gp">In [7]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;Butter_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;Butter_2_ba&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth_ba&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;Butter_5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;Butter_5_BA&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">   ...: </span>                    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth_ba&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;Bessel_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bessel&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;Bessel_5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bessel&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ...: </span>                    <span class="s2">&quot;FIR&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fir&#39;</span><span class="p">)})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_filter2.png"><img alt="../_images/p_signal_filter2.png" src="../_images/p_signal_filter2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using Bandpass Filtering in real-life scenarios</span>
+<span class="go"># Simulate noisy respiratory signal</span>
+<span class="gp">In [8]: </span><span class="n">original</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="n">noise_amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">   ...: </span>                          <span class="n">powerline_amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># Bandpass between 10 and 30 breaths per minute (respiratory rate range)</span>
+<span class="gp">In [10]: </span><span class="n">fig3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Butter_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Butter_2_BA&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                                     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth_ba&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Butter_5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Butter_5_BA&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                                     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;butterworth_ba&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Bessel_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bessel&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Bessel_5&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bessel&#39;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;FIR&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">10</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">30</span><span class="o">/</span><span class="mi">60</span><span class="p">,</span>
+<span class="gp">   ....: </span>                                             <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fir&#39;</span><span class="p">),</span>
+<span class="gp">   ....: </span>                     <span class="s2">&quot;Savgol&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;savgol&#39;</span><span class="p">)})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_filter3.png"><img alt="../_images/p_signal_filter3.png" src="../_images/p_signal_filter3.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="signal-flatline">
+<h3><em>signal_flatline()</em><a class="headerlink" href="#signal-flatline" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_flatline">
+<span class="sig-name descname"><span class="pre">signal_flatline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_flatline" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Return the Flatline Percentage of the Signal</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>threshold</strong> (<em>float, optional</em>) – Flatline threshold relative to the biggest change in the signal.
+This is the percentage of the maximum value of absolute consecutive
+differences.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>float</em> – Percentage of signal where the absolute value of the derivative is lower then the threshold.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_flatline</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+<span class="gh">Out[3]: </span><span class="go">0.008</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="signal-interpolate">
+<h3><em>signal_interpolate()</em><a class="headerlink" href="#signal-interpolate" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_interpolate">
+<span class="sig-name descname"><span class="pre">signal_interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'quadratic'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_interpolate" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Interpolate a signal</strong></p>
+<p>Interpolate a signal using different methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_values</strong> (<em>Union[list, np.array, pd.Series]</em>) – The samples corresponding to the values to be interpolated.</p></li>
+<li><p><strong>y_values</strong> (<em>Union[list, np.array, pd.Series]</em>) – The values to be interpolated.</p></li>
+<li><p><strong>x_new</strong> (<em>Union[list, np.array, pd.Series] or int</em>) – The samples at which to interpolate the y_values. Samples before the first value in x_values
+or after the last value in x_values will be extrapolated. If an integer is passed, nex_x
+will be considered as the desired length of the interpolated signal between the first and
+the last values of x_values. No extrapolation will be done for values before or after the
+first and the last values of x_values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Method of interpolation. Can be ‘linear’, ‘nearest’, ‘zero’, ‘slinear’, ‘quadratic’,
+‘cubic’, ‘previous’, ‘next’ or ‘monotone_cubic’. The methods ‘zero’, ‘slinear’, ‘quadratic’
+and ‘cubic’ refer to a spline interpolation of zeroth, first, second or third order;
+whereas ‘previous’ and ‘next’ simply return the previous or next value of the point. An
+integer specifying the order of the spline interpolator to use.
+See <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html">here</a> for details on the ‘monotone_cubic’ method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector of interpolated samples.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="go"># Generate Simulated Signal</span>
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="go"># List all interpolation methods and interpolation parameters</span>
+<span class="gp">In [5]: </span><span class="n">interpolation_methods</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;quadratic&quot;</span><span class="p">,</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                         <span class="s2">&quot;previous&quot;</span><span class="p">,</span> <span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;monotone_cubic&quot;</span><span class="p">]</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [6]: </span><span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="go"># Visualize all interpolation methods</span>
+<span class="gp">In [8]: </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="gp">In [9]: </span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f84f54de2c0&gt;</span>
+
+<span class="gp">In [10]: </span><span class="k">for</span> <span class="n">im</span> <span class="ow">in</span> <span class="n">interpolation_methods</span><span class="p">:</span>
+<span class="go">  Input In [10]</span>
+<span class="go">    for im in interpolation_methods:</span>
+<span class="go">                                    ^</span>
+<span class="go">SyntaxError: incomplete input</span>
+
+
+<span class="gp">In [11]: </span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+<span class="gh">Out[11]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f84f6b64bb0&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+</section>
+<section id="peaks">
+<h2>Peaks<a class="headerlink" href="#peaks" title="Permalink to this headline">#</a></h2>
+<section id="signal-findpeaks">
+<h3><em>signal_findpeaks()</em><a class="headerlink" href="#signal-findpeaks" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_findpeaks">
+<span class="sig-name descname"><span class="pre">signal_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_height_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_height_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_median</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_findpeaks" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Find peaks in a signal</strong></p>
+<p>Locate peaks (local maxima) in a signal and their related characteristics, such as height
+(prominence), width and distance with other peaks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>height_min</strong> (<em>float</em>) – The minimum height (i.e., amplitude in terms of absolute values). For example,
+<code class="docutils literal notranslate"><span class="pre">height_min=20</span></code> will remove all peaks which height is smaller or equal to 20 (in the
+provided signal’s values).</p></li>
+<li><p><strong>height_max</strong> (<em>float</em>) – The maximum height (i.e., amplitude in terms of absolute values).</p></li>
+<li><p><strong>relative_height_min</strong> (<em>float</em>) – The minimum height (i.e., amplitude) relative to the sample (see below). For example,
+<code class="docutils literal notranslate"><span class="pre">relative_height_min=-2.96</span></code> will remove all peaks which height lies below 2.96 standard
+deviations from the mean of the heights.</p></li>
+<li><p><strong>relative_height_max</strong> (<em>float</em>) – The maximum height (i.e., amplitude) relative to the sample (see below).</p></li>
+<li><p><strong>relative_mean</strong> (<em>bool</em>) – If a relative threshold is specified, how should it be computed (i.e., relative to what?).
+<code class="docutils literal notranslate"><span class="pre">relative_mean=True</span></code> will use Z-scores.</p></li>
+<li><p><strong>relative_median</strong> (<em>bool</em>) – If a relative threshold is specified, how should it be computed (i.e., relative to what?).
+Relative to median uses a more robust form of standardization (see <code class="docutils literal notranslate"><span class="pre">standardize()</span></code>).</p></li>
+<li><p><strong>relative_max</strong> (<em>bool</em>) – If a relative threshold is specified, how should it be computed (i.e., relative to what?).
+Relative to max will consider the maximum height as the reference.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><em>dict</em> –</p>
+<p>Returns a dict itself containing 5 arrays:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>’Peaks’ contains the peaks indices (as relative to the given signal). For instance, the</dt><dd><p>value 3 means that the third data point of the signal is a peak.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>’Distance’ contains, for each peak, the closest distance with another peak. Note that</dt><dd><p>these values will be recomputed after filtering to match the selected peaks.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>’Height’ contains the prominence of each peak.</dt><dd><p>See <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.signal.peak_prominences()</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><p>’Width’ contains the width of each peak. See <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.signal.peak_widths()</span></code>.</p></li>
+<li><p>’Onset’ contains the onset, start (or left trough), of each peak.</p></li>
+<li><p>’Offset’ contains the offset, end (or right trough), of each peak.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate a Signal</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="go"># Visualize Onsets of Peaks and Peaks of Signal</span>
+<span class="gp">In [4]: </span><span class="n">fig1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Onsets&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]],</span> <span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_findpeaks_1.png"><img alt="../_images/p_signal_findpeaks_1.png" src="../_images/p_signal_findpeaks_1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="kn">import</span> <span class="nn">scipy.misc</span>
+
+<span class="go"># Load actual ECG Signal</span>
+<span class="gp">In [6]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">electrocardiogram</span><span class="p">()</span>
+
+<span class="gp">In [7]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]</span>
+
+<span class="go"># Find Unfiltered and Filtered Peaks</span>
+<span class="gp">In [8]: </span><span class="n">info1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">info2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="go"># Visualize Peaks</span>
+<span class="gp">In [10]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info1</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">],</span> <span class="n">info2</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]],</span> <span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_findpeaks_2.png"><img alt="../_images/p_signal_findpeaks_2.png" src="../_images/p_signal_findpeaks_2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="signal-fixpeaks">
+<h3><em>signal_fixpeaks()</em><a class="headerlink" href="#signal-fixpeaks" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_fixpeaks">
+<span class="sig-name descname"><span class="pre">signal_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_interval_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_interval_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Kubios'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_fixpeaks" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Correct Erroneous Peak Placements</strong></p>
+<p>Identify and correct erroneous peak placements based on outliers in peak-to-peak differences
+(period).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the peaks occur. If an array is passed in, it is assumed that it was
+obtained with <code class="docutils literal notranslate"><span class="pre">signal_findpeaks</span></code>. If a DataFrame is passed in, it is assumed to be
+obtained with <code class="docutils literal notranslate"><span class="pre">ecg_findpeaks</span></code> or <code class="docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code> and to be of the same length as the
+input signal.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>iterative</strong> (<em>bool</em>) – Whether or not to apply the artifact correction repeatedly (results in superior artifact
+correction).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Whether or not to visualize artifacts and artifact thresholds.</p></li>
+<li><p><strong>interval_min</strong> (<em>float</em>) – Only when <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;neurokit&quot;</span></code>. The minimum interval between the peaks.</p></li>
+<li><p><strong>interval_max</strong> (<em>float</em>) – Only when <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;neurokit&quot;</span></code>. The maximum interval between the peaks.</p></li>
+<li><p><strong>relative_interval_min</strong> (<em>float</em>) – Only when <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;neurokit&quot;</span></code>. The minimum interval between the peaks as relative to
+the sample (expressed in standard deviation from the mean).</p></li>
+<li><p><strong>relative_interval_max</strong> (<em>float</em>) – Only when <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;neurokit&quot;</span></code>. The maximum interval between the peaks as relative to
+the sample (expressed in standard deviation from the mean).</p></li>
+<li><p><strong>robust</strong> (<em>bool</em>) – Only when <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;neurokit&quot;</span></code>. Use a robust method of standardization (see
+<cite>standardize</cite>) for the relative thresholds.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Either “Kubios” or “Neurokit”. “Kubios” uses the artifact detection and correction described
+in Lipponen, J. A., &amp; Tarvainen, M. P. (2019). Note that “Kubios” is only meant for peaks in
+ECG or PPG. “neurokit” can be used with peaks in ECG, PPG, or respiratory data.</p></li>
+<li><p><strong>**kwargs</strong> – Other keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>peaks_clean</strong> (<em>array</em>) – The corrected peak locations.</p></li>
+<li><p><strong>artifacts</strong> (<em>dict</em>) – Only if method=”Kubios”. A dictionary containing the indices of artifacts, accessible with
+the keys “ectopic”, “missed”, “extra”, and “longshort”.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.signal_findpeaks" title="neurokit2.signal_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_findpeaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate ECG data</span>
+<span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">240</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="go"># Identify and Correct Peaks using &#39;Kubios&#39; Method</span>
+<span class="gp">In [3]: </span><span class="n">rpeaks_uncorrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">artifacts</span><span class="p">,</span> <span class="n">rpeaks_corrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_fixpeaks</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="n">rpeaks_uncorrected</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Kubios&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">   ...: </span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks1.png"><img alt="../_images/p_signal_fixpeaks1.png" src="../_images/p_signal_fixpeaks1.png" style="width: 1500.0px; height: 1000.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize Artifact Correction</span>
+<span class="gp">In [5]: </span><span class="n">rate_corrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks_corrected</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">))</span>
+
+<span class="gp">In [6]: </span><span class="n">rate_uncorrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks_uncorrected</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">))</span>
+
+<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="p">[</span><span class="n">rate_uncorrected</span><span class="p">,</span> <span class="n">rate_corrected</span><span class="p">],</span>
+<span class="gp">   ...: </span>    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Heart Rate Uncorrected&quot;</span><span class="p">,</span> <span class="s2">&quot;Heart Rate Corrected&quot;</span><span class="p">]</span>
+<span class="gp">   ...: </span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks2.png"><img alt="../_images/p_signal_fixpeaks2.png" src="../_images/p_signal_fixpeaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="go"># Simulate Abnormal Signals</span>
+<span class="gp">In [9]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">peaks_true</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
+
+<span class="gp">In [11]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">peaks_true</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># create gaps due to missing peaks</span>
+
+<span class="gp">In [12]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">peaks_true</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
+
+<span class="gp">In [14]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">peaks_true</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">])</span>  <span class="c1"># create gaps</span>
+
+<span class="gp">In [15]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="p">[</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">11350</span><span class="p">,</span> <span class="mi">18350</span><span class="p">]))</span>  <span class="c1"># add artifacts</span>
+
+<span class="go"># Identify and Correct Peaks using &#39;Neurokit&#39; Method</span>
+<span class="gp">In [16]: </span><span class="n">peaks_corrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_fixpeaks</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">interval_max</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="go"># Plot and shift original peaks to the right to see the difference.</span>
+<span class="gp">In [17]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">peaks</span> <span class="o">+</span> <span class="mi">50</span><span class="p">,</span> <span class="n">peaks_corrected</span><span class="p">],</span> <span class="n">signal</span><span class="p">)</span>
+<span class="gh">Out[17]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks3.png"><img alt="../_images/p_signal_fixpeaks3.png" src="../_images/p_signal_fixpeaks3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Lipponen, J. A., &amp; Tarvainen, M. P. (2019). A robust algorithm for heart rate variability time
+series artefact correction using novel beat classification. Journal of medical engineering &amp;
+technology, 43(3), 173-181. 10.1080/03091902.2019.1640306</p></li>
+</ul>
+</dd></dl>
+
+</section>
+</section>
+<section id="analysis">
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">#</a></h2>
+<section id="signal-autocor">
+<h3><em>signal_autocor()</em><a class="headerlink" href="#signal-autocor" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_autocor">
+<span class="sig-name descname"><span class="pre">signal_autocor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fft'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_autocor" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Autocorrelation (ACF)</strong></p>
+<p>Compute the autocorrelation of a signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – Vector of values.</p></li>
+<li><p><strong>lag</strong> (<em>int</em>) – Time lag. If specified, one value of autocorrelation between signal with its lag self will
+be returned.</p></li>
+<li><p><strong>demean</strong> (<em>bool</em>) – If True, the mean of the signal will be subtracted from the signal before ACF computation.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be ‘correlation’ (using <code class="xref py py-func docutils literal notranslate"><span class="pre">np.correlate()</span></code>) or ‘fft’ (Fast Fourier Transform;
+default).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If True, plot the autocorrelation at all values of lag.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – The cross-correlation of the signal with itself at different time lags. Minimum time lag is
+0, maximum time lag is the length of the signal. Or a correlation value at a specific lag
+if lag is not None.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, such as the confidence interval.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Example 1: Using &#39;Correlation&#39; Method</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+
+<span class="gp">In [3]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;correlate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_autocor.png"><img alt="../_images/p_signal_autocor.png" src="../_images/p_signal_autocor.png" style="width: 1200.0px; height: 1200.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: Using &#39;FFT&#39; Method</span>
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fft&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_autocor2.png"><img alt="../_images/p_signal_autocor2.png" src="../_images/p_signal_autocor2.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="signal-changepoints">
+<h3><em>signal_changepoints()</em><a class="headerlink" href="#signal-changepoints" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_changepoints">
+<span class="sig-name descname"><span class="pre">signal_changepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'meanvar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.signal_changepoints" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Change Point Detection</strong></p>
+<p>Only the PELT method is implemented for now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – Vector of values.</p></li>
+<li><p><strong>change</strong> (<em>str</em>) – Can be one of “meanvar” (default), “mean” or “var”.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em>) – The algorithm penalty. Defaults to <code class="docutils literal notranslate"><span class="pre">np.log(len(signal))</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Array</em> – Values indicating the samples at which the changepoints occur.</p></li>
+<li><p><em>Fig</em> – Figure of plot of signal with markers of changepoints.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gh">Out[3]: </span><span class="go">array([   0, 1750, 2750, 4500, 5500, 7250, 8250])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_signal_changepoints1.png"><img alt="../_images/p_signal_changepoints1.png" src="../_images/p_signal_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Killick, R., Fearnhead, P., &amp; Eckley, I. A. (2012). Optimal detection of changepoints with a
+linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="functions_eda.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">EDA</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="functions_data.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

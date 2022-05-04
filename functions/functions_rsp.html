@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="functions_data.html">
      Data
     </a>
@@ -870,37 +875,40 @@ and rate.</p>
 <li><p><strong>respiratory_rate</strong> (<em>float</em>) – Desired number of breath cycles in one minute.</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The model used to generate the signal. Can be ‘sinusoidal’ for a simulation based on a
 trigonometric sine wave that roughly approximates a single respiratory cycle. If
-‘breathmetrics’ (default), will use an advanced model desbribed <a class="reference external" href="https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m">Noto, et al. (2018)</a>.</p></li>
+‘breathmetrics’ (default), will use an advanced model desbribed by
+<a class="reference external" href="https://github.com/zelanolab/breathmetrics">Noto, et al. (2018)</a>.</p></li>
 <li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – Vector containing the respiratory signal.</p>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>array</em> – Vector containing the respiratory signal.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="gp">In [3]: </span><span class="n">rsp1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sinusoidal&quot;</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">rsp1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sinusoidal&quot;</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">rsp2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">rsp2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
-
-<span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSP_Simple&quot;</span><span class="p">:</span> <span class="n">rsp1</span><span class="p">,</span> <span class="s2">&quot;RSP_Complex&quot;</span><span class="p">:</span> <span class="n">rsp2</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [5]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSP_Simple&quot;</span><span class="p">:</span> <span class="n">rsp1</span><span class="p">,</span> <span class="s2">&quot;RSP_Complex&quot;</span><span class="p">:</span> <span class="n">rsp2</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gh">Out[5]: </span><span class="go">array([&lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;], dtype=object)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_simulate1.png"><img alt="../_images/p_rsp_simulate1.png" src="../_images/p_rsp_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
-<p>Noto, T., Zhou, G., Schuele, S., Templer, J., &amp; Zelano, C. (2018). Automated analysis of breathing
-waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597.
-<a class="reference external" href="https://doi.org/10.1093/chemse/bjy045">https://doi.org/10.1093/chemse/bjy045</a></p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></a></p>
-</div>
+<ul class="simple">
+<li><p>Noto, T., Zhou, G., Schuele, S., Templer, J., &amp; Zelano, C. (2018). Automated analysis of
+breathing waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583-597.</p></li>
+</ul>
 </dd></dl>
 
 </section>
@@ -950,10 +958,13 @@ waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_clean">
 <span class="sig-name descname"><span class="pre">rsp_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.rsp.rsp_clean" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Preprocess a respiration (RSP) signal</strong></p>
-<p>Clean a respiration signal using different sets of parameters, such as ‘khodadad2018’ (linear
-detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter) or <a href="#id1"><span class="problematic" id="id2">`</span></a>BioSPPy &lt;<a class="reference external" href="https://">https://</a>
-github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&gt;`_(second order0.1 - 0.35 Hz
-bandpass Butterworth filter followed by a constant detrending).</p>
+<p>Clean a respiration signal using different sets of parameters, such as:</p>
+<ul class="simple">
+<li><p><strong>khodadad2018</strong>: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
+filter)</p></li>
+<li><p><strong>BioSPPy</strong>: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
+detrending).</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -977,18 +988,23 @@ bandpass Butterworth filter followed by a constant detrending).</p>
 
 <span class="gp">In [3]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span> <span class="s2">&quot;RSP_Raw&quot;</span><span class="p">:</span> <span class="n">rsp</span><span class="p">,</span>
-<span class="gp">   ...: </span>                       <span class="s2">&quot;RSP_Khodadad2018&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">),</span>
-<span class="gp">   ...: </span>                       <span class="s2">&quot;RSP_BioSPPy&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;biosppy&quot;</span><span class="p">)})</span>
+<span class="gp">In [4]: </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;RSP_Raw&quot;</span><span class="p">:</span> <span class="n">rsp</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;RSP_Khodadad2018&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">),</span>
+<span class="gp">   ...: </span>    <span class="s2">&quot;RSP_BioSPPy&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;biosppy&quot;</span><span class="p">)</span>
+<span class="gp">   ...: </span><span class="p">})</span>
 <span class="gp">   ...: </span>
 
-<span class="gp">In [5]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">In [5]: </span><span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gh">Out[5]: </span><span class="go">&lt;AxesSubplot:&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_clean1.png"><img alt="../_images/p_rsp_clean1.png" src="../_images/p_rsp_clean1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta">Khodadad et al. (2018)</a></p></li>
+<li><p>Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., … &amp; Bayford,
+R. (2018). Optimized breath detection algorithm in electrical impedance tomography.
+Physiological measurement, 39(9), 094001.</p></li>
 </ul>
 </dd></dl>
 
@@ -1390,8 +1406,8 @@ dimensions.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1128.244398     3997.45  684.466175  ...    0.633217  0.087805    1.098612</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  682.123002     3914.85  416.418726  ...    0.642161  0.018896        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1465,9 +1481,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        0.0              0.221772</span>
-<span class="go">2     2        10000  ...        0.0              0.630791</span>
-<span class="go">3     3        15000  ...        1.0              0.182093</span>
+<span class="go">1     1         5000  ...        0.0              0.124067</span>
+<span class="go">2     2        10000  ...        0.0              0.411026</span>
+<span class="go">3     3        15000  ...        0.0              0.885876</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1567,55 +1583,6 @@ docstrings for details.</p></li>
 <section id="module-neurokit2.rsp">
 <span id="other"></span><h2><em>Other</em><a class="headerlink" href="#module-neurokit2.rsp" title="Permalink to this headline">#</a></h2>
 <p>Submodule for NeuroKit.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">rsp_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">respiratory_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'breathmetrics'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Simulate a respiratory signal</strong></p>
-<p>Generate an artificial (synthetic) respiratory signal of a given duration
-and rate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>duration</strong> (<em>int</em>) – Desired length of duration (s).</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>length</strong> (<em>int</em>) – The desired length of the signal (in samples).</p></li>
-<li><p><strong>noise</strong> (<em>float</em>) – Noise level (amplitude of the laplace noise).</p></li>
-<li><p><strong>respiratory_rate</strong> (<em>float</em>) – Desired number of breath cycles in one minute.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The model used to generate the signal. Can be ‘sinusoidal’ for a simulation based on a
-trigonometric sine wave that roughly approximates a single respiratory cycle. If
-‘breathmetrics’ (default), will use an advanced model desbribed <a class="reference external" href="https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m">Noto, et al. (2018)</a>.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – Vector containing the respiratory signal.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [4]: </span><span class="n">rsp1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sinusoidal&quot;</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">rsp2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
-
-<span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSP_Simple&quot;</span><span class="p">:</span> <span class="n">rsp1</span><span class="p">,</span> <span class="s2">&quot;RSP_Complex&quot;</span><span class="p">:</span> <span class="n">rsp2</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_rsp_simulate1.png"><img alt="../_images/p_rsp_simulate1.png" src="../_images/p_rsp_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p class="rubric">References</p>
-<p>Noto, T., Zhou, G., Schuele, S., Templer, J., &amp; Zelano, C. (2018). Automated analysis of breathing
-waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597.
-<a class="reference external" href="https://doi.org/10.1093/chemse/bjy045">https://doi.org/10.1093/chemse/bjy045</a></p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></a></p>
-</div>
-</dd></dl>
-
 </section>
 </section>
 

@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="functions_data.html">
      Data
     </a>
@@ -1147,38 +1152,38 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_rsa">
 <span class="sig-name descname"><span class="pre">hrv_rsa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_rsa" title="Permalink to this definition">#</a></dt>
-<dd><p>Respiratory Sinus Arrhythmia (RSA)</p>
+<dd><p><strong>Respiratory Sinus Arrhythmia (RSA)</strong></p>
 <p>Respiratory sinus arrhythmia (RSA), also referred to as ‘cardiac coherence’ or ‘physiological
-coherence’ (though these terms are often encompassing a wider meaning), is the naturally occurring
-variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a
-measure of parasympathetic nervous system activity. Neurophysiology informs us that the functional
-output of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm.
-Thus, there would a temporal relation between the respiratory rhythm being expressed in the firing
-of these efferent pathways and the functional effect on the heart rate rhythm manifested as RSA.
-Importantly, several methods exist to quantify RSA:</p>
+coherence’ (though these terms are often encompassing a wider meaning), is the naturally
+occurring variation in heart rate during the breathing cycle. Metrics to quantify it are often
+used as a measure of parasympathetic nervous system activity. Neurophysiology informs us that
+the functional output of the myelinated vagus originating from the nucleus ambiguus has a
+respiratory rhythm. Thus, there would a temporal relation between the respiratory rhythm being
+expressed in the firing of these efferent pathways and the functional effect on the heart rate
+rhythm manifested as RSA. Several methods exist to quantify RSA:</p>
 <ul class="simple">
-<li><p>The <em>Peak-to-trough (P2T)</em> algorithm measures the statistical range in milliseconds of the heart</p></li>
+<li><p>The <strong>Peak-to-trough (P2T)</strong> algorithm measures the statistical range in milliseconds of the
+heart period oscillation associated with synchronous respiration. Operationally, subtracting
+the shortest heart period during inspiration from the longest heart period during a breath
+cycle produces an estimate of RSA during each breath. The peak-to-trough method makes no
+statistical assumption or correction (e.g., adaptive filtering) regarding other sources of
+variance in the heart period time series that may confound, distort, or interact with the
+metric such as slower periodicities and baseline trend. Although it has been proposed that
+the P2T method “acts as a time-domain filter dynamically centered at the exact ongoing
+respiratory frequency” (Grossman, 1992), the method does not transform the time series in any
+way, as a filtering process would. Instead the method uses knowledge of the ongoing
+respiratory cycle to associate segments of the heart period time series with either
+inhalation or exhalation (Lewis, 2012).</p></li>
+<li><p>The <strong>Porges-Bohrer (PB)</strong> algorithm assumes that heart period time series reflect the sum of
+several component time series. Each of these component time series may be mediated by
+different neural mechanisms and may have different statistical features. The Porges-Bohrer
+method applies an algorithm that selectively extracts RSA, even when the periodic process
+representing RSA is superimposed on a complex baseline that may include aperiodic and slow
+periodic processes. Since the method is designed to remove sources of variance in the heart
+period time series other than the variance within the  frequency band of spontaneous
+breathing, the method is capable of accurately quantifying RSA when the signal to noise ratio
+is low.</p></li>
 </ul>
-<p>period oscillation associated with synchronous respiration. Operationally, subtracting the shortest
-heart period during inspiration from the longest heart period during a breath cycle produces an estimate
-of RSA during each breath. The peak-to-trough method makes no statistical assumption or correction
-(e.g., adaptive filtering) regarding other sources of variance in the heart period time series that
-may confound, distort, or interact with the metric such as slower periodicities and baseline trend.
-Although it has been proposed that the P2T method “acts as a time-domain filter dynamically centered
-at the exact ongoing respiratory frequency” (Grossman, 1992), the method does not transform the time
-series in any way, as a filtering process would. Instead the method uses knowledge of the ongoing
-respiratory cycle to associate segments of the heart period time series with either inhalation or
-exhalation (Lewis, 2012).</p>
-<ul class="simple">
-<li><p>The <em>Porges-Bohrer (PB)</em> algorithm assumes that heart period time series reflect the sum of several</p></li>
-</ul>
-<p>component time series. Each of these component time series may be mediated by different neural
-mechanisms and may have different statistical features. The Porges-Bohrer method applies an algorithm
-that selectively extracts RSA, even when the periodic process representing RSA is superimposed on a
-complex baseline that may include aperiodic and slow periodic processes. Since the method is designed
-to remove sources of variance in the heart period time series other than the variance within the
-frequency band of spontaneous breathing, the method is capable of accurately quantifying RSA when
-the signal to noise ratio is low.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1202,62 +1207,76 @@ Peak Matched Multiple Window. If None (default), window_number will be set at 8.
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p><strong>rsa</strong> (<em>dict</em>) – A dictionary containing the RSA features, which includes:</p>
 <ul class="simple">
-<li><p>”<em>RSA_P2T_Values</em>”: the estimate of RSA during each breath cycle, produced by subtracting
+<li><p>”RSA_P2T_Values”: the estimate of RSA during each breath cycle, produced by subtracting
 the shortest heart period (or RR interval) from the longest heart period in ms.</p></li>
-<li><p>”<em>RSA_P2T_Mean</em>”: the mean peak-to-trough across all cycles in ms</p></li>
-<li><p>”<em>RSA_P2T_Mean_log</em>”: the logarithm of the mean of RSA estimates.</p></li>
-<li><p>”<em>RSA_P2T_SD</em>”: the standard deviation of all RSA estimates.</p></li>
-<li><p>”<em>RSA_P2T_NoRSA</em>”: the number of breath cycles
+<li><p>”RSA_P2T_Mean”: the mean peak-to-trough across all cycles in ms</p></li>
+<li><p>”RSA_P2T_Mean_log”: the logarithm of the mean of RSA estimates.</p></li>
+<li><p>”RSA_P2T_SD”: the standard deviation of all RSA estimates.</p></li>
+<li><p>”RSA_P2T_NoRSA”: the number of breath cycles
 from which RSA could not be calculated.</p></li>
-<li><p>”<em>RSA_PorgesBohrer</em>”: the Porges-Bohrer estimate of RSA, optimal
+<li><p>”RSA_PorgesBohrer”: the Porges-Bohrer estimate of RSA, optimal
 when the signal to noise ratio is low, in ln(ms^2).</p></li>
 </ul>
 </p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Download data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process the data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get RSA features</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> 
-<span class="go">{&#39;RSA_P2T_Mean&#39;: ...,</span>
-<span class="go"> &#39;RSA_P2T_Mean_log&#39;: ...,</span>
-<span class="go"> &#39;RSA_P2T_SD&#39;: ...,</span>
-<span class="go"> &#39;RSA_P2T_NoRSA&#39;: ...,</span>
-<span class="go"> &#39;RSA_PorgesBohrer&#39;: ...,</span>
-<span class="go"> &#39;RSA_Gates_Mean&#39;: ...,</span>
-<span class="go"> &#39;RSA_Gates_Mean_log&#39;: ...,</span>
-<span class="go"> &#39;RSA_Gates_SD&#39;: ...}</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get RSA as a continuous signal</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> 
-<span class="go">        RSA_P2T  RSA_Gates</span>
-<span class="go">0         ...         ...</span>
-<span class="go">1         ...         ...</span>
-<span class="go">2         ...         ...</span>
-<span class="gp">... </span>      <span class="o">...</span>         <span class="o">...</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Download data</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Process the data</span>
+<span class="gp">In [3]: </span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Get RSA features</span>
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">{&#39;RSA_P2T_Mean&#39;: 0.07513513513513514,</span>
+<span class="go"> &#39;RSA_P2T_Mean_log&#39;: -2.588466984941679,</span>
+<span class="go"> &#39;RSA_P2T_SD&#39;: 0.07116575415580562,</span>
+<span class="go"> &#39;RSA_P2T_NoRSA&#39;: 2,</span>
+<span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.647618796135399,</span>
+<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.433517176809868,</span>
+<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.13221390644948,</span>
+<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16712618361933582}</span>
+
+<span class="go"># Get RSA as a continuous signal</span>
+<span class="gp">In [6]: </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">rsa</span>
+<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="go">       RSA_P2T  RSA_Gates</span>
+<span class="go">0         0.09   8.372156</span>
+<span class="go">1         0.09   8.372156</span>
+<span class="go">2         0.09   8.372156</span>
+<span class="go">3         0.09   8.372156</span>
+<span class="go">4         0.09   8.372156</span>
+<span class="go">...        ...        ...</span>
+<span class="go">14995     0.04   8.741065</span>
+<span class="go">14996     0.04   8.741065</span>
+<span class="go">14997     0.04   8.741065</span>
+<span class="go">14998     0.04   8.741065</span>
+<span class="go">14999     0.04   8.741065</span>
+
+<span class="go">[15000 rows x 2 columns]</span>
+
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ecg_signals</span><span class="p">[</span><span class="s2">&quot;ECG_Rate&quot;</span><span class="p">],</span> <span class="n">rsp_signals</span><span class="p">[</span><span class="s2">&quot;RSP_Rate&quot;</span><span class="p">],</span> <span class="n">rsa</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>[15000 rows x 2 columns]
-&gt;&gt;&gt; nk.signal_plot([ecg_signals[“ECG_Rate”], rsp_signals[“RSP_Rate”], rsa], standardize=True)</p>
+<a class="reference internal image-reference" href="../_images/hrv_rsa1.png"><img alt="../_images/hrv_rsa1.png" src="../_images/hrv_rsa1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Servant, D., Logier, R., Mouster, Y., &amp; Goudemand, M. (2009). La variabilité de la fréquence
-cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016</p></li>
+cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423-428.</p></li>
 <li><p>Lewis, G. F., Furman, S. A., McCool, M. F., &amp; Porges, S. W. (2012). Statistical strategies to
-quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology,
-89(2), 349-364.</p></li>
+quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological
+psychology, 89(2), 349-364.</p></li>
 <li><p>Zohar, A. H., Cloninger, C. R., &amp; McCraty, R. (2013). Personality and heart rate variability:
-exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences,
-1(06), 32.</p></li>
+exploring pathways from personality to cardiac coherence and health. Open Journal of Social
+Sciences, 1(06), 32.</p></li>
 </ul>
 </dd></dl>
 
