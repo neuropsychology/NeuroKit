@@ -80,7 +80,6 @@ def fractal_mandelbrot(
       @suppress
       plt.close()
 
-
     Generate a Buddhabrot fractal
 
     .. ipython:: python
@@ -93,7 +92,6 @@ def fractal_mandelbrot(
       plt.axis("off")
       @suppress
       plt.close()
-
 
     Mixed MandelBuddha
 

@@ -30,6 +30,7 @@ def fractal_dfa(
     The output is for multifractal DFA is a dataframe containing the following features:
 
     * TODO.
+    * Need to complete the docstrings.
 
     This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its
     multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``.
@@ -52,7 +53,7 @@ def fractal_dfa(
         which corresponds to the signal 'profile'). Note that it leads to the flattening of the
         signal, which can lead to the loss of some details (see Ihlen, 2012 for an explanation).
         Note that for strongly anticorrelated signals, this transformation should be applied  two
-        times (i.e., provide ``np.cumsum(signal - np.mean(signal))`` instead of `signal`).
+        times (i.e., provide ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
     order : int
        The order of the polynomial trend for detrending, 1 for the linear trend.
     multifractal : bool
@@ -73,16 +74,15 @@ def fractal_dfa(
 
     Returns
     ----------
-    dfa : float or np.array
-        If `multifractal` is False, one DFA value is returned for a single time series.
+    dfa : float or pd.DataFrame
+        If ``multifractal`` is False, one DFA value is returned for a single time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
-        to compute DFA. If `multifractal` is False, the dictionary contains q value, a
+        to compute DFA. If ``multifractal`` is False, the dictionary contains q value, a
         series of windows, fluctuations of each window and the
         slopes value of the log2(windows) versus log2(fluctuations) plot. If
-        `multifractal` is True, the dictionary additionally contains the
-        parameters of the singularity spectrum (scaling exponents, singularity dimension,
-        singularity strength; see `_singularity_spectrum()` for more information).
+        ``multifractal`` is True, the dictionary additionally contains the
+        parameters of the singularity spectrum.
 
     See Also
     --------
@@ -91,6 +91,7 @@ def fractal_dfa(
     Examples
     ----------
     **Example 1:** Monofractal DFA
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -107,7 +108,7 @@ def fractal_dfa(
       dfa
 
     As we can see from the plot, the final value, corresponding to the slope of the red line,
-    doesn't capture properly the relationship. We can adust the *scale factors* to capture the
+    doesn't capture properly the relationship. We can adjust the *scale factors* to capture the
     fractality of short-term fluctuations.
 
     .. ipython:: python
@@ -119,7 +120,8 @@ def fractal_dfa(
       @suppress
       plt.close()
 
-    **MFDFA**
+    **Example 2:** Multifractal DFA (MFDFA)
+
     .. ipython:: python
 
       @savefig p_fractal_dfa3.png scale=100%

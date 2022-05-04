@@ -76,7 +76,6 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
       @suppress
       plt.close()
 
-
     References
     -----------
     * Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., & Bailón, R. (2014).
@@ -117,7 +116,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
         cd, intercept = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
 
     if show is True:
-        fig = plt.figure(constrained_layout=False)
+        fig = plt.figure()
         fig.suptitle("Correlation Dimension")
         plt.xlabel(r"$\log_{2}$(radius)")
         plt.ylabel(r"$\log_{2}$(correlation sum)")

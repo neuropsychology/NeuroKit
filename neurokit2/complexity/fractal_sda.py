@@ -140,5 +140,3 @@ def _fractal_sda_plot(sds, scales, slope, intercept, ax=None):
         label="Fractal Dimension = " + str(np.round(1 - slope, 2)),
     )
     ax.legend(loc="lower right")
-
-    return fig
