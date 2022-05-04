@@ -56,8 +56,8 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
       fig, ax = plt.subplots()
       ax.scatter(x_values, signal, label="original datapoints", zorder=3)
       for im in interpolation_methods:
-         signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
-         ax.plot(x_new, signal_interpolated, label=im)
+       signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
+       ax.plot(x_new, signal_interpolated, label=im)
       ax.legend(loc="upper right")
       @suppress
       plt.close()
