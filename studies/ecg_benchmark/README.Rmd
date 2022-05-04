@@ -22,7 +22,7 @@ options(digits=3)
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi=450,
-  fig.path = "../../studies/ecg_preprocessing/figures/"
+  fig.path = "../../studies/ecg_benchmark/figures/"
 )
 
 # Setup python - you need to change the path to your python distribution
