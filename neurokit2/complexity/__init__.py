@@ -27,6 +27,7 @@ from .entropy_ofentropy import entropy_ofentropy
 from .entropy_permutation import entropy_permutation
 from .entropy_phase import entropy_phase
 from .entropy_range import entropy_range
+from .entropy_rate import entropy_rate
 from .entropy_renyi import entropy_renyi
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
@@ -148,6 +149,7 @@ __all__ = [
     "entropy_maximum",
     "entropy_shannon",
     "entropy_shannon_joint",
+    "entropy_rate",
     "entropy_tsallis",
     "entropy_renyi",
     "entropy_kolmogorov",
