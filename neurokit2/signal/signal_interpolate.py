@@ -37,6 +37,7 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
     Examples
     --------
     .. ipython:: python
+      :okexcept:
 
       import numpy as np
       import neurokit2 as nk
