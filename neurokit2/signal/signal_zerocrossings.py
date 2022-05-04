@@ -21,17 +21,18 @@ def signal_zerocrossings(signal, direction="both"):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=5)
-    >>> zeros = nk.signal_zerocrossings(signal)
-    >>> nk.events_plot(zeros, signal)
-    >>>
-    >>> # Only upward or downward zerocrossings
-    >>> up = nk.signal_zerocrossings(signal, direction='up')
-    >>> down = nk.signal_zerocrossings(signal, direction='down')
-    >>> nk.events_plot([up, down], signal)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=5)
+      zeros = nk.signal_zerocrossings(signal)
+      nk.events_plot(zeros, signal)
+
+      # Only upward or downward zerocrossings
+      up = nk.signal_zerocrossings(signal, direction='up')
+      down = nk.signal_zerocrossings(signal, direction='down')
+      nk.events_plot([up, down], signal)
 
     """
     df = np.diff(np.sign(signal))
