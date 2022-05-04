@@ -8,7 +8,8 @@ from .transition_matrix import _sanitize_tm_input
 def markov_test_symmetry(fm):
     """**Is the Markov process symmetric?**
 
-    Performs a symmetry test. If significant (e.g., *p*-value < .05), one can reject the hypothesis
+    Performs a symmetry test, to test if for instance if the transitions A -> B and B -> A occur
+    with the same probability. If significant (e.g., *p*-value < .05), one can reject the hypothesis
     that observed Markov process is symmetric, and conclude that it the transition matrix is
     asymmetric.
 
