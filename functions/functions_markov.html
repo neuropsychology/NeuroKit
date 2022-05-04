@@ -565,7 +565,7 @@ title="Print to PDF"
 <h2><em>transition_matrix()</em><a class="headerlink" href="#transition-matrix" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.transition_matrix">
-<span class="sig-name descname"><span class="pre">transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.transition_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.transition_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Transition Matrix</strong></p>
 <p>A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
 describe a sequence of states, also known as <strong>discrete Markov chains</strong>. Each of its entries is
@@ -597,7 +597,7 @@ accessible via the key <code class="docutils literal notranslate"><span class="p
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">sequence</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">In [2]: </span><span class="n">sequence</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">]</span>
 
 <span class="gp">In [3]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -605,11 +605,39 @@ accessible via the key <code class="docutils literal notranslate"><span class="p
 <a class="reference internal image-reference" href="../_images/p_transition_matrix1.png"><img alt="../_images/p_transition_matrix1.png" src="../_images/p_transition_matrix1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">tm</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">          0         1         2         3</span>
-<span class="go">0  0.666667  0.333333  0.000000  0.333333</span>
-<span class="go">1  0.500000  0.000000  0.500000  0.000000</span>
-<span class="go">2  0.000000  0.333333  0.666667  0.000000</span>
-<span class="go">3  0.250000  0.250000  0.250000  0.250000</span>
+<span class="go">      A         B         C     D</span>
+<span class="go">A  0.50  0.000000  0.250000  0.25</span>
+<span class="go">B  0.00  0.666667  0.333333  0.00</span>
+<span class="go">C  0.50  0.500000  0.000000  0.00</span>
+<span class="go">D  0.25  0.250000  0.250000  0.25</span>
+</pre></div>
+</div>
+<p>In this example, the transition from D is unknown, resulting in an absence of transitioning
+probability. As this can cause issues, unknown probabilities are replaced by a uniform
+distribution, but this can be turned off using the <code class="docutils literal notranslate"><span class="pre">adjust</span></code> argument.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">tm</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">     A         B         C     D</span>
+<span class="go">A  0.5  0.000000  0.250000  0.25</span>
+<span class="go">B  0.0  0.666667  0.333333  0.00</span>
+<span class="go">C  0.5  0.500000  0.000000  0.00</span>
+<span class="go">D  0.0  0.000000  0.000000  0.00</span>
+</pre></div>
+</div>
+<p>Transition matrix of higher order</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">sequence</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">]</span>
+
+<span class="gp">In [8]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">tm</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">array([[[0.25, 0.75],</span>
+<span class="go">        [1.  , 0.  ]],</span>
+
+<span class="go">       [[1.  , 0.  ],</span>
+<span class="go">        [0.5 , 0.5 ]]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -648,7 +676,7 @@ accessible via the key <code class="docutils literal notranslate"><span class="p
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 1, 0, 3, 1, 0, 0, 3, 0, 1, 2, 1, 0, 1, 0])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -810,7 +838,7 @@ Markov chain tells us how long does it take for a run to go near the stationary 
 <span class="gp">In [3]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">markov_mixingtime</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">2.2642503142522745</span>
+<span class="gh">Out[4]: </span><span class="go">2.509587003712985</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
