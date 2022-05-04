@@ -198,9 +198,9 @@ Other
 
 Utilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. *fractal_mandelbrot()*
-.. """"""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.fractal_mandelbrot
+*fractal_mandelbrot()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_mandelbrot
 
 *complexity_simulate()*
 """"""""""""""""""""""""""
