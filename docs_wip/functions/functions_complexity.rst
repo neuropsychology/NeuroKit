@@ -196,42 +196,42 @@ Other
 .. autofunction:: neurokit2.complexity.complexity_rqa
 
 
-.. Utilities
-.. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Utilities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. *fractal_mandelbrot()*
 .. """"""""""""""""""""""""""
 .. .. autofunction:: neurokit2.complexity.fractal_mandelbrot
 
-.. *complexity_simulate()*
-.. """"""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.complexity_simulate
+*complexity_simulate()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_simulate
 
-.. *complexity_attractor()*
-.. """"""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.complexity_attractor
+*complexity_attractor()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_attractor
 
-.. *complexity_symbolize*
-.. """"""""""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.complexity_symbolize
+*complexity_symbolize*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_symbolize
 
-.. *complexity_coarsegraining()*
-.. """"""""""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.complexity_coarsegraining
+*complexity_coarsegraining()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_coarsegraining
 
-.. *complexity_ordinalpatterns()*
-.. """"""""""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
+*complexity_ordinalpatterns()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
 
-.. *recurrence_matrix()*
-.. """"""""""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.recurrence_matrix
+*recurrence_matrix()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.recurrence_matrix
 
 
-.. Joint/Multivariate
-.. ^^^^^^^^^^^^^^^^^^^^^^
-.. *entropy_shannon_joint()*
-.. """"""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.entropy_shannon_joint
+Joint/Multivariate
+^^^^^^^^^^^^^^^^^^^^^^
+*entropy_shannon_joint()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_shannon_joint
 
 
 .. *Other*
