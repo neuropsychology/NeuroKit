@@ -57,9 +57,9 @@ Fractal Dimension
 .. """"""""""""""""""""""
 .. .. autofunction:: neurokit2.complexity.fractal_correlation
 
-.. *fractal_dfa()*
-.. """"""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.fractal_dfa
+*fractal_dfa()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_dfa
 
 
 Entropy
@@ -233,6 +233,9 @@ Joint/Multivariate
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_shannon_joint
 
+.. *fractal_correlation()*
+.. """"""""""""""""""""""
+.. .. autofunction:: neurokit2.complexity.fractal_correlation
 
 .. *Other*
 .. ^^^^^^^^^
