@@ -106,7 +106,6 @@ def fractal_dfa(
 
       dfa
 
-
     As we can see from the plot, the final value, corresponding to the slope of the red line,
     doesn't capture properly the relationship. We can adust the *scale factors* to capture the
     fractality of short-term fluctuations.

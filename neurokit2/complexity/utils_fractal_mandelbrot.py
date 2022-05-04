@@ -78,7 +78,6 @@ def fractal_mandelbrot(
       plt.imshow(m.T, cmap="viridis")
       plt.axis("off")
       @suppress
-      plt.show()
       plt.close()
 
 
@@ -93,7 +92,6 @@ def fractal_mandelbrot(
       plt.imshow(b.T, cmap="gray")
       plt.axis("off")
       @suppress
-      plt.show()
       plt.close()
 
 
@@ -109,7 +107,6 @@ def fractal_mandelbrot(
       plt.imshow(mixed.T, cmap="gray")
       plt.axis("off")
       @suppress
-      plt.show()
       plt.close()
 
     """

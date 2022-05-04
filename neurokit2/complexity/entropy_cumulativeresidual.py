@@ -52,7 +52,7 @@ def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
 
       import neurokit2 as nk
 
-      signal = [1, 1, 1, 3, 3, 2, 2]
+      signal = [1, 1, 1, 3, 3, 2, 2, 1, 1, 3, 3, 3]
 
       @savefig p_entropy_cumulativeresidual1.png scale=100%
       cren, info = nk.entropy_cumulativeresidual(signal, show=True)

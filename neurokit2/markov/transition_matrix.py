@@ -61,6 +61,12 @@ def transition_matrix(sequence, show=False):
     states = np.unique(sequence)
     n_states = len(states)
 
+    # order=1
+    # freq = np.zeros((n_states,) * (order + 1))
+    # for _ind in zip(*[sequence[_x:] for _x in range(order + 1)]):
+    #     freq[_ind] += 1
+    # freq
+
     # Get observed transition matrix
     freqs = np.zeros((n_states, n_states))
     for x, y in itertools.product(range(n_states), repeat=2):

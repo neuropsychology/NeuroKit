@@ -52,3 +52,31 @@ Fractal Dimension
 *fractal_higuchi()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_higuchi
+
+
+
+Entropy
+^^^^^^^^^^^^^^^^^
+*entropy_shannon()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_shannon
+
+*entropy_maximum()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_maximum
+
+*entropy_differential()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_differential
+
+*entropy_tsallis()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_tsallis
+
+*entropy_renyi()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_renyi
+
+*entropy_cumulativeresidual()*
+"""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_cumulativeresidual
