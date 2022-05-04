@@ -90,7 +90,6 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
         plt.ylabel("Autocorrelation r")
         plt.xlabel("Lag")
         plt.ylim(-1, 1)
-        # plt.show()
 
     if lag is not None:
         if lag > n:

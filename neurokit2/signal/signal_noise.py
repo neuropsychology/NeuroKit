@@ -62,7 +62,6 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
     >>> plt.loglog(psd_white["Frequency"], psd_white["Power"], c="grey") #doctest: +SKIP
     >>> plt.loglog(psd_pink["Frequency"], psd_pink["Power"], c="pink") #doctest: +SKIP
     >>> plt.loglog(psd_brown["Frequency"], psd_brown["Power"], c="brown") #doctest: +SKIP
-    >>> plt.show() #doctest: +SKIP
 
     """
 

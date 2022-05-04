@@ -40,7 +40,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
       signal = np.cos(np.linspace(start=0, stop=20, num=1000))
       binary = nk.signal_binarize(signal)
       @savefig p_signal_binarize.png scale=100%
-      fig = pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
+      pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
       @suppress
       plt.close()
 

@@ -99,16 +99,9 @@ def signal_detrend(
                            "Tarvainen": tarvainen,
                            "LOESS": loess,
                            "Local Regression": locreg}).plot(subplots=True)
-      @suppress
-      plt.close()
-
-    .. ipython:: python
-
       # Plot horizontal lines to better visualize the detrending
-      @savefig signal_detrend2.png scale=100%
       for subplot in axes:
-        subplot.axhline(y=0, color='k', linestyle='--')
-      plt.show()
+          subplot.axhline(y=0, color='k', linestyle='--')
       @suppress
       plt.close()
 

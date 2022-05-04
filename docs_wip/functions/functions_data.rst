@@ -21,3 +21,10 @@ I/O
 *write_csv()*
 """""""""""""""
 .. autofunction:: neurokit2.data.write_csv
+
+*Other*
+^^^^^^^^^
+
+.. automodule:: neurokit2.data
+   :members:
+   :exclude-members: data, read_acqknowledge, read_bitalino, write_csv

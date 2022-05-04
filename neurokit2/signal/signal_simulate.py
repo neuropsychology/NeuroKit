@@ -6,7 +6,9 @@ import numpy as np
 from ..misc import NeuroKitWarning, listify
 
 
-def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False):
+def signal_simulate(
+    duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False
+):
     """Simulate a continuous signal.
 
     Parameters
@@ -35,10 +37,9 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> fig = pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1),
+    >>> pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1),
     ...                     "2Hz": nk.signal_simulate(duration=5, frequency=2),
     ...                     "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
-    >>> fig #doctest: +SKIP
 
     """
     n_samples = int(np.rint(duration * sampling_rate))
@@ -63,7 +64,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
                     f" sampling rate of {sampling_rate} Hz. Please increase"
                     f" sampling rate to {freq * 10} Hz or choose frequencies"
                     f" smaller than or equal to {nyquist} Hz.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
             continue
         # Also make sure that at leat one period of the frequency can be
@@ -77,7 +78,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
                     f" Please choose frequencies larger than"
                     f" {1 / duration} Hz or increase the duration of the"
                     f" signal above {1 / freq} seconds.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
             continue
 

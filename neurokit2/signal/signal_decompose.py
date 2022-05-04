@@ -51,13 +51,14 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
       plt.close()
 
     .. ipython:: python
+      :okexcept:
 
       # Example 1: Using the EMD method
       components = nk.signal_decompose(signal, method="emd")
 
       # Visualize Decomposed Signal Components
       @savefig p_signal_decompose2.png scale=100%
-      fig = nk.signal_plot(components)
+      nk.signal_plot(components)
       @suppress
       plt.close()
 
@@ -68,7 +69,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
 
       # Visualize Decomposed Signal Components
       @savefig p_signal_decompose3.png scale=100%
-      fig = nk.signal_plot(components)  # Visualize components
+      nk.signal_plot(components)  # Visualize components
       @suppress
       plt.close()
 
@@ -80,7 +81,9 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     elif method in ["ssa"]:
         components = _signal_decompose_ssa(signal, n_components=n_components)
     else:
-        raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd' or 'ssa'.")
+        raise ValueError(
+            "NeuroKit error: signal_decompose(): 'method' should be one of 'emd' or 'ssa'."
+        )
     return components
 
 
@@ -182,8 +185,8 @@ def _signal_decompose_emd(signal, ensemble=False):
         import PyEMD
     except ImportError as e:
         raise ImportError(
-            "NeuroKit error: _signal_decompose_emd(): the 'PyEMD' module is required for this function to run. ",
-            "Please install it first (`pip install EMD-signal`).",
+            "NeuroKit error: _signal_decompose_emd(): the 'PyEMD' module is required for this"
+            " function to run. Please install it first (`pip install EMD-signal`).",
         ) from e
 
     if ensemble is False:

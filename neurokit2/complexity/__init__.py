@@ -21,6 +21,7 @@ from .entropy_grid import entropy_grid
 from .entropy_hierarchical import entropy_hierarchical
 from .entropy_increment import entropy_increment
 from .entropy_kolmogorov import entropy_kolmogorov
+from .entropy_maximum import entropy_maximum
 from .entropy_multiscale import entropy_multiscale
 from .entropy_ofentropy import entropy_ofentropy
 from .entropy_permutation import entropy_permutation
@@ -144,6 +145,7 @@ __all__ = [
     "complexity_dfa",
     "complexity_relativeroughness",
     "complexity_rqa",
+    "entropy_maximum",
     "entropy_shannon",
     "entropy_shannon_joint",
     "entropy_tsallis",

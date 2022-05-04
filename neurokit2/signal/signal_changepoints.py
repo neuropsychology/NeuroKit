@@ -35,7 +35,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
       signal = nk.emg_simulate(burst_number=3)
       @savefig p_signal_changepoints1.png scale=100%
-      fig = nk.signal_changepoints(signal, change="var", show=True)
+      nk.signal_changepoints(signal, change="var", show=True)
       @suppress
       plt.close()
 

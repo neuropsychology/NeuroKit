@@ -26,14 +26,12 @@ def signal_zerocrossings(signal, direction="both"):
     >>>
     >>> signal = nk.signal_simulate(duration=5)
     >>> zeros = nk.signal_zerocrossings(signal)
-    >>> fig = nk.events_plot(zeros, signal)
-    >>> fig #doctest: +SKIP
+    >>> nk.events_plot(zeros, signal)
     >>>
     >>> # Only upward or downward zerocrossings
     >>> up = nk.signal_zerocrossings(signal, direction='up')
     >>> down = nk.signal_zerocrossings(signal, direction='down')
-    >>> fig = nk.events_plot([up, down], signal)
-    >>> fig #doctest: +SKIP
+    >>> nk.events_plot([up, down], signal)
 
     """
     df = np.diff(np.sign(signal))

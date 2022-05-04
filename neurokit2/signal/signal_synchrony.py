@@ -49,8 +49,7 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     >>> coupling_h = nk.signal_synchrony(signal1, signal2, method="hilbert")
     >>> coupling_c = nk.signal_synchrony(signal1, signal2, method="correlation", window_size=1000/2)
     >>>
-    >>> fig = nk.signal_plot([signal1, signal2, coupling_h, coupling_c])
-    >>> fig #doctest: +SKIP
+    >>> nk.signal_plot([signal1, signal2, coupling_h, coupling_c])
 
     References
     ----------
@@ -63,7 +62,9 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
         coupling = _signal_synchrony_correlation(signal1, signal2, window_size=int(window_size))
 
     else:
-        raise ValueError("NeuroKit error: signal_synchrony(): 'method' should be one of 'hilbert' or 'correlation'.")
+        raise ValueError(
+            "NeuroKit error: signal_synchrony(): 'method' should be one of 'hilbert' or 'correlation'."
+        )
 
     return coupling
 

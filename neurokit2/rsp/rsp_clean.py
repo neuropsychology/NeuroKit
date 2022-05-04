@@ -12,10 +12,12 @@ from ..signal import signal_detrend, signal_filter
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """**Preprocess a respiration (RSP) signal**
 
-    Clean a respiration signal using different sets of parameters, such as 'khodadad2018' (linear
-    detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter) or `BioSPPy <https://
-    github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_(second order0.1 - 0.35 Hz
-    bandpass Butterworth filter followed by a constant detrending).
+    Clean a respiration signal using different sets of parameters, such as:
+
+    * **khodadad2018**: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
+      filter)
+    * **BioSPPy**: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
+      detrending).
 
     Parameters
     ----------
@@ -43,17 +45,21 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
-      signals = pd.DataFrame({ "RSP_Raw": rsp,
-                             "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
-                             "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
+      signals = pd.DataFrame({
+          "RSP_Raw": rsp,
+          "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
+          "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")
+      })
       @savefig p_rsp_clean1.png scale=100%
-      fig = signals.plot()
+      signals.plot()
       @suppress
       plt.close()
 
     References
     ----------
-    - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
+    * Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... & Bayford,
+      R. (2018). Optimized breath detection algorithm in electrical impedance tomography.
+      Physiological measurement, 39(9), 094001.
 
     """
     rsp_signal = as_vector(rsp_signal)
@@ -62,7 +68,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     n_missing = np.sum(np.isnan(rsp_signal))
     if n_missing > 0:
         warn(
-            "There are " + str(n_missing) + " missing data points in your signal."
+            f"There are {n_missing} missing data points in your signal."
             " Filling missing values by using the forward filling method.",
             category=NeuroKitWarning,
         )

@@ -28,37 +28,38 @@ def hrv_rsa(
     window=None,
     window_number=None,
 ):
-    """Respiratory Sinus Arrhythmia (RSA)
+    """**Respiratory Sinus Arrhythmia (RSA)**
 
     Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence' or 'physiological
-    coherence' (though these terms are often encompassing a wider meaning), is the naturally occurring
-    variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a
-    measure of parasympathetic nervous system activity. Neurophysiology informs us that the functional
-    output of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm.
-    Thus, there would a temporal relation between the respiratory rhythm being expressed in the firing
-    of these efferent pathways and the functional effect on the heart rate rhythm manifested as RSA.
-    Importantly, several methods exist to quantify RSA:
+    coherence' (though these terms are often encompassing a wider meaning), is the naturally
+    occurring variation in heart rate during the breathing cycle. Metrics to quantify it are often
+    used as a measure of parasympathetic nervous system activity. Neurophysiology informs us that
+    the functional output of the myelinated vagus originating from the nucleus ambiguus has a
+    respiratory rhythm. Thus, there would a temporal relation between the respiratory rhythm being
+    expressed in the firing of these efferent pathways and the functional effect on the heart rate
+    rhythm manifested as RSA. Several methods exist to quantify RSA:
 
-    - The *Peak-to-trough (P2T)* algorithm measures the statistical range in milliseconds of the heart
-    period oscillation associated with synchronous respiration. Operationally, subtracting the shortest
-    heart period during inspiration from the longest heart period during a breath cycle produces an estimate
-    of RSA during each breath. The peak-to-trough method makes no statistical assumption or correction
-    (e.g., adaptive filtering) regarding other sources of variance in the heart period time series that
-    may confound, distort, or interact with the metric such as slower periodicities and baseline trend.
-    Although it has been proposed that the P2T method "acts as a time-domain filter dynamically centered
-    at the exact ongoing respiratory frequency" (Grossman, 1992), the method does not transform the time
-    series in any way, as a filtering process would. Instead the method uses knowledge of the ongoing
-    respiratory cycle to associate segments of the heart period time series with either inhalation or
-    exhalation (Lewis, 2012).
-
-    - The *Porges-Bohrer (PB)* algorithm assumes that heart period time series reflect the sum of several
-    component time series. Each of these component time series may be mediated by different neural
-    mechanisms and may have different statistical features. The Porges-Bohrer method applies an algorithm
-    that selectively extracts RSA, even when the periodic process representing RSA is superimposed on a
-    complex baseline that may include aperiodic and slow periodic processes. Since the method is designed
-    to remove sources of variance in the heart period time series other than the variance within the
-    frequency band of spontaneous breathing, the method is capable of accurately quantifying RSA when
-    the signal to noise ratio is low.
+    * The **Peak-to-trough (P2T)** algorithm measures the statistical range in milliseconds of the
+      heart period oscillation associated with synchronous respiration. Operationally, subtracting
+      the shortest heart period during inspiration from the longest heart period during a breath
+      cycle produces an estimate of RSA during each breath. The peak-to-trough method makes no
+      statistical assumption or correction (e.g., adaptive filtering) regarding other sources of
+      variance in the heart period time series that may confound, distort, or interact with the
+      metric such as slower periodicities and baseline trend. Although it has been proposed that
+      the P2T method "acts as a time-domain filter dynamically centered at the exact ongoing
+      respiratory frequency" (Grossman, 1992), the method does not transform the time series in any
+      way, as a filtering process would. Instead the method uses knowledge of the ongoing
+      respiratory cycle to associate segments of the heart period time series with either
+      inhalation or exhalation (Lewis, 2012).
+    * The **Porges-Bohrer (PB)** algorithm assumes that heart period time series reflect the sum of
+      several component time series. Each of these component time series may be mediated by
+      different neural mechanisms and may have different statistical features. The Porges-Bohrer
+      method applies an algorithm that selectively extracts RSA, even when the periodic process
+      representing RSA is superimposed on a complex baseline that may include aperiodic and slow
+      periodic processes. Since the method is designed to remove sources of variance in the heart
+      period time series other than the variance within the  frequency band of spontaneous
+      breathing, the method is capable of accurately quantifying RSA when the signal to noise ratio
+      is low.
 
     Parameters
     ----------
@@ -90,67 +91,51 @@ def hrv_rsa(
     rsa : dict
         A dictionary containing the RSA features, which includes:
 
-        - "*RSA_P2T_Values*": the estimate of RSA during each breath cycle, produced by subtracting
+        * "RSA_P2T_Values": the estimate of RSA during each breath cycle, produced by subtracting
           the shortest heart period (or RR interval) from the longest heart period in ms.
-
-        - "*RSA_P2T_Mean*": the mean peak-to-trough across all cycles in ms
-
-        - "*RSA_P2T_Mean_log*": the logarithm of the mean of RSA estimates.
-
-        - "*RSA_P2T_SD*": the standard deviation of all RSA estimates.
-
-        - "*RSA_P2T_NoRSA*": the number of breath cycles
+        * "RSA_P2T_Mean": the mean peak-to-trough across all cycles in ms
+        * "RSA_P2T_Mean_log": the logarithm of the mean of RSA estimates.
+        * "RSA_P2T_SD": the standard deviation of all RSA estimates.
+        * "RSA_P2T_NoRSA": the number of breath cycles
           from which RSA could not be calculated.
-
-        - "*RSA_PorgesBohrer*": the Porges-Bohrer estimate of RSA, optimal
+        * "RSA_PorgesBohrer": the Porges-Bohrer estimate of RSA, optimal
           when the signal to noise ratio is low, in ln(ms^2).
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>>
-    >>> # Process the data
-    >>> ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
-    >>> rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
-    >>>
-    >>> # Get RSA features
-    >>> nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False) #doctest: +ELLIPSIS
-    {'RSA_P2T_Mean': ...,
-     'RSA_P2T_Mean_log': ...,
-     'RSA_P2T_SD': ...,
-     'RSA_P2T_NoRSA': ...,
-     'RSA_PorgesBohrer': ...,
-     'RSA_Gates_Mean': ...,
-     'RSA_Gates_Mean_log': ...,
-     'RSA_Gates_SD': ...}
-    >>>
-    >>> # Get RSA as a continuous signal
-    >>> rsa = nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
-    >>> rsa #doctest: +ELLIPSIS
-            RSA_P2T  RSA_Gates
-    0         ...         ...
-    1         ...         ...
-    2         ...         ...
-    ...       ...         ...
+    .. ipython:: python
 
-    [15000 rows x 2 columns]
-    >>> nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True)
+      import neurokit2 as nk
+
+      # Download data
+      data = nk.data("bio_eventrelated_100hz")
+
+      # Process the data
+      ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+      rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
+
+      # Get RSA features
+      nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False)
+
+      # Get RSA as a continuous signal
+      rsa = nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
+      rsa
+
+      @savefig hrv_rsa1.png scale=100%
+      nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True)
+      @suppress
+      plt.close()
 
     References
     ------------
-    - Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence
-      cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
-
-    - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to
-      quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology,
-      89(2), 349-364.
-
-    - Zohar, A. H., Cloninger, C. R., & McCraty, R. (2013). Personality and heart rate variability:
-      exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences,
-      1(06), 32.
+    * Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence
+      cardiaque. Intérêts en psychiatrie. L'Encéphale, 35(5), 423-428.
+    * Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to
+      quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological
+      psychology, 89(2), 349-364.
+    * Zohar, A. H., Cloninger, C. R., & McCraty, R. (2013). Personality and heart rate variability:
+      exploring pathways from personality to cardiac coherence and health. Open Journal of Social
+      Sciences, 1(06), 32.
 
     """
     rpeaks = _hrv_sanitize_input(rpeaks)

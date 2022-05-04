@@ -78,17 +78,17 @@ def signal_fixpeaks(
     .. ipython:: python
 
       import neurokit2 as nk
-      import numpy as np
-      import matplotlib.pyplot as plt
 
       # Simulate ECG data
       ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
 
       # Identify and Correct Peaks using 'Kubios' Method
       rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
-      @savefig p_sign al_fixpeaks1.png scale=100%
-      artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True,
-                                                    show=True, method="Kubios")
+
+      @savefig p_signal_fixpeaks1.png scale=100%
+      artifacts, rpeaks_corrected = nk.signal_fixpeaks(
+          rpeaks_uncorrected, iterative=True, method="Kubios", show=True
+      )
       @suppress
       plt.close()
 
@@ -99,14 +99,16 @@ def signal_fixpeaks(
       rate_uncorrected = nk.signal_rate(rpeaks_uncorrected, desired_length=len(ecg))
 
       @savefig p_signal_fixpeaks2.png scale=100%
-      fig, ax = plt.subplots()
-      ax.plot(rate_uncorrected, label="heart rate without artifact correction")
-      ax.plot(rate_corrected, label="heart rate with artifact correction")
-      ax.legend(loc="upper right")
+      nk.signal_plot(
+          [rate_uncorrected, rate_corrected],
+          labels=["Heart Rate Uncorrected", "Heart Rate Corrected"]
+      )
       @suppress
       plt.close()
 
     .. ipython:: python
+
+      import numpy as np
 
       # Simulate Abnormal Signals
       signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
@@ -119,12 +121,13 @@ def signal_fixpeaks(
       peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
 
       # Identify and Correct Peaks using 'Neurokit' Method
-      peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5,
-      method="neurokit")
+      peaks_corrected = nk.signal_fixpeaks(
+          peaks=peaks, interval_min=0.5, interval_max=1.5, method="neurokit"
+      )
 
       # Plot and shift original peaks to the right to see the difference.
       @savefig p_signal_fixpeaks3.png scale=100%
-      fig = nk.events_plot([peaks + 50, peaks_corrected], signal)
+      nk.events_plot([peaks + 50, peaks_corrected], signal)
       @suppress
       plt.close()
 
