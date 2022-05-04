@@ -233,9 +233,6 @@ Joint/Multivariate
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_shannon_joint
 
-.. *fractal_correlation()*
-.. """"""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.fractal_correlation
 
 .. *Other*
 .. ^^^^^^^^^

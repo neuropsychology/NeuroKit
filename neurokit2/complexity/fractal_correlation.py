@@ -51,6 +51,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
 
     Examples
     ----------
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -62,12 +63,14 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
       @suppress
       plt.close()
 
+
     .. ipython:: python
 
       @savefig p_fractal_correlation2.png scale=100%
       cd, info = nk.fractal_correlation(signal, radius="nolds", show=True)
       @suppress
       plt.close()
+
 
     .. ipython:: python
 
