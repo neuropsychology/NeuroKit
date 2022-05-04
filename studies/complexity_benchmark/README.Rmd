@@ -56,7 +56,7 @@ The script to generate the data can be found at ...
 
 Generated 5 types of signals, to which we added different types of noise.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.height=20, fig.width=12}
 library(tidyverse)
 library(easystats)
 library(patchwork)
@@ -186,6 +186,11 @@ colors <- c(
   "MMSyDyEn" = "#E91E63",
   "DispEn" = "#E91E63",
   "DispEn (fluctuation)" = "#E91E63",
+  "FuzzyMSEn" = "#E91E63",
+  "FuzzyCMSEn" = "#E91E63",
+  "FuzzyRCMSEn" = "#E91E63",
+  "FuzzyMMSEn" = "#E91E63",
+  "FuzzyIMSEn" = "#E91E63",
   "ShanEn (A)" = "#E91E63",
   "ShanEn (B)" = "#E91E63",
   "ShanEn (C)" = "#E91E63",
@@ -234,7 +239,6 @@ colors <- c(
   "RQA_Laminarity_Determinism" = "#4CAF50",
   "RQA_RecurrenceRate" = "#4CAF50",
   "RQA_L" = "#4CAF50",
-  "RQA_LMax" = "#4CAF50",
   "RQA_LEn" = "#4CAF50",
   "RQA_VMax" = "#4CAF50",
   "RQA_VEn" = "#4CAF50",
@@ -252,6 +256,7 @@ colors <- c(
 )
 
 # unique(df$Index)[!unique(df$Index) %in% names(colors)]
+# names(colors)[!names(colors) %in% unique(df$Index)]
 ```
 
 
@@ -313,7 +318,7 @@ dfsummary |>
 ```
 
 
-```{r time2, message=FALSE, warning=FALSE}
+```{r time2, message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
 df |>
   filter(!Index %in% c("SD", "Length", "Noise", "Random")) |>
   mutate(Duration = Duration * 10000) |>
@@ -333,7 +338,7 @@ df |>
 ### Sensitivity to Signal Length
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
 model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random")))
 
 parameters::parameters(model, keep = "poly.*1") |>
@@ -357,7 +362,7 @@ estimate_relation(model) |>
 
 ### Sensitivity to Noise
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
 model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random")))
 
 parameters::parameters(model, keep = "poly.*1") |>
@@ -539,7 +544,7 @@ r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))
 
-rez <- parameters::factor_analysis(data, cor = r, n = 11, rotation = "varimax", sort = TRUE, fm="wls")
+rez <- parameters::factor_analysis(data, cor = r, n = 14, rotation = "varimax", sort = TRUE, fm="wls")
 # rez <- parameters::principal_components(data, n = 5, sort = TRUE)
 # rez
 
@@ -555,11 +560,13 @@ loadings <- attributes(rez)$loadings_long |>
 
 colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Component))), levels(loadings$Component))
 
+
 p1 <- loadings |>
   # filter(Variable == "CD") |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
   geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
+  geom_vline(xintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_fill_material_d("rainbow") +
   coord_flip() +
@@ -584,6 +591,7 @@ p2 <- order |>
   mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |>
   ggplot(aes(x = log10(Duration), y = Index)) +
   geom_bar(aes(fill = log10(Duration)), stat = "identity") +
+  geom_hline(yintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
   scale_x_reverse(expand = c(0, 0)) +
   # scale_x_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) +
   scale_y_discrete(position = "right") +

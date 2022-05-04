@@ -52,14 +52,14 @@ def markov_test_symmetry(fm):
     fm = fm.values
 
     # Start computation
-    T = 0.0
+    t = 0.0
     for i, j in np.ndindex(fm.shape):
         if i != j:
             f = fm[i, j] * fm[j, i]
             if f > 0:
-                T += fm[i, j] * np.log((2.0 * fm[i, j]) / (fm[i, j] + fm[j, i]))
+                t += fm[i, j] * np.log((2.0 * fm[i, j]) / (fm[i, j] + fm[j, i]))
 
     # Run test
-    out = {"Symmetry_t": T * 2.0, "Symmetry_df": len(fm) * (len(fm) - 1) / 2}
+    out = {"Symmetry_t": t * 2.0, "Symmetry_df": len(fm) * (len(fm) - 1) / 2}
     out["Symmetry_p"] = scipy.stats.chi2.sf(out["Symmetry_t"], out["Symmetry_df"], loc=0, scale=1)
     return out

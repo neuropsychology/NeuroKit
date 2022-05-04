@@ -106,6 +106,7 @@ def fractal_dfa(
 
       dfa
 
+
     As we can see from the plot, the final value, corresponding to the slope of the red line,
     doesn't capture properly the relationship. We can adust the *scale factors* to capture the
     fractality of short-term fluctuations.
@@ -115,14 +116,14 @@ def fractal_dfa(
       scale = nk.expspace(10, 100, 20, base=2)
 
       @savefig p_fractal_dfa2.png scale=100%
-      dfa1, info = nk.fractal_dfa(signal, scale=scale, show=True)
+      dfa, info = nk.fractal_dfa(signal, scale=scale, show=True)
       @suppress
       plt.close()
 
     **MFDFA**
     .. ipython:: python
 
-      @savefig p_fractal_dfa2.png scale=100%
+      @savefig p_fractal_dfa3.png scale=100%
       mfdfa, info = nk.fractal_mfdfa(signal, q=[-5, -3, -1, 0, 1, 3, 5], show=True)
       @suppress
       plt.close()

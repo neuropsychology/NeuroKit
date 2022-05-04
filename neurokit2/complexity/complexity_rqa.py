@@ -33,9 +33,9 @@ def complexity_rqa(
     * **Trapping Time (TT)**: Average length of vertical black lines.
     * **L**: Average length of diagonal black lines. Average duration that a system is staying in
       the same state.
-    * **LEn**: Entropy diagonal lines.
+    * **LEn**: Entropy of diagonal lines.
     * **VMax**: Longest vertical line length.
-    * **VEn**: Entropy vertical lines.
+    * **VEn**: Entropy of vertical lines.
     * **W**: Average white vertical line length.
     * **WMax**: Longest white vertical line length.
     * **WEn**: Entropy white vertical lines.
