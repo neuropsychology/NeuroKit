@@ -7,7 +7,7 @@ from ..signal import signal_autocor
 def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
     """**EDA Autocorrelation**
 
-    Computes autocorrelation measure of raw EDA signal i.e., the correlation between the time
+    Compute autocorrelation measure of raw EDA signal i.e., the correlation between the time
     series data and a specified time-lagged version of itself.
 
     Parameters

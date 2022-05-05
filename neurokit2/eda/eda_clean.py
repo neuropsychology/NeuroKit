@@ -10,7 +10,7 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
-    """Preprocess Electrodermal Activity (EDA) signal.
+    """**Preprocess Electrodermal Activity (EDA) signal**
 
     Parameters
     ----------
@@ -32,15 +32,20 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
 
     Examples
     --------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> eda = nk.eda_simulate(duration=30, sampling_rate=100, scr_number=10, noise=0.01, drift=0.02)
-    >>> signals = pd.DataFrame({"EDA_Raw": eda,
-    ...                         "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100,method='biosppy'),
-    ...                         "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
-    >>> fig = signals.plot()
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      eda = nk.eda_simulate(duration=30, sampling_rate=100, scr_number=10, noise=0.01, drift=0.02)
+      signals = pd.DataFrame({"EDA_Raw": eda,
+                              "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100,method='biosppy'),
+                              "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100,
+                              method='neurokit')})
+      @savefig p_eda_clean.png scale=100%
+      fig = signals.plot()
+      @suppress
+      plt.close()
 
     """
     eda_signal = as_vector(eda_signal)
