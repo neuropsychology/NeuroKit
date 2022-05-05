@@ -7,7 +7,7 @@ from ..signal import signal_distort, signal_merge
 def eda_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
 ):
-    """Simulate Electrodermal Activity (EDA) signal.
+    """**Simulate Electrodermal Activity (EDA) signal**
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
 
@@ -35,12 +35,17 @@ def eda_simulate(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> eda = nk.eda_simulate(duration=10, scr_number=3)
-    >>> fig = nk.signal_plot(eda)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+
+      eda = nk.eda_simulate(duration=10, scr_number=3)
+      @savefig p_eda_simulate1.png scale=100%
+      fig = nk.signal_plot(eda)
+      @suppress
+      plt.close()
+
 
     See Also
     --------
@@ -49,7 +54,7 @@ def eda_simulate(
 
     References
     -----------
-    - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin
+    * Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin
       conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
 
     """
@@ -120,9 +125,9 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
 
     Examples
     --------
-    >>> # scr1 = _eda_simulate_scr(time_peak=3.0745)
-    >>> # scr2 = _eda_simulate_scr(time_peak=10)
-    >>> # pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
+      # scr1 = _eda_simulate_scr(time_peak=3.0745)
+      # scr2 = _eda_simulate_scr(time_peak=10)
+      # pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
 
     """
     if length is None:
@@ -160,8 +165,8 @@ def _eda_simulate_bateman(sampling_rate=1000, t1=0.75, t2=2):
 
     Examples
     ----------
-    >>> # bateman = _eda_simulate_bateman()
-    >>> # nk.signal_plot(bateman)
+      # bateman = _eda_simulate_bateman()
+      # nk.signal_plot(bateman)
 
     """
 

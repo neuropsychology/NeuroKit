@@ -4,6 +4,10 @@ EDA
 Main
 ^^^^^^^^^^^^^^^^
 
+*eda_process()*
+"""""""""""""""
+.. autofunction:: neurokit2.eda.eda_process
+
 *eda_analyze()*
 """""""""""""""
 .. autofunction:: neurokit2.eda.eda_analyze
@@ -11,6 +15,10 @@ Main
 *eda_plot()*
 """""""""""""
 .. autofunction:: neurokit2.eda.eda_plot
+
+*eda_simulate()*
+"""""""""""""
+.. autofunction:: neurokit2.eda.eda_simulate
 
 Preprocessing
 ^^^^^^^^^^^^^^^^
