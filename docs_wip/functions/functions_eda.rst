@@ -27,3 +27,7 @@ Main
 *eda_findpeaks()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_findpeaks
+
+*eda_fixpeaks()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_fixpeaks
