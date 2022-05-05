@@ -19,7 +19,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     domain <hrv_frequency>`, and :func:`non-linear domain <hrv_nonlinear>`.
 
     .. tip::
-    
+
         We strongly recommend checking our open-access paper `Pham et al. (2021)
         <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
 

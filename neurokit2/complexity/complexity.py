@@ -32,13 +32,13 @@ from .information_fisher import fisher_information
 def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="sd", **kwargs):
     """**Complexity and Chaos Analysis**
 
-    Measuring complexity refers to the quantification of various concepts, such as chaos, entropy,
-    unpredictability, and fractal dimension.
+    Measuring complexity refers to the quantification of various concepts, such as **chaos, entropy,
+    unpredictability, and fractal dimension**.
 
     .. tip::
 
         We recommend checking our `open-access preprint <https://psyarxiv.com/f8k3x/>`_ for an
-        introduction to fractal physiology and its application in neuroscience.
+        introduction to **fractal physiology** and its application in neuroscience.
 
     There are many indices that have been developped and used to assess the complexity of signals,
     and all of them come with different specificities and limitations. While they should be used in
