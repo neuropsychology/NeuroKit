@@ -101,7 +101,11 @@ p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulat
 ## Results
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+library(easystats)
+library(patchwork)
+
 df <- read.csv("data_Complexity.csv") |>
   mutate(Method = as.factor(Method))
 
@@ -264,7 +268,7 @@ colors <- c(
 
 ### Computation Time
 
-```{r message=FALSE, warning=FALSE}
+```{r computation_time, message=FALSE, warning=FALSE, fig.width=16*1.25, fig.height=10*1.25}
 order <- df |>
   group_by(Index) |>
   summarize(Duration = median(Duration)) |>
@@ -285,7 +289,7 @@ df |>
   theme_modern() +
   scale_y_log10(breaks = 10**seq(0, 5), labels = function(x) sprintf("%g", x)) +
   scale_fill_manual(values = colors, guide = "none") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1)) +
   labs(x = NULL, y = "Computation Time")
 ```
 
@@ -384,10 +388,11 @@ estimate_relation(model) |>
   facet_wrap(~Index, scales = "free_y")
 ```
 
+
 ### Correlation
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15}
 data <- df |>
   mutate(i = paste(Signal, Length, Noise_Type, Noise_Intensity, sep = "__")) |>
   select(i, Index, Result) |>
@@ -428,7 +433,7 @@ get_cor <- function(data) {
 cor <- get_cor(data)
 ```
 
-### Duplicates 
+### Duplicates
 
 - **CREn (B)**, and **ShanEn (B)**
   - Remove *CREn (B)*  because it's slower.
@@ -456,13 +461,13 @@ cor <- get_cor(data)
   - Remove **RR**  because it's slower.
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
 cor |>
   cor_lower() |>
   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |>
   arrange(desc(abs(rho)), Parameter1) |>
   filter(Parameter1 != Parameter2) |>
-  filter(abs(rho) > .97) |> 
+  filter(abs(rho) > .97) |>
   select(Parameter1, Parameter2, rho)
 
 
@@ -539,7 +544,7 @@ cor <- get_cor(data)
 ### Factor Analysis
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))
@@ -548,7 +553,7 @@ rez <- parameters::factor_analysis(data, cor = r, n = 14, rotation = "varimax", 
 # rez <- parameters::principal_components(data, n = 5, sort = TRUE)
 # rez
 
-col <- gsub('[[:digit:]]+', '', names(rez)[2]) 
+col <- gsub('[[:digit:]]+', '', names(rez)[2])
 closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with(col)), 1, \(x) which.max(abs(x)))]
 
 loadings <- attributes(rez)$loadings_long |>

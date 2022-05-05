@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 
 from .complexity_hjorth import complexity_hjorth
-from .fractal_hurst import fractal_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
@@ -20,6 +19,7 @@ from .entropy_svd import entropy_svd
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
+from .fractal_hurst import fractal_hurst
 from .fractal_katz import fractal_katz
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
@@ -30,17 +30,29 @@ from .information_fisher import fisher_information
 
 
 def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="sd", **kwargs):
-    """**Automated Complexity and Chaos Analysis**
+    """**Complexity and Chaos Analysis**
 
-    This function can be used to compute a large number of complexity metrics and features. For more
-    control, you can run each function separately. Note that it does not include Recurrence
-    Quantification Analysis (RQA, ``nk.complexity_rqa()``) which currently requires an additional
-    dependency.
+    Measuring complexity refers to the quantification of various concepts, such as chaos, entropy,
+    unpredictability, and fractal dimension.
+
+    .. tip::
+
+        We recommend checking our `open-access preprint <https://psyarxiv.com/f8k3x/>`_ for an
+        introduction to fractal physiology and its application in neuroscience.
+
+    There are many indices that have been developped and used to assess the complexity of signals,
+    and all of them come with different specificities and limitations. While they should be used in
+    an informed manner, it is also convenient to have a single function that can compute multiple
+    indices at once.
+
+    The ``nk.complexity()`` function can be used to compute a large number of complexity metrics
+    and features. While this is great for exploratory analyses, we recommend running each function
+    separately, to gain more control over the parameters and information that you get.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
     <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_ results:
 
-    .. figure:: ../../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png
+    .. figure:: ../../studies/complexity_benchmark/figures/computation_time-1.png
        :alt: Complexity Benchmark (Makowski).
        :target: https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html
 
