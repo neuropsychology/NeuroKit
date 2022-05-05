@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Blink Template Estimation for Electrooculography (EOG)" href="eog_blinktemplate.html" />
-    <link rel="prev" title="Measuring Chaos: Empirical Relationship between Complexity Indices" href="complexity_benchmark.html" />
+    <link rel="prev" title="Benchmarking of ECG Preprocessing Methods" href="ecg_benchmark.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -314,7 +314,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
-     HRV Tutorial
+     HRV Review
     </a>
    </li>
    <li class="toctree-l2">
@@ -327,11 +327,6 @@
      ECG Benchmark
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="complexity_benchmark.html">
-     Complexity Benchmark
-    </a>
-   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      EEG Analysis with GAMs
@@ -340,6 +335,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eog_blinktemplate.html">
      EOG blink template
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="complexity_benchmark.html">
+     Complexity Benchmark
     </a>
    </li>
   </ul>
@@ -890,7 +895,7 @@ a baseline to check if our regression approach is on track.</p>
   <span class="nf">theme_eeg</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-8-12.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-8-11.png" /><!-- --></p>
 </section>
 <section id="spline-regression">
 <h3>Spline Regression<a class="headerlink" href="#spline-regression" title="Permalink to this headline">#</a></h3>
@@ -942,7 +947,7 @@ of freedom as a function of the epoch length. As our epoch is 600 ms
 <span class="nf">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-10-12.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-10-11.png" /><!-- --></p>
 <p>This plot shows the original raw averages (dotted lines), the predicted
 values by the model and their confidence interval (CI), as well as the
 difference between the two conditions (estimated as marginal contrasts).</p>
@@ -1066,11 +1071,11 @@ meg and eeg data. <em>Neuroimage</em>, <em>86</em>, 446–460.</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="complexity_benchmark.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="ecg_benchmark.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Measuring Chaos: Empirical Relationship between Complexity Indices</p>
+            <p class="prev-next-title">Benchmarking of ECG Preprocessing Methods</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="eog_blinktemplate.html" title="next page">

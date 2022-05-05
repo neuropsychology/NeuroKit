@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Measuring Chaos: Empirical Relationship between Complexity Indices" href="complexity_benchmark.html" />
+    <link rel="next" title="An GAM-based Approach to EEG/ERP Analysis using Python and R" href="erp_gam.html" />
     <link rel="prev" title="Studies" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -314,7 +314,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
-     HRV Tutorial
+     HRV Review
     </a>
    </li>
    <li class="toctree-l2">
@@ -328,11 +328,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="complexity_benchmark.html">
-     Complexity Benchmark
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="erp_gam.html">
      EEG Analysis with GAMs
     </a>
@@ -340,6 +335,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eog_blinktemplate.html">
      EOG blink template
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="complexity_benchmark.html">
+     Complexity Benchmark
     </a>
    </li>
   </ul>
@@ -1158,7 +1163,7 @@ beat annotation was verified by visual inspection.</p>
     <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-6-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-6-1.png" /><!-- --></p>
 <p><strong>Conclusion:</strong> It seems that <code class="docutils literal notranslate"><span class="pre">gamboa2008</span></code> and <code class="docutils literal notranslate"><span class="pre">martinez2003</span></code> are
 particularly prone to errors, especially in the case of a noisy ECG
 signal. Aside from that, the other algorithms are quite resistant and
@@ -1190,7 +1195,7 @@ bug-free.</p>
     <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Duration (seconds per data sample)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-8-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-8-1.png" /><!-- --></p>
 <!-- ```{r, warning=FALSE, message=FALSE} -->
 <!-- # Interaction time and recording length -->
 <!-- data %>%  -->
@@ -1239,7 +1244,7 @@ bug-free.</p>
     <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Duration (seconds per data sample)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-9-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-9-1.png" /><!-- --></p>
 <p><strong>Conclusion:</strong> It seems that <code class="docutils literal notranslate"><span class="pre">gamboa2008</span></code> and <code class="docutils literal notranslate"><span class="pre">neurokit</span></code> are the
 fastest methods, followed by <code class="docutils literal notranslate"><span class="pre">martinez2003</span></code>, <code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code>,
 <code class="docutils literal notranslate"><span class="pre">rodrigues2020</span></code> and <code class="docutils literal notranslate"><span class="pre">hamilton2002</span></code>. The other methods are then
@@ -1270,7 +1275,7 @@ better the accuracy.</p>
     <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Amount of Error&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-10-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-10-1.png" /><!-- --></p>
 </section>
 <section id="id2">
 <h5>Statistical Modelling<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h5>
@@ -1307,7 +1312,7 @@ better the accuracy.</p>
     <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Amount of Error&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-11-11.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-11-1.png" /><!-- --></p>
 <p><strong>Conclusion:</strong> It seems that <code class="docutils literal notranslate"><span class="pre">neurokit</span></code>, <code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code> and
 <code class="docutils literal notranslate"><span class="pre">martinez2003</span></code> the most accurate algorithms to detect R-peaks. This
 pattern of results differs a bit from Porr &amp; Howell (2019) that outlines
@@ -1559,10 +1564,10 @@ popular detectors. <em>bioRxiv</em>, 722397.</p>
             <p class="prev-next-title">Studies</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="complexity_benchmark.html" title="next page">
+    <a class='right-next' id="next-link" href="erp_gam.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Measuring Chaos: Empirical Relationship between Complexity Indices</p>
+        <p class="prev-next-title">An GAM-based Approach to EEG/ERP Analysis using Python and R</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
