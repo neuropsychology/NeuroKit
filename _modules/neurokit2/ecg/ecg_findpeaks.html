@@ -1,0 +1,1559 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.ecg.ecg_findpeaks &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/ecg/ecg_findpeaks.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.ecg.ecg_findpeaks</h1><div class="highlight"><pre>
+<span></span><span class="c1"># - * - coding: utf-8 - * -</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_plot</span><span class="p">,</span> <span class="n">signal_sanitize</span><span class="p">,</span>
+                      <span class="n">signal_smooth</span><span class="p">,</span> <span class="n">signal_zerocrossings</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ecg_findpeaks"><a class="viewcode-back" href="../../../functions/functions_ecg.html#neurokit2.ecg.ecg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Locate R-peaks**</span>
+
+<span class="sd">    Low-level function used by ``ecg_peaks()`` to identify R-peaks in an ECG signal using a</span>
+<span class="sd">    different set of algorithms. Use the main function and see its documentation for details.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ecg_cleaned : Union[list, np.array, pd.Series]</span>
+<span class="sd">        See ``ecg_peaks()``.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        See ``ecg_peaks()``.</span>
+<span class="sd">    method : string</span>
+<span class="sd">        See ``ecg_peaks()``.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If ``True``, will return a plot to visualizing the thresholds used in the algorithm.</span>
+<span class="sd">        Useful for debugging.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments, usually specific for each `method`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    info : dict</span>
+<span class="sd">        A dictionary containing additional information, in this case the</span>
+<span class="sd">        samples at which R-peaks occur, accessible with the key ``&quot;ECG_R_Peaks&quot;``.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ecg_peaks, signal_fixpeaks</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Try retrieving right column</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="p">[</span><span class="s2">&quot;ECG_Clean&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">NameError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="p">[</span><span class="s2">&quot;ECG_Raw&quot;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">NameError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+                <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Sanitize input</span>
+    <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">signal_sanitize</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
+
+    <span class="c1"># Run peak detection algorithm</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_findmethod</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">error</span>
+
+    <span class="c1"># Prepare output.</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">:</span> <span class="n">rpeaks</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<span class="c1"># Returns the peak detector function by name</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_findmethod</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nk&quot;</span><span class="p">,</span> <span class="s2">&quot;nk2&quot;</span><span class="p">,</span> <span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s2">&quot;neurokit2&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_neurokit</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pantompkins&quot;</span><span class="p">,</span> <span class="s2">&quot;pantompkins1985&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_pantompkins</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian&quot;</span><span class="p">,</span> <span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_nabian2018</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">,</span> <span class="s2">&quot;gamboa&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_gamboa</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ssf&quot;</span><span class="p">,</span> <span class="s2">&quot;slopesumfunction&quot;</span><span class="p">,</span> <span class="s2">&quot;zong&quot;</span><span class="p">,</span> <span class="s2">&quot;zong2003&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_ssf</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hamilton&quot;</span><span class="p">,</span> <span class="s2">&quot;hamilton2002&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_hamilton</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;christov&quot;</span><span class="p">,</span> <span class="s2">&quot;christov2004&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_christov</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;engzee&quot;</span><span class="p">,</span> <span class="s2">&quot;engzee2012&quot;</span><span class="p">,</span> <span class="s2">&quot;engzeemod&quot;</span><span class="p">,</span> <span class="s2">&quot;engzeemod2012&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_engzee</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="s2">&quot;elgendi2010&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_elgendi</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kalidas2017&quot;</span><span class="p">,</span> <span class="s2">&quot;swt&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidas&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidastamil&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidastamil2017&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_kalidas</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;martinez2003&quot;</span><span class="p">,</span> <span class="s2">&quot;martinez&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_WT</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rodrigues2020&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues2021&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues&quot;</span><span class="p">,</span> <span class="s2">&quot;asi&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_rodrigues</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;promac&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_promac</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NeuroKit error: ecg_findpeaks(): &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; not implemented.&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Probabilistic Methods-Agreement via Convolution (ProMAC)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_promac</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">promac_methods</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gamboa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ssf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;engzee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elgendi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;kalidas&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;martinez&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rodrigues&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">threshold</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span>
+    <span class="n">gaussian_sd</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Probabilistic Methods-Agreement via Convolution (ProMAC).</span>
+
+<span class="sd">    ProMAC combines the result of several R-peak detectors in a probabilistic way. For a given peak</span>
+<span class="sd">    detector, the binary signal representing the peak locations is convolved with a Gaussian</span>
+<span class="sd">    distribution, resulting in a propabilistic representation of each peak location. This procedure</span>
+<span class="sd">    is repeated for all selected &#39;promac_methods&#39; and the resulting signals are accumulated. Finally,</span>
+<span class="sd">    a threshold is used to accept or reject the peak locations.</span>
+
+<span class="sd">    See this discussion for more information on the origins of the method:</span>
+<span class="sd">    https://github.com/neuropsychology/NeuroKit/issues/222</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The (cleaned) ECG channel, e.g. as returned by `ecg_clean()`.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        Defaults to 1000.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If True, will return a plot to visualizing the thresholds used in the algorithm.</span>
+<span class="sd">        Useful for debugging.</span>
+<span class="sd">    promac_methods : list of string</span>
+<span class="sd">        The algorithms to be used for R-peak detection. See the list of acceptable algorithms for</span>
+<span class="sd">        the &#39;ecg_peaks&#39; function.</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        The tolerance for peak acceptance. This value is a percentage of the signal&#39;s maximum</span>
+<span class="sd">        value. Only peaks found above this tolerance will be finally considered as actual peaks.</span>
+<span class="sd">    gaussian_sd : int</span>
+<span class="sd">        The standard deviation of the Gaussian distribution used to represent the peak location</span>
+<span class="sd">        probability. This value should be in millisencods and is usually taken as the size of</span>
+<span class="sd">        QRS complexes.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rpeaks : list of int</span>
+<span class="sd">        A list of array positions at which R-peaks occur.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">promac_methods</span> <span class="o">=</span> <span class="p">[</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">promac_methods</span><span class="p">]</span>  <span class="c1"># remove capitalised letters</span>
+    <span class="n">error_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores the failed methods</span>
+
+    <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">promac_methods</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_findmethod</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_promac_addconvolve</span><span class="p">(</span>
+                <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">gaussian_sd</span><span class="o">=</span><span class="n">gaussian_sd</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">error_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Method &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; is not valid.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="n">error_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> error: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Rescale</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">convoluted</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Remove below threshold</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Find peaks</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">height_min</span><span class="o">=</span><span class="n">threshold</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">signal_plot</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;ECG&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span> <span class="s2">&quot;Convoluted&quot;</span><span class="p">:</span> <span class="n">convoluted</span><span class="p">}),</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">[</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">peaks</span>
+        <span class="p">]</span>  <span class="c1"># pylint: disable=W0106</span>
+
+    <span class="c1"># I am not sure if mandatory print the best option</span>
+    <span class="k">if</span> <span class="n">error_list</span><span class="p">:</span>  <span class="c1"># empty?</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">peaks</span>
+
+
+<span class="c1"># _ecg_findpeaks_promac_addmethod + _ecg_findpeaks_promac_convolve</span>
+<span class="c1"># Joining them makes parameters exposition more consistent</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_promac_addconvolve</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="n">gaussian_sd</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">peaks</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># SD is defined as a typical QRS size, which for adults if 100ms</span>
+    <span class="n">sd</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="n">gaussian_sd</span> <span class="o">/</span> <span class="mi">1000</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">sd</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">sd</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">sd</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)),</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sd</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># NeuroKit</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_neurokit</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">smoothwindow</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">avgwindow</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+    <span class="n">gradthreshweight</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">minlenweight</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">mindelay</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;All tune-able parameters are specified as keyword arguments.</span>
+
+<span class="sd">    The `signal` must be the highpass-filtered raw ECG with a lowcut of .5 Hz.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">__</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Compute the ECG&#39;s gradient as well as the gradient threshold. Run with</span>
+    <span class="c1"># show=True in order to get an idea of the threshold.</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">absgrad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
+    <span class="n">smooth_kernel</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">smoothwindow</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">avg_kernel</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">avgwindow</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">smoothgrad</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">absgrad</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;boxcar&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">smooth_kernel</span><span class="p">)</span>
+    <span class="n">avggrad</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">smoothgrad</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;boxcar&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">avg_kernel</span><span class="p">)</span>
+    <span class="n">gradthreshold</span> <span class="o">=</span> <span class="n">gradthreshweight</span> <span class="o">*</span> <span class="n">avggrad</span>
+    <span class="n">mindelay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="n">mindelay</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">smoothgrad</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gradthreshold</span><span class="p">)</span>
+
+    <span class="c1"># Identify start and end of QRS complexes.</span>
+    <span class="n">qrs</span> <span class="o">=</span> <span class="n">smoothgrad</span> <span class="o">&gt;</span> <span class="n">gradthreshold</span>
+    <span class="n">beg_qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">qrs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">end_qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Throw out QRS-ends that precede first QRS-start.</span>
+    <span class="n">end_qrs</span> <span class="o">=</span> <span class="n">end_qrs</span><span class="p">[</span><span class="n">end_qrs</span> <span class="o">&gt;</span> <span class="n">beg_qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="c1"># Identify R-peaks within QRS (ignore QRS that are too short).</span>
+    <span class="n">num_qrs</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">beg_qrs</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">end_qrs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">min_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">end_qrs</span><span class="p">[:</span><span class="n">num_qrs</span><span class="p">]</span> <span class="o">-</span> <span class="n">beg_qrs</span><span class="p">[:</span><span class="n">num_qrs</span><span class="p">])</span> <span class="o">*</span> <span class="n">minlenweight</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qrs</span><span class="p">):</span>
+
+        <span class="n">beg</span> <span class="o">=</span> <span class="n">beg_qrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">end_qrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">len_qrs</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">beg</span>
+
+        <span class="k">if</span> <span class="n">len_qrs</span> <span class="o">&lt;</span> <span class="n">min_len</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># Find local maxima and their prominence within QRS.</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">beg</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+        <span class="n">locmax</span><span class="p">,</span> <span class="n">props</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">locmax</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Identify most prominent local maximum.</span>
+            <span class="n">peak</span> <span class="o">=</span> <span class="n">beg</span> <span class="o">+</span> <span class="n">locmax</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">props</span><span class="p">[</span><span class="s2">&quot;prominences&quot;</span><span class="p">])]</span>
+            <span class="c1"># Enforce minimum delay between peaks.</span>
+            <span class="k">if</span> <span class="n">peak</span> <span class="o">-</span> <span class="n">peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mindelay</span><span class="p">:</span>
+                <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+
+    <span class="n">peaks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to int</span>
+    <span class="k">return</span> <span class="n">peaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Pan &amp; Tompkins (1985)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_pantompkins</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.</span>
+<span class="sd">    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="n">squared</span> <span class="o">=</span> <span class="n">diff</span> <span class="o">*</span> <span class="n">diff</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.12</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">mwa</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_MWA</span><span class="p">(</span><span class="n">squared</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">mwa</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">mwa_peaks</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_peakdetect</span><span class="p">(</span><span class="n">mwa</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">mwa_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mwa_peaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mwa_peaks</span>
+
+
+<span class="c1"># ===========================================================================</span>
+<span class="c1"># Nabian et al. (2018)</span>
+<span class="c1"># ===========================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_nabian2018</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.</span>
+
+<span class="sd">    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp;amp; Ostadabbas, S. (2018).</span>
+<span class="sd">    An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.</span>
+<span class="sd">    IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
+<span class="sd">    doi:10.1109/jtehm.2018.2878000</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">):</span>
+        <span class="n">ecg_window</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">window_size</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">]</span>
+        <span class="n">rpeak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">ecg_window</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">rpeak</span><span class="p">):</span>
+            <span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">peaks</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># min_distance = 200</span>
+
+    <span class="k">return</span> <span class="n">rpeaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Hamilton (2002)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_hamilton</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.08</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.08</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">ma</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
+
+    <span class="n">ma</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">n_pks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">n_pks_ave</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">s_pks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s_pks_ave</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">QRS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">RR</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">RR_ave</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">th</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ma</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200,R1702</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">):</span>  <span class="c1"># pylint: disable=R1716</span>
+            <span class="n">peak</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ma</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span> <span class="ow">and</span> <span class="p">(</span><span class="n">peak</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">:</span>
+                <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+                <span class="n">idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+                <span class="n">s_pks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="n">peak</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_pks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                    <span class="n">s_pks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">s_pks_ave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s_pks</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">RR_ave</span> <span class="o">!=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">RR_ave</span><span class="p">:</span>
+                    <span class="n">missed_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">idx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="k">for</span> <span class="n">missed_peak</span> <span class="ow">in</span> <span class="n">missed_peaks</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">missed_peak</span> <span class="o">-</span> <span class="n">peaks</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.36</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+                            <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">missed_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">th</span>
+                        <span class="p">):</span>
+                            <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">missed_peak</span><span class="p">)</span>
+                            <span class="n">QRS</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                            <span class="k">break</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">QRS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">RR</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">RR</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                        <span class="n">RR</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">RR_ave</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">RR</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">n_pks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="n">peak</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_pks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                    <span class="n">n_pks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">n_pks_ave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">n_pks</span><span class="p">)</span>
+
+            <span class="n">th</span> <span class="o">=</span> <span class="n">n_pks_ave</span> <span class="o">+</span> <span class="mf">0.45</span> <span class="o">*</span> <span class="p">(</span><span class="n">s_pks_ave</span> <span class="o">-</span> <span class="n">n_pks_ave</span><span class="p">)</span>
+
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">QRS</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">QRS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">QRS</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">QRS</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Slope Sum Function (SSF) - Zong et al. (2003)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_ssf</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
+<span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.</span>
+
+<span class="sd">    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial</span>
+<span class="sd">      blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: Doesn&#39;t really seems to work</span>
+
+    <span class="c1"># convert to samples</span>
+    <span class="n">winB</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">before</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">winA</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">after</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">Rset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="c1"># diff</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">dx</span><span class="p">[</span><span class="n">dx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="c1"># detection</span>
+    <span class="p">(</span><span class="n">idx</span><span class="p">,)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">dx</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span>
+    <span class="n">idx0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">))</span>
+    <span class="n">didx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">idx0</span><span class="p">)</span>
+
+    <span class="c1"># search</span>
+    <span class="n">sidx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="n">didx</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sidx</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">item</span> <span class="o">-</span> <span class="n">winB</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">item</span> <span class="o">+</span> <span class="n">winA</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">length</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">a</span><span class="p">:</span><span class="n">b</span><span class="p">])</span> <span class="o">+</span> <span class="n">a</span>
+        <span class="n">Rset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="c1"># output</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Rset</span><span class="p">)</span>
+    <span class="n">rpeaks</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rpeaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Christov (2004)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_christov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,</span>
+<span class="sd">      BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">total_taps</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.02</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.02</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">total_taps</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">MA1</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.028</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.028</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">total_taps</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">MA2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">MA1</span><span class="p">)</span>
+
+    <span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">MA2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">MA2</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">MA2</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.040</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.040</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">total_taps</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">MA3</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+    <span class="n">MA3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">total_taps</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">ms50</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">ms200</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">ms1200</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">ms350</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.35</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">newM5</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">M_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">MM</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">M_slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">ms1200</span> <span class="o">-</span> <span class="n">ms200</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">F_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">RR</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Rm</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">R_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">MFR</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">MFR_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">QRS</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">MA3</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+
+        <span class="c1"># M</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">:</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">MA3</span><span class="p">[:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">MM</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">MM</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span><span class="p">:</span>
+            <span class="n">newM5</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">MA3</span><span class="p">[</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">:</span> <span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">newM5</span> <span class="o">&gt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">MM</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">newM5</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">MM</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">newM5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">newM5</span> <span class="o">=</span> <span class="n">MM</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">MM</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newM5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">MM</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms1200</span><span class="p">:</span>
+
+            <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span> <span class="o">*</span> <span class="n">M_slope</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="p">(</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms1200</span><span class="p">:</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span>
+
+        <span class="c1"># F</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">ms350</span><span class="p">:</span>
+            <span class="n">F_section</span> <span class="o">=</span> <span class="n">MA3</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">ms350</span> <span class="p">:</span> <span class="n">i</span><span class="p">]</span>
+            <span class="n">max_latest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">F_section</span><span class="p">[</span><span class="o">-</span><span class="n">ms50</span><span class="p">:])</span>
+            <span class="n">max_earliest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">F_section</span><span class="p">[:</span><span class="n">ms50</span><span class="p">])</span>
+            <span class="n">F</span> <span class="o">+=</span> <span class="p">(</span><span class="n">max_latest</span> <span class="o">-</span> <span class="n">max_earliest</span><span class="p">)</span> <span class="o">/</span> <span class="mf">150.0</span>
+
+        <span class="c1"># R</span>
+        <span class="k">if</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">((</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">Rm</span><span class="p">)):</span>
+
+            <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">((</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">Rm</span><span class="p">))</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">Rm</span><span class="p">:</span>
+
+            <span class="n">dec</span> <span class="o">=</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">))</span> <span class="o">/</span> <span class="mf">1.4</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">dec</span>
+
+        <span class="n">MFR</span> <span class="o">=</span> <span class="n">M</span> <span class="o">+</span> <span class="n">F</span> <span class="o">+</span> <span class="n">R</span>
+        <span class="n">M_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">F_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+        <span class="n">R_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+        <span class="n">MFR_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MFR</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">MA3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">MFR</span><span class="p">:</span>
+            <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span> <span class="ow">and</span> <span class="n">MA3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">MFR</span><span class="p">:</span>
+            <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">QRS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">RR</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">RR</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="n">RR</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">Rm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">RR</span><span class="p">))</span>
+
+    <span class="n">QRS</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">QRS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">QRS</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">QRS</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Gamboa (2008)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_gamboa</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
+<span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.</span>
+
+<span class="sd">    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.</span>
+<span class="sd">      PhD ThesisUniversidade.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">hist</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">TH</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+
+    <span class="n">v0</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">F</span> <span class="o">&gt;</span> <span class="n">TH</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">F</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">TH</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="n">nrm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">v0</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v1</span><span class="p">)])</span>
+    <span class="n">norm_signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">nrm</span><span class="p">)</span>
+
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">norm_signal</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="o">-</span><span class="n">d2</span><span class="p">))))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c1"># pylint: disable=E1130</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="o">-</span><span class="n">d2</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># pylint: disable=E1130</span>
+
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># convert to samples</span>
+        <span class="n">v_100ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">v_300ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">previous</span> <span class="o">&gt;</span> <span class="n">v_300ms</span><span class="p">:</span>
+                <span class="n">previous</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">rpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">v_100ms</span><span class="p">)])</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)))</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rpeaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Engzee Modified (2012)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_engzee</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.</span>
+<span class="sd">      in Cardiology, vol. 6, pp. 37-42, 1979</span>
+<span class="sd">    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, &quot;Real Time Electrocardiogram Segmentation</span>
+<span class="sd">      for Finger Based ECG Biometrics&quot;, BIOSIGNALS 2012, pp. 49-54, 2012.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">engzee_fake_delay</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">diff</span><span class="p">)):</span>
+        <span class="n">diff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">4</span><span class="p">]</span>
+
+    <span class="n">ci</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">low_pass</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
+
+    <span class="n">low_pass</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">ms200</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">ms1200</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">ms160</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.16</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">neg_threshold</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">M_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">neg_m</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">MM</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">M_slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">ms1200</span> <span class="o">-</span> <span class="n">ms200</span><span class="p">)</span>
+
+    <span class="n">QRS</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">r_peaks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">thi_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">thi</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">thf_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">thf</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">newM5</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">low_pass</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+
+        <span class="c1"># M</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">:</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">low_pass</span><span class="p">[:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">MM</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">MM</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span><span class="p">:</span>
+
+            <span class="n">newM5</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">low_pass</span><span class="p">[</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">:</span> <span class="n">i</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">newM5</span> <span class="o">&gt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">MM</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">newM5</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">MM</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">newM5</span> <span class="ow">and</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span><span class="p">:</span>
+            <span class="n">MM</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newM5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">MM</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms1200</span><span class="p">:</span>
+
+            <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span> <span class="o">*</span> <span class="n">M_slope</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="p">(</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms1200</span><span class="p">:</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MM</span><span class="p">)</span>
+
+        <span class="n">M_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">neg_m</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">M</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">low_pass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">M</span><span class="p">:</span>
+            <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">thi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">thi</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">elif</span> <span class="n">QRS</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms200</span> <span class="ow">and</span> <span class="n">low_pass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">M</span><span class="p">:</span>
+            <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">thi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">thi</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">thi</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thi_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms160</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">low_pass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">M</span> <span class="ow">and</span> <span class="n">low_pass</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">M</span><span class="p">:</span>
+                <span class="c1"># thf_list.append(i)</span>
+                <span class="n">thf</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">thf</span> <span class="ow">and</span> <span class="n">low_pass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">M</span><span class="p">:</span>
+                <span class="n">thf_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">elif</span> <span class="n">low_pass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">M</span> <span class="ow">and</span> <span class="n">thf</span><span class="p">:</span>
+                <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">thi</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">thf</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">elif</span> <span class="n">thi</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">thi_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ms160</span><span class="p">:</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">thi</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">thf</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">counter</span> <span class="o">&gt;</span> <span class="n">neg_threshold</span><span class="p">:</span>
+            <span class="n">unfiltered_section</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">thi_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="p">:</span> <span class="n">i</span><span class="p">]</span>
+            <span class="n">r_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">engzee_fake_delay</span>
+                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">unfiltered_section</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">thi_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">thi</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">thf</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">r_peaks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
+        <span class="mi">0</span>
+    <span class="p">)</span>  <span class="c1"># removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold</span>
+    <span class="n">r_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r_peaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">r_peaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Stationary Wavelet Transform  (SWT) - Kalidas and Tamil (2017)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_kalidas</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform</span>
+<span class="sd">      for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and</span>
+<span class="sd">      Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Try loading pywt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pywt</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">import_error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_findpeaks(): the &#39;PyWavelets&#39; module is required for&quot;</span>
+            <span class="s2">&quot; this method to run. Please install it first (`pip install PyWavelets`).&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="nn">import_error</span>
+
+    <span class="n">signal_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="n">swt_level</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">padding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">swt_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">padding</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">padding</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">padding</span><span class="p">),</span> <span class="s2">&quot;edge&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">padding</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Padding greater than 1000 required</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">swt_ecg</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">swt</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="s2">&quot;db3&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">swt_level</span><span class="p">)</span>
+    <span class="n">swt_ecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">swt_ecg</span><span class="p">)</span>
+    <span class="n">swt_ecg</span> <span class="o">=</span> <span class="n">swt_ecg</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">squared</span> <span class="o">=</span> <span class="n">swt_ecg</span> <span class="o">*</span> <span class="n">swt_ecg</span>
+
+    <span class="n">f1</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandpass&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
+    <span class="n">filtered_squared</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">squared</span><span class="p">)</span>
+
+    <span class="c1"># Drop padding to avoid detecting peaks inside it (#456)</span>
+    <span class="n">filtered_squared</span> <span class="o">=</span> <span class="n">filtered_squared</span><span class="p">[:</span><span class="n">signal_length</span><span class="p">]</span>
+
+    <span class="n">filt_peaks</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_peakdetect</span><span class="p">(</span><span class="n">filtered_squared</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">filt_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filt_peaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filt_peaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Elgendi et al. (2010)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_elgendi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - Elgendi, Mohamed &amp; Jonkman, Mirjam &amp; De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.</span>
+<span class="sd">      The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010).</span>
+<span class="sd">      428-431.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">window1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.12</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">mwa_qrs</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_MWA</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">window1</span><span class="p">)</span>
+
+    <span class="n">window2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.6</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">mwa_beat</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_MWA</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">window2</span><span class="p">)</span>
+
+    <span class="n">blocks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">block_height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mwa_qrs</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+        <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_height</span> <span class="k">if</span> <span class="n">mwa_qrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mwa_beat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">QRS</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">blocks</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_height</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">elif</span> <span class="n">blocks</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_height</span> <span class="ow">and</span> <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.08</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">):</span>
+                <span class="n">detection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">start</span>
+                <span class="k">if</span> <span class="n">QRS</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">detection</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">):</span>
+                        <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detection</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detection</span><span class="p">)</span>
+
+    <span class="n">QRS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">QRS</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">QRS</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Continuous Wavelet Transform (CWT) - Martinez et al. (2003)</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1">#</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_WT</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Try loading pywt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pywt</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">import_error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for&quot;</span>
+            <span class="s2">&quot; this method to run. Please install it first (`pip install PyWavelets`).&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="nn">import_error</span>
+    <span class="c1"># first derivative of the Gaissian signal</span>
+    <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+    <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># For wt of scale 2^4</span>
+    <span class="n">signal_4</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">epsilon_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">signal_4</span><span class="p">)))</span>
+    <span class="n">peaks_4</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal_4</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">epsilon_4</span><span class="p">)</span>
+
+    <span class="c1"># For wt of scale 2^3</span>
+    <span class="n">signal_3</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">epsilon_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">signal_3</span><span class="p">)))</span>
+    <span class="n">peaks_3</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal_3</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">epsilon_3</span><span class="p">)</span>
+    <span class="c1"># Keep only peaks_3 that are nearest to peaks_4</span>
+    <span class="n">peaks_3_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+        <span class="n">peaks_distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">peaks_3</span><span class="p">)</span>
+        <span class="n">peaks_3_keep</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">peaks_3</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">peaks_distance</span><span class="p">)]</span>
+
+    <span class="c1"># For wt of scale 2^2</span>
+    <span class="n">signal_2</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">epsilon_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">signal_2</span><span class="p">)))</span>
+    <span class="n">peaks_2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal_2</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">epsilon_2</span><span class="p">)</span>
+    <span class="c1"># Keep only peaks_2 that are nearest to peaks_3</span>
+    <span class="n">peaks_2_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">)):</span>
+        <span class="n">peaks_distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">peaks_3_keep</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">peaks_2</span><span class="p">)</span>
+        <span class="n">peaks_2_keep</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">peaks_2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">peaks_distance</span><span class="p">)]</span>
+
+    <span class="c1"># For wt of scale 2^1</span>
+    <span class="n">signal_1</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">epsilon_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">signal_1</span><span class="p">)))</span>
+    <span class="n">peaks_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal_1</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">epsilon_1</span><span class="p">)</span>
+    <span class="c1"># Keep only peaks_1 that are nearest to peaks_2</span>
+    <span class="n">peaks_1_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks_4</span><span class="p">)):</span>
+        <span class="n">peaks_distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">peaks_2_keep</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">peaks_1</span><span class="p">)</span>
+        <span class="n">peaks_1_keep</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">peaks_1</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">peaks_distance</span><span class="p">)]</span>
+
+    <span class="c1"># Find R peaks</span>
+    <span class="n">max_R_peak_dist</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index_cur</span><span class="p">,</span> <span class="n">index_next</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">peaks_1_keep</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">peaks_1_keep</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">correct_sign</span> <span class="o">=</span> <span class="n">signal_1</span><span class="p">[</span><span class="n">index_cur</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">signal_1</span><span class="p">[</span><span class="n">index_next</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># pylint: disable=R1716</span>
+        <span class="n">near</span> <span class="o">=</span> <span class="p">(</span><span class="n">index_next</span> <span class="o">-</span> <span class="n">index_cur</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_R_peak_dist</span>  <span class="c1"># limit 2</span>
+        <span class="k">if</span> <span class="n">near</span> <span class="ow">and</span> <span class="n">correct_sign</span><span class="p">:</span>
+            <span class="n">rpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">signal_1</span><span class="p">[</span><span class="n">index_cur</span> <span class="p">:</span> <span class="n">index_next</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_cur</span><span class="p">)</span>
+
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rpeaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ASI (FSM based 2020)</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_rodrigues</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    - Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., &amp; Hernández, A. (2015). Novel real-time</span>
+<span class="sd">      low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal,</span>
+<span class="sd">      15(10), 6036-6043.</span>
+
+<span class="sd">    - Sadhukhan, D., &amp; Mitra, M. (2012). R-peak detection algorithm for ECG using double difference</span>
+<span class="sd">      and RR interval processing. Procedia Technology, 4, 873-877.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">128</span><span class="p">))</span>
+    <span class="n">Nd</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">Pth</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="o">/</span> <span class="mi">128</span> <span class="o">+</span> <span class="mf">2.7</span>
+    <span class="c1"># Pth = 3, optimal for fs = 250 Hz</span>
+    <span class="n">Rmin</span> <span class="o">=</span> <span class="mf">0.26</span>
+
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">Ramptotal</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Double derivative squared</span>
+    <span class="n">diff_ecg</span> <span class="o">=</span> <span class="p">[</span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">Nd</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))]</span>
+    <span class="n">ddiff_ecg</span> <span class="o">=</span> <span class="p">[</span><span class="n">diff_ecg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">diff_ecg</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">diff_ecg</span><span class="p">))]</span>
+    <span class="n">squar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">ddiff_ecg</span><span class="p">)</span>
+
+    <span class="c1"># Integrate moving window</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">processed_ecg</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">squar</span><span class="p">)</span>
+    <span class="n">tf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_ecg</span><span class="p">)</span>
+
+    <span class="c1"># R-peak finder FSM</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf</span><span class="p">:</span>  <span class="c1"># ignore last second of recording</span>
+        <span class="c1"># State 1: looking for maximum</span>
+        <span class="n">tf1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">Rmin</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">Rpeakamp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf1</span><span class="p">:</span>
+            <span class="c1"># Rpeak amplitude and position</span>
+            <span class="k">if</span> <span class="n">processed_ecg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Rpeakamp</span><span class="p">:</span>
+                <span class="n">Rpeakamp</span> <span class="o">=</span> <span class="n">processed_ecg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">rpeakpos</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">Ramptotal</span> <span class="o">=</span> <span class="p">(</span><span class="mi">19</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ramptotal</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">Rpeakamp</span>
+        <span class="n">rpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpeakpos</span><span class="p">)</span>
+
+        <span class="c1"># State 2: waiting state</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">tf1</span> <span class="o">-</span> <span class="n">rpeakpos</span>
+        <span class="n">tf2</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">tf2</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># State 3: decreasing threshold</span>
+        <span class="n">Thr</span> <span class="o">=</span> <span class="n">Ramptotal</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf</span> <span class="ow">and</span> <span class="n">processed_ecg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">Thr</span><span class="p">:</span>
+            <span class="n">Thr</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">Pth</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rpeaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Utilities</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_MWA</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Based on https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    Optimized for vectorized computation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window_size</span><span class="p">)</span>
+
+    <span class="c1"># Scipy&#39;s uniform_filter1d is a fast and accurate way of computing</span>
+    <span class="c1"># moving averages. By default it computes the averages of `window_size`</span>
+    <span class="c1"># elements centered around each element in the input array, including</span>
+    <span class="c1"># `(window_size - 1) // 2` elements after the current element (when</span>
+    <span class="c1"># `window_size` is even, the extra element is taken from before). To</span>
+    <span class="c1"># return causal moving averages, i.e. each output element is the average</span>
+    <span class="c1"># of window_size input elements ending at that position, we use the</span>
+    <span class="c1"># `origin` argument to shift the filter computation accordingly.</span>
+    <span class="n">mwa</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">uniform_filter1d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Compute actual moving averages for the first `window_size - 1` elements,</span>
+    <span class="c1"># which the uniform_filter1d function computes using padding. We want</span>
+    <span class="c1"># those output elements to be averages of only the input elements until</span>
+    <span class="c1"># that position.</span>
+    <span class="n">head_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">mwa</span><span class="p">[:</span><span class="n">head_size</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">signal</span><span class="p">[:</span><span class="n">head_size</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">head_size</span><span class="p">,</span> <span class="n">head_size</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mwa</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_peakdetect</span><span class="p">(</span><span class="n">detection</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Based on https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    Optimized for vectorized computation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">min_peak_distance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">min_missed_distance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">signal_peaks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">SPKI</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">NPKI</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">last_peak</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">last_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># NOTE: Using plateau_size=(1,1) here avoids detecting flat peaks and</span>
+    <span class="c1"># maintains original py-ecg-detectors behaviour. Flat peaks are typically</span>
+    <span class="c1"># found in measurement artifacts where the signal saturates at maximum</span>
+    <span class="c1"># recording amplitude. Such cases should not be detected as peaks. If we</span>
+    <span class="c1"># do encounter recordings where even normal R peaks are flat, then changing</span>
+    <span class="c1"># this to something like plateau_size=(1, sampling_rate // 10) might make</span>
+    <span class="c1"># sense. See also https://github.com/neuropsychology/NeuroKit/pull/450.</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">detection</span><span class="p">,</span> <span class="n">plateau_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">peak</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">peaks</span><span class="p">):</span>
+        <span class="n">peak_value</span> <span class="o">=</span> <span class="n">detection</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span>
+
+        <span class="n">threshold_I1</span> <span class="o">=</span> <span class="n">NPKI</span> <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">SPKI</span> <span class="o">-</span> <span class="n">NPKI</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">peak_value</span> <span class="o">&gt;</span> <span class="n">threshold_I1</span> <span class="ow">and</span> <span class="n">peak</span> <span class="o">&gt;</span> <span class="n">last_peak</span> <span class="o">+</span> <span class="n">min_peak_distance</span><span class="p">:</span>
+            <span class="n">signal_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+
+            <span class="c1"># RR_missed threshold is based on the previous eight R-R intervals</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal_peaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span><span class="p">:</span>
+                <span class="n">RR_ave</span> <span class="o">=</span> <span class="p">(</span><span class="n">signal_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">signal_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span> <span class="o">//</span> <span class="mi">8</span>
+                <span class="n">RR_missed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1.66</span> <span class="o">*</span> <span class="n">RR_ave</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">peak</span> <span class="o">-</span> <span class="n">last_peak</span> <span class="o">&gt;</span> <span class="n">RR_missed</span><span class="p">:</span>
+                    <span class="n">missed_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">last_index</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">index</span><span class="p">]</span>
+                    <span class="n">missed_peaks</span> <span class="o">=</span> <span class="n">missed_peaks</span><span class="p">[</span>
+                        <span class="p">(</span><span class="n">missed_peaks</span> <span class="o">&gt;</span> <span class="n">last_peak</span> <span class="o">+</span> <span class="n">min_missed_distance</span><span class="p">)</span>
+                        <span class="o">&amp;</span> <span class="p">(</span><span class="n">missed_peaks</span> <span class="o">&lt;</span> <span class="n">peak</span> <span class="o">-</span> <span class="n">min_missed_distance</span><span class="p">)</span>
+                    <span class="p">]</span>
+                    <span class="n">threshold_I2</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">threshold_I1</span>
+                    <span class="n">missed_peaks</span> <span class="o">=</span> <span class="n">missed_peaks</span><span class="p">[</span><span class="n">detection</span><span class="p">[</span><span class="n">missed_peaks</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold_I2</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missed_peaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">signal_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">missed_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">detection</span><span class="p">[</span><span class="n">missed_peaks</span><span class="p">])]</span>
+                        <span class="n">signal_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+
+            <span class="n">last_peak</span> <span class="o">=</span> <span class="n">peak</span>
+            <span class="n">last_index</span> <span class="o">=</span> <span class="n">index</span>
+
+            <span class="n">SPKI</span> <span class="o">=</span> <span class="mf">0.125</span> <span class="o">*</span> <span class="n">peak_value</span> <span class="o">+</span> <span class="mf">0.875</span> <span class="o">*</span> <span class="n">SPKI</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">NPKI</span> <span class="o">=</span> <span class="mf">0.125</span> <span class="o">*</span> <span class="n">peak_value</span> <span class="o">+</span> <span class="mf">0.875</span> <span class="o">*</span> <span class="n">NPKI</span>
+
+    <span class="k">return</span> <span class="n">signal_peaks</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

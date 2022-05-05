@@ -226,7 +226,7 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eventrelated/eventrelated.html">
+    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
      Event-related Analysis
     </a>
    </li>
@@ -238,6 +238,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
      EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
     </a>
    </li>
   </ul>
@@ -592,7 +597,7 @@ title="Print to PDF"
 <h2><em>transition_matrix()</em><a class="headerlink" href="#transition-matrix" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.transition_matrix">
-<span class="sig-name descname"><span class="pre">transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.transition_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/transition_matrix.html#transition_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.transition_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Transition Matrix</strong></p>
 <p>A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
 describe a sequence of states, also known as <strong>discrete Markov chains</strong>. Each of its entries is
@@ -674,7 +679,7 @@ distribution, but this can be turned off using the <code class="docutils literal
 <h2><em>markov_simulate()</em><a class="headerlink" href="#markov-simulate" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.markov_simulate">
-<span class="sig-name descname"><span class="pre">markov_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.markov_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">markov_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_simulate.html#markov_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_simulate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Markov Chain Simulation</strong></p>
 <p>Given a <a class="reference internal" href="#neurokit2.markov.transition_matrix" title="neurokit2.markov.transition_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">transition_matrix()</span></code></a>, this function simulates the corresponding sequence of states
 (also known as a discrete Markov chain).</p>
@@ -703,7 +708,7 @@ distribution, but this can be turned off using the <code class="docutils literal
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 0, 0, 0, 0, 0, 1, 2, 1, 2, 2, 2, 1, 0, 0])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -713,7 +718,7 @@ distribution, but this can be turned off using the <code class="docutils literal
 <h2><em>markov_test_random()</em><a class="headerlink" href="#markov-test-random" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.markov_test_random">
-<span class="sig-name descname"><span class="pre">markov_test_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.markov_test_random" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">markov_test_random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_test_random.html#markov_test_random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_test_random" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Is the Markov process random?</strong></p>
 <p>This function computes the expected (theoretical) transition matrix if the order of appearance
 of each state was governed only by their overall prevalence, and that a previous state had no
@@ -753,7 +758,7 @@ process is random, and conclude that past states have an influence on next state
 <h2><em>markov_test_symmetry()</em><a class="headerlink" href="#markov-test-symmetry" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.markov_test_symmetry">
-<span class="sig-name descname"><span class="pre">markov_test_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.markov_test_symmetry" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">markov_test_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_test_symmetry.html#markov_test_symmetry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_test_symmetry" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Is the Markov process symmetric?</strong></p>
 <p>Performs a symmetry test, to test if for instance if the transitions A -&gt; B and B -&gt; A occur
 with the same probability. If significant (e.g., <em>p</em>-value &lt; .05), one can reject the hypothesis
@@ -796,7 +801,7 @@ chains. Technometrics, 4(4), 573-608.</p></li>
 <h2><em>markov_test_homogeneity()</em><a class="headerlink" href="#markov-test-homogeneity" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.markov_test_homogeneity">
-<span class="sig-name descname"><span class="pre">markov_test_homogeneity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.markov_test_homogeneity" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">markov_test_homogeneity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_test_homogeneity.html#markov_test_homogeneity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_test_homogeneity" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Is the Markov process homogeneous?</strong></p>
 <p>Performs a homogeneity test that tests the null hypothesis that the samples are
 homogeneous, i.e., from the same - but unspecified - population, against the alternative
@@ -839,7 +844,7 @@ chains. Technometrics, 4(4), 573-608.</p></li>
 <h2><em>markov_mixingtime()</em><a class="headerlink" href="#markov-mixingtime" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.markov_mixingtime">
-<span class="sig-name descname"><span class="pre">markov_mixingtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.markov.markov_mixingtime" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">markov_mixingtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_mixingtime.html#markov_mixingtime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_mixingtime" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Markov Chain Mixing Time</strong></p>
 <p>The Mixing time (also known as relaxation time) is the inverse of spectral gap, which is the
 difference between the two largest eigenvalues of the transition matrix. The Mixing time of a
@@ -865,7 +870,7 @@ Markov chain tells us how long does it take for a run to go near the stationary 
 <span class="gp">In [3]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">markov_mixingtime</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">2.509587003712985</span>
+<span class="gh">Out[4]: </span><span class="go">2.5095870037129875</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>

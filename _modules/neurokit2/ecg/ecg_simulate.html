@@ -1,0 +1,901 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.ecg.ecg_simulate &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/ecg/ecg_simulate.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.ecg.ecg_simulate</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span><span class="p">,</span> <span class="n">signal_resample</span>
+
+
+<div class="viewcode-block" id="ecg_simulate"><a class="viewcode-back" href="../../../functions/functions_ecg.html#neurokit2.ecg.ecg_simulate">[docs]</a><span class="k">def</span> <span class="nf">ecg_simulate</span><span class="p">(</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
+    <span class="n">heart_rate_std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ecgsyn&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Simulate an ECG/EKG signal.**</span>
+
+<span class="sd">    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either</span>
+<span class="sd">    the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies</span>
+<span class="sd">    wavelets to roughly approximate cardiac cycles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    duration : int</span>
+<span class="sd">        Desired recording length in seconds.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The desired sampling rate (in Hz, i.e., samples/second).</span>
+<span class="sd">    length : int</span>
+<span class="sd">        The desired length of the signal (in samples).</span>
+<span class="sd">    noise : float</span>
+<span class="sd">        Noise level (amplitude of the laplace noise).</span>
+<span class="sd">    heart_rate : int</span>
+<span class="sd">        Desired simulated heart rate (in beats per minute). The default is 70. Note that for the</span>
+<span class="sd">        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These</span>
+<span class="sd">        fluctuations can cause some slight discrepancies between the requested heart rate and the</span>
+<span class="sd">        empirical heart rate, especially for shorter signals.</span>
+<span class="sd">    heart_rate_std : int</span>
+<span class="sd">        Desired heart rate standard deviation (beats per minute).</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The model used to generate the signal. Can be &#39;simple&#39; for a simulation based on Daubechies</span>
+<span class="sd">        wavelets that roughly approximates a single cardiac cycle. If &#39;ecgsyn&#39; (default), will use</span>
+<span class="sd">        the model desbribed `McSharry et al. (2003) &lt;https://physionet.org/content/ecgsyn/&gt;`_. If</span>
+<span class="sd">        &#39;multileads&#39;, will return a DataFrame containing 12-leads (see `12-leads ECG simulation</span>
+<span class="sd">        &lt;https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html&gt;`_).</span>
+<span class="sd">    random_state : int</span>
+<span class="sd">        Seed for the random number generator.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other keywords parameters for ECGSYN algorithm, such as `lfhfratio`, `ti`, `ai`, `bi`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Vector containing the ECG signal.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    * **Example 1:** Simulate single lead ECG</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      ecg1 = nk.ecg_simulate(duration=10, method=&quot;simple&quot;)</span>
+<span class="sd">      ecg2 = nk.ecg_simulate(duration=10, method=&quot;ecgsyn&quot;)</span>
+
+<span class="sd">      # Visualize result</span>
+<span class="sd">      @savefig p_ecg_simulate1.png scale=100%</span>
+<span class="sd">      nk.signal_plot([ecg1, ecg2], labels=[&quot;simple&quot;, &quot;ecgsyn&quot;], subplots=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    * **Example 2:** Simulate 12-leads ECG</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      ecg12 = nk.ecg_simulate(duration=10, method=&quot;multileads&quot;)</span>
+<span class="sd">      # Visualize result</span>
+<span class="sd">      @savefig p_ecg_simulate2.png scale=100%</span>
+<span class="sd">      nk.signal_plot(ecg12, subplots=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    rsp_simulate, eda_simulate, ppg_simulate, emg_simulate</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    - McSharry, P. E., Clifford, G. D., Tarassenko, L., &amp; Smith, L. A. (2003). A dynamical model for</span>
+<span class="sd">      generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering,</span>
+<span class="sd">      50 (3), 289-294.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="c1"># Generate number of samples automatically if length is unspecified</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="k">if</span> <span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">length</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+
+    <span class="c1"># Run appropriate method</span>
+    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="s2">&quot;daubechies&quot;</span><span class="p">]:</span>
+        <span class="n">signals</span> <span class="o">=</span> <span class="n">_ecg_simulate_daubechies</span><span class="p">(</span>
+            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="n">heart_rate</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">approx_number_beats</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="p">(</span><span class="n">heart_rate</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;multi&quot;</span><span class="p">,</span> <span class="s2">&quot;multilead&quot;</span><span class="p">,</span> <span class="s2">&quot;multileads&quot;</span><span class="p">,</span> <span class="s2">&quot;multichannel&quot;</span><span class="p">]:</span>
+            <span class="c1"># Gamma, a (12,5) matrix to modify the five waves&#39; amplitudes of 12 leads (P, Q, R, S, T)</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">],</span>
+                    <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.2</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                    <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="n">signals</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">_ecg_simulate_ecgsyn</span><span class="p">(</span>
+                <span class="n">sfecg</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">N</span><span class="o">=</span><span class="n">approx_number_beats</span><span class="p">,</span>
+                <span class="n">hrmean</span><span class="o">=</span><span class="n">heart_rate</span><span class="p">,</span>
+                <span class="n">hrstd</span><span class="o">=</span><span class="n">heart_rate_std</span><span class="p">,</span>
+                <span class="n">sfint</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">signals</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">_ecg_simulate_ecgsyn</span><span class="p">(</span>
+                <span class="n">sfecg</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">N</span><span class="o">=</span><span class="n">approx_number_beats</span><span class="p">,</span>
+                <span class="n">hrmean</span><span class="o">=</span><span class="n">heart_rate</span><span class="p">,</span>
+                <span class="n">hrstd</span><span class="o">=</span><span class="n">heart_rate_std</span><span class="p">,</span>
+                <span class="n">sfint</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">gamma</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="c1"># Cut to match expected length</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">)):</span>
+            <span class="n">signals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="p">]</span>
+
+    <span class="c1"># Add random noise</span>
+    <span class="k">if</span> <span class="n">noise</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">)):</span>
+            <span class="n">signals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_distort</span><span class="p">(</span>
+                <span class="n">signals</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
+                <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+                <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+                <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Format</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ecg</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ecg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;II&quot;</span><span class="p">,</span> <span class="s2">&quot;III&quot;</span><span class="p">,</span> <span class="s2">&quot;aVR&quot;</span><span class="p">,</span> <span class="s2">&quot;aVL&quot;</span><span class="p">,</span> <span class="s2">&quot;aVF&quot;</span><span class="p">,</span> <span class="s2">&quot;V1&quot;</span><span class="p">,</span> <span class="s2">&quot;V2&quot;</span><span class="p">,</span> <span class="s2">&quot;V3&quot;</span><span class="p">,</span> <span class="s2">&quot;V4&quot;</span><span class="p">,</span> <span class="s2">&quot;V5&quot;</span><span class="p">,</span> <span class="s2">&quot;V6&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Reset random seed (so it doesn&#39;t affect global)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ecg</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Daubechies</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_simulate_daubechies</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.</span>
+
+<span class="sd">    It uses a &#39;Daubechies&#39; wavelet that roughly approximates a single cardiac cycle.</span>
+<span class="sd">    This function is based on `this script &lt;https://github.com/diarmaidocualain/ecg_simulation&gt;`_.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The &quot;Daubechies&quot; wavelet is a rough approximation to a real, single, cardiac cycle</span>
+    <span class="n">cardiac</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">wavelets</span><span class="o">.</span><span class="n">daub</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="c1"># Add the gap after the pqrst when the heart is resting.</span>
+    <span class="n">cardiac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">cardiac</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+
+    <span class="c1"># Caculate the number of beats in capture time period</span>
+    <span class="n">num_heart_beats</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">heart_rate</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
+
+    <span class="c1"># Concatenate together the number of heart beats needed</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">cardiac</span><span class="p">,</span> <span class="n">num_heart_beats</span><span class="p">)</span>
+
+    <span class="c1"># Change amplitude</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">ecg</span> <span class="o">*</span> <span class="mi">10</span>
+
+    <span class="c1"># Resample</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+        <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Return the signal in a list to match</span>
+    <span class="c1"># with the potential multichanel output of ecgsyn</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">ecg</span><span class="p">]</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ECGSYN</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_simulate_ecgsyn</span><span class="p">(</span>
+    <span class="n">sfecg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">N</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">hrmean</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">hrstd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">lfhfratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">sfint</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">ti</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">ai</span><span class="o">=</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="o">-</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
+    <span class="n">bi</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">),</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is a python translation of the matlab script by `McSharry &amp; Clifford (2013)</span>
+<span class="sd">    &lt;https://physionet.org/content/ecgsyn&gt;`_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sfecg:</span>
+<span class="sd">        ECG sampling frequency [256 Hertz]</span>
+<span class="sd">    N:</span>
+<span class="sd">        approximate number of heart beats [256]</span>
+<span class="sd">    Anoise:</span>
+<span class="sd">        Additive uniformly distributed measurement noise [0 mV]</span>
+<span class="sd">    hrmean:</span>
+<span class="sd">        Mean heart rate [60 beats per minute]</span>
+<span class="sd">    hrstd:</span>
+<span class="sd">        Standard deviation of heart rate [1 beat per minute]</span>
+<span class="sd">    lfhfratio:</span>
+<span class="sd">        LF/HF ratio [0.5]</span>
+<span class="sd">    sfint:</span>
+<span class="sd">        Internal sampling frequency [256 Hertz]</span>
+<span class="sd">    ti</span>
+<span class="sd">        angles of extrema (in degrees). Order of extrema is (P Q R S T).</span>
+<span class="sd">    ai</span>
+<span class="sd">        z-position of extrema.</span>
+<span class="sd">    bi</span>
+<span class="sd">        Gaussian width of peaks.</span>
+<span class="sd">    gamma</span>
+<span class="sd">        This determines the different leads.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Vector containing simulated ecg signal.</span>
+
+<span class="sd">    #    Examples</span>
+<span class="sd">    #    --------</span>
+<span class="sd">    #    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    #    &gt;&gt;&gt; import neurokit2 as nk</span>
+<span class="sd">    #    &gt;&gt;&gt;</span>
+<span class="sd">    #    &gt;&gt;&gt; s = _ecg_simulate_ecgsynth()</span>
+<span class="sd">    #    &gt;&gt;&gt; x = np.linspace(0, len(s)-1, len(s))</span>
+<span class="sd">    #    &gt;&gt;&gt; num_points = 4000</span>
+<span class="sd">    #    &gt;&gt;&gt;</span>
+<span class="sd">    #    &gt;&gt;&gt; num_points = min(num_points, len(s))</span>
+<span class="sd">    #    &gt;&gt;&gt; plt.plot(x[:num_points], s[:num_points]) #doctest: +SKIP</span>
+<span class="sd">    #    &gt;&gt;&gt; plt.show() #doctest: +SKIP</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ti</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ai</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">ai</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ai</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">bi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bi</span><span class="p">)</span>
+
+    <span class="n">ti</span> <span class="o">=</span> <span class="n">ti</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+
+    <span class="c1"># Adjust extrema parameters for mean heart rate</span>
+    <span class="n">hrfact</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hrmean</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">hrfact2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hrfact</span><span class="p">)</span>
+    <span class="n">bi</span> <span class="o">=</span> <span class="n">hrfact</span> <span class="o">*</span> <span class="n">bi</span>
+    <span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hrfact2</span><span class="p">,</span> <span class="n">hrfact</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hrfact</span><span class="p">,</span> <span class="n">hrfact2</span><span class="p">])</span> <span class="o">*</span> <span class="n">ti</span>
+
+    <span class="c1"># Check that sfint is an integer multiple of sfecg</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sfint</span> <span class="o">/</span> <span class="n">sfecg</span><span class="p">)</span>
+    <span class="n">qd</span> <span class="o">=</span> <span class="n">sfint</span> <span class="o">/</span> <span class="n">sfecg</span>
+    <span class="k">if</span> <span class="n">q</span> <span class="o">!=</span> <span class="n">qd</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency&quot;</span>
+            <span class="s2">&quot; (sfecg). Your current choices are: sfecg = &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sfecg</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot; and sfint = &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sfint</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Define frequency parameters for rr process</span>
+    <span class="c1"># flo and fhi correspond to the Mayer waves and respiratory rate respectively</span>
+    <span class="n">flo</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">fhi</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">flostd</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">fhistd</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+    <span class="c1"># Calculate time scales for rr and total output</span>
+    <span class="n">sfrr</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">trr</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sfrr</span>
+    <span class="n">rrmean</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">hrmean</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rrmean</span> <span class="o">/</span> <span class="n">trr</span><span class="p">)))</span>
+
+    <span class="n">rr0</span> <span class="o">=</span> <span class="n">_ecg_simulate_rrprocess</span><span class="p">(</span><span class="n">flo</span><span class="p">,</span> <span class="n">fhi</span><span class="p">,</span> <span class="n">flostd</span><span class="p">,</span> <span class="n">fhistd</span><span class="p">,</span> <span class="n">lfhfratio</span><span class="p">,</span> <span class="n">hrmean</span><span class="p">,</span> <span class="n">hrstd</span><span class="p">,</span> <span class="n">sfrr</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="c1"># Upsample rr time series from 1 Hz to sfint Hz</span>
+    <span class="n">rr</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">rr0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sfint</span><span class="p">)</span>
+
+    <span class="c1"># Make the rrn time series</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sfint</span>
+    <span class="n">rrn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rr</span><span class="p">))</span>
+    <span class="n">tecg</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">rr</span><span class="p">):</span>
+        <span class="n">tecg</span> <span class="o">+=</span> <span class="n">rr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">tecg</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
+        <span class="n">rrn</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">ip</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">ip</span>
+    <span class="n">Nt</span> <span class="o">=</span> <span class="n">ip</span>
+
+    <span class="c1"># Integrate system using fourth order Runge-Kutta</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">])</span>
+
+    <span class="c1"># tspan is a tuple of (min, max) which defines the lower and upper bound of t in ODE</span>
+    <span class="c1"># t_eval is the list of desired t points for ODE</span>
+    <span class="c1"># in Matlab, ode45 can accepts both tspan and t_eval in one argument</span>
+    <span class="n">Tspan</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">Nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">]</span>
+    <span class="n">t_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">Nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
+
+    <span class="c1"># Initialize results containers</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Multichannel modification (#625):</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="c1"># Loop over the twelve leads modifying ai in the loop to generate each lead&#39;s data</span>
+    <span class="c1"># Because these are all starting at the same position, it may make sense to grab a random</span>
+    <span class="c1"># segment within the series to simulate random phase and to forget the initial conditions</span>
+
+    <span class="k">for</span> <span class="n">lead</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gamma</span><span class="p">)):</span>
+        <span class="c1"># as passing extra arguments to derivative function is not supported yet in solve_ivp</span>
+        <span class="c1"># lambda function is used to serve the purpose</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">solve_ivp</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">_ecg_simulate_derivsecgsyn</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rrn</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">sfint</span><span class="p">,</span> <span class="n">gamma</span><span class="p">[</span><span class="n">lead</span><span class="p">]</span> <span class="o">*</span> <span class="n">ai</span><span class="p">,</span> <span class="n">bi</span><span class="p">),</span>
+            <span class="n">Tspan</span><span class="p">,</span>
+            <span class="n">x0</span><span class="p">,</span>
+            <span class="n">t_eval</span><span class="o">=</span><span class="n">t_eval</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># store results</span>
+        <span class="n">X0</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">y</span>  <span class="c1"># get signal</span>
+
+        <span class="c1"># downsample to required sfecg</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X0</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]</span>
+
+        <span class="c1"># Scale signal to lie between -0.4 and 1.2 mV</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">zmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">zmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">zrange</span> <span class="o">=</span> <span class="n">zmax</span> <span class="o">-</span> <span class="n">zmin</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">zmin</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.6</span> <span class="o">/</span> <span class="n">zrange</span> <span class="o">-</span> <span class="mf">0.4</span>
+
+        <span class="n">signals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">results</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_simulate_derivsecgsyn</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">sfint</span><span class="p">,</span> <span class="n">ai</span><span class="p">,</span> <span class="n">bi</span><span class="p">):</span>
+
+    <span class="n">ta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">r0</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">r0</span>
+
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">sfint</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">w0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">rr</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="c1"># w0 = 2*np.pi/rr[ip[ip &lt;= np.max(rr)]]</span>
+
+    <span class="n">fresp</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">zbase</span> <span class="o">=</span> <span class="mf">0.005</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">fresp</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+
+    <span class="n">dx1dt</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dx2dt</span> <span class="o">=</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># matlab rem and numpy rem are different</span>
+    <span class="c1"># dti = np.remainder(ta - ti, 2*np.pi)</span>
+    <span class="n">dti</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span> <span class="o">-</span> <span class="n">ti</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">ta</span> <span class="o">-</span> <span class="n">ti</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">dx3dt</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ai</span> <span class="o">*</span> <span class="n">dti</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">dti</span> <span class="o">/</span> <span class="n">bi</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">zbase</span><span class="p">)</span>
+
+    <span class="n">dxdt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">dx1dt</span><span class="p">,</span> <span class="n">dx2dt</span><span class="p">,</span> <span class="n">dx3dt</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">dxdt</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_simulate_rrprocess</span><span class="p">(</span>
+    <span class="n">flo</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fhi</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">flostd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">fhistd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lfhfratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">hrmean</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">hrstd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sfrr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">256</span>
+<span class="p">):</span>
+    <span class="n">w1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">flo</span>
+    <span class="n">w2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">fhi</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">flostd</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">fhistd</span>
+    <span class="n">sig2</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">sig1</span> <span class="o">=</span> <span class="n">lfhfratio</span>
+    <span class="n">rrmean</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">hrmean</span>
+    <span class="n">rrstd</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">hrstd</span> <span class="o">/</span> <span class="p">(</span><span class="n">hrmean</span> <span class="o">*</span> <span class="n">hrmean</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">sfrr</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">df</span>
+    <span class="n">dw1</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">w1</span>
+    <span class="n">dw2</span> <span class="o">=</span> <span class="n">w</span> <span class="o">-</span> <span class="n">w2</span>
+
+    <span class="n">Hw1</span> <span class="o">=</span> <span class="n">sig1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">dw1</span> <span class="o">/</span> <span class="n">c1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">c1</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">Hw2</span> <span class="o">=</span> <span class="n">sig2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">dw2</span> <span class="o">/</span> <span class="n">c2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">c2</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">Hw</span> <span class="o">=</span> <span class="n">Hw1</span> <span class="o">+</span> <span class="n">Hw2</span>
+    <span class="n">Hw0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Hw</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)],</span> <span class="n">Hw</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">::</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">Sw</span> <span class="o">=</span> <span class="p">(</span><span class="n">sfrr</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Hw0</span><span class="p">)</span>
+
+    <span class="n">ph0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ph0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">ph0</span><span class="p">)])</span>
+    <span class="n">SwC</span> <span class="o">=</span> <span class="n">Sw</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ph</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">SwC</span><span class="p">))</span>
+
+    <span class="n">xstd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">rrstd</span> <span class="o">/</span> <span class="n">xstd</span>
+    <span class="k">return</span> <span class="n">rrmean</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">ratio</span>  <span class="c1"># Return RR</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

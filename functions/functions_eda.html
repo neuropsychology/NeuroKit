@@ -226,7 +226,7 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eventrelated/eventrelated.html">
+    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
      Event-related Analysis
     </a>
    </li>
@@ -238,6 +238,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
      EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
     </a>
    </li>
   </ul>
@@ -552,7 +557,7 @@ title="Print to PDF"
 <h3><em>eda_analyze()</em><a class="headerlink" href="#eda-analyze" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_analyze">
-<span class="sig-name descname"><span class="pre">eda_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eda.eda_analyze" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_analyze.html#eda_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_analyze" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>EDA Analysis</strong></p>
 <p>Perform EDA analysis on either epochs (event-related analysis) or on longer periods of data
 such as resting-state data.</p>
@@ -631,7 +636,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <cite>eda_eventrel
 <h3><em>eda_plot()</em><a class="headerlink" href="#eda-plot" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_plot">
-<span class="sig-name descname"><span class="pre">eda_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eda.eda_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_plot.html#eda_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize electrodermal activity (EDA) data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

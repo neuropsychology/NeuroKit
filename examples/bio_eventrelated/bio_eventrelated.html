@@ -1,0 +1,1071 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Event-related Analysis &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Generating Abnormal 12-leads ECG" href="../ecg_generate_12leads/ecg_generate_12leads.html" />
+    <link rel="prev" title="Examples" href="../index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../index.html">
+   Examples
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fexamples/bio_eventrelated/bio_eventrelated.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs_wip/examples/bio_eventrelated/bio_eventrelated.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/examples/bio_eventrelated/bio_eventrelated.ipynb.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-dataset">
+   The Dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#find-events">
+   Find Events
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#process-the-signals">
+   Process the Signals
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-epochs">
+   Create Epochs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#manually-extract-event-related-features">
+   Manually Extract Event Related Features
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#automatic-feature-extraction">
+   Automatic Feature Extraction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plot-event-related-features">
+   Plot Event-Related Features
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Event-related Analysis</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-dataset">
+   The Dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#find-events">
+   Find Events
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#process-the-signals">
+   Process the Signals
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-epochs">
+   Create Epochs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#manually-extract-event-related-features">
+   Manually Extract Event Related Features
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#automatic-feature-extraction">
+   Automatic Feature Extraction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plot-event-related-features">
+   Plot Event-Related Features
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="event-related-analysis">
+<h1>Event-related Analysis<a class="headerlink" href="#event-related-analysis" title="Permalink to this headline">#</a></h1>
+<p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
+<p>This example shows how to use Neurokit to extract epochs from data based on events localisation and its corresponding physiological signals. That way, you can compare <em>experimental conditions</em> with one another.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
+<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This &quot;decorative&quot; cell should be hidden from the docs once this is implemented:</span>
+<span class="c1"># https://github.com/microsoft/vscode-jupyter/issues/1182 </span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>  <span class="c1"># Bigger images</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">14</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="the-dataset">
+<h2>The Dataset<a class="headerlink" href="#the-dataset" title="Permalink to this headline">#</a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">nk.data()</span></code> function to load the dataset located on Neurokit data folder.</p>
+<p>It contains 2.5 minutes of biosignals recorded at a frequency of 100Hz (2.5 x 60 x 100 = 15000 data points).</p>
+<p>Biosignals : <strong>ECG, RSP, EDA + Photosensor (event signal)</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is the data from <strong>one participant</strong> that saw 4 emotional and neutral images from the <a class="reference external" href="https://en.wikipedia.org/wiki/International_Affective_Picture_System">IAPS</a>), which we will refer to as <strong>events</strong>.</p>
+<p>Importantly, the images were marked in the recording system (the “triggers”) by a small black rectangle on the screen, which led to the <strong>photosensor</strong> signal to go down (and then up again after the image). This is what will allow us to retrieve the location of these events.</p>
+<p>They were 2 types of images (the <strong>condition</strong>) that were shown to the participant: <strong>“Negative”</strong> vs. <strong>“Neutral”</strong> (in terms of emotion). Each picture was presented for 3 seconds. The following list is the condition order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">condition_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="find-events">
+<h2>Find Events<a class="headerlink" href="#find-events" title="Permalink to this headline">#</a></h2>
+<p>These events can be localized and extracted using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find">events_find()</a>.</p>
+<p><em>Note that you should also specify whether to select events that are higher or below the threshold using the <code class="docutils literal notranslate"><span class="pre">threshold_keep</span></code> argument.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find events</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span> <span class="n">event_conditions</span><span class="o">=</span><span class="n">condition_list</span><span class="p">)</span>
+<span class="n">events</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;onset&#39;: array([ 1024,  4957,  9224, 12984]),
+ &#39;duration&#39;: array([300, 300, 300, 300]),
+ &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U21&#39;),
+ &#39;condition&#39;: [&#39;Negative&#39;, &#39;Neutral&#39;, &#39;Neutral&#39;, &#39;Negative&#39;]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, <code class="docutils literal notranslate"><span class="pre">events_find()</span></code> returns a dict containing onsets and durations for each corresponding event, based on the label for event identifiers and each event condition. Each event here lasts for 300 data points (equivalent to 3 seconds sampled at 100Hz).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the location of event with the signals</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" src="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" />
+</div>
+</div>
+<p>The output of <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot">events_plot()</a> shows the corresponding events in the signal, with the blue dashed line representing a Negative event and red dashed line representing a Neutral event.</p>
+</section>
+<section id="process-the-signals">
+<h2>Process the Signals<a class="headerlink" href="#process-the-signals" title="Permalink to this headline">#</a></h2>
+<p>Now that we have the events location, we can go ahead and process the data.</p>
+<p>Biosignals processing can be done quite easily using NeuroKit with the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.bio_process">bio_process()</a> function. Simply provide the appropriate biosignal channels and additional channels that you want to keep (for example, the photosensor), and <code class="docutils literal notranslate"><span class="pre">bio_process()</span></code> will take care of the rest. It will return a dataframe containing processed signals and a dictionary containing useful information.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process the signal</span>
+<span class="n">data_clean</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> 
+                                  <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> 
+                                  <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA&quot;</span><span class="p">],</span> 
+                                  <span class="n">keep</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> 
+                                  <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Visualize some of the channels</span>
+<span class="n">data_clean</span><span class="p">[[</span><span class="s2">&quot;ECG_Rate&quot;</span><span class="p">,</span> <span class="s2">&quot;RSP_Rate&quot;</span><span class="p">,</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">,</span> <span class="s2">&quot;Photosensor&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;],
+      dtype=object)
+</pre></div>
+</div>
+<img alt="../../_images/b1f09b747a1ea7d3354a92b6922c230692f5b95cbff923397e23031b7dacc148.png" src="../../_images/b1f09b747a1ea7d3354a92b6922c230692f5b95cbff923397e23031b7dacc148.png" />
+</div>
+</div>
+</section>
+<section id="create-epochs">
+<h2>Create Epochs<a class="headerlink" href="#create-epochs" title="Permalink to this headline">#</a></h2>
+<p>We now have to transform this dataframe into <strong>epochs</strong>, i.e. segments (chunks) of data around the <strong>events</strong> using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create">epochs_create()</a>. We want it to start <strong>1 second before</strong> the event onset and end <strong>6 seconds</strong> after. These values are passed into the <code class="docutils literal notranslate"><span class="pre">epochs_start</span></code> and <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code> arguments, respectively.</p>
+<p>Our epochs will then cover the region from <strong>-1 s</strong> to <strong>+6 s</strong> (i.e., 700 data points since the signal is sampled at 100Hz).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and plot epochs</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data_clean</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s plot some of the signals of the first epoch (and transform them to the same scale for visualization purposes).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Iterate through epoch data</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">epochs</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="c1"># Plot scaled signals</span>
+    <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">epoch</span><span class="p">[[</span><span class="s1">&#39;ECG_Rate&#39;</span><span class="p">,</span> <span class="s1">&#39;RSP_Rate&#39;</span><span class="p">,</span><span class="s1">&#39;EDA_Phasic&#39;</span><span class="p">,</span> <span class="s2">&quot;Photosensor&quot;</span><span class="p">]],</span> 
+                   <span class="n">title</span><span class="o">=</span><span class="n">epoch</span><span class="p">[</span><span class="s1">&#39;Condition&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># Extract condition name</span>
+                   <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/b2a34530c97904268ac623f70055743e4d2982fcf239b395c0fc99a9f575d2e4.png" src="../../_images/b2a34530c97904268ac623f70055743e4d2982fcf239b395c0fc99a9f575d2e4.png" />
+<img alt="../../_images/77d5c77795ddd3dfbf4ffded8349cf9a805d6404330b737d3c3eaedeca97e133.png" src="../../_images/77d5c77795ddd3dfbf4ffded8349cf9a805d6404330b737d3c3eaedeca97e133.png" />
+<img alt="../../_images/25b0f992bafd6d668f758cd34402788fb68d6c8cd9af736b6f0e385945a57412.png" src="../../_images/25b0f992bafd6d668f758cd34402788fb68d6c8cd9af736b6f0e385945a57412.png" />
+<img alt="../../_images/2e1a6e287d46e62a4ac263c3d7d48e8b910bf70659e8bce045f0feb973004061.png" src="../../_images/2e1a6e287d46e62a4ac263c3d7d48e8b910bf70659e8bce045f0feb973004061.png" />
+</div>
+</div>
+</section>
+<section id="manually-extract-event-related-features">
+<h2>Manually Extract Event Related Features<a class="headerlink" href="#manually-extract-event-related-features" title="Permalink to this headline">#</a></h2>
+<p>With these segments, we are able to compare how the physiological signals vary across the different events. We do this by:</p>
+<ol class="arabic simple">
+<li><p>Iterating through our object epochs</p></li>
+<li><p>Storing the mean value of $X$ feature of each condition in a new dictionary</p></li>
+<li><p>Saving the results in a readable format</p></li>
+</ol>
+<p>We will call these 3 objects <em>epochs-dictionary</em>, the <em>mean-dictionary</em> and our <em>results-dataframe</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize an empty dict to store the results</span>
+         
+<span class="c1"># Iterate through epochs index and data</span>
+<span class="k">for</span> <span class="n">epoch_index</span><span class="p">,</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">epochs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">epoch_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize an empty dict inside of it</span>
+                            
+
+    <span class="c1"># Note: We will use the 100th value (corresponding to the event onset, 0s) as the baseline</span>
+
+    <span class="c1"># ECG ====</span>
+    <span class="n">ecg_baseline</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;ECG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>  <span class="c1"># Baseline</span>
+    <span class="n">ecg_mean</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;ECG_Rate&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>  <span class="c1"># Mean heart rate in the 0-4 seconds</span>
+    <span class="c1"># Store ECG in df</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">epoch_index</span><span class="p">][</span><span class="s2">&quot;ECG_Rate_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ecg_mean</span> <span class="o">-</span> <span class="n">ecg_baseline</span>  <span class="c1"># Correct for baseline</span>
+
+    <span class="c1"># RSP ====</span>
+    <span class="n">rsp_baseline</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>  <span class="c1"># Baseline</span>
+    <span class="n">rsp_rate</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Rate&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>  <span class="c1"># Longer window for RSP that has a slower dynamic</span>
+    <span class="c1"># Store RSP in df</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">epoch_index</span><span class="p">][</span><span class="s2">&quot;RSP_Rate_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsp_rate</span> <span class="o">-</span> <span class="n">rsp_baseline</span>  <span class="c1"># Correct for baseline</span>
+
+    
+    <span class="c1"># EDA/SCR ====</span>
+    <span class="n">scr_max</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>  <span class="c1"># Maximum SCR peak</span>
+    <span class="c1"># If no SCR, consider the magnitude, i.e. that the value is 0</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">scr_max</span><span class="p">):</span>
+        <span class="n">scr_max</span> <span class="o">=</span> <span class="mi">0</span>  
+    <span class="c1"># Store SCR in df</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">epoch_index</span><span class="p">][</span><span class="s2">&quot;SCR_Magnitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scr_max</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>  <span class="c1"># Convert to a dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">condition_list</span>  <span class="c1"># Add the conditions</span>
+<span class="n">df</span>  <span class="c1"># Print DataFrame</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ECG_Rate_Mean</th>
+      <th>RSP_Rate_Mean</th>
+      <th>SCR_Magnitude</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>-2.005527</td>
+      <td>-0.591449</td>
+      <td>3.114808</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-3.119900</td>
+      <td>-0.009901</td>
+      <td>0.000000</td>
+      <td>Neutral</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.336250</td>
+      <td>-0.899208</td>
+      <td>0.000000</td>
+      <td>Neutral</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-3.543494</td>
+      <td>0.646818</td>
+      <td>1.675922</td>
+      <td>Negative</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>You can save this dataframe (<code class="docutils literal notranslate"><span class="pre">df.to_csv(&quot;results.csv&quot;)</span></code>) and proceed to do some actual statistics on it.</p>
+</section>
+<section id="automatic-feature-extraction">
+<h2>Automatic Feature Extraction<a class="headerlink" href="#automatic-feature-extraction" title="Permalink to this headline">#</a></h2>
+<p>While manual feature creation allows you to compute and extract exactly what you need, using our automated pipeline is a lot easier.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Label</th>
+      <th>Condition</th>
+      <th>Event_Onset</th>
+      <th>ECG_Rate_Baseline</th>
+      <th>ECG_Rate_Max</th>
+      <th>ECG_Rate_Min</th>
+      <th>ECG_Rate_Mean</th>
+      <th>ECG_Rate_SD</th>
+      <th>ECG_Rate_Max_Time</th>
+      <th>ECG_Rate_Min_Time</th>
+      <th>...</th>
+      <th>RSP_Phase</th>
+      <th>RSP_Phase_Completion</th>
+      <th>EDA_Peak_Amplitude</th>
+      <th>EDA_SCR</th>
+      <th>SCR_Peak_Amplitude</th>
+      <th>SCR_Peak_Amplitude_Time</th>
+      <th>SCR_RiseTime</th>
+      <th>SCR_RecoveryTime</th>
+      <th>RSA_P2T</th>
+      <th>RSA_Gates</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Negative</td>
+      <td>1024</td>
+      <td>58.962843</td>
+      <td>1.037157</td>
+      <td>-7.238706</td>
+      <td>-3.416404</td>
+      <td>2.462046</td>
+      <td>3.035765</td>
+      <td>5.329041</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.641256</td>
+      <td>1.995617</td>
+      <td>1</td>
+      <td>3.114808</td>
+      <td>4.718169</td>
+      <td>1.74</td>
+      <td>NaN</td>
+      <td>-0.031061</td>
+      <td>1.008946e-07</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Neutral</td>
+      <td>4957</td>
+      <td>64.000846</td>
+      <td>-0.056683</td>
+      <td>-5.177317</td>
+      <td>-3.209327</td>
+      <td>1.661333</td>
+      <td>0.011445</td>
+      <td>1.323319</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.462312</td>
+      <td>0.868942</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-0.030944</td>
+      <td>6.840513e-02</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>Neutral</td>
+      <td>9224</td>
+      <td>55.976284</td>
+      <td>5.248206</td>
+      <td>-1.922230</td>
+      <td>1.891089</td>
+      <td>2.279224</td>
+      <td>2.054363</td>
+      <td>1.072961</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.752747</td>
+      <td>0.026651</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-0.024188</td>
+      <td>1.652256e-01</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Negative</td>
+      <td>12984</td>
+      <td>57.505912</td>
+      <td>0.186396</td>
+      <td>-5.781774</td>
+      <td>-2.941543</td>
+      <td>2.142268</td>
+      <td>4.768240</td>
+      <td>2.565093</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>0.746667</td>
+      <td>1.056855</td>
+      <td>1</td>
+      <td>1.675922</td>
+      <td>2.845494</td>
+      <td>1.73</td>
+      <td>477.0</td>
+      <td>-0.020054</td>
+      <td>1.084281e-01</td>
+    </tr>
+  </tbody>
+</table>
+<p>4 rows × 43 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="plot-event-related-features">
+<h2>Plot Event-Related Features<a class="headerlink" href="#plot-event-related-features" title="Permalink to this headline">#</a></h2>
+<p>You can now plot and compare how these features differ according to the event of interest.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Condition&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;ECG_Rate_Mean&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/aa49c88b0058b5b816172619a39afa2442f3bd6821a13559a40895abcabb0623.png" src="../../_images/aa49c88b0058b5b816172619a39afa2442f3bd6821a13559a40895abcabb0623.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Condition&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;RSP_Rate_Mean&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/046507d7ff7175cedc9b0397263ca546e1a1b6bc358e97e31a0f46ff4f527558.png" src="../../_images/046507d7ff7175cedc9b0397263ca546e1a1b6bc358e97e31a0f46ff4f527558.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Condition&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;EDA_Peak_Amplitude&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/48fff1ad10c3900caa4d5d2054850da794c59c6140e2cfef3fe8be71912f694a.png" src="../../_images/48fff1ad10c3900caa4d5d2054850da794c59c6140e2cfef3fe8be71912f694a.png" />
+</div>
+</div>
+<p><strong>Interpretation</strong>: As we can see, there seems to be a difference between the negative and the neutral pictures. Negative stimuli, as compared to neutral stimuli, were related to a stronger cardiac deceleration (i.e., higher heart rate variability), an accelerated breathing rate, and higher SCR magnitude.</p>
+<p>Of course, because of data size limits on Github, we had to downsample the signals and have only one participant with a few events. That said, the same workflow can apply for more events, and more participants (you just need to additionally loop through all participants).</p>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Examples</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../ecg_generate_12leads/ecg_generate_12leads.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Generating Abnormal 12-leads ECG</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

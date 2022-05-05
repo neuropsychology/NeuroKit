@@ -1,0 +1,1028 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.hrv.hrv_rsa &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/hrv/hrv_rsa.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.hrv.hrv_rsa</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span>
+
+<span class="kn">from</span> <span class="nn">..ecg.ecg_rsp</span> <span class="kn">import</span> <span class="n">ecg_rsp</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
+<span class="kn">from</span> <span class="nn">..rsp</span> <span class="kn">import</span> <span class="n">rsp_process</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_filter</span><span class="p">,</span>
+    <span class="n">signal_interpolate</span><span class="p">,</span>
+    <span class="n">signal_rate</span><span class="p">,</span>
+    <span class="n">signal_resample</span><span class="p">,</span>
+    <span class="n">signal_timefrequency</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_formatpeaks_sanitize</span>
+<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
+
+
+<div class="viewcode-block" id="hrv_rsa"><a class="viewcode-back" href="../../../functions/functions_hrv.html#neurokit2.hrv.hrv_rsa">[docs]</a><span class="k">def</span> <span class="nf">hrv_rsa</span><span class="p">(</span>
+    <span class="n">ecg_signals</span><span class="p">,</span>
+    <span class="n">rsp_signals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">window_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Respiratory Sinus Arrhythmia (RSA)**</span>
+
+<span class="sd">    Respiratory sinus arrhythmia (RSA), also referred to as &#39;cardiac coherence&#39; or &#39;physiological</span>
+<span class="sd">    coherence&#39; (though these terms are often encompassing a wider meaning), is the naturally</span>
+<span class="sd">    occurring variation in heart rate during the breathing cycle. Metrics to quantify it are often</span>
+<span class="sd">    used as a measure of parasympathetic nervous system activity. Neurophysiology informs us that</span>
+<span class="sd">    the functional output of the myelinated vagus originating from the nucleus ambiguus has a</span>
+<span class="sd">    respiratory rhythm. Thus, there would a temporal relation between the respiratory rhythm being</span>
+<span class="sd">    expressed in the firing of these efferent pathways and the functional effect on the heart rate</span>
+<span class="sd">    rhythm manifested as RSA. Several methods exist to quantify RSA:</span>
+
+<span class="sd">    * The **Peak-to-trough (P2T)** algorithm measures the statistical range in milliseconds of the</span>
+<span class="sd">      heart period oscillation associated with synchronous respiration. Operationally, subtracting</span>
+<span class="sd">      the shortest heart period during inspiration from the longest heart period during a breath</span>
+<span class="sd">      cycle produces an estimate of RSA during each breath. The peak-to-trough method makes no</span>
+<span class="sd">      statistical assumption or correction (e.g., adaptive filtering) regarding other sources of</span>
+<span class="sd">      variance in the heart period time series that may confound, distort, or interact with the</span>
+<span class="sd">      metric such as slower periodicities and baseline trend. Although it has been proposed that</span>
+<span class="sd">      the P2T method &quot;acts as a time-domain filter dynamically centered at the exact ongoing</span>
+<span class="sd">      respiratory frequency&quot; (Grossman, 1992), the method does not transform the time series in any</span>
+<span class="sd">      way, as a filtering process would. Instead the method uses knowledge of the ongoing</span>
+<span class="sd">      respiratory cycle to associate segments of the heart period time series with either</span>
+<span class="sd">      inhalation or exhalation (Lewis, 2012).</span>
+<span class="sd">    * The **Porges-Bohrer (PB)** algorithm assumes that heart period time series reflect the sum of</span>
+<span class="sd">      several component time series. Each of these component time series may be mediated by</span>
+<span class="sd">      different neural mechanisms and may have different statistical features. The Porges-Bohrer</span>
+<span class="sd">      method applies an algorithm that selectively extracts RSA, even when the periodic process</span>
+<span class="sd">      representing RSA is superimposed on a complex baseline that may include aperiodic and slow</span>
+<span class="sd">      periodic processes. Since the method is designed to remove sources of variance in the heart</span>
+<span class="sd">      period time series other than the variance within the  frequency band of spontaneous</span>
+<span class="sd">      breathing, the method is capable of accurately quantifying RSA when the signal to noise ratio</span>
+<span class="sd">      is low.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ecg_signals : DataFrame</span>
+<span class="sd">        DataFrame obtained from `ecg_process()`. Should contain columns `ECG_Rate` and `ECG_R_Peaks`.</span>
+<span class="sd">        Can also take a DataFrame comprising of both ECG and RSP signals, generated by `bio_process()`.</span>
+<span class="sd">    rsp_signals : DataFrame</span>
+<span class="sd">        DataFrame obtained from `rsp_process()`. Should contain columns `RSP_Phase` and `RSP_PhaseCompletion`.</span>
+<span class="sd">        No impact when a DataFrame comprising of both the ECG and RSP signals are passed as `ecg_signals`.</span>
+<span class="sd">        Defaults to None.</span>
+<span class="sd">    rpeaks : dict</span>
+<span class="sd">        The samples at which the R-peaks of the ECG signal occur. Dict returned by `ecg_peaks()`,</span>
+<span class="sd">        `ecg_process()`, or `bio_process()`. Defaults to None.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of signals (in Hz, i.e., samples/second).</span>
+<span class="sd">    continuous : bool</span>
+<span class="sd">        If False, will return RSA properties computed from the data (one value per index).</span>
+<span class="sd">        If True, will return continuous estimations of RSA of the same length as the signal.</span>
+<span class="sd">        See below for more details.</span>
+<span class="sd">    window : int</span>
+<span class="sd">        For calculating RSA second by second. Length of each segment in seconds. If None (default),</span>
+<span class="sd">        window will be set at 32 seconds.</span>
+<span class="sd">    window_number : int</span>
+<span class="sd">        Between 2 and 8. For caculating RSA second by second. Number of windows to be calculated in</span>
+<span class="sd">        Peak Matched Multiple Window. If None (default), window_number will be set at 8.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rsa : dict</span>
+<span class="sd">        A dictionary containing the RSA features, which includes:</span>
+
+<span class="sd">        * &quot;RSA_P2T_Values&quot;: the estimate of RSA during each breath cycle, produced by subtracting</span>
+<span class="sd">          the shortest heart period (or RR interval) from the longest heart period in ms.</span>
+<span class="sd">        * &quot;RSA_P2T_Mean&quot;: the mean peak-to-trough across all cycles in ms</span>
+<span class="sd">        * &quot;RSA_P2T_Mean_log&quot;: the logarithm of the mean of RSA estimates.</span>
+<span class="sd">        * &quot;RSA_P2T_SD&quot;: the standard deviation of all RSA estimates.</span>
+<span class="sd">        * &quot;RSA_P2T_NoRSA&quot;: the number of breath cycles</span>
+<span class="sd">          from which RSA could not be calculated.</span>
+<span class="sd">        * &quot;RSA_PorgesBohrer&quot;: the Porges-Bohrer estimate of RSA, optimal</span>
+<span class="sd">          when the signal to noise ratio is low, in ln(ms^2).</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      # Download data</span>
+<span class="sd">      data = nk.data(&quot;bio_eventrelated_100hz&quot;)</span>
+
+<span class="sd">      # Process the data</span>
+<span class="sd">      ecg_signals, info = nk.ecg_process(data[&quot;ECG&quot;], sampling_rate=100)</span>
+<span class="sd">      rsp_signals, _ = nk.rsp_process(data[&quot;RSP&quot;], sampling_rate=100)</span>
+
+<span class="sd">      # Get RSA features</span>
+<span class="sd">      nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False)</span>
+
+<span class="sd">      # Get RSA as a continuous signal</span>
+<span class="sd">      rsa = nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)</span>
+<span class="sd">      rsa</span>
+
+<span class="sd">      @savefig hrv_rsa1.png scale=100%</span>
+<span class="sd">      nk.signal_plot([ecg_signals[&quot;ECG_Rate&quot;], rsp_signals[&quot;RSP_Rate&quot;], rsa], standardize=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ------------</span>
+<span class="sd">    * Servant, D., Logier, R., Mouster, Y., &amp; Goudemand, M. (2009). La variabilité de la fréquence</span>
+<span class="sd">      cardiaque. Intérêts en psychiatrie. L&#39;Encéphale, 35(5), 423-428.</span>
+<span class="sd">    * Lewis, G. F., Furman, S. A., McCool, M. F., &amp; Porges, S. W. (2012). Statistical strategies to</span>
+<span class="sd">      quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological</span>
+<span class="sd">      psychology, 89(2), 349-364.</span>
+<span class="sd">    * Zohar, A. H., Cloninger, C. R., &amp; McCraty, R. (2013). Personality and heart rate variability:</span>
+<span class="sd">      exploring pathways from personality to cardiac coherence and health. Open Journal of Social</span>
+<span class="sd">      Sciences, 1(06), 32.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">_hrv_sanitize_input</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># Detect actual sampling rate</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rpeaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">signals</span><span class="p">,</span> <span class="n">ecg_period</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_rsa_formatinput</span><span class="p">(</span>
+        <span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Extract cycles</span>
+    <span class="n">rsp_cycles</span> <span class="o">=</span> <span class="n">_hrv_rsa_cycles</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+    <span class="n">rsp_onsets</span> <span class="o">=</span> <span class="n">rsp_cycles</span><span class="p">[</span><span class="s2">&quot;RSP_Inspiration_Onsets&quot;</span><span class="p">]</span>
+    <span class="n">rsp_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">rsp_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rsp_peaks</span><span class="p">)[</span><span class="n">rsp_peaks</span> <span class="o">&gt;</span> <span class="n">rsp_onsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_onsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">rsp_peaks</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_onsets</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Couldn&#39;t find rsp cycles onsets and centers. Check your RSP signal.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Methods ------------------------</span>
+
+    <span class="c1"># Peak-to-Trough</span>
+    <span class="n">rsa_p2t</span> <span class="o">=</span> <span class="n">_hrv_rsa_p2t</span><span class="p">(</span>
+        <span class="n">rsp_onsets</span><span class="p">,</span>
+        <span class="n">rpeaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">continuous</span><span class="o">=</span><span class="n">continuous</span><span class="p">,</span>
+        <span class="n">ecg_period</span><span class="o">=</span><span class="n">ecg_period</span><span class="p">,</span>
+        <span class="n">rsp_peaks</span><span class="o">=</span><span class="n">rsp_peaks</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Porges-Bohrer</span>
+    <span class="n">rsa_pb</span> <span class="o">=</span> <span class="n">_hrv_rsa_pb</span><span class="p">(</span><span class="n">ecg_period</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="n">continuous</span><span class="p">)</span>
+
+    <span class="c1"># RSAsecondbysecond</span>
+    <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># 32 seconds</span>
+    <span class="n">input_duration</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+    <span class="k">if</span> <span class="n">input_duration</span> <span class="o">&gt;=</span> <span class="n">window</span><span class="p">:</span>
+        <span class="n">rsa_gates</span> <span class="o">=</span> <span class="n">_hrv_rsa_gates</span><span class="p">(</span>
+            <span class="n">ecg_signals</span><span class="p">,</span>
+            <span class="n">rpeaks</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+            <span class="n">window_number</span><span class="o">=</span><span class="n">window_number</span><span class="p">,</span>
+            <span class="n">continuous</span><span class="o">=</span><span class="n">continuous</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The duration of recording is shorter than the duration of the window (</span><span class="si">{</span><span class="n">window</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;seconds). Returning RSA by Gates method as Nan. Consider using a longer recording.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">rsa_gates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rsa_gates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsa_p2t</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">rsa</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty dict</span>
+        <span class="n">rsa</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rsa_p2t</span><span class="p">)</span>
+        <span class="n">rsa</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rsa_pb</span><span class="p">)</span>
+        <span class="n">rsa</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rsa_gates</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rsa</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSA_P2T&quot;</span><span class="p">:</span> <span class="n">rsa_p2t</span><span class="p">,</span> <span class="s2">&quot;RSA_Gates&quot;</span><span class="p">:</span> <span class="n">rsa_gates</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">rsa</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Methods (Domains)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_hrv_rsa_p2t</span><span class="p">(</span>
+    <span class="n">rsp_onsets</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ecg_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rsp_peaks</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Peak-to-trough algorithm (P2T)&quot;&quot;&quot;</span>
+
+    <span class="c1"># Find all RSP cycles and the Rpeaks within</span>
+    <span class="n">cycles_rri</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_onsets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">cycle_init</span> <span class="o">=</span> <span class="n">rsp_onsets</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">cycle_end</span> <span class="o">=</span> <span class="n">rsp_onsets</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">cycles_rri</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rpeaks</span> <span class="o">&gt;=</span> <span class="n">cycle_init</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">&lt;</span> <span class="n">cycle_end</span><span class="p">)])</span>
+
+    <span class="c1"># Iterate over all cycles</span>
+    <span class="n">rsa_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cycles_rri</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cycles_rri</span><span class="p">):</span>
+        <span class="c1"># Estimate of RSA during each breath</span>
+        <span class="n">RRis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">RRis</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">rsa_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">RRis</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">RRis</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">rsa</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSA_P2T_Mean&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">)}</span>
+        <span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_P2T_Mean_log&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_P2T_Mean&quot;</span><span class="p">])</span>  <span class="c1"># pylint: disable=E1111</span>
+        <span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_P2T_SD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_P2T_NoRSA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">)</span><span class="o">.</span><span class="n">isnull</span><span class="p">()])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rsa</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+            <span class="n">x_values</span><span class="o">=</span><span class="n">rsp_peaks</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">)],</span>
+            <span class="n">y_values</span><span class="o">=</span><span class="n">rsa_values</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">)],</span>
+            <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_period</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rsa</span>
+
+
+<span class="k">def</span> <span class="nf">_hrv_rsa_pb</span><span class="p">(</span><span class="n">ecg_period</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Porges-Bohrer method.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Re-sample at 2 Hz</span>
+    <span class="n">resampled</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">ecg_period</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Fit 21-point cubic polynomial filter (zero mean, 3rd order)</span>
+    <span class="c1"># with a low-pass cutoff frequency of 0.095Hz</span>
+    <span class="n">trend</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">resampled</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.095</span><span class="p">,</span>
+        <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;savgol&quot;</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">window_size</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">zero_mean</span> <span class="o">=</span> <span class="n">resampled</span> <span class="o">-</span> <span class="n">trend</span>
+    <span class="c1"># Remove variance outside bandwidth of spontaneous respiration</span>
+    <span class="n">zero_mean_filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">zero_mean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mf">0.40</span><span class="p">)</span>
+
+    <span class="c1"># Divide into 30-second epochs</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">zero_mean_filtered</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Epoch Index&quot;</span><span class="p">:</span> <span class="n">time</span> <span class="o">//</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;Signal&quot;</span><span class="p">:</span> <span class="n">zero_mean_filtered</span><span class="p">})</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Epoch Index&quot;</span><span class="p">)</span>
+
+    <span class="n">epochs</span> <span class="o">=</span> <span class="p">[</span><span class="n">time</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">variance</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">epochs</span><span class="p">:</span>
+        <span class="n">variance</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">epoch</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">))</span>  <span class="c1"># convert ms</span>
+
+    <span class="n">variance</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">variance</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;RSA_PorgesBohrer&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">variance</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()}</span>
+
+
+<span class="c1"># def _hrv_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method=&quot;correlation&quot;, continuous=False):</span>
+<span class="c1">#    &quot;&quot;&quot;Experimental method</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    if rsp_signal is None:</span>
+<span class="c1">#        return None</span>
+<span class="c1">#</span>
+<span class="c1">#    filtered_period = signal_filter(ecg_period, sampling_rate=sampling_rate,</span>
+<span class="c1">#                                    lowcut=0.12, highcut=0.4, order=6)</span>
+<span class="c1">#    coupling = signal_synchrony(filtered_period, rsp_signal, method=method, window_size=sampling_rate*3)</span>
+<span class="c1">#    coupling = signal_filter(coupling, sampling_rate=sampling_rate, highcut=0.4, order=6)</span>
+<span class="c1">#</span>
+<span class="c1">#    if continuous is False:</span>
+<span class="c1">#        rsa = {}</span>
+<span class="c1">#        rsa[&quot;RSA_Synchrony_Mean&quot;] = np.nanmean(coupling)</span>
+<span class="c1">#        rsa[&quot;RSA_Synchrony_SD&quot;] = np.nanstd(coupling, ddof=1)</span>
+<span class="c1">#        return rsa</span>
+<span class="c1">#    else:</span>
+<span class="c1">#        return coupling</span>
+
+
+<span class="c1"># def _hrv_rsa_servant(ecg_period, sampling_rate=1000, continuous=False):</span>
+<span class="c1">#    &quot;&quot;&quot;Servant, D., Logier, R., Mouster, Y., &amp; Goudemand, M. (2009). La variabilité de la fréquence</span>
+<span class="c1"># cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#    rpeaks, _ = nk.ecg_peaks(nk.ecg_simulate(duration=90))</span>
+<span class="c1">#    ecg_period = nk.ecg_rate(rpeaks) / 60 * 1000</span>
+<span class="c1">#    sampling_rate=1000</span>
+<span class="c1">#</span>
+<span class="c1">#    if len(ecg_period) / sampling_rate &lt;= 60:</span>
+<span class="c1">#        return None</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    signal = nk.signal_filter(ecg_period, sampling_rate=sampling_rate,</span>
+<span class="c1">#                           lowcut=0.1, highcut=1, order=6)</span>
+<span class="c1">#    signal = nk.standardize(signal)</span>
+<span class="c1">#</span>
+<span class="c1">#    nk.signal_plot([ecg_period, signal], standardize=True)</span>
+<span class="c1">#</span>
+<span class="c1">#    troughs = nk.signal_findpeaks(-1 * signal)[&quot;Peaks&quot;]</span>
+<span class="c1">#    trough_signal = nk.signal_interpolate(x_values=troughs,</span>
+<span class="c1">#                                          y_values=signal[troughs],</span>
+<span class="c1">#                                          desired_length=len(signal))</span>
+<span class="c1">#    first_trough = troughs[0]</span>
+<span class="c1">#</span>
+<span class="c1">#    # Initial parameters</span>
+<span class="c1">#    n_windows = int(len(trough_signal[first_trough:]) / sampling_rate / 16)  # How many windows of 16 s</span>
+<span class="c1">#    onsets = (np.arange(n_windows) * 16 * sampling_rate) + first_trough</span>
+<span class="c1">#</span>
+<span class="c1">#    areas_under_curve = np.zeros(len(onsets))</span>
+<span class="c1">#    for i, onset in enumerate(onsets):</span>
+<span class="c1">#        areas_under_curve[i] = sklearn.metrics.auc(np.linspace(0, 16, 16*sampling_rate),</span>
+<span class="c1">#                                                   trough_signal[onset:onset+(16*sampling_rate)])</span>
+<span class="c1">#    max_auc = np.max(areas_under_curve)</span>
+<span class="c1">#</span>
+<span class="c1">#    # Moving computation</span>
+<span class="c1">#    onsets = np.arange(first_trough, len(signal)-16*sampling_rate, step=4*sampling_rate)</span>
+<span class="c1">#    areas_under_curve = np.zeros(len(onsets))</span>
+<span class="c1">#    for i, onset in enumerate(onsets):</span>
+<span class="c1">#        areas_under_curve[i] = sklearn.metrics.auc(np.linspace(0, 16, 16*sampling_rate),</span>
+<span class="c1">#                                                   trough_signal[onset:onset+(16*sampling_rate)])</span>
+<span class="c1">#    rsa = (max_auc - areas_under_curve) / max_auc + 1</span>
+<span class="c1">#</span>
+<span class="c1">#    # Not sure what to do next, sent an email to Servant.</span>
+<span class="c1">#    pass</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Second-by-second RSA</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_hrv_rsa_gates</span><span class="p">(</span>
+    <span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+
+    <span class="c1"># Boundaries of rsa freq</span>
+    <span class="n">min_frequency</span> <span class="o">=</span> <span class="mf">0.12</span>
+    <span class="n">max_frequency</span> <span class="o">=</span> <span class="mf">0.40</span>
+    <span class="c1"># Retrived IBI and interpolate it</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Re-sample at 4 Hz</span>
+    <span class="n">desired_sampling_rate</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">rri</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Sanitize parameters</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">desired_sampling_rate</span><span class="p">)</span>
+    <span class="n">nperseg</span> <span class="o">=</span> <span class="n">window</span> <span class="o">*</span> <span class="n">desired_sampling_rate</span>
+    <span class="k">if</span> <span class="n">window_number</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">window_number</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="c1"># Get multipeak window</span>
+    <span class="n">multipeak</span><span class="p">,</span> <span class="n">weight</span> <span class="o">=</span> <span class="n">_get_multipeak_window</span><span class="p">(</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">window_number</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_timefrequency</span><span class="p">(</span>
+            <span class="n">rri</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span><span class="p">,</span>
+            <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span>
+            <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;stft&quot;</span><span class="p">,</span>
+            <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+            <span class="n">window_type</span><span class="o">=</span><span class="n">multipeak</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span>
+            <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">rsa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">psd</span><span class="p">)</span>
+        <span class="n">rsa</span> <span class="o">=</span> <span class="n">psd</span> <span class="o">*</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">rsa</span>  <span class="c1"># add weights</span>
+    <span class="n">meanRSA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rsa</span><span class="p">)</span> <span class="o">/</span> <span class="n">nperseg</span><span class="p">)</span>
+
+    <span class="c1"># Sanitize output</span>
+    <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">rsa</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSA_Gates_Mean&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">meanRSA</span><span class="p">)}</span>
+        <span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_Gates_Mean_log&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_Gates_Mean&quot;</span><span class="p">])</span>  <span class="c1"># pylint: disable=E1111</span>
+        <span class="n">rsa</span><span class="p">[</span><span class="s2">&quot;RSA_Gates_SD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">meanRSA</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># For window=32, meanRSA is RSA from 16th second to xth second where x=recording</span>
+        <span class="c1"># duration-16secs</span>
+        <span class="c1"># Padding the missing first and list window/2 segments</span>
+        <span class="n">pad_length</span> <span class="o">=</span> <span class="n">window</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">time_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pad_length</span><span class="p">)</span>
+        <span class="n">time_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pad_length</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">time_start</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">time_end</span><span class="p">))</span>
+
+        <span class="n">rsa_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_start</span><span class="p">),</span> <span class="n">meanRSA</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rsa_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_end</span><span class="p">),</span> <span class="n">meanRSA</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">meanRSA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">rsa_start</span><span class="p">,</span> <span class="n">meanRSA</span><span class="p">,</span> <span class="n">rsa_end</span><span class="p">))</span>
+
+        <span class="c1"># Convert to samples</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+        <span class="n">rsa</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">meanRSA</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">rsa</span>
+
+
+<span class="k">def</span> <span class="nf">_get_multipeak_window</span><span class="p">(</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">window_number</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get Peak Matched Multiple Window</span>
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Hansson, M., &amp; Salomonsson, G. (1997). A multiple window method for estimation of peaked spectra.</span>
+<span class="sd">    IEEE Transactions on Signal Processing, 45(3), 778-781.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K1</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Peak in dB</span>
+    <span class="n">K2</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># Penalty value in dB</span>
+
+    <span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">window_number</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">nperseg</span>  <span class="c1"># Resolution in spectrum</span>
+
+    <span class="n">loge</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">K1</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">/</span> <span class="n">B</span> <span class="o">/</span> <span class="n">loge</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="n">r0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">C</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">C</span> <span class="o">*</span> <span class="n">B</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">r_num</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">C</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">C</span> <span class="o">*</span> <span class="n">B</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">C</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">r_den</span> <span class="o">=</span> <span class="n">C</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">r_num</span><span class="p">,</span> <span class="n">r_den</span><span class="p">)</span>
+
+    <span class="n">rpeak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>  <span class="c1"># Covariance function peaked spectrum</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span>
+    <span class="n">rbox</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+    <span class="n">rpen</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">K2</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nperseg</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">-</span> <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">K2</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">rbox</span>
+    <span class="p">)</span>  <span class="c1"># Covariance function penalty function</span>
+
+    <span class="n">Ry</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">rpeak</span><span class="p">)</span>
+    <span class="n">Rx</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">rpen</span><span class="p">)</span>
+    <span class="n">RR</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">Rx</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">RR</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ry</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">RR</span><span class="p">))</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">schur</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">RR</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+    <span class="n">RD</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ry</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+    <span class="n">RD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span>
+    <span class="n">RDN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span>
+
+    <span class="n">FN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">RD</span><span class="p">)):</span>
+        <span class="n">FN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">F</span><span class="p">[:,</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">F</span><span class="p">[:,</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">F</span><span class="p">[:,</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]]))</span>
+
+    <span class="n">RDN</span> <span class="o">=</span> <span class="n">RDN</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">FN</span> <span class="o">=</span> <span class="n">FN</span><span class="p">[:,</span> <span class="nb">len</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">RDN</span><span class="p">[:</span><span class="n">window_number</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">RDN</span><span class="p">[:</span><span class="n">window_number</span><span class="p">])</span>
+    <span class="n">multipeak</span> <span class="o">=</span> <span class="n">FN</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">window_number</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">multipeak</span><span class="p">,</span> <span class="n">weight</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internals</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_hrv_rsa_cycles</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract respiratory cycles.&quot;&quot;&quot;</span>
+    <span class="n">inspiration_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">assume_unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">expiration_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">assume_unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">cycles_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">inspiration_onsets</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;RSP_Inspiration_Onsets&quot;</span><span class="p">:</span> <span class="n">inspiration_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;RSP_Expiration_Onsets&quot;</span><span class="p">:</span> <span class="n">expiration_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;RSP_Cycles_Length&quot;</span><span class="p">:</span> <span class="n">cycles_length</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_hrv_rsa_formatinput</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Sanity Checks</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">ecg_signals</span> <span class="o">=</span> <span class="n">ecg_signals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;ECG_Rate&quot;</span> <span class="ow">in</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">ecg_period</span> <span class="o">=</span> <span class="n">ecg_signals</span><span class="p">[</span><span class="s2">&quot;ECG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;ECG_R_Peaks&quot;</span> <span class="ow">in</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">ecg_period</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                    <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;NeuroKit error: _hrv_rsa_formatinput():&quot;</span>
+                    <span class="s2">&quot;Wrong input, we couldn&#39;t extract&quot;</span>
+                    <span class="s2">&quot;heart rate signal.&quot;</span>
+                <span class="p">)</span>
+    <span class="k">if</span> <span class="n">rsp_signals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rsp_signals</span> <span class="o">=</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">rsp_signals</span> <span class="o">=</span> <span class="n">rsp_signals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">rsp_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">rsp_signals</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;RSP_Phase&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_cols</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">edr</span> <span class="o">=</span> <span class="n">ecg_rsp</span><span class="p">(</span><span class="n">ecg_period</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rsp_process</span><span class="p">(</span><span class="n">edr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;RSP signal not found. For this time, we will derive RSP&quot;</span>
+                <span class="s2">&quot; signal from ECG using ecg_rsp(). But the results are&quot;</span>
+                <span class="s2">&quot; definitely not reliable, so please provide a real RSP signal.&quot;</span><span class="p">,</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">rpeaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">_signal_formatpeaks_sanitize</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">NameError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: _hrv_rsa_formatinput(): &quot;</span>
+                <span class="s2">&quot;Wrong input, we couldn&#39;t extract rpeaks indices.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">_signal_formatpeaks_sanitize</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)</span>
+
+    <span class="n">nonduplicates</span> <span class="o">=</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">[[</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rsp_signals</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ecg_signals</span><span class="p">[</span><span class="n">nonduplicates</span><span class="p">],</span> <span class="n">rsp_signals</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># RSP signal</span>
+    <span class="k">if</span> <span class="s2">&quot;RSP_Clean&quot;</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Clean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="s2">&quot;RSP_Raw&quot;</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="s2">&quot;RSP&quot;</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">ecg_period</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">rsp_signal</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

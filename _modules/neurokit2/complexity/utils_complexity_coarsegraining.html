@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.complexity.utils_complexity_coarsegraining &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/complexity/utils_complexity_coarsegraining.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.complexity.utils_complexity_coarsegraining</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.ndimage.filters</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_interpolate</span>
+
+
+<div class="viewcode-block" id="complexity_coarsegraining"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.complexity_coarsegraining">[docs]</a><span class="k">def</span> <span class="nf">complexity_coarsegraining</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nonoverlapping&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Coarse-graining of a signal**</span>
+
+<span class="sd">    The goal of coarse-graining is to represent the signal at a different &quot;scale&quot;. The</span>
+<span class="sd">    coarse-grained time series for a scale factor Tau (:math:`\\tau`) are obtained by averaging</span>
+<span class="sd">    non-overlapping windows of size Tau. In most of the complexity metrics, multiple coarse-grained</span>
+<span class="sd">    segments are constructed for a given signal, to represent the signal at different scales (hence</span>
+<span class="sd">    the &quot;multiscale&quot; adjective).</span>
+
+<span class="sd">    .. figure:: ../img/wu2013a.png</span>
+<span class="sd">       :alt: Figure from Wu et al. (2013).</span>
+<span class="sd">       :target: https://doi.org/10.1016/j.physleta.2014.03.034</span>
+
+<span class="sd">    This coarse-graining procedure is similar to moving averaging and the decimation of the original</span>
+<span class="sd">    time series. The length of each coarse-grained time series is N/Tau. For scale = 1, the</span>
+<span class="sd">    coarse-grained time series is simply the original time series itself.</span>
+
+<span class="sd">    The coarse graining procedure (used for instance in MSE) is considered a shortcoming that</span>
+<span class="sd">    decreases the entropy rate artificially (Nikulin, 2004). One of the core issue is that the</span>
+<span class="sd">    length of coarse-grained signals becomes smaller as the scale increases.</span>
+
+<span class="sd">    To address this issue of length, several methods have been proposed, such as **adaptive</span>
+<span class="sd">    resampling** (Liu et al. 2012), **moving average** (Wu et al. 2013), or **timeshift**</span>
+<span class="sd">    (Wu et al. 2013).</span>
+
+<span class="sd">    - **Non-overlapping** (default): The coarse-grained time series are constructed by averaging</span>
+<span class="sd">      non-overlapping windows of given size.</span>
+<span class="sd">    - **Interpolate**: Interpolates (i.e., resamples) the coarse-grained time series to match the</span>
+<span class="sd">      original signal length (currently using a monotonic cubic method, but let us know if you have</span>
+<span class="sd">      any opinion on that).</span>
+<span class="sd">    - **Moving average**: The coarse-grained time series via a moving average.</span>
+<span class="sd">    - **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see</span>
+<span class="sd">      **Figure** below). Somewhat similar to moving-average, with the difference that the time lag</span>
+<span class="sd">      creates new vectors.</span>
+
+<span class="sd">    .. figure:: ../img/wu2013b.png</span>
+<span class="sd">       :alt: Figure from Wu et al. (2013).</span>
+<span class="sd">       :target: https://doi.org/10.1016/j.physleta.2014.03.034</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">    scale : int</span>
+<span class="sd">        The size of the windows that the signal is divided into. Also referred to as Tau</span>
+<span class="sd">        :math:`\\tau`, it represents the scale factor and corresponds to</span>
+<span class="sd">        the amount of coarsegraining.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Can be ``&quot;nonoverlapping&quot;``, ``&quot;rolling&quot;``, ``&quot;interpolate&quot;``, or ``timeshift``.</span>
+<span class="sd">    force : bool</span>
+<span class="sd">        If ``True``, will include all the samples (even if the last segment is too short).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If ``True``, will show the coarse-grained signal.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments (not used currently).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        The coarse-grained signal.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    ------------</span>
+<span class="sd">    complexity_delay, complexity_dimension</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+
+<span class="sd">    **Simple examples**</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      signal = [0, 2, 4, 6, 8, 10]</span>
+<span class="sd">      nk.complexity_coarsegraining(signal, scale=2)</span>
+
+<span class="sd">      signal = [0, 1, 2, 0, 1]</span>
+<span class="sd">      nk.complexity_coarsegraining(signal, scale=3)</span>
+<span class="sd">      # Forcing uses all the samples even if the last segment is too short</span>
+<span class="sd">      nk.complexity_coarsegraining(signal, scale=3, force=True)</span>
+
+<span class="sd">      nk.complexity_coarsegraining(signal=range(10), method=&quot;interpolate&quot;)</span>
+<span class="sd">      nk.complexity_coarsegraining(signal=range(10), method=&quot;rolling&quot;)</span>
+
+<span class="sd">    **Simulated signal**</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 20])</span>
+
+<span class="sd">      @savefig p_complexity_coarsegraining1.png scale=100%</span>
+<span class="sd">      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_complexity_coarsegraining2.png scale=100%</span>
+<span class="sd">      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method=&quot;interpolate&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_complexity_coarsegraining3.png scale=100%</span>
+<span class="sd">      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method=&quot;rolling&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=0.5, frequency=[5, 20])</span>
+
+<span class="sd">      @savefig p_complexity_coarsegraining4.png scale=100%</span>
+<span class="sd">      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method=&quot;timeshift&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **Benchmarking**</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=10, frequency=5)</span>
+<span class="sd">      scale = 2</span>
+<span class="sd">      x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]</span>
+<span class="sd">      x_nk = nk.complexity_coarsegraining(signal, scale=scale)</span>
+<span class="sd">      np.allclose(x_pd - x_nk, 0)</span>
+
+<span class="sd">      %timeit x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]</span>
+<span class="sd">      %timeit x_nk = nk.complexity_coarsegraining(signal, scale=scale)</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=30, frequency=5)</span>
+<span class="sd">      scale = 3</span>
+
+<span class="sd">      x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::]</span>
+<span class="sd">      x_nk = nk.complexity_coarsegraining(signal, scale=scale, rolling=True)</span>
+<span class="sd">      np.allclose(x_pd - x_nk[1:-1], 0)</span>
+
+<span class="sd">      %timeit pd.Series(signal).rolling(window=scale).mean().values[scale-1::]</span>
+<span class="sd">      %timeit nk.complexity_coarsegraining(signal, scale=scale, rolling=True)</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    * Su, C., Liang, Z., Li, X., Li, D., Li, Y., &amp; Ursino, M. (2016). A comparison of multiscale</span>
+<span class="sd">      permutation entropy measures in on-line depth of anesthesia monitoring. PLoS One, 11(10),</span>
+<span class="sd">      e0164104.</span>
+<span class="sd">    * Nikulin, V. V., &amp; Brismar, T. (2004). Comment on &quot;Multiscale entropy analysis of complex</span>
+<span class="sd">      physiologic time series”&quot; Physical review letters, 92(8), 089803.</span>
+<span class="sd">    * Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., &amp; Shieh, J. S. (2012).</span>
+<span class="sd">      Adaptive computation of multiscale entropy and its application in EEG signals for monitoring</span>
+<span class="sd">      depth of anesthesia during surgery. Entropy, 14(6), 978-992.</span>
+<span class="sd">    * Wu, S. D., Wu, C. W., Lee, K. Y., &amp; Lin, S. G. (2013). Modified multiscale entropy for</span>
+<span class="sd">      short-term time series analysis. Physica A: Statistical Mechanics and its Applications, 392</span>
+<span class="sd">      (23), 5865-5873.</span>
+<span class="sd">    * Wu, S. D., Wu, C. W., Lin, S. G., Wang, C. C., &amp; Lee, K. Y. (2013). Time series analysis</span>
+<span class="sd">      using composite multiscale entropy. Entropy, 15(3), 1069-1084.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanity checks</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">signal</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nonoverlapping&quot;</span><span class="p">,</span> <span class="s2">&quot;resampling&quot;</span><span class="p">,</span> <span class="s2">&quot;interpolate&quot;</span><span class="p">]:</span>
+        <span class="c1"># The following is a fast alternative to:</span>
+        <span class="c1"># pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]</span>
+
+        <span class="c1"># Get max j</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">//</span> <span class="n">scale</span>
+        <span class="c1"># Coarse-grain</span>
+        <span class="n">coarse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">j</span> <span class="o">*</span> <span class="n">scale</span><span class="p">],</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">scale</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;resampling&quot;</span><span class="p">,</span> <span class="s2">&quot;interpolate&quot;</span><span class="p">]:</span>
+            <span class="n">x_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">))</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">coarse</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+                <span class="n">x_values</span><span class="p">,</span> <span class="n">coarse</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;rolling&quot;</span><span class="p">:</span>
+        <span class="c1"># Relying on scipy is a fast alternative to:</span>
+        <span class="c1"># pd.Series(signal).rolling(window=scale).mean().values[scale-1::]</span>
+        <span class="c1"># https://stackoverflow.com/questions/13728392/moving-average-or-running-mean</span>
+        <span class="n">coarse</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">uniform_filter1d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+        <span class="n">coarse</span> <span class="o">=</span> <span class="n">coarse</span><span class="p">[</span><span class="n">scale</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">:]</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;timeshift&quot;</span><span class="p">:</span>
+        <span class="n">coarse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">signal</span><span class="p">[:</span> <span class="n">scale</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">//</span> <span class="n">scale</span><span class="p">)],</span> <span class="p">(</span><span class="n">n</span> <span class="o">//</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">)))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown `method`: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_complexity_show</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="n">coarse</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">coarse</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Utils</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_complexity_show</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">coarse</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nonoverlapping&quot;</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nonoverlapping&quot;</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">)),</span> <span class="n">coarse</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">)),</span> <span class="n">coarse</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;timeshift&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">)):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">)),</span>
+                <span class="n">coarse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">)),</span> <span class="n">coarse</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Coarse-graining using method &quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Get Scale Factor</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_get_scales</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Select scale factors&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Set to max</span>
+    <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+        <span class="c1"># See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">dimension</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">scale</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

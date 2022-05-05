@@ -1,0 +1,881 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.complexity.entropy_multiscale &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/complexity/entropy_multiscale.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.complexity.entropy_multiscale</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">copyfunction</span>
+<span class="kn">from</span> <span class="nn">.complexity_lempelziv</span> <span class="kn">import</span> <span class="n">complexity_lempelziv</span>
+<span class="kn">from</span> <span class="nn">.entropy_approximate</span> <span class="kn">import</span> <span class="n">entropy_approximate</span>
+<span class="kn">from</span> <span class="nn">.entropy_cosinesimilarity</span> <span class="kn">import</span> <span class="n">entropy_cosinesimilarity</span>
+<span class="kn">from</span> <span class="nn">.entropy_increment</span> <span class="kn">import</span> <span class="n">entropy_increment</span>
+<span class="kn">from</span> <span class="nn">.entropy_permutation</span> <span class="kn">import</span> <span class="n">entropy_permutation</span>
+<span class="kn">from</span> <span class="nn">.entropy_sample</span> <span class="kn">import</span> <span class="n">entropy_sample</span>
+<span class="kn">from</span> <span class="nn">.entropy_slope</span> <span class="kn">import</span> <span class="n">entropy_slope</span>
+<span class="kn">from</span> <span class="nn">.entropy_symbolicdynamic</span> <span class="kn">import</span> <span class="n">entropy_symbolicdynamic</span>
+<span class="kn">from</span> <span class="nn">.optim_complexity_tolerance</span> <span class="kn">import</span> <span class="n">complexity_tolerance</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_phi</span><span class="p">,</span> <span class="n">_phi_divide</span>
+<span class="kn">from</span> <span class="nn">.utils_complexity_coarsegraining</span> <span class="kn">import</span> <span class="n">_get_scales</span><span class="p">,</span> <span class="n">complexity_coarsegraining</span>
+
+
+<div class="viewcode-block" id="entropy_multiscale"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.entropy_multiscale">[docs]</a><span class="k">def</span> <span class="nf">entropy_multiscale</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSEn&quot;</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Multiscale entropy (MSEn) and its Composite (CMSEn), Refined (RCMSEn) or fuzzy versions**</span>
+
+<span class="sd">    One of the limitation of :func:`SampEn &lt;entropy_sample&gt;` is that it characterizes</span>
+<span class="sd">    complexity strictly on the time scale defined by the sampling procedure (via the ``delay``</span>
+<span class="sd">    argument). To address this, Costa et al. (2002) proposed the multiscale entropy (MSEn),</span>
+<span class="sd">    which compute sample entropies at multiple scales.</span>
+
+<span class="sd">    The conventional MSEn algorithm consists of two steps:</span>
+
+<span class="sd">    1. A :func:`coarse-graining &lt;complexity_coarsegraining&gt;` procedure is used to represent the</span>
+<span class="sd">       signal at different time scales.</span>
+<span class="sd">    2. :func:`Sample entropy &lt;entropy_sample&gt;` (or other function) is used to quantify the</span>
+<span class="sd">       regularity of a coarse-grained time series at each time scale factor.</span>
+
+<span class="sd">    However, in the traditional coarse-graining procedure, the larger the scale factor is, the</span>
+<span class="sd">    shorter the coarse-grained time series is. As such, the variance of the entropy of the</span>
+<span class="sd">    coarse-grained series estimated by SampEn increases as the time scale factor increases, making</span>
+<span class="sd">    it problematic for shorter signals.</span>
+
+<span class="sd">    * **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et</span>
+<span class="sd">      al. (2013) introduced the **Composite Multiscale Entropy** algorithm, which computes</span>
+<span class="sd">      multiple coarse-grained series for each scale factor (via the **time-shift** method for</span>
+<span class="sd">      :func:`coarse-graining &lt;complexity_coarsegraining&gt;`).</span>
+<span class="sd">    * **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy</span>
+<span class="sd">      values of each subcoarsed vector, but its components at a lower level.</span>
+<span class="sd">    * **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**</span>
+<span class="sd">      algorithm, which is based on rolling-average :func:`coarse-graining &lt;complexity_coarsegraining&gt;`.</span>
+<span class="sd">    * **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the</span>
+<span class="sd">      coarse-grained series. We implement a generalization of this via interpolation that can be</span>
+<span class="sd">      referred to as **Interpolated Multiscale Entropy**.</span>
+
+<span class="sd">    Their :func:`Fuzzy &lt;entropy_fuzzy&gt;` version can be obtained by setting ``fuzzy=True``.</span>
+
+<span class="sd">    This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``.</span>
+<span class="sd">    Moreover, variants can be directly accessed via ``complexity_cmse()``, `complexity_rcmse()``,</span>
+<span class="sd">    ``complexity_fuzzymse()``, ``complexity_fuzzycmse()`` and ``complexity_fuzzyrcmse()``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">        or dataframe.</span>
+<span class="sd">    scale : str or int or list</span>
+<span class="sd">        A list of scale factors used for coarse graining the time series. If &#39;default&#39;, will use</span>
+<span class="sd">        ``range(len(signal) / (dimension + 10))`` (see discussion</span>
+<span class="sd">        `here &lt;https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426&gt;`_).</span>
+<span class="sd">        If &#39;max&#39;, will use all scales until half the length of the signal. If an integer, will</span>
+<span class="sd">        create a range until the specified int. See :func:`complexity_coarsegraining` for details.</span>
+<span class="sd">    dimension : int</span>
+<span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
+<span class="sd">        :func:`complexity_dimension()` to estimate the optimal value for this parameter.</span>
+<span class="sd">    tolerance : float</span>
+<span class="sd">        Tolerance (often denoted as *r*), distance to consider two data points as similar. If</span>
+<span class="sd">        ``&quot;sd&quot;`` (default), will be set to :math:`0.2 * SD_{signal}`. See</span>
+<span class="sd">        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        What version of multiscale entropy to compute. Can be one of ``&quot;MSEn&quot;``, ``&quot;CMSEn&quot;``,</span>
+<span class="sd">        ``&quot;RCMSEn&quot;``, ``&quot;MMSEn&quot;``, ``&quot;IMSEn&quot;``, ``&quot;MSApEn&quot;``, ``&quot;MSPEn&quot;``, ``&quot;CMSPEn&quot;``,</span>
+<span class="sd">        ``&quot;MMSPEn&quot;``, ``&quot;IMSPEn&quot;``, ``&quot;MSWPEn&quot;``, ``&quot;CMSWPEn&quot;``, ``&quot;MMSWPEn&quot;``, ``&quot;IMSWPEn&quot;``</span>
+<span class="sd">        (case sensitive).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Show the entropy values for each scale factor.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Optional arguments.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    float</span>
+<span class="sd">        The point-estimate of multiscale entropy (MSEn) of the single time series corresponding to</span>
+<span class="sd">        the area under the MSEn values curve, which is essentially the sum of sample entropy values</span>
+<span class="sd">        over the range of scale factors.</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dictionary containing additional information regarding the parameters used</span>
+<span class="sd">        to compute multiscale entropy. The entropy values corresponding to each ``&quot;Scale&quot;``</span>
+<span class="sd">        factor are stored under the ``&quot;Value&quot;`` key.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    complexity_coarsegraining, entropy_sample, entropy_fuzzy, entropy_permutation</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ----------</span>
+<span class="sd">    **MSEn** (basic coarse-graining)</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 12, 40])</span>
+
+<span class="sd">      @savefig p_entropy_multiscale1.png scale=100%</span>
+<span class="sd">      msen, info = nk.entropy_multiscale(signal, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **CMSEn** (time-shifted coarse-graining)</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale2.png scale=100%</span>
+<span class="sd">      cmsen, info = nk.entropy_multiscale(signal, method=&quot;CMSEn&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **RCMSEn** (refined composite MSEn)</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale3.png scale=100%</span>
+<span class="sd">      rcmsen, info = nk.entropy_multiscale(signal, method=&quot;RCMSEn&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **MMSEn** (rolling-window coarse-graining)</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale4.png scale=100%</span>
+<span class="sd">      mmsen, info = nk.entropy_multiscale(signal, method=&quot;MMSEn&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **IMSEn** (interpolated coarse-graining)</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale5.png scale=100%</span>
+<span class="sd">      imsen, info = nk.entropy_multiscale(signal, method=&quot;IMSEn&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **MSApEn** (based on ApEn instead of SampEn)</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale6.png scale=100%</span>
+<span class="sd">      msapen, info = nk.entropy_multiscale(signal, method=&quot;MSApEn&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **MSPEn** (based on PEn), **CMSPEn**, **MMSPEn** and **IMSPEn**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale7.png scale=100%</span>
+<span class="sd">      mspen, info = nk.entropy_multiscale(signal, method=&quot;MSPEn&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      cmspen, info = nk.entropy_multiscale(signal, method=&quot;CMSPEn&quot;)</span>
+<span class="sd">      cmspen</span>
+<span class="sd">      mmspen, info = nk.entropy_multiscale(signal, method=&quot;MMSPEn&quot;)</span>
+<span class="sd">      mmspen</span>
+<span class="sd">      imspen, info = nk.entropy_multiscale(signal, method=&quot;IMSPEn&quot;)</span>
+<span class="sd">      imspen</span>
+
+<span class="sd">    **MSWPEn** (based on WPEn), **CMSWPEn**, **MMSWPEn** and **IMSWPEn**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      mswpen, info = nk.entropy_multiscale(signal, method=&quot;MSWPEn&quot;)</span>
+<span class="sd">      cmswpen, info = nk.entropy_multiscale(signal, method=&quot;CMSWPEn&quot;)</span>
+<span class="sd">      mmswpen, info = nk.entropy_multiscale(signal, method=&quot;MMSWPEn&quot;)</span>
+<span class="sd">      imswpen, info = nk.entropy_multiscale(signal, method=&quot;IMSWPEn&quot;)</span>
+
+<span class="sd">    **FuzzyMSEn**, **FuzzyCMSEn** and **FuzzyRCMSEn**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_entropy_multiscale8.png scale=100%</span>
+<span class="sd">      fuzzymsen, info = nk.entropy_multiscale(signal, method=&quot;MSEn&quot;, fuzzy=True, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      fuzzycmsen, info = nk.entropy_multiscale(signal, method=&quot;CMSEn&quot;, fuzzy=True)</span>
+<span class="sd">      fuzzycmsen</span>
+
+<span class="sd">      fuzzyrcmsen, info = nk.entropy_multiscale(signal, method=&quot;RCMSEn&quot;, fuzzy=True)</span>
+<span class="sd">      fuzzycmsen</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    * Costa, M., Goldberger, A. L., &amp; Peng, C. K. (2002). Multiscale entropy analysis of complex</span>
+<span class="sd">      physiologic time series. Physical review letters, 89(6), 068102.</span>
+<span class="sd">    * Costa, M., Goldberger, A. L., &amp; Peng, C. K. (2005). Multiscale entropy analysis of biological</span>
+<span class="sd">      signals. Physical review E, 71(2), 021906.</span>
+<span class="sd">    * Wu, S. D., Wu, C. W., Lee, K. Y., &amp; Lin, S. G. (2013). Modified multiscale entropy for</span>
+<span class="sd">      short-term time series analysis. Physica A: Statistical Mechanics and its Applications, 392</span>
+<span class="sd">      (23), 5865-5873.</span>
+<span class="sd">    * Wu, S. D., Wu, C. W., Lin, S. G., Wang, C. C., &amp; Lee, K. Y. (2013). Time series analysis</span>
+<span class="sd">      using composite multiscale entropy. Entropy, 15(3), 1069-1084.</span>
+<span class="sd">    * Wu, S. D., Wu, C. W., Lin, S. G., Lee, K. Y., &amp; Peng, C. K. (2014). Analysis of complex time</span>
+<span class="sd">      series using refined composite multiscale entropy. Physics Letters A, 378(20), 1369-1374.</span>
+<span class="sd">    * Gow, B. J., Peng, C. K., Wayne, P. M., &amp; Ahn, A. C. (2015). Multiscale entropy analysis of</span>
+<span class="sd">      center-of-pressure dynamics in human postural control: methodological considerations. Entropy,</span>
+<span class="sd">      17(12), 7926-7947.</span>
+<span class="sd">    * Norris, P. R., Anderson, S. M., Jenkins, J. M., Williams, A. E., &amp; Morris Jr, J. A. (2008).</span>
+<span class="sd">      Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma</span>
+<span class="sd">      patients. Shock, 30(1), 17-22.</span>
+<span class="sd">    * Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., &amp; Shieh, J. S. (2012).</span>
+<span class="sd">      Adaptive computation of multiscale entropy and its application in EEG signals for monitoring</span>
+<span class="sd">      depth of anesthesia during surgery. Entropy, 14(6), 978-992.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanity checks</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">))</span> <span class="ow">and</span> <span class="n">signal</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.&quot;</span>
+        <span class="p">)</span>
+    <span class="c1"># Prevent multiple arguments error in case &#39;delay&#39; is passed in kwargs</span>
+    <span class="k">if</span> <span class="s2">&quot;delay&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;delay&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Parameters selection</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_sample</span>
+    <span class="n">refined</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">coarsegraining</span> <span class="o">=</span> <span class="s2">&quot;nonoverlapping&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSEn&quot;</span><span class="p">,</span> <span class="s2">&quot;SampEn&quot;</span><span class="p">]:</span>
+        <span class="k">pass</span>  <span class="c1"># The default arguments are good</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSApEn&quot;</span><span class="p">,</span> <span class="s2">&quot;ApEn&quot;</span><span class="p">,</span> <span class="s2">&quot;MSPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;PEn&quot;</span><span class="p">,</span> <span class="s2">&quot;MSWPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;WPEn&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSApEn&quot;</span><span class="p">,</span> <span class="s2">&quot;ApEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_approximate</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;PEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_permutation</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSWPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;WPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">copyfunction</span><span class="p">(</span><span class="n">entropy_permutation</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MMSEn&quot;</span><span class="p">,</span> <span class="s2">&quot;MMSPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;MMSWPEn&quot;</span><span class="p">]:</span>
+        <span class="n">coarsegraining</span> <span class="o">=</span> <span class="s2">&quot;rolling&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MMSPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_permutation</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MMSWPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">copyfunction</span><span class="p">(</span><span class="n">entropy_permutation</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;IMSEn&quot;</span><span class="p">,</span> <span class="s2">&quot;IMSPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;IMSWPEn&quot;</span><span class="p">]:</span>
+        <span class="n">coarsegraining</span> <span class="o">=</span> <span class="s2">&quot;interpolate&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;IMSPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_permutation</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;IMSWPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">copyfunction</span><span class="p">(</span><span class="n">entropy_permutation</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CMSEn&quot;</span><span class="p">,</span> <span class="s2">&quot;RCMSEn&quot;</span><span class="p">,</span> <span class="s2">&quot;CMSPEn&quot;</span><span class="p">,</span> <span class="s2">&quot;CMSWPEn&quot;</span><span class="p">]:</span>
+        <span class="n">coarsegraining</span> <span class="o">=</span> <span class="s2">&quot;timeshift&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CMSPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_permutation</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CMSWPEn&quot;</span><span class="p">]:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">copyfunction</span><span class="p">(</span><span class="n">entropy_permutation</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">]:</span>
+            <span class="n">refined</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSCoSiEn&quot;</span><span class="p">,</span> <span class="s2">&quot;CoSiEn&quot;</span><span class="p">]:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_cosinesimilarity</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSIncrEn&quot;</span><span class="p">,</span> <span class="s2">&quot;IncrEn&quot;</span><span class="p">]:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_increment</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSSlopEn&quot;</span><span class="p">,</span> <span class="s2">&quot;SlopEn&quot;</span><span class="p">]:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_slope</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSLZC&quot;</span><span class="p">,</span> <span class="s2">&quot;LZC&quot;</span><span class="p">]:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">complexity_lempelziv</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSPLZC&quot;</span><span class="p">,</span> <span class="s2">&quot;PLZC&quot;</span><span class="p">]:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">copyfunction</span><span class="p">(</span><span class="n">complexity_lempelziv</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MSSyDyEn&quot;</span><span class="p">,</span> <span class="s2">&quot;SyDyEn&quot;</span><span class="p">,</span> <span class="s2">&quot;MMSyDyEn&quot;</span><span class="p">]:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">entropy_symbolicdynamic</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MMSyDyEn&quot;</span><span class="p">]:</span>
+            <span class="n">coarsegraining</span> <span class="o">=</span> <span class="s2">&quot;rolling&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Method &#39;</span><span class="si">{method}</span><span class="s2">&#39; is not supported. Please use &quot;</span>
+            <span class="s2">&quot;&#39;MSEn&#39;, &#39;CMSEn&#39;, &#39;RCMSEn&#39;, &#39;MMSEn&#39;, &#39;IMSPEn&#39;,&quot;</span>
+            <span class="s2">&quot;&#39;MSPEn&#39;, &#39;CMSPEn&#39;, &#39;MMSPEn&#39;, &#39;IMSPEn&#39;,&quot;</span>
+            <span class="s2">&quot;&#39;MSWPEn&#39;, &#39;CMSWPEn&#39;, &#39;MMSWPEn&#39;, &#39;IMSWPEn&#39;,&quot;</span>
+            <span class="s2">&quot;&#39;MSCoSiEn&#39;, &#39;MSIncrEn&#39;, &#39;MSSlopEn&#39;, &#39;MSSyDyEn&#39;&quot;</span>
+            <span class="s2">&quot;&#39;MSLZC&#39;, &#39;MSPLZC&#39;&quot;</span>
+            <span class="s2">&quot; or &#39;MSApEn&#39; (case sensitive).&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Store parameters</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+        <span class="s2">&quot;Algorithm&quot;</span><span class="p">:</span> <span class="n">algorithm</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="s2">&quot;Coarsegraining&quot;</span><span class="p">:</span> <span class="n">coarsegraining</span><span class="p">,</span>
+        <span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">dimension</span><span class="p">,</span>
+        <span class="s2">&quot;Scale&quot;</span><span class="p">:</span> <span class="n">_get_scales</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">),</span>
+        <span class="s2">&quot;Tolerance&quot;</span><span class="p">:</span> <span class="n">complexity_tolerance</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Compute entropy for each coarsegrained segment</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">_entropy_multiscale</span><span class="p">(</span>
+                <span class="n">coarse</span><span class="o">=</span><span class="n">complexity_coarsegraining</span><span class="p">(</span>
+                    <span class="n">signal</span><span class="p">,</span>
+                    <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
+                    <span class="n">method</span><span class="o">=</span><span class="n">coarsegraining</span><span class="p">,</span>
+                    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
+                <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+                <span class="n">tolerance</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Tolerance&quot;</span><span class="p">],</span>
+                <span class="n">refined</span><span class="o">=</span><span class="n">refined</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Scale&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Remove inf, nan and 0</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">])]</span>
+
+    <span class="c1"># The MSE index is quantified as the area under the curve (AUC),</span>
+    <span class="c1"># which is like the sum normalized by the number of values. It&#39;s similar to the mean.</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+
+    <span class="c1"># Plot overlay</span>
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_entropy_multiscale_plot</span><span class="p">(</span><span class="n">mse</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mse</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internal</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_entropy_multiscale_plot</span><span class="p">(</span><span class="n">mse</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Entropy values across scale factors&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(Total </span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">mse</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Entropy values&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Scale&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Scale&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">])],</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">])],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF9800&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Methods</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_entropy_multiscale</span><span class="p">(</span><span class="n">coarse</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">refined</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper function that works both on 1D and 2D coarse-grained (for composite)&quot;&quot;&quot;</span>
+    <span class="c1"># For 1D coarse-graining</span>
+    <span class="k">if</span> <span class="n">coarse</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">algorithm</span><span class="p">(</span>
+            <span class="n">coarse</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># 2D coarse-graining (time-shifted, used in composite)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># CMSE</span>
+        <span class="k">if</span> <span class="n">refined</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_validmean</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">algorithm</span><span class="p">(</span>
+                        <span class="n">coarse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+                        <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">))</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="c1"># RCMSE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">_phi</span><span class="p">(</span>
+                        <span class="n">coarse</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+                        <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+                        <span class="n">approximate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coarse</span><span class="p">))</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="c1"># Average all phi of the same dimension, then divide, then log</span>
+            <span class="k">return</span> <span class="n">_phi_divide</span><span class="p">([</span><span class="n">_validmean</span><span class="p">(</span><span class="n">phis</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">_validmean</span><span class="p">(</span><span class="n">phis</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])])</span>
+
+
+<span class="k">def</span> <span class="nf">_validmean</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mean that is robust to NaN and Inf&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

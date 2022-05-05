@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.signal.signal_findpeaks &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/signal/signal_findpeaks.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.signal.signal_findpeaks</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.misc</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
+
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span><span class="p">,</span> <span class="n">find_closest</span>
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">standardize</span>
+
+
+<div class="viewcode-block" id="signal_findpeaks"><a class="viewcode-back" href="../../../functions/functions_signal.html#neurokit2.signal_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">signal_findpeaks</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">height_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">height_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_height_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_height_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">relative_median</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">relative_max</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Find peaks in a signal**</span>
+
+<span class="sd">    Locate peaks (local maxima) in a signal and their related characteristics, such as height</span>
+<span class="sd">    (prominence), width and distance with other peaks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">    height_min : float</span>
+<span class="sd">        The minimum height (i.e., amplitude in terms of absolute values). For example,</span>
+<span class="sd">        ``height_min=20`` will remove all peaks which height is smaller or equal to 20 (in the</span>
+<span class="sd">        provided signal&#39;s values).</span>
+<span class="sd">    height_max : float</span>
+<span class="sd">        The maximum height (i.e., amplitude in terms of absolute values).</span>
+<span class="sd">    relative_height_min : float</span>
+<span class="sd">        The minimum height (i.e., amplitude) relative to the sample (see below). For example,</span>
+<span class="sd">        ``relative_height_min=-2.96`` will remove all peaks which height lies below 2.96 standard</span>
+<span class="sd">        deviations from the mean of the heights.</span>
+<span class="sd">    relative_height_max : float</span>
+<span class="sd">        The maximum height (i.e., amplitude) relative to the sample (see below).</span>
+<span class="sd">    relative_mean : bool</span>
+<span class="sd">        If a relative threshold is specified, how should it be computed (i.e., relative to what?).</span>
+<span class="sd">        ``relative_mean=True`` will use Z-scores.</span>
+<span class="sd">    relative_median : bool</span>
+<span class="sd">        If a relative threshold is specified, how should it be computed (i.e., relative to what?).</span>
+<span class="sd">        Relative to median uses a more robust form of standardization (see ``standardize()``).</span>
+<span class="sd">    relative_max : bool</span>
+<span class="sd">        If a relative threshold is specified, how should it be computed (i.e., relative to what?).</span>
+<span class="sd">        Relative to max will consider the maximum height as the reference.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Returns a dict itself containing 5 arrays:</span>
+
+<span class="sd">         * &#39;Peaks&#39; contains the peaks indices (as relative to the given signal). For instance, the</span>
+<span class="sd">            value 3 means that the third data point of the signal is a peak.</span>
+<span class="sd">         * &#39;Distance&#39; contains, for each peak, the closest distance with another peak. Note that</span>
+<span class="sd">            these values will be recomputed after filtering to match the selected peaks.</span>
+<span class="sd">         * &#39;Height&#39; contains the prominence of each peak.</span>
+<span class="sd">            See :func:`.scipy.signal.peak_prominences()`.</span>
+<span class="sd">         * &#39;Width&#39; contains the width of each peak. See :func:`.scipy.signal.peak_widths()`.</span>
+<span class="sd">         * &#39;Onset&#39; contains the onset, start (or left trough), of each peak.</span>
+<span class="sd">         * &#39;Offset&#39; contains the offset, end (or right trough), of each peak.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      # Simulate a Signal</span>
+<span class="sd">      signal = nk.signal_simulate(duration=5)</span>
+<span class="sd">      info = nk.signal_findpeaks(signal)</span>
+
+<span class="sd">      # Visualize Onsets of Peaks and Peaks of Signal</span>
+<span class="sd">      @savefig p_signal_findpeaks_1.png scale=100%</span>
+<span class="sd">      fig1 = nk.events_plot([info[&quot;Onsets&quot;], info[&quot;Peaks&quot;]], signal)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import scipy.misc</span>
+
+<span class="sd">      # Load actual ECG Signal</span>
+<span class="sd">      ecg = scipy.misc.electrocardiogram()</span>
+<span class="sd">      signal = ecg[0:1000]</span>
+
+<span class="sd">      # Find Unfiltered and Filtered Peaks</span>
+<span class="sd">      info1 = nk.signal_findpeaks(signal, relative_height_min=0)</span>
+<span class="sd">      info2 = nk.signal_findpeaks(signal, relative_height_min=1)</span>
+
+<span class="sd">      # Visualize Peaks</span>
+<span class="sd">      @savefig p_signal_findpeaks_2.png scale=100%</span>
+<span class="sd">      fig2 = nk.events_plot([info1[&quot;Peaks&quot;], info2[&quot;Peaks&quot;]], signal)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    signal_fixpeaks</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">_signal_findpeaks_scipy</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="c1"># Absolute</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">_signal_findpeaks_keep</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span>
+        <span class="n">what</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span>
+        <span class="n">below</span><span class="o">=</span><span class="n">height_max</span><span class="p">,</span>
+        <span class="n">above</span><span class="o">=</span><span class="n">height_min</span><span class="p">,</span>
+        <span class="n">relative_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">relative_median</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">relative_max</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Relative</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">_signal_findpeaks_keep</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span>
+        <span class="n">what</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span>
+        <span class="n">below</span><span class="o">=</span><span class="n">relative_height_max</span><span class="p">,</span>
+        <span class="n">above</span><span class="o">=</span><span class="n">relative_height_min</span><span class="p">,</span>
+        <span class="n">relative_mean</span><span class="o">=</span><span class="n">relative_mean</span><span class="p">,</span>
+        <span class="n">relative_median</span><span class="o">=</span><span class="n">relative_median</span><span class="p">,</span>
+        <span class="n">relative_max</span><span class="o">=</span><span class="n">relative_max</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Filter</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_signal_findpeaks_distances</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_signal_findpeaks_findbase</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">],</span> <span class="n">signal</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s2">&quot;onset&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Offsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_signal_findpeaks_findbase</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">],</span> <span class="n">signal</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s2">&quot;offset&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Filtering peaks</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_findpeaks_keep</span><span class="p">(</span>
+    <span class="n">info</span><span class="p">,</span>
+    <span class="n">what</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span>
+    <span class="n">below</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">above</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">relative_median</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">relative_max</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">below</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">above</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">info</span>
+
+    <span class="n">keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]),</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">relative_max</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">what</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="n">what</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="n">what</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">relative_median</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">what</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="n">what</span><span class="p">],</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">relative_mean</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">what</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="n">what</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">what</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="n">what</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">below</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">keep</span><span class="p">[</span><span class="n">what</span> <span class="o">&gt;</span> <span class="n">below</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">above</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">keep</span><span class="p">[</span><span class="n">what</span> <span class="o">&lt;</span> <span class="n">above</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="n">_signal_findpeaks_filter</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">keep</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_findpeaks_filter</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">keep</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">keep</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Helpers</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_findpeaks_distances</span><span class="p">(</span><span class="n">peaks</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">distances_next</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">peaks</span><span class="p">))])</span>
+        <span class="n">distances_prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">peaks</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]])</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">distances_next</span><span class="p">,</span> <span class="n">distances_prev</span><span class="p">))])</span>
+
+    <span class="k">return</span> <span class="n">distances</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_findpeaks_findbase</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s2">&quot;onset&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">&quot;onset&quot;</span><span class="p">:</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;smaller&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;greater&quot;</span>
+
+    <span class="n">troughs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">signal</span><span class="p">)</span>
+
+    <span class="n">bases</span> <span class="o">=</span> <span class="n">find_closest</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">strictly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">bases</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">bases</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bases</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_findpeaks_scipy</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="c1"># Get info</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">_signal_findpeaks_distances</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">heights</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">peak_prominences</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">peaks</span><span class="p">)</span>
+    <span class="n">widths</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">___</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">peak_widths</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">rel_height</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># Prepare output</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">,</span> <span class="s2">&quot;Distance&quot;</span><span class="p">:</span> <span class="n">distances</span><span class="p">,</span> <span class="s2">&quot;Height&quot;</span><span class="p">:</span> <span class="n">heights</span><span class="p">,</span> <span class="s2">&quot;Width&quot;</span><span class="p">:</span> <span class="n">widths</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">info</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

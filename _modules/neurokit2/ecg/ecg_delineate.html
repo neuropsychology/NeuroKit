@@ -1,0 +1,1635 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.ecg.ecg_delineate &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/ecg/ecg_delineate.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.ecg.ecg_delineate</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
+
+<span class="kn">from</span> <span class="nn">..epochs</span> <span class="kn">import</span> <span class="n">epochs_create</span><span class="p">,</span> <span class="n">epochs_to_df</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_findpeaks</span><span class="p">,</span>
+    <span class="n">signal_formatpeaks</span><span class="p">,</span>
+    <span class="n">signal_rate</span><span class="p">,</span>
+    <span class="n">signal_resample</span><span class="p">,</span>
+    <span class="n">signal_smooth</span><span class="p">,</span>
+    <span class="n">signal_zerocrossings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">standardize</span>
+<span class="kn">from</span> <span class="nn">.ecg_peaks</span> <span class="kn">import</span> <span class="n">ecg_peaks</span>
+<span class="kn">from</span> <span class="nn">.ecg_segment</span> <span class="kn">import</span> <span class="n">ecg_segment</span>
+
+
+<div class="viewcode-block" id="ecg_delineate"><a class="viewcode-back" href="../../../functions/functions_ecg.html#neurokit2.ecg.ecg_delineate">[docs]</a><span class="k">def</span> <span class="nf">ecg_delineate</span><span class="p">(</span>
+    <span class="n">ecg_cleaned</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_type</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">,</span>
+    <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Delineate QRS complex**</span>
+
+<span class="sd">    Function to delineate the QRS complex, i.e., the different waves of the cardiac cycles. A</span>
+<span class="sd">    typical ECG heartbeat consists of a P wave, a QRS complex and a T wave. The P wave represents</span>
+<span class="sd">    the wave of depolarization that spreads from the SA-node throughout the atria. The QRS complex</span>
+<span class="sd">    reflects the rapid depolarization of the right and left ventricles. Since the ventricles are</span>
+<span class="sd">    the largest part of the heart, in terms of mass, the QRS complex usually has a much larger</span>
+<span class="sd">    amplitude than the P-wave. The T wave represents the ventricular repolarization of the</span>
+<span class="sd">    ventricles.On rare occasions, a U wave can be seen following the T wave. The U wave is believed</span>
+<span class="sd">    to be related to the last remnants of ventricular repolarization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ecg_cleaned : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The cleaned ECG channel as returned by `ecg_clean()`.</span>
+<span class="sd">    rpeaks : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The samples at which R-peaks occur. Accessible with the key &quot;ECG_R_Peaks&quot; in the info</span>
+<span class="sd">        dictionary returned by `ecg_findpeaks()`.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Can be one of ``&#39;peak&#39;`` for a peak-based method, ``&#39;cwt&#39;`` for continuous wavelet transform</span>
+<span class="sd">        or ``&#39;dwt&#39;`` (default) for discrete wavelet transform.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If True, will return a plot to visualizing the delineated waves information.</span>
+<span class="sd">    show_type: str</span>
+<span class="sd">        The type of delineated waves information showed in the plot.</span>
+<span class="sd">        Can be ``&quot;peaks&quot;``, ``&quot;bounds_R&quot;``, ``&quot;bounds_T&quot;``, ``&quot;bounds_P&quot;`` or ``&quot;all&quot;``.</span>
+<span class="sd">    check : bool</span>
+<span class="sd">        Defaults to False. If True, replaces the delineated features with ``np.nan`` if its</span>
+<span class="sd">        standardized distance from R-peaks is more than 3.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other optional arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    waves : dict</span>
+<span class="sd">        A dictionary containing additional information.</span>
+<span class="sd">        For derivative method, the dictionary contains the samples at which P-peaks, Q-peaks,</span>
+<span class="sd">        S-peaks, T-peaks, P-onsets and T-offsets occur, accessible with the keys ``&quot;ECG_P_Peaks&quot;``,</span>
+<span class="sd">        ``&quot;ECG_Q_Peaks&quot;``, ``&quot;ECG_S_Peaks&quot;``, ``&quot;ECG_T_Peaks&quot;``, ``&quot;ECG_P_Onsets&quot;``,</span>
+<span class="sd">        ``&quot;ECG_T_Offsets&quot;``, respectively.</span>
+
+<span class="sd">        For wavelet methods, in addition to the above information, the dictionary contains the</span>
+<span class="sd">        samples at which QRS-onsets and QRS-offsets occur, accessible with the key</span>
+<span class="sd">        ``&quot;ECG_P_Peaks&quot;``, ``&quot;ECG_T_Peaks&quot;``, ``&quot;ECG_P_Onsets&quot;``, ``&quot;ECG_P_Offsets&quot;``,</span>
+<span class="sd">        ``&quot;ECG_Q_Peaks&quot;``, ``&quot;ECG_S_Peaks&quot;``, ``&quot;ECG_T_Onsets&quot;``, ``&quot;ECG_T_Offsets&quot;``,</span>
+<span class="sd">        ``&quot;ECG_R_Onsets&quot;``, ``&quot;ECG_R_Offsets&quot;``, respectively.</span>
+
+<span class="sd">    signals : DataFrame</span>
+<span class="sd">        A DataFrame of same length as the input signal in which occurrences of</span>
+<span class="sd">        peaks, onsets and offsets marked as &quot;1&quot; in a list of zeros.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ecg_clean, signal_fixpeaks, ecg_peaks, signal_rate, ecg_process, ecg_plot</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    * Step 1. Delineate</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      # Simulate ECG signal</span>
+<span class="sd">      ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)</span>
+<span class="sd">      # Get R-peaks location</span>
+<span class="sd">      _, rpeaks = nk.ecg_peaks(ecg, sampling_rate=1000)</span>
+<span class="sd">      # Delineate cardiac cycle</span>
+<span class="sd">      signals, waves = nk.ecg_delineate(ecg, rpeaks, sampling_rate=1000)</span>
+
+<span class="sd">    * Step 2. Plot P-Peaks and T-Peaks</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_ecg_delineate1.png scale=100%</span>
+<span class="sd">      nk.events_plot([waves[&quot;ECG_P_Peaks&quot;], waves[&quot;ECG_T_Peaks&quot;]], ecg)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    --------------</span>
+<span class="sd">    - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., &amp; Laguna, P. (2004). A wavelet-based</span>
+<span class="sd">      ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering,</span>
+<span class="sd">      51(4), 570-581.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanitize input for ecg_cleaned</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ecg_cleaned</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;ECG_Clean&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cols</span><span class="p">:</span>
+            <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: ecg_delineate(): Wrong input, we couldn&#39;t extract&quot;</span>
+                <span class="s2">&quot;cleaned signal.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ecg_cleaned</span><span class="p">:</span>
+            <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ecg_cleaned</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;ECG_Clean&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">cols</span><span class="p">:</span>
+                <span class="n">signals</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span>
+                <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;NeuroKit error: ecg_delineate(): Wrong input, we couldn&#39;t extract&quot;</span>
+                    <span class="s2">&quot;cleaned signal.&quot;</span>
+                <span class="p">)</span>
+
+    <span class="c1"># Sanitize input for rpeaks</span>
+    <span class="k">if</span> <span class="n">rpeaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span> <span class="s2">&quot;peaks&quot;</span><span class="p">,</span> <span class="s2">&quot;derivative&quot;</span><span class="p">,</span> <span class="s2">&quot;gradient&quot;</span><span class="p">]:</span>
+        <span class="n">waves</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> <span class="s2">&quot;continuous wavelet transform&quot;</span><span class="p">]:</span>
+        <span class="n">waves</span> <span class="o">=</span> <span class="n">_ecg_delineator_cwt</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> <span class="s2">&quot;discrete wavelet transform&quot;</span><span class="p">]:</span>
+        <span class="n">waves</span> <span class="o">=</span> <span class="n">_dwt_ecg_delineator</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineate(): &#39;method&#39; should be one of &#39;peak&#39;,&quot;</span> <span class="s2">&quot;&#39;cwt&#39; or &#39;dwt&#39;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Remove NaN in Peaks, Onsets, and Offsets</span>
+    <span class="n">waves_noNA</span> <span class="o">=</span> <span class="n">waves</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">waves_noNA</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">waves_noNA</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">waves_noNA</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">instant_peaks</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span><span class="n">waves_noNA</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">))</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">instant_peaks</span>
+
+    <span class="n">waves_sanitized</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">waves</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">waves_sanitized</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">values</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">x</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_ecg_delineate_plot</span><span class="p">(</span>
+            <span class="n">ecg_cleaned</span><span class="p">,</span>
+            <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span>
+            <span class="n">signals</span><span class="o">=</span><span class="n">signals</span><span class="p">,</span>
+            <span class="n">signal_features_type</span><span class="o">=</span><span class="n">show_type</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">check</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">waves_sanitized</span> <span class="o">=</span> <span class="n">_ecg_delineate_check</span><span class="p">(</span><span class="n">waves_sanitized</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">waves_sanitized</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># WAVELET METHOD (DWT)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_dwt_resample_points</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resample given points to a different sampling rate.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>  <span class="c1"># peaks are passed in from previous processing steps</span>
+        <span class="c1"># Prevent overflow by converting to np.int64 (peaks might be passed in containing np.int32).</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># peaks returned from internal functions</span>
+        <span class="c1"># Cannot be converted to int since list might contain np.nan. Automatically cast to np.float64 if list contains np.nan.</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">peaks_resample</span> <span class="o">=</span> <span class="n">peaks</span> <span class="o">*</span> <span class="n">desired_sampling_rate</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+    <span class="n">peaks_resample</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">peaks_resample</span><span class="o">.</span><span class="n">tolist</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="n">peaks_resample</span>
+
+
+<span class="k">def</span> <span class="nf">_dwt_ecg_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delinate ecg signal using discrete wavelet transforms.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ecg : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The cleaned ECG channel as returned by `ecg_clean()`.</span>
+<span class="sd">    rpeaks : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The samples at which R-peaks occur. Accessible with the key &quot;ECG_R_Peaks&quot; in the info dictionary</span>
+<span class="sd">        returned by `ecg_findpeaks()`.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">    analysis_sampling_rate : int</span>
+<span class="sd">        The sampling frequency for analysis (in Hz, i.e., samples/second).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Dictionary of the points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># No dwt defined method for Q and S peak</span>
+    <span class="c1"># Adopting manual method from &quot;peak&quot; method</span>
+    <span class="n">qpeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">speaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rpeak</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">):</span>
+        <span class="n">heartbeat</span> <span class="o">=</span> <span class="n">heartbeats</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="c1"># Get index of R peaks</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]))</span>
+        <span class="c1"># Q wave</span>
+        <span class="n">Q_index</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_Q</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+        <span class="n">qpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q_index</span><span class="p">)</span>
+        <span class="c1"># S wave</span>
+        <span class="n">S_index</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_S</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">)</span>
+        <span class="n">speaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_index</span><span class="p">)</span>
+
+    <span class="c1"># dwt to delineate tp waves, onsets, offsets and qrs ontsets and offsets</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+    <span class="p">)</span>
+    <span class="n">dwtmatr</span> <span class="o">=</span> <span class="n">_dwt_compute_multiscales</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+
+    <span class="c1"># # only for debugging</span>
+    <span class="c1"># for idx in [0, 1, 2, 3]:</span>
+    <span class="c1">#     plt.plot(dwtmatr[idx + 3], label=f&#39;W[{idx}]&#39;)</span>
+    <span class="c1"># plt.plot(ecg, &#39;--&#39;)</span>
+    <span class="c1"># plt.legend()</span>
+    <span class="c1"># plt.grid(True)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">rpeaks_resampled</span> <span class="o">=</span> <span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">)</span>
+
+    <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_peaks</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+    <span class="p">)</span>
+    <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">qrs_offsets</span> <span class="o">=</span> <span class="n">_dwt_delineate_qrs_bounds</span><span class="p">(</span>
+        <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+    <span class="p">)</span>
+    <span class="n">ponsets</span><span class="p">,</span> <span class="n">poffsets</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_onsets_offsets</span><span class="p">(</span>
+        <span class="n">ppeaks</span><span class="p">,</span> <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+    <span class="p">)</span>
+    <span class="n">tonsets</span><span class="p">,</span> <span class="n">toffsets</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_onsets_offsets</span><span class="p">(</span>
+        <span class="n">tpeaks</span><span class="p">,</span>
+        <span class="n">rpeaks_resampled</span><span class="p">,</span>
+        <span class="n">dwtmatr</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span><span class="p">,</span>
+        <span class="n">onset_weight</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">duration_onset</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">ECG_P_Peaks</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">ppeaks</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_P_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">ponsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_P_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">poffsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_Q_Peaks</span><span class="o">=</span><span class="n">qpeaks</span><span class="p">,</span>
+        <span class="n">ECG_R_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_R_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">qrs_offsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_S_Peaks</span><span class="o">=</span><span class="n">speaks</span><span class="p">,</span>
+        <span class="n">ECG_T_Peaks</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">tpeaks</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_T_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">tonsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_T_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">toffsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">average_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">peaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;degree&quot;</span><span class="p">:</span>
+        <span class="c1"># adjust defree of dwt by sampling_rate and HR</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">250</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">average_rate</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">scale_factor</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;duration&quot;</span><span class="p">:</span>
+        <span class="c1"># adjust duration of search by HR</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="p">(</span><span class="mi">60</span> <span class="o">/</span> <span class="n">average_rate</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_dwt_delineate_tp_peaks</span><span class="p">(</span>
+    <span class="n">ecg</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="p">,</span>
+    <span class="n">dwtmatr</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+    <span class="n">qrs_width</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span>
+    <span class="n">p2r_duration</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">rt_duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">degree_tpeak</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">degree_ppeak</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">epsilon_T_weight</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">epsilon_P_weight</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ecg : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The cleaned ECG channel as returned by `ecg_clean()`.</span>
+<span class="sd">    rpeaks : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The samples at which R-peaks occur. Accessible with the key &quot;ECG_R_Peaks&quot; in the info dictionary</span>
+<span class="sd">        returned by `ecg_findpeaks()`.</span>
+<span class="sd">    dwtmatr : np.array</span>
+<span class="sd">        Output of `_dwt_compute_multiscales()`. Multiscales of wavelet transform.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">    qrs_width : int</span>
+<span class="sd">        Approximate duration of qrs in seconds. Default to 0.13 seconds.</span>
+<span class="sd">    p2r_duration : int</span>
+<span class="sd">        Approximate duration from P peaks to R peaks in seconds.</span>
+<span class="sd">    rt_duration : int</span>
+<span class="sd">        Approximate duration from R peaks to T peaks in secons.</span>
+<span class="sd">    degree_tpeak : int</span>
+<span class="sd">        Wavelet transform of scales 2**3.</span>
+<span class="sd">    degree_tpeak : int</span>
+<span class="sd">        Wavelet transform of scales 2**2.</span>
+<span class="sd">    epsilon_T_weight : int</span>
+<span class="sd">        Epsilon of RMS value of wavelet transform. Appendix (A.3).</span>
+<span class="sd">    epsilon_P_weight : int</span>
+<span class="sd">        Epsilon of RMS value of wavelet transform. Appendix (A.4).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">srch_bndry</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">qrs_width</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">degree_add</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
+    <span class="c1"># sanitize search duration by HR</span>
+    <span class="n">p2r_duration</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">p2r_duration</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
+    <span class="n">rt_duration</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">rt_duration</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">tpeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rpeak_</span> <span class="ow">in</span> <span class="n">rpeaks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rpeak_</span><span class="p">):</span>
+            <span class="n">tpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="c1"># search for T peaks from R peaks</span>
+        <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">rpeak_</span> <span class="o">+</span> <span class="n">srch_bndry</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">rpeak_</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">rt_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="n">degree_tpeak</span> <span class="o">+</span> <span class="n">degree_add</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">epsilon_T_weight</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">ecg_local</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">peaks</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=W0640</span>
+        <span class="k">if</span> <span class="n">dwt_local</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># just append</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">peaks</span>
+
+        <span class="c1"># detect morphology</span>
+        <span class="n">candidate_peaks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">candidate_peaks_scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx_peak</span><span class="p">,</span> <span class="n">idx_peak_nxt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">peaks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">correct_sign</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak_nxt</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+            <span class="p">)</span>  <span class="c1"># pylint: disable=R1716</span>
+            <span class="k">if</span> <span class="n">correct_sign</span><span class="p">:</span>
+                <span class="n">idx_zero</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span> <span class="p">:</span> <span class="n">idx_peak_nxt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx_peak</span>
+                <span class="p">)</span>
+                <span class="c1"># This is the score assigned to each peak. The peak with the highest score will be</span>
+                <span class="c1"># selected.</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">ecg_local</span><span class="p">[</span><span class="n">idx_zero</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="o">-</span> <span class="p">(</span><span class="n">rt_duration</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qrs_width</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">candidate_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span>
+                <span class="n">candidate_peaks_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">candidate_peaks</span><span class="p">:</span>
+            <span class="n">tpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">tpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">candidate_peaks_scores</span><span class="p">)]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
+
+    <span class="n">ppeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rpeak</span> <span class="ow">in</span> <span class="n">rpeaks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rpeak</span><span class="p">):</span>
+            <span class="n">ppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># search for P peaks from Rpeaks</span>
+        <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">p2r_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="n">srch_bndry</span>
+        <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="n">degree_ppeak</span> <span class="o">+</span> <span class="n">degree_add</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">epsilon_P_weight</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">ecg_local</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">peaks</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dwt_local</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># just append</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">peaks</span>
+
+        <span class="c1"># detect morphology</span>
+        <span class="n">candidate_peaks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">candidate_peaks_scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx_peak</span><span class="p">,</span> <span class="n">idx_peak_nxt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">peaks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">correct_sign</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak_nxt</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+            <span class="p">)</span>  <span class="c1"># pylint: disable=R1716</span>
+            <span class="k">if</span> <span class="n">correct_sign</span><span class="p">:</span>
+                <span class="n">idx_zero</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span> <span class="p">:</span> <span class="n">idx_peak_nxt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx_peak</span>
+                <span class="p">)</span>
+                <span class="c1"># This is the score assigned to each peak. The peak with the highest score will be</span>
+                <span class="c1"># selected.</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">ecg_local</span><span class="p">[</span><span class="n">idx_zero</span><span class="p">]</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="o">-</span> <span class="n">p2r_duration</span>
+                <span class="p">)</span>  <span class="c1"># Minus p2r because of the srch_idx_start</span>
+                <span class="n">candidate_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span>
+                <span class="n">candidate_peaks_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">candidate_peaks</span><span class="p">:</span>
+            <span class="n">ppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">ppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">candidate_peaks_scores</span><span class="p">)]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span>
+
+
+<span class="k">def</span> <span class="nf">_dwt_delineate_tp_onsets_offsets</span><span class="p">(</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="p">,</span>
+    <span class="n">dwtmatr</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+    <span class="n">duration_onset</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">duration_offset</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">onset_weight</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">offset_weight</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">degree_onset</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">degree_offset</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="c1"># sanitize search duration by HR</span>
+    <span class="n">duration_onset</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration_onset</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
+    <span class="n">duration_offset</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration_offset</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
+    <span class="n">degree</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+        <span class="c1"># look for onsets</span>
+        <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration_onset</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">srch_idx_start</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">or</span> <span class="n">srch_idx_end</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">:</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="n">degree_onset</span> <span class="o">+</span> <span class="n">degree</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">onset_slope_peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">onset_slope_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="n">onset_weight</span> <span class="o">*</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dwt_local</span><span class="p">[:</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[:</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_onsets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
+
+        <span class="c1"># # only for debugging</span>
+        <span class="c1"># events_plot([candidate_onsets, onset_slope_peaks], dwt_local)</span>
+        <span class="c1"># plt.plot(ecg[srch_idx_start: srch_idx_end], &#39;--&#39;, label=&#39;ecg&#39;)</span>
+        <span class="c1"># plt.show()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+        <span class="c1"># look for offset</span>
+        <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration_offset</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">srch_idx_start</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">or</span> <span class="n">srch_idx_end</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">:</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="n">degree_offset</span> <span class="o">+</span> <span class="n">degree</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">offset_slope_peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">offset_slope_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="o">-</span><span class="n">offset_weight</span> <span class="o">*</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="o">+</span> <span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
+
+        <span class="c1"># # only for debugging</span>
+        <span class="c1"># events_plot([candidate_offsets, offset_slope_peaks], dwt_local)</span>
+        <span class="c1"># plt.plot(ecg[srch_idx_start: srch_idx_end], &#39;--&#39;, label=&#39;ecg&#39;)</span>
+        <span class="c1"># plt.show()</span>
+
+    <span class="k">return</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">offsets</span>
+
+
+<span class="k">def</span> <span class="nf">_dwt_delineate_qrs_bounds</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">):</span>
+    <span class="n">degree</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+        <span class="c1"># look for onsets</span>
+        <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">ppeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">srch_idx_start</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">or</span> <span class="n">srch_idx_end</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">:</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="mi">2</span> <span class="o">+</span> <span class="n">degree</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">onset_slope_peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">onset_slope_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="o">-</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[:</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[:</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_onsets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
+
+        <span class="c1"># only for debugging</span>
+    <span class="c1">#        import neurokit as nk</span>
+    <span class="c1">#        events_plot(candidate_onsets, -dwt_local)</span>
+    <span class="c1">#        plt.plot(ecg[srch_idx_start: srch_idx_end], &#39;--&#39;, label=&#39;ecg&#39;)</span>
+    <span class="c1">#        plt.legend()</span>
+    <span class="c1">#        plt.show()</span>
+
+    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+        <span class="c1"># look for offsets</span>
+        <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">tpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">srch_idx_start</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">or</span> <span class="n">srch_idx_end</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">:</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="mi">2</span> <span class="o">+</span> <span class="n">degree</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
+        <span class="n">onset_slope_peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">onset_slope_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
+
+        <span class="c1"># # only for debugging</span>
+        <span class="c1"># events_plot(candidate_offsets, dwt_local)</span>
+        <span class="c1"># plt.plot(ecg[srch_idx_start: srch_idx_end], &#39;--&#39;, label=&#39;ecg&#39;)</span>
+        <span class="c1"># plt.legend()</span>
+        <span class="c1"># plt.show()</span>
+
+    <span class="k">return</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">offsets</span>
+
+
+<span class="k">def</span> <span class="nf">_dwt_compute_multiscales</span><span class="p">(</span><span class="n">ecg</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_degree</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return multiscales wavelet transforms.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_apply_H_filter</span><span class="p">(</span><span class="n">signal_i</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">power</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">timedelay</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">power</span>
+        <span class="n">banks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span>
+            <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">zeros</span><span class="p">,</span>
+            <span class="mf">3.0</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">zeros</span><span class="p">,</span>
+            <span class="mf">3.0</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">zeros</span><span class="p">,</span>
+            <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">signal_f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">signal_i</span><span class="p">,</span> <span class="n">banks</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+        <span class="n">signal_f</span><span class="p">[:</span><span class="o">-</span><span class="n">timedelay</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_f</span><span class="p">[</span><span class="n">timedelay</span><span class="p">:]</span>  <span class="c1"># timeshift: 2 steps</span>
+        <span class="k">return</span> <span class="n">signal_f</span>
+
+    <span class="k">def</span> <span class="nf">_apply_G_filter</span><span class="p">(</span><span class="n">signal_i</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">power</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">timedelay</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">power</span>
+        <span class="n">banks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">signal_f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">signal_i</span><span class="p">,</span> <span class="n">banks</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+        <span class="n">signal_f</span><span class="p">[:</span><span class="o">-</span><span class="n">timedelay</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_f</span><span class="p">[</span><span class="n">timedelay</span><span class="p">:]</span>  <span class="c1"># timeshift: 1 step</span>
+        <span class="k">return</span> <span class="n">signal_f</span>
+
+    <span class="n">dwtmatr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">intermediate_ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">deg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_degree</span><span class="p">):</span>
+        <span class="n">S_deg</span> <span class="o">=</span> <span class="n">_apply_G_filter</span><span class="p">(</span><span class="n">intermediate_ret</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="n">deg</span><span class="p">)</span>
+        <span class="n">T_deg</span> <span class="o">=</span> <span class="n">_apply_H_filter</span><span class="p">(</span><span class="n">intermediate_ret</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="n">deg</span><span class="p">)</span>
+        <span class="n">dwtmatr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_deg</span><span class="p">)</span>
+        <span class="n">intermediate_ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">T_deg</span><span class="p">)</span>
+    <span class="n">dwtmatr</span> <span class="o">=</span> <span class="p">[</span><span class="n">arr</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">)]</span> <span class="k">for</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">dwtmatr</span><span class="p">]</span>  <span class="c1"># rescale transforms to the same length</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dwtmatr</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># WAVELET METHOD (CWT)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_delineator_cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># P-Peaks and T-Peaks</span>
+    <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">_peaks_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># qrs onsets and offsets</span>
+    <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">qrs_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;rpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
+
+    <span class="c1"># ppeaks onsets and offsets</span>
+    <span class="n">p_onsets</span><span class="p">,</span> <span class="n">p_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;ppeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
+
+    <span class="c1"># tpeaks onsets and offsets</span>
+    <span class="n">t_onsets</span><span class="p">,</span> <span class="n">t_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
+
+    <span class="c1"># No dwt defined method for Q and S peak</span>
+    <span class="c1"># Adopting manual method from &quot;peak&quot; method</span>
+    <span class="n">q_peaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s_peaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rpeak</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">):</span>
+        <span class="n">heartbeat</span> <span class="o">=</span> <span class="n">heartbeats</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="c1"># Get index of R peaks</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]))</span>
+        <span class="c1"># Q wave</span>
+        <span class="n">Q_index</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_Q</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+        <span class="n">q_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q_index</span><span class="p">)</span>
+        <span class="c1"># S wave</span>
+        <span class="n">S_index</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_S</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">)</span>
+        <span class="n">s_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_index</span><span class="p">)</span>
+
+    <span class="c1"># Return info dictionary</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;ECG_P_Onsets&quot;</span><span class="p">:</span> <span class="n">p_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_P_Peaks&quot;</span><span class="p">:</span> <span class="n">ppeaks</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_P_Offsets&quot;</span><span class="p">:</span> <span class="n">p_offsets</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">:</span> <span class="n">q_peaks</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_R_Onsets&quot;</span><span class="p">:</span> <span class="n">qrs_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_R_Offsets&quot;</span><span class="p">:</span> <span class="n">qrs_offsets</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_S_Peaks&quot;</span><span class="p">:</span> <span class="n">s_peaks</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_T_Onsets&quot;</span><span class="p">:</span> <span class="n">t_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_T_Peaks&quot;</span><span class="p">:</span> <span class="n">tpeaks</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">:</span> <span class="n">t_offsets</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Internals</span>
+<span class="c1"># ---------------------</span>
+
+
+<span class="k">def</span> <span class="nf">_onset_offset_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;rpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Try loading pywt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pywt</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># first derivative of the Gaissian signal</span>
+    <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+    <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">half_wave_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>  <span class="c1"># NEED TO CHECK</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index_peak</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
+        <span class="c1"># find onset</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">index_peak</span><span class="p">):</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
+            <span class="n">search_window</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span> <span class="p">:</span> <span class="n">index_peak</span><span class="p">]</span>
+            <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
+            <span class="n">search_window</span> <span class="o">=</span> <span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span> <span class="p">:</span> <span class="n">index_peak</span><span class="p">]</span>
+
+            <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wt_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># print(&quot;Fail to find onset at index: %d&quot;, index_peak)</span>
+            <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># The last peak is nfirst in (Martinez, 2004)</span>
+            <span class="n">nfirst</span> <span class="o">=</span> <span class="n">wt_peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span>
+            <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">:</span>
+                <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="mf">0.50</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;tpeaks&quot;</span><span class="p">:</span>
+                <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">leftbase</span> <span class="o">=</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;left_bases&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span>
+            <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
+                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
+                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
+                <span class="p">)</span>
+
+            <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">candidate_onsets</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">leftbase</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_onsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">candidate_onsets</span><span class="p">))</span>
+
+        <span class="c1"># find offset</span>
+        <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
+            <span class="n">search_window</span> <span class="o">=</span> <span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">index_peak</span> <span class="p">:</span> <span class="n">index_peak</span> <span class="o">+</span> <span class="n">half_wave_width</span><span class="p">]</span>
+            <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.50</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
+            <span class="n">search_window</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">index_peak</span> <span class="p">:</span> <span class="n">index_peak</span> <span class="o">+</span> <span class="n">half_wave_width</span><span class="p">]</span>
+            <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wt_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># print(&quot;Fail to find offsets at index: %d&quot;, index_peak)</span>
+            <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nlast</span> <span class="o">=</span> <span class="n">wt_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span>
+            <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mf">0.125</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">:</span>
+                <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;tpeaks&quot;</span><span class="p">:</span>
+                <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">rightbase</span> <span class="o">=</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;right_bases&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span>
+            <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
+                <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nlast</span> <span class="p">:</span> <span class="n">nlast</span> <span class="o">+</span> <span class="mi">100</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nlast</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
+                <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nlast</span> <span class="p">:</span> <span class="n">nlast</span> <span class="o">+</span> <span class="mi">100</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nlast</span>
+                <span class="p">)</span>
+
+            <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="n">candidate_offsets</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">rightbase</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">))</span>
+
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">onsets</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">offsets</span>
+
+
+<span class="k">def</span> <span class="nf">_peaks_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Try loading pywt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pywt</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># first derivative of the Gaissian signal</span>
+    <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+    <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">qrs_duration</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+    <span class="n">search_boundary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.9</span> <span class="o">*</span> <span class="n">qrs_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">significant_peaks_groups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># search for T peaks and P peaks from R peaks</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">search_boundary</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">search_boundary</span>
+        <span class="n">search_window</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">search_window</span><span class="p">)))</span>
+        <span class="n">peaks_tp</span><span class="p">,</span> <span class="n">heights_tp</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">search_window</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">peaks_tp</span> <span class="o">=</span> <span class="n">peaks_tp</span> <span class="o">+</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">search_boundary</span>
+        <span class="c1"># set threshold for heights of peaks to find significant peaks in wavelet</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.125</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
+        <span class="n">significant_peaks_tp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">significant_peaks_tp</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">peaks_tp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks_tp</span><span class="p">))</span> <span class="k">if</span> <span class="n">heights_tp</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+        <span class="p">]</span>
+
+        <span class="n">significant_peaks_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">_find_tppeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">significant_peaks_tp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[(</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">significant_peaks_groups</span><span class="p">])</span>
+
+    <span class="n">tpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+    <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ppeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span>
+
+
+<span class="k">def</span> <span class="nf">_find_tppeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">keep_tp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># Try loading pywt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pywt</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># first derivative of the Gaissian signal</span>
+    <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+    <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">max_search_duration</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">tppeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index_cur</span><span class="p">,</span> <span class="n">index_next</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keep_tp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">keep_tp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="c1"># limit 1</span>
+        <span class="n">correct_sign</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_cur</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_next</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=R1716</span>
+        <span class="c1">#    near = (index_next - index_cur) &lt; max_wv_peak_dist #limit 2</span>
+        <span class="c1">#    if near and correct_sign:</span>
+        <span class="k">if</span> <span class="n">correct_sign</span><span class="p">:</span>
+            <span class="n">index_zero_cr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_cur</span> <span class="p">:</span> <span class="n">index_next</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_cur</span>
+            <span class="p">)</span>
+            <span class="n">nb_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_search_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">index_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">index_zero_cr</span> <span class="o">-</span> <span class="n">nb_idx</span> <span class="p">:</span> <span class="n">index_zero_cr</span> <span class="o">+</span> <span class="n">nb_idx</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span>
+                <span class="n">index_zero_cr</span> <span class="o">-</span> <span class="n">nb_idx</span>
+            <span class="p">)</span>
+            <span class="n">tppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index_max</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tppeaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">tppeaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">tppeaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1">#                              PEAK METHOD</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># Initialize</span>
+    <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">Q_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">P_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">S_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">T_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">P_onsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">T_offsets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rpeak</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">):</span>
+        <span class="n">heartbeat</span> <span class="o">=</span> <span class="n">heartbeats</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+
+        <span class="c1"># Get index of heartbeat</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">heartbeat</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]))</span>
+
+        <span class="c1"># Peaks ------</span>
+        <span class="c1"># Q wave</span>
+        <span class="n">Q_index</span><span class="p">,</span> <span class="n">Q</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_Q</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+        <span class="n">Q_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q_index</span><span class="p">)</span>
+
+        <span class="c1"># P wave</span>
+        <span class="n">P_index</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_P</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+        <span class="n">P_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P_index</span><span class="p">)</span>
+
+        <span class="c1"># S wave</span>
+        <span class="n">S_index</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_S</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">)</span>
+        <span class="n">S_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_index</span><span class="p">)</span>
+
+        <span class="c1"># T wave</span>
+        <span class="n">T_index</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">_ecg_delineator_peak_T</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span>
+        <span class="n">T_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T_index</span><span class="p">)</span>
+
+        <span class="c1"># Onsets/Offsets ------</span>
+        <span class="n">P_onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_ecg_delineator_peak_P_onset</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">P</span><span class="p">))</span>
+        <span class="n">T_offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_ecg_delineator_peak_T_offset</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
+        <span class="c1"># Manual fix for T_offsets</span>
+        <span class="k">if</span> <span class="n">T_offsets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">):</span>
+            <span class="n">T_offsets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Return info dictionary</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;ECG_P_Peaks&quot;</span><span class="p">:</span> <span class="n">P_list</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">:</span> <span class="n">Q_list</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_S_Peaks&quot;</span><span class="p">:</span> <span class="n">S_list</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_T_Peaks&quot;</span><span class="p">:</span> <span class="n">T_list</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_P_Onsets&quot;</span><span class="p">:</span> <span class="n">P_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">:</span> <span class="n">T_offsets</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Internal</span>
+<span class="c1"># --------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak_Q</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">):</span>
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="p">[:</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Select left hand side</span>
+
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span>
+        <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Select most right-hand side</span>
+    <span class="n">from_R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">-</span> <span class="n">Q</span>  <span class="c1"># Relative to R</span>
+    <span class="k">return</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="n">from_R</span><span class="p">,</span> <span class="n">Q</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak_P</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">Q</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">Q</span><span class="p">]</span>  <span class="c1"># Select left of Q wave</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;Height&quot;</span><span class="p">])]</span>  <span class="c1"># Select heighest</span>
+    <span class="n">from_R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">-</span> <span class="n">P</span>  <span class="c1"># Relative to R</span>
+    <span class="k">return</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="n">from_R</span><span class="p">,</span> <span class="n">P</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak_S</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">):</span>
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="p">[</span><span class="mi">0</span><span class="p">:]</span>  <span class="c1"># Select right hand side</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="o">-</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Select most left-hand side</span>
+    <span class="k">return</span> <span class="n">rpeak</span> <span class="o">+</span> <span class="n">S</span><span class="p">,</span> <span class="n">S</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak_T</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">S</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">R</span> <span class="o">+</span> <span class="n">S</span> <span class="p">:]</span>  <span class="c1"># Select right of S wave</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="s2">&quot;Height&quot;</span><span class="p">])]</span>  <span class="c1"># Select heighest</span>
+    <span class="k">return</span> <span class="n">rpeak</span> <span class="o">+</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak_P_onset</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">P</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">P</span><span class="p">]</span>  <span class="c1"># Select left of P wave</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">R</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">P_onset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="n">from_R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">-</span> <span class="n">P_onset</span>  <span class="c1"># Relative to R</span>
+    <span class="k">return</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="n">from_R</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineator_peak_T_offset</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">T</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">R</span> <span class="o">+</span> <span class="n">T</span> <span class="p">:]</span>  <span class="c1"># Select right of T wave</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">R</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">T_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rpeak</span> <span class="o">+</span> <span class="n">T</span> <span class="o">+</span> <span class="n">T_offset</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internals</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineate_plot</span><span class="p">(</span>
+    <span class="n">ecg_signal</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">signals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">signal_features_type</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">window_start</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">window_end</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    import neurokit2 as nk</span>
+<span class="sd">    import numpy as np</span>
+<span class="sd">    import pandas as pd</span>
+<span class="sd">    import matplotlib.pyplot as plt</span>
+
+<span class="sd">    ecg_signal = nk.data(&quot;ecg_100hz&quot;)</span>
+
+<span class="sd">    # Extract R-peaks locations</span>
+<span class="sd">     _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)</span>
+
+<span class="sd">    # Delineate the ECG signal with ecg_delineate()</span>
+<span class="sd">    signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)</span>
+
+<span class="sd">    # Plot the ECG signal with markings on ECG peaks</span>
+<span class="sd">    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,</span>
+<span class="sd">                        signal_features_type=&#39;peaks&#39;, sampling_rate=1000)</span>
+
+<span class="sd">    # Plot the ECG signal with markings on boundaries of R peaks</span>
+<span class="sd">    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,</span>
+<span class="sd">                        signal_features_type=&#39;bound_R&#39;, sampling_rate=1000)</span>
+
+<span class="sd">    # Plot the ECG signal with markings on boundaries of P peaks</span>
+<span class="sd">    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,</span>
+<span class="sd">                        signal_features_type=&#39;bound_P&#39;, sampling_rate=1000)</span>
+
+<span class="sd">    # Plot the ECG signal with markings on boundaries of T peaks</span>
+<span class="sd">    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,</span>
+<span class="sd">                        signal_features_type=&#39;bound_T&#39;, sampling_rate=1000)</span>
+
+<span class="sd">    # Plot the ECG signal with markings on all peaks and boundaries</span>
+<span class="sd">    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,</span>
+<span class="sd">                        signal_features_type=&#39;all&#39;, sampling_rate=1000)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Signal&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)})</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span> <span class="n">signals</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Try retrieving right column</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+    <span class="c1"># Segment the signal around the R-peaks</span>
+    <span class="n">epochs</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">events</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">epochs_start</span><span class="o">=</span><span class="n">window_start</span><span class="p">,</span>
+        <span class="n">epochs_end</span><span class="o">=</span><span class="n">window_end</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+    <span class="n">data_cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">data_cols</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">signal_features_type</span> <span class="o">==</span> <span class="s2">&quot;peaks&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Peak&quot;</span><span class="p">]):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal_features_type</span> <span class="o">==</span> <span class="s2">&quot;bounds_R&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ECG_R_Onsets&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_R_Offsets&quot;</span><span class="p">]):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal_features_type</span> <span class="o">==</span> <span class="s2">&quot;bounds_T&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ECG_T_Onsets&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">]):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal_features_type</span> <span class="o">==</span> <span class="s2">&quot;bounds_P&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ECG_P_Onsets&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_P_Offsets&quot;</span><span class="p">]):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">signal_features_type</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Peak&quot;</span><span class="p">,</span> <span class="s2">&quot;Onset&quot;</span><span class="p">,</span> <span class="s2">&quot;Offset&quot;</span><span class="p">]):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Label</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+        <span class="n">epoch_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">Label</span> <span class="o">==</span> <span class="n">label</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epoch_data</span><span class="o">.</span><span class="n">Time</span><span class="p">,</span> <span class="n">epoch_data</span><span class="o">.</span><span class="n">Signal</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">feature_type</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>  <span class="c1"># pylint: disable=W0612</span>
+        <span class="n">event_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">feature_type</span><span class="p">]</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">event_data</span><span class="o">.</span><span class="n">Time</span><span class="p">,</span> <span class="n">event_data</span><span class="o">.</span><span class="n">Signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">feature_type</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_delineate_check</span><span class="p">(</span><span class="n">waves</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than</span>
+<span class="sd">    3.&quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">waves</span><span class="p">)</span>
+    <span class="n">features_columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">:</span> <span class="n">rpeaks</span><span class="p">})],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># loop through all columns to calculate the z distance</span>
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">features_columns</span><span class="p">:</span>  <span class="c1"># pylint: disable=W0612</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">_calculate_abs_z</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features_columns</span><span class="p">)</span>
+
+    <span class="c1"># Replace with nan if distance &gt; 3</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">features_columns</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Dist_R_&quot;</span> <span class="o">+</span> <span class="n">col</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Return df without distance columns</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features_columns</span><span class="p">]</span>
+    <span class="n">waves</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">waves</span>
+
+
+<span class="k">def</span> <span class="nf">_calculate_abs_z</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves</span>
+<span class="sd">    features by `ecg_delineate()`&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Dist_R_&quot;</span> <span class="o">+</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">standardize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

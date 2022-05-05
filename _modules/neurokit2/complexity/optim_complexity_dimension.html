@@ -1,0 +1,896 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.complexity.optim_complexity_dimension &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/complexity/optim_complexity_dimension.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.complexity.optim_complexity_dimension</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial</span>
+
+<span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
+<span class="kn">from</span> <span class="nn">.fractal_correlation</span> <span class="kn">import</span> <span class="n">fractal_correlation</span>
+
+
+<div class="viewcode-block" id="complexity_dimension"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.complexity_dimension">[docs]</a><span class="k">def</span> <span class="nf">complexity_dimension</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;afnn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Automated selection of the optimal Embedding Dimension (m)**</span>
+
+<span class="sd">    The Embedding Dimension (*m*, sometimes referred to as *d* or *order*) is the second</span>
+<span class="sd">    critical parameter (the first being the :func:`delay &lt;complexity_delay&gt;` :math:`\\tau`)</span>
+<span class="sd">    involved in the construction of the time-delay embedding of a signal. It corresponds to the</span>
+<span class="sd">    number of delayed states (versions of the signals lagged by :math:`\\tau`) that we include in</span>
+<span class="sd">    the embedding.</span>
+
+<span class="sd">    Though one can commonly find values of 2 or 3 used in practice, several authors suggested</span>
+<span class="sd">    different numerical methods to guide the choice of *m*:</span>
+
+<span class="sd">    * **Correlation Dimension** (CD): One of the earliest method to estimate the optimal *m*</span>
+<span class="sd">      was to calculate the :func:`correlation dimension &lt;fractal_correlation&gt;` for embeddings of</span>
+<span class="sd">      various sizes and look for a saturation (i.e., a plateau) in its value as the embedding</span>
+<span class="sd">      dimension increases. One of the limitation is that a saturation will also occur when there is</span>
+<span class="sd">      not enough data to adequately fill the high-dimensional space (note that, in general, having</span>
+<span class="sd">      such large embeddings that it significantly shortens the length of the signal is not</span>
+<span class="sd">      recommended).</span>
+<span class="sd">    * **FNN** (False Nearest Neighbour): The method, introduced by Kennel et al. (1992), is based</span>
+<span class="sd">      on the assumption that two points that are near to each other in the sufficient embedding</span>
+<span class="sd">      dimension should remain close as the dimension increases. The algorithm checks the neighbours</span>
+<span class="sd">      in increasing embedding dimensions until it finds only a negligible number of false</span>
+<span class="sd">      neighbours when going from dimension :math:`m` to :math:`m+1`. This corresponds to the lowest</span>
+<span class="sd">      embedding dimension, which is presumed to give an unfolded space-state reconstruction. This</span>
+<span class="sd">      method can fail in noisy signals due to the futile attempt of unfolding the noise (and in</span>
+<span class="sd">      purely random signals, the amount of false neighbors does not substantially drops as *m*</span>
+<span class="sd">      increases).</span>
+<span class="sd">    * **AFN** (Average False Neighbors): This modification by Cao (1997) of the FNN method</span>
+<span class="sd">      addresses one of its main drawback, the need for a heuristic choice for the tolerance</span>
+<span class="sd">      thresholds ``R``. It uses the maximal Euclidian distance to represent nearest neighbors, and</span>
+<span class="sd">      averages all ratios of the distance in :math:`m+1` to :math:`m` dimension and defines E1 as a</span>
+<span class="sd">      parameter. The optimal dimension corresponds to when E1(d) stops changing (reaches a plateau).</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">    delay : int</span>
+<span class="sd">        Time delay (often denoted Tau :math:`\\tau`, sometimes referred to as Lag) in samples.</span>
+<span class="sd">        See :func:`complexity_delay()` to choose the optimal value for this parameter.</span>
+<span class="sd">    dimension_max : int</span>
+<span class="sd">        The maximum embedding dimension to test.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Can be ``&quot;afn&quot;`` (Average False Neighbor), ``&quot;fnn&quot;`` (False Nearest Neighbour), or ``&quot;cd&quot;``</span>
+<span class="sd">        (Correlation Dimension).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Visualize the result.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments, such as ``R=10.0`` or ``A=2.0`` (relative and absolute tolerance, only for</span>
+<span class="sd">        &#39;fnn&#39; method).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    delay : int</span>
+<span class="sd">        Time delay (often denoted &#39;Tau&#39; :math:`\\tau`, sometimes referred to as &#39;lag&#39;) in samples.</span>
+<span class="sd">        See :func:`complexity_delay` to choose the optimal value for this parameter.</span>
+<span class="sd">    parameters : dict</span>
+<span class="sd">        A dictionary containing additional information regarding the parameters used</span>
+<span class="sd">        to compute the optimal dimension.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    ------------</span>
+<span class="sd">    complexity, complexity_dimension, complexity_delay, complexity_tolerance</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)</span>
+<span class="sd">      # Find optimal delay</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=500)</span>
+
+<span class="sd">      # Find optimal dimension</span>
+<span class="sd">      @savefig p_complexity_dimension1.png scale=100%</span>
+<span class="sd">      optimal_dimension, info = nk.complexity_dimension(signal,</span>
+<span class="sd">                                                        delay=delay,</span>
+<span class="sd">                                                        dimension_max=20,</span>
+<span class="sd">                                                        method=&#39;afnn&#39;,</span>
+<span class="sd">                                                        show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_complexity_dimension2.png scale=100%</span>
+<span class="sd">      optimal_dimension, info = nk.complexity_dimension(signal,</span>
+<span class="sd">                                                        delay=delay,</span>
+<span class="sd">                                                        dimension_max=20,</span>
+<span class="sd">                                                        method=&#39;fnn&#39;,</span>
+<span class="sd">                                                        show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    * Kennel, M. B., Brown, R., &amp; Abarbanel, H. D. (1992). Determining embedding dimension for</span>
+<span class="sd">      phase-space reconstruction using a geometrical construction. Physical review A, 45(6), 3403.</span>
+<span class="sd">    * Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar</span>
+<span class="sd">      time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.</span>
+<span class="sd">    * Rhodes, C., &amp; Morari, M. (1997). The false nearest neighbors algorithm: An overview.</span>
+<span class="sd">      Computers &amp; Chemical Engineering, 21, S1149-S1154.</span>
+<span class="sd">    * Krakovská, A., Mezeiová, K., &amp; Budáčová, H. (2015). Use of false nearest neighbours for</span>
+<span class="sd">      selecting variables and embedding parameters for state space reconstruction. Journal of</span>
+<span class="sd">      Complex Systems, 2015.</span>
+<span class="sd">    * Gautama, T., Mandic, D. P., &amp; Van Hulle, M. M. (2003, April). A differential entropy based</span>
+<span class="sd">      method for determining the optimal embedding parameters of a signal. In 2003 IEEE</span>
+<span class="sd">      International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.</span>
+<span class="sd">      (ICASSP&#39;03). (Vol. 6, pp. VI-29). IEEE.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialize vectors</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">dimension_seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dimension_seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">)</span>
+
+    <span class="c1"># Method</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;afnn&quot;</span><span class="p">,</span> <span class="s2">&quot;afn&quot;</span><span class="p">]:</span>
+        <span class="c1"># Append value (as it gets cropped afterwards anyway)</span>
+        <span class="n">dimension_seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="p">[</span><span class="n">dimension_seq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">E</span><span class="p">,</span> <span class="n">Es</span> <span class="o">=</span> <span class="n">_embedding_dimension_afn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">E1</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">E</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">E2</span> <span class="o">=</span> <span class="n">Es</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">Es</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># To find where E1 saturates, set a threshold of difference</span>
+        <span class="c1"># threshold = 0.1 * (np.max(E1) - np.min(E1))</span>
+        <span class="n">min_dimension</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">E1</span> <span class="o">&gt;=</span> <span class="mf">0.85</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">E1</span><span class="p">))</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># To standardize the length of dimension_seq with E1 and E2</span>
+        <span class="n">dimension_seq</span> <span class="o">=</span> <span class="n">dimension_seq</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Store information</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="s2">&quot;E1&quot;</span><span class="p">:</span> <span class="n">E1</span><span class="p">,</span> <span class="s2">&quot;E2&quot;</span><span class="p">:</span> <span class="n">E2</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">_embedding_dimension_plot</span><span class="p">(</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span>
+                <span class="n">min_dimension</span><span class="o">=</span><span class="n">min_dimension</span><span class="p">,</span>
+                <span class="n">E1</span><span class="o">=</span><span class="n">E1</span><span class="p">,</span>
+                <span class="n">E2</span><span class="o">=</span><span class="n">E2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fnn&quot;</span><span class="p">]:</span>
+        <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">_embedding_dimension_ffn</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">min_dimension</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f3</span> <span class="o">&lt;=</span> <span class="mf">1.85</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">f3</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">f3</span><span class="p">)]))</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Store information</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">:</span> <span class="n">f1</span><span class="p">,</span> <span class="s2">&quot;f2&quot;</span><span class="p">:</span> <span class="n">f2</span><span class="p">,</span> <span class="s2">&quot;f3&quot;</span><span class="p">:</span> <span class="n">f3</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">_embedding_dimension_plot</span><span class="p">(</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span>
+                <span class="n">min_dimension</span><span class="o">=</span><span class="n">min_dimension</span><span class="p">,</span>
+                <span class="n">f1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+                <span class="n">f2</span><span class="o">=</span><span class="n">f2</span><span class="p">,</span>
+                <span class="n">f3</span><span class="o">=</span><span class="n">f3</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span> <span class="s2">&quot;cd&quot;</span><span class="p">]:</span>
+        <span class="n">CDs</span> <span class="o">=</span> <span class="n">_embedding_dimension_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Find elbow (TODO: replace by better method of elbow localization)</span>
+        <span class="n">min_dimension</span> <span class="o">=</span> <span class="n">dimension_seq</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">CDs</span> <span class="o">&gt;=</span> <span class="mf">0.66</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">CDs</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="c1"># Store information</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="s2">&quot;CD&quot;</span><span class="p">:</span> <span class="n">CDs</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">_embedding_dimension_plot</span><span class="p">(</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span>
+                <span class="n">min_dimension</span><span class="o">=</span><span class="n">min_dimension</span><span class="p">,</span>
+                <span class="n">CD</span><span class="o">=</span><span class="n">CDs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: complexity_dimension(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">min_dimension</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Methods</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_embedding_dimension_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the Correlation Dimension (CD) for a all d in dimension_seq.&quot;&quot;&quot;</span>
+    <span class="n">CDs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">):</span>
+        <span class="n">CDs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">CDs</span>
+
+
+<span class="k">def</span> <span class="nf">_embedding_dimension_afn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return E(d) and E^*(d) for a all d in dimension_seq.</span>
+
+<span class="sd">    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).</span>
+
+<span class="sd">    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater than some value d0  if the time</span>
+<span class="sd">    series comes from an attractor. Then d0 + 1 is the minimum embedding dimension we look for.</span>
+
+<span class="sd">    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish deterministic signals from</span>
+<span class="sd">    stochastic signals. For random data, since the future values are independent of the past values,</span>
+<span class="sd">    E2(d) will be equal to 1 for any d. For deterministic data, E2(d) is certainly related to d, it</span>
+<span class="sd">    cannot be a constant for all d; there must exist somed&#39;s such that E2(d) is not 1.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">_embedding_dimension_afn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">dimension_seq</span>
+        <span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">E</span><span class="p">,</span> <span class="n">Es</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">E</span><span class="p">,</span> <span class="n">Es</span>
+
+
+<span class="k">def</span> <span class="nf">_embedding_dimension_afn_d</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return E(d) and E^*(d) for a single d.</span>
+
+<span class="sd">    Returns E(d) and E^*(d) for the AFN method for a single d.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">_embedding_dimension_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">)</span>
+
+    <span class="c1"># Compute the ratio of near-neighbor distances in d + 1 over d dimension</span>
+    <span class="c1"># Its average is E(d)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">dist</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">Es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span> <span class="o">/</span> <span class="n">dist</span><span class="p">)</span>
+        <span class="c1"># Calculate E^*(d)</span>
+        <span class="n">Es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y2</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y2</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">E</span><span class="p">,</span> <span class="n">Es</span>
+
+
+<span class="k">def</span> <span class="nf">_embedding_dimension_ffn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the fraction of false nearest neighbors.</span>
+
+<span class="sd">    The false nearest neighbors (FNN) method described by Kennel et al.</span>
+<span class="sd">    (1992) to calculate the minimum embedding dimension required to embed a scalar time series.</span>
+
+<span class="sd">    Returns 3 vectors:</span>
+
+<span class="sd">    - f1 : Fraction of neighbors classified as false by Test I.</span>
+<span class="sd">    - f2 : Fraction of neighbors classified as false by Test II.</span>
+<span class="sd">    - f3 : Fraction of neighbors classified as false by either Test I or Test II.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">_embedding_dimension_ffn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">dimension_seq</span>
+        <span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span>
+
+
+<span class="k">def</span> <span class="nf">_embedding_dimension_ffn_d</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return fraction of false nearest neighbors for a single d.&quot;&quot;&quot;</span>
+    <span class="n">d</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">_embedding_dimension_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">)</span>
+
+    <span class="c1"># Find all potential false neighbors using Kennel et al.&#39;s tests.</span>
+    <span class="n">dist</span><span class="p">[</span><span class="n">dist</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># assign nan to avoid divide by zero error in next line</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y2</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y2</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="n">R</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">d</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">A</span>
+    <span class="n">f3</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">|</span> <span class="n">f2</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">f1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">f2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">f3</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internals</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_embedding_dimension_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># We need to reduce the number of points in dimension d by tau</span>
+    <span class="c1"># so that after reconstruction, there&#39;ll be equal number of points</span>
+    <span class="c1"># at both dimension d as well as dimension d + 1.</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">[:</span><span class="o">-</span><span class="n">delay</span><span class="p">],</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Find near neighbors in dimension d.</span>
+    <span class="n">index</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">_embedding_dimension_neighbors</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="n">maxnum</span><span class="p">)</span>
+
+    <span class="c1"># Compute the near-neighbor distances in d + 1 dimension</span>
+    <span class="c1"># TODO: is there a way to make this faster?</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">y2</span><span class="p">[</span><span class="n">index</span><span class="p">])]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">dist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">y2</span>
+
+
+<span class="k">def</span> <span class="nf">_embedding_dimension_neighbors</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the</span>
+<span class="sd">    given array using SciPy&#39;s KDTree search.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : ndarray</span>
+<span class="sd">        embedded signal: N-dimensional array containing time-delayed vectors.</span>
+<span class="sd">    delay : int</span>
+<span class="sd">        Time delay (often denoted &#39;Tau&#39;, sometimes referred to as &#39;lag&#39;). In practice, it is common</span>
+<span class="sd">        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),</span>
+<span class="sd">        or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).</span>
+<span class="sd">    dimension_max : int</span>
+<span class="sd">        The maximum embedding dimension (often denoted &#39;m&#39; or &#39;d&#39;, sometimes referred to as &#39;order&#39;)</span>
+<span class="sd">        to test.</span>
+<span class="sd">    metric : str</span>
+<span class="sd">        Metric to use for distance computation.  Must be one of &quot;cityblock&quot; (aka the Manhattan metric),</span>
+<span class="sd">        &quot;chebyshev&quot; (aka the maximum norm metric), or &quot;euclidean&quot;. Defaults to &#39;chebyshev&#39;.</span>
+<span class="sd">    window : int</span>
+<span class="sd">        Minimum temporal separation (Theiler window) that should exist between near neighbors.</span>
+<span class="sd">        This is crucial while computing Lyapunov exponents and the correlation dimension. Defaults to 0.</span>
+<span class="sd">    maxnum : int</span>
+<span class="sd">        Maximum number of near neighbors that should be found for each point.</span>
+<span class="sd">        In rare cases, when there are no neighbors that are at a nonzero distance, this will have to</span>
+<span class="sd">        be increased (i.e., beyond 2 * window + 3). Defaults to None (optimum).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    index : array</span>
+<span class="sd">        Array containing indices of near neighbors.</span>
+<span class="sd">    dist : array</span>
+<span class="sd">        Array containing near neighbor distances.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;chebyshev&quot;</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;cityblock&quot;</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;euclidean&quot;</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Unknown metric. Should be one of &quot;cityblock&quot;, &#39;</span> <span class="s1">&#39;&quot;euclidean&quot;, or &quot;chebyshev&quot;.&#39;</span>
+        <span class="p">)</span>
+
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">cKDTree</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># pylint: disable=E1102</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">maxnum</span><span class="p">:</span>
+        <span class="n">maxnum</span> <span class="o">=</span> <span class="p">(</span><span class="n">window</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">window</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">maxnum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">maxnum</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;maxnum is bigger than array length.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Query for k numbers of nearest neighbors</span>
+    <span class="n">distances</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxnum</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="c1"># Substract the first point</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">indices</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="p">(</span><span class="n">indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Remove points that are closer than min temporal separation</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">window</span>
+
+    <span class="c1"># Remove also self reference (d &gt; 0)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">valid</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">distances</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Get indices to keep</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">distances</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[(</span><span class="n">valid</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">distances</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">indices</span><span class="p">,</span> <span class="n">distances</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Plotting</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_embedding_dimension_plot</span><span class="p">(</span>
+    <span class="n">method</span><span class="p">,</span>
+    <span class="n">dimension_seq</span><span class="p">,</span>
+    <span class="n">min_dimension</span><span class="p">,</span>
+    <span class="n">E1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">E2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">f1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">f2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">f3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">CD</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Dimension (d)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Embedding dimension $d$&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;correlation&quot;</span><span class="p">,</span> <span class="s2">&quot;cd&quot;</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation Dimension (CD)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">CD</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$CD$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#852b01&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$E_1(d)$ and $E_2(d)$&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;afnn&quot;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">E1</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$E_1(d)$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF5722&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">E2</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$E_2(d)$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f44336&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fnn&quot;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">f1</span><span class="p">,</span> <span class="s2">&quot;o--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test I&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF5722&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">f2</span><span class="p">,</span> <span class="s2">&quot;^--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test II&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f44336&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">f3</span><span class="p">,</span> <span class="s2">&quot;s-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test I + II&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#852b01&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">min_dimension</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Optimal dimension: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">min_dimension</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

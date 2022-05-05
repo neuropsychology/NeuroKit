@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.complexity.complexity_rqa &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/complexity/complexity_rqa.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.complexity.complexity_rqa</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">find_groups</span>
+<span class="kn">from</span> <span class="nn">.entropy_shannon</span> <span class="kn">import</span> <span class="n">entropy_shannon</span>
+<span class="kn">from</span> <span class="nn">.optim_complexity_tolerance</span> <span class="kn">import</span> <span class="n">complexity_tolerance</span>
+<span class="kn">from</span> <span class="nn">.utils_recurrence_matrix</span> <span class="kn">import</span> <span class="n">recurrence_matrix</span>
+
+
+<div class="viewcode-block" id="complexity_rqa"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.complexity_rqa">[docs]</a><span class="k">def</span> <span class="nf">complexity_rqa</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">min_linelength</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Recurrence Quantification Analysis (RQA)**</span>
+
+<span class="sd">    A :func:`recurrence plot &lt;recurrence_matrix&gt;` is based on a time-delay embedding representation</span>
+<span class="sd">    of a signal and is a 2D depiction of when a system revisits a state that is has been in the</span>
+<span class="sd">    past.</span>
+
+<span class="sd">    Recurrence quantification analysis (RQA) is a method of complexity analysis</span>
+<span class="sd">    for the investigation of dynamical systems. It quantifies the number and duration</span>
+<span class="sd">    of recurrences of a dynamical system presented by its phase space trajectory.</span>
+
+<span class="sd">    Features include:</span>
+
+<span class="sd">    * **Recurrence rate (RR)**: Proportion of points that are labelled as recurrences. Depends on</span>
+<span class="sd">      the radius *r*.</span>
+<span class="sd">    * **Determinism (DET)**: Proportion of recurrence points which form diagonal lines. Indicates</span>
+<span class="sd">      autocorrelation.</span>
+<span class="sd">    * **Divergence (DIV)**: The inverse of the longest diagonal line length (*LMax*).</span>
+<span class="sd">    * **Laminarity (LAM)**: Proportion of recurrence points which form vertical lines. Indicates the</span>
+<span class="sd">      amount of laminar phases (intermittency).</span>
+<span class="sd">    * **Trapping Time (TT)**: Average length of vertical black lines.</span>
+<span class="sd">    * **L**: Average length of diagonal black lines. Average duration that a system is staying in</span>
+<span class="sd">      the same state.</span>
+<span class="sd">    * **LEn**: Entropy of diagonal lines.</span>
+<span class="sd">    * **VMax**: Longest vertical line length.</span>
+<span class="sd">    * **VEn**: Entropy of vertical lines.</span>
+<span class="sd">    * **W**: Average white vertical line length.</span>
+<span class="sd">    * **WMax**: Longest white vertical line length.</span>
+<span class="sd">    * **WEn**: Entropy white vertical lines.</span>
+<span class="sd">    * Ratio determinism / recurrence rate</span>
+<span class="sd">    * Ratio laminarity / determinism</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">      More feature exist for RQA, such as the `trend &lt;https://juliadynamics.github.io/</span>
+<span class="sd">      DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend&gt;`_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">    delay : int</span>
+<span class="sd">        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.</span>
+<span class="sd">        See :func:`complexity_delay` to estimate the optimal value for this parameter.</span>
+<span class="sd">    dimension : int</span>
+<span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
+<span class="sd">        :func:`complexity_dimension()` to estimate the optimal value for this parameter.</span>
+<span class="sd">    tolerance : float</span>
+<span class="sd">        Tolerance (similarity threshold, often denoted as &#39;r&#39;). The radius used for detecting</span>
+<span class="sd">        neighbours. A rule of thumb is to set r so that the percentage of points classified as</span>
+<span class="sd">        recurrences (``info[&#39;RecurrenceRate&#39;]``) is about 2-5%.</span>
+<span class="sd">    min_linelength : int</span>
+<span class="sd">        Minimum length of diagonal and vertical lines. Default to 2.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Can be ``&quot;pyrqa&quot;`` to use the *PyRQA* package (requires to install it first).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Visualise recurrence matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rqa : DataFrame</span>
+<span class="sd">         The RQA results.</span>
+<span class="sd">    info : dict</span>
+<span class="sd">        A dictionary containing additional information regarding the parameters used to compute RQA.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)</span>
+
+<span class="sd">      # RQA</span>
+<span class="sd">      @savefig p_complexity_rqa1.png scale=100%</span>
+<span class="sd">      results, info = nk.complexity_rqa(signal, tolerance=1, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      results</span>
+
+<span class="sd">      # Compare to PyRQA</span>
+<span class="sd">      # results1, info = nk.complexity_rqa(signal, tolerance=1, show=True, method = &quot;pyrqa&quot;)</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Rawald, T., Sips, M., Marwan, N., &amp; Dransch, D. (2014). Fast computation of recurrences in</span>
+<span class="sd">      long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Tolerance&quot;</span><span class="p">:</span> <span class="n">complexity_tolerance</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;pyrqa&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_complexity_rqa_pyrqa</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Tolerance&quot;</span><span class="p">],</span>
+            <span class="n">linelength</span><span class="o">=</span><span class="n">min_linelength</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Recurrence_Matrix&quot;</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Recurrence_Matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rc</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get recurrence matrix (rm)</span>
+        <span class="n">rc</span><span class="p">,</span> <span class="n">dm</span> <span class="o">=</span> <span class="n">recurrence_matrix</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Tolerance&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Recurrence_Matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rc</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Distance_Matrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dm</span>
+
+        <span class="c1"># Compute features</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_complexity_rqa_features</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">min_linelength</span><span class="o">=</span><span class="n">min_linelength</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">)</span>
+            <span class="c1"># Flip the matrix to match traditional RQA representation</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Recurrence Matrix&quot;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">MemoryError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. &quot;</span><span class="p">,</span>
+                <span class="s2">&quot;You can recover the matrix from the parameters and try to display parts of it.&quot;</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="k">def</span> <span class="nf">_complexity_rqa_features</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">min_linelength</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute recurrence rate from a recurrence matrix (rc).&quot;&quot;&quot;</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
+    <span class="c1"># Recurrence Rate (RR)</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="c1"># Indices of the lower triangular (without the diagonal)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Compute percentage</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RecurrenceRate&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">])}</span>
+
+    <span class="c1"># Find diagonale lines</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">diag_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># All diagonals except the main one (0)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>  <span class="c1"># Get diagonal</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">find_groups</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span>  <span class="c1"># Split into consecutives</span>
+        <span class="n">diag_lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">diag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diag</span><span class="p">))</span> <span class="k">if</span> <span class="n">diag</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># Store 1s</span>
+
+    <span class="c1"># Get lengths</span>
+    <span class="n">diag_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">diag_lines</span><span class="p">])</span>
+
+    <span class="c1"># Exclude small diagonals (&gt; 1)</span>
+    <span class="n">diag_lengths</span> <span class="o">=</span> <span class="n">diag_lengths</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diag_lengths</span> <span class="o">&gt;=</span> <span class="n">min_linelength</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="c1"># Compute features</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diag_lengths</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism_RecurrenceRate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RecurrenceRate&quot;</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Divergence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;LEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span>
+        <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Find vertical lines</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">black_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">white_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">verti</span> <span class="o">=</span> <span class="n">rc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="n">verti</span> <span class="o">=</span> <span class="n">find_groups</span><span class="p">(</span><span class="n">verti</span><span class="p">)</span>
+        <span class="n">black_lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">verti</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">verti</span><span class="p">))</span> <span class="k">if</span> <span class="n">verti</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">white_lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">verti</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">verti</span><span class="p">))</span> <span class="k">if</span> <span class="n">verti</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># Get lengths</span>
+    <span class="n">black_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">black_lines</span><span class="p">])</span>
+    <span class="n">white_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">white_lines</span><span class="p">])</span>
+
+    <span class="c1"># Exclude small lines (&gt; 1)</span>
+    <span class="n">black_lengths</span> <span class="o">=</span> <span class="n">black_lengths</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">black_lengths</span> <span class="o">&gt;=</span> <span class="n">min_linelength</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">white_lengths</span> <span class="o">=</span> <span class="n">white_lengths</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">white_lengths</span> <span class="o">&gt;=</span> <span class="n">min_linelength</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="c1"># Compute features</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">black_lengths</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity_Determinism&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TrappingTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VMax&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span>
+        <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">white_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">white_lengths</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;WMax&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">white_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">white_lengths</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;WEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span>
+        <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">white_lengths</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># PyRQA</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_complexity_rqa_pyrqa</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">linelength</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute recurrence rate (imported in complexity_rqa)&quot;&quot;&quot;</span>
+    <span class="c1"># Try loading pyrqa</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.analysis_type</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.computation</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.image_generator</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.metric</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.neighbourhood</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.settings</span>
+        <span class="kn">import</span> <span class="nn">pyrqa.time_series</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">ImportError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: complexity_rqa(): the &#39;pyrqa&#39; module is required for this function to run. &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Please install it first (`pip install PyRQA`).&quot;</span><span class="p">,</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="c1"># Get neighbourhood</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">pyrqa</span><span class="o">.</span><span class="n">neighbourhood</span><span class="o">.</span><span class="n">FixedRadius</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+
+    <span class="c1"># Convert signal to time series</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">pyrqa</span><span class="o">.</span><span class="n">time_series</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">embedding_dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">time_delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
+
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">pyrqa</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">Settings</span><span class="p">(</span>
+        <span class="n">signal</span><span class="p">,</span>
+        <span class="n">analysis_type</span><span class="o">=</span><span class="n">pyrqa</span><span class="o">.</span><span class="n">analysis_type</span><span class="o">.</span><span class="n">Classic</span><span class="p">,</span>
+        <span class="n">neighbourhood</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">similarity_measure</span><span class="o">=</span><span class="n">pyrqa</span><span class="o">.</span><span class="n">metric</span><span class="o">.</span><span class="n">EuclideanMetric</span><span class="p">,</span>
+        <span class="n">theiler_corrector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># RQA features</span>
+    <span class="n">rqa</span> <span class="o">=</span> <span class="n">pyrqa</span><span class="o">.</span><span class="n">computation</span><span class="o">.</span><span class="n">RQAComputation</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="c1"># Minimum line lengths</span>
+    <span class="n">rqa</span><span class="o">.</span><span class="n">min_diagonal_line_length</span> <span class="o">=</span> <span class="n">linelength</span>
+    <span class="n">rqa</span><span class="o">.</span><span class="n">min_vertical_line_length</span> <span class="o">=</span> <span class="n">linelength</span>
+    <span class="n">rqa</span><span class="o">.</span><span class="n">min_white_vertical_line_length</span> <span class="o">=</span> <span class="n">linelength</span>
+
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">pyrqa</span><span class="o">.</span><span class="n">computation</span><span class="o">.</span><span class="n">RPComputation</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;RecurrenceRate&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">recurrence_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Determinism&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span><span class="p">,</span>
+        <span class="s2">&quot;Divergence&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">divergence</span><span class="p">,</span>
+        <span class="s2">&quot;Laminarity&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">laminarity</span><span class="p">,</span>
+        <span class="s2">&quot;TrappingTime&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">trapping_time</span><span class="p">,</span>
+        <span class="s2">&quot;Determinism_RecurrenceRate&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span> <span class="o">/</span> <span class="n">rqa</span><span class="o">.</span><span class="n">recurrence_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Laminarity_Determinism&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">laminarity</span> <span class="o">/</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span><span class="p">,</span>
+        <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">average_diagonal_line</span><span class="p">,</span>
+        <span class="s2">&quot;LEn&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">entropy_diagonal_lines</span><span class="p">,</span>
+        <span class="s2">&quot;VMax&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">longest_vertical_line</span><span class="p">,</span>
+        <span class="s2">&quot;VEn&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">entropy_vertical_lines</span><span class="p">,</span>
+        <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">average_white_vertical_line</span><span class="p">,</span>
+        <span class="s2">&quot;WMax&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">longest_white_vertical_line</span><span class="p">,</span>
+        <span class="s2">&quot;W_div&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">longest_white_vertical_line_inverse</span><span class="p">,</span>
+        <span class="s2">&quot;WEn&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">entropy_white_vertical_lines</span><span class="p">,</span>
+        <span class="s2">&quot;Recurrence_Matrix&quot;</span><span class="p">:</span> <span class="n">rp</span><span class="o">.</span><span class="n">recurrence_matrix_reverse</span><span class="p">,</span>  <span class="c1"># recurrence_matrix_reverse_normalized</span>
+    <span class="p">}</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

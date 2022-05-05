@@ -226,7 +226,7 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eventrelated/eventrelated.html">
+    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
      Event-related Analysis
     </a>
    </li>
@@ -238,6 +238,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
      EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
     </a>
    </li>
   </ul>
@@ -608,7 +613,7 @@ title="Print to PDF"
 <h3><em>data()</em><a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.data">
-<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bio_eventrelated_100hz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.data.data" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bio_eventrelated_100hz'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/data.html#data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.data" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>NeuroKit Datasets</strong></p>
 <p>NeuroKit includes datasets that can be used for testing. These datasets are not downloaded
 automatically with the package (to avoid increasing its weight), but can be downloaded via the
@@ -765,7 +770,7 @@ order was: <code class="docutils literal notranslate"><span class="pre">[&quot;N
 <h3><em>read_acqknowledge()</em><a class="headerlink" href="#read-acqknowledge" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_acqknowledge">
-<span class="sig-name descname"><span class="pre">read_acqknowledge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impute_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.data.read_acqknowledge" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read_acqknowledge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impute_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_acqknowledge.html#read_acqknowledge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_acqknowledge" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Read and format a BIOPAC’s AcqKnowledge file into a pandas’ dataframe</strong></p>
 <p>The function outputs both the dataframe and the sampling rate (retrieved from the
 AcqKnowledge file).</p>
@@ -811,7 +816,7 @@ interruptions using padding.</p></li>
 <h3><em>read_bitalino()</em><a class="headerlink" href="#read-bitalino" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_bitalino">
-<span class="sig-name descname"><span class="pre">read_bitalino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation_directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.data.read_bitalino" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read_bitalino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation_directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_bitalino.html#read_bitalino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_bitalino" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Read and format a  OpenSignals file (e.g., from BITalino) into a pandas’ dataframe</strong></p>
 <p>The function outputs both the dataframe and the sampling rate (retrieved from the
 OpenSignals file).</p>
@@ -857,7 +862,7 @@ rate, and the events annotation timings if <cite>events_annotation</cite> is Tru
 <h3><em>write_csv()</em><a class="headerlink" href="#write-csv" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.write_csv">
-<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.data.write_csv" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/write_csv.html#write_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.write_csv" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Write data to multiple csv files</strong></p>
 <p>Split the data into multiple CSV files. You can then re-create them as follows:</p>
 <p class="rubric">Example</p>

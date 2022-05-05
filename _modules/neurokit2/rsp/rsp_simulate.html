@@ -1,0 +1,830 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.rsp.rsp_simulate &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/rsp/rsp_simulate.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.rsp.rsp_simulate</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span><span class="p">,</span> <span class="n">signal_simulate</span><span class="p">,</span> <span class="n">signal_smooth</span>
+
+
+<div class="viewcode-block" id="rsp_simulate"><a class="viewcode-back" href="../../../functions/functions_rsp.html#neurokit2.rsp.rsp_simulate">[docs]</a><span class="k">def</span> <span class="nf">rsp_simulate</span><span class="p">(</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Simulate a respiratory signal**</span>
+
+<span class="sd">    Generate an artificial (synthetic) respiratory signal of a given duration</span>
+<span class="sd">    and rate.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    duration : int</span>
+<span class="sd">        Desired length of duration (s).</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The desired sampling rate (in Hz, i.e., samples/second).</span>
+<span class="sd">    length : int</span>
+<span class="sd">        The desired length of the signal (in samples).</span>
+<span class="sd">    noise : float</span>
+<span class="sd">        Noise level (amplitude of the laplace noise).</span>
+<span class="sd">    respiratory_rate : float</span>
+<span class="sd">        Desired number of breath cycles in one minute.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The model used to generate the signal. Can be &#39;sinusoidal&#39; for a simulation based on a</span>
+<span class="sd">        trigonometric sine wave that roughly approximates a single respiratory cycle. If</span>
+<span class="sd">        &#39;breathmetrics&#39; (default), will use an advanced model desbribed by</span>
+<span class="sd">        `Noto, et al. (2018) &lt;https://github.com/zelanolab/breathmetrics&gt;`_.</span>
+<span class="sd">    random_state : int</span>
+<span class="sd">        Seed for the random number generator.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    rsp_clean, rsp_findpeaks, signal_rate, rsp_process, rsp_plot</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Vector containing the respiratory signal.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import pandas as pd</span>
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      rsp1 = nk.rsp_simulate(duration=30, method=&quot;sinusoidal&quot;)</span>
+<span class="sd">      rsp2 = nk.rsp_simulate(duration=30, method=&quot;breathmetrics&quot;)</span>
+
+<span class="sd">      @savefig p_rsp_simulate1.png scale=100%</span>
+<span class="sd">      pd.DataFrame({&quot;RSP_Simple&quot;: rsp1, &quot;RSP_Complex&quot;: rsp2}).plot(subplots=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Noto, T., Zhou, G., Schuele, S., Templer, J., &amp; Zelano, C. (2018). Automated analysis of</span>
+<span class="sd">      breathing waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583-597.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="c1"># Generate number of samples automatically if length is unspecified</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+
+    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sinusoidal&quot;</span><span class="p">,</span> <span class="s2">&quot;sinus&quot;</span><span class="p">,</span> <span class="s2">&quot;simple&quot;</span><span class="p">]:</span>
+        <span class="n">rsp</span> <span class="o">=</span> <span class="n">_rsp_simulate_sinusoidal</span><span class="p">(</span>
+            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="n">respiratory_rate</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rsp</span> <span class="o">=</span> <span class="n">_rsp_simulate_breathmetrics</span><span class="p">(</span>
+            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="n">respiratory_rate</span>
+        <span class="p">)</span>
+        <span class="n">rsp</span> <span class="o">=</span> <span class="n">rsp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="p">]</span>
+
+    <span class="c1"># Add random noise</span>
+    <span class="k">if</span> <span class="n">noise</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_distort</span><span class="p">(</span>
+            <span class="n">rsp</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
+            <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+            <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Reset random seed (so it doesn&#39;t affect global)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rsp</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Simple Sinusoidal Model</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_rsp_simulate_sinusoidal</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that</span>
+<span class="sd">    roughly approximates a single respiratory cycle.&quot;&quot;&quot;</span>
+    <span class="c1"># Generate values along the length of the duration</span>
+    <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_simulate</span><span class="p">(</span>
+        <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="o">=</span><span class="n">respiratory_rate</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span>
+        <span class="n">amplitude</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rsp</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># BreathMetrics Model</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_rsp_simulate_breathmetrics_original</span><span class="p">(</span>
+    <span class="n">nCycles</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">breathing_rate</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">average_amplitude</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">amplitude_variance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">phase_variance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">inhale_pause_percent</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">inhale_pause_avgLength</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">inhale_pauseLength_variance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">exhale_pause_percent</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">exhale_pause_avgLength</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">exhale_pauseLength_variance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">pause_amplitude</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">pause_amplitude_variance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">signal_noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simulates a recording of human airflow data by appending individually constructed sin waves and pauses in</span>
+<span class="sd">    sequence. This is translated from the matlab code available `here.</span>
+
+<span class="sd">    &lt;https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m&gt;`_ by Noto, et al. (2018).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nCycles : int or float</span>
+<span class="sd">        number of breathing cycles to simulate.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        sampling rate.</span>
+<span class="sd">    breathing_rate : float</span>
+<span class="sd">        average breathing rate.</span>
+<span class="sd">    average_amplitude : float</span>
+<span class="sd">        average amplitude of inhales and exhales.</span>
+<span class="sd">    amplitude_variance: float</span>
+<span class="sd">        variance in respiratory amplitudes.</span>
+<span class="sd">    phase_variance: float</span>
+<span class="sd">        variance in duration of individual breaths.</span>
+<span class="sd">    inhale_pause_percent : float</span>
+<span class="sd">        percent of inhales followed by a pause.</span>
+<span class="sd">    inhale_pause_avgLength : float</span>
+<span class="sd">        average length of inhale pauses.</span>
+<span class="sd">    inhale_pauseLength_variance : float</span>
+<span class="sd">        variance in inhale pause length.</span>
+<span class="sd">    exhale_pause_percent : float</span>
+<span class="sd">        percent of exhales followed by a pause.</span>
+<span class="sd">    exhale_pause_avgLength : float</span>
+<span class="sd">        average length of exhale pauses.</span>
+<span class="sd">    exhale_pauseLength_variance : float</span>
+<span class="sd">        variance in exhale pause length.</span>
+<span class="sd">    pause_amplitude : float</span>
+<span class="sd">        noise amplitude of pauses.</span>
+<span class="sd">    pause_amplitude_variance : float</span>
+<span class="sd">        variance in pause noise.</span>
+<span class="sd">    signal_noise : float</span>
+<span class="sd">        percent of noise saturation in the simulated signal.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal</span>
+<span class="sd">        vector containing breathmetrics simulated rsp signal.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Define additional parameters</span>
+    <span class="n">sample_phase</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">breathing_rate</span>
+    <span class="n">inhale_pause_phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">inhale_pause_avgLength</span> <span class="o">*</span> <span class="n">sample_phase</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">exhale_pause_phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">exhale_pause_avgLength</span> <span class="o">*</span> <span class="n">sample_phase</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># Normalize variance by average breath amplitude</span>
+    <span class="n">amplitude_variance_normed</span> <span class="o">=</span> <span class="n">average_amplitude</span> <span class="o">*</span> <span class="n">amplitude_variance</span>
+    <span class="n">amplitudes_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">amplitude_variance_normed</span> <span class="o">+</span> <span class="n">average_amplitude</span>
+    <span class="n">amplitudes_with_noise</span><span class="p">[</span><span class="n">amplitudes_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Normalize phase by average breath length</span>
+    <span class="n">phase_variance_normed</span> <span class="o">=</span> <span class="n">phase_variance</span> <span class="o">*</span> <span class="n">sample_phase</span>
+    <span class="n">phases_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">phase_variance_normed</span> <span class="o">+</span> <span class="n">sample_phase</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">phases_with_noise</span><span class="p">[</span><span class="n">phases_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Normalize pause lengths by phase and variation</span>
+    <span class="n">inhale_pauseLength_variance_normed</span> <span class="o">=</span> <span class="n">inhale_pause_phase</span> <span class="o">*</span> <span class="n">inhale_pauseLength_variance</span>
+    <span class="n">inhale_pauseLengths_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">inhale_pauseLength_variance_normed</span> <span class="o">+</span> <span class="n">inhale_pause_phase</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">inhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">inhale_pauseLengths_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">exhale_pauseLength_variance_normed</span> <span class="o">=</span> <span class="n">exhale_pause_phase</span> <span class="o">*</span> <span class="n">exhale_pauseLength_variance</span>
+    <span class="n">exhale_pauseLengths_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">exhale_pauseLength_variance_normed</span> <span class="o">+</span> <span class="n">inhale_pause_phase</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># why inhale pause phase?</span>
+    <span class="n">exhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">exhale_pauseLengths_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Normalize pause amplitudes</span>
+    <span class="n">pause_amplitude_variance_normed</span> <span class="o">=</span> <span class="n">pause_amplitude</span> <span class="o">*</span> <span class="n">pause_amplitude_variance</span>
+
+    <span class="c1"># Initialize empty vector to fill with simulated data</span>
+    <span class="n">simulated_respiration</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Initialize parameters to save</span>
+    <span class="n">inhale_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+    <span class="n">exhale_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+
+    <span class="n">inhale_pause_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+    <span class="n">exhale_pause_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+
+    <span class="n">inhale_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+    <span class="n">inhale_pauseLengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+    <span class="n">exhale_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+    <span class="n">exhale_pauseLengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+
+    <span class="n">inhale_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+    <span class="n">exhale_troughs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nCycles</span><span class="p">):</span>
+        <span class="c1"># Determine length of inhale pause for this cycle</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">inhale_pause_percent</span><span class="p">:</span>
+            <span class="n">this_inhale_pauseLength</span> <span class="o">=</span> <span class="n">inhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+            <span class="n">this_inhale_pause</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">this_inhale_pauseLength</span><span class="p">)</span> <span class="o">*</span> <span class="n">pause_amplitude_variance_normed</span>
+            <span class="p">)</span>
+            <span class="n">this_inhale_pause</span><span class="p">[</span><span class="n">this_inhale_pause</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">this_inhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">this_inhale_pause</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Determine length of exhale pause for this cycle</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">exhale_pause_percent</span><span class="p">:</span>
+            <span class="n">this_exhale_pauseLength</span> <span class="o">=</span> <span class="n">exhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+            <span class="n">this_exhale_pause</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">this_exhale_pauseLength</span><span class="p">)</span> <span class="o">*</span> <span class="n">pause_amplitude_variance_normed</span>
+            <span class="p">)</span>
+            <span class="n">this_exhale_pause</span><span class="p">[</span><span class="n">this_exhale_pause</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">this_exhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">this_exhale_pause</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Determine length of inhale and exhale for this cycle to main</span>
+        <span class="c1"># breathing rate</span>
+        <span class="n">cycle_length</span> <span class="o">=</span> <span class="n">phases_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">this_inhale_pauseLength</span> <span class="o">+</span> <span class="n">this_exhale_pauseLength</span><span class="p">)</span>
+
+        <span class="c1"># If pauses are longer than the time alloted for this breath, set them</span>
+        <span class="c1"># to 0 so a real breath can be simulated. This will deviate the</span>
+        <span class="c1"># statistics from those initialized but is unavaoidable at the current</span>
+        <span class="c1"># state</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cycle_length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">cycle_length</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">phases_with_noise</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="n">this_inhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">this_inhale_pause</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">this_exhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">this_exhale_pause</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">cycle_length</span> <span class="o">=</span> <span class="n">phases_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span>
+                <span class="n">this_inhale_pauseLength</span> <span class="o">+</span> <span class="n">this_exhale_pauseLength</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Compute inhale and exhale for this cycle</span>
+        <span class="n">this_cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">cycle_length</span><span class="p">))</span> <span class="o">*</span> <span class="n">amplitudes_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+        <span class="n">half_cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">this_cycle</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">this_inhale</span> <span class="o">=</span> <span class="n">this_cycle</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">half_cycle</span><span class="p">]</span>
+        <span class="n">this_inhale_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_inhale</span><span class="p">)</span>
+        <span class="n">this_exhale</span> <span class="o">=</span> <span class="n">this_cycle</span><span class="p">[</span><span class="n">half_cycle</span><span class="p">:]</span>
+        <span class="n">this_exhale_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_exhale</span><span class="p">)</span>
+
+        <span class="c1"># Save parameters for checking</span>
+        <span class="n">inhale_lengths</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_inhale_length</span>
+        <span class="n">inhale_pauseLengths</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_inhale_pauseLength</span>
+        <span class="n">exhale_lengths</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_exhale_length</span>
+        <span class="n">exhale_pauseLengths</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_exhale_pauseLength</span>
+        <span class="n">inhale_onsets</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">exhale_onsets</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">this_inhale_length</span> <span class="o">+</span> <span class="n">this_inhale_pauseLength</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_inhale_pause</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">inhale_pause_onsets</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">this_inhale_length</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inhale_pause_onsets</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_exhale_pause</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">exhale_pause_onsets</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">i</span> <span class="o">+</span> <span class="n">this_inhale_length</span> <span class="o">+</span> <span class="n">this_inhale_pauseLength</span> <span class="o">+</span> <span class="n">this_exhale_length</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exhale_pause_onsets</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Compose breath from parameters</span>
+        <span class="n">this_breath</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">this_inhale</span><span class="p">,</span> <span class="n">this_inhale_pause</span><span class="p">,</span> <span class="n">this_exhale</span><span class="p">,</span> <span class="n">this_exhale_pause</span><span class="p">])</span>
+
+        <span class="c1"># Compute max flow for inhale and exhale for this breath</span>
+        <span class="n">max_ID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">this_breath</span><span class="p">)</span>
+        <span class="n">min_ID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">this_breath</span><span class="p">)</span>
+        <span class="n">inhale_peaks</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">max_ID</span>
+        <span class="n">exhale_troughs</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">min_ID</span>
+
+        <span class="c1"># Append breath to simulated resperation vector</span>
+        <span class="n">simulated_respiration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">simulated_respiration</span><span class="p">,</span> <span class="n">this_breath</span><span class="p">])</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_breath</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># Smooth signal</span>
+    <span class="n">simulated_respiration</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span>
+        <span class="n">simulated_respiration</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;boxzen&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">signal_noise</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">signal_noise</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+    <span class="n">noise_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">simulated_respiration</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">average_amplitude</span>
+    <span class="n">simulated_respiration</span> <span class="o">=</span> <span class="n">simulated_respiration</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">signal_noise</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise_vector</span> <span class="o">*</span> <span class="n">signal_noise</span>
+    <span class="n">raw_features</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Inhale Onsets&quot;</span><span class="p">:</span> <span class="n">inhale_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;Exhale Onsets&quot;</span><span class="p">:</span> <span class="n">exhale_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;Inhale Pause Onsets&quot;</span><span class="p">:</span> <span class="n">inhale_pause_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;Exhale Pause Onsets&quot;</span><span class="p">:</span> <span class="n">exhale_pause_onsets</span><span class="p">,</span>
+        <span class="s2">&quot;Inhale Lengths&quot;</span><span class="p">:</span> <span class="n">inhale_lengths</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Inhale Pause Lengths&quot;</span><span class="p">:</span> <span class="n">inhale_pauseLengths</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Exhale Lengths&quot;</span><span class="p">:</span> <span class="n">exhale_lengths</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Exhale Pause Lengths&quot;</span><span class="p">:</span> <span class="n">exhale_pauseLengths</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Inhale Peaks&quot;</span><span class="p">:</span> <span class="n">inhale_peaks</span><span class="p">,</span>
+        <span class="s2">&quot;Exhale Troughs&quot;</span><span class="p">:</span> <span class="n">exhale_troughs</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inhale_pauseLengths</span><span class="p">[</span><span class="n">inhale_pauseLengths</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">avg_inhale_pauseLength</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">inhale_pauseLengths</span><span class="p">[</span><span class="n">inhale_pauseLengths</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">avg_inhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exhale_pauseLengths</span><span class="p">[</span><span class="n">exhale_pauseLengths</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">avg_exhale_pauseLength</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">exhale_pauseLengths</span><span class="p">[</span><span class="n">exhale_pauseLengths</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">avg_exhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">estimated_breathing_rate</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">inhale_onsets</span><span class="p">)))</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="n">feature_stats</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Breathing Rate&quot;</span><span class="p">:</span> <span class="n">estimated_breathing_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Average Inhale Length&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">inhale_lengths</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">),</span>
+        <span class="s2">&quot;Average Inhale Pause Length&quot;</span><span class="p">:</span> <span class="n">avg_inhale_pauseLength</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="s2">&quot;Average Exhale Length&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">exhale_lengths</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">),</span>
+        <span class="s2">&quot;Average Exhale Pause Length&quot;</span><span class="p">:</span> <span class="n">avg_exhale_pauseLength</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">simulated_respiration</span><span class="p">,</span> <span class="n">raw_features</span><span class="p">,</span> <span class="n">feature_stats</span>
+
+
+<span class="k">def</span> <span class="nf">_rsp_simulate_breathmetrics</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
+
+    <span class="n">n_cycles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">respiratory_rate</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">duration</span><span class="p">)</span>
+
+    <span class="c1"># Loop until it doesn&#39;t fail</span>
+    <span class="n">rsp</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="n">rsp</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="c1"># Generate a longer than necessary signal so it won&#39;t be shorter</span>
+        <span class="n">rsp</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">_rsp_simulate_breathmetrics_original</span><span class="p">(</span>
+            <span class="n">nCycles</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n_cycles</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">),</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">breathing_rate</span><span class="o">=</span><span class="n">respiratory_rate</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span>
+            <span class="n">signal_noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">rsp</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
