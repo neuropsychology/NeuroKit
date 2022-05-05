@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Heart Rate Varability (HRV) &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Generating Abnormal 12-leads ECG" href="../ecg_generate_12leads/ecg_generate_12leads.html" />
+    <link rel="prev" title="Event-related Analysis" href="../bio_eventrelated/bio_eventrelated.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../index.html">
+   Examples
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../misc_epochs_create/misc_epochs_create.html">
+     How to create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fexamples/ecg_hrv/ecg_hrv.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs_wip/examples/ecg_hrv/ecg_hrv.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/examples/ecg_hrv/ecg_hrv.ipynb.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#compute-hrv-features">
+   Compute HRV features
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-dataset">
+   Download Dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#time-domain-analysis">
+   Time-Domain Analysis
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frequency-domain-analysis">
+   Frequency-Domain Analysis
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#non-linear-domain-analysis">
+   Non-Linear Domain Analysis
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#all-domains">
+   All Domains
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Heart Rate Varability (HRV)</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#compute-hrv-features">
+   Compute HRV features
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#download-dataset">
+   Download Dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#time-domain-analysis">
+   Time-Domain Analysis
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frequency-domain-analysis">
+   Frequency-Domain Analysis
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#non-linear-domain-analysis">
+   Non-Linear Domain Analysis
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#all-domains">
+   All Domains
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="heart-rate-varability-hrv">
+<h1>Heart Rate Varability (HRV)<a class="headerlink" href="#heart-rate-varability-hrv" title="Permalink to this headline">#</a></h1>
+<p>NeuroKit2 is the most comprehensive package when it comes to HRV indices, and this example shows how to use NeuroKit2 to compute heart rate variability (HRV) indices in the time-, frequency-, and non-linear domain.</p>
+<p>For a comprehensive review of the most up-to-date HRV indices, a discussion of their significance in psychology, and a step-by-step guide for HRV analysis using <strong>NeuroKit2</strong>, the <a class="reference external" href="https://doi.org/10.3390/s21123998">Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial</a> paper is a good place to start.</p>
+<section id="compute-hrv-features">
+<h2>Compute HRV features<a class="headerlink" href="#compute-hrv-features" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the NeuroKit package and other useful packages</span>
+<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This &quot;decorative&quot; cell should be hidden from the docs once this is implemented:</span>
+<span class="c1"># https://github.com/microsoft/vscode-jupyter/issues/1182 </span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>  <span class="c1"># Bigger images</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">14</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="download-dataset">
+<h2>Download Dataset<a class="headerlink" href="#download-dataset" title="Permalink to this headline">#</a></h2>
+<p>First, let’s download the resting rate data (sampled at 100Hz) using <code class="docutils literal notranslate"><span class="pre">nk.data()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>  <span class="c1"># Print first 5 rows</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ECG</th>
+      <th>PPG</th>
+      <th>RSP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.003766</td>
+      <td>-0.102539</td>
+      <td>0.494652</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.017466</td>
+      <td>-0.103760</td>
+      <td>0.502483</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.015679</td>
+      <td>-0.107422</td>
+      <td>0.511102</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.001598</td>
+      <td>-0.110855</td>
+      <td>0.518791</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.002483</td>
+      <td>-0.112610</td>
+      <td>0.528669</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>You can see that it consists of three different signals, pertaining to ECG, PPG (an alternative determinant of heart rate as compared to ECG), and RSP (respiration). Now, let’s extract the ECG signal in the shape of a vector (i.e., a one-dimensional array), and find the peaks using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_peaks">ecg_peaks()</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find peaks</span>
+<span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><em>Note: It is critical that you specify the correct sampling rate of your signal throughout many processing functions, as this allows NeuroKit to have a time reference.</em></p>
+<p>This produces two elements, <code class="docutils literal notranslate"><span class="pre">peaks</span></code> which is a DataFrame of same length as the input signal in which occurences of R-peaks are marked with 1 in a list of zeros. <code class="docutils literal notranslate"><span class="pre">info</span></code> is a dictionary of the sample points at which these R-peaks occur.</p>
+<p>HRV is the temporal variation between consecutive heartbeats (<strong>RR intervals</strong>). Here, we will use <code class="docutils literal notranslate"><span class="pre">peaks</span></code> i.e. occurrences of the heartbeat peaks, as the input argument in the following HRV functions to extract the indices.</p>
+</section>
+<section id="time-domain-analysis">
+<h2>Time-Domain Analysis<a class="headerlink" href="#time-domain-analysis" title="Permalink to this headline">#</a></h2>
+<p>First, let’s extract the time-domain indices.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract clean EDA and SCR features</span>
+<span class="n">hrv_time</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hrv_time</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>HRV_MeanNN</th>
+      <th>HRV_SDNN</th>
+      <th>HRV_SDANN1</th>
+      <th>HRV_SDNNI1</th>
+      <th>HRV_SDANN2</th>
+      <th>HRV_SDNNI2</th>
+      <th>HRV_SDANN5</th>
+      <th>HRV_SDNNI5</th>
+      <th>HRV_RMSSD</th>
+      <th>HRV_SDSD</th>
+      <th>...</th>
+      <th>HRV_MCVNN</th>
+      <th>HRV_IQRNN</th>
+      <th>HRV_Prc20NN</th>
+      <th>HRV_Prc80NN</th>
+      <th>HRV_pNN50</th>
+      <th>HRV_pNN20</th>
+      <th>HRV_MinNN</th>
+      <th>HRV_MaxNN</th>
+      <th>HRV_HTI</th>
+      <th>HRV_TINN</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>696.395349</td>
+      <td>62.135891</td>
+      <td>10.060728</td>
+      <td>60.275036</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>69.697983</td>
+      <td>69.779109</td>
+      <td>...</td>
+      <td>0.064461</td>
+      <td>60.0</td>
+      <td>660.0</td>
+      <td>740.0</td>
+      <td>14.651163</td>
+      <td>49.302326</td>
+      <td>470.0</td>
+      <td>1420.0</td>
+      <td>7.962963</td>
+      <td>234.375</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 24 columns</p>
+</div></div><img alt="../../_images/5e1990e2d6d4ae276ca6d05e306d184ecfcb746a028a1b049bdd3446f304c8cc.png" src="../../_images/5e1990e2d6d4ae276ca6d05e306d184ecfcb746a028a1b049bdd3446f304c8cc.png" />
+</div>
+</div>
+<p>These features include the RMSSD (square root of the mean of the sum of successive differences between adjacent RR intervals), MeanNN (mean of RR intervals) so on and so forth. You can also visualize the distribution of R-R intervals by specifying <code class="docutils literal notranslate"><span class="pre">show=True</span></code> in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv_time">hrv_time()</a>.</p>
+</section>
+<section id="frequency-domain-analysis">
+<h2>Frequency-Domain Analysis<a class="headerlink" href="#frequency-domain-analysis" title="Permalink to this headline">#</a></h2>
+<p>Now, let’s extract the frequency domain features, which involve extracting for example the spectral power density pertaining to different frequency bands. Again, you can visualize the power across frequency bands by specifying <code class="docutils literal notranslate"><span class="pre">show=True</span></code> in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv_frequency">hrv_frequency()</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hrv_freq</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hrv_freq</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>HRV_ULF</th>
+      <th>HRV_VLF</th>
+      <th>HRV_LF</th>
+      <th>HRV_HF</th>
+      <th>HRV_VHF</th>
+      <th>HRV_LFHF</th>
+      <th>HRV_LFn</th>
+      <th>HRV_HFn</th>
+      <th>HRV_LnHF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>0.016913</td>
+      <td>0.050186</td>
+      <td>0.06632</td>
+      <td>0.009835</td>
+      <td>0.75672</td>
+      <td>0.350328</td>
+      <td>0.462957</td>
+      <td>-2.713264</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><img alt="../../_images/cf4415569fc451f9075a96fadac14e4bb99777acb865f2fce2a83cd305af731f.png" src="../../_images/cf4415569fc451f9075a96fadac14e4bb99777acb865f2fce2a83cd305af731f.png" />
+</div>
+</div>
+</section>
+<section id="non-linear-domain-analysis">
+<h2>Non-Linear Domain Analysis<a class="headerlink" href="#non-linear-domain-analysis" title="Permalink to this headline">#</a></h2>
+<p>Now, let’s compute the non-linear indices with <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv_nonlinear">hrv_nonlinear()</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hrv_nonlinear</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hrv_nonlinear</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>HRV_SD1</th>
+      <th>HRV_SD2</th>
+      <th>HRV_SD1SD2</th>
+      <th>HRV_S</th>
+      <th>HRV_CSI</th>
+      <th>HRV_CVI</th>
+      <th>HRV_CSI_Modified</th>
+      <th>HRV_PIP</th>
+      <th>HRV_IALS</th>
+      <th>HRV_PSS</th>
+      <th>...</th>
+      <th>HRV_SampEn</th>
+      <th>HRV_ShanEn</th>
+      <th>HRV_FuzzyEn</th>
+      <th>HRV_MSEn</th>
+      <th>HRV_CMSEn</th>
+      <th>HRV_RCMSEn</th>
+      <th>HRV_CD</th>
+      <th>HRV_HFD</th>
+      <th>HRV_KFD</th>
+      <th>HRV_LZC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>49.341281</td>
+      <td>72.597435</td>
+      <td>0.679656</td>
+      <td>11253.343336</td>
+      <td>1.471333</td>
+      <td>4.758252</td>
+      <td>427.259889</td>
+      <td>0.55814</td>
+      <td>0.511688</td>
+      <td>0.736041</td>
+      <td>...</td>
+      <td>1.259931</td>
+      <td>4.282683</td>
+      <td>1.063533</td>
+      <td>1.266877</td>
+      <td>1.446925</td>
+      <td>1.63037</td>
+      <td>0.716677</td>
+      <td>1.856372</td>
+      <td>1.913071</td>
+      <td>0.854475</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 48 columns</p>
+</div></div><img alt="../../_images/aa12de94568c155b4e05ebab61355879c381fbb87b61e8ab6ee5d84df4bbdaf7.png" src="../../_images/aa12de94568c155b4e05ebab61355879c381fbb87b61e8ab6ee5d84df4bbdaf7.png" />
+</div>
+</div>
+<p>This will produce a Poincaré plot which plots each RR interval against the next successive one.</p>
+<p>Note that there exist many more <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_complexity.html"><strong>complexity indices</strong></a>, that are available in NeuroKit2, and that could be applied to HRV. The <code class="docutils literal notranslate"><span class="pre">hrv_nonlinear()</span></code> function only includes the most commonly used indices.</p>
+</section>
+<section id="all-domains">
+<h2>All Domains<a class="headerlink" href="#all-domains" title="Permalink to this headline">#</a></h2>
+<p>Finally, if you’d like to extract HRV indices from all three domains, you can simply input <code class="docutils literal notranslate"><span class="pre">peaks</span></code> into <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv">hrv()</a>, where you can specify <code class="docutils literal notranslate"><span class="pre">show=True</span></code> to visualize the combination of plots depicting the RR intervals distribution, power spectral density for frequency domains, and the poincare scattergram.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hrv_indices</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>HRV_MeanNN</th>
+      <th>HRV_SDNN</th>
+      <th>HRV_SDANN1</th>
+      <th>HRV_SDNNI1</th>
+      <th>HRV_SDANN2</th>
+      <th>HRV_SDNNI2</th>
+      <th>HRV_SDANN5</th>
+      <th>HRV_SDNNI5</th>
+      <th>HRV_RMSSD</th>
+      <th>HRV_SDSD</th>
+      <th>...</th>
+      <th>HRV_SampEn</th>
+      <th>HRV_ShanEn</th>
+      <th>HRV_FuzzyEn</th>
+      <th>HRV_MSEn</th>
+      <th>HRV_CMSEn</th>
+      <th>HRV_RCMSEn</th>
+      <th>HRV_CD</th>
+      <th>HRV_HFD</th>
+      <th>HRV_KFD</th>
+      <th>HRV_LZC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>696.395349</td>
+      <td>62.135891</td>
+      <td>10.060728</td>
+      <td>60.275036</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>69.697983</td>
+      <td>69.779109</td>
+      <td>...</td>
+      <td>1.259931</td>
+      <td>4.282683</td>
+      <td>1.063533</td>
+      <td>1.266877</td>
+      <td>1.446925</td>
+      <td>1.63037</td>
+      <td>0.716677</td>
+      <td>1.856372</td>
+      <td>1.913071</td>
+      <td>0.854475</td>
+    </tr>
+  </tbody>
+</table>
+<p>1 rows × 81 columns</p>
+</div></div><img alt="../../_images/e0bf7d0dbee26b5b4883ae028526e431974d686bf6225d17bb07b8ddcdba4547.png" src="../../_images/e0bf7d0dbee26b5b4883ae028526e431974d686bf6225d17bb07b8ddcdba4547.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../bio_eventrelated/bio_eventrelated.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Event-related Analysis</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../ecg_generate_12leads/ecg_generate_12leads.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Generating Abnormal 12-leads ECG</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

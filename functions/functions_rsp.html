@@ -231,8 +231,18 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
      Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
     </a>
    </li>
    <li class="toctree-l2">
@@ -243,6 +253,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
+     How to create epochs
     </a>
    </li>
   </ul>
@@ -1448,8 +1463,8 @@ dimensions.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  808.274022     4036.45  603.626974  ...    1.056344  0.091859         inf</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1273.582886     4003.95  748.42589  ...    0.557012  0.087805    1.098612</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1523,9 +1538,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.903918</span>
-<span class="go">2     2        10000  ...        0.0              0.122180</span>
-<span class="go">3     3        15000  ...        0.0              0.544509</span>
+<span class="go">1     1         5000  ...        1.0              0.814037</span>
+<span class="go">2     2        10000  ...        0.0              0.181412</span>
+<span class="go">3     3        15000  ...        0.0              0.681197</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 

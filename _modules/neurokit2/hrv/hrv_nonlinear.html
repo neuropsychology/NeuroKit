@@ -228,8 +228,18 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
      Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
     </a>
    </li>
    <li class="toctree-l2">
@@ -240,6 +250,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">
+     How to create epochs
     </a>
    </li>
   </ul>
@@ -445,7 +460,9 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;**Computes nonlinear indices of Heart Rate Variability (HRV)**</span>
 
 <span class="sd">    Non-linear indices include features derived from the *Poincaré plot*, as well as other</span>
-<span class="sd">    :func:`.complexity` indices.</span>
+<span class="sd">    :func:`.complexity` indices. Note that there exist many more complexity indices that are</span>
+<span class="sd">    available in NeuroKit2 and that could be applied to HRV. The ``hrv_nonlinear()`` function only</span>
+<span class="sd">    includes the most commonly used indices.</span>
 
 <span class="sd">    The **Poincaré plot** is a graphical representation of each NN interval plotted against its</span>
 <span class="sd">    preceding NN interval. The ellipse that emerges is a visual quantification of the correlation</span>

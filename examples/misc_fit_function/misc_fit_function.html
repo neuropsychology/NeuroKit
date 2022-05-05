@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Studies" href="../../studies/index.html" />
+    <link rel="next" title="How to create epochs" href="../misc_epochs_create/misc_epochs_create.html" />
     <link rel="prev" title="EEG Power in Frequency Bands" href="../eeg_power/eeg_power.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -231,8 +231,18 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../ecg_generate_12leads/ecg_generate_12leads.html">
      Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
     </a>
    </li>
    <li class="toctree-l2">
@@ -243,6 +253,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../misc_epochs_create/misc_epochs_create.html">
+     How to create epochs
     </a>
    </li>
   </ul>
@@ -566,7 +581,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/81e22d1267ac12c7afb9c7d0ad1edbd94ce3725595f522f391ad47e513dbbb73.png" src="../../_images/81e22d1267ac12c7afb9c7d0ad1edbd94ce3725595f522f391ad47e513dbbb73.png" />
+<img alt="../../_images/fd6fec846934ed42d5a94d8694126e2914af46ac21a3b1b68557046329c3fd57.png" src="../../_images/fd6fec846934ed42d5a94d8694126e2914af46ac21a3b1b68557046329c3fd57.png" />
 </div>
 </div>
 <p>In this case we <strong>know</strong> that the best fitting line will be a linear function (i.e., a straight line), and we want to find its parameters. A linear function has two parameters, the <strong>intercept</strong> and the <strong>slope</strong>.</p>
@@ -589,7 +604,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.69813622,  3.38881157])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.52107369, 2.68776906])
 </pre></div>
 </div>
 </div>
@@ -606,7 +621,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c3772bdb439813b48b20828ad2d074be0ecee1c48b935497b0a71068997df492.png" src="../../_images/c3772bdb439813b48b20828ad2d074be0ecee1c48b935497b0a71068997df492.png" />
+<img alt="../../_images/901af05adf4afdf7041200bf94b01ed181a15790b4ada169ecec754709a9cf90.png" src="../../_images/901af05adf4afdf7041200bf94b01ed181a15790b4ada169ecec754709a9cf90.png" />
 </div>
 </div>
 </section>
@@ -621,7 +636,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2db043d611d3cafd7ea7aad0fadeba7ebb29c608f31979af816a32696532aaa7.png" src="../../_images/2db043d611d3cafd7ea7aad0fadeba7ebb29c608f31979af816a32696532aaa7.png" />
+<img alt="../../_images/b8aa35ad0b80f199f3afe83123db7948ec72cf79a7bbf97d35521a29f9fc0d0d.png" src="../../_images/b8aa35ad0b80f199f3afe83123db7948ec72cf79a7bbf97d35521a29f9fc0d0d.png" />
 </div>
 </div>
 <p>In this example, we will try to approximate this Skin Conductance Response (SCR) using a <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/pull/269">gamma distribution</a>, which is quite a flexible distribution defined by 3 parameters (<strong>a</strong>, <strong>loc</strong> and <strong>scale</strong>).</p>
@@ -659,7 +674,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94904371, 2.26495724, 1.06428791, 1.64328363, 2.0122043 ])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.9487166 , 2.28777287, 1.03090188, 0.96192384, 2.12165865])
 </pre></div>
 </div>
 </div>
@@ -675,7 +690,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/6a82e2d49cc553645ade6d990cf16a8f3670c75ce04543ef4a8da552311c9dbe.png" src="../../_images/6a82e2d49cc553645ade6d990cf16a8f3670c75ce04543ef4a8da552311c9dbe.png" />
+<img alt="../../_images/ee699ed08c2325af805ff8a28ec04ec1f488221dbacfdfeed07360f12be3f739.png" src="../../_images/ee699ed08c2325af805ff8a28ec04ec1f488221dbacfdfeed07360f12be3f739.png" />
 </div>
 </div>
 </section>
@@ -696,10 +711,10 @@ title="Print to PDF"
             <p class="prev-next-title">EEG Power in Frequency Bands</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../../studies/index.html" title="next page">
+    <a class='right-next' id="next-link" href="../misc_epochs_create/misc_epochs_create.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Studies</p>
+        <p class="prev-next-title">How to create epochs</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

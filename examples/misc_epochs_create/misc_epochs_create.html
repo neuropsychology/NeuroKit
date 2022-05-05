@@ -1,0 +1,788 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>How to create epochs &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Studies" href="../../studies/index.html" />
+    <link rel="prev" title="Fit a function to a non-linear pattern" href="../misc_fit_function/misc_fit_function.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../index.html">
+   Examples
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     How to create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fexamples/misc_epochs_create/misc_epochs_create.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs_wip/examples/misc_epochs_create/misc_epochs_create.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/examples/misc_epochs_create/misc_epochs_create.ipynb.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#one-signal-with-multiple-event-markings">
+   One signal with multiple event markings
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#each-subject-with-multiple-files">
+   Each subject with multiple files
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>How to create epochs</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#one-signal-with-multiple-event-markings">
+   One signal with multiple event markings
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#each-subject-with-multiple-files">
+   Each subject with multiple files
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="how-to-create-epochs">
+<h1>How to create epochs<a class="headerlink" href="#how-to-create-epochs" title="Permalink to this headline">#</a></h1>
+<p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
+<p>In your experiment, participants undergo a number of trials (events) and these events are possibly of different conditions. You are wondering how can you locate these events on your signals and perhaps make them into epochs for future analysis?</p>
+<p>This example shows how to use Neurokit to extract epochs from data based on events localisation. In case you have multiple data files for each subject, this example also shows you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
+<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This &quot;decorative&quot; cell should be hidden from the docs once this is implemented:</span>
+<span class="c1"># https://github.com/microsoft/vscode-jupyter/issues/1182 </span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>  <span class="c1"># Bigger images</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">14</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, we will use a short segment of data which has ECG, EDA and respiration (RSP) signals.</p>
+<section id="one-signal-with-multiple-event-markings">
+<h2>One signal with multiple event markings<a class="headerlink" href="#one-signal-with-multiple-event-markings" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve ECG data from data folder (sampling rate= 1000 Hz)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Besides the signal channels, this data also has a fourth channel which consists of a string of 0 and 5. This is a binary marking of the Digital Input channel in BIOPAC.</p>
+<p>Let’s visualize the event-marking channel below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize the event-marking channel</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f9889f02890&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/5f8e8f018054867beeb35a41497edc8ff44cd9c819ec5b01f37418794106741f.png" src="../../_images/5f8e8f018054867beeb35a41497edc8ff44cd9c819ec5b01f37418794106741f.png" />
+</div>
+</div>
+<p>Depending on how you set up your experiment, the onset of the event can either be marked by signal going from 0 to 5 or vice versa. Specific to this data, the onsets of the events are marked where the signal in the event-marking channel goes from 5 to 0 and the offsets of the events are marked where the signal goes from 0 to 5.</p>
+<p>As shown in the above figure, there are four times the signal going from 5 to 0, corresponding to the 4 events (4 trials) in this data.</p>
+<p>There were 2 types (the condition) of images that were shown to the participant: “Negative” vs. “Neutral” in terms of emotion. Each condition had 2 trials. The following list is the condition order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">condition_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before we can epoch the data, we have to locate the events and extract their related information. This can be done using Neurokit function <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find%3E">events_find()</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find events</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">event_channel</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> 
+                        <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span> 
+                        <span class="n">event_conditions</span><span class="o">=</span><span class="n">condition_list</span><span class="p">)</span>
+
+<span class="n">events</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;onset&#39;: array([ 1024,  4957,  9224, 12984]),
+ &#39;duration&#39;: array([300, 300, 300, 300]),
+ &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U21&#39;),
+ &#39;condition&#39;: [&#39;Negative&#39;, &#39;Neutral&#39;, &#39;Neutral&#39;, &#39;Negative&#39;]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>The output of <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find%3E">events_find()</a> gives you a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> that contains the information of event onsets, event duration, event label and event condition.</p>
+<p>As stated, as the event onsets of this data are marked by event channel going from 5 to <strong>0</strong>, the <code class="docutils literal notranslate"><span class="pre">threshold_keep</span></code> is set to <code class="docutils literal notranslate"><span class="pre">below</span></code>. Depends on your data, you can customize the <code class="docutils literal notranslate"><span class="pre">arguments</span></code> in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find%3E">events_find()</a> to correctly locate the events.</p>
+<p>You can use the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot%3E">events_plot()</a> function to plot the events that have been found together with your event channel to confirm that it is correct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ef332345367d7686a0421d4e5fac1e88ca7487b5c2e88020922a57f31c8ac8f6.png" src="../../_images/ef332345367d7686a0421d4e5fac1e88ca7487b5c2e88020922a57f31c8ac8f6.png" />
+</div>
+</div>
+<p>Or you can visualize the events together with the all other signals.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" src="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" />
+</div>
+</div>
+<p>After you have located the events, you can now create epochs using the NeuroKit <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create%3E">epochs_create()</a> function. However, we recommend to process your signal first before cutting them to smaller epochs. You can read more about processing of physiological signals using NeuroKit in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/examples/custom.html%3E">Custom your Processing Pipeline</a> Example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process the signal</span>
+<span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s think about how we want our epochs to be like. For this example, we want:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1. Epochs to start *1 second before the event onset*
+
+2. Epochs to end *6 seconds* afterwards
+</pre></div>
+</div>
+<p>These are passed into the <code class="docutils literal notranslate"><span class="pre">epochs_start</span></code> and <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code> arguments, respectively.</p>
+<p>Our epochs will then cover the region from <strong>-1 s</strong> to <strong>+6 s</strong> relative to the onsets of events (i.e., 700 data points since the signal is sampled at 100Hz).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and plot epochs</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And as easy as that, you have created a dictionary of four dataframes, each correspond to an epoch of the event.</p>
+<p>Here, in the above example, all your epochs have the same starting time and ending time, specified by <code class="docutils literal notranslate"><span class="pre">epochs_start</span></code> and <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code>. Nevertheless, you can also pass a list of different timings to these two arguments to customize the duration of the epochs for each of your events.</p>
+</section>
+<section id="each-subject-with-multiple-files">
+<h2>Each subject with multiple files<a class="headerlink" href="#each-subject-with-multiple-files" title="Permalink to this headline">#</a></h2>
+<p>In some experimental designs, instead of having one signal file with multiple events, each subject can have multiples files where each file is the record of one event.</p>
+<p>In the following example, we will show you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
+<p>Firstly, let’s say your data is arranged as the following where each subject has a folder and in each folder there are multiple data files corresponding to different events:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[Experiment folder]
+|
+└── Data
+|   |
+|   └── Subject_001/
+|   |   │   event_1.[csv]
+|   |   │   event_2.[csv]
+|   |   |__ ......
+|   └── Subject_002/
+|       │   event_1.[csv]
+|       │   event_2.[csv]
+|       |__ ......
+└── analysis_script.py
+</pre></div>
+</div>
+<p>The following will illustrate how your analysis script might look like. Try to re-create such data structure and the analysis script in your computer!</p>
+<p>Assuming that your working directory is now at your analysis script, and you want to read all the data files of <code class="docutils literal notranslate"><span class="pre">Subject_001</span></code>.</p>
+<p>Your analysis script should look something like below (you need to uncomment the code):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Load packages</span>
+<span class="c1"># import pandas as pd</span>
+<span class="c1"># import os</span>
+
+<span class="c1"># # Your working directory should be at Experiment folder</span>
+<span class="c1"># participant = &quot;Subject_001&quot;</span>
+
+<span class="c1"># sampling_rate = 100</span>
+
+<span class="c1"># # List all data files in Subject_001 folder</span>
+<span class="c1"># all_files = os.listdir(&quot;Data/&quot; + participant)</span>
+
+<span class="c1"># # Create an empty directory to store your files (events)</span>
+<span class="c1"># epochs = {}</span>
+
+<span class="c1"># # Loop through each file in the subject folder</span>
+<span class="c1"># for i, file in enumerate(all_files):</span>
+<span class="c1">#     # Read the file</span>
+<span class="c1">#     data = pd.read_csv(&quot;Data/&quot; + participant + &quot;/&quot; + file)</span>
+<span class="c1">#     # Add a Label column (e.g Label 1 for epoch 1)</span>
+<span class="c1">#     data[&quot;Label&quot;] = np.full(len(data), str(i + 1))</span>
+<span class="c1">#     # Set index of data to time in seconds</span>
+<span class="c1">#     index = data.index / sampling_rate</span>
+<span class="c1">#     data = data.set_index(pd.Series(index))</span>
+<span class="c1">#     # Append the file into the dictionary</span>
+<span class="c1">#     epochs[str(i + 1)] = data</span>
+
+<span class="c1"># epochs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And tah dah! You now should have a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> called epochs that resembles the output of NeuroKit <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create%3E">epochs_create()</a>. Each <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> in the epochs corresponds to an event (a trial) that <code class="docutils literal notranslate"><span class="pre">Subject_001</span></code> underwent.</p>
+<p>The epochs is now ready for further analysis!</p>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../misc_fit_function/misc_fit_function.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Fit a function to a non-linear pattern</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../../studies/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Studies</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

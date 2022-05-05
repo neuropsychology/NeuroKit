@@ -231,8 +231,18 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
      Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
     </a>
    </li>
    <li class="toctree-l2">
@@ -243,6 +253,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
+     How to create epochs
     </a>
    </li>
   </ul>
@@ -948,7 +963,9 @@ Rate Variability. Simul. Notes Eur., 27(4), 183-190.</p></li>
 <span class="sig-name descname"><span class="pre">hrv_nonlinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_nonlinear.html#hrv_nonlinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_nonlinear" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Computes nonlinear indices of Heart Rate Variability (HRV)</strong></p>
 <p>Non-linear indices include features derived from the <em>Poincaré plot</em>, as well as other
-<a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity()</span></code></a> indices.</p>
+<a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity()</span></code></a> indices. Note that there exist many more complexity indices that are
+available in NeuroKit2 and that could be applied to HRV. The <code class="docutils literal notranslate"><span class="pre">hrv_nonlinear()</span></code> function only
+includes the most commonly used indices.</p>
 <p>The <strong>Poincaré plot</strong> is a graphical representation of each NN interval plotted against its
 preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
 between successive NN intervals.</p>
@@ -1281,9 +1298,9 @@ when the signal to noise ratio is low, in ln(ms^2).</p></li>
 <span class="go"> &#39;RSA_P2T_SD&#39;: 0.07116575415580562,</span>
 <span class="go"> &#39;RSA_P2T_NoRSA&#39;: 2,</span>
 <span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.647618796135399,</span>
-<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.43351717680981,</span>
-<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.132213906449473,</span>
-<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16712618361934264}</span>
+<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.433517176809868,</span>
+<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.13221390644948,</span>
+<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16712618361933582}</span>
 
 <span class="go"># Get RSA as a continuous signal</span>
 <span class="gp">In [6]: </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
