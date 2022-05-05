@@ -17,5 +17,9 @@ Main
 .. autofunction:: neurokit2.eda.eda_plot
 
 *eda_clean()*
-"""""""""""""""""""""
+"""""""""""""
 .. autofunction:: neurokit2.eda.eda_clean
+
+*eda_eventrelated()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_eventrelated
