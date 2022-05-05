@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="How to create epochs" href="../misc_epochs_create/misc_epochs_create.html" />
+    <link rel="next" title="Create epochs" href="../misc_epochs_create/misc_epochs_create.html" />
     <link rel="prev" title="EEG Power in Frequency Bands" href="../eeg_power/eeg_power.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -251,6 +251,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../ecg_edr/ecg_edr.html">
      ECG-Derived Respiration (EDR)
     </a>
@@ -263,6 +268,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../eda_peaks/eda_peaks.html">
      Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
     </a>
    </li>
    <li class="toctree-l2">
@@ -282,7 +297,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../misc_epochs_create/misc_epochs_create.html">
-     How to create epochs
+     Create epochs
     </a>
    </li>
   </ul>
@@ -606,7 +621,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/be31d8f03db8ce03077c93de6fb107a68add4bef5907175a49eaf8aa5ed8dad6.png" src="../../_images/be31d8f03db8ce03077c93de6fb107a68add4bef5907175a49eaf8aa5ed8dad6.png" />
+<img alt="../../_images/88be26d3c07e306e680e168cfdaf962961f396b4e2e52f721230ed63fcc5357c.png" src="../../_images/88be26d3c07e306e680e168cfdaf962961f396b4e2e52f721230ed63fcc5357c.png" />
 </div>
 </div>
 <p>In this case we <strong>know</strong> that the best fitting line will be a linear function (i.e., a straight line), and we want to find its parameters. A linear function has two parameters, the <strong>intercept</strong> and the <strong>slope</strong>.</p>
@@ -629,7 +644,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1.81941602, 2.75650626])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([5.86951255, 2.38354175])
 </pre></div>
 </div>
 </div>
@@ -646,7 +661,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/6450e8bfef185c031451ae73174f9a28376f15b9ebd2289d584c7a517ebc15dd.png" src="../../_images/6450e8bfef185c031451ae73174f9a28376f15b9ebd2289d584c7a517ebc15dd.png" />
+<img alt="../../_images/9a1d81c612770067006a3e7fd65a94d523b2df62eca6cab016d7f5a37d6d01ab.png" src="../../_images/9a1d81c612770067006a3e7fd65a94d523b2df62eca6cab016d7f5a37d6d01ab.png" />
 </div>
 </div>
 </section>
@@ -661,7 +676,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c536fa2aacc0bb2347452112ec012608f3585de3ee1c8adf27b63acfcb6b3a3f.png" src="../../_images/c536fa2aacc0bb2347452112ec012608f3585de3ee1c8adf27b63acfcb6b3a3f.png" />
+<img alt="../../_images/4769e5f48b3efaf7fea4085f950379528441710801780d6192772d818601e3dd.png" src="../../_images/4769e5f48b3efaf7fea4085f950379528441710801780d6192772d818601e3dd.png" />
 </div>
 </div>
 <p>In this example, we will try to approximate this Skin Conductance Response (SCR) using a <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/pull/269">gamma distribution</a>, which is quite a flexible distribution defined by 3 parameters (<strong>a</strong>, <strong>loc</strong> and <strong>scale</strong>).</p>
@@ -699,7 +714,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.95002174, 2.23696483, 1.06446196, 1.80360293, 1.97631616])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94658397, 2.32048648, 1.09452929, 1.12221738, 1.98675033])
 </pre></div>
 </div>
 </div>
@@ -715,7 +730,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bfe3968f15e905bbe646780c70cebfe6f254372e0ab395c9eff8fd87e71567da.png" src="../../_images/bfe3968f15e905bbe646780c70cebfe6f254372e0ab395c9eff8fd87e71567da.png" />
+<img alt="../../_images/a11e9f42c616df2e09b577f3c2c796b6b9a523977828437cce1076d22422a02c.png" src="../../_images/a11e9f42c616df2e09b577f3c2c796b6b9a523977828437cce1076d22422a02c.png" />
 </div>
 </div>
 </section>
@@ -739,7 +754,7 @@ title="Print to PDF"
     <a class='right-next' id="next-link" href="../misc_epochs_create/misc_epochs_create.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">How to create epochs</p>
+        <p class="prev-next-title">Create epochs</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

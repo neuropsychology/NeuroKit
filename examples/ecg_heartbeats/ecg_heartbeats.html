@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ECG-Derived Respiration (EDR)" href="../ecg_edr/ecg_edr.html" />
+    <link rel="next" title="Locate P, Q, S and T waves in ECG" href="../ecg_delineate/ecg_delineate.html" />
     <link rel="prev" title="Heart Rate Varability (HRV)" href="../ecg_hrv/ecg_hrv.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -251,6 +251,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../ecg_edr/ecg_edr.html">
      ECG-Derived Respiration (EDR)
     </a>
@@ -263,6 +268,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../eda_peaks/eda_peaks.html">
      Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
     </a>
    </li>
    <li class="toctree-l2">
@@ -282,7 +297,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../misc_epochs_create/misc_epochs_create.html">
-     How to create epochs
+     Create epochs
     </a>
    </li>
   </ul>
@@ -655,6 +670,14 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.4/x64/lib/python3.10/site-packages/numpy/core/fromnumeric.py:3474: RuntimeWarning: Mean of empty slice.
+  return _methods._mean(a, axis=axis, dtype=dtype,
+/opt/hostedtoolcache/Python/3.10.4/x64/lib/python3.10/site-packages/numpy/core/_methods.py:189: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
+</pre></div>
+</div>
+</div>
 </div>
 <p>This function outputs two elements, a <em>dataframe</em> containing the different signals (raw, cleaned, etc.) and a <em>dictionary</em> containing various additional information (peaks location, …).</p>
 </section>
@@ -679,7 +702,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/05de6f38e010b978fad163239a837ef3c248baf574cf04a5a60ae7a310085bbf.png" src="../../_images/05de6f38e010b978fad163239a837ef3c248baf574cf04a5a60ae7a310085bbf.png" />
+<img alt="../../_images/4c6685b1f068400480daa8a7a06bb701bcba181daf6b1dab44ffaee8f31e2d59.png" src="../../_images/4c6685b1f068400480daa8a7a06bb701bcba181daf6b1dab44ffaee8f31e2d59.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -695,7 +718,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2741b4480e757bac77df4e0caf9c0cce995e2d20e35d9b25851745c9a6b7ceff.png" src="../../_images/2741b4480e757bac77df4e0caf9c0cce995e2d20e35d9b25851745c9a6b7ceff.png" />
+<img alt="../../_images/8d02d5d8e26ae9c67345524097da546f6bf2921272b8053e9c2387ce39f98155.png" src="../../_images/8d02d5d8e26ae9c67345524097da546f6bf2921272b8053e9c2387ce39f98155.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -751,36 +774,36 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.198924</td>
-      <td>140</td>
+      <td>-0.212524</td>
+      <td>137</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.193490</td>
-      <td>141</td>
+      <td>-0.206679</td>
+      <td>138</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.187981</td>
-      <td>142</td>
+      <td>-0.200752</td>
+      <td>139</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.182329</td>
-      <td>143</td>
+      <td>-0.194689</td>
+      <td>140</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.176446</td>
-      <td>144</td>
+      <td>-0.188423</td>
+      <td>141</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -826,10 +849,10 @@ title="Print to PDF"
       <th>17</th>
       <th>18</th>
       <th>...</th>
-      <th>31</th>
       <th>32</th>
       <th>33</th>
       <th>34</th>
+      <th>35</th>
       <th>4</th>
       <th>5</th>
       <th>6</th>
@@ -865,127 +888,127 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.198924</td>
-      <td>-0.136992</td>
-      <td>-0.138748</td>
-      <td>-0.128938</td>
-      <td>-0.148018</td>
-      <td>-0.146572</td>
-      <td>-0.152682</td>
-      <td>-0.125104</td>
-      <td>-0.130167</td>
-      <td>-0.142551</td>
+      <td>-0.212524</td>
+      <td>-0.140782</td>
+      <td>-0.146490</td>
+      <td>-0.136244</td>
+      <td>-0.137645</td>
+      <td>-0.133792</td>
+      <td>-0.138583</td>
+      <td>-0.128436</td>
+      <td>-0.136621</td>
+      <td>-0.138680</td>
       <td>...</td>
-      <td>-0.141584</td>
-      <td>-0.140428</td>
-      <td>-0.137857</td>
-      <td>-0.128431</td>
-      <td>-0.113521</td>
-      <td>-0.149733</td>
-      <td>-0.133848</td>
-      <td>-0.130510</td>
-      <td>-0.134475</td>
-      <td>-0.144091</td>
+      <td>-0.139550</td>
+      <td>-0.175098</td>
+      <td>-0.060242</td>
+      <td>-0.260054</td>
+      <td>-0.111840</td>
+      <td>-0.141035</td>
+      <td>-0.128977</td>
+      <td>-0.140153</td>
+      <td>-0.149758</td>
+      <td>-0.141399</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.193490</td>
-      <td>-0.136608</td>
-      <td>-0.137730</td>
-      <td>-0.127401</td>
-      <td>-0.146495</td>
-      <td>-0.145303</td>
-      <td>-0.151703</td>
-      <td>-0.124231</td>
-      <td>-0.129142</td>
-      <td>-0.141636</td>
+      <td>-0.206679</td>
+      <td>-0.139643</td>
+      <td>-0.145525</td>
+      <td>-0.134635</td>
+      <td>-0.136857</td>
+      <td>-0.132956</td>
+      <td>-0.137735</td>
+      <td>-0.127965</td>
+      <td>-0.135449</td>
+      <td>-0.137642</td>
       <td>...</td>
-      <td>-0.140399</td>
-      <td>-0.139833</td>
-      <td>-0.137130</td>
-      <td>-0.127728</td>
-      <td>-0.113432</td>
-      <td>-0.149082</td>
-      <td>-0.132983</td>
-      <td>-0.129983</td>
-      <td>-0.133670</td>
-      <td>-0.142545</td>
+      <td>-0.138866</td>
+      <td>-0.174722</td>
+      <td>-0.059120</td>
+      <td>-0.257279</td>
+      <td>-0.111189</td>
+      <td>-0.140417</td>
+      <td>-0.127786</td>
+      <td>-0.138849</td>
+      <td>-0.148544</td>
+      <td>-0.140816</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.187981</td>
-      <td>-0.136050</td>
-      <td>-0.136569</td>
-      <td>-0.125696</td>
-      <td>-0.144774</td>
-      <td>-0.143903</td>
-      <td>-0.150514</td>
-      <td>-0.123261</td>
-      <td>-0.127979</td>
-      <td>-0.140546</td>
+      <td>-0.200752</td>
+      <td>-0.138341</td>
+      <td>-0.144393</td>
+      <td>-0.132879</td>
+      <td>-0.135925</td>
+      <td>-0.131978</td>
+      <td>-0.136726</td>
+      <td>-0.127392</td>
+      <td>-0.134103</td>
+      <td>-0.136464</td>
       <td>...</td>
-      <td>-0.139039</td>
-      <td>-0.139071</td>
-      <td>-0.136210</td>
-      <td>-0.126917</td>
-      <td>-0.113169</td>
-      <td>-0.148298</td>
-      <td>-0.132077</td>
-      <td>-0.129367</td>
-      <td>-0.132688</td>
-      <td>-0.140773</td>
+      <td>-0.137954</td>
+      <td>-0.174203</td>
+      <td>-0.057914</td>
+      <td>-0.254259</td>
+      <td>-0.110434</td>
+      <td>-0.139686</td>
+      <td>-0.126445</td>
+      <td>-0.137335</td>
+      <td>-0.147117</td>
+      <td>-0.140065</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.182329</td>
-      <td>-0.135258</td>
-      <td>-0.135223</td>
-      <td>-0.123763</td>
-      <td>-0.142814</td>
-      <td>-0.142345</td>
-      <td>-0.149081</td>
-      <td>-0.122170</td>
-      <td>-0.126633</td>
-      <td>-0.139225</td>
+      <td>-0.194689</td>
+      <td>-0.136834</td>
+      <td>-0.143045</td>
+      <td>-0.130940</td>
+      <td>-0.134820</td>
+      <td>-0.130831</td>
+      <td>-0.135527</td>
+      <td>-0.126683</td>
+      <td>-0.132549</td>
+      <td>-0.135109</td>
       <td>...</td>
-      <td>-0.137456</td>
-      <td>-0.138098</td>
-      <td>-0.135059</td>
-      <td>-0.125963</td>
-      <td>-0.112675</td>
-      <td>-0.147361</td>
-      <td>-0.131115</td>
-      <td>-0.128630</td>
-      <td>-0.131473</td>
-      <td>-0.138698</td>
+      <td>-0.136760</td>
+      <td>-0.173490</td>
+      <td>-0.056598</td>
+      <td>-0.250939</td>
+      <td>-0.109553</td>
+      <td>-0.138815</td>
+      <td>-0.124904</td>
+      <td>-0.135538</td>
+      <td>-0.145421</td>
+      <td>-0.139119</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.176446</td>
-      <td>-0.134164</td>
-      <td>-0.133634</td>
-      <td>-0.121521</td>
-      <td>-0.140552</td>
-      <td>-0.140592</td>
-      <td>-0.147357</td>
-      <td>-0.120930</td>
-      <td>-0.125047</td>
-      <td>-0.137604</td>
+      <td>-0.188423</td>
+      <td>-0.135064</td>
+      <td>-0.141408</td>
+      <td>-0.128770</td>
+      <td>-0.133499</td>
+      <td>-0.129471</td>
+      <td>-0.134094</td>
+      <td>-0.125793</td>
+      <td>-0.130749</td>
+      <td>-0.133528</td>
       <td>...</td>
-      <td>-0.135580</td>
-      <td>-0.136869</td>
-      <td>-0.133638</td>
-      <td>-0.124818</td>
-      <td>-0.111893</td>
-      <td>-0.146236</td>
-      <td>-0.130074</td>
-      <td>-0.127727</td>
-      <td>-0.129949</td>
-      <td>-0.136235</td>
+      <td>-0.135233</td>
+      <td>-0.172528</td>
+      <td>-0.055134</td>
+      <td>-0.247242</td>
+      <td>-0.108514</td>
+      <td>-0.137768</td>
+      <td>-0.123094</td>
+      <td>-0.133368</td>
+      <td>-0.143389</td>
+      <td>-0.137937</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 34 columns</p>
+<p>5 rows × 35 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -1009,7 +1032,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/681a606c9ababb2c348b57785e32edf22890fe1ec0b07990c85a74eddb5a8407.png" src="../../_images/681a606c9ababb2c348b57785e32edf22890fe1ec0b07990c85a74eddb5a8407.png" />
+<img alt="../../_images/88775b3661335db7ae94c9e190279ac01484455a9660ec3827d044f1863d461b.png" src="../../_images/88775b3661335db7ae94c9e190279ac01484455a9660ec3827d044f1863d461b.png" />
 </div>
 </div>
 </section>
@@ -1052,10 +1075,10 @@ title="Print to PDF"
             <p class="prev-next-title">Heart Rate Varability (HRV)</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../ecg_edr/ecg_edr.html" title="next page">
+    <a class='right-next' id="next-link" href="../ecg_delineate/ecg_delineate.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ECG-Derived Respiration (EDR)</p>
+        <p class="prev-next-title">Locate P, Q, S and T waves in ECG</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -13,9 +13,12 @@ Physiological
    bio_custom/bio_custom
    ecg_hrv/ecg_hrv
    ecg_heartbeats/ecg_heartbeats
+   ecg_delineate/ecg_delineate
    ecg_edr/ecg_edr
    ecg_generate_12leads/ecg_generate_12leads
    eda_peaks/eda_peaks
+   rsp_rrv/rsp_rrv
+   eog_analyze/eog_analyze
    signal_simulation/signal_simulation
 
 EEG

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>How to create epochs &#8212; NeuroKit2 0.1.8 documentation</title>
+    <title>Create epochs &#8212; NeuroKit2 0.1.8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -251,6 +251,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../ecg_edr/ecg_edr.html">
      ECG-Derived Respiration (EDR)
     </a>
@@ -263,6 +268,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../eda_peaks/eda_peaks.html">
      Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
     </a>
    </li>
    <li class="toctree-l2">
@@ -282,7 +297,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     How to create epochs
+     Create epochs
     </a>
    </li>
   </ul>
@@ -537,7 +552,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>How to create epochs</h1>
+                <h1>Create epochs</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -567,8 +582,8 @@ title="Print to PDF"
                 
               <div>
                 
-  <section id="how-to-create-epochs">
-<h1>How to create epochs<a class="headerlink" href="#how-to-create-epochs" title="Permalink to this headline">#</a></h1>
+  <section id="create-epochs">
+<h1>Create epochs<a class="headerlink" href="#create-epochs" title="Permalink to this headline">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>In your experiment, participants undergo a number of trials (events) and these events are possibly of different conditions. You are wondering how can you locate these events on your signals and perhaps make them into epochs for future analysis?</p>
 <p>This example shows how to use Neurokit to extract epochs from data based on events localisation. In case you have multiple data files for each subject, this example also shows you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
@@ -612,7 +627,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f1f0393a800&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f2b09456890&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/5f8e8f018054867beeb35a41497edc8ff44cd9c819ec5b01f37418794106741f.png" src="../../_images/5f8e8f018054867beeb35a41497edc8ff44cd9c819ec5b01f37418794106741f.png" />
