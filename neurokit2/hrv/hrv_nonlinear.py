@@ -28,7 +28,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """**Computes nonlinear indices of Heart Rate Variability (HRV)**
 
     Non-linear indices include features derived from the *Poincaré plot*, as well as other
-    :func:`.complexity` indices.
+    :func:`.complexity` indices. Note that there exist many more complexity indices that are
+    available in NeuroKit2 and that could be applied to HRV. The ``hrv_nonlinear()`` function only
+    includes the most commonly used indices.
 
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
