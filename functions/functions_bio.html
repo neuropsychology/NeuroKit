@@ -231,8 +231,28 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
      Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
     </a>
    </li>
    <li class="toctree-l2">
@@ -243,6 +263,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
      Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
     </a>
    </li>
    <li class="toctree-l2">
@@ -646,17 +671,17 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">       ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0     1.051662  -0.071513  70.013484  ...            0    0.040   7.908799</span>
-<span class="go">1     0.999233  -0.194060  70.013484  ...            0    0.040   7.908799</span>
-<span class="go">2     0.863378  -0.329307  70.013484  ...            0    0.040   7.908799</span>
-<span class="go">3     0.670241  -0.481670  70.013484  ...            0    0.040   7.908799</span>
-<span class="go">4     0.447696  -0.648046  70.013484  ...            0    0.040   7.908799</span>
+<span class="go">0     1.088008  -0.069063  70.020747  ...            0    0.024   7.944331</span>
+<span class="go">1     1.033215  -0.196503  70.020747  ...            0    0.024   7.944331</span>
+<span class="go">2     0.891571  -0.336616  70.020747  ...            0    0.024   7.944331</span>
+<span class="go">3     0.691233  -0.493509  70.020747  ...            0    0.024   7.944331</span>
+<span class="go">4     0.462116  -0.663577  70.020747  ...            0    0.024   7.944331</span>
 <span class="go">...        ...        ...        ...  ...          ...      ...        ...</span>
-<span class="go">9995 -0.116114  -0.039720  69.124424  ...            0    0.012   7.913172</span>
-<span class="go">9996 -0.114706  -0.037433  69.124424  ...            0    0.012   7.913172</span>
-<span class="go">9997 -0.113027  -0.034943  69.124424  ...            0    0.012   7.913172</span>
-<span class="go">9998 -0.111031  -0.032286  69.124424  ...            0    0.012   7.913172</span>
-<span class="go">9999 -0.108667  -0.029531  69.124424  ...            0    0.012   7.913172</span>
+<span class="go">9995 -0.080058  -0.048220  70.754717  ...            0    0.008   7.969585</span>
+<span class="go">9996 -0.075372  -0.043676  70.754717  ...            0    0.008   7.969585</span>
+<span class="go">9997 -0.069713  -0.038387  70.754717  ...            0    0.008   7.969585</span>
+<span class="go">9998 -0.062961  -0.032501  70.754717  ...            0    0.008   7.969585</span>
+<span class="go">9999 -0.054995  -0.026264  70.754717  ...            0    0.008   7.969585</span>
 
 <span class="go">[10000 rows x 46 columns]</span>
 
