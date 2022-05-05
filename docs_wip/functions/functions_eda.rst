@@ -35,6 +35,10 @@ Preprocessing
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_peaks
 
+*eda_phasic()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_phasic
+
 Analysis
 ^^^^^^^^^
 
