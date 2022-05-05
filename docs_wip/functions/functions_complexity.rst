@@ -53,6 +53,10 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_higuchi
 
+*fractal_hurst()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_hurst
+
 .. *fractal_correlation()*
 .. """"""""""""""""""""""
 .. .. autofunction:: neurokit2.complexity.fractal_correlation
@@ -165,7 +169,7 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_hierarchical
 
 
-Other
+Other indices
 ^^^^^^^^^^^^^^^^^
 *fisher_information()*
 """"""""""""""""""""""
@@ -182,10 +186,6 @@ Other
 *complexity_relativeroughness()*
 """"""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_relativeroughness
-
-*fractal_hurst()*
-"""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.fractal_hurst
 
 *complexity_lyapunov()*
 """""""""""""""""""""""""
