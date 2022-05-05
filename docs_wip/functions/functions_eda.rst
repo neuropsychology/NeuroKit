@@ -23,3 +23,7 @@ Main
 *eda_eventrelated()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_eventrelated
+
+*eda_findpeaks()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_findpeaks
