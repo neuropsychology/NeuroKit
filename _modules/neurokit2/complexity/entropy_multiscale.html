@@ -501,7 +501,8 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.entropy_symbolicdynamic</span> <span class="kn">import</span> <span class="n">entropy_symbolicdynamic</span>
 <span class="kn">from</span> <span class="nn">.optim_complexity_tolerance</span> <span class="kn">import</span> <span class="n">complexity_tolerance</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_phi</span><span class="p">,</span> <span class="n">_phi_divide</span>
-<span class="kn">from</span> <span class="nn">.utils_complexity_coarsegraining</span> <span class="kn">import</span> <span class="n">_get_scales</span><span class="p">,</span> <span class="n">complexity_coarsegraining</span>
+<span class="kn">from</span> <span class="nn">.utils_complexity_coarsegraining</span> <span class="kn">import</span> <span class="p">(</span><span class="n">_get_scales</span><span class="p">,</span>
+                                              <span class="n">complexity_coarsegraining</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="entropy_multiscale"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.entropy_multiscale">[docs]</a><span class="k">def</span> <span class="nf">entropy_multiscale</span><span class="p">(</span>
@@ -563,11 +564,11 @@ title="Open an issue"
 <span class="sd">        create a range until the specified int. See :func:`complexity_coarsegraining` for details.</span>
 <span class="sd">    dimension : int</span>
 <span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
-<span class="sd">        :func:`complexity_dimension()` to estimate the optimal value for this parameter.</span>
+<span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter.</span>
 <span class="sd">    tolerance : float</span>
 <span class="sd">        Tolerance (often denoted as *r*), distance to consider two data points as similar. If</span>
 <span class="sd">        ``&quot;sd&quot;`` (default), will be set to :math:`0.2 * SD_{signal}`. See</span>
-<span class="sd">        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.</span>
+<span class="sd">        :func:`complexity_tolerance` to estimate the optimal value for this parameter.</span>
 <span class="sd">    method : str</span>
 <span class="sd">        What version of multiscale entropy to compute. Can be one of ``&quot;MSEn&quot;``, ``&quot;CMSEn&quot;``,</span>
 <span class="sd">        ``&quot;RCMSEn&quot;``, ``&quot;MMSEn&quot;``, ``&quot;IMSEn&quot;``, ``&quot;MSApEn&quot;``, ``&quot;MSPEn&quot;``, ``&quot;CMSPEn&quot;``,</span>
