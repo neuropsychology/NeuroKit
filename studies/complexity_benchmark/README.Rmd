@@ -56,7 +56,7 @@ The script to generate the data can be found at ...
 
 Generated 5 types of signals, to which we added different types of noise.
 
-```{r message=FALSE, warning=FALSE, fig.height=20, fig.width=12}
+```{r message=FALSE, warning=FALSE, fig.height=20, fig.width=12, cache=TRUE}
 library(tidyverse)
 library(easystats)
 library(patchwork)
@@ -268,7 +268,7 @@ colors <- c(
 
 ### Computation Time
 
-```{r computation_time, message=FALSE, warning=FALSE, fig.width=16*1.25, fig.height=10*1.25}
+```{r computation_time, message=FALSE, warning=FALSE, fig.width=16*1.25, fig.height=10*1.25, cache=TRUE}
 order <- df |>
   group_by(Index) |>
   summarize(Duration = median(Duration)) |>
@@ -392,7 +392,7 @@ estimate_relation(model) |>
 ### Correlation
 
 
-```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15}
+```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15, cache=TRUE}
 data <- df |>
   mutate(i = paste(Signal, Length, Noise_Type, Noise_Intensity, sep = "__")) |>
   select(i, Index, Result) |>
@@ -461,7 +461,7 @@ cor <- get_cor(data)
   - Remove **RR**  because it's slower.
 
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE, cache=TRUE}
 cor |>
   cor_lower() |>
   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |>
@@ -487,21 +487,10 @@ filter(averagetime, Index %in% c("FuzzyEn", "FuzzyApEn"))
 filter(averagetime, Index %in% c("SVDEn", "FuzzycApEn"))
 filter(averagetime, Index %in% c("CPEn", "CRPEn"))
 filter(averagetime, Index %in% c("NLDFD", "RR"))
+```
 
 
-# NLFD | RR
-# NLFD | RR
-# - Drop RR because it's slower
-# H (uncorrected) | H (corrected)
-# - ??
-# SVDEn | FuzzyEn
-# - Drop FuzzyEn because it's slower
-
-# Hasselman positively correlated with most of the others
-# - RR: much slower
-
-
-
+```{r message=FALSE, warning=FALSE, cache=TRUE}
 data <- data |>
   select(
     -`CREn (B)`,
@@ -517,11 +506,14 @@ data <- data |>
     -FuzzycApEn,
     -CPEn,
     -RR,
+    -MFDFA_HDelta,
+    -FuzzyRCMSEn,
+    -`CREn (1000)`, -`CREn (100)`,
+    -RQA_VEn, -RQA_LEn
   )
 
 cor <- get_cor(data)
 ```
-
 
 <!-- ### Hierarchical CLustering -->
 
@@ -544,7 +536,7 @@ cor <- get_cor(data)
 ### Factor Analysis
 
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=18}
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))

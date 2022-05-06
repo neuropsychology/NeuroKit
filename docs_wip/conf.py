@@ -93,6 +93,10 @@ napoleon_use_ivar = False
 napoleon_use_rtype = False
 add_module_names = False  # If true, the current module name will be prepended to all description
 
+# -- Options for ipython directive  ----------------------------------------
+
+ipython_promptin = ">"  # "In [%d]:"
+ipython_promptout = ">"  # "Out [%d]:"
 
 # -- Options for myst_nb ---------------------------------------------------
 nb_execution_mode = "force"

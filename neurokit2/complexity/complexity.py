@@ -32,8 +32,8 @@ from .information_fisher import fisher_information
 def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="sd", **kwargs):
     """**Complexity and Chaos Analysis**
 
-    Measuring complexity refers to the quantification of various concepts, such as **chaos, entropy,
-    unpredictability, and fractal dimension**.
+    Measuring the complexity of a signal refers to the quantification of various aspects related to
+    concepts such as **chaos**, **entropy**, **unpredictability**, and **fractal dimension**.
 
     .. tip::
 
@@ -50,11 +50,11 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
     separately, to gain more control over the parameters and information that you get.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
-    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_ results:
+    <https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html>`_ results:
 
     .. figure:: ../../studies/complexity_benchmark/figures/computation_time-1.png
        :alt: Complexity Benchmark (Makowski).
-       :target: https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html
+       :target: https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html
 
     Parameters
     ----------
@@ -68,11 +68,11 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
 
     Returns
     --------
@@ -83,8 +83,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
 
     See Also
     --------
-    entropy_permutation, entropy_differential, entropy_svd, fractal_katz, fractal_petrosian,
-    fractal_sevcik, fisher_information, complexity_hjorth, complexity_rqa
+    complexity_delay, complexity_dimension, complexity_tolerance
 
     Examples
     ----------

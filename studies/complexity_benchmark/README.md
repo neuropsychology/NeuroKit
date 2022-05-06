@@ -246,6 +246,33 @@ cor <- get_cor(data)
 -   **NLDFD**, and **RR**
     -   Remove **RR** because it’s slower.
 
+``` r
+data <- data |>
+  select(
+    -`CREn (B)`,
+    -`CREn (D)`, -`ShanEn (D)`,
+    -`CREn (r)`, -`ShanEn (r)`,
+    # -`CREn (C)`, -`ShanEn (C)`,
+    -`PSDFD (Voss1998)`,
+    -`RangeEn (A)`, -`RangeEn (Ac)`,
+    -FI,
+    -MMSEn,
+    -`H (corrected)`,
+    -FuzzyApEn,
+    -FuzzycApEn,
+    -CPEn,
+    -RR,
+    -MFDFA_HDelta,
+    -FuzzyRCMSEn,
+    -`CREn (1000)`, -`CREn (100)`,
+    -RQA_VEn, -RQA_LEn
+  )
+
+cor <- get_cor(data)
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-9-1.png)<!-- -->
+
 <!-- ### Hierarchical CLustering -->
 <!-- ```{r message=FALSE, warning=FALSE} -->
 <!-- n <- parameters::n_clusters(as.data.frame(t(data)), standardize = FALSE) -->
@@ -261,5 +288,81 @@ cor <- get_cor(data)
 <!-- ``` -->
 
 ### Factor Analysis
+
+``` r
+r <- correlation::cor_smooth(as.matrix(cor))
+
+plot(parameters::n_factors(data, cor = r))
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+rez <- parameters::factor_analysis(data, cor = r, n = 14, rotation = "varimax", sort = TRUE, fm="wls")
+# rez <- parameters::principal_components(data, n = 5, sort = TRUE)
+# rez
+
+col <- gsub('[[:digit:]]+', '', names(rez)[2])
+closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with(col)), 1, \(x) which.max(abs(x)))]
+
+loadings <- attributes(rez)$loadings_long |>
+  mutate(
+    Loading = abs(Loading),
+    Component = fct_relevel(Component, rev(names(select(rez, starts_with(col))))),
+    Variable = fct_rev(fct_relevel(Variable, rez$Variable))
+  )
+
+colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Component))), levels(loadings$Component))
+
+
+p1 <- loadings |>
+  # filter(Variable == "CD") |>
+  ggplot(aes(x = Variable, y = Loading)) +
+  geom_bar(aes(fill = Component), stat = "identity") +
+  geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
+  geom_vline(xintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_fill_material_d("rainbow") +
+  coord_flip() +
+  theme_minimal() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  labs(x = NULL) +
+  theme(
+    axis.text.y = element_text(
+      color = rev(colors[closest]),
+      face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")),
+      hjust = 0.5
+    ),
+    axis.text.x = element_blank(),
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+p2 <- order |>
+  mutate(Duration = 1 + Duration * 10000) |>
+  filter(Index %in% loadings$Variable) |>
+  mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |>
+  ggplot(aes(x = log10(Duration), y = Index)) +
+  geom_bar(aes(fill = log10(Duration)), stat = "identity") +
+  geom_hline(yintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
+  scale_x_reverse(expand = c(0, 0)) +
+  # scale_x_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) +
+  scale_y_discrete(position = "right") +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Computation Time", y = NULL) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.text.x = element_blank(),
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+(p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-10-2.png)<!-- -->
 
 ## References
