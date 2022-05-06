@@ -519,8 +519,8 @@ title="Open an issue"
 <div class="viewcode-block" id="complexity"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.complexity">[docs]</a><span class="k">def</span> <span class="nf">complexity</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fast&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">],</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Complexity and Chaos Analysis**</span>
 
-<span class="sd">    Measuring complexity refers to the quantification of various concepts, such as **chaos, entropy,</span>
-<span class="sd">    unpredictability, and fractal dimension**.</span>
+<span class="sd">    Measuring the complexity of a signal refers to the quantification of various aspects related to</span>
+<span class="sd">    concepts such as **chaos**, **entropy**, **unpredictability**, and **fractal dimension**.</span>
 
 <span class="sd">    .. tip::</span>
 
@@ -537,11 +537,11 @@ title="Open an issue"
 <span class="sd">    separately, to gain more control over the parameters and information that you get.</span>
 
 <span class="sd">    The categorization by &quot;computation time&quot; is based on our preliminary `benchmarking study</span>
-<span class="sd">    &lt;https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html&gt;`_ results:</span>
+<span class="sd">    &lt;https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html&gt;`_ results:</span>
 
 <span class="sd">    .. figure:: ../../studies/complexity_benchmark/figures/computation_time-1.png</span>
 <span class="sd">       :alt: Complexity Benchmark (Makowski).</span>
-<span class="sd">       :target: https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html</span>
+<span class="sd">       :target: https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -555,11 +555,11 @@ title="Open an issue"
 <span class="sd">        See :func:`complexity_delay` to estimate the optimal value for this parameter.</span>
 <span class="sd">    dimension : int</span>
 <span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
-<span class="sd">        :func:`complexity_dimension()` to estimate the optimal value for this parameter.</span>
+<span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter.</span>
 <span class="sd">    tolerance : float</span>
 <span class="sd">        Tolerance (often denoted as *r*), distance to consider two data points as similar. If</span>
 <span class="sd">        ``&quot;sd&quot;`` (default), will be set to :math:`0.2 * SD_{signal}`. See</span>
-<span class="sd">        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.</span>
+<span class="sd">        :func:`complexity_tolerance` to estimate the optimal value for this parameter.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
@@ -570,8 +570,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    entropy_permutation, entropy_differential, entropy_svd, fractal_katz, fractal_petrosian,</span>
-<span class="sd">    fractal_sevcik, fisher_information, complexity_hjorth, complexity_rqa</span>
+<span class="sd">    complexity_delay, complexity_dimension, complexity_tolerance</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>

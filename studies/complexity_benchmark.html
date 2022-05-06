@@ -967,6 +967,31 @@ undefined entropies.</p></li>
 </ul>
 </li>
 </ul>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span>
+    <span class="o">-</span><span class="n">`CREn (B)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`CREn (D)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`ShanEn (D)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`CREn (r)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`ShanEn (r)`</span><span class="p">,</span>
+    <span class="c1"># -`CREn (C)`, -`ShanEn (C)`,</span>
+    <span class="o">-</span><span class="n">`PSDFD (Voss1998)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`RangeEn (A)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`RangeEn (Ac)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">FI</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">MMSEn</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`H (corrected)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">FuzzyApEn</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">FuzzycApEn</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">CPEn</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">RR</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">MFDFA_HDelta</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">FuzzyRCMSEn</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`CREn (1000)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`CREn (100)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">RQA_VEn</span><span class="p">,</span> <span class="o">-</span><span class="n">RQA_LEn</span>
+  <span class="p">)</span>
+
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-9-1.png" /><!-- --></p>
 <!-- ### Hierarchical CLustering -->
 <!-- ```{r message=FALSE, warning=FALSE} -->
 <!-- n <- parameters::n_clusters(as.data.frame(t(data)), standardize = FALSE) -->
@@ -983,6 +1008,78 @@ undefined entropies.</p></li>
 </section>
 <section id="factor-analysis">
 <h3>Factor Analysis<a class="headerlink" href="#factor-analysis" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">cor_smooth</span><span class="p">(</span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">cor</span><span class="p">))</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">parameters</span><span class="o">::</span><span class="nf">n_factors</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-10-1.png" /><!-- --></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">14</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">fm</span><span class="o">=</span><span class="s">&quot;wls&quot;</span><span class="p">)</span>
+<span class="c1"># rez &lt;- parameters::principal_components(data, n = 5, sort = TRUE)</span>
+<span class="c1"># rez</span>
+
+<span class="n">col</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#39;[[:digit:]]+&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nf">names</span><span class="p">(</span><span class="n">rez</span><span class="p">)[</span><span class="m">2</span><span class="p">])</span>
+<span class="n">closest</span> <span class="o">&lt;-</span> <span class="nf">colnames</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">)))[</span><span class="nf">apply</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">)),</span> <span class="m">1</span><span class="p">,</span> \<span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">which.max</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)))]</span>
+
+<span class="n">loadings</span> <span class="o">&lt;-</span> <span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">loadings_long</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span>
+    <span class="n">Loading</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">Loading</span><span class="p">),</span>
+    <span class="n">Component</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Component</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">))))),</span>
+    <span class="n">Variable</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Variable</span><span class="p">,</span> <span class="n">rez</span><span class="o">$</span><span class="n">Variable</span><span class="p">))</span>
+  <span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">&lt;-</span> <span class="nf">setNames</span><span class="p">(</span><span class="n">see</span><span class="o">::</span><span class="nf">palette_material</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)(</span><span class="nf">length</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">))),</span> <span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">))</span>
+
+
+<span class="n">p1</span> <span class="o">&lt;-</span> <span class="n">loadings</span> <span class="o">|&gt;</span>
+  <span class="c1"># filter(Variable == &quot;CD&quot;) |&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Component</span><span class="p">),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="nf">sort</span><span class="p">(</span><span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">))),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_material_d</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">coord_flip</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">guides</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">guide_legend</span><span class="p">(</span><span class="n">reverse</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span>
+    <span class="n">axis.text.y</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span>
+      <span class="n">color</span> <span class="o">=</span> <span class="nf">rev</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">closest</span><span class="p">]),</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="nf">rev</span><span class="p">(</span><span class="nf">ifelse</span><span class="p">(</span><span class="n">rez</span><span class="o">$</span><span class="n">Variable</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">),</span> <span class="s">&quot;italic&quot;</span><span class="p">,</span> <span class="s">&quot;plain&quot;</span><span class="p">)),</span>
+      <span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span>
+    <span class="p">),</span>
+    <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+    <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()</span>
+  <span class="p">)</span>
+
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">order</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="m">1</span> <span class="o">+</span> <span class="n">Duration</span> <span class="o">*</span> <span class="m">10000</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Index</span> <span class="o">%in%</span> <span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">)),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="nf">sort</span><span class="p">(</span><span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">))),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_x_reverse</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="c1"># scale_x_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf(&quot;%g&quot;, x), expand=c(0, 0)) +</span>
+  <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">position</span> <span class="o">=</span> <span class="s">&quot;right&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_fill_viridis_c</span><span class="p">(</span><span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">&quot;Computation Time&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span>
+    <span class="n">axis.text.y</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+    <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()</span>
+  <span class="p">)</span>
+
+<span class="p">(</span><span class="n">p2</span> <span class="o">|</span> <span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Computation Time and Factor Loading&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-10-2.png" /><!-- --></p>
 </section>
 </section>
 <section id="references">
