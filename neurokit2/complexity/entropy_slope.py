@@ -22,7 +22,7 @@ def entropy_slope(signal, dimension=3, thresholds=[0.1, 45], **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     thresholds : list
         Angular thresholds (called *levels*). A list of monotonically increasing  values in the
         range [0, 90] degrees.

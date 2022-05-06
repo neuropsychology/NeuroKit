@@ -29,7 +29,7 @@ def entropy_hierarchical(
         differently here, see :func:`complexity_multiscale` for details.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     method : str
         Method for symbolic sequence partitioning. Can be one of ``"MEP"`` (default),
         ``"linear"``, ``"uniform"``, ``"kmeans"``.

@@ -41,7 +41,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     show : bool
         Plot the reconstructed attractor. See :func:`complexity_attractor` for details.
     **kwargs
@@ -50,7 +50,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     Returns
     -------
     array
-        Embedded time-series, of shape ``(n_times - (order - 1) * delay, order)``
+        Embedded time-series, of shape ``(length - (dimension - 1) * delay, order)``
 
     See Also
     ------------
@@ -58,32 +58,67 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Basic example
-    >>> signal = [1, 2, 3, 2.5, 2.0, 1.5]
-    >>> embedded = nk.complexity_embedding(signal, delay = 2, dimension = 2, show=True) #doctest: +SKIP
-    >>>
-    >>> # Artifical example
-    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
-    >>>
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True) #doctest: +SKIP
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True) #doctest: +SKIP
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True) #doctest: +SKIP
-    >>>
-    >>> # Realistic example
-    >>> ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200, desired_length=len(ecg))
-    >>>
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True) #doctest: +SKIP
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True) #doctest: +SKIP
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=4, show=True) #doctest: +SKIP
+    **Example 1**: Understanding the output
+
+    .. ipython
+
+      import neurokit2 as nk
+
+      # Basic example
+      signal = [1, 2, 3, 2.5, 2.0, 1.5]
+      embedded = nk.complexity_embedding(signal, delay = 2, dimension = 2)
+      embedded
+
+    The first columns contains the beginning of the signal, and the second column contains the
+    values at *t+2*.
+
+    **Example 2**: 2D, 3D, and "4D" Attractors. Note that 3D attractors are slow to plot.
+
+    .. ipython
+
+      # Artifical example
+      signal = nk.signal_simulate(duration=4, sampling_rate=200, frequency=5, noise=0.01)
+
+      @savefig p_complexity_embedding1.png scale=100%
+      embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython
+
+      @savefig p_complexity_embedding2.png scale=100%
+      embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython
+
+      @savefig p_complexity_embedding3.png scale=100%
+      embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True)
+      @suppress
+      plt.close()
+
+    In the last 3D-attractor, the 4th dimension is represented by the color.
+
+    **Example 3**: Attractor of heart rate
+
+      ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
+      peaks, _ = nk.ecg_peaks(ecg, sampling_rate=200)
+      signal = nk.ecg_rate(peaks, sampling_rate=200, desired_length=len(ecg))
+
+      @savefig p_complexity_embedding4.png scale=100%
+      embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True)
+      @suppress
+      plt.close()
 
     References
     -----------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
-      for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
-      on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    * Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based
+      method for determining the optimal embedding parameters of a signal. In 2003 IEEE
+      International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.
+      (ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    * Takens, F. (1981). Detecting strange attractors in turbulence. In Dynamical systems and
+      turbulence, Warwick 1980 (pp. 366-381). Springer, Berlin, Heidelberg.
 
     """
     # If string

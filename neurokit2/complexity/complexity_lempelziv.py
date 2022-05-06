@@ -40,7 +40,7 @@ def complexity_lempelziv(
         when ``permutation=True``.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter. Only used
+        :func:`complexity_dimension` to estimate the optimal value for this parameter. Only used
         when ``permutation=True``.
     **kwargs
         Other arguments to be passed to :func:`complexity_ordinalpatterns` (if

@@ -30,7 +30,7 @@ def fisher_information(signal, delay=1, dimension=2):
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
 
     Returns
     -------

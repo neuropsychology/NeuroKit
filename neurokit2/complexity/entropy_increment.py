@@ -31,7 +31,7 @@ def entropy_increment(signal, dimension=2, q=4, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     q : float
         The quantifying resolution *q* represents the precision of *IncrEn*, with larger values
         indicating a higher precision, causing IncrEn to be more sensitive to subtle fluctuations.

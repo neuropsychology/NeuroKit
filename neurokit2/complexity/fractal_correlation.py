@@ -31,7 +31,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     radius : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in

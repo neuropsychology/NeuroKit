@@ -206,6 +206,10 @@ Utilities
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_simulate
 
+*complexity_embedding()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_embedding
+
 *complexity_attractor()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_attractor

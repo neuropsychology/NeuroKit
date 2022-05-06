@@ -95,6 +95,7 @@ add_module_names = False  # If true, the current module name will be prepended t
 
 # -- Options for ipython directive  ----------------------------------------
 
+# Doesn't work?
 # ipython_promptin = ">"  # "In [%d]:"
 # ipython_promptout = ">"  # "Out [%d]:"
 

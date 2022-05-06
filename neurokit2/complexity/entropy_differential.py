@@ -30,7 +30,7 @@ def entropy_differential(signal, **kwargs):
 
     See Also
     --------
-    entropy_shannon, entropy_cumulative_residual
+    entropy_shannon, entropy_cumulativeresidual
 
     Examples
     ----------

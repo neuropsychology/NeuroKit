@@ -17,7 +17,7 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     c : int
         Number of symbols *c*.
     method : str

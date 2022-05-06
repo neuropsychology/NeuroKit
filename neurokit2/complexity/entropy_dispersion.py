@@ -22,7 +22,7 @@ def entropy_dispersion(
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     c : int
         Number of symbols *c*. Rostaghi (2016) recommend in practice a *c* between 4 and 8.
     method : str
