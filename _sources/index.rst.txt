@@ -8,10 +8,10 @@
 
     Like the software? Don't forget to support it by `starring <https://github.com/neuropsychology/NeuroKit>`_ |:star:|, sponsoring |:revolving_hearts:|, or spreading the word |:love_letter:|
 
-    We don't want NeuroKit2 to become a stale, static and outdated software. We count on you
-    to help us making it better even by **contributing even the tiniest improvements** (a typo, some
-    rephrasing to make things clearer, a comment to the code, a new option, etc.). **NeuroKit2
-    belongs to you.** Make yourself part of the team!
+    And don't forget, we don't want NeuroKit2 to become a stale, static and outdated software. We
+    count on you to help us making it better by **contributing even the tiniest improvements**
+    (a typo, a rephrasing to make things clearer, a comment to the code, a new option, etc.).
+    **NeuroKit2 belongs to you.** Make yourself part of the team!
 
 Home
 ====

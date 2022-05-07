@@ -778,11 +778,7 @@ noise.</p>
 </section>
 <section id="results">
 <h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">patchwork</span><span class="p">)</span>
-
-<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_Complexity.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_Complexity.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Method</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Method</span><span class="p">))</span>
 
 <span class="c1"># Show and filter out NaNs</span>
@@ -867,7 +863,7 @@ noise.</p>
 
 
 
-<span class="n">get_cor</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">get_cor</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">cor</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">correlation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;spearman&quot;</span><span class="p">,</span> <span class="n">redundant</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">|&gt;</span>
     <span class="n">correlation</span><span class="o">::</span><span class="nf">cor_sort</span><span class="p">(</span><span class="n">hclust_method</span> <span class="o">=</span> <span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
   <span class="n">p</span> <span class="o">&lt;-</span> <span class="n">cor</span> <span class="o">|&gt;</span>
@@ -886,12 +882,12 @@ noise.</p>
     <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Correlation Matrix of Complexity Indices&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
     <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
     <span class="nf">theme</span><span class="p">(</span>
-      <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">),</span>
+      <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">90</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">),</span>
       <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
       <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
       <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()</span>
     <span class="p">)</span>
-  <span class="nf">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="nf">if</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span> <span class="nf">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
   <span class="n">cor</span>
 <span class="p">}</span>
 
@@ -899,7 +895,6 @@ noise.</p>
 <span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-7-1.png" /><!-- --></p>
 </section>
 <section id="duplicates">
 <h3>Duplicates<a class="headerlink" href="#duplicates" title="Permalink to this headline">#</a></h3>
@@ -983,12 +978,13 @@ undefined entropies.</p></li>
     <span class="o">-</span><span class="n">CPEn</span><span class="p">,</span>
     <span class="o">-</span><span class="n">RR</span><span class="p">,</span>
     <span class="o">-</span><span class="n">MFDFA_HDelta</span><span class="p">,</span>
-    <span class="o">-</span><span class="n">FuzzyRCMSEn</span><span class="p">,</span>
-    <span class="o">-</span><span class="n">`CREn (1000)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`CREn (100)`</span><span class="p">,</span>
+    <span class="c1"># -FuzzyRCMSEn,</span>
+    <span class="c1"># -`CREn (1000)`,</span>
+    <span class="o">-</span><span class="n">`CREn (100)`</span><span class="p">,</span>
     <span class="o">-</span><span class="n">RQA_VEn</span><span class="p">,</span> <span class="o">-</span><span class="n">RQA_LEn</span>
   <span class="p">)</span>
 
-<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-9-1.png" /><!-- --></p>
@@ -1014,8 +1010,8 @@ undefined entropies.</p></li>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-10-1.png" /><!-- --></p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">14</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">fm</span><span class="o">=</span><span class="s">&quot;wls&quot;</span><span class="p">)</span>
-<span class="c1"># rez &lt;- parameters::principal_components(data, n = 5, sort = TRUE)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">fm</span><span class="o">=</span><span class="s">&quot;ml&quot;</span><span class="p">)</span>
+<span class="c1"># rez &lt;- parameters::principal_components(data, n = 13, sort = TRUE)</span>
 <span class="c1"># rez</span>
 
 <span class="n">col</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#39;[[:digit:]]+&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nf">names</span><span class="p">(</span><span class="n">rez</span><span class="p">)[</span><span class="m">2</span><span class="p">])</span>
@@ -1023,7 +1019,7 @@ undefined entropies.</p></li>
 
 <span class="n">loadings</span> <span class="o">&lt;-</span> <span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">loadings_long</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span>
-    <span class="n">Loading</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">Loading</span><span class="p">),</span>
+    <span class="n">Loading</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">,</span>
     <span class="n">Component</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Component</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">))))),</span>
     <span class="n">Variable</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Variable</span><span class="p">,</span> <span class="n">rez</span><span class="o">$</span><span class="n">Variable</span><span class="p">))</span>
   <span class="p">)</span>
@@ -1036,7 +1032,7 @@ undefined entropies.</p></li>
   <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Component</span><span class="p">),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="nf">sort</span><span class="p">(</span><span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">))),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">)[</span><span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">)]),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">scale_fill_material_d</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">coord_flip</span><span class="p">()</span> <span class="o">+</span>
@@ -1058,7 +1054,8 @@ undefined entropies.</p></li>
 <span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">order</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="m">1</span> <span class="o">+</span> <span class="n">Duration</span> <span class="o">*</span> <span class="m">10000</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">filter</span><span class="p">(</span><span class="n">Index</span> <span class="o">%in%</span> <span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)</span> <span class="o">|&gt;</span>
-  <span class="nf">mutate</span><span class="p">(</span><span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)),</span>
+         <span class="n">Duration</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="n">Duration</span><span class="p">))</span> <span class="o">|&gt;</span>
   <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">)),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="nf">sort</span><span class="p">(</span><span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">))),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
@@ -1079,7 +1076,7 @@ undefined entropies.</p></li>
 <span class="p">(</span><span class="n">p2</span> <span class="o">|</span> <span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Computation Time and Factor Loading&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-10-2.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-11-1.png" /><!-- --></p>
 </section>
 </section>
 <section id="references">
