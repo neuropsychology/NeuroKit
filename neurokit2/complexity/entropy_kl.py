@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import scipy.stats
-import sklearn.metrics
 import sklearn.neighbors
 
 from .utils_complexity_embedding import complexity_embedding

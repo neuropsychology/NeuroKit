@@ -15,7 +15,6 @@ from .optim_complexity_dimension import (
     _embedding_dimension_plot,
 )
 from .optim_complexity_tolerance import _optimize_tolerance_plot
-from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_optimize(
@@ -30,7 +29,9 @@ def complexity_optimize(
 ):
     """**Joint-estimation of optimal complexity parameters**
 
-    The selection of the parameters *Dimension* and *Delay* is a challenge. One approach is to select them (semi) independently (as dimension selection often requires the delay) from each other, using :func:`complexity_delay` and :func:`complexity_dimension`.
+    The selection of the parameters *Dimension* and *Delay* is a challenge. One approach is to
+    select them (semi) independently (as dimension selection often requires the delay) from each
+    other, using :func:`complexity_delay` and :func:`complexity_dimension`.
 
     Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance (r).
 

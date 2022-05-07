@@ -40,6 +40,12 @@ def complexity_delay(
     :math:`\\tau` is larger than it should be, successive coordinates are almost independent,
     resulting in an uncorrelated and unstructured cloud of points.
 
+    The selection of the parameters *delay* and :func:`*dimension* <complexity_dimension>` is a
+    challenge. One approach is to select them (semi) independently (as dimension selection often
+    requires the delay), using :func:`complexity_delay` and :func:`complexity_dimension`. However,
+    some joint-estimation methods do exist, that attempt at finding the optimal delay and dimension
+    at the same time.
+
     Several authors suggested different methods to guide the choice of the delay:
 
     * **Fraser and Swinney (1986)** suggest using the first local minimum of the mutual information
@@ -66,7 +72,7 @@ def complexity_delay(
       The ``algorithm`` argument (default to ``"fft"``) and will be passed as the ``method``
       argument of  ``signal_psd()``.
 
-      **Joint-Methods for Delay and Dimension**
+    **Joint-Methods for Delay and Dimension**
 
     * **Gautama (2003)** mentions that in practice, it is common to have a fixed time lag and to
       adjust the embedding dimension accordingly. As this can lead to large *m* values (and thus to
@@ -504,6 +510,77 @@ def _embedding_delay_cc_deviation(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10,
 
 
 # =============================================================================
+# Plotting Generics
+# =============================================================================
+def _embedding_delay_plot(
+    signal,
+    metric_values,
+    tau_sequence,
+    tau=1,
+    metric="Mutual Information",
+    ax0=None,
+    ax1=None,
+    plot="2D",
+):
+
+    # Prepare figure
+    if ax0 is None and ax1 is None:
+        fig = plt.figure(constrained_layout=False)
+        spec = matplotlib.gridspec.GridSpec(
+            ncols=1, nrows=2, height_ratios=[1, 3], width_ratios=[2]
+        )
+        ax0 = fig.add_subplot(spec[0])
+        if plot == "2D":
+            ax1 = fig.add_subplot(spec[1])
+        elif plot == "3D":
+            ax1 = fig.add_subplot(spec[1], projection="3d")
+    else:
+        fig = None
+
+    ax0.set_title("Optimization of Delay")
+    ax0.set_xlabel("Time Delay")
+    ax0.set_ylabel(metric)
+    ax0.plot(tau_sequence, metric_values, color="#FFC107")
+    ax0.axvline(x=tau, color="#E91E63", label="Optimal delay: " + str(tau))
+    ax0.legend(loc="upper right")
+    ax1.set_title("Attractor")
+    ax1.set_xlabel("Signal [i]")
+    ax1.set_ylabel("Signal [i-" + str(tau) + "]")
+
+    # Get data points, set axis limits
+    embedded = complexity_embedding(signal, delay=tau, dimension=3)
+    x = embedded[:, 0]
+    y = embedded[:, 1]
+    z = embedded[:, 2]
+    ax1.set_xlim(x.min(), x.max())
+    ax1.set_ylim(x.min(), x.max())
+
+    # Colors
+    norm = plt.Normalize(z.min(), z.max())
+    cmap = plt.get_cmap("plasma")
+    colors = cmap(norm(x))
+
+    # Attractor for 2D vs 3D
+    if plot == "2D":
+        points = np.array([x, y]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = matplotlib.collections.LineCollection(segments, cmap="plasma", norm=norm)
+        lc.set_array(z)
+        ax1.add_collection(lc)
+
+    elif plot == "3D":
+        points = np.array([x, y, z]).T.reshape(-1, 1, 3)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        for i in range(len(x) - 1):
+            seg = segments[i]
+            (l,) = ax1.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
+            l.set_solid_capstyle("round")
+        ax1.set_zlabel("Signal [i-" + str(2 * tau) + "]")
+
+    return fig
+
+
+# =============================================================================
 # Optimal Delay via SPAR Method
 # =============================================================================
 
@@ -619,7 +696,7 @@ def _complexity_delay_entropyratio(
     optimal_delay = out["Delay"][idx]
 
     if show is True:
-        fig = plt.figure()
+        plt.figure()
         ax = plt.axes(projection="3d")
         ax.set_title("Joint-Estimation of Optimal Delay and Dimension")
         ax.plot_trisurf(
@@ -657,71 +734,29 @@ def _complexity_delay_entropyratio(
 
 
 # =============================================================================
-# Plotting Generics
+# Joint-Optimization via SymbolicDynamic (Matilla-García, 2021)
 # =============================================================================
-def _embedding_delay_plot(
-    signal,
-    metric_values,
-    tau_sequence,
-    tau=1,
-    metric="Mutual Information",
-    ax0=None,
-    ax1=None,
-    plot="2D",
-):
 
-    # Prepare figure
-    if ax0 is None and ax1 is None:
-        fig = plt.figure(constrained_layout=False)
-        spec = matplotlib.gridspec.GridSpec(
-            ncols=1, nrows=2, height_ratios=[1, 3], width_ratios=[2]
-        )
-        ax0 = fig.add_subplot(spec[0])
-        if plot == "2D":
-            ax1 = fig.add_subplot(spec[1])
-        elif plot == "3D":
-            ax1 = fig.add_subplot(spec[1], projection="3d")
-    else:
-        fig = None
 
-    ax0.set_title("Optimization of Delay")
-    ax0.set_xlabel("Time Delay")
-    ax0.set_ylabel(metric)
-    ax0.plot(tau_sequence, metric_values, color="#FFC107")
-    ax0.axvline(x=tau, color="#E91E63", label="Optimal delay: " + str(tau))
-    ax0.legend(loc="upper right")
-    ax1.set_title("Attractor")
-    ax1.set_xlabel("Signal [i]")
-    ax1.set_ylabel("Signal [i-" + str(tau) + "]")
+# def _complexity_delay_symbolicdynamics(
+#     signal,
+#     delay_max=20,
+#     dimension_max=5,
+#     show=False,
+# ):
+#     """https://www.mdpi.com/1099-4300/23/2/221/htm"""
+#     delay = 1
+#     dimension = 3
+#     e = 3
+#     signal = [2, -7, -12, 5, -1, 9, 14]
 
-    # Get data points, set axis limits
-    embedded = complexity_embedding(signal, delay=tau, dimension=3)
-    x = embedded[:, 0]
-    y = embedded[:, 1]
-    z = embedded[:, 2]
-    ax1.set_xlim(x.min(), x.max())
-    ax1.set_ylim(x.min(), x.max())
+#     embedded = nk.complexity_embedding(signal, delay=delay, dimension=dimension)
 
-    # Colors
-    norm = plt.Normalize(z.min(), z.max())
-    cmap = plt.get_cmap("plasma")
-    colors = cmap(norm(x))
+#     # How to create the symbolic sequence?
+#     symbols = np.zeros((len(embedded), dimension - 1))
+#     for d in range(1, dimension):
+#         # Difference with e
+#         symbols[:, d - 1][np.all(np.abs(embedded[:, d - 1 : d + 1]) >= e, axis=1)] = 1
 
-    # Attractor for 2D vs 3D
-    if plot == "2D":
-        points = np.array([x, y]).T.reshape(-1, 1, 2)
-        segments = np.concatenate([points[:-1], points[1:]], axis=1)
-        lc = matplotlib.collections.LineCollection(segments, cmap="plasma", norm=norm)
-        lc.set_array(z)
-        ax1.add_collection(lc)
-
-    elif plot == "3D":
-        points = np.array([x, y, z]).T.reshape(-1, 1, 3)
-        segments = np.concatenate([points[:-1], points[1:]], axis=1)
-        for i in range(len(x) - 1):
-            seg = segments[i]
-            (l,) = ax1.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
-            l.set_solid_capstyle("round")
-        ax1.set_zlabel("Signal [i-" + str(2 * tau) + "]")
-
-    return fig
+#     symbols[:, 0][np.abs(embedded[:, 0]) >= e] = 1
+#     symbols[:, 1][np.all(embedded[:, 1:] < e, axis=1)] = 1
