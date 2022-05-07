@@ -496,12 +496,10 @@ title="Open an issue"
 <div class="viewcode-block" id="transition_matrix"><a class="viewcode-back" href="../../../functions/functions_markov.html#neurokit2.markov.transition_matrix">[docs]</a><span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Transition Matrix**</span>
 
-<span class="sd">    A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to</span>
-<span class="sd">    describe a sequence of states, also known as **discrete Markov chains**. Each of its entries is</span>
-<span class="sd">    a probability of transitioning from one state to the other.</span>
-
-<span class="sd">    Computes the observed transition matrix and performs a</span>
-<span class="sd">    Chi-square test against the expected transition matrix.</span>
+<span class="sd">    A **Transition Matrix** (also known as a stochastic matrix or a **Markov matrix**) is a</span>
+<span class="sd">    convenient way of representing and describing a sequence of (discrete) states, also known as</span>
+<span class="sd">    **discrete Markov chains**. Each of its entries is a probability of transitioning from one</span>
+<span class="sd">    state to the other.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -539,9 +537,9 @@ title="Open an issue"
 
 <span class="sd">      tm</span>
 
-<span class="sd">    In this example, the transition from D is unknown, resulting in an absence of transitioning</span>
-<span class="sd">    probability. As this can cause issues, unknown probabilities are replaced by a uniform</span>
-<span class="sd">    distribution, but this can be turned off using the ``adjust`` argument.</span>
+<span class="sd">    In this example, the transition from D is unknown (it is the last element), resulting in an</span>
+<span class="sd">    absence of transitioning probability. As this can cause issues, unknown probabilities are</span>
+<span class="sd">    replaced by a uniform distribution, but this can be turned off using the ``adjust`` argument.</span>
 
 <span class="sd">    .. ipython:: python</span>
 

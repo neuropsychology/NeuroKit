@@ -512,7 +512,8 @@ title="Open an issue"
 
 <span class="sd">    For monofractal DFA, the output *alpha* :math:`\\alpha` corresponds to the slope of the linear</span>
 <span class="sd">    trend between the scale factors and the fluctuations. For multifractal DFA, the slope values</span>
-<span class="sd">    under different *q* values are actually generalised Hurst exponents *h*.</span>
+<span class="sd">    under different *q* values are actually generalised Hurst exponents *h*. DFA corresponds to</span>
+<span class="sd">    MFDFA with *q = 2*.</span>
 
 <span class="sd">    The output is for multifractal DFA is a dataframe containing the following features:</span>
 
@@ -537,10 +538,11 @@ title="Open an issue"
 <span class="sd">        non-overlapping windows will be used.</span>
 <span class="sd">    integrate : bool</span>
 <span class="sd">        It is common practice to convert the signal to a random walk (i.e., detrend and integrate,</span>
-<span class="sd">        which corresponds to the signal &#39;profile&#39;). Note that it leads to the flattening of the</span>
-<span class="sd">        signal, which can lead to the loss of some details (see Ihlen, 2012 for an explanation).</span>
-<span class="sd">        Note that for strongly anticorrelated signals, this transformation should be applied  two</span>
-<span class="sd">        times (i.e., provide ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).</span>
+<span class="sd">        which corresponds to the signal &#39;profile&#39;) in order to avoid having too small exponent</span>
+<span class="sd">        values. Note that it leads to the flattening of the signal, which can lead to the loss of</span>
+<span class="sd">        some details (see Ihlen, 2012 for an explanation). Note that for strongly anticorrelated</span>
+<span class="sd">        signals, this transformation should be applied  two times (i.e., provide</span>
+<span class="sd">        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).</span>
 <span class="sd">    order : int</span>
 <span class="sd">       The order of the polynomial trend for detrending, 1 for the linear trend.</span>
 <span class="sd">    multifractal : bool</span>

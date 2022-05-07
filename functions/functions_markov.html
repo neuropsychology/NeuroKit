@@ -669,11 +669,10 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="neurokit2.markov.transition_matrix">
 <span class="sig-name descname"><span class="pre">transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/transition_matrix.html#transition_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.transition_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Transition Matrix</strong></p>
-<p>A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
-describe a sequence of states, also known as <strong>discrete Markov chains</strong>. Each of its entries is
-a probability of transitioning from one state to the other.</p>
-<p>Computes the observed transition matrix and performs a
-Chi-square test against the expected transition matrix.</p>
+<p>A <strong>Transition Matrix</strong> (also known as a stochastic matrix or a <strong>Markov matrix</strong>) is a
+convenient way of representing and describing a sequence of (discrete) states, also known as
+<strong>discrete Markov chains</strong>. Each of its entries is a probability of transitioning from one
+state to the other.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -714,9 +713,9 @@ accessible via the key <code class="docutils literal notranslate"><span class="p
 <span class="go">D  0.25  0.250000  0.250000  0.25</span>
 </pre></div>
 </div>
-<p>In this example, the transition from D is unknown, resulting in an absence of transitioning
-probability. As this can cause issues, unknown probabilities are replaced by a uniform
-distribution, but this can be turned off using the <code class="docutils literal notranslate"><span class="pre">adjust</span></code> argument.</p>
+<p>In this example, the transition from D is unknown (it is the last element), resulting in an
+absence of transitioning probability. As this can cause issues, unknown probabilities are
+replaced by a uniform distribution, but this can be turned off using the <code class="docutils literal notranslate"><span class="pre">adjust</span></code> argument.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">tm</span>
@@ -778,7 +777,7 @@ distribution, but this can be turned off using the <code class="docutils literal
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 2, 1, 0, 0, 3, 0, 0, 0, 3, 1, 2, 2, 1])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 0, 1, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 1, 2])</span>
 </pre></div>
 </div>
 </dd></dl>
