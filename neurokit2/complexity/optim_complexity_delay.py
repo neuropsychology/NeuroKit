@@ -12,13 +12,8 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import (
-    signal_autocor,
-    signal_findpeaks,
-    signal_psd,
-    signal_surrogate,
-    signal_zerocrossings,
-)
+from ..signal import (signal_autocor, signal_findpeaks, signal_psd,
+                      signal_surrogate, signal_zerocrossings)
 from .entropy_kl import entropy_kl
 from .information_mutual import mutual_information
 from .utils_complexity_embedding import complexity_embedding
@@ -745,12 +740,15 @@ def _complexity_delay_entropyratio(
 #     show=False,
 # ):
 #     """https://www.mdpi.com/1099-4300/23/2/221/htm"""
+
 #     delay = 1
 #     dimension = 3
 #     e = 3
+
 #     signal = [2, -7, -12, 5, -1, 9, 14]
 
 #     embedded = nk.complexity_embedding(signal, delay=delay, dimension=dimension)
+#     print(embedded)
 
 #     # How to create the symbolic sequence?
 #     symbols = np.zeros((len(embedded), dimension - 1))

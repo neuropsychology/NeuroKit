@@ -102,10 +102,6 @@ p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulat
 
 
 ```{r message=FALSE, warning=FALSE, results='hide'}
-library(tidyverse)
-library(easystats)
-library(patchwork)
-
 df <- read.csv("data_Complexity.csv") |>
   mutate(Method = as.factor(Method))
 
@@ -223,6 +219,8 @@ colors <- c(
   "SPEn (50)" = "#E91E63",
   "SPEn (100)" = "#E91E63",
   "HEn" = "#E91E63",
+  "KLEn" = "#E91E63",
+  "KLEn (corrected)" = "#E91E63",
   "H (corrected)" = "#2196F3",
   "H (uncorrected)" = "#2196F3",
   "LZC" = "#2196F3",
@@ -401,7 +399,7 @@ data <- df |>
 
 
 
-get_cor <- function(data) {
+get_cor <- function(data, plot=FALSE) {
   cor <- correlation::correlation(data, method = "spearman", redundant = TRUE) |>
     correlation::cor_sort(hclust_method = "ward.D2")
   p <- cor |>
@@ -420,12 +418,12 @@ get_cor <- function(data) {
     labs(title = "Correlation Matrix of Complexity Indices", x = NULL, y = NULL) +
     theme_minimal() +
     theme(
-      axis.text.x = element_text(angle = 45, hjust = 1),
+      axis.text.x = element_text(angle = 90, hjust = 1),
       plot.title = element_text(hjust = 0.5),
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank()
     )
-  plot(p)
+  if(plot) plot(p)
   cor
 }
 
@@ -507,12 +505,12 @@ data <- data |>
     -CPEn,
     -RR,
     -MFDFA_HDelta,
-    -FuzzyRCMSEn,
+    # -FuzzyRCMSEn,
     -`CREn (1000)`, -`CREn (100)`,
     -RQA_VEn, -RQA_LEn
   )
 
-cor <- get_cor(data)
+cor <- get_cor(data, plot=TRUE)
 ```
 
 <!-- ### Hierarchical CLustering -->
@@ -540,9 +538,10 @@ cor <- get_cor(data)
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))
+plot(parameters::n_components(data, cor = r))
 
-rez <- parameters::factor_analysis(data, cor = r, n = 14, rotation = "varimax", sort = TRUE, fm="wls")
-# rez <- parameters::principal_components(data, n = 5, sort = TRUE)
+rez <- parameters::factor_analysis(data, cor = r, n = 13, rotation = "varimax", sort = TRUE, fm="wls")
+# rez <- parameters::principal_components(data, n = 13, sort = TRUE)
 # rez
 
 col <- gsub('[[:digit:]]+', '', names(rez)[2])
