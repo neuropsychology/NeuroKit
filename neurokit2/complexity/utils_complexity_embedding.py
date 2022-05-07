@@ -50,7 +50,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     Returns
     -------
     array
-        Embedded time-series, of shape ``(length - (dimension - 1) * delay, order)``
+        Embedded time-series, of shape ``length - (dimension - 1) * delay``
 
     See Also
     ------------
