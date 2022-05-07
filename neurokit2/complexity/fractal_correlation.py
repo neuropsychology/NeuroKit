@@ -35,7 +35,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     radius : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
-        other packages can be used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
+        other packages can be used via ``'nolds'``, ``'Corr_Dim'`` or ``'boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
     **kwargs
@@ -48,6 +48,15 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute the correlation dimension.
+
+    Examples
+    ----------
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=[5, 7])
 
     References
     -----------
@@ -89,8 +98,8 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
         cd, intercept = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
 
     if show is True:
-        fig = plt.figure()
-        fig.suptitle("Correlation Dimension")
+        plt.figure()
+        plt.title("Correlation Dimension")
         plt.xlabel(r"$\log_{2}$(radius)")
         plt.ylabel(r"$\log_{2}$(correlation sum)")
 
