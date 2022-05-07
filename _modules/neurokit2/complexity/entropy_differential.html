@@ -490,7 +490,7 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
 
-<div class="viewcode-block" id="entropy_differential"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.entropy_differential">[docs]</a><span class="k">def</span> <span class="nf">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_differential"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.entropy_differential">[docs]</a><span class="k">def</span> <span class="nf">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Differential entropy (DiffEn)**</span>
 
 <span class="sd">    Differential entropy (DiffEn; also referred to as continuous entropy) started as an</span>
@@ -504,6 +504,7 @@ title="Open an issue"
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Other arguments passed to ``scipy.stats.differential_entropy()``.</span>
 
@@ -511,13 +512,17 @@ title="Open an issue"
 <span class="sd">    --------</span>
 <span class="sd">    diffen : float</span>
 <span class="sd">        The Differential entropy of the signal.</span>
+<span class="sd">    base: float</span>
+<span class="sd">        The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.</span>
+<span class="sd">        stats.entropy()`` uses Euler&#39;s number (``np.e``) as default (the natural logarithm), giving</span>
+<span class="sd">        a measure of information expressed in *nats*.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information regarding the parameters used</span>
 <span class="sd">        to compute Differential entropy.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    entropy_shannon, entropy_cumulativeresidual</span>
+<span class="sd">    entropy_shannon, entropy_cumulativeresidual, entropy_kl</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>
@@ -556,9 +561,9 @@ title="Open an issue"
     <span class="k">else</span><span class="p">:</span>
         <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;vasicek&quot;</span>
 
-    <span class="n">diffen</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">differential_entropy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">diffen</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">differential_entropy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">diffen</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">}</span></div>
+    <span class="k">return</span> <span class="n">diffen</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s2">&quot;Base&quot;</span><span class="p">:</span> <span class="n">base</span><span class="p">}</span></div>
 </pre></div>
 
               </div>

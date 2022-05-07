@@ -602,6 +602,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-surrogate">
+     <em>
+      signal_surrogate()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -716,6 +723,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#signal-interpolate">
      <em>
       signal_interpolate()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#signal-surrogate">
+     <em>
+      signal_surrogate()
      </em>
     </a>
    </li>
@@ -1265,10 +1279,99 @@ See <a class="reference external" href="https://docs.scipy.org/doc/scipy/referen
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fc5c3f8f8b0&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f4432957b80&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="signal-surrogate">
+<h3><em>signal_surrogate()</em><a class="headerlink" href="#signal-surrogate" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.signal_surrogate">
+<span class="sig-name descname"><span class="pre">signal_surrogate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IAAFT'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_surrogate.html#signal_surrogate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_surrogate" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Create Signal Surrogates</strong></p>
+<p>Generate a surrogate version of a signal. Different methods are available, such as:</p>
+<ul class="simple">
+<li><p><strong>random</strong>: Performs a random permutation of the signal value. This way, the signal
+distribution is unaffected and the serial correlations are cancelled, yielding a whitened
+signal with an distribution identical to that of the original.</p></li>
+<li><p><strong>IAAFT</strong>: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate. It is
+a phase randomized, amplitude adjusted surrogates with the same power spectrum (to a very
+high accuracy) and distribution as the original data, using an iterative scheme.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be “random” or “IAAFT”.</p></li>
+<li><p><strong>**kwargs</strong> – Other keywords arguments, such as <a href="#id1"><span class="problematic" id="id2">``</span></a>max_iter``(by default 1000).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>surrogate</strong> (<em>array</em>) – Surrogate signal.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create surrogates using different methods.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="gp">In [3]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">surrogate_iaaft</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;IAAFT&quot;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f44321f8880&gt;]</span>
+
+<span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f44323dd960&gt;]</span>
+
+<span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f44323dda80&gt;]</span>
+
+<span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f4432ad3f40&gt;</span>
+
+<span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_delay6.png"><img alt="../_images/p_complexity_delay6.png" src="../_images/p_complexity_delay6.png" style="width: 1200.0px; height: 1200.0px;" /></a>
+<p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
+And their distributions are identical:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f442fa14c70&gt;]</span>
+
+<span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f44321fae90&gt;]</span>
+
+<span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f442fa7fee0&gt;]</span>
+
+<span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f4432493340&gt;</span>
+</pre></div>
+</div>
+<p>However, the power spectrum of the IAAFT surrogate is preserved.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">f</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="gp">In [16]: </span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;IAAFT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">20</span><span class="p">)[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span>
+
+<span class="gp">In [17]: </span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;Random&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">20</span><span class="p">)[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span>
+
+<span class="gp">In [18]: </span><span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span> <span class="s2">&quot;IAAFT&quot;</span><span class="p">,</span> <span class="s2">&quot;Random&quot;</span><span class="p">])</span>
+<span class="gh">Out[18]: </span><span class="go">&lt;AxesSubplot:xlabel=&#39;Frequency&#39;&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Schreiber, T., &amp; Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical
+review letters, 77(4), 635.</p></li>
+</ul>
 </dd></dl>
 
 </section>
@@ -1522,7 +1625,7 @@ if lag is not None.</p></li>
 <span class="gp">In [3]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;correlate&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_autocor.png"><img alt="../_images/p_signal_autocor.png" src="../_images/p_signal_autocor.png" style="width: 1200.0px; height: 1200.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_signal_autocor.png"><img alt="../_images/p_signal_autocor.png" src="../_images/p_signal_autocor.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: Using &#39;FFT&#39; Method</span>
 <span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 

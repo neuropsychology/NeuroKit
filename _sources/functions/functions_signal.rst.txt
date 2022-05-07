@@ -32,6 +32,10 @@ Transformation
 """""""""""""""""""""""
 .. autofunction:: neurokit2.signal_interpolate
 
+*signal_surrogate()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_surrogate
+
 
 Peaks
 ^^^^^^^^^^^^^^^^

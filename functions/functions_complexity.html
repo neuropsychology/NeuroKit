@@ -1502,7 +1502,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [4]: </span><span class="n">df</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">       ApEn      CREn    DiffEn  ...     ShanEn      SpEn     WPEn</span>
-<span class="go">0  0.162527  0.628836  0.303891  ...  11.271005  0.094806  0.98896</span>
+<span class="go">0  0.162527  0.628836  0.438423  ...  11.271005  0.094806  0.98896</span>
 
 <span class="go">[1 rows x 23 columns]</span>
 </pre></div>
@@ -1594,7 +1594,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <h3><em>complexity_delay()</em><a class="headerlink" href="#complexity-delay" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.complexity.complexity_delay">
-<span class="sig-name descname"><span class="pre">complexity_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fraser1986'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/complexity/optim_complexity_delay.html#complexity_delay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.complexity.complexity_delay" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">complexity_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fraser1986'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/complexity/optim_complexity_delay.html#complexity_delay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.complexity.complexity_delay" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Automated selection of the optimal Delay (Tau)</strong></p>
 <p>The time delay (Tau <span class="math notranslate nohighlight">\(\tau\)</span>, also referred to as <em>Lag</em>) is one of the two critical
 parameters (the other being the <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">Dimension</span></code></a> <em>m</em>) involved in the
@@ -1606,7 +1606,7 @@ system’s state are correlated and the attractor is not sufficiently unfolded. 
 <span class="math notranslate nohighlight">\(\tau\)</span> is larger than it should be, successive coordinates are almost independent,
 resulting in an uncorrelated and unstructured cloud of points.</p>
 <p>Several authors suggested different methods to guide the choice of the delay:</p>
-<ul class="simple">
+<ul>
 <li><p><strong>Fraser and Swinney (1986)</strong> suggest using the first local minimum of the mutual information
 between the delayed and non-delayed time series, effectively identifying a value of Tau for
 which they share the least information.</p></li>
@@ -1623,17 +1623,19 @@ makes use of a statistic within the reconstructed phase space, rather than analy
 temporal evolution of the time series. However, computation times are significantly long for
 this method due to the need to compare every unique pair of pairwise vectors within the
 embedded signal per delay.</p></li>
-<li><p><strong>Gautama (2003)</strong> mentions that in practice, it is common to have a fixed time lag and to
-adjust the embedding dimension accordingly. As this can lead to large <em>m</em> values (and thus to
-embedded data of a large size) and thus, slow processing, they describe an optimisation
-method to jointly determine <em>m</em> and <span class="math notranslate nohighlight">\(\tau\)</span> (see <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_optimize()</span></code>).</p></li>
 <li><p><strong>Lyle (2021)</strong> describes the “Symmetric Projection Attractor Reconstruction” (SPAR), where
 <span class="math notranslate nohighlight">\(1/3\)</span> of the the dominant frequency (i.e., of the length of the average “cycle”) can be
 a suitable value for approximately periodic data, and makes the attractor sensitive to
 morphological changes. See also <a class="reference external" href="https://youtu.be/GGrOJtcTcHA?t=730">Aston’s talk</a>. This
 method is also the fastest but might not be suitable for aperiodic signals.
 The <code class="docutils literal notranslate"><span class="pre">algorithm</span></code> argument (default to <code class="docutils literal notranslate"><span class="pre">&quot;fft&quot;</span></code>) and will be passed as the <code class="docutils literal notranslate"><span class="pre">method</span></code>
-argument of  <code class="docutils literal notranslate"><span class="pre">signal_psd()</span></code>.</p></li>
+argument of  <code class="docutils literal notranslate"><span class="pre">signal_psd()</span></code>.</p>
+<p><strong>Joint-Methods for Delay and Dimension</strong></p>
+</li>
+<li><p><strong>Gautama (2003)</strong> mentions that in practice, it is common to have a fixed time lag and to
+adjust the embedding dimension accordingly. As this can lead to large <em>m</em> values (and thus to
+embedded data of a large size) and thus, slow processing, they describe an optimisation
+method to jointly determine <em>m</em> and <span class="math notranslate nohighlight">\(\tau\)</span>, based on the <strong>entropy ratio</strong>.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1670,63 +1672,86 @@ artificial signal.</p></li>
 </ul>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay1.png"><img alt="../_images/p_complexity_delay1.png" src="../_images/p_complexity_delay1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fraser1986&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay2.png"><img alt="../_images/p_complexity_delay2.png" src="../_images/p_complexity_delay2.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;theiler1990&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay3.png"><img alt="../_images/p_complexity_delay3.png" src="../_images/p_complexity_delay3.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;casdagli1991&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay4.png"><img alt="../_images/p_complexity_delay4.png" src="../_images/p_complexity_delay4.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rosenstein1993&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay5.png"><img alt="../_images/p_complexity_delay5.png" src="../_images/p_complexity_delay5.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rosenstein1994&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_complexity_delay6.png"><img alt="../_images/p_complexity_delay6.png" src="../_images/p_complexity_delay6.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a class="reference internal image-reference" href="../_images/p_complexity_delay6.png"><img alt="../_images/p_complexity_delay6.png" src="../_images/p_complexity_delay6.png" style="width: 1200.0px; height: 1200.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;lyle2021&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay7.png"><img alt="../_images/p_complexity_delay7.png" src="../_images/p_complexity_delay7.png" style="width: 640.0px; height: 480.0px;" /></a>
 <ul class="simple">
-<li><p><strong>Example 2</strong>: Using a realistic signal.</p></li>
+<li><p><strong>Example 2</strong>: Optimizing the delay and the dimension using joint-estimation methods.</p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">6</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ....: </span>    <span class="n">delay_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>  <span class="c1"># Can be an int or a list</span>
+<span class="gp">   ....: </span>    <span class="n">dimension_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>  <span class="c1"># Can be an int or a list</span>
+<span class="gp">   ....: </span>    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gautama2003&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>    <span class="n">surrogate_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># Number of surrogate signals to generate</span>
+<span class="gp">   ....: </span>    <span class="n">surrogate_method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>  <span class="c1"># can be IAAFT, see nk.signal_surrogate()</span>
+<span class="gp">   ....: </span>    <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_delay7.png"><img alt="../_images/p_complexity_delay7.png" src="../_images/p_complexity_delay7.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Optimal dimension</span>
+<span class="gp">In [11]: </span><span class="n">dimension</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;Dimension&quot;</span><span class="p">]</span>
 
-<span class="gp">In [11]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rate</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+<span class="gp">In [12]: </span><span class="n">dimension</span>
+<span class="gh">Out[12]: </span><span class="go">20</span>
+</pre></div>
+</div>
+<p><strong>Note</strong>: A double-checking of that method would be appreciated! Please help us improve.</p>
+<ul class="simple">
+<li><p><strong>Example 3</strong>: Using a realistic signal.</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">6</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="gp">In [14]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rate</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
 <span class="gp">   ....: </span>                     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
 <span class="gp">   ....: </span>                     <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">))</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+<span class="gp">In [15]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay8.png"><img alt="../_images/p_complexity_delay8.png" src="../_images/p_complexity_delay8.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_delay9.png"><img alt="../_images/p_complexity_delay9.png" src="../_images/p_complexity_delay9.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1747,6 +1772,12 @@ largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena,
 geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.</p></li>
 <li><p>Kim, H., Eykholt, R., &amp; Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding
 windows. Physica D: Nonlinear Phenomena, 127(1-2), 48-60.</p></li>
+<li><p>Gautama, T., Mandic, D. P., &amp; Van Hulle, M. M. (2003, April). A differential entropy based
+method for determining the optimal embedding parameters of a signal. In 2003 IEEE
+International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.
+(ICASSP’03). (Vol. 6, pp. VI-29). IEEE.</p></li>
+<li><p>Camplani, M., &amp; Cannas, B. (2009). The role of the embedding dimension and time delay in time
+series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.</p></li>
 </ul>
 </dd></dl>
 
@@ -2128,7 +2159,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.683001775400354</span>
+<span class="gh">Out[12]: </span><span class="go">1.8463088161011638</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -2138,7 +2169,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">4.033008097561936</span>
+<span class="gh">Out[16]: </span><span class="go">3.7471931167028205</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2341,7 +2372,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5890591256350927</span>
+<span class="gh">Out[10]: </span><span class="go">0.6021798523669519</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -2419,7 +2450,7 @@ to perform PSD slope analysis.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_psdslope1.png"><img alt="../_images/p_fractal_psdslope1.png" src="../_images/p_fractal_psdslope1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.802231388744743</span>
+<span class="gh">Out[4]: </span><span class="go">2.504798988157193</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2483,7 +2514,7 @@ to compute Higuchi’s fractal dimension.</p></li>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi1.png"><img alt="../_images/p_fractal_higuchi1.png" src="../_images/p_fractal_higuchi1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi2.png"><img alt="../_images/p_fractal_higuchi2.png" src="../_images/p_fractal_higuchi2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hfd</span>
-<span class="gh">Out[5]: </span><span class="go">1.9843532050278347</span>
+<span class="gh">Out[5]: </span><span class="go">1.8527529842773318</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2634,7 +2665,7 @@ parameters of the singularity spectrum.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_dfa1.png"><img alt="../_images/p_fractal_dfa1.png" src="../_images/p_fractal_dfa1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">dfa</span>
-<span class="gh">Out[4]: </span><span class="go">0.6525889115705261</span>
+<span class="gh">Out[4]: </span><span class="go">0.6516464358205124</span>
 </pre></div>
 </div>
 <p>As we can see from the plot, the final value, corresponding to the slope of the red line,
@@ -2653,8 +2684,8 @@ fractality of short-term fluctuations.</p>
 <a class="reference internal image-reference" href="../_images/p_fractal_dfa3.png"><img alt="../_images/p_fractal_dfa3.png" src="../_images/p_fractal_dfa3.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">mfdfa</span>
 <span class="gh">Out[8]: </span><span class="go"></span>
-<span class="go">   ExpRange   ExpMean  DimRange   DimMean      HMax    HDelta       HAR</span>
-<span class="go">0  0.822377  0.851517  0.801043  0.636376  0.674539  0.822377 -0.243728</span>
+<span class="go">   ExpRange   ExpMean  DimRange   DimMean      HMax    HDelta      HAR</span>
+<span class="go">0  0.830145  0.850865  0.801015  0.632721  0.673608  0.830145 -0.24699</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2746,7 +2777,7 @@ to compute Shannon entropy.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">shanen</span>
-<span class="gh">Out[7]: </span><span class="go">1.5526653886369624</span>
+<span class="gh">Out[7]: </span><span class="go">1.5468870544035935</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -2756,12 +2787,12 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [9]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [10]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[10]: </span><span class="go">1.0762256364867222</span>
+<span class="gh">Out[10]: </span><span class="go">1.0722204004045295</span>
 
 <span class="gp">In [11]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">shanen</span>
-<span class="gh">Out[12]: </span><span class="go">1.0762256364867222</span>
+<span class="gh">Out[12]: </span><span class="go">1.0722204004045295</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2816,7 +2847,7 @@ default in some algorithms).</p>
 <h3><em>entropy_differential()</em><a class="headerlink" href="#entropy-differential" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.complexity.entropy_differential">
-<span class="sig-name descname"><span class="pre">entropy_differential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/complexity/entropy_differential.html#entropy_differential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.complexity.entropy_differential" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">entropy_differential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/complexity/entropy_differential.html#entropy_differential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.complexity.entropy_differential" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Differential entropy (DiffEn)</strong></p>
 <p>Differential entropy (DiffEn; also referred to as continuous entropy) started as an
 attempt by Shannon to extend Shannon entropy. However, differential entropy presents some
@@ -2833,6 +2864,9 @@ distribution).</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>diffen</strong> (<em>float</em>) – The Differential entropy of the signal.</p></li>
+<li><p><strong>base</strong> (<em>float</em>) – The logarithmic base to use, defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>, giving a unit in <em>bits</em>. Note that <code class="docutils literal notranslate"><span class="pre">scipy.</span>
+<span class="pre">stats.entropy()</span></code> uses Euler’s number (<code class="docutils literal notranslate"><span class="pre">np.e</span></code>) as default (the natural logarithm), giving
+a measure of information expressed in <em>nats</em>.</p></li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
 to compute Differential entropy.</p></li>
 </ul>
@@ -2841,7 +2875,7 @@ to compute Differential entropy.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_cumulativeresidual" title="neurokit2.complexity.entropy_cumulativeresidual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulativeresidual</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_cumulativeresidual" title="neurokit2.complexity.entropy_cumulativeresidual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulativeresidual</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_kl" title="neurokit2.complexity.entropy_kl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_kl</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -2853,7 +2887,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.3396008120771504</span>
+<span class="gh">Out[4]: </span><span class="go">0.5109599690432561</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3202,7 +3236,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">klen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_kl</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">klen</span>
-<span class="gh">Out[4]: </span><span class="go">1.5555499285992478</span>
+<span class="gh">Out[4]: </span><span class="go">1.6180150663491868</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3261,7 +3295,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.2605251763905254</span>
+<span class="gh">Out[4]: </span><span class="go">0.2565943748851035</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3324,7 +3358,7 @@ graining parameter that defines how fine the grid is. It is recommended to use e
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_phase1.png"><img alt="../_images/p_entropy_phase1.png" src="../_images/p_entropy_phase1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">1.172108290612565</span>
+<span class="gh">Out[4]: </span><span class="go">1.160841388139349</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3389,14 +3423,14 @@ graining parameter that defines how fine the grid is.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_grid1.png"><img alt="../_images/p_entropy_grid1.png" src="../_images/p_entropy_grid1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">2.2667775418444633</span>
+<span class="gh">Out[4]: </span><span class="go">1.570452754332821</span>
 
 <span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_grid</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_grid2.png"><img alt="../_images/p_entropy_grid2.png" src="../_images/p_entropy_grid2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;GDR&quot;</span><span class="p">]</span>
-<span class="gh">Out[6]: </span><span class="go">0.56</span>
+<span class="gh">Out[6]: </span><span class="go">0.49</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3449,7 +3483,7 @@ subsequent maxima ).</p></li>
 <span class="gp">In [3]: </span><span class="n">atten</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">atten</span>
-<span class="gh">Out[4]: </span><span class="go">1.1245041772702107</span>
+<span class="gh">Out[4]: </span><span class="go">1.18300364870963</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3517,7 +3551,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">incren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_increment</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">incren</span>
-<span class="gh">Out[4]: </span><span class="go">2.776160663945627</span>
+<span class="gh">Out[4]: </span><span class="go">2.7852020626801157</span>
 
 <span class="go"># Multiscale IncrEn (MSIncrEn)</span>
 <span class="gp">In [5]: </span><span class="n">msincren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSIncrEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3584,12 +3618,12 @@ range [0, 90] degrees.</p></li>
 <span class="gp">In [3]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">45</span><span class="p">])</span>
 
 <span class="gp">In [4]: </span><span class="n">slopen</span>
-<span class="gh">Out[4]: </span><span class="go">3.863122002194505</span>
+<span class="gh">Out[4]: </span><span class="go">3.8444882603824966</span>
 
 <span class="gp">In [5]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
 
 <span class="gp">In [6]: </span><span class="n">slopen</span>
-<span class="gh">Out[6]: </span><span class="go">5.007781946303787</span>
+<span class="gh">Out[6]: </span><span class="go">5.062287707591934</span>
 
 <span class="go"># Compute Multiscale Slope Entropy (MSSlopEn)</span>
 <span class="gp">In [7]: </span><span class="n">msslopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSlopEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3649,12 +3683,12 @@ details.</p></li>
 <span class="gp">In [4]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MEP&quot;</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">sydyen</span>
-<span class="gh">Out[5]: </span><span class="go">3.715092731173379</span>
+<span class="gh">Out[5]: </span><span class="go">3.6399499926576864</span>
 
 <span class="gp">In [6]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">sydyen</span>
-<span class="gh">Out[7]: </span><span class="go">3.565996609618445</span>
+<span class="gh">Out[7]: </span><span class="go">3.2767147052161776</span>
 
 <span class="go"># Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)</span>
 <span class="gp">In [8]: </span><span class="n">mssydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSyDyEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3724,17 +3758,17 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [3]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">dispen</span>
-<span class="gh">Out[4]: </span><span class="go">1.4209211135149629</span>
+<span class="gh">Out[4]: </span><span class="go">1.3835818069213384</span>
 
 <span class="go"># Get Reverse Dispersion Entropy (RDEn)</span>
 <span class="gp">In [5]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RDEn&quot;</span><span class="p">]</span>
-<span class="gh">Out[5]: </span><span class="go">0.003797009788020115</span>
+<span class="gh">Out[5]: </span><span class="go">0.009933218469619066</span>
 
 <span class="go"># Fluctuation-based DispEn with &quot;finesort&quot;</span>
 <span class="gp">In [6]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;finesort&quot;</span><span class="p">,</span> <span class="n">fluctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">dispen</span>
-<span class="gh">Out[7]: </span><span class="go">1.4209211135149626</span>
+<span class="gh">Out[7]: </span><span class="go">1.3835818069213384</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3788,7 +3822,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">enofen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_ofentropy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">enofen</span>
-<span class="gh">Out[4]: </span><span class="go">3.956198332810096</span>
+<span class="gh">Out[4]: </span><span class="go">3.9086949695628426</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3988,31 +4022,31 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [2]: </span><span class="n">pen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">pen</span>
-<span class="gh">Out[3]: </span><span class="go">2.5777622402153573</span>
+<span class="gh">Out[3]: </span><span class="go">2.547860335493998</span>
 
 <span class="go"># Weighted Permutation Entropy (WPEn)</span>
 <span class="gp">In [4]: </span><span class="n">wpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">wpen</span>
-<span class="gh">Out[5]: </span><span class="go">0.9990653279014605</span>
+<span class="gh">Out[5]: </span><span class="go">0.980004486081643</span>
 
 <span class="go"># Conditional Permutation Entropy (CPEn)</span>
 <span class="gp">In [6]: </span><span class="n">cpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">cpen</span>
-<span class="gh">Out[7]: </span><span class="go">0.4244426755528404</span>
+<span class="gh">Out[7]: </span><span class="go">0.4207749383301629</span>
 
 <span class="go"># Conditional Weighted Permutation Entropy (CWPEn)</span>
 <span class="gp">In [8]: </span><span class="n">cwpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">cwpen</span>
-<span class="gh">Out[9]: </span><span class="go">0.41125608795965357</span>
+<span class="gh">Out[9]: </span><span class="go">0.4034160376781296</span>
 
 <span class="go"># Conditional Renyi Permutation Entropy (CRPEn)</span>
 <span class="gp">In [10]: </span><span class="n">crpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">entropy_renyi</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">crpen</span>
-<span class="gh">Out[11]: </span><span class="go">0.2861298217665969</span>
+<span class="gh">Out[11]: </span><span class="go">0.28409344972726386</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -4667,13 +4701,13 @@ to compute LZC.</p></li>
 <span class="gp">In [3]: </span><span class="n">lzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">lzc</span>
-<span class="gh">Out[4]: </span><span class="go">1.0156531022985302</span>
+<span class="gh">Out[4]: </span><span class="go">1.1020916641962775</span>
 
 <span class="go"># PLZC</span>
 <span class="gp">In [5]: </span><span class="n">plzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plzc</span>
-<span class="gh">Out[6]: </span><span class="go">0.6799731176847983</span>
+<span class="gh">Out[6]: </span><span class="go">0.6715783878368379</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># MSLZC</span>
@@ -4829,7 +4863,7 @@ to compute LLE.</p></li>
 <span class="gp">In [3]: </span><span class="n">lle</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lyapunov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rosenstein1993&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">lle</span>
-<span class="gh">Out[4]: </span><span class="go">0.045612792863763976</span>
+<span class="gh">Out[4]: </span><span class="go">0.048638706611012064</span>
 
 <span class="go"># Eckman&#39;s method is broken. Please help us fix-it!</span>
 <span class="go"># lle, info = nk.complexity_lyapunov(signal, dimension=2, method=&quot;eckmann1996&quot;)</span>
@@ -4920,7 +4954,7 @@ recurrences (<code class="docutils literal notranslate"><span class="pre">info['
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">results</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">   RecurrenceRate  Determinism  ...  WMax       WEn</span>
-<span class="go">0        0.076281     0.659852  ...   414  3.642433</span>
+<span class="go">0        0.073178     0.628975  ...   485  3.623641</span>
 
 <span class="go">[1 rows x 14 columns]</span>
 
@@ -4988,7 +5022,7 @@ figure.</p></li>
 <span class="gp">In [5]: </span><span class="n">m</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">real_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">imaginary_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">))</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7fc5c53df340&gt;</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7f4431516080&gt;</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gh">Out[7]: </span><span class="go">(-0.5, 908.5, 999.5, -0.5)</span>
@@ -5001,7 +5035,7 @@ figure.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7fc5c5a49ea0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7f4433613b20&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gh">Out[10]: </span><span class="go">(-0.5, 1363.5, 1499.5, -0.5)</span>
@@ -5016,7 +5050,7 @@ figure.</p></li>
 <span class="gp">In [13]: </span><span class="n">mixed</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">b</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mixed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7fc5c31523b0&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x7f4431086830&gt;</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gh">Out[15]: </span><span class="go">(-0.5, 999.5, 999.5, -0.5)</span>
@@ -5148,7 +5182,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – Embedded time-series, of shape <code class="docutils literal notranslate"><span class="pre">(length</span> <span class="pre">-</span> <span class="pre">(dimension</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">*</span> <span class="pre">delay,</span> <span class="pre">order)</span></code></p>
+<dd class="field-even"><p><em>array</em> – Embedded time-series, of shape <code class="docutils literal notranslate"><span class="pre">length</span> <span class="pre">-</span> <span class="pre">(dimension</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">*</span> <span class="pre">delay</span></code></p>
 </dd>
 </dl>
 <div class="admonition seealso">

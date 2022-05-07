@@ -493,18 +493,26 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">matplotlib.collections</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_closest</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_autocor</span><span class="p">,</span> <span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_psd</span><span class="p">,</span> <span class="n">signal_zerocrossings</span>
-<span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_autocor</span><span class="p">,</span>
+    <span class="n">signal_findpeaks</span><span class="p">,</span>
+    <span class="n">signal_psd</span><span class="p">,</span>
+    <span class="n">signal_surrogate</span><span class="p">,</span>
+    <span class="n">signal_zerocrossings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.entropy_kl</span> <span class="kn">import</span> <span class="n">entropy_kl</span>
 <span class="kn">from</span> <span class="nn">.information_mutual</span> <span class="kn">import</span> <span class="n">mutual_information</span>
+<span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
 
 
 <div class="viewcode-block" id="complexity_delay"><a class="viewcode-back" href="../../../functions/functions_complexity.html#neurokit2.complexity.complexity_delay">[docs]</a><span class="k">def</span> <span class="nf">complexity_delay</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fraser1986&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fraser1986&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Automated selection of the optimal Delay (Tau)**</span>
 
@@ -537,10 +545,6 @@ title="Open an issue"
 <span class="sd">      temporal evolution of the time series. However, computation times are significantly long for</span>
 <span class="sd">      this method due to the need to compare every unique pair of pairwise vectors within the</span>
 <span class="sd">      embedded signal per delay.</span>
-<span class="sd">    * **Gautama (2003)** mentions that in practice, it is common to have a fixed time lag and to</span>
-<span class="sd">      adjust the embedding dimension accordingly. As this can lead to large *m* values (and thus to</span>
-<span class="sd">      embedded data of a large size) and thus, slow processing, they describe an optimisation</span>
-<span class="sd">      method to jointly determine *m* and :math:`\\tau` (see :func:`complexity_optimize`).</span>
 <span class="sd">    * **Lyle (2021)** describes the &quot;Symmetric Projection Attractor Reconstruction&quot; (SPAR), where</span>
 <span class="sd">      :math:`1/3` of the the dominant frequency (i.e., of the length of the average &quot;cycle&quot;) can be</span>
 <span class="sd">      a suitable value for approximately periodic data, and makes the attractor sensitive to</span>
@@ -548,6 +552,18 @@ title="Open an issue"
 <span class="sd">      method is also the fastest but might not be suitable for aperiodic signals.</span>
 <span class="sd">      The ``algorithm`` argument (default to ``&quot;fft&quot;``) and will be passed as the ``method``</span>
 <span class="sd">      argument of  ``signal_psd()``.</span>
+
+<span class="sd">      **Joint-Methods for Delay and Dimension**</span>
+
+<span class="sd">    * **Gautama (2003)** mentions that in practice, it is common to have a fixed time lag and to</span>
+<span class="sd">      adjust the embedding dimension accordingly. As this can lead to large *m* values (and thus to</span>
+<span class="sd">      embedded data of a large size) and thus, slow processing, they describe an optimisation</span>
+<span class="sd">      method to jointly determine *m* and :math:`\\tau`, based on the **entropy ratio**.</span>
+
+<span class="sd">    .. todo::</span>
+
+<span class="sd">      We would like to implement the joint-estimation by `Matilla-García et al. (2021)</span>
+<span class="sd">      &lt;https://www.mdpi.com/1099-4300/23/2/221&gt;`_, please get in touch if you can help us!</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -590,7 +606,7 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)</span>
+<span class="sd">      signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[1, 1.5], noise=0.02)</span>
 <span class="sd">      @savefig p_complexity_delay1.png scale=100%</span>
 <span class="sd">      nk.signal_plot(signal)</span>
 <span class="sd">      @suppress</span>
@@ -599,7 +615,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_delay2.png scale=100%</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=100, show=True,</span>
 <span class="sd">                                              method=&quot;fraser1986&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -607,7 +623,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_delay3.png scale=100%</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=100, show=True,</span>
 <span class="sd">                                              method=&quot;theiler1990&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -615,7 +631,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_delay4.png scale=100%</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=100, show=True,</span>
 <span class="sd">                                              method=&quot;casdagli1991&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -623,7 +639,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_delay5.png scale=100%</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=100, show=True,</span>
 <span class="sd">                                              method=&quot;rosenstein1993&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -631,7 +647,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_delay6.png scale=100%</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=100, show=True,</span>
 <span class="sd">                                              method=&quot;rosenstein1994&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -639,12 +655,36 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_delay7.png scale=100%</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=100, show=True,</span>
 <span class="sd">                                              method=&quot;lyle2021&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
-<span class="sd">    * **Example 2**: Using a realistic signal.</span>
+<span class="sd">    * **Example 2**: Optimizing the delay and the dimension using joint-estimation methods.</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_complexity_delay7.png scale=100%</span>
+<span class="sd">      delay, parameters = nk.complexity_delay(</span>
+<span class="sd">          signal,</span>
+<span class="sd">          delay_max=np.arange(1, 30, 1),  # Can be an int or a list</span>
+<span class="sd">          dimension_max=20,  # Can be an int or a list</span>
+<span class="sd">          method=&quot;gautama2003&quot;,</span>
+<span class="sd">          surrogate_n=5,  # Number of surrogate signals to generate</span>
+<span class="sd">          surrogate_method=&quot;random&quot;,  # can be IAAFT, see nk.signal_surrogate()</span>
+<span class="sd">          show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      # Optimal dimension</span>
+<span class="sd">      dimension = parameters[&quot;Dimension&quot;]</span>
+<span class="sd">      dimension</span>
+
+<span class="sd">    **Note**: A double-checking of that method would be appreciated! Please help us improve.</span>
+
+<span class="sd">    * **Example 3**: Using a realistic signal.</span>
 
 <span class="sd">    .. ipython:: python</span>
 
@@ -681,6 +721,12 @@ title="Open an issue"
 <span class="sd">      geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.</span>
 <span class="sd">    * Kim, H., Eykholt, R., &amp; Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding</span>
 <span class="sd">      windows. Physica D: Nonlinear Phenomena, 127(1-2), 48-60.</span>
+<span class="sd">    * Gautama, T., Mandic, D. P., &amp; Van Hulle, M. M. (2003, April). A differential entropy based</span>
+<span class="sd">      method for determining the optimal embedding parameters of a signal. In 2003 IEEE</span>
+<span class="sd">      International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.</span>
+<span class="sd">      (ICASSP&#39;03). (Vol. 6, pp. VI-29). IEEE.</span>
+<span class="sd">    * Camplani, M., &amp; Cannas, B. (2009). The role of the embedding dimension and time delay in time</span>
+<span class="sd">      series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Initalize vectors</span>
@@ -716,7 +762,9 @@ title="Open an issue"
         <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;first local minimum&quot;</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;aston2020&quot;</span><span class="p">,</span> <span class="s2">&quot;lyle2021&quot;</span><span class="p">,</span> <span class="s2">&quot;spar&quot;</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">_embedding_delay_spar</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_complexity_delay_spar</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;gautama2003&quot;</span><span class="p">,</span> <span class="s2">&quot;gautama&quot;</span><span class="p">,</span> <span class="s2">&quot;entropyratio&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_complexity_delay_entropyratio</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="n">delay_max</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: complexity_delay(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
 
@@ -870,30 +918,6 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">values</span>
 
 
-<span class="k">def</span> <span class="nf">_embedding_delay_spar</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;fft&quot;</span>
-    <span class="c1"># Compute power in freqency domain</span>
-    <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">power</span> <span class="o">=</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">freqs</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">/</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Convert to samples</span>
-
-    <span class="c1"># Get the 1/3 max frequency (in samples) (https://youtu.be/GGrOJtcTcHA?t=730)</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
-    <span class="n">optimal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">freqs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">idxs</span> <span class="o">=</span> <span class="n">freqs</span> <span class="o">&lt;=</span> <span class="n">optimal</span> <span class="o">*</span> <span class="mi">6</span>
-        <span class="n">_embedding_delay_plot</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span>
-            <span class="n">metric_values</span><span class="o">=</span><span class="n">power</span><span class="p">[</span><span class="n">idxs</span><span class="p">],</span>
-            <span class="n">tau_sequence</span><span class="o">=</span><span class="n">freqs</span><span class="p">[</span><span class="n">idxs</span><span class="p">],</span>
-            <span class="n">tau</span><span class="o">=</span><span class="n">optimal</span><span class="p">,</span>
-            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Algorithm&quot;</span><span class="p">:</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;SPAR&quot;</span><span class="p">}</span>
-
-
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internals for C-C method, Kim et al. (1999)</span>
 <span class="c1"># =============================================================================</span>
@@ -967,7 +991,160 @@ title="Open an issue"
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># Plotting internals</span>
+<span class="c1"># Optimal Delay via SPAR Method</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_complexity_delay_spar</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;fft&quot;</span>
+    <span class="c1"># Compute power in freqency domain</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">power</span> <span class="o">=</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">freqs</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">/</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Convert to samples</span>
+
+    <span class="c1"># Get the 1/3 max frequency (in samples) (https://youtu.be/GGrOJtcTcHA?t=730)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
+    <span class="n">optimal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">freqs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">freqs</span> <span class="o">&lt;=</span> <span class="n">optimal</span> <span class="o">*</span> <span class="mi">6</span>
+        <span class="n">_embedding_delay_plot</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">metric_values</span><span class="o">=</span><span class="n">power</span><span class="p">[</span><span class="n">idxs</span><span class="p">],</span>
+            <span class="n">tau_sequence</span><span class="o">=</span><span class="n">freqs</span><span class="p">[</span><span class="n">idxs</span><span class="p">],</span>
+            <span class="n">tau</span><span class="o">=</span><span class="n">optimal</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Algorithm&quot;</span><span class="p">:</span> <span class="n">algorithm</span><span class="p">,</span> <span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;SPAR&quot;</span><span class="p">}</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Joint-Optimization via Entropy Ratio (Gautama, 2003)</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_complexity_delay_entropyratio</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">delay_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">dimension_max</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">surrogate_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">surrogate_method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Joint-optimization using Entropy Ratio method.</span>
+
+<span class="sd">    * Gautama, T., Mandic, D. P., &amp; Van Hulle, M. M. (2003, April). A differential entropy based</span>
+<span class="sd">      method for determining the optimal embedding parameters of a signal. In 2003 IEEE</span>
+<span class="sd">      International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.</span>
+<span class="sd">      (ICASSP&#39;03). (Vol. 6, pp. VI-29). IEEE.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">    delay_max : int</span>
+<span class="sd">        The maximum time delay (Tau) to test.</span>
+<span class="sd">    dimension_max : int</span>
+<span class="sd">        The maximum embedding dimension (often denoted &#39;m&#39; or &#39;d&#39;, sometimes referred to as &#39;order&#39;) to test.</span>
+<span class="sd">    surrogate_iter : int</span>
+<span class="sd">        The maximum surrogates generated using the iAAFT method.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initalize vectors</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delay_max</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">delay_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">delay_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">dimension_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dimension_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Prepare output</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">delay_max</span><span class="p">)),</span>
+            <span class="s2">&quot;Delay&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">delay_max</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">)),</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="c1"># N is the number of delay vectors</span>
+    <span class="c1"># out[&quot;N&quot;] = len(signal) - (out[&quot;Dimension&quot;] - 1) * out[&quot;Delay&quot;]</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="n">klens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">klens_surrogates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)):</span>
+        <span class="n">klens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_kl</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Delay&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Dimension&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">klens_surrogates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">entropy_kl</span><span class="p">(</span>
+                    <span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">surrogate_method</span><span class="p">),</span>
+                    <span class="n">delay</span><span class="o">=</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Delay&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">dimension</span><span class="o">=</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Dimension&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">surrogate_n</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;KLEn_Signal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">klens</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;KLEn_Surrogate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">klens_surrogates</span>
+    <span class="c1"># Entropy Ratio (ER)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;KLEn_Ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">klens</span> <span class="o">/</span> <span class="n">klens_surrogates</span>
+    <span class="c1"># To penalise for higher embedding dimensions, the minimum</span>
+    <span class="c1"># description length (MDL) method is superimposed, yielding</span>
+    <span class="c1"># the &quot;entropy ratio&quot; (ER):</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;KLEn_Ratio&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Dimension&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">]))</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># optimal dimension and tau is where entropy_ratio is minimum</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+    <span class="n">optimal_dimension</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Dimension&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">optimal_delay</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Delay&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Joint-Estimation of Optimal Delay and Dimension&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot_trisurf</span><span class="p">(</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Delay&quot;</span><span class="p">],</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Dimension&quot;</span><span class="p">],</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">],</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;GnBu&quot;</span><span class="p">),</span>
+            <span class="n">antialiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Minimum Entropy Ratio&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">optimal_delay</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">optimal_dimension</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">optimal_delay</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">optimal_dimension</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Entropy_Ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Dimension&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Delay&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;Entropy Ratio&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">dimension_max</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">delay_max</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">delay_max</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optimal_delay</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">optimal_dimension</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">:</span> <span class="n">out</span><span class="p">}</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Plotting Generics</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_embedding_delay_plot</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
@@ -994,8 +1171,8 @@ title="Open an issue"
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Delay (tau)&quot;</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time Delay (tau)&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Delay&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time Delay&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau_sequence</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Optimal delay: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
