@@ -527,6 +527,12 @@ title="Open an issue"
 <span class="sd">    :math:`\\tau` is larger than it should be, successive coordinates are almost independent,</span>
 <span class="sd">    resulting in an uncorrelated and unstructured cloud of points.</span>
 
+<span class="sd">    The selection of the parameters *delay* and :func:`*dimension* &lt;complexity_dimension&gt;` is a</span>
+<span class="sd">    challenge. One approach is to select them (semi) independently (as dimension selection often</span>
+<span class="sd">    requires the delay), using :func:`complexity_delay` and :func:`complexity_dimension`. However,</span>
+<span class="sd">    some joint-estimation methods do exist, that attempt at finding the optimal delay and dimension</span>
+<span class="sd">    at the same time.</span>
+
 <span class="sd">    Several authors suggested different methods to guide the choice of the delay:</span>
 
 <span class="sd">    * **Fraser and Swinney (1986)** suggest using the first local minimum of the mutual information</span>
@@ -553,7 +559,7 @@ title="Open an issue"
 <span class="sd">      The ``algorithm`` argument (default to ``&quot;fft&quot;``) and will be passed as the ``method``</span>
 <span class="sd">      argument of  ``signal_psd()``.</span>
 
-<span class="sd">      **Joint-Methods for Delay and Dimension**</span>
+<span class="sd">    **Joint-Methods for Delay and Dimension**</span>
 
 <span class="sd">    * **Gautama (2003)** mentions that in practice, it is common to have a fixed time lag and to</span>
 <span class="sd">      adjust the embedding dimension accordingly. As this can lead to large *m* values (and thus to</span>
@@ -991,6 +997,77 @@ title="Open an issue"
 
 
 <span class="c1"># =============================================================================</span>
+<span class="c1"># Plotting Generics</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_embedding_delay_plot</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">metric_values</span><span class="p">,</span>
+    <span class="n">tau_sequence</span><span class="p">,</span>
+    <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;Mutual Information&quot;</span><span class="p">,</span>
+    <span class="n">ax0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">plot</span><span class="o">=</span><span class="s2">&quot;2D&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="c1"># Prepare figure</span>
+    <span class="k">if</span> <span class="n">ax0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ax1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span>
+            <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;2D&quot;</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;3D&quot;</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Delay&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time Delay&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau_sequence</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Optimal delay: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Attractor&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Signal [i]&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Signal [i-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get data points, set axis limits</span>
+    <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1"># Colors</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="c1"># Attractor for 2D vs 3D</span>
+    <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;2D&quot;</span><span class="p">:</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">lc</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;plasma&quot;</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">lc</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">lc</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;3D&quot;</span><span class="p">:</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">seg</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="p">(</span><span class="n">l</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">seg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">seg</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">seg</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">set_solid_capstyle</span><span class="p">(</span><span class="s2">&quot;round&quot;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;Signal [i-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">tau</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span>
+
+
+<span class="c1"># =============================================================================</span>
 <span class="c1"># Optimal Delay via SPAR Method</span>
 <span class="c1"># =============================================================================</span>
 
@@ -1106,7 +1183,7 @@ title="Open an issue"
     <span class="n">optimal_delay</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Delay&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Joint-Estimation of Optimal Delay and Dimension&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot_trisurf</span><span class="p">(</span>
@@ -1144,74 +1221,32 @@ title="Open an issue"
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># Plotting Generics</span>
+<span class="c1"># Joint-Optimization via SymbolicDynamic (Matilla-García, 2021)</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_embedding_delay_plot</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span>
-    <span class="n">metric_values</span><span class="p">,</span>
-    <span class="n">tau_sequence</span><span class="p">,</span>
-    <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;Mutual Information&quot;</span><span class="p">,</span>
-    <span class="n">ax0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">ax1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">plot</span><span class="o">=</span><span class="s2">&quot;2D&quot;</span><span class="p">,</span>
-<span class="p">):</span>
 
-    <span class="c1"># Prepare figure</span>
-    <span class="k">if</span> <span class="n">ax0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ax1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">spec</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span>
-            <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;2D&quot;</span><span class="p">:</span>
-            <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;3D&quot;</span><span class="p">:</span>
-            <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Delay&quot;</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time Delay&quot;</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tau_sequence</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Optimal delay: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Attractor&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Signal [i]&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Signal [i-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
+<span class="c1"># def _complexity_delay_symbolicdynamics(</span>
+<span class="c1">#     signal,</span>
+<span class="c1">#     delay_max=20,</span>
+<span class="c1">#     dimension_max=5,</span>
+<span class="c1">#     show=False,</span>
+<span class="c1"># ):</span>
+<span class="c1">#     &quot;&quot;&quot;https://www.mdpi.com/1099-4300/23/2/221/htm&quot;&quot;&quot;</span>
+<span class="c1">#     delay = 1</span>
+<span class="c1">#     dimension = 3</span>
+<span class="c1">#     e = 3</span>
+<span class="c1">#     signal = [2, -7, -12, 5, -1, 9, 14]</span>
 
-    <span class="c1"># Get data points, set axis limits</span>
-    <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="c1">#     embedded = nk.complexity_embedding(signal, delay=delay, dimension=dimension)</span>
 
-    <span class="c1"># Colors</span>
-    <span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;plasma&quot;</span><span class="p">)</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="c1">#     # How to create the symbolic sequence?</span>
+<span class="c1">#     symbols = np.zeros((len(embedded), dimension - 1))</span>
+<span class="c1">#     for d in range(1, dimension):</span>
+<span class="c1">#         # Difference with e</span>
+<span class="c1">#         symbols[:, d - 1][np.all(np.abs(embedded[:, d - 1 : d + 1]) &gt;= e, axis=1)] = 1</span>
 
-    <span class="c1"># Attractor for 2D vs 3D</span>
-    <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;2D&quot;</span><span class="p">:</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">lc</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;plasma&quot;</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-        <span class="n">lc</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">lc</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">plot</span> <span class="o">==</span> <span class="s2">&quot;3D&quot;</span><span class="p">:</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">seg</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="p">(</span><span class="n">l</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">seg</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">seg</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">seg</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">l</span><span class="o">.</span><span class="n">set_solid_capstyle</span><span class="p">(</span><span class="s2">&quot;round&quot;</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;Signal [i-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">tau</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">fig</span>
+<span class="c1">#     symbols[:, 0][np.abs(embedded[:, 0]) &gt;= e] = 1</span>
+<span class="c1">#     symbols[:, 1][np.all(embedded[:, 1:] &lt; e, axis=1)] = 1</span>
 </pre></div>
 
               </div>
