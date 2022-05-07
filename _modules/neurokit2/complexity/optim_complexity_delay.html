@@ -499,13 +499,8 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_closest</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">signal_autocor</span><span class="p">,</span>
-    <span class="n">signal_findpeaks</span><span class="p">,</span>
-    <span class="n">signal_psd</span><span class="p">,</span>
-    <span class="n">signal_surrogate</span><span class="p">,</span>
-    <span class="n">signal_zerocrossings</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_autocor</span><span class="p">,</span> <span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_psd</span><span class="p">,</span>
+                      <span class="n">signal_surrogate</span><span class="p">,</span> <span class="n">signal_zerocrossings</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.entropy_kl</span> <span class="kn">import</span> <span class="n">entropy_kl</span>
 <span class="kn">from</span> <span class="nn">.information_mutual</span> <span class="kn">import</span> <span class="n">mutual_information</span>
 <span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
@@ -1232,12 +1227,15 @@ title="Open an issue"
 <span class="c1">#     show=False,</span>
 <span class="c1"># ):</span>
 <span class="c1">#     &quot;&quot;&quot;https://www.mdpi.com/1099-4300/23/2/221/htm&quot;&quot;&quot;</span>
+
 <span class="c1">#     delay = 1</span>
 <span class="c1">#     dimension = 3</span>
 <span class="c1">#     e = 3</span>
+
 <span class="c1">#     signal = [2, -7, -12, 5, -1, 9, 14]</span>
 
 <span class="c1">#     embedded = nk.complexity_embedding(signal, delay=delay, dimension=dimension)</span>
+<span class="c1">#     print(embedded)</span>
 
 <span class="c1">#     # How to create the symbolic sequence?</span>
 <span class="c1">#     symbols = np.zeros((len(embedded), dimension - 1))</span>
