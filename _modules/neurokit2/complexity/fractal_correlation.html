@@ -522,7 +522,7 @@ title="Open an issue"
 <span class="sd">    radius : Union[str, int, list]</span>
 <span class="sd">        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence</span>
 <span class="sd">        of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in</span>
-<span class="sd">        other packages can be used via setting ``r=&#39;nolds&#39;``, ``r=&#39;Corr_Dim&#39;`` or ``r=&#39;boon2008&#39;``.</span>
+<span class="sd">        other packages can be used via ``&#39;nolds&#39;``, ``&#39;Corr_Dim&#39;`` or ``&#39;boon2008&#39;``.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        Plot of correlation dimension if True. Defaults to False.</span>
 <span class="sd">    **kwargs</span>
@@ -535,6 +535,15 @@ title="Open an issue"
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information regarding the parameters used</span>
 <span class="sd">        to compute the correlation dimension.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 7])</span>
 
 <span class="sd">    References</span>
 <span class="sd">    -----------</span>
@@ -576,8 +585,8 @@ title="Open an issue"
         <span class="n">cd</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">r_vals</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">corr</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Correlation Dimension&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Correlation Dimension&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(radius)&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(correlation sum)&quot;</span><span class="p">)</span>
 
