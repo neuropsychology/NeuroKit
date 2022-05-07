@@ -54,7 +54,7 @@ def entropy_slope(signal, dimension=3, thresholds=[0.1, 45], **kwargs):
       slopen, info = nk.entropy_slope(signal, dimension=3, thresholds=[0.1, 45])
       slopen
 
-      slopen, info = nk.entropy_slope(signal, dimension=3, thresholds=[5, 45, 60])
+      slopen, info = nk.entropy_slope(signal, dimension=3, thresholds=[5, 45, 60, 90])
       slopen
 
       # Compute Multiscale Slope Entropy (MSSlopEn)

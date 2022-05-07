@@ -92,10 +92,6 @@ p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulat
 ## Results
 
 ``` r
-library(tidyverse)
-library(easystats)
-library(patchwork)
-
 df <- read.csv("data_Complexity.csv") |>
   mutate(Method = as.factor(Method))
 
@@ -183,7 +179,7 @@ data <- df |>
 
 
 
-get_cor <- function(data) {
+get_cor <- function(data, plot=FALSE) {
   cor <- correlation::correlation(data, method = "spearman", redundant = TRUE) |>
     correlation::cor_sort(hclust_method = "ward.D2")
   p <- cor |>
@@ -202,20 +198,18 @@ get_cor <- function(data) {
     labs(title = "Correlation Matrix of Complexity Indices", x = NULL, y = NULL) +
     theme_minimal() +
     theme(
-      axis.text.x = element_text(angle = 45, hjust = 1),
+      axis.text.x = element_text(angle = 90, hjust = 1),
       plot.title = element_text(hjust = 0.5),
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank()
     )
-  plot(p)
+  if(plot) plot(p)
   cor
 }
 
 
 cor <- get_cor(data)
 ```
-
-![](../../studies/complexity_benchmark/figures/unnamed-chunk-7-1.png)<!-- -->
 
 ### Duplicates
 
@@ -263,12 +257,13 @@ data <- data |>
     -CPEn,
     -RR,
     -MFDFA_HDelta,
-    -FuzzyRCMSEn,
-    -`CREn (1000)`, -`CREn (100)`,
+    # -FuzzyRCMSEn,
+    # -`CREn (1000)`, 
+    -`CREn (100)`,
     -RQA_VEn, -RQA_LEn
   )
 
-cor <- get_cor(data)
+cor <- get_cor(data, plot=TRUE)
 ```
 
 ![](../../studies/complexity_benchmark/figures/unnamed-chunk-9-1.png)<!-- -->
@@ -298,8 +293,8 @@ plot(parameters::n_factors(data, cor = r))
 ![](../../studies/complexity_benchmark/figures/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
-rez <- parameters::factor_analysis(data, cor = r, n = 14, rotation = "varimax", sort = TRUE, fm="wls")
-# rez <- parameters::principal_components(data, n = 5, sort = TRUE)
+rez <- parameters::factor_analysis(data, cor = r, n = 4, rotation = "varimax", sort = TRUE, fm="ml")
+# rez <- parameters::principal_components(data, n = 13, sort = TRUE)
 # rez
 
 col <- gsub('[[:digit:]]+', '', names(rez)[2])
@@ -307,7 +302,7 @@ closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with
 
 loadings <- attributes(rez)$loadings_long |>
   mutate(
-    Loading = abs(Loading),
+    Loading = Loading,
     Component = fct_relevel(Component, rev(names(select(rez, starts_with(col))))),
     Variable = fct_rev(fct_relevel(Variable, rez$Variable))
   )
@@ -320,7 +315,7 @@ p1 <- loadings |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
   geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
-  geom_vline(xintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
+  geom_vline(xintercept = head(cumsum(table(closest)[levels(loadings$Component)]), -1) + 0.5) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_fill_material_d("rainbow") +
   coord_flip() +
@@ -342,7 +337,8 @@ p1 <- loadings |>
 p2 <- order |>
   mutate(Duration = 1 + Duration * 10000) |>
   filter(Index %in% loadings$Variable) |>
-  mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |>
+  mutate(Index = fct_relevel(Index, levels(loadings$Variable)),
+         Duration = ifelse(is.na(Duration), 0, Duration)) |>
   ggplot(aes(x = log10(Duration), y = Index)) +
   geom_bar(aes(fill = log10(Duration)), stat = "identity") +
   geom_hline(yintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
@@ -363,6 +359,6 @@ p2 <- order |>
 (p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
 
-![](../../studies/complexity_benchmark/figures/unnamed-chunk-10-2.png)<!-- -->
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-11-1.png)<!-- -->
 
 ## References

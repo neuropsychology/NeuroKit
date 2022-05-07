@@ -79,7 +79,7 @@ def run_benchmark(noise_intensity=0.01):
     data_complexity = []
 
     print("Noise intensity: {}".format(noise_intensity))
-    for duration in [0.5, 1, 2]:
+    for duration in [0.5, 1, 1.5, 2]:
         for method in [
             "Random-Walk",
             "lorenz_10_2.5_28",
@@ -179,7 +179,7 @@ def run_benchmark(noise_intensity=0.01):
 
             # Fractals
             # ----------
-            for x in ["A", "B", "C", "D", "r", 3, 10, 100, 1000]:
+            for x in ["A", "B", "C", "D", "r", 3, 10, 100]:
                 rez = pd.concat(
                     [
                         rez,
@@ -337,7 +337,7 @@ def run_benchmark(noise_intensity=0.01):
 
             # Entropy
             # ----------
-            for x in ["A", "B", "C", "D", "r", 3, 10, 100, 1000]:
+            for x in ["A", "B", "C", "D", "r", 3, 10, 100]:
                 rez = pd.concat(
                     [
                         rez,
@@ -449,20 +449,6 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_entropy_kl",
                         delay=delay,
                         dimension=3,
-                    ),
-                ]
-            )
-            rez = pd.concat(
-                [
-                    rez,
-                    time_function(
-                        signal_,
-                        nk.entropy_kl,
-                        index="KLEn (corrected)",
-                        name="nk_entropy_kl",
-                        delay=delay,
-                        dimension=3,
-                        corrected=True,
                     ),
                 ]
             )
@@ -589,6 +575,19 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_entropy_slope",
                         dimension=3,
                         thresholds=[0.1, 45],
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_slope,
+                        index="SlopEn (7)",
+                        name="nk_entropy_slope",
+                        dimension=3,
+                        thresholds=[0.1, 15, 30, 45, 60, 75, 90],
                     ),
                 ]
             )
@@ -1007,19 +1006,19 @@ def run_benchmark(noise_intensity=0.01):
                     ),
                 ]
             )
-            # rez = pd.concat(
-            #     [
-            #         rez,
-            #         time_function(
-            #             signal_,
-            #             nk.entropy_multiscale,
-            #             index="MSWPEn",
-            #             name="nk_entropy_multiscale",
-            #             dimension=3,
-            #             method="MSWPEn",
-            #         ),
-            #     ]
-            # )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MSWPEn",
+                        name="nk_entropy_multiscale",
+                        dimension=3,
+                        method="MSWPEn",
+                    ),
+                ]
+            )
             # rez = pd.concat(
             #     [
             #         rez,
@@ -1074,21 +1073,21 @@ def run_benchmark(noise_intensity=0.01):
                 ]
             )
             # Super slow:
-            # rez = pd.concat(
-            #     [
-            #         rez,
-            #         time_function(
-            #             signal_,
-            #             nk.entropy_multiscale,
-            #             index="FuzzyMSEn",
-            #             name="nk_entropy_multiscale",
-            #             delay=delay,
-            #             dimension=3,
-            #             method="MSEn",
-            #             fuzzy=True,
-            #         ),
-            #     ]
-            # )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="FuzzyMSEn",
+                        name="nk_entropy_multiscale",
+                        delay=delay,
+                        dimension=3,
+                        method="MSEn",
+                        fuzzy=True,
+                    ),
+                ]
+            )
             # rez = pd.concat(
             #     [
             #         rez,

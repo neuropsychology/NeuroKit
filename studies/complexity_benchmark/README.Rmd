@@ -56,7 +56,7 @@ The script to generate the data can be found at ...
 
 Generated 5 types of signals, to which we added different types of noise.
 
-```{r message=FALSE, warning=FALSE, fig.height=20, fig.width=12, cache=TRUE}
+```{r message=FALSE, warning=FALSE, fig.height=20, fig.width=12}
 library(tidyverse)
 library(easystats)
 library(patchwork)
@@ -180,6 +180,7 @@ colors <- c(
   "IncrEn" = "#E91E63",
   "MSIncrEn" = "#E91E63",
   "SlopEn" = "#E91E63",
+  "SlopEn (7)" = "#E91E63",
   "MSSlopEn" = "#E91E63",
   "SyDyEn" = "#E91E63",
   "MSSyDyEn" = "#E91E63",
@@ -488,7 +489,7 @@ filter(averagetime, Index %in% c("NLDFD", "RR"))
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE, cache=TRUE, fig.width=16, fig.height=15}
 data <- data |>
   select(
     -`CREn (B)`,
@@ -506,7 +507,8 @@ data <- data |>
     -RR,
     -MFDFA_HDelta,
     # -FuzzyRCMSEn,
-    -`CREn (1000)`, -`CREn (100)`,
+    # -`CREn (1000)`, 
+    -`CREn (100)`,
     -RQA_VEn, -RQA_LEn
   )
 
@@ -533,14 +535,15 @@ cor <- get_cor(data, plot=TRUE)
 
 ### Factor Analysis
 
-
-```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=18}
+```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=7}
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))
-plot(parameters::n_components(data, cor = r))
+```
 
-rez <- parameters::factor_analysis(data, cor = r, n = 13, rotation = "varimax", sort = TRUE, fm="wls")
+
+```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=18}
+rez <- parameters::factor_analysis(data, cor = r, n = 4, rotation = "varimax", sort = TRUE, fm="ml")
 # rez <- parameters::principal_components(data, n = 13, sort = TRUE)
 # rez
 
@@ -549,7 +552,7 @@ closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with
 
 loadings <- attributes(rez)$loadings_long |>
   mutate(
-    Loading = abs(Loading),
+    Loading = Loading,
     Component = fct_relevel(Component, rev(names(select(rez, starts_with(col))))),
     Variable = fct_rev(fct_relevel(Variable, rez$Variable))
   )
@@ -562,7 +565,7 @@ p1 <- loadings |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
   geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
-  geom_vline(xintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
+  geom_vline(xintercept = head(cumsum(table(closest)[levels(loadings$Component)]), -1) + 0.5) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_fill_material_d("rainbow") +
   coord_flip() +
@@ -584,7 +587,8 @@ p1 <- loadings |>
 p2 <- order |>
   mutate(Duration = 1 + Duration * 10000) |>
   filter(Index %in% loadings$Variable) |>
-  mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |>
+  mutate(Index = fct_relevel(Index, levels(loadings$Variable)),
+         Duration = ifelse(is.na(Duration), 0, Duration)) |>
   ggplot(aes(x = log10(Duration), y = Index)) +
   geom_bar(aes(fill = log10(Duration)), stat = "identity") +
   geom_hline(yintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
