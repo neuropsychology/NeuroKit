@@ -57,9 +57,9 @@ Fractal Dimension
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_hurst
 
-.. *fractal_correlation()*
-.. """"""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.fractal_correlation
+*fractal_correlation()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_correlation
 
 *fractal_dfa()*
 """"""""""""""""""""""
