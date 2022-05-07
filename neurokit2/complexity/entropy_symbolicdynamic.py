@@ -44,6 +44,8 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
 
       import neurokit2 as nk
 
+      signal = [2, -7, -12, 5, -1, 9, 14]
+
       # Simulate a Signal
       signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
 
@@ -68,6 +70,9 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
 
     References
     ----------
+    * Matilla-García, M., Morales, I., Rodríguez, J. M., & Marín, M. R. (2021). Selection of
+      embedding dimension and delay time in phase space reconstruction via symbolic dynamics.
+      Entropy, 23(2), 221.
     * Li, Y., Yang, Y., Li, G., Xu, M., & Huang, W. (2017). A fault diagnosis scheme for planetary
       gearboxes using modified multi-scale symbolic dynamic entropy and mRMR feature selection.
       Mechanical Systems and Signal Processing, 91, 295-312.

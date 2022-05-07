@@ -100,6 +100,10 @@ Entropy
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
 
+*entropy_kl()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_kl
+
 *entropy_spectral()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral

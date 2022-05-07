@@ -25,7 +25,8 @@ def fractal_dfa(
 
     For monofractal DFA, the output *alpha* :math:`\\alpha` corresponds to the slope of the linear
     trend between the scale factors and the fluctuations. For multifractal DFA, the slope values
-    under different *q* values are actually generalised Hurst exponents *h*.
+    under different *q* values are actually generalised Hurst exponents *h*. DFA corresponds to
+    MFDFA with *q = 2*.
 
     The output is for multifractal DFA is a dataframe containing the following features:
 
@@ -50,10 +51,11 @@ def fractal_dfa(
         non-overlapping windows will be used.
     integrate : bool
         It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
-        which corresponds to the signal 'profile'). Note that it leads to the flattening of the
-        signal, which can lead to the loss of some details (see Ihlen, 2012 for an explanation).
-        Note that for strongly anticorrelated signals, this transformation should be applied  two
-        times (i.e., provide ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        which corresponds to the signal 'profile') in order to avoid having too small exponent
+        values. Note that it leads to the flattening of the signal, which can lead to the loss of
+        some details (see Ihlen, 2012 for an explanation). Note that for strongly anticorrelated
+        signals, this transformation should be applied  two times (i.e., provide
+        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
     order : int
        The order of the polynomial trend for detrending, 1 for the linear trend.
     multifractal : bool
