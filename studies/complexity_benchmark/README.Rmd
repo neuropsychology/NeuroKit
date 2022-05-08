@@ -550,6 +550,7 @@ rez <- parameters::factor_analysis(data, cor = r, n = 4, rotation = "varimax", s
 col <- gsub('[[:digit:]]+', '', names(rez)[2])
 closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with(col)), 1, \(x) which.max(abs(x)))]
 
+
 loadings <- attributes(rez)$loadings_long |>
   mutate(
     Loading = Loading,
@@ -559,8 +560,20 @@ loadings <- attributes(rez)$loadings_long |>
 
 colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Component))), levels(loadings$Component))
 
+# Sort by sign too
+names(closest) <- rev(levels(loadings$Variable))
+
+idx_order <- loadings |> 
+  mutate(Closest = closest[as.character(loadings$Variable)],
+         Sign = sign(Loading)) |> 
+  filter(Component == Closest) |> 
+  arrange(desc(Component), desc(Sign), desc(abs(Loading))) |> 
+  pull(Variable) |> 
+  as.character()
+  
 
 p1 <- loadings |>
+  mutate(Variable = fct_relevel(Variable, rev(idx_order))) |> 
   # filter(Variable == "CD") |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
@@ -575,7 +588,7 @@ p1 <- loadings |>
   theme(
     axis.text.y = element_text(
       color = rev(colors[closest]),
-      face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")),
+      face = rev(ifelse(idx_order %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")),
       hjust = 0.5
     ),
     axis.text.x = element_blank(),
