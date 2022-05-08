@@ -746,7 +746,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="gp">In [7]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv1.png"><img alt="../_images/p_hrv1.png" src="../_images/p_hrv1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv1.png"><img alt="savefig/p_hrv1.png" src="savefig/p_hrv1.png" /></a>
 <p><strong>Example 2</strong>: Compute HRV directly from processed data</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download data</span>
 <span class="gp">In [8]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
@@ -872,7 +872,7 @@ the height of the RR intervals histogram.</p></li>
 <span class="gp">In [4]: </span><span class="n">hrv</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_time.png"><img alt="../_images/p_hrv_time.png" src="../_images/p_hrv_time.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_time.png"><img alt="savefig/p_hrv_time.png" src="savefig/p_hrv_time.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in
@@ -978,22 +978,22 @@ the total power.</p></li>
 <span class="gp">In [4]: </span><span class="n">hrv_welch</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq1.png"><img alt="../_images/p_hrv_freq1.png" src="../_images/p_hrv_freq1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq1.png"><img alt="savefig/p_hrv_freq1.png" src="savefig/p_hrv_freq1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method =&#39;burg&#39;</span>
 <span class="gp">In [5]: </span><span class="n">hrv_burg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;burg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq2.png"><img alt="../_images/p_hrv_freq2.png" src="../_images/p_hrv_freq2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq2.png"><img alt="savefig/p_hrv_freq2.png" src="savefig/p_hrv_freq2.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method = &#39;lomb&#39; (requires installation of astropy)</span>
 <span class="gp">In [6]: </span><span class="n">hrv_lomb</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;lomb&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq3.png"><img alt="../_images/p_hrv_freq3.png" src="../_images/p_hrv_freq3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq3.png"><img alt="savefig/p_hrv_freq3.png" src="savefig/p_hrv_freq3.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method=&#39;multitapers&#39;</span>
 <span class="gp">In [7]: </span><span class="n">hrv_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;multitapers&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_freq4.png"><img alt="../_images/p_hrv_freq4.png" src="../_images/p_hrv_freq4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_freq4.png"><img alt="savefig/p_hrv_freq4.png" src="savefig/p_hrv_freq4.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in
@@ -1150,7 +1150,7 @@ the next successive one. The ellipse centers around the average RR interval. By 
 <span class="gp">In [4]: </span><span class="n">hrv</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_nonlinear1.png"><img alt="../_images/p_hrv_nonlinear1.png" src="../_images/p_hrv_nonlinear1.png" style="width: 800.0px; height: 800.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_nonlinear1.png"><img alt="savefig/p_hrv_nonlinear1.png" src="savefig/p_hrv_nonlinear1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hrv</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">     HRV_SD1    HRV_SD2  HRV_SD1SD2  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
@@ -1239,7 +1239,7 @@ of the mean pairwise distance between points.</p></li>
 <span class="gp">In [4]: </span><span class="n">hrv_rqa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rqa</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_rqa1.png"><img alt="../_images/p_hrv_rqa1.png" src="../_images/p_hrv_rqa1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_hrv_rqa1.png"><img alt="savefig/p_hrv_rqa1.png" src="savefig/p_hrv_rqa1.png" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hrv_rqa</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">   RecurrenceRate  Determinism  ...  WMax       WEn</span>
@@ -1380,7 +1380,7 @@ when the signal to noise ratio is low, in ln(ms^2).</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ecg_signals</span><span class="p">[</span><span class="s2">&quot;ECG_Rate&quot;</span><span class="p">],</span> <span class="n">rsp_signals</span><span class="p">[</span><span class="s2">&quot;RSP_Rate&quot;</span><span class="p">],</span> <span class="n">rsa</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/hrv_rsa1.png"><img alt="../_images/hrv_rsa1.png" src="../_images/hrv_rsa1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/hrv_rsa1.png"><img alt="savefig/hrv_rsa1.png" src="savefig/hrv_rsa1.png" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Servant, D., Logier, R., Mouster, Y., &amp; Goudemand, M. (2009). La variabilité de la fréquence
