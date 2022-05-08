@@ -51,6 +51,8 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
 
     Examples
     ----------
+    For some completely unclear reasons, uncommenting the following examples messes up the figures
+    path of all the subsequent documented function. So, commenting it for now.
 
     .. ipython:: python
 
