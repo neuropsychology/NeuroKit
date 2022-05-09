@@ -6,8 +6,10 @@ from ..signal import signal_changepoints
 
 
 def eda_changepoints(eda_cleaned):
-    """Calculate the number of change points using of the skin conductance signal in terms of mean and variance.
-    Defaults to an algorithm penalty of 10000, as recommended by Halem et al. (2020).
+    """**Calculate Number of Change Points**
+
+    Calculate the number of change points using of the skin conductance signal in terms of mean
+    and variance. Defaults to an algorithm penalty of 10000, as recommended by Halem et al. (2020).
 
     Parameters
     ----------
@@ -26,17 +28,18 @@ def eda_changepoints(eda_cleaned):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Simulate EDA signal
-    >>> eda_signal = nk.eda_simulate(duration=5, scr_number=5, drift=0.1)
-    >>> eda_cleaned = nk.eda_clean(eda_signal)
-    >>> changepoints = nk.eda_changepoints(eda_cleaned)
-    >>> changepoints #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate EDA signal
+      eda_signal = nk.eda_simulate(duration=5, scr_number=5, drift=0.1)
+      eda_cleaned = nk.eda_clean(eda_signal)
+      changepoints = nk.eda_changepoints(eda_cleaned)
 
     References
     -----------
-    - Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That Matter?
+    * Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That Matter?
       On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing Events Within
       an Experience Sampling Framework. European Journal of Personality.
 

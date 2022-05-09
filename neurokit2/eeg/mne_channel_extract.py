@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
-    """Channel array extraction from MNE.
+    """**Channel array extraction from MNE**
 
     Select one or several channels by name and returns them in a dataframe.
 
@@ -37,15 +37,17 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>> import mne
-    >>>
-    >>> raw = nk.mne_data("raw")
-    >>>
-    >>> raw_channel = nk.mne_channel_extract(raw, what=["EEG 060", "EEG 055"], name=['060', '055']) # doctest: +SKIP
-    >>> eeg_channels = nk.mne_channel_extract(raw, "EEG") # doctest: +SKIP
-    >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG') # doctest: +SKIP
-    >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', add_firstsamples = 0) # doctest: +SKIP
+    .. ipython:: python
+    
+      import neurokit2 as nk
+      import mne
+
+      raw = nk.mne_data("raw")
+
+      raw_channel = nk.mne_channel_extract(raw, what=["EEG 060", "EEG 055"], name=['060', '055'])
+      eeg_channels = nk.mne_channel_extract(raw, "EEG")
+      eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG')
+      eog_channels = nk.mne_channel_extract(raw, what='EOG', add_firstsamples = 0)
 
     """
     channels_all = raw.copy().info["ch_names"]

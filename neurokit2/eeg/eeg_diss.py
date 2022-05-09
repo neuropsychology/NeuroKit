@@ -6,7 +6,7 @@ from .eeg_gfp import eeg_gfp
 
 
 def eeg_diss(eeg, gfp=None, **kwargs):
-    """Global dissimilarity (DISS)
+    """**Global dissimilarity (DISS)**
 
     Global dissimilarity (DISS) is an index of configuration differences between two electric
     fields, independent of their strength. Like GFP, DISS was first introduced by Lehmann and
@@ -30,18 +30,24 @@ def eeg_diss(eeg, gfp=None, **kwargs):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> eeg = eeg.set_eeg_reference('average') #doctest: +SKIP
-    >>>
-    >>> gfp = nk.eeg_gfp(eeg)
-    >>> diss = nk.eeg_diss(eeg, gfp=gfp)
-    >>> nk.signal_plot([gfp[0:300], diss[0:300]], standardize=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw")
+      eeg = eeg.set_eeg_reference('average') #doctest: +SKIP
+
+      gfp = nk.eeg_gfp(eeg)
+      diss = nk.eeg_diss(eeg, gfp=gfp)
+      @savefig p_eeg_diss1.png scale=100%
+      nk.signal_plot([gfp[0:300], diss[0:300]], standardize=True)
+      @suppress
+      plt.close()
+
 
     References
     ----------
-    - Lehmann, D., & Skrandies, W. (1980). Reference-free identification of components of
+    * Lehmann, D., & Skrandies, W. (1980). Reference-free identification of components of
     checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
     neurophysiology, 48(6), 609-621.
 

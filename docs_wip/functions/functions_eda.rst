@@ -17,7 +17,7 @@ Main
 .. autofunction:: neurokit2.eda.eda_plot
 
 *eda_simulate()*
-"""""""""""""
+"""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_simulate
 
 Preprocessing
@@ -30,6 +30,10 @@ Preprocessing
 *eda_clean()*
 """""""""""""
 .. autofunction:: neurokit2.eda.eda_clean
+
+*eda_changepoints()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_changepoints
 
 *eda_findpeaks()*
 """""""""""""""""""""

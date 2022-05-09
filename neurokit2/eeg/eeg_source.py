@@ -1,5 +1,5 @@
 def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", **kwargs):
-    """Source Reconstruction for EEG data
+    """**Source Reconstruction for EEG data**
 
     Currently only for mne.Raw objects.
 
