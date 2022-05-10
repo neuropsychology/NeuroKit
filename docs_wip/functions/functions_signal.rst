@@ -36,6 +36,10 @@ Transformation
 """""""""""""""""""""
 .. autofunction:: neurokit2.signal_merge
 
+*signal_noise()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.signal_noise
+
 
 Peaks
 ^^^^^^^^^^^^^^^^
