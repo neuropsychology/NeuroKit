@@ -10,7 +10,8 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     Compute a continuous index of coupling between two signals either using the 'hilbert' method to
     get the instantaneous phase synchrony, or using rolling window correlation.
 
-    The instantaneous phase synchrony measures the phase similarities between signals at each timepoint. The phase refers to the angle of the signal, calculated through the hilbert
+    The instantaneous phase synchrony measures the phase similarities between signals at each
+    timepoint. The phase refers to the angle of the signal, calculated through the hilbert
     transform, when it is resonating between -pi to pi degrees. When two signals line up in phase
     their angular difference becomes zero.
 
@@ -92,10 +93,12 @@ def _signal_synchrony_hilbert(signal1, signal2):
 
 
 def _signal_synchrony_correlation(signal1, signal2, window_size, center=False):
-    """Calculates pairwise rolling correlation at each time. Grabs the upper triangle, at each timepoints.
+    """**Calculates pairwise rolling correlation at each time**
+    Grabs the upper triangle, at each timepoint.
 
-    - window: window size of rolling corr in samples
-    - center: whether to center result (Default: False, so correlation values are listed on the right.)
+    * window: window size of rolling corr in samples
+    * center: whether to center result (Default: False, so correlation values are listed on the
+      right.)
 
     """
     data = pd.DataFrame({"y1": signal1, "y2": signal2})
