@@ -58,7 +58,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=2, frequency=[5, 7])
+      signal = nk.signal_simulate(duration=1, frequency=[5, 7])
 
       # @savefig p_fractal_correlation1.png scale=100%
       # cd, info = nk.fractal_correlation(signal, radius=32, show=True)
