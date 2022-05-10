@@ -66,6 +66,10 @@ Analysis
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_period
 
+*signal_phase()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_phase
+
 
 
 
