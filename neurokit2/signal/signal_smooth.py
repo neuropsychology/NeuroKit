@@ -8,7 +8,7 @@ from ..stats import fit_loess
 
 
 def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=0.1):
-    """Signal smoothing.
+    """**Signal smoothing**
 
     Signal smoothing can be achieved using either the convolution of a filter kernel with the input
     signal to compute the smoothed signal (Smith, 1997) or a LOESS regression.
@@ -20,21 +20,20 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
     method : str
         Can be one of 'convolution' (default) or 'loess'.
     kernel : Union[str, np.array]
-        Only used if `method` is 'convolution'. Type of kernel to use; if array, use directly as the
-        kernel. Can be one of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming', 'hann',
-        'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris', 'nuttall', 'barthann', 'kaiser'
-        (needs beta), 'gaussian' (needs std), 'general_gaussian' (needs power, width), 'slepian' (needs width)
-        or 'chebwin' (needs attenuation).
+        Only used if ``method`` is 'convolution'. Type of kernel to use; if array, use directly as
+        the kernel. Can be one of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming',
+        'hann', 'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris', 'nuttall', 'barthann',
+        'kaiser' (needs beta), 'gaussian' (needs std), 'general_gaussian' (needs power, width),
+        'slepian' (needs width) or 'chebwin' (needs attenuation).
     size : int
-        Only used if `method` is 'convolution'. Size of the kernel; ignored if kernel is an array.
+        Only used if ``method`` is 'convolution'. Size of the kernel; ignored if kernel is an array.
     alpha : float
-        Only used if `method` is 'loess'. The parameter which controls the degree of smoothing.
+        Only used if ``method`` is 'loess'. The parameter which controls the degree of smoothing.
 
     Returns
     -------
     array
         Smoothed signal.
-
 
     See Also
     ---------
@@ -42,29 +41,42 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
-    >>> distorted = nk.signal_distort(signal, noise_amplitude=[0.3, 0.2, 0.1, 0.05], noise_frequency=[5, 10, 50, 100])
-    >>>
-    >>> size = len(signal)/100
-    >>> signals = pd.DataFrame({"Raw": distorted,
-    ...                         "Median": nk.signal_smooth(distorted, kernel='median', size=size-1),
-    ...                         "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size),
-    ...                         "Triang": nk.signal_smooth(distorted, kernel='triang', size=size),
-    ...                         "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size),
-    ...                         "Loess_01": nk.signal_smooth(distorted, method='loess', alpha=0.1),
-    ...                         "Loess_02": nk.signal_smooth(distorted, method='loess', alpha=0.2),
-    ...                         "Loess_05": nk.signal_smooth(distorted, method='loess', alpha=0.5)})
-    >>> fig = signals.plot()
-    >>> fig_magnify = signals[50:150].plot()  # Magnify
-    >>> fig_magnify #doctest: +SKIP
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = np.cos(np.linspace(start=0, stop=10, num=1000))
+      distorted = nk.signal_distort(signal,
+                                    noise_amplitude=[0.3, 0.2, 0.1, 0.05],
+                                    noise_frequency=[5, 10, 50, 100])
+
+      size = len(signal)/100
+      signals = pd.DataFrame({"Raw": distorted,
+                              "Median": nk.signal_smooth(distorted, kernel='median', size=size-1),
+                              "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size),
+                              "Triang": nk.signal_smooth(distorted, kernel='triang', size=size),
+                              "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size),
+                              "Loess_01": nk.signal_smooth(distorted, method='loess', alpha=0.1),
+                              "Loess_02": nk.signal_smooth(distorted, method='loess', alpha=0.2),
+                              "Loess_05": nk.signal_smooth(distorted, method='loess', alpha=0.5)})
+      @savefig p_signal_smooth1.png scale=100%
+      fig = signals.plot()
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Magnify the plot
+      @savefig p_signal_smooth2.png scale=100%
+      fig_magnify = signals[50:150].plot()
+      @suppress
+      plt.close()
 
     References
     ----------
-    - Smith, S. W. (1997). The scientist and engineer's guide to digital signal processing.
+    * Smith, S. W. (1997). The scientist and engineer's guide to digital signal processing.
 
     """
     if isinstance(signal, pd.Series):
