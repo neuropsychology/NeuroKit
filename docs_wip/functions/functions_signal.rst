@@ -1,5 +1,23 @@
 Signal
 -------
+*signal_simulate()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_simulate
+
+
+Preprocessing
+^^^^^^^^^^^^^^
+*signal_filter()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_filter
+
+*signal_sanitize()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_sanitize
+
+*signal_resample()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.signal_resample
 
 
 Transformation
@@ -23,10 +41,6 @@ Transformation
 *signal_distort()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_distort
-
-*signal_filter()*
-""""""""""""""""""
-.. autofunction:: neurokit2.signal_filter
 
 *signal_flatline()*
 """"""""""""""""""""
@@ -90,5 +104,20 @@ Analysis
 """"""""""""""""""
 .. autofunction:: neurokit2.signal_rate
 
+*signal_smooth()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_smooth
+
+*signal_synchrony()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_synchrony
+
+*signal_timefrequency()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_timefrequency
+
+*signal_zerocrossings()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_zerocrossings
 
 
