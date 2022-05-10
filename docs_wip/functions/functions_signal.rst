@@ -62,6 +62,10 @@ Analysis
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.signal_changepoints
 
+*signal_period()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_period
+
 
 
 
