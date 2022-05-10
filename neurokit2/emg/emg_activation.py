@@ -18,7 +18,7 @@ def emg_activation(
     threshold_size=None,
     **kwargs,
 ):
-    """Detects onset in EMG signal based on the amplitude threshold.
+    """**Detects onset in EMG signal based on the amplitude threshold**
 
     Parameters
     ----------
@@ -75,41 +75,63 @@ def emg_activation(
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Simulate signal and obtain amplitude
-    >>> emg = nk.emg_simulate(duration=10, burst_number=3)
-    >>> emg_cleaned = nk.emg_clean(emg)
-    >>> emg_amplitude = nk.emg_amplitude(emg_cleaned)
-    >>>
-    >>> # Threshold method
-    >>> activity, info = nk.emg_activation(emg_amplitude=emg_amplitude, method="threshold")
-    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> # Threshold method
-    >>> activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="pelt")
-    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> # Biosppy method
-    >>> activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="biosppy")
-    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> # Silva method
-    >>> activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="silva")
-    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate signal and obtain amplitude
+      emg = nk.emg_simulate(duration=10, burst_number=3)
+      emg_cleaned = nk.emg_clean(emg)
+      emg_amplitude = nk.emg_amplitude(emg_cleaned)
+
+      * **Example 1:** Threshold method
+
+    .. ipython:: python
+
+      activity, info = nk.emg_activation(emg_amplitude=emg_amplitude, method="threshold")
+      @savefig p_emg_activation1.png scale=100%
+      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      @suppress
+      plt.close()
+
+    * **Example 2:** Pelt method
+
+    .. ipython:: python
+
+      activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="pelt")
+      @savefig p_emg_activation2.png scale=100%
+      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      @suppress
+      plt.close()
+
+    * **Example 3:** Biosppy method
+
+    .. ipython:: python
+
+      activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="biosppy")
+      @savefig p_emg_activation3.png scale=100%
+      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      @suppress
+      plt.close()
+
+    * **Example 4:** Silva method
+
+    .. ipython:: python
+      
+      activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="silva")
+      @savefig p_emg_activation4.png scale=100%
+      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      @suppress
+      plt.close()
 
 
     References
     ----------
-    - BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
+    * BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
 
-    - Modified emg.py for BioSPPy: https://gist.github.com/tostasmistas/747f4585198411c8c4bda5f312f27dfb
+    * Modified emg.py for BioSPPy: https://gist.github.com/tostasmistas/747f4585198411c8c4bda5f312f27dfb
 
-    - Silva H, Scherer R, Sousa J, Londral A , "Towards improving the ssability of
+    * Silva H, Scherer R, Sousa J, Londral A , "Towards improving the ssability of
     electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1–2, 2012.
 
     """

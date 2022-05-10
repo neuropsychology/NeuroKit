@@ -52,7 +52,7 @@ def eeg_gfp(
     .. ipython:: python
 
       import neurokit2 as nk
-
+    
       eeg = nk.mne_data("filt-0-40_raw")
       eeg = nk.eeg_rereference(eeg, 'average')
       eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points

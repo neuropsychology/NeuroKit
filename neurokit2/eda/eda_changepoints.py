@@ -36,6 +36,7 @@ def eda_changepoints(eda_cleaned):
       eda_signal = nk.eda_simulate(duration=5, scr_number=5, drift=0.1)
       eda_cleaned = nk.eda_clean(eda_signal)
       changepoints = nk.eda_changepoints(eda_cleaned)
+      changepoints
 
     References
     -----------

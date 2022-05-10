@@ -6,8 +6,9 @@ from .emg_intervalrelated import emg_intervalrelated
 
 
 def emg_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs EMG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-
-    state data.
+    """**EMG Analysis**
+
+    Performs EMG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.
 
     Parameters
     ----------
@@ -26,9 +27,9 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed EMG features. If event-related analysis is conducted, each
-        epoch is indicated by the `Label` column. See `emg_eventrelated()` and `emg_intervalrelated()`
-        docstrings for details.
+        A dataframe containing the analyzed EMG features. If event-related analysis is conducted,
+        each epoch is indicated by the `Label` column. See `emg_eventrelated()` and
+        `emg_intervalrelated()` docstrings for details.
 
     See Also
     --------
@@ -36,22 +37,24 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
+    .. ipython:: python
 
-    >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
-    >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
-    ...                           epochs_start=-0.1, epochs_end=1.9)
-    >>>
-    >>> # Event-related analysis
-    >>> analyze_epochs = nk.emg_analyze(epochs, method="event-related")
-    >>> analyze_epochs #doctest: +SKIP
-    >>>
-    >>> # Interval-related analysis
-    >>> analyze_df = nk.emg_analyze(emg_signals, method="interval-related")
-    >>> analyze_df #doctest: +SKIP
+      import neurokit2 as nk
+      import pandas as pd
+
+      # Example with simulated data
+      emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
+      emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+      epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
+                                epochs_start=-0.1, epochs_end=1.9)
+
+      # Event-related analysis
+      analyze_epochs = nk.emg_analyze(epochs, method="event-related")
+      analyze_epochs
+
+      # Interval-related analysis
+      analyze_df = nk.emg_analyze(emg_signals, method="interval-related")
+      analyze_df
 
     """
     method = method.lower()

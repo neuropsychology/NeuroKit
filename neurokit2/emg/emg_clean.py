@@ -10,7 +10,7 @@ from ..signal import signal_detrend
 
 
 def emg_clean(emg_signal, sampling_rate=1000):
-    """Preprocess an electromyography (emg) signal.
+    """**Preprocess an electromyography (emg) signal**
 
     Clean an EMG signal using a set of parameters, such as: in `BioSPPy
     <https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/emg.py>>`_:
@@ -35,13 +35,17 @@ def emg_clean(emg_signal, sampling_rate=1000):
 
     Examples
     --------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000)
-    >>> signals = pd.DataFrame({"EMG_Raw": emg, "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
-    >>> fig = signals.plot()
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+    
+      import pandas as pd
+      import neurokit2 as nk
+
+      emg = nk.emg_simulate(duration=10, sampling_rate=1000)
+      signals = pd.DataFrame({"EMG_Raw": emg, "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
+      @savefig p.emg_clean.png scale=100%
+      fig = signals.plot()
+      @suppress
+      plt.close()
 
     """
     emg_signal = as_vector(emg_signal)

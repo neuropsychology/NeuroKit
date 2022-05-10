@@ -5,7 +5,7 @@ from ..signal import signal_filter
 
 
 def emg_amplitude(emg_cleaned):
-    """Compute electromyography (EMG) amplitude.
+    """**Compute electromyography (EMG) amplitude**
 
     Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
     linear envelope of the signal.
@@ -26,15 +26,19 @@ def emg_amplitude(emg_cleaned):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
-    >>> cleaned = nk.emg_clean(emg, sampling_rate=1000)
-    >>>
-    >>> amplitude = nk.emg_amplitude(cleaned)
-    >>> fig = pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+    
+      import neurokit2 as nk
+      import pandas as pd
+
+      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
+      cleaned = nk.emg_clean(emg, sampling_rate=1000)
+
+      amplitude = nk.emg_amplitude(cleaned)
+      @savefig p.emg_amplitude.png scale=100%
+      fig = pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True)
+      @suppress
+      plt.close()
 
     """
     tkeo = _emg_amplitude_tkeo(emg_cleaned)

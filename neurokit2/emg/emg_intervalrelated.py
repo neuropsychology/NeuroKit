@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def emg_intervalrelated(data):
-    """Performs EMG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
+    """**Performs EMG analysis on longer periods of data (typically > 10 seconds), such as resting-state data**
 
     Parameters
     ----------
@@ -17,8 +17,8 @@ def emg_intervalrelated(data):
     -------
     DataFrame
         A dataframe containing the analyzed EMG features. The analyzed features consist of the following:
-        - *"EMG_Activation_N"*: the number of bursts of muscular activity.
-        - *"EMG_Amplitude_Mean"*: the mean amplitude of the muscular activity.
+        * ``"EMG_Activation_N"``: the number of bursts of muscular activity.
+        * ``"EMG_Amplitude_Mean"``: the mean amplitude of the muscular activity.
 
     See Also
     --------
@@ -26,17 +26,19 @@ def emg_intervalrelated(data):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=40, sampling_rate=1000, burst_number=3)
-    >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>>
-    >>> # Single dataframe is passed
-    >>> nk.emg_intervalrelated(emg_signals) #doctest: +SKIP
-    >>>
-    >>> epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
-    >>> nk.emg_intervalrelated(epochs) #doctest: +SKIP
+    .. ipython:: python
+    
+      import neurokit2 as nk
+
+      # Example with simulated data
+      emg = nk.emg_simulate(duration=40, sampling_rate=1000, burst_number=3)
+      emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+
+      # Single dataframe is passed
+      nk.emg_intervalrelated(emg_signals)
+
+      epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
+      nk.emg_intervalrelated(epochs)
 
     """
     intervals = {}

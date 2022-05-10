@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def emg_plot(emg_signals, sampling_rate=None):
-    """Visualize electromyography (EMG) data.
+    """**Visualize electromyography (EMG) data**
 
     Parameters
     ----------
@@ -23,12 +23,16 @@ def emg_plot(emg_signals, sampling_rate=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
-    >>> emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
-    >>> fig = nk.emg_plot(emg_signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
+      emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
+      @savefig p.emg_plot.png scale=100%
+      fig = nk.emg_plot(emg_signals)
+      @suppress
+      plt.close()
 
     See Also
     --------
