@@ -74,6 +74,14 @@ Analysis
 """"""""""""""""""
 .. autofunction:: neurokit2.signal_plot
 
+*signal_power()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_power
+
+*signal_psd()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_psd
+
 
 
 
