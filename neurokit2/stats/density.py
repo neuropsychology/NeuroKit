@@ -31,6 +31,10 @@ def density(x, desired_length=100, bandwidth="Scott", show=False, **kwargs):
     y
         The y axis of the density estimation.
 
+    See Also
+    --------
+    density_bandwidth
+
     Examples
     --------
     .. ipython:: python
@@ -60,6 +64,8 @@ def density(x, desired_length=100, bandwidth="Scott", show=False, **kwargs):
       plt.close()
 
     """
+    if "method" in kwargs:
+        kwargs.pop("method")
     bw = density_bandwidth(x, method=bandwidth, **kwargs)
     density_function = scipy.stats.gaussian_kde(x, bw_method=bw)
 

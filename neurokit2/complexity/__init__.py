@@ -27,6 +27,7 @@ from .entropy_multiscale import entropy_multiscale
 from .entropy_ofentropy import entropy_ofentropy
 from .entropy_permutation import entropy_permutation
 from .entropy_phase import entropy_phase
+from .entropy_power import entropy_power
 from .entropy_range import entropy_range
 from .entropy_rate import entropy_rate
 from .entropy_renyi import entropy_renyi
@@ -49,6 +50,7 @@ from .fractal_psdslope import fractal_psdslope
 from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
+from .information_fishershannon import fishershannon_information
 from .information_mutual import mutual_information
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
@@ -150,6 +152,7 @@ __all__ = [
     "entropy_maximum",
     "entropy_shannon",
     "entropy_shannon_joint",
+    "entropy_power",
     "entropy_rate",
     "entropy_tsallis",
     "entropy_renyi",
@@ -181,6 +184,7 @@ __all__ = [
     "entropy_range",
     "entropy_cosinesimilarity",
     "fisher_information",
+    "fishershannon_information",
     "fractal_dfa",
     "fractal_correlation",
     "fractal_higuchi",

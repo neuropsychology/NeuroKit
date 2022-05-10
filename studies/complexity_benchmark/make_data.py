@@ -15,15 +15,9 @@ def time_function(
     **kwargs,
 ):
     t0 = timer()
-    rez, _ = fun(x, **kwargs)
+    rez, info = fun(x, **kwargs)
     t1 = timer() - t0
 
-    pd.DataFrame(
-        {
-            "Duration": [t1],
-            "Method": [name],
-        }
-    )
     if name == "nk_complexity_rqa":
         rez = rez.add_prefix("RQA_")
         out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
@@ -34,6 +28,7 @@ def time_function(
         out = pd.DataFrame({"Result": [rez], "Index": [index]})
     out["Duration"] = t1
     out["Method"] = name
+
     return out
 
 
@@ -79,7 +74,7 @@ def run_benchmark(noise_intensity=0.01):
     data_complexity = []
 
     print("Noise intensity: {}".format(noise_intensity))
-    for duration in [0.5, 1, 1.5, 2]:
+    for duration in [0.5, 1, 1.5, 2, 2.5]:
         for method in [
             "Random-Walk",
             "lorenz_10_2.5_28",
@@ -474,6 +469,17 @@ def run_benchmark(noise_intensity=0.01):
                         nk.entropy_differential,
                         index="DiffEn",
                         name="nk_entropy_differential",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_power,
+                        index="PowEn",
+                        name="nk_entropy_power",
                     ),
                 ]
             )
@@ -1263,6 +1269,17 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_complexity_rqa",
                         delay=delay,
                         dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fishershannon_information,
+                        index="FSI",
+                        name="nk_fishershannon_information",
                     ),
                 ]
             )

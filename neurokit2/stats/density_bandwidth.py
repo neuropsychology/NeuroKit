@@ -20,7 +20,7 @@ def density_bandwidth(x, method="KernSmooth", resolution=401):
     x : Union[list, np.array, pd.Series]
         A vector of values.
     method : float
-        The bandwidth of the kernel. The smaller the values, the smoother the estimation. Can be an
+        The bandwidth of the kernel. The larger the values, the smoother the estimation. Can be an
         number, or ``'scott'`` or ``'silverman'`` (see ``bw_method`` argument in ``scipy.stats.
         gaussian_kde()``), or "KernSmooth".
     resolution : int
@@ -31,6 +31,10 @@ def density_bandwidth(x, method="KernSmooth", resolution=401):
     -------
     float
         Bandwidth value.
+
+    See Also
+    --------
+    density
 
     Examples
     --------
@@ -55,7 +59,9 @@ def density_bandwidth(x, method="KernSmooth", resolution=401):
     * Jones, W. M. (1995). Kernel Smoothing, Chapman & Hall.
 
     """
-    if isinstance(method, (float, int)) or method.lower() != "kernsmooth":
+    if isinstance(method, str):
+        method = method.lower()
+    if isinstance(method, (float, int)) or method != "kernsmooth":
         return scipy.stats.gaussian_kde(x, bw_method=method).factor
 
     n = len(x)
