@@ -9,7 +9,7 @@ from ..stats import standardize
 
 
 def eog_plot(eog_signals, peaks=None, sampling_rate=None):
-    """Visualize EOG data.
+    """**Visualize EOG data**
 
     Parameters
     ----------
@@ -30,16 +30,20 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> eog_signal = nk.data('eog_100hz')
-    >>>
-    >>> # Process
-    >>> eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)
-    >>>
-    >>> nk.eog_plot(eog_signals, peaks, sampling_rate=100) #doctest: +ELLIPSIS
-    <Figure ...>
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      eog_signal = nk.data('eog_100hz')
+
+      # Process
+      eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)
+      @savefig p.eog_plot.png scale=100%
+      nk.eog_plot(eog_signals, peaks, sampling_rate=100)
+      @suppress
+      plt.close()
+
 
     See Also
     --------

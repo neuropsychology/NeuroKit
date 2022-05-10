@@ -21,26 +21,26 @@ Main
 
 Preprocessing
 ^^^^^^^^^^^^^^^^
-*emg_activation*
+*emg_activation()*
 """"""""""""""""
 .. autofunction:: neurokit2.emg.emg_activation
 
-*emg_amplitude*
+*emg_amplitude()*
 """"""""""""""""
 .. autofunction:: neurokit2.emg.emg_amplitude
 
-*emg_clean*
+*emg_clean()*
 """"""""""""
 .. autofunction:: neurokit2.emg.emg_clean
 
 
 Analysis
 ^^^^^^^^^
-*emg_eventrelated*
+*emg_eventrelated()*
 """"""""""""""""""
 .. autofunction:: neurokit2.emg.emg_eventrelated
 
-*emg_intervalrelated*
+*emg_intervalrelated()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.emg.emg_intervalrelated
 
