@@ -12,6 +12,10 @@ Transformation
 """"""""""""""""""""""
 .. autofunction:: neurokit2.signal_decompose
 
+*signal_recompose()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_recompose
+
 *signal_detrend()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_detrend
@@ -82,6 +86,9 @@ Analysis
 """"""""""""""""""
 .. autofunction:: neurokit2.signal_psd
 
+*signal_rate()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_rate
 
 
 
