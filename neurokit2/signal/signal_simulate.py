@@ -9,7 +9,7 @@ from ..misc import NeuroKitWarning, listify
 def signal_simulate(
     duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False
 ):
-    """Simulate a continuous signal.
+    """**Simulate a continuous signal**
 
     Parameters
     ----------
@@ -38,11 +38,14 @@ def signal_simulate(
       import pandas as pd
       import neurokit2 as nk
 
+      @savefig p_signal_simulate1.png scale=100%
       pd.DataFrame({
           "1Hz": nk.signal_simulate(duration=5, frequency=1),
           "2Hz": nk.signal_simulate(duration=5, frequency=2),
           "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])
       }).plot()
+      @suppress
+      plt.close()
 
     """
     n_samples = int(np.rint(duration * sampling_rate))
