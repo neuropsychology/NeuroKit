@@ -70,6 +70,10 @@ Analysis
 """"""""""""""""""
 .. autofunction:: neurokit2.signal_phase
 
+*signal_plot()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_plot
+
 
 
 
