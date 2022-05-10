@@ -46,7 +46,8 @@ def signal_timefrequency(
           frequency of the underlying signal structure, because of its bilinear nature, existence
           of negative values, the WVD has misleading TF results in the case of multi-component
           signals such as EEG due to the presence of cross terms and inference terms. Cross WVD
-          terms can be reduced by using smoothing kernel functions as well as analyzing the analytic signal (instead of the original signal)
+          terms can be reduced by using smoothing kernel functions as well as analyzing the
+          analytic signal (instead of the original signal)
 
         * Smoothed Pseudo Wigner Ville Distribution (SPWVD): to address the problem of cross-terms
           suppression, SPWVD allows two independent analysis windows, one in time and the other in
@@ -77,8 +78,8 @@ def signal_timefrequency(
     nfreqbin : int, float
         Number of frequency bins. If None (default), nfreqbin will be set to 0.5*sampling_rate.
     overlap : int
-        Number of points to overlap between segments. If None, noverlap = nperseg // 8. Defaults to
-        None.
+        Number of points to overlap between segments. If None, noverlap = nperseg // 8.
+        Defaults to None.
     analytical_signal : bool
         If True, analytical signal instead of actual signal is used in Wigner Ville Distribution
         methods.
@@ -106,7 +107,11 @@ def signal_timefrequency(
 
       # STFT Method
       @savefig p_signal_timefrequency1.png scale=100%
-      f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="stft", show=True)
+      f, t, stft = nk.signal_timefrequency(signal,
+                                           sampling_rate,
+                                           max_frequency=20,
+                                           method="stft",
+                                           show=True)
       @suppress
       plt.close()
 
@@ -114,7 +119,11 @@ def signal_timefrequency(
 
       # CWTM Method
       @savefig p_signal_timefrequency2.png scale=100%
-      f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="cwt", show=True)
+      f, t, cwtm = nk.signal_timefrequency(signal,
+                                           sampling_rate,
+                                           max_frequency=20,
+                                           method="cwt",
+                                           show=True)
       @suppress
       plt.close()
 
@@ -122,7 +131,11 @@ def signal_timefrequency(
 
       # WVD Method
       @savefig p_signal_timefrequency3.png scale=100%
-      f, t, wvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="wvd", show=True)
+      f, t, wvd = nk.signal_timefrequency(signal,
+                                          sampling_rate,
+                                          max_frequency=20,
+                                          method="wvd",
+                                          show=True)
       @suppress
       plt.close()
 
@@ -130,7 +143,11 @@ def signal_timefrequency(
 
       # PWVD Method
       @savefig p_signal_timefrequency4.png scale=100%
-      f, t, pwvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="pwvd", show=True)
+      f, t, pwvd = nk.signal_timefrequency(signal,
+                                           sampling_rate,
+                                           max_frequency=20,
+                                           method="pwvd",
+                                           show=True)
       @suppress
       plt.close()
 
@@ -243,18 +260,18 @@ def short_term_ft(
 def continuous_wt(
     signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, nfreqbin=None
 ):
-    """Continuous Wavelet Transform.
+    """**Continuous Wavelet Transform**
 
      References
      ----------
-     - Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L. A. (2016).
-     Morlet wavelet transforms of heart rate variability for autonomic nervous system activity.
-     Applied and Computational Harmonic Analysis, 40(1), 200-206.
+     * Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L.
+       A. (2016). Morlet wavelet transforms of heart rate variability for autonomic nervous system
+       activity. Applied and Computational Harmonic Analysis, 40(1), 200-206.
 
-    - Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
-    & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet transforms
-    of electrocardiography and electromyography. Philosophical Transactions of the Royal Society A:
-    Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
+    * Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
+      & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet
+      transforms of electrocardiography and electromyography. Philosophical Transactions of the
+      Royal Society A: Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
 
     """
 
@@ -368,7 +385,7 @@ def smooth_pseudo_wvd(
     nfreqbin=None,
     window_method="hamming",
 ):
-    """Smoothed Pseudo Wigner Ville Distribution.
+    """**Smoothed Pseudo Wigner Ville Distribution**
 
     Parameters
     ----------
@@ -381,7 +398,7 @@ def smooth_pseudo_wvd(
     time_length: np.array
         Lenght of time smoothing window
     segment_step : int
-        The step between samples in `time_array`. Default to 1.
+        The step between samples in ``time_array``. Default to 1.
     nfreqbin : int
         Number of Frequency bins.
     window_method : str
@@ -396,11 +413,11 @@ def smooth_pseudo_wvd(
     pwvd : np.ndarray
         SPWVD. Time increases across its columns and frequency increases
         down the rows.
+
     References
     ----------
-    J. M. O' Toole, M. Mesbah, and B. Boashash, (2008),
-    "A New Discrete Analytic Signal for Reducing Aliasing in the
-     Discrete Wigner-Ville Distribution", IEEE Trans.
+    * J. M. O' Toole, M. Mesbah, and B. Boashash, (2008), "A New Discrete Analytic Signal for
+      Reducing Aliasing in the Discrete Wigner-Ville Distribution", IEEE Trans.
 
     """
 
