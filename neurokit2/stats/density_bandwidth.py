@@ -2,24 +2,30 @@
 import warnings
 
 import numpy as np
+import scipy.stats
 
 
-def density_bandwidth(x, resolution=401):
+def density_bandwidth(x, method="KernSmooth", resolution=401):
     """**Bandwidth Selection for Density Estimation**
 
-    Bandwidth selector for non-parametric density estimation. Estimates the optimal AMISE
-    bandwidth using the direct plug-in method with 2 levels for the Parzen-Rosenblatt
-    estimator with Gaussian kernel.
+    Bandwidth selector for :func:`density` estimation. See ``bw_method`` argument in
+    ``scipy.stats.gaussian_kde()``.
 
-    Adapted from the ``dpik()`` function from the *KernSmooth* R package.
+    The "KernSmooth" method is adapted from the ``dpik()`` function from the *KernSmooth* R
+    package. In this case, it estimates the optimal AMISE bandwidth using the direct plug-in method
+    with 2 levels for the Parzen-Rosenblatt estimator with Gaussian kernel.
 
     Parameters
     -----------
     x : Union[list, np.array, pd.Series]
         A vector of values.
+    method : float
+        The bandwidth of the kernel. The smaller the values, the smoother the estimation. Can be an
+        number, or ``'scott'`` or ``'silverman'`` (see ``bw_method`` argument in ``scipy.stats.
+        gaussian_kde()``), or "KernSmooth".
     resolution : int
-        The number of equally-spaced points over which binning is performed to obtain kernel
-        functional approximation (see ``gridsize`` argument in ``KernSmooth::dpik()``).
+        Only when ``method="KernSmooth"``. The number of equally-spaced points over which binning
+        is performed to obtain kernel functional approximation (see ``gridsize`` argument in ``KernSmooth::dpik()``).
 
     Returns
     -------
@@ -30,8 +36,14 @@ def density_bandwidth(x, resolution=401):
     --------
     .. ipython:: python
 
+      import neurokit2 as nk
+
       x = np.random.normal(0, 1, size=100)
       bw = nk.density_bandwidth(x)
+      bw
+
+      nk.density_bandwidth(x, method="scott")
+      nk.density_bandwidth(x, method=1)
 
       @savefig p_density_bandwidth.png scale=100%
       x, y = nk.density(signal, bandwidth=bw, show=True)
@@ -43,6 +55,9 @@ def density_bandwidth(x, resolution=401):
     * Jones, W. M. (1995). Kernel Smoothing, Chapman & Hall.
 
     """
+    if isinstance(method, (float, int)) or method.lower() != "kernsmooth":
+        return scipy.stats.gaussian_kde(x, bw_method=method).factor
+
     n = len(x)
 
     stdev = np.nanstd(x, ddof=1)
@@ -122,8 +137,8 @@ def _density_bkfe(gcounts, drv, h, a, b):
     lvec = np.arange(L + 1)
     arg = lvec * delta / h
 
-    dnorm = lambda x: np.exp(-np.square(x) / 2) / np.sqrt(2 * np.pi)
-    kappam = dnorm(arg) / h ** (drv + 1)
+    dnorm = np.exp(-np.square(arg) / 2) / np.sqrt(2 * np.pi)
+    kappam = dnorm / h ** (drv + 1)
     hmold0 = 1
     hmold1 = arg
     hmnew = 1
