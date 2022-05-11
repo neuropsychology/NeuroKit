@@ -105,7 +105,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
     .. ipython:: python
 
       # Slow, with specific parameters for Higuchi and MFDFA
-      df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
+      df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 3))
       df
 
     * **Example 3**: Compute complexity over time
@@ -257,9 +257,9 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         # Other
         df["LLE"], info["LLE"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
         df["DFA"], info["DFA"] = fractal_dfa(signal)
-        mdfa, _ = fractal_dfa(signal, multifractal=True, **kwargs)
-        for k in mdfa.columns:
-            df["MFDFA_" + k] = mdfa[k].values[0]
+        mfdfa, _ = fractal_dfa(signal, multifractal=True, **kwargs)
+        for k in mfdfa.columns:
+            df["MFDFA_" + k] = mfdfa[k].values[0]
 
     # Prepare output
     df = pd.DataFrame.from_dict(df, orient="index").T  # Convert to dataframe

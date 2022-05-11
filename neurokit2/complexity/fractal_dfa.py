@@ -246,7 +246,7 @@ def fractal_dfa(
         slopes = slopes[0]
 
     # Prepare output
-    info["Fluctuation"] = fluctuations
+    info["Fluctuations"] = fluctuations
     info["Alpha"] = slopes
 
     # Extract features
@@ -359,6 +359,8 @@ def _singularity_spectrum(q, slopes):
     if len(slopes) > 3:
         # Help needed to double check that!
         out["Fluctuation"] = np.sum(np.diff(np.diff(out["h"])) ** 2) / (2 * np.max(np.abs(q)) + 2)
+    else:
+        out["Fluctuation"] = np.nan
     # hFI tends to zero in high fractionation signals. hFI has no reference point when a set of
     # signals is evaluated, so hFI must be normalisedd, so that hFIn = 1 is the most organised and
     # the most regular signal in the set
@@ -509,7 +511,7 @@ def _fractal_dfa_plot(info, scale, fluctuations):
     fluctfit = 2 ** np.polyval(polyfit, np.log2(scale))
     plt.loglog(scale, fluctuations, "o", c="#90A4AE")
     plt.xlabel(r"$\log_{2}$(Scale)")
-    plt.ylabel(r"$\log_{2}$(Fluctuation)")
+    plt.ylabel(r"$\log_{2}$(Fluctuations)")
     plt.loglog(scale, fluctfit, c="#E91E63", label=r"$\alpha$ = {:.3f}".format(info["Alpha"]))
 
     plt.legend(loc="lower right")
@@ -556,7 +558,7 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
         ax_fluctuation.loglog(scale, fluctfit, c=colors[i], base=2, label="_no_legend_")
 
     ax_fluctuation.set_xlabel(r"$\log_{2}$(Scale)")
-    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
+    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuations)")
     ax_fluctuation.legend(loc="lower right")
 
     # Plot the singularity spectrum
