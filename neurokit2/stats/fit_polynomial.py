@@ -7,7 +7,7 @@ from .fit_error import fit_rmse
 
 
 def fit_polynomial(y, X=None, order=2, method="raw"):
-    """Polynomial Regression.
+    """**Polynomial Regression**
 
     Performs a polynomial regression of given order.
 
@@ -19,11 +19,12 @@ def fit_polynomial(y, X=None, order=2, method="raw"):
     X : Union[list, np.array, pd.Series]
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
     order : int
-        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit, respectively.
-        Can also be 'auto', it which case it will attempt to find the optimal order to minimize the RMSE.
+        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit,
+        respectively. Can also be 'auto', in which case it will attempt to find the optimal order
+        to minimize the RMSE.
     method : str
         If 'raw' (default), compute standard polynomial coefficients. If 'orthogonal', compute
-        orthogonal polynomials (and is equivalent to R's ``poly()`` default behavior).
+        orthogonal polynomials (and is equivalent to R's ``poly`` default behavior).
 
     Returns
     -------
@@ -38,18 +39,22 @@ def fit_polynomial(y, X=None, order=2, method="raw"):
 
     Examples
     ---------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
-    >>>
-    >>> pd.DataFrame({"y": y,
-    ...               "Poly_0": nk.fit_polynomial(y, order=0)[0],
-    ...               "Poly_1": nk.fit_polynomial(y, order=1)[0],
-    ...               "Poly_2": nk.fit_polynomial(y, order=2)[0],
-    ...               "Poly_3": nk.fit_polynomial(y, order=3)[0],
-    ...               "Poly_5": nk.fit_polynomial(y, order=5)[0],
-    ...               "Poly_auto": nk.fit_polynomial(y, order='auto')[0]}).plot() #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      y = np.cos(np.linspace(start=0, stop=10, num=100))
+      @savefig p_fit_polynomial1.png scale=100%
+      pd.DataFrame({"y": y,
+                    "Poly_0": nk.fit_polynomial(y, order=0)[0],
+                    "Poly_1": nk.fit_polynomial(y, order=1)[0],
+                    "Poly_2": nk.fit_polynomial(y, order=2)[0],
+                    "Poly_3": nk.fit_polynomial(y, order=3)[0],
+                    "Poly_5": nk.fit_polynomial(y, order=5)[0],
+                    "Poly_auto": nk.fit_polynomial(y, order='auto')[0]}).plot()
+      @suppress
+      plt.close()
 
     """
     if X is None:
@@ -101,11 +106,11 @@ def fit_polynomial_findorder(y, X=None, max_order=6):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
-    >>>
-    >>> nk.fit_polynomial_findorder(y, max_order=10)
+      import neurokit2 as nk
+
+      y = np.cos(np.linspace(start=0, stop=10, num=100))
+
+      nk.fit_polynomial_findorder(y, max_order=10)
     9
 
     """
@@ -137,15 +142,15 @@ def _fit_polynomial(y, X, order=2):
 def _fit_polynomial_orthogonal(y, X, order=2):
     """Fit an orthogonal polynomial regression in Python (equivalent to R's poly())
 
-    >>> from sklearn.datasets import load_iris
-    >>> import pandas as pd
-    >>> df = load_iris()
-    >>> df = pd.DataFrame(data=df.data, columns=df.feature_names)
-    >>> y = df.iloc[:, 0].values  # Sepal.Length
-    >>> X = df.iloc[:, 1].values  # Sepal.Width
-    >>> _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP
-    >>> # Equivalent to R's:
-    >>> # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
+      from sklearn.datasets import load_iris
+      import pandas as pd
+      df = load_iris()
+      df = pd.DataFrame(data=df.data, columns=df.feature_names)
+      y = df.iloc[:, 0].values  # Sepal.Length
+      X = df.iloc[:, 1].values  # Sepal.Width
+      _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP
+      # Equivalent to R's:
+      # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
 
 
     """

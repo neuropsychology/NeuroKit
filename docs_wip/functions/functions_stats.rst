@@ -40,3 +40,23 @@ Stats
 *fit_polynomial()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.fit_polynomial
+
+*hdi()*
+""""""""""""
+.. autofunction:: neurokit2.hdi
+
+*mad()*
+""""""""""""
+.. autofunction:: neurokit2.mad
+
+*rescale()*
+""""""""""""
+.. autofunction:: neurokit2.rescale
+
+*standardize()*
+""""""""""""""""
+.. autofunction:: neurokit2.standardize
+
+*summary()*
+""""""""""""
+.. autofunction:: neurokit2.summary_plot
