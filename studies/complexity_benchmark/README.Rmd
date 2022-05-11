@@ -547,18 +547,19 @@ g <- cor |>
   tidygraph::as_tbl_graph(directed=FALSE) 
 
 g |> 
-  mutate(importance = tidygraph::centrality_hub(weights = abs(rho)),
-         group = tidygraph::group_fast_greedy(weights = abs(rho))) |> 
+  mutate(importance = tidygraph::centrality_authority(weights = abs(rho)),
+         group = as.factor(tidygraph::group_louvain(weights = abs(rho)))) |> 
   tidygraph::activate("edges") |> 
   filter(abs(rho) > 0.5) |>
   tidygraph::activate("nodes") |> 
   filter(!tidygraph::node_is_isolated()) |> 
   ggraph(layout = 'kk') +  # fr # lgl # drl
   ggraph::geom_edge_arc(aes(edge_width=width, edge_colour=edgecolor), strength=0.1, alpha=0.7) +
-  ggraph::geom_node_point(aes(size = importance, fill = group)) +
+  ggraph::geom_node_point(aes(size = importance, colour = group)) +
   ggraph::geom_node_label(aes(label = name), repel=TRUE) +
   scale_edge_color_manual(values = c("1" = "#2E7D32", "-1"="#C62828")) +
-  scale_edge_width_continuous(range = c(0.01, 2))
+  scale_edge_width_continuous(range = c(0.01, 2)) +
+  scale_size_continuous(range = c(0.5, 10))
 ```
 
 

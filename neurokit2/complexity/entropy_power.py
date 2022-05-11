@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy.integrate
 
-from ..stats import density, density_bandwidth
+from ..stats import density
 
 
 def entropy_power(signal, **kwargs):
