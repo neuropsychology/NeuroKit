@@ -514,15 +514,15 @@ title="Open an issue"
 <span class="sd">    trend between the scale factors and the fluctuations. For multifractal DFA, the slope values</span>
 <span class="sd">    under different *q* values are actually generalised Hurst exponents *h*. Monofractal DFA</span>
 <span class="sd">    corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the **Hurst</span>
-<span class="sd">    exponent** (:math:`*h*_{(2)}`).</span>
+<span class="sd">    exponent** (:math:`h_{(2)}`).</span>
 
-<span class="sd">    The Hurst exponent is the measure of long range autocorrelation of a signal, and *h*(2) &gt; 0.5</span>
-<span class="sd">    suggests the presence of long range correlation, while *h*(2) &lt; 0.5 suggests short range</span>
-<span class="sd">    correlations. If h(2) = 0.5, it indicates uncorrelated indiscriminative fluctuations, i.e. a</span>
-<span class="sd">    Brownian motion.</span>
+<span class="sd">    The Hurst exponent is the measure of long range autocorrelation of a signal, and</span>
+<span class="sd">    :math:`h_{(2)} &gt; 0.5` suggests the presence of long range correlation, while</span>
+<span class="sd">    :math:`h_{(2)} &lt; 0.5`suggests short range correlations. If `h_{(2)} = 0.5`, it indicates</span>
+<span class="sd">    uncorrelated indiscriminative fluctuations, i.e. a Brownian motion.</span>
 
 <span class="sd">    Multifractal DFA returns the generalised Hurst exponents *h* for different values of *q*. It is</span>
-<span class="sd">    converted to the multifractal **scaling exponent** *Tau* :math:`\\tau`, which non-linear</span>
+<span class="sd">    converted to the multifractal **scaling exponent** *Tau* :math:`\\tau_{(q)}`, which non-linear</span>
 <span class="sd">    relationship with *q* can indicate multifractility. From there, we derive the singularity</span>
 <span class="sd">    exponent *H* (or :math:`\\alpha`) (also known as Hölder&#39;s exponents) and the singularity</span>
 <span class="sd">    dimension *D* (or :math:`f(\\alpha)`). The variation of *D* with *H* is known as multifractal</span>
@@ -556,7 +556,7 @@ title="Open an issue"
 
 <span class="sd">    .. note ::</span>
 
-<span class="sd">        An improvement is needed to implement the modified formula to compute the slope when</span>
+<span class="sd">        Help is needed to implement the modified formula to compute the slope when</span>
 <span class="sd">        *q* = 0. See for instance `Faini (2021)</span>
 <span class="sd">        &lt;https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254&gt;`_.</span>
 
