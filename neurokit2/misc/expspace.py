@@ -28,7 +28,7 @@ def expspace(start, stop, num=50, out=int, base=1):
     Examples
     ---------
     .. ipython:: python
-    
+
       import neurokit2 as nk
       nk.expspace(start=4, stop=100, num=10)
 

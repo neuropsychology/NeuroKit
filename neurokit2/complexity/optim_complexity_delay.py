@@ -12,8 +12,13 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import (signal_autocor, signal_findpeaks, signal_psd,
-                      signal_surrogate, signal_zerocrossings)
+from ..signal import (
+    signal_autocor,
+    signal_findpeaks,
+    signal_psd,
+    signal_surrogate,
+    signal_zerocrossings,
+)
 from .entropy_kl import entropy_kl
 from .information_mutual import mutual_information
 from .utils_complexity_embedding import complexity_embedding
@@ -121,6 +126,7 @@ def complexity_delay(
       import neurokit2 as nk
 
       signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[1, 1.5], noise=0.02)
+
       @savefig p_complexity_delay1.png scale=100%
       nk.signal_plot(signal)
       @suppress
@@ -178,7 +184,7 @@ def complexity_delay(
 
     .. ipython:: python
 
-      @savefig p_complexity_delay7.png scale=100%
+      @savefig p_complexity_delay8.png scale=100%
       delay, parameters = nk.complexity_delay(
           signal,
           delay_max=np.arange(1, 30, 1),  # Can be an int or a list
@@ -206,14 +212,14 @@ def complexity_delay(
       signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200),
                            sampling_rate=200,
                            desired_length=len(ecg))
-      @savefig p_complexity_delay8.png scale=100%
+      @savefig p_complexity_delay9.png scale=100%
       nk.signal_plot(signal)
       @suppress
       plt.close()
 
     .. ipython:: python
 
-      @savefig p_complexity_delay9.png scale=100%
+      @savefig p_complexity_delay10.png scale=100%
       delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True)
       @suppress
       plt.close()

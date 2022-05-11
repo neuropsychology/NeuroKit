@@ -3,9 +3,11 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
-                                         _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 from ..misc import NeuroKitWarning
 
 
@@ -51,7 +53,7 @@ def emg_eventrelated(epochs, silent=False):
       emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
       epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
                                 epochs_start=-0.1,epochs_end=1.9)
-      nk.emg_eventrelated(epochs) 
+      nk.emg_eventrelated(epochs)
 
     """
     # Sanity checks
@@ -66,9 +68,8 @@ def emg_eventrelated(epochs, silent=False):
         # Activation following event
         if "EMG_Onsets" not in epochs[i]:
             warn(
-                "Input does not have an `EMG_Onsets` column."
-                " Unable to process EMG features.",
-                category=NeuroKitWarning
+                "Input does not have an `EMG_Onsets` column." " Unable to process EMG features.",
+                category=NeuroKitWarning,
             )
             data[i]["EMG_Activation"] = 0
         elif np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] != 0):
@@ -104,7 +105,7 @@ def _emg_eventrelated_features(epoch, output={}):
         warn(
             "Input does not have an `EMG_Activity` column or `EMG_Amplitude` column."
             " Will skip computation of EMG amplitudes.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -119,7 +120,9 @@ def _emg_eventrelated_features(epoch, output={}):
 
     output["EMG_Amplitude_Mean"] = mean
     output["EMG_Amplitude_Max"] = maximum
-    output["EMG_Amplitude_SD"] = np.std(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal])
+    output["EMG_Amplitude_SD"] = np.std(
+        epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]
+    )
     output["EMG_Amplitude_Max_Time"] = time
     output["EMG_Bursts"] = activations
 

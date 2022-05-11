@@ -17,7 +17,7 @@ def find_groups(x):
     Examples
     ---------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       x = [2, 2, 2, 2, 1, 3, 3, 2, 2, 2, 1]
