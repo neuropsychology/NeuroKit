@@ -34,7 +34,7 @@ def fit_mixture(X=None, n_clusters=2):
       import neurokit2 as nk
 
       x = nk.signal_simulate()
-      probs, info = fit_mixture(x, n_clusters=2)  # function doesn't run using ``nk.fit_mixture``?
+      probs, info = nk.fit_mixture(x, n_clusters=2)  # Rmb to merge with main to return ``info``
       @savefig p_fit_mixture.png scale=100%
       fig = nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True)
       @suppress
