@@ -432,7 +432,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs
     )
     for k in mdfa_alpha1.columns:
-        out["DFA_alpha1_" + k] = mdfa_alpha1[k]
+        out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
     # Compute DFA alpha2
     # sanatize max_beats
@@ -454,7 +454,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
             rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs
         )
         for k in mdfa_alpha2.columns:
-            out["DFA_alpha2_" + k] = mdfa_alpha2[k]
+            out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
 
     return out
 

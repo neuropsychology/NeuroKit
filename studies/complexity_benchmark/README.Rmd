@@ -1,5 +1,5 @@
 ---
-output: 
+output:
   github_document:
     toc: false
     fig_width: 10.08
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteIndexEntry{README}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 csl: utils/apa.csl
@@ -45,7 +45,7 @@ There has been a large and accelerating increase in the number of complexity ind
 The goal for NeuroKit is to provide the most comprehensive, accurate and fast pure Python implementations of complexity indices (fractal dimension, entropy, etc.).
 
 In this study, we will compute a vast amount of complexity indices on various types of signals, with varying degrees of noise. We will then empirically compare the various metrics and their relationship.
- 
+
 
 
 ## Methods
@@ -250,14 +250,7 @@ colors <- c(
   "RQA_W" = "#4CAF50",
   "RQA_WMax" = "#4CAF50",
   "RQA_WEn" = "#4CAF50",
-  "DFA" = "#4CAF50",
-  "MFDFA_ExpRange" = "#4CAF50",
-  "MFDFA_ExpMean" = "#4CAF50",
-  "MFDFA_DimRange" = "#4CAF50",
-  "MFDFA_DimMean" = "#4CAF50",
-  "MFDFA_HMax" = "#4CAF50",
-  "MFDFA_HDelta" = "#4CAF50",
-  "MFDFA_HAR" = "#4CAF50"
+  "DFA" = "#4CAF50"
 )
 
 # unique(df$Index)[!unique(df$Index) %in% names(colors)]
@@ -509,7 +502,7 @@ data <- data |>
     -RR,
     -MFDFA_HDelta,
     # -FuzzyRCMSEn,
-    # -`CREn (1000)`, 
+    # -`CREn (1000)`,
     -`CREn (100)`,
     -RQA_VEn, -RQA_LEn
   )
@@ -540,19 +533,19 @@ cor <- get_cor(data, plot=TRUE)
 ```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=7}
 library(ggraph)
 
-g <- cor |> 
-  cor_lower() |> 
+g <- cor |>
+  cor_lower() |>
   mutate(width = abs(rho),
-         edgecolor = as.character(sign(rho))) |> 
-  tidygraph::as_tbl_graph(directed=FALSE) 
+         edgecolor = as.character(sign(rho))) |>
+  tidygraph::as_tbl_graph(directed=FALSE)
 
-g |> 
+g |>
   mutate(importance = tidygraph::centrality_authority(weights = abs(rho)),
-         group = as.factor(tidygraph::group_louvain(weights = abs(rho)))) |> 
-  tidygraph::activate("edges") |> 
+         group = as.factor(tidygraph::group_louvain(weights = abs(rho)))) |>
+  tidygraph::activate("edges") |>
   filter(abs(rho) > 0.5) |>
-  tidygraph::activate("nodes") |> 
-  filter(!tidygraph::node_is_isolated()) |> 
+  tidygraph::activate("nodes") |>
+  filter(!tidygraph::node_is_isolated()) |>
   ggraph(layout = 'kk') +  # fr # lgl # drl
   ggraph::geom_edge_arc(aes(edge_width=width, edge_colour=edgecolor), strength=0.1, alpha=0.7) +
   ggraph::geom_node_point(aes(size = importance, colour = group)) +
@@ -594,17 +587,17 @@ colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Compo
 # Sort by sign too
 names(closest) <- rev(levels(loadings$Variable))
 
-idx_order <- loadings |> 
+idx_order <- loadings |>
   mutate(Closest = closest[as.character(loadings$Variable)],
-         Sign = sign(Loading)) |> 
-  filter(Component == Closest) |> 
-  arrange(desc(Component), desc(Sign), desc(abs(Loading))) |> 
-  pull(Variable) |> 
+         Sign = sign(Loading)) |>
+  filter(Component == Closest) |>
+  arrange(desc(Component), desc(Sign), desc(abs(Loading))) |>
+  pull(Variable) |>
   as.character()
-  
+
 
 p1 <- loadings |>
-  mutate(Variable = fct_relevel(Variable, rev(idx_order))) |> 
+  mutate(Variable = fct_relevel(Variable, rev(idx_order))) |>
   # filter(Variable == "CD") |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +

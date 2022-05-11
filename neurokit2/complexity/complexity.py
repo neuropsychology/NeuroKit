@@ -255,13 +255,11 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         )
 
         # Other
-        df["DFA"], info["DFA"] = fractal_dfa(signal)
-        _, info["MFDFA"] = fractal_dfa(signal, multifractal=True, **kwargs)
-        df["MFDFA_ExpRange"] = info["MFDFA"]["ExpRange"]
-        df["MFDFA_ExpMean"] = info["MFDFA"]["ExpMean"]
-        df["MFDFA_DimRange"] = info["MFDFA"]["DimRange"]
-        df["MFDFA_DimMean"] = info["MFDFA"]["DimMean"]
         df["LLE"], info["LLE"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
+        df["DFA"], info["DFA"] = fractal_dfa(signal)
+        mdfa, _ = fractal_dfa(signal, multifractal=True, **kwargs)
+        for k in mdfa.columns:
+            df["MFDFA_" + k] = mdfa[k].values[0]
 
     # Prepare output
     df = pd.DataFrame.from_dict(df, orient="index").T  # Convert to dataframe
