@@ -69,6 +69,10 @@ Peaks
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_fixpeaks
 
+*signal_formatpeaks()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_formatpeaks
+
 
 Analysis
 ^^^^^^^^^^^^^^^^
