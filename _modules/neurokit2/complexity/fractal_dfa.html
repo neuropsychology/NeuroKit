@@ -507,21 +507,58 @@ title="Open an issue"
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)**</span>
 
-<span class="sd">    Detrended fluctuation analysis, much like the Hurst exponent, is used to find long-term</span>
-<span class="sd">    statistical dependencies in time series.</span>
+<span class="sd">    Detrended fluctuation analysis (DFA) is used to find long-term statistical dependencies in time</span>
+<span class="sd">    series.</span>
 
 <span class="sd">    For monofractal DFA, the output *alpha* :math:`\\alpha` corresponds to the slope of the linear</span>
 <span class="sd">    trend between the scale factors and the fluctuations. For multifractal DFA, the slope values</span>
-<span class="sd">    under different *q* values are actually generalised Hurst exponents *h*. DFA corresponds to</span>
-<span class="sd">    MFDFA with *q = 2*.</span>
+<span class="sd">    under different *q* values are actually generalised Hurst exponents *h*. Monofractal DFA</span>
+<span class="sd">    corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the **Hurst</span>
+<span class="sd">    exponent** (:math:`*h*_{(2)}`).</span>
 
-<span class="sd">    The output is for multifractal DFA is a dataframe containing the following features:</span>
+<span class="sd">    The Hurst exponent is the measure of long range autocorrelation of a signal, and *h*(2) &gt; 0.5</span>
+<span class="sd">    suggests the presence of long range correlation, while *h*(2) &lt; 0.5 suggests short range</span>
+<span class="sd">    correlations. If h(2) = 0.5, it indicates uncorrelated indiscriminative fluctuations, i.e. a</span>
+<span class="sd">    Brownian motion.</span>
 
-<span class="sd">    * TODO.</span>
-<span class="sd">    * Need to complete the docstrings.</span>
+<span class="sd">    Multifractal DFA returns the generalised Hurst exponents *h* for different values of *q*. It is</span>
+<span class="sd">    converted to the multifractal **scaling exponent** *Tau* :math:`\\tau`, which non-linear</span>
+<span class="sd">    relationship with *q* can indicate multifractility. From there, we derive the singularity</span>
+<span class="sd">    exponent *H* (or :math:`\\alpha`) (also known as Hölder&#39;s exponents) and the singularity</span>
+<span class="sd">    dimension *D* (or :math:`f(\\alpha)`). The variation of *D* with *H* is known as multifractal</span>
+<span class="sd">    singularity spectrum (MSP), and usually has shape of an inverted parabola. It measures the long</span>
+<span class="sd">    range correlation property of a signal. From these elements, different features are extracted:</span>
+
+<span class="sd">    * **Width**: The width of the singularity spectrum and quantifies the degree of the</span>
+<span class="sd">      multifractality. In the case of monofractal signals, the MSP width is zero, since *h*(q) is</span>
+<span class="sd">      independent of *q*.</span>
+<span class="sd">    * **Peak**: The value of the singularity exponent *H* corresponding to peak of</span>
+<span class="sd">      singularity dimension *D*. It is a measure of the self-affinity of the signal, and a high</span>
+<span class="sd">      value is an indicator of high degree of correlation between the data points. In the other</span>
+<span class="sd">      words, the process is recurrent and repetitive.</span>
+<span class="sd">    * **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which</span>
+<span class="sd">      quantifies the average fluctuations of the signal.</span>
+<span class="sd">    * **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of</span>
+<span class="sd">      singularity exponent *H*, indicates the maximum fluctuation of the signal.</span>
+<span class="sd">    * **Delta**: the vertical distance between the singularity spectrum *D* where the singularity</span>
+<span class="sd">      exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the</span>
+<span class="sd">      signal.</span>
+<span class="sd">    * **Asymmetry**: The asymmetric ratio (AR) is as the centrality of the peak of the spectrum.</span>
+<span class="sd">      AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et al., 2015).</span>
+<span class="sd">    * **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second</span>
+<span class="sd">      derivative of *h*(q). See Orozco-Duque et al. (2015).</span>
+<span class="sd">    * **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the</span>
+<span class="sd">      generalized Hurst&#39;s exponents between consecutive moment orders is a more robust index of the</span>
+<span class="sd">      distribution of the generalized Hurst&#39;s exponents (Faini et al., 2021).</span>
 
 <span class="sd">    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its</span>
 <span class="sd">    multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``.</span>
+
+<span class="sd">    .. note ::</span>
+
+<span class="sd">        An improvement is needed to implement the modified formula to compute the slope when</span>
+<span class="sd">        *q* = 0. See for instance `Faini (2021)</span>
+<span class="sd">        &lt;https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254&gt;`_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -624,6 +661,12 @@ title="Open an issue"
 
 <span class="sd">    References</span>
 <span class="sd">    -----------</span>
+<span class="sd">    * Faini, A., Parati, G., &amp; Castiglioni, P. (2021). Multiscale assessment of the degree of</span>
+<span class="sd">      multifractality for physiological time series. Philosophical Transactions of the Royal</span>
+<span class="sd">      Society A, 379(2212), 20200254.</span>
+<span class="sd">    * Orozco-Duque, A., Novak, D., Kremen, V., &amp; Bustamante, J. (2015). Multifractal analysis for</span>
+<span class="sd">      grading complex fractionated electrograms in atrial fibrillation. Physiological Measurement,</span>
+<span class="sd">      36(11), 2269-2284.</span>
 <span class="sd">    * Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended</span>
 <span class="sd">      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.</span>
 <span class="sd">    * Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S.,</span>
@@ -690,18 +733,30 @@ title="Open an issue"
         <span class="n">slopes</span> <span class="o">=</span> <span class="n">slopes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Prepare output</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Fluctuation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fluctuations</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Fluctuations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fluctuations</span>
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slopes</span>
 
     <span class="c1"># Extract features</span>
     <span class="k">if</span> <span class="n">multifractal</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_singularity_spectrum</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">slopes</span><span class="o">=</span><span class="n">slopes</span><span class="p">))</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ExpRange&quot;</span><span class="p">,</span> <span class="s2">&quot;ExpMean&quot;</span><span class="p">,</span> <span class="s2">&quot;DimRange&quot;</span><span class="p">,</span> <span class="s2">&quot;DimMean&quot;</span><span class="p">,</span> <span class="s2">&quot;HMax&quot;</span><span class="p">,</span> <span class="s2">&quot;HDelta&quot;</span><span class="p">,</span> <span class="s2">&quot;HAR&quot;</span><span class="p">]</span>
-        <span class="p">}</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_singularity_spectrum</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">slopes</span><span class="o">=</span><span class="n">slopes</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">k</span>
+                <span class="ow">in</span> <span class="p">[</span>
+                    <span class="s2">&quot;Peak&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Width&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Max&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Delta&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Asymmetry&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Fluctuation&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Increment&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">slopes</span>
 
@@ -739,65 +794,75 @@ title="Open an issue"
 <span class="sd">    needed. Here defaulted to `q = list(range(-5,5))`, where the `0` element</span>
 <span class="sd">    is removed by `_cleanse_q()`.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    tau: np.array</span>
-<span class="sd">        Scaling exponents `τ`. A usually increasing function of `q` from</span>
-<span class="sd">        which the fractality of the data can be determined by its shape. A truly</span>
-<span class="sd">        linear tau indicates monofractality, whereas a curved one (usually</span>
-<span class="sd">        curving around small `q` values) indicates multifractality.</span>
-<span class="sd">    Hq: np.array</span>
-<span class="sd">        Singularity strength `H`. The width of this function indicates the</span>
-<span class="sd">        strength of the multifractality. A width of `max(H) - min(H) ≈ 0`</span>
-<span class="sd">        means the data is monofractal.</span>
-<span class="sd">    Dq: np.array</span>
-<span class="sd">        Singularity spectrum `Dq`. The location of the maximum of `Dq` (with</span>
-<span class="sd">        `H` as the abscissa) should be 1 and indicates the most prominent</span>
-<span class="sd">        exponent in the data.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
 <span class="sd">    This was first designed and implemented by Leonardo Rydin in</span>
 <span class="sd">    `MFDFA &lt;https://github.com/LRydin/MFDFA/&gt;`_ and ported here by the same.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Components of the singularity spectrum</span>
+    <span class="c1"># ---------------------------------------</span>
     <span class="c1"># The generalised Hurst exponents `h(q)` from MFDFA, which are simply the slopes of each DFA</span>
     <span class="c1"># for various `q` values</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="n">slopes</span><span class="p">}</span>
 
-    <span class="c1"># Calculate the Scaling Exponent Tau</span>
-    <span class="c1"># https://github.com/LRydin/MFDFA/issues/30</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Tau&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">slopes</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="c1"># The generalised Hurst exponent h(q) is related to the Scaling Exponent Tau t(q):</span>
+    <span class="c1"># Should it be (q - 1) * slopes (https://github.com/LRydin/MFDFA/issues/30)?</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Tau&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span> <span class="o">*</span> <span class="n">slopes</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="c1"># Calculate Singularity Exponent H or α, which needs tau</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Tau&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">q</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;Tau&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
 
     <span class="c1"># Calculate Singularity Dimension Dq or f(α), which needs tau and q</span>
-    <span class="c1"># The relation between α and f(α) is called the Multifractal (MF) spectrum or singularity</span>
-    <span class="c1"># spectrum</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Tau&quot;</span><span class="p">]</span>
-
-    <span class="c1"># Calculate the singularity</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;ExpRange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;ExpMean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DimRange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">])</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DimMean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">])</span>
+    <span class="c1"># The relation between α and f(α) (H and D) is called the Multifractal (MF) spectrum or</span>
+    <span class="c1"># singularity spectrum, which resembles the shape of an inverted parabola.</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span> <span class="o">*</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Tau&quot;</span><span class="p">]</span>
 
     <span class="c1"># Features (Orozco-Duque et al., 2015)</span>
-    <span class="c1"># the singularity exponent, for which the spectrum takes its</span>
-    <span class="c1"># maximum value (α0)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HMax&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">])]</span>
-    <span class="c1"># the spectrum width delta</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HDelta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
+    <span class="c1"># ---------------------------------------</span>
+    <span class="c1"># The width of the MSP quantifies the degree of the multifractality</span>
+    <span class="c1"># the spectrum width delta quantifies the degree of the multifractality.</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
+
+    <span class="c1"># the singularity exponent, for which the spectrum D takes its maximum value (α0)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Peak&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">])]</span>
+
+    <span class="c1"># The mean of the maximum and minimum values of singularity exponent H</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="c1"># The value of singularity spectrum D, corresponding to the maximum value of</span>
+    <span class="c1"># singularity exponent H, indicates the maximum fluctuation of the signal.</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])]</span>
+
+    <span class="c1"># The vertical distance between the singularity spectrum *D* where the singularity</span>
+    <span class="c1"># exponents are at their minimum and maximum.</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])]</span> <span class="o">-</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])]</span>
+
     <span class="c1"># the asymmetric ratio (AR) defined as the ratio between h calculated with negative q and the</span>
     <span class="c1"># total width of the spectrum. If the multifractal spectrum is symmetric, AR should be equal to</span>
     <span class="c1"># 0.5</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HAR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HMax&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HDelta&quot;</span><span class="p">]</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Asymmetry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Peak&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Width&quot;</span><span class="p">]</span>
 
     <span class="c1"># h-fluctuation index (hFI), which is defined as the power of the second derivative of h(q)</span>
+    <span class="c1"># hFI tends to zero in high fractionation signals.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">slopes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="c1"># Help needed to double check that!</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Fluctuation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;h&quot;</span><span class="p">]))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q</span><span class="p">))</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Fluctuation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="c1"># hFI tends to zero in high fractionation signals. hFI has no reference point when a set of</span>
-    <span class="c1"># signals is evaluated, so hFI must be normalised, so that hFIn = 1 is the most organised and</span>
+    <span class="c1"># signals is evaluated, so hFI must be normalisedd, so that hFIn = 1 is the most organised and</span>
     <span class="c1"># the most regular signal in the set</span>
-    <span class="c1"># TODO.</span>
+    <span class="c1"># BUT the formula in Orozco-Duque (2015) is weird, as HFI is a single value so cannot be</span>
+    <span class="c1"># normalized by its range...</span>
+
+    <span class="c1"># Faini (2021): new index that describes the distribution of the generalized Hurst&#39;s exponents</span>
+    <span class="c1"># without requiring the Legendre transform. This index, αCF, is the cumulative function of the</span>
+    <span class="c1"># squared increments of the generalized Hurst&#39;s exponents between consecutive moment orders.</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Increment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">slopes</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+
+    <span class="c1"># Other indices from the singularity spectrum</span>
+    <span class="c1"># out[&quot;ExpRange&quot;] = np.nanmax(out[&quot;H&quot;]) - np.nanmin(out[&quot;H&quot;])</span>
+    <span class="c1"># out[&quot;DimRange&quot;] = np.nanmax(out[&quot;D&quot;]) - np.nanmin(out[&quot;D&quot;])</span>
+    <span class="c1"># out[&quot;DimMean&quot;] = np.nanmean(out[&quot;D&quot;])</span>
 
     <span class="k">return</span> <span class="n">out</span>
 
@@ -933,7 +998,7 @@ title="Open an issue"
     <span class="n">fluctfit</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">polyfit</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">fluctuations</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;#90A4AE&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(Scale)&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(Fluctuation)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(Fluctuations)&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">fluctfit</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\alpha$ = </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Alpha&quot;</span><span class="p">]))</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
@@ -980,7 +1045,7 @@ title="Open an issue"
         <span class="n">ax_fluctuation</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">fluctfit</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;_no_legend_&quot;</span><span class="p">)</span>
 
     <span class="n">ax_fluctuation</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(Scale)&quot;</span><span class="p">)</span>
-    <span class="n">ax_fluctuation</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(Fluctuation)&quot;</span><span class="p">)</span>
+    <span class="n">ax_fluctuation</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{2}</span><span class="s2">$(Fluctuations)&quot;</span><span class="p">)</span>
     <span class="n">ax_fluctuation</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
 
     <span class="c1"># Plot the singularity spectrum</span>
@@ -988,10 +1053,24 @@ title="Open an issue"
     <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Singularity Dimension ($D$)&quot;</span><span class="p">)</span>
     <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Singularity Exponent ($H$)&quot;</span><span class="p">)</span>
     <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;HMax&quot;</span><span class="p">],</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peak&quot;</span><span class="p">],</span>
         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;HMax = </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;HMax&quot;</span><span class="p">]),</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Peak = </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peak&quot;</span><span class="p">]),</span>
+    <span class="p">)</span>
+    <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">])]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Width = </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Width&quot;</span><span class="p">]),</span>
+    <span class="p">)</span>
+    <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])],</span>
+        <span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B71C1C&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;Delta = </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Delta&quot;</span><span class="p">]),</span>
     <span class="p">)</span>
     <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">],</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">)</span>
     <span class="n">ax_spectrum</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>

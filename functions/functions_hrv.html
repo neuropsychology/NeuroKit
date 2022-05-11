@@ -760,7 +760,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="go">   HRV_MeanNN   HRV_SDNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
 <span class="go">0  694.756381  49.036043  ...            2.046078      0.156442</span>
 
-<span class="go">[1 rows x 89 columns]</span>
+<span class="go">[1 rows x 97 columns]</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1095,20 +1095,7 @@ HRV.</p></li>
 corresponding to short-term correlations. See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_dfa()</span></code></a>.</p></li>
 <li><p><strong>DFA_alpha2</strong>: The monofractal detrended fluctuation analysis of the HR signal,
 corresponding to long-term correlations. See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_dfa()</span></code></a>.</p></li>
-<li><p><strong>DFA_alpha1_ExpRange</strong>: The multifractal detrended fluctuation analysis of the HR signal
-corresponding to short-term correlations. ExpRange is the range of singularity exponents,
-corresponding to the width of the singularity spectrum. See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_dfa()</span></code></a>.</p></li>
-<li><p><strong>DFA_alpha2_ExpRange</strong>: The multifractal detrended fluctuation analysis of the HR signal,
-corresponding to long-term correlations. See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_dfa()</span></code></a>.</p></li>
-<li><p><strong>DFA_alpha1_ExpMean</strong>: Multifractal DFA. ExpMean is the mean of singularity exponents.</p></li>
-<li><p><strong>DFA_alpha2_ExpMean</strong>: Multifractal DFA. ExpMean is the mean of singularity exponents.</p></li>
-<li><p><strong>DFA_alpha1_DimRange</strong>: Multifractal DFA (short-term correlations). DimRange is the range of
-singularity dimensions, corresponding to the height of the singularity spectrum.</p></li>
-<li><p><strong>DFA_alpha2_DimRange</strong>: Multifractal DFA (long-term correlations).</p></li>
-<li><p><strong>DFA_alpha1_DimMean</strong>: Multifractal DFA (short-term correlations). Dimmean is the mean of
-singularity dimensions.</p></li>
-<li><p><strong>DFA_alpha2_DimMean</strong>: Multifractal DFA (long-term correlations). Dimmean is the mean of
-singularity dimensions.</p></li>
+<li><p><strong>MFDFA indices</strong>: Indices related to the <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">multifractal</span> <span class="pre">spectrum</span></code></a>.</p></li>
 </ul>
 <p>Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), but
 are not implemented yet (but soon).</p>
@@ -1156,7 +1143,7 @@ the next successive one. The ellipse centers around the average RR interval. By 
 <span class="go">     HRV_SD1    HRV_SD2  HRV_SD1SD2  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0  49.341281  72.597435    0.679656  ...  1.856372  1.913071  0.854475</span>
 
-<span class="go">[1 rows x 48 columns]</span>
+<span class="go">[1 rows x 56 columns]</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>

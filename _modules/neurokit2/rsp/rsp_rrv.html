@@ -525,86 +525,43 @@ title="Open an issue"
 <span class="sd">        DataFrame consisting of the computed RRV metrics, which includes:</span>
 
 <span class="sd">        * ``&quot;RRV_SDBB&quot;``: the standard deviation of the breath-to-breath intervals.</span>
-
 <span class="sd">        * ``&quot;RRV_RMSSD&quot;``: the root mean square of successive differences of the breath-to-breath</span>
 <span class="sd">          intervals.</span>
-
 <span class="sd">        * ``&quot;RRV_SDSD&quot;``: the standard deviation of the successive differences between adjacent</span>
 <span class="sd">          breath-to-breath intervals.</span>
-
 <span class="sd">        * ``&quot;RRV_BBx&quot;``: the number of successive interval differences that are greater than x</span>
 <span class="sd">          seconds.</span>
-
 <span class="sd">        * ``&quot;RRV-pBBx&quot;``: the proportion of breath-to-breath intervals that are greater than x</span>
 <span class="sd">          seconds,</span>
 <span class="sd">          out of the total number of intervals.</span>
-
 <span class="sd">        * ``&quot;RRV_VLF&quot;``: spectral power density pertaining to very low frequency band i.e., 0 to .</span>
 <span class="sd">          04 Hz by default.</span>
-
 <span class="sd">        * ``&quot;RRV_LF&quot;``: spectral power density pertaining to low frequency band i.e., .04 to .15</span>
 <span class="sd">          Hz by default.</span>
-
 <span class="sd">        * ``&quot;RRV_HF&quot;``: spectral power density pertaining to high frequency band i.e., .15 to .4</span>
 <span class="sd">          Hz by default.</span>
-
 <span class="sd">        * ``&quot;RRV_LFHF&quot;``: the ratio of low frequency power to high frequency power.</span>
-
 <span class="sd">        * ``&quot;RRV_LFn&quot;``: the normalized low frequency, obtained by dividing the low frequency</span>
 <span class="sd">          power by the total power.</span>
-
 <span class="sd">        * ``&quot;RRV_HFn&quot;``: the normalized high frequency, obtained by dividing the low frequency</span>
 <span class="sd">          power by total power.</span>
-
 <span class="sd">        * ``&quot;RRV_SD1&quot;``: SD1 is a measure of the spread of breath-to-breath intervals on the</span>
 <span class="sd">          Poincaré plot perpendicular to the line of identity. It is an index of short-term</span>
 <span class="sd">          variability.</span>
-
 <span class="sd">        * ``&quot;RRV_SD2&quot;``: SD2 is a measure of the spread of breath-to-breath intervals on the</span>
 <span class="sd">          Poincaré plot along the line of identity. It is an index of long-term variability.</span>
-
 <span class="sd">        * ``&quot;RRV_SD2SD1&quot;``: the ratio between short and long term fluctuations of the</span>
 <span class="sd">          breath-to-breath intervals (SD2 divided by SD1).</span>
-
 <span class="sd">        * ``&quot;RRV_ApEn&quot;``: the approximate entropy of RRV, calculated by `entropy_approximate()`.</span>
-
 <span class="sd">        * ``&quot;RRV_SampEn&quot;``: the sample entropy of RRV, calculated by `entropy_sample()`.</span>
-
 <span class="sd">        * ``&quot;RRV_DFA_alpha1&quot;``: the &quot;short-term&quot; fluctuation value generated from Detrended</span>
 <span class="sd">          Fluctuation</span>
 <span class="sd">          Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath</span>
 <span class="sd">          intervals. Will only be computed if mora than 160 breath cycles in the signal.</span>
-
 <span class="sd">        * ``&quot;RRV_DFA_alpha2&quot;``: the long-term fluctuation value. Will only be computed if mora</span>
 <span class="sd">          than 640 breath cycles in the signal.</span>
+<span class="sd">        * **MFDFA indices**: Indices related to the :func:`multifractal spectrum &lt;.fractal_dfa()&gt;`.</span>
 
-<span class="sd">        * ``&quot;RRV_alpha1_ExpRange&quot;``: Multifractal DFA. ExpRange is the range of singularity</span>
-<span class="sd">          exponents, correspoinding to the</span>
-<span class="sd">          width of the singularity spectrum.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha2_ExpRange&quot;``: Multifractal DFA. ExpRange is the range of singularity</span>
-<span class="sd">          exponents, correspoinding to the</span>
-<span class="sd">          width of the singularity spectrum.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha1_ExpMean&quot;``: Multifractal DFA. ExpMean is the mean of singularity</span>
-<span class="sd">          exponents.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha2_ExpMean&quot;``: Multifractal DFA. ExpMean is the mean of singularity</span>
-<span class="sd">          exponents.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha1_DimRange&quot;``: Multifractal DFA. DimRange is the range of singularity</span>
-<span class="sd">          dimensions, correspoinding to the</span>
-<span class="sd">          height of the singularity spectrum.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha2_DimRange&quot;``: Multifractal DFA. DimRange is the range of singularity</span>
-<span class="sd">          dimensions, correspoinding to the</span>
-<span class="sd">          height of the singularity spectrum.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha1_DimMean&quot;``: Multifractal DFA. Dimmean is the mean of singularity</span>
-<span class="sd">          dimensions.</span>
-
-<span class="sd">        * ``&quot;RRV_alpha2_DimMean&quot;``: Multifractal DFA. Dimmean is the mean of singularity</span>
-<span class="sd">          dimensions.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -753,26 +710,20 @@ title="Open an issue"
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bbi</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">&gt;</span> <span class="mi">16</span><span class="p">:</span>
         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">bbi</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># For multifractal</span>
-        <span class="n">mdfa_alpha1</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
+        <span class="n">mdfa_alpha1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
             <span class="n">bbi</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
-        <span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mdfa_alpha1</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MFDFA_alpha1_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1_ExpRange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha1</span><span class="p">[</span><span class="s2">&quot;ExpRange&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1_ExpMean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha1</span><span class="p">[</span><span class="s2">&quot;ExpMean&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1_DimRange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha1</span><span class="p">[</span><span class="s2">&quot;DimRange&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1_DimMean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha1</span><span class="p">[</span><span class="s2">&quot;DimMean&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bbi</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">65</span><span class="p">:</span>
         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">bbi</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">65</span><span class="p">),</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># For multifractal</span>
-        <span class="n">mdfa_alpha2</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
+        <span class="n">mdfa_alpha2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
             <span class="n">bbi</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">65</span><span class="p">)</span>
-        <span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2_ExpRange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha2</span><span class="p">[</span><span class="s2">&quot;ExpRange&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2_ExpMean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha2</span><span class="p">[</span><span class="s2">&quot;ExpMean&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2_DimRange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha2</span><span class="p">[</span><span class="s2">&quot;DimRange&quot;</span><span class="p">]</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2_DimMean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha2</span><span class="p">[</span><span class="s2">&quot;DimMean&quot;</span><span class="p">]</span>
-
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mdfa_alpha2</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MFDFA_alpha2_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">out</span>
 
 

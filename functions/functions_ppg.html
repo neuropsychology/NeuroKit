@@ -847,9 +847,9 @@ by the <cite>Label</cite> column. See <a class="reference internal" href="#neuro
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.153694           0.994214</span>
-<span class="go">2     2        10000  ...                  0.125593           0.960169</span>
-<span class="go">3     3        15000  ...                 -0.337799           0.700203</span>
+<span class="go">1     1         5000  ...                  1.036898           0.774278</span>
+<span class="go">2     2        10000  ...                  1.956994           0.939298</span>
+<span class="go">3     3        15000  ...                 -0.887545           0.747374</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -867,7 +867,7 @@ by the <cite>Label</cite> column. See <a class="reference internal" href="#neuro
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.403761  694.663573  49.385202  ...  1.834631  2.711986  0.852819</span>
 
-<span class="go">[1 rows x 82 columns]</span>
+<span class="go">[1 rows x 90 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1068,16 +1068,16 @@ peaks occur, accessible with the key “PPG_Peaks”.</p>
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f47ff51a920&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f1ff1303be0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f47ff6d6500&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f1ff06fef50&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f47ff6d6830&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f1ff340b1f0&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f47ff51a650&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f1ff12b20e0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1150,9 +1150,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.044261           0.995387</span>
-<span class="go">2     2        10000  ...                  3.253645           0.874748</span>
-<span class="go">3     3        15000  ...                 -0.533366           0.909752</span>
+<span class="go">1     1         5000  ...                 -1.057321           0.901287</span>
+<span class="go">2     2        10000  ...                  0.961267           0.967930</span>
+<span class="go">3     3        15000  ...                  0.263723           0.989498</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1204,7 +1204,7 @@ separately processed DataFrames.</p></li>
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.403761  694.663573  49.385202  ...  1.834631  2.711986  0.852819</span>
 
-<span class="go">[1 rows x 82 columns]</span>
+<span class="go">[1 rows x 90 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
 <span class="gp">   ...: </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
@@ -1216,7 +1216,7 @@ separately processed DataFrames.</p></li>
 <span class="go">1     1      86.483853   69.395349  ...  1.808904  2.306391  0.792838</span>
 <span class="go">2     2      86.323669   69.483721  ...  1.867346  3.210792  0.973029</span>
 
-<span class="go">[2 rows x 83 columns]</span>
+<span class="go">[2 rows x 91 columns]</span>
 </pre></div>
 </div>
 </dd></dl>

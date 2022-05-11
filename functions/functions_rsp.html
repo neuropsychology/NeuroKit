@@ -960,10 +960,10 @@ each epoch is indicated by the <cite>Label</cite> column. See <cite>rsp_eventrel
 <span class="go"># Analyze</span>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[9]: </span><span class="go"></span>
-<span class="go">   RSP_Rate_Mean  ...  RRV_DFA_alpha2_DimMean</span>
-<span class="go">0      15.860331  ...                0.356496</span>
+<span class="go">   RSP_Rate_Mean  ...  RRV_MFDFA_alpha2_Increment</span>
+<span class="go">0      15.860331  ...                    0.093556</span>
 
-<span class="go">[1 rows x 30 columns]</span>
+<span class="go">[1 rows x 34 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1481,26 +1481,7 @@ Analysis i.e. the root mean square deviation from the fitted trend of the breath
 intervals. Will only be computed if mora than 160 breath cycles in the signal.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_DFA_alpha2&quot;</span></code>: the long-term fluctuation value. Will only be computed if mora
 than 640 breath cycles in the signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha1_ExpRange&quot;</span></code>: Multifractal DFA. ExpRange is the range of singularity
-exponents, correspoinding to the
-width of the singularity spectrum.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha2_ExpRange&quot;</span></code>: Multifractal DFA. ExpRange is the range of singularity
-exponents, correspoinding to the
-width of the singularity spectrum.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha1_ExpMean&quot;</span></code>: Multifractal DFA. ExpMean is the mean of singularity
-exponents.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha2_ExpMean&quot;</span></code>: Multifractal DFA. ExpMean is the mean of singularity
-exponents.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha1_DimRange&quot;</span></code>: Multifractal DFA. DimRange is the range of singularity
-dimensions, correspoinding to the
-height of the singularity spectrum.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha2_DimRange&quot;</span></code>: Multifractal DFA. DimRange is the range of singularity
-dimensions, correspoinding to the
-height of the singularity spectrum.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha1_DimMean&quot;</span></code>: Multifractal DFA. Dimmean is the mean of singularity
-dimensions.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_alpha2_DimMean&quot;</span></code>: Multifractal DFA. Dimmean is the mean of singularity
-dimensions.</p></li>
+<li><p><strong>MFDFA indices</strong>: Indices related to the <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">multifractal</span> <span class="pre">spectrum</span></code></a>.</p></li>
 </ul>
 </p>
 </dd>
@@ -1519,7 +1500,7 @@ dimensions.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1426.20564     3914.95  780.119389  ...    0.369579  0.091859         inf</span>
+<span class="go">0  787.928396      4017.1  517.322449  ...    0.797932  0.164821         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1593,9 +1574,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        0.0              0.131255</span>
-<span class="go">2     2        10000  ...        0.0              0.727468</span>
-<span class="go">3     3        15000  ...        1.0              0.132923</span>
+<span class="go">1     1         5000  ...        0.0              0.067813</span>
+<span class="go">2     2        10000  ...        0.0              0.749082</span>
+<span class="go">3     3        15000  ...        1.0              0.117403</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1672,10 +1653,10 @@ docstrings for details.</p></li>
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">   RSP_Rate_Mean  ...  RRV_DFA_alpha2_DimMean</span>
-<span class="go">0      15.860331  ...                0.356496</span>
+<span class="go">   RSP_Rate_Mean  ...  RRV_MFDFA_alpha2_Increment</span>
+<span class="go">0      15.860331  ...                    0.093556</span>
 
-<span class="go">[1 rows x 30 columns]</span>
+<span class="go">[1 rows x 34 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 

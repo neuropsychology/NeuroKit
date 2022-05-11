@@ -80,6 +80,10 @@ Entropy
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_differential
 
+*entropy_power()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_power
+
 *entropy_tsallis()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_tsallis
@@ -178,6 +182,10 @@ Other indices
 *fisher_information()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fisher_information
+
+*fishershannon_information()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fishershannon_information
 
 *complexity_hjorth()*
 """""""""""""""""""""""

@@ -597,30 +597,23 @@ title="Open an issue"
 <span class="sd">    * Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in</span>
 <span class="sd">      Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.</span>
 <span class="sd">      https://doi.org/10.3390/s21123998</span>
-
 <span class="sd">    * Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., &amp; Weir, J. P.</span>
 <span class="sd">      (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle &amp; nerve,</span>
 <span class="sd">      56(4), 674-678.</span>
-
 <span class="sd">    * Han, L., Zhang, Q., Chen, X., Zhan, Q., Yang, T., &amp; Zhao, Z. (2017). Detecting work-related</span>
 <span class="sd">      stress with a wearable device. Computers in Industry, 90, 42-49.</span>
-
 <span class="sd">    * Hovsepian, K., Al&#39;Absi, M., Ertin, E., Kamarck, T., Nakajima, M., &amp; Kumar, S. (2015). cStress:</span>
 <span class="sd">      towards a gold standard for continuous stress assessment in the mobile environment. In</span>
 <span class="sd">      Proceedings of the 2015 ACM international joint conference on pervasive and ubiquitous</span>
 <span class="sd">      computing (pp. 493-504).</span>
-
 <span class="sd">    * Parent, M., Tiwari, A., Albuquerque, I., Gagnon, J. F., Lafond, D., Tremblay, S., &amp; Falk, T.</span>
 <span class="sd">      H. (2019). A multimodal approach to improve the robustness of physiological stress prediction</span>
 <span class="sd">      during physical activity. In 2019 IEEE International Conference on Systems, Man and</span>
 <span class="sd">      Cybernetics (SMC) (pp. 4131-4136). IEEE.</span>
-
 <span class="sd">    * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac</span>
 <span class="sd">      electrophysiology review, 6(3), 239-244.</span>
-
 <span class="sd">    * Shaffer, F., &amp; Ginsberg, J. P. (2017). An overview of heart rate variability metrics and</span>
 <span class="sd">      norms. Frontiers in public health, 5, 258.</span>
-
 <span class="sd">    * Subramaniam, S. D., &amp; Dass, B. (2022). An Efficient Convolutional Neural Network for Acute</span>
 <span class="sd">      Pain Recognition Using HRV Features. In Proceedings of the International e-Conference on</span>
 <span class="sd">      Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.</span>
@@ -645,7 +638,7 @@ title="Open an issue"
         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDNNI&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_sdnni</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
 
     <span class="c1"># Difference-based</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RMSSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">diff_rri</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RMSSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">diff_rri</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">diff_rri</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Normalized</span>
@@ -735,7 +728,7 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_hrv_TINN</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">bar_x</span><span class="p">,</span> <span class="n">bar_y</span><span class="p">,</span> <span class="n">binsize</span><span class="p">):</span>
     <span class="c1"># set pre-defined conditions</span>
-    <span class="n">min_error</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">14</span>
+    <span class="n">min_error</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">bar_x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">bar_y</span><span class="p">)]</span>  <span class="c1"># bin where Y is max</span>
     <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bar_y</span><span class="p">)</span>  <span class="c1"># max value of Y</span>
     <span class="n">idx_where</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bar_x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
