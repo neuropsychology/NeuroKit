@@ -207,15 +207,15 @@ def _complexity_rqa_features(rc, min_linelength=2):
     # Compute features
     data["Laminarity"] = black_lengths.sum() / rc[idx].sum()
     data["Laminarity_Determinism"] = data["Laminarity"] / data["Determinism"]
-    data["TrappingTime"] = 0 if len(black_lengths) == 0 else np.mean(black_lengths)
-    data["VMax"] = 0 if len(black_lengths) == 0 else np.max(black_lengths)
+    data["TrappingTime"] = 0 if len(black_lengths) == 0 else np.nanmean(black_lengths)
+    data["VMax"] = 0 if len(black_lengths) == 0 else np.nanmax(black_lengths)
     data["VEn"] = entropy_shannon(
         freq=np.unique(black_lengths, return_counts=True)[1],
         base=np.e,
     )[0]
 
-    data["W"] = 0 if len(white_lengths) == 0 else np.mean(white_lengths)
-    data["WMax"] = 0 if len(white_lengths) == 0 else np.max(white_lengths)
+    data["W"] = 0 if len(white_lengths) == 0 else np.nanmean(white_lengths)
+    data["WMax"] = 0 if len(white_lengths) == 0 else np.nanmax(white_lengths)
     data["WEn"] = entropy_shannon(
         freq=np.unique(white_lengths, return_counts=True)[1],
         base=np.e,

@@ -250,7 +250,15 @@ colors <- c(
   "RQA_W" = "#4CAF50",
   "RQA_WMax" = "#4CAF50",
   "RQA_WEn" = "#4CAF50",
-  "DFA" = "#4CAF50"
+  "DFA" = "#4CAF50",
+  "MFDFA_Fluctuation" = "#4CAF50",
+  "MFDFA_Width" = "#4CAF50",
+  "MFDFA_Peak" = "#4CAF50",
+  "MFDFA_Mean" = "#4CAF50",
+  "MFDFA_Max" = "#4CAF50",
+  "MFDFA_Delta" = "#4CAF50",
+  "MFDFA_Asymmetry" = "#4CAF50",
+  "MFDFA_Increment" = "#4CAF50"
 )
 
 # unique(df$Index)[!unique(df$Index) %in% names(colors)]

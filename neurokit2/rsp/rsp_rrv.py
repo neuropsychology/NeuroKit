@@ -237,6 +237,7 @@ def _rsp_rrv_nonlinear(bbi):
         )
         for k in mdfa_alpha2.columns:
             out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
+    return out
 
 
 # =============================================================================
