@@ -180,17 +180,18 @@ data <- df |>
 
 
 get_cor <- function(data, plot=FALSE) {
-  cor <- correlation::correlation(data, method = "spearman", redundant = TRUE) |>
+  cor <- correlation::correlation(data, method = "pearson", redundant = TRUE) |>
     correlation::cor_sort(hclust_method = "ward.D2")
-  p <- cor |>
+  if(plot) {
+      p <- cor |>
     cor_lower() |>
     mutate(
-      Text = insight::format_value(rho, zap_small = TRUE, digits = 3),
+      Text = insight::format_value(r, zap_small = TRUE, digits = 3),
       Text = str_replace(str_remove(Text, "^0+"), "^-0+", "-"),
       Parameter2 = fct_rev(Parameter2)
     ) |>
     ggplot(aes(x = Parameter2, y = Parameter1)) +
-    geom_tile(aes(fill = rho)) +
+    geom_tile(aes(fill = r)) +
     # geom_text(aes(label = Text), size = 2) +
     scale_fill_gradient2(low = "#2196F3", mid = "white", high = "#F44336", midpoint = 0, limit = c(-1, 1), space = "Lab", name = "Correlation", guide = "legend") +
     scale_x_discrete(expand = c(0, 0)) +
@@ -203,7 +204,8 @@ get_cor <- function(data, plot=FALSE) {
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank()
     )
-  if(plot) plot(p)
+    plot(p)
+  }
   cor
 }
 
@@ -246,21 +248,23 @@ data <- data |>
     -`CREn (B)`,
     -`CREn (D)`, -`ShanEn (D)`,
     -`CREn (r)`, -`ShanEn (r)`,
-    # -`CREn (C)`, -`ShanEn (C)`,
-    -`PSDFD (Voss1998)`,
-    -`RangeEn (A)`, -`RangeEn (Ac)`,
-    -FI,
-    -MMSEn,
-    -`H (corrected)`,
-    -FuzzyApEn,
-    -FuzzycApEn,
-    -CPEn,
-    -RR,
-    -MFDFA_HDelta,
-    # -FuzzyRCMSEn,
-    # -`CREn (1000)`, 
+    -`CREn (C)`, -`ShanEn (C)`,
     -`CREn (100)`,
-    -RQA_VEn, -RQA_LEn
+    -`PowEn`,
+    # -`PSDFD (Voss1998)`,
+    # -`RangeEn (A)`, -`RangeEn (Ac)`,
+    # -FI,
+    # -MMSEn,
+    # -`H (corrected)`,
+    # -FuzzyApEn,
+    # -FuzzycApEn,
+    # -CPEn,
+    # -RR,
+    # -MFDFA_HDelta,
+    -FuzzyRCMSEn
+    # -`CREn (1000)`,
+    # -`CREn (100)`,
+    # -RQA_VEn, -RQA_LEn
   )
 
 cor <- get_cor(data, plot=TRUE)
@@ -282,6 +286,35 @@ cor <- get_cor(data, plot=TRUE)
 <!--   plot(hang = -1) -->
 <!-- ``` -->
 
+### Graph
+
+``` r
+library(ggraph)
+
+g <- cor |>
+  cor_lower() |>
+  mutate(width = abs(r),
+         edgecolor = as.character(sign(r))) |>
+  tidygraph::as_tbl_graph(directed=FALSE)
+
+g |>
+  mutate(importance = tidygraph::centrality_authority(weights = abs(r)),
+         group = as.factor(tidygraph::group_louvain(weights = abs(r)))) |>
+  tidygraph::activate("edges") |>
+  filter(abs(r) > 0.5) |>
+  tidygraph::activate("nodes") |>
+  filter(!tidygraph::node_is_isolated()) |>
+  ggraph(layout = 'kk') +  # fr # lgl # drl
+  ggraph::geom_edge_arc(aes(edge_width=width, edge_colour=edgecolor), strength=0.1, alpha=0.7) +
+  ggraph::geom_node_point(aes(size = importance, colour = group)) +
+  ggraph::geom_node_label(aes(label = name), repel=TRUE) +
+  scale_edge_color_manual(values = c("1" = "#2E7D32", "-1"="#C62828")) +
+  scale_edge_width_continuous(range = c(0.01, 2)) +
+  scale_size_continuous(range = c(0.5, 10))
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-10-1.png)<!-- -->
+
 ### Factor Analysis
 
 ``` r
@@ -290,15 +323,16 @@ r <- correlation::cor_smooth(as.matrix(cor))
 plot(parameters::n_factors(data, cor = r))
 ```
 
-![](../../studies/complexity_benchmark/figures/unnamed-chunk-10-1.png)<!-- -->
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
-rez <- parameters::factor_analysis(data, cor = r, n = 4, rotation = "varimax", sort = TRUE, fm="ml")
+rez <- parameters::factor_analysis(data, cor = r, n = 15, rotation = "varimax", sort = TRUE, fm="ml")
 # rez <- parameters::principal_components(data, n = 13, sort = TRUE)
 # rez
 
 col <- gsub('[[:digit:]]+', '', names(rez)[2])
 closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with(col)), 1, \(x) which.max(abs(x)))]
+
 
 loadings <- attributes(rez)$loadings_long |>
   mutate(
@@ -309,8 +343,20 @@ loadings <- attributes(rez)$loadings_long |>
 
 colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Component))), levels(loadings$Component))
 
+# Sort by sign too
+names(closest) <- rev(levels(loadings$Variable))
+
+idx_order <- loadings |>
+  mutate(Closest = closest[as.character(loadings$Variable)],
+         Sign = sign(Loading)) |>
+  filter(Component == Closest) |>
+  arrange(desc(Component), desc(Sign), desc(abs(Loading))) |>
+  pull(Variable) |>
+  as.character()
+
 
 p1 <- loadings |>
+  mutate(Variable = fct_relevel(Variable, rev(idx_order))) |>
   # filter(Variable == "CD") |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
@@ -325,7 +371,7 @@ p1 <- loadings |>
   theme(
     axis.text.y = element_text(
       color = rev(colors[closest]),
-      face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")),
+      face = rev(ifelse(idx_order %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")),
       hjust = 0.5
     ),
     axis.text.x = element_blank(),
@@ -359,6 +405,6 @@ p2 <- order |>
 (p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
 
-![](../../studies/complexity_benchmark/figures/unnamed-chunk-11-1.png)<!-- -->
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-12-1.png)<!-- -->
 
 ## References

@@ -213,9 +213,7 @@ colors <- c(
   "EnofEn (3)" = "#E91E63",
   "EnofEn (5)" = "#E91E63",
   "EnofEn (9)" = "#E91E63",
-  "RangeEn (A)" = "#E91E63",
-  "RangeEn (Ac)" = "#E91E63",
-  "RangeEn (B)" = "#E91E63",
+  "RangeEn" = "#E91E63",
   "SPEn (10)" = "#E91E63",
   "SPEn (50)" = "#E91E63",
   "SPEn (100)" = "#E91E63",
@@ -270,7 +268,7 @@ colors <- c(
 
 ### Computation Time
 
-```{r computation_time, message=FALSE, warning=FALSE, fig.width=16*1.25, fig.height=10*1.25, cache=TRUE}
+```{r computation_time, message=FALSE, warning=FALSE, fig.width=16*1.25, fig.height=10*1.25, cache=FALSE}
 order <- df |>
   group_by(Index) |>
   summarize(Duration = median(Duration)) |>
@@ -324,7 +322,7 @@ dfsummary |>
 ```
 
 
-```{r time2, message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+```{r time2, message=FALSE, warning=FALSE, include=FALSE}
 df |>
   filter(!Index %in% c("SD", "Length", "Noise", "Random")) |>
   mutate(Duration = Duration * 10000) |>
@@ -344,7 +342,7 @@ df |>
 ### Sensitivity to Signal Length
 
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, cache=FALSE}
 model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random")))
 
 parameters::parameters(model, keep = "poly.*1") |>
@@ -368,7 +366,7 @@ estimate_relation(model) |>
 
 ### Sensitivity to Noise
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, cache=FALSE}
 model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random")))
 
 parameters::parameters(model, keep = "poly.*1") |>
@@ -394,7 +392,7 @@ estimate_relation(model) |>
 ### Correlation
 
 
-```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15, cache=TRUE}
+```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15, cache=FALSE}
 data <- df |>
   mutate(i = paste(Signal, Length, Noise_Type, Noise_Intensity, sep = "__")) |>
   select(i, Index, Result) |>
@@ -404,17 +402,18 @@ data <- df |>
 
 
 get_cor <- function(data, plot=FALSE) {
-  cor <- correlation::correlation(data, method = "spearman", redundant = TRUE) |>
+  cor <- correlation::correlation(data, method = "pearson", redundant = TRUE) |>
     correlation::cor_sort(hclust_method = "ward.D2")
-  p <- cor |>
+  if(plot) {
+      p <- cor |>
     cor_lower() |>
     mutate(
-      Text = insight::format_value(rho, zap_small = TRUE, digits = 3),
+      Text = insight::format_value(r, zap_small = TRUE, digits = 3),
       Text = str_replace(str_remove(Text, "^0+"), "^-0+", "-"),
       Parameter2 = fct_rev(Parameter2)
     ) |>
     ggplot(aes(x = Parameter2, y = Parameter1)) +
-    geom_tile(aes(fill = rho)) +
+    geom_tile(aes(fill = r)) +
     # geom_text(aes(label = Text), size = 2) +
     scale_fill_gradient2(low = "#2196F3", mid = "white", high = "#F44336", midpoint = 0, limit = c(-1, 1), space = "Lab", name = "Correlation", guide = "legend") +
     scale_x_discrete(expand = c(0, 0)) +
@@ -427,7 +426,8 @@ get_cor <- function(data, plot=FALSE) {
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank()
     )
-  if(plot) plot(p)
+    plot(p)
+  }
   cor
 }
 
@@ -463,14 +463,14 @@ cor <- get_cor(data)
   - Remove **RR**  because it's slower.
 
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval=FALSE, cache=TRUE}
+```{r eval=TRUE, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
 cor |>
   cor_lower() |>
   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |>
-  arrange(desc(abs(rho)), Parameter1) |>
+  arrange(desc(abs(r)), Parameter1) |>
   filter(Parameter1 != Parameter2) |>
-  filter(abs(rho) > .97) |>
-  select(Parameter1, Parameter2, rho)
+  filter(abs(r) > .97) |>
+  select(Parameter1, Parameter2, r)
 
 
 # Duplicates
@@ -481,38 +481,42 @@ filter(averagetime, Index %in% c("CREn (D)", "PFD (D)", "ShanEn (D)"))
 filter(averagetime, Index %in% c("ShanEn (B)", "CREn (B)"))
 filter(averagetime, Index %in% c("ShanEn (r)", "PFD (r)", "CREn (r)"))
 filter(averagetime, Index %in% c("ShanEn (C)", "PFD (C)", "CREn (C)"))
+filter(averagetime, Index %in% c("CREn (10)", "CREn (100)"))
 filter(averagetime, Index %in% c("SVDEn", "FI"))
 filter(averagetime, Index %in% c("PSDFD (Hasselman2013)", "PSDFD (Voss1998)"))
 filter(averagetime, Index %in% c("MMSEn", "IMSEn"))
 filter(averagetime, Index %in% c("H (corrected)", "H (uncorrected)"))
 filter(averagetime, Index %in% c("FuzzyEn", "FuzzyApEn"))
+filter(averagetime, Index %in% c("RCMSEn", "FuzzyRCMSEn"))
 filter(averagetime, Index %in% c("SVDEn", "FuzzycApEn"))
 filter(averagetime, Index %in% c("CPEn", "CRPEn"))
 filter(averagetime, Index %in% c("NLDFD", "RR"))
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE, fig.width=16, fig.height=15}
+```{r message=FALSE, warning=FALSE, cache=FALSE, fig.width=16, fig.height=15}
 data <- data |>
   select(
     -`CREn (B)`,
     -`CREn (D)`, -`ShanEn (D)`,
     -`CREn (r)`, -`ShanEn (r)`,
-    # -`CREn (C)`, -`ShanEn (C)`,
-    -`PSDFD (Voss1998)`,
-    -`RangeEn (A)`, -`RangeEn (Ac)`,
-    -FI,
-    -MMSEn,
-    -`H (corrected)`,
-    -FuzzyApEn,
-    -FuzzycApEn,
-    -CPEn,
-    -RR,
-    -MFDFA_HDelta,
-    # -FuzzyRCMSEn,
-    # -`CREn (1000)`,
+    -`CREn (C)`, -`ShanEn (C)`,
     -`CREn (100)`,
-    -RQA_VEn, -RQA_LEn
+    -`PowEn`,
+    # -`PSDFD (Voss1998)`,
+    # -`RangeEn (A)`, -`RangeEn (Ac)`,
+    # -FI,
+    # -MMSEn,
+    # -`H (corrected)`,
+    # -FuzzyApEn,
+    # -FuzzycApEn,
+    # -CPEn,
+    # -RR,
+    # -MFDFA_HDelta,
+    -FuzzyRCMSEn
+    # -`CREn (1000)`,
+    # -`CREn (100)`,
+    # -RQA_VEn, -RQA_LEn
   )
 
 cor <- get_cor(data, plot=TRUE)
@@ -543,15 +547,15 @@ library(ggraph)
 
 g <- cor |>
   cor_lower() |>
-  mutate(width = abs(rho),
-         edgecolor = as.character(sign(rho))) |>
+  mutate(width = abs(r),
+         edgecolor = as.character(sign(r))) |>
   tidygraph::as_tbl_graph(directed=FALSE)
 
 g |>
-  mutate(importance = tidygraph::centrality_authority(weights = abs(rho)),
-         group = as.factor(tidygraph::group_louvain(weights = abs(rho)))) |>
+  mutate(importance = tidygraph::centrality_authority(weights = abs(r)),
+         group = as.factor(tidygraph::group_louvain(weights = abs(r)))) |>
   tidygraph::activate("edges") |>
-  filter(abs(rho) > 0.5) |>
+  filter(abs(r) > 0.5) |>
   tidygraph::activate("nodes") |>
   filter(!tidygraph::node_is_isolated()) |>
   ggraph(layout = 'kk') +  # fr # lgl # drl
@@ -575,7 +579,7 @@ plot(parameters::n_factors(data, cor = r))
 
 
 ```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=18}
-rez <- parameters::factor_analysis(data, cor = r, n = 4, rotation = "varimax", sort = TRUE, fm="ml")
+rez <- parameters::factor_analysis(data, cor = r, n = 15, rotation = "varimax", sort = TRUE, fm="ml")
 # rez <- parameters::principal_components(data, n = 13, sort = TRUE)
 # rez
 
