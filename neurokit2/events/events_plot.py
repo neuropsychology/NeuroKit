@@ -6,7 +6,7 @@ import pandas as pd
 
 
 def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
-    """Plot events in signal.
+    """**Plot events in signal**
 
     Parameters
     ----------
@@ -34,36 +34,60 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
 
     Examples
     ----------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> fig = nk.events_plot([1, 3, 5])
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> # With signal
-    >>> signal = nk.signal_simulate(duration=4)
-    >>> events = nk.events_find(signal)
-    >>> fig1 = nk.events_plot(events, signal)
-    >>> fig1 #doctest: +SKIP
-    >>>
-    >>> # Different events
-    >>> events1 = events["onset"]
-    >>> events2 = np.linspace(0, len(signal), 8)
-    >>> fig2 = nk.events_plot([events1, events2], signal)
-    >>> fig2 #doctest: +SKIP
-    >>>
-    >>> # Conditions
-    >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
-    >>> fig3 = nk.events_plot(events, signal)
-    >>> fig3 #doctest: +SKIP
-    >>>
-    >>> # Different colors for all events
-    >>> signal = nk.signal_simulate(duration=20)
-    >>> events = nk.events_find(signal)
-    >>> events = [[i] for i in events['onset']]
-    >>> fig4 = nk.events_plot(events, signal)
-    >>> fig4 #doctest: +SKIP
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      @savefig p.events_plot1.png scale = 100%
+      fig = nk.events_plot([1, 3, 5])
+      @suppress
+      plt.close()
+
+    * **Example 1:** With signal
+
+    .. ipython:: python
+
+      signal = nk.signal_simulate(duration=4)
+      events = nk.events_find(signal)
+      @savefig p.events_plot2.png scale = 100%
+      fig1 = nk.events_plot(events, signal)
+      @suppress
+      plt.close()
+
+    * **Example 2:** Different events
+
+    .. ipython:: python
+
+      events1 = events["onset"]
+      events2 = np.linspace(0, len(signal), 8)
+      @savefig p.events_plot2.png scale = 100%
+      fig2 = nk.events_plot([events1, events2], signal)
+      @suppress
+      plt.close()
+
+    * **Example 3:** Conditions
+
+    .. ipython:: python
+
+      events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
+      @savefig p.events_plot3.png scale = 100%
+      fig3 = nk.events_plot(events, signal)
+      @suppress
+      plt.close()
+
+    * **Example 3:** Different colors for all events
+
+    .. ipython:: python
+    
+      signal = nk.signal_simulate(duration=20)
+      events = nk.events_find(signal)
+      events = [[i] for i in events['onset']]
+      @savefig p.events_plot4.png scale = 100%
+      fig4 = nk.events_plot(events, signal)
+      @suppress
+      plt.close()
 
     """
 

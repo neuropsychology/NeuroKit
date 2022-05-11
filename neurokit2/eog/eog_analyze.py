@@ -6,8 +6,9 @@ from .eog_intervalrelated import eog_intervalrelated
 
 
 def eog_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs EOG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-
-    state data.
+    """**EOG Analysis**
+
+    Performs EOG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.
 
     Parameters
     ----------
@@ -38,30 +39,25 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example 1: Event-related analysis
-    >>> data = nk.data("eog_100hz")
-    >>>
-    >>> # Process the data for event-related analysis
-    >>> df, info = nk.bio_process(eog=data, sampling_rate=100)
-    >>> epochs = nk.epochs_create(df, events=[500, 4000, 6000, 9000], sampling_rate=100,
-    ...                           epochs_start=-0.1,epochs_end=1.9)
-    >>>
-    >>> # Analyze
-    >>> nk.eog_analyze(epochs, sampling_rate=100)  #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  EOG_Rate_Min_Time  EOG_Blinks_Presence
-    1     1          ...  ...                ...           ...
-    2     2          ...  ...                ...           ...
-    3     3          ...  ...                ...           ...
-    4     4          ...  ...                ...           ...
-    [4 rows x 10 columns]
-    >>>
-    >>> # Example 2: Interval-related analysis with same dataset
-    >>>
-    >>> nk.eog_analyze(df, sampling_rate=100)  #doctest: +ELLIPSIS
-      EOG_Peaks_N      ...
-    0         ...      ...
+    .. ipython:: python
+    
+      import neurokit2 as nk
+
+      # Example 1: Event-related analysis
+      data = nk.data("eog_100hz")
+
+      # Process the data for event-related analysis
+      df, info = nk.bio_process(eog=data, sampling_rate=100)
+      epochs = nk.epochs_create(df, events=[500, 4000, 6000, 9000], sampling_rate=100,
+                                epochs_start=-0.1,epochs_end=1.9)
+
+      # Analyze
+      nk.eog_analyze(epochs, sampling_rate=100)
+
+      # Example 2: Interval-related analysis with same dataset
+
+      nk.eog_analyze(df, sampling_rate=100)
+
 
     """
     method = method.lower()

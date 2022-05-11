@@ -10,7 +10,7 @@ from ..misc import NeuroKitWarning
 
 
 def emg_eventrelated(epochs, silent=False):
-    """Performs event-related EMG analysis on epochs.
+    """**Performs event-related EMG analysis on epochs**
 
     Parameters
     ----------
@@ -23,18 +23,18 @@ def emg_eventrelated(epochs, silent=False):
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated by
-        the `Label` column (if not present, by the `Index` column). The analyzed features consist of
-        the following:
-            - *"EMG_Activation"*: indication of whether there is muscular activation following the onset
+        A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated
+        by the `Label` column (if not present, by the `Index` column). The analyzed features consist
+        of the following:
+            * ``"EMG_Activation*``: indication of whether there is muscular activation following the onset
             of the event (1 if present, 0 if absent) and if so, its corresponding amplitude features
             and the number of activations in each epoch. If there is no activation, nans are displayed
             for the below features.
-            - *"EMG_Amplitude_Mean"*: the mean amplitude of the activity.
-            - *"EMG_Amplitude_Max"*: the maximum amplitude of the activity.
-            - *"EMG_Amplitude_SD"*: the standard deviation of the activity amplitude.
-            - *"EMG_Amplitude_Max_Time"*: the time of maximum amplitude.
-            - *"EMG_Bursts"*: the number of activations, or bursts of activity, within each epoch.
+            * ``"EMG_Amplitude_Mean*``: the mean amplitude of the activity.
+            * ``"EMG_Amplitude_Max*``: the maximum amplitude of the activity.
+            * ``"EMG_Amplitude_SD*``: the standard deviation of the activity amplitude.
+            * ``"EMG_Amplitude_Max_Time*``: the time of maximum amplitude.
+            * ``"EMG_Bursts*``: the number of activations, or bursts of activity, within each epoch.
 
     See Also
     --------
@@ -42,14 +42,16 @@ def emg_eventrelated(epochs, silent=False):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
-    >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
-    ...                           epochs_start=-0.1,epochs_end=1.9)
-    >>> nk.emg_eventrelated(epochs) #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Example with simulated data
+      emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
+      emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+      epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
+                                epochs_start=-0.1,epochs_end=1.9)
+      nk.emg_eventrelated(epochs) 
 
     """
     # Sanity checks

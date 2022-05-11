@@ -6,10 +6,10 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
-    """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+    """**Decompose Electrodermal Activity (EDA) into Phasic and Tonic components**
 
-    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different
-    methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
+    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using
+    different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
 
     Parameters
     ----------
@@ -18,8 +18,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
     method : str
-        The processing pipeline to apply. Can be one of "cvxEDA", "median", "smoothmedian", "highpass",
-        "biopac", or "acqknowledge".
+        The processing pipeline to apply. Can be one of "cvxEDA", "median", "smoothmedian",
+        "highpass", "biopac", or "acqknowledge".
 
     Returns
     -------
@@ -33,37 +33,47 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Simulate EDA signal
-    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)
-    >>>
-    >>> # Decompose using different algorithms
-    >>> cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method='cvxeda')
-    >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
-    >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
-    >>>
-    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'),
-    ...                   highpass.add_suffix('_Highpass')], axis=1)
-    >>> data["EDA_Raw"] = eda_signal
-    >>> fig = data.plot()
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
-    >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)
-    >>> data["EDA_Raw"] = eda_signal
-    >>> fig = nk.signal_plot(data, standardize=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate EDA signal
+      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)
+
+      # Decompose using different algorithms
+      cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method='cvxeda')
+      smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
+      highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
+
+      data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'),
+                        highpass.add_suffix('_Highpass')], axis=1)
+      data["EDA_Raw"] = eda_signal
+      @savefig p_eda_phasic1.png scale=100%
+      fig = data.plot()
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
+      data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)
+      data["EDA_Raw"] = eda_signal
+      @savefig p_eda_phasic2.png scale=100%
+      fig = nk.signal_plot(data, standardize=True)
+      @suppress
+      plt.close()
 
     References
     -----------
-    - cvxEDA: https://github.com/lciti/cvxEDA.
+    * cvxEDA: https://github.com/lciti/cvxEDA.
 
-    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances
-      in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
+    * Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In
+      Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43).
+      Springer International Publishing.
 
-    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization
-      approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering,
+    * Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex
+      optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical
+      Engineering,
       63(4), 797-804.
 
     """
@@ -263,10 +273,10 @@ def _eda_phasic_cvxeda(
 #
 #    Examples
 #    ---------
-#    >>> import neurokit2 as nk
+#      import neurokit2 as nk
 #    >>>
-#    >>> eda_signal = nk.data("bio_eventrelated_100hz")["EDA"].values
-#    >>> sampling_rate = 100
+#      eda_signal = nk.data("bio_eventrelated_100hz")["EDA"].values
+#      sampling_rate = 100
 #    """
 #    bateman = _eda_simulate_bateman(sampling_rate=sampling_rate)
 #    bateman_peak = np.argmax(bateman)

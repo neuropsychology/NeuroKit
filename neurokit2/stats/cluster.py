@@ -14,17 +14,19 @@ from .cluster_quality import _cluster_quality_distance
 
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):
-    """Performs clustering of data according to different algorithms.
+    """**Performs clustering of data according to different algorithms**
 
     Parameters
     ----------
     data : np.ndarray
         Matrix array of data (E.g., an array (channels, times) of M/EEG data).
     method : str
-        The algorithm for clustering. Can be one of 'kmeans' (default), modified k-means algorithm 'kmod',
-        'kmedoids' (k-centers or k-medoids clustering), 'pca' (Principal Component Analysis), 'ica' (Independent Component
-        Analysis), 'agglomerative' (Atomize and Agglomerate Hierarchical Clustering), 'hierarchical', 'spectral',
-        'mixture', 'mixturebayesian'. See ``sklearn`` for methods details.
+        The algorithm for clustering. Can be one of 'kmeans' (default), modified k-means algorithm
+        'kmod', 'kmedoids' (k-centers or k-medoids clustering),
+        'pca' (Principal Component Analysis), 'ica' (Independent Component
+        Analysis), 'agglomerative' (Atomize and Agglomerate Hierarchical Clustering),
+        'hierarchical', 'spectral', 'mixture', 'mixturebayesian'. See ``sklearn`` for methods
+        details.
     n_clusters : int
         The desired number of clusters.
     random_state : Union[int, numpy.random.RandomState]
@@ -47,62 +49,67 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> # Load the iris dataset (without the "Species" column)
-    >>> data = nk.data("iris").drop("Species", axis=1)
-    >>>
-    >>> # Cluster using different methods
-    >>> clustering_kmeans, clusters_kmeans, info = nk.cluster(data, method="kmeans", n_clusters=3)
-    >>> clustering_spectral, clusters_spectral, info = nk.cluster(data, method="spectral", n_clusters=3)
-    >>> clustering_hierarchical, clusters_hierarchical, info = nk.cluster(data, method="hierarchical", n_clusters=3)
-    >>> clustering_agglomerative, clusters_agglomerative, info= nk.cluster(data, method="agglomerative", n_clusters=3)
-    >>> clustering_mixture, clusters_mixture, info = nk.cluster(data, method="mixture", n_clusters=3)
-    >>> clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
-    >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
-    >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
-    >>> clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
-    >>> clustering_kmedoids, clusters_kmedoids, info = nk.cluster(data, method="kmedoids", n_clusters=3)
-    >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
-    >>>
-    >>> # Visualize classification and 'average cluster'
-    >> fig, axes = plt.subplots(ncols=2, nrows=5)
-    >> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
-    >> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
-    >> axes[0, 0].set_title("k-means")
-    >> axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral['Cluster'])
-    >> axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c='red')
-    >> axes[0, 1].set_title("Spectral")
-    >> axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical['Cluster'])
-    >> axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c='red')
-    >> axes[1, 0].set_title("Hierarchical")
-    >> axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative['Cluster'])
-    >> axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c='red')
-    >> axes[1, 1].set_title("Agglomerative")
-    >> axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture['Cluster'])
-    >> axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
-    >> axes[2, 0].set_title("Mixture")
-    >> axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes['Cluster'])
-    >> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
-    >> axes[2, 1].set_title("Bayesian Mixture")
-    >> axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca['Cluster'])
-    >> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
-    >> axes[3, 0].set_title("PCA")
-    >> axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica['Cluster'])
-    >> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
-    >> axes[3, 1].set_title("ICA")
-    >> axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
-    >> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
-    >> axes[4, 0].set_title("modified K-means")
-    >> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
-    >> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
-    >> axes[4, 1].set_title("AAHC (Frederic's method)")
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import matplotlib.pyplot as plt
+
+      # Load the iris dataset
+      data = nk.data("iris")
+
+      # Cluster using different methods
+      clustering_kmeans, clusters_kmeans, info = nk.cluster(data, method="kmeans", n_clusters=3)
+      clustering_spectral, clusters_spectral, info = nk.cluster(data, method="spectral", n_clusters=3)
+      clustering_hierarchical, clusters_hierarchical, info = nk.cluster(data, method="hierarchical", n_clusters=3)
+      clustering_agglomerative, clusters_agglomerative, info= nk.cluster(data, method="agglomerative", n_clusters=3)
+      clustering_mixture, clusters_mixture, info = nk.cluster(data, method="mixture", n_clusters=3)
+      clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
+      clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
+      clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
+      clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
+      clustering_kmedoids, clusters_kmedoids, info = nk.cluster(data, method="kmedoids", n_clusters=3)
+      clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
+
+      # Visualize classification and 'average cluster'
+      @savefig p_cluster1.png scale=100%
+      fig, axes = plt.subplots(ncols=2, nrows=5)
+      axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
+      axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
+      axes[0, 0].set_title("k-means")
+      axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral['Cluster'])
+      axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c='red')
+      axes[0, 1].set_title("Spectral")
+      axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical['Cluster'])
+      axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c='red')
+      axes[1, 0].set_title("Hierarchical")
+      axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative['Cluster'])
+      axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c='red')
+      axes[1, 1].set_title("Agglomerative")
+      axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture['Cluster'])
+      axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
+      axes[2, 0].set_title("Mixture")
+      axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes['Cluster'])
+      axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
+      axes[2, 1].set_title("Bayesian Mixture")
+      axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca['Cluster'])
+      axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
+      axes[3, 0].set_title("PCA")
+      axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica['Cluster'])
+      axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
+      axes[3, 1].set_title("ICA")
+      axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
+      axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
+      axes[4, 0].set_title("modified K-means")
+      axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
+      axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
+      axes[4, 1].set_title("AAHC (Frederic's method)")
+      @suppress
+      plt.close()
 
     Refereneces
     -----------
-    - Park, H. S., & Jun, C. H. (2009). A simple and fast algorithm for K-medoids
-    clustering. Expert systems with applications, 36(2), 3336-3341.
+    * Park, H. S., & Jun, C. H. (2009). A simple and fast algorithm for K-medoids
+      clustering. Expert systems with applications, 36(2), 3336-3341.
 
     """
     # Sanity checks

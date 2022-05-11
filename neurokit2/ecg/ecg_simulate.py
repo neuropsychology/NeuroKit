@@ -94,7 +94,7 @@ def ecg_simulate(
 
     References
     -----------
-    - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
+    * McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
       generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering,
       50 (3), 289-294.
 

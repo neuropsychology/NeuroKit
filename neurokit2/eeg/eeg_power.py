@@ -8,7 +8,7 @@ from .utils import _sanitize_eeg
 def eeg_power(
     eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"], **kwargs
 ):
-    """EEG Power in Different Frequency Bands
+    """**EEG Power in Different Frequency Bands**
 
     See our `walkthrough <https://neurokit2.readthedocs.io/en/latest/examples/eeg_power.html>`_ for details.
 
@@ -42,16 +42,17 @@ def eeg_power(
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Raw objects
-    >>> eeg = nk.mne_data("raw")
-    >>> by_channel = nk.eeg_power(eeg)
-    >>> by_channel #doctest: +SKIP
-    >>>
-    >>> average = by_channel.mean(numeric_only=True, axis=0)
-    >>> average["Gamma"]
-    0.005154868723667882
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Raw objects
+      eeg = nk.mne_data("raw")
+      by_channel = nk.eeg_power(eeg)
+      by_channel
+
+      average = by_channel.mean(numeric_only=True, axis=0)
+      average["Gamma"]
 
     References
     ----------

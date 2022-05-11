@@ -8,7 +8,7 @@ from ..stats import standardize
 
 
 def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True, normalize=True, gfp_method="l1", **kwargs):
-    """Prepare eeg data for microstates extraction.
+    """**Prepare eeg data for microstates extraction**
 
     Parameters
     ----------

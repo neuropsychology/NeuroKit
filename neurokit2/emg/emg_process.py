@@ -8,7 +8,7 @@ from .emg_clean import emg_clean
 
 
 def emg_process(emg_signal, sampling_rate=1000):
-    """Process a electromyography (EMG) signal.
+    """**Process a electromyography (EMG) signal**
 
     Convenience function that automatically processes an electromyography signal.
 
@@ -23,13 +23,13 @@ def emg_process(emg_signal, sampling_rate=1000):
     -------
     signals : DataFrame
         A DataFrame of same length as `emg_signal` containing the following columns:
-        - *"EMG_Raw"*: the raw signal.
-        - *"EMG_Clean"*: the cleaned signal.
-        - *"EMG_Amplitude"*: the signal amplitude, or the activation level of the signal.
-        - *"EMG_Activity*": the activity of the signal for which amplitude exceeds the threshold specified,
-        marked as "1" in a list of zeros.
-        - *"EMG_Onsets"*: the onsets of the amplitude, marked as "1" in a list of zeros.
-        - *"EMG_Offsets"*: the offsets of the amplitude, marked as "1" in a list of zeros.
+        * ``"EMG_Raw"``: the raw signal.
+        * ``"EMG_Clean"``: the cleaned signal.
+        * ``"EMG_Amplitude"``: the signal amplitude, or the activation level of the signal.
+        * ``"EMG_Activity"``: the activity of the signal for which amplitude exceeds the threshold
+          specified,marked as "1" in a list of zeros.
+        * ``"EMG_Onsets"``: the onsets of the amplitude, marked as "1" in a list of zeros.
+        * ``"EMG_Offsets"``: the offsets of the amplitude, marked as "1" in a list of zeros.
     info : dict
         A dictionary containing the information of each amplitude onset, offset, and peak activity
         (see `emg_activation()`), as well as the signals' sampling rate.
@@ -40,12 +40,16 @@ def emg_process(emg_signal, sampling_rate=1000):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
-    >>> signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> fig = nk.emg_plot(signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
+      signals, info = nk.emg_process(emg, sampling_rate=1000)
+      @savefig p.emg_process.png scale=100%
+      fig = nk.emg_plot(signals)
+      @suppress
+      plt.close()
 
     """
     # Sanitize input

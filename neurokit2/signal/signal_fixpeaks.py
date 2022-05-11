@@ -31,9 +31,9 @@ def signal_fixpeaks(
     ----------
     peaks : list or array or DataFrame or Series or dict
         The samples at which the peaks occur. If an array is passed in, it is assumed that it was
-        obtained with ``signal_findpeaks``. If a DataFrame is passed in, it is assumed to be
-        obtained with ``ecg_findpeaks`` or ``ppg_findpeaks`` and to be of the same length as the
-        input signal.
+        obtained with :func:`.signal_findpeaks`. If a DataFrame is passed in, it is assumed to be
+        obtained with :func:`.ecg_findpeaks` or :func:`.ppg_findpeaks` and to be of the same length
+        as the input signal.
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).
     iterative : bool

@@ -8,9 +8,7 @@ from .standardize import standardize
 
 
 def distance(X=None, method="mahalanobis"):
-    """Distance.
-
-    Compute distance using different metrics.
+    """**Compute distance using different metrics**
 
     Parameters
     ----------
@@ -26,12 +24,14 @@ def distance(X=None, method="mahalanobis"):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Load the iris dataset (without the "Species" column)
-    >>> X = nk.data("iris").drop("Species", axis=1)
-    >>> vector = nk.distance(X)
-    >>> vector #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Load the iris dataset
+      X = nk.data("iris")
+      vector = nk.distance(X)
+      vector 
 
     """
     if not isinstance(X, pd.DataFrame):

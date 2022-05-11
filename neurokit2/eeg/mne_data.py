@@ -2,7 +2,7 @@
 
 
 def mne_data(what="raw", path=None):
-    """Utility function to easily access MNE datasets
+    """**Utility function to easily access MNE datasets**
 
     Parameters
     -----------
@@ -19,10 +19,12 @@ def mne_data(what="raw", path=None):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> raw = nk.mne_data(what="raw")
-    >>> raw = nk.mne_data(what="epochs")
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      raw = nk.mne_data(what="raw")
+      raw = nk.mne_data(what="epochs")
 
     """
     # Try loading mne

@@ -21,7 +21,7 @@ def events_find(
     event_labels=None,
     event_conditions=None,
 ):
-    """Find and select events in a continuous signal (e.g., from a photosensor).
+    """**Find and select events in a continuous signal** (e.g., from a photosensor).
 
     Parameters
     ----------
@@ -69,19 +69,21 @@ def events_find(
 
     Example
     ----------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=4)
-    >>> events = nk.events_find(signal)
-    >>> events #doctest: +ELLIPSIS
-    {'onset': array(...),
-     'duration': array(...),
-     'label': array(...)}
-    >>>
-    >>> nk.events_plot(events, signal) #doctest: +ELLIPSIS
-    <Figure ...>
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=4)
+      events = nk.events_find(signal)
+      events
+
+      @savefig p.events_find.png scale = 100%
+      nk.events_plot(events, signal)
+      @suppress
+      plt.close()
+
 
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)

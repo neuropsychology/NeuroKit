@@ -10,7 +10,7 @@ from ..stats import standardize as nk_standardize
 def signal_plot(
     signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs
 ):
-    """Plot signal with events as vertical lines.
+    """**Plot signal with events as vertical lines**
 
     Parameters
     ----------
@@ -31,18 +31,28 @@ def signal_plot(
 
     Examples
     ----------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
-    >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
-    >>>
-    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
-    ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
-    ...                      "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
-    >>> nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
-    >>> nk.signal_plot([signal, data], standardize=True)
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=10, sampling_rate=1000)
+      @savefig p_signal_plot1.png scale=100%
+      nk.signal_plot(signal, sampling_rate=1000, color="red")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
+                           "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
+                           "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+      @savefig p_signal_plot2.png scale=100%
+      nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
+      nk.signal_plot([signal, data], standardize=True)
+      @suppress
+      plt.close()
 
     """
     # Sanitize format

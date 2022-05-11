@@ -6,7 +6,7 @@ import numpy as np
 
 
 def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
-    """Plots the clustered microstates.
+    """**Plots the clustered microstates**
 
     Parameters
     ----------
@@ -28,15 +28,19 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
-    Filtering raw data ...
-    >>> eeg = nk.eeg_rereference(eeg, 'average')
-    >>>
-    >>> microstates = nk.microstates_segment(eeg, method='kmod')
-    >>> nk.microstates_plot(microstates, gfp=microstates["GFP"][0:500])  #doctest: +ELLIPSIS
-    <Figure ...>
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
+      eeg = nk.eeg_rereference(eeg, 'average')
+
+      microstates = nk.microstates_segment(eeg, method='kmod')
+      @savefig p_microstates_plot.png scale = 100%
+      nk.microstates_plot(microstates, gfp=microstates["GFP"][0:500])
+      @suppress
+      plt.close()
+
 
     """
     # Try retrieving info

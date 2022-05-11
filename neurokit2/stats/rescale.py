@@ -3,7 +3,7 @@ import numpy as np
 
 
 def rescale(data, to=[0, 1], scale=None):
-    """Rescale data.
+    """**Rescale data**
 
     Rescale a numeric variable to a new range.
 
@@ -26,10 +26,11 @@ def rescale(data, to=[0, 1], scale=None):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> nk.rescale([3, 1, 2, 4, 6], to=[0, 1]) #doctest: +ELLIPSIS
-    [0.4, 0.0, 0.2, 0.6000000000000001, 1.0]
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      nk.rescale([3, 1, 2, 4, 6], to=[0, 1])
 
     """
 

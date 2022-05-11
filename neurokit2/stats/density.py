@@ -26,7 +26,7 @@ def density(x, desired_length=100, bandwidth="Scott", show=False, **kwargs):
 
     Returns
     -------
-    x, y
+    x
         The x axis of the density estimation.
     y
         The y axis of the density estimation.

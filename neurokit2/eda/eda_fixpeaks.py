@@ -5,7 +5,7 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 def eda_fixpeaks(peaks, onsets=None, height=None):
-    """Correct  Skin Conductance Responses (SCR) peaks.
+    """**Correct  Skin Conductance Responses (SCR) peaks**
 
     Low-level function used by `eda_peaks()` to correct the peaks found by `eda_findpeaks()`.
     Doesn't do anything for now for EDA. See `eda_peaks()` for details.
@@ -25,9 +25,9 @@ def eda_fixpeaks(peaks, onsets=None, height=None):
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the aplitude of the SCR, the samples
-        at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
-        "SCR_Onsets", and "SCR_Peaks" respectively.
+        A dictionary containing additional information, in this case the aplitude of the SCR, the
+        samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
+        "SCR_Amplitude", "SCR_Onsets", and "SCR_Peaks" respectively.
 
     See Also
     --------
@@ -37,20 +37,24 @@ def eda_fixpeaks(peaks, onsets=None, height=None):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get phasic component
-    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
-    >>> eda_cleaned = nk.eda_clean(eda_signal)
-    >>> eda = nk.eda_phasic(eda_cleaned)
-    >>> eda_phasic = eda["EDA_Phasic"].values
-    >>>
-    >>> # Find and fix peaks
-    >>> info = nk.eda_findpeaks(eda_phasic)
-    >>> info = nk.eda_fixpeaks(info)
-    >>>
-    >>> fig = nk.events_plot(info["SCR_Peaks"], eda_phasic)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get phasic component
+      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
+      eda_cleaned = nk.eda_clean(eda_signal)
+      eda = nk.eda_phasic(eda_cleaned)
+      eda_phasic = eda["EDA_Phasic"].values
+
+      # Find and fix peaks
+      info = nk.eda_findpeaks(eda_phasic)
+      info = nk.eda_fixpeaks(info)
+
+      @savefig p_eda_fixpeaks.png scale=100%
+      fig = nk.events_plot(info["SCR_Peaks"], eda_phasic)
+      @suppress
+      plt.close()
 
     """
     # Format input.

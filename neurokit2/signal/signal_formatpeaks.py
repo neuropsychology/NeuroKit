@@ -50,7 +50,7 @@ def _signal_sanitize_indices(indices, values):
 
 
 def _signal_from_indices(indices, desired_length=None, value=1):
-    """Generates array of 0 and given values at given indices.
+    """**Generates array of 0 and given values at given indices**
 
     Used in *_findpeaks to transform vectors of peak indices to signal.
 

@@ -7,7 +7,7 @@ from .microstates_segment import microstates_segment
 
 
 def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
-    """Estimate optimal number of microstates.
+    """**Estimate optimal number of microstates**
 
     Estimate the optimal number of microstates using a variety of indices.
 
@@ -33,14 +33,15 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
 
     Examples
     ------------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
-    Filtering raw data ...
-    >>> eeg = nk.eeg_rereference(eeg, 'average')
-    >>>
-    >>> # Estimate optimal number (currently comment out due to memory error)
-    >>> # results = nk.microstates_findnumber(eeg, n_max=4, show=True, method="kmod")
+    .. ipython:: python
+    
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
+      eeg = nk.eeg_rereference(eeg, 'average')
+
+      # Estimate optimal number (currently comment out due to memory error)
+      # results = nk.microstates_findnumber(eeg, n_max=4, show=True, method="kmod")
 
     """
     # Retrieve data

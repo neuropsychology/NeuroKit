@@ -27,7 +27,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     ----------
     peaks : dict
         Samples at which R-peaks occur. Can be a list of indices or the output(s) of other
-        functions such as :func:`.ecg_peaks`, :func:`ppg_peaks`, :func:`.ecg_process` or
+        functions such as :func:`.ecg_peaks`, :func:`.ppg_peaks`, :func:`.ecg_process` or
         :func:`bio_process`
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at

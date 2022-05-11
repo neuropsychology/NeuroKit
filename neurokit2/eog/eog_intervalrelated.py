@@ -4,7 +4,9 @@ import pandas as pd
 
 
 def eog_intervalrelated(data):
-    """Performs EOG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
+    """**EOG analysis on longer periods of data**
+
+    Performs EOG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -18,9 +20,9 @@ def eog_intervalrelated(data):
     DataFrame
         A dataframe containing the analyzed EOG features. The analyzed features consist of the following:
 
-        - *"EOG_Rate_Mean"*: the mean heart rate.
+        * ``"EOG_Rate_Mean"``: the mean heart rate.
 
-        - *"EOG_Peaks_N"*: the number of blink peak occurrences.
+        * ``"EOG_Peaks_N"``: the number of blink peak occurrences.
 
     See Also
     --------
@@ -28,26 +30,24 @@ def eog_intervalrelated(data):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> eog = nk.data('eog_200hz')['vEOG']
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.eog_process(eog, sampling_rate=200)
-    >>>
-    >>> # Single dataframe is passed
-    >>> nk.eog_intervalrelated(df) #doctest: +ELLIPSIS
-       EOG_Peaks_N  EOG_Rate_Mean
-    0          ...            ...
-    >>>
-    >>> # Dictionary is passed
-    >>> epochs = nk.epochs_create(df, events=[0, 30000], sampling_rate=200,
-    ...                           epochs_end=120)
-    >>> nk.eog_intervalrelated(epochs) #doctest: +ELLIPSIS
-       Label  EOG_Peaks_N  EOG_Rate_Mean
-    1    ...          ...            ...
-    2    ...          ...            ...
+    .. ipython:: python
+    
+      import neurokit2 as nk
+
+      # Download data
+      eog = nk.data('eog_200hz')['vEOG']
+
+      # Process the data
+      df, info = nk.eog_process(eog, sampling_rate=200)
+
+      # Single dataframe is passed
+      nk.eog_intervalrelated(df)
+
+      # Dictionary is passed
+      epochs = nk.epochs_create(df, events=[0, 30000], sampling_rate=200,
+                                epochs_end=120)
+      nk.eog_intervalrelated(epochs)
+
 
     """
     intervals = {}

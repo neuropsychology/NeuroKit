@@ -4,7 +4,7 @@ from .events_find import _events_find_label
 
 
 def events_create(event_onsets, event_durations=None, event_labels=None, event_conditions=None):
-    """Create events dictionnary from list of onsets.
+    """**Create events dictionnary from list of onsets**
 
     Parameters
     ----------
@@ -31,13 +31,13 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> events = nk.events_create(event_onsets = [500, 1500, 2500, 5000])
-    >>> events #doctest: +ELLIPSIS
-    {'onset': [...],
-     'duration': array(...),
-     'label': array(...)}
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      events = nk.events_create(event_onsets = [500, 1500, 2500, 5000])
+      events
+
 
     """
     if event_durations is None:

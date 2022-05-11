@@ -40,11 +40,13 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
 
     Examples
     ----------
+    * **Example 1: Data for event-related analysis**
+
     .. ipython:: python
 
       import neurokit2 as nk
 
-      # Example 1: Download the data for event-related analysis
+      # Download the data for event-related analysis
       data = nk.data("bio_eventrelated_100hz")
 
       # Process the data for event-related analysis
@@ -57,7 +59,13 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
       analyze_epochs = nk.eda_analyze(epochs, sampling_rate=100)
       analyze_epochs
 
-      # Example 2: Download the resting-state data
+    * **Example 2: Resting-state data**
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download the resting-state data
       data = nk.data("bio_resting_8min_100hz")
 
       # Process the data

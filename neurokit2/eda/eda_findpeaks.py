@@ -7,10 +7,11 @@ from ..signal import signal_filter, signal_findpeaks, signal_smooth, signal_zero
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
+    """**Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
 
-    Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in the
-    phasic component of Electrodermal Activity (EDA) with different possible methods. See `eda_peaks()` for details.
+    Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in
+    the phasic component of Electrodermal Activity (EDA) with different possible methods. See
+    `eda_peaks()` for details.
 
     Parameters
     ----------
@@ -36,41 +37,45 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     --------
     eda_simulate, eda_clean, eda_phasic, eda_fixpeaks, eda_peaks, eda_process, eda_plot
 
-
-
+ 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get phasic component
-    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
-    >>> eda_cleaned = nk.eda_clean(eda_signal)
-    >>> eda = nk.eda_phasic(eda_cleaned)
-    >>> eda_phasic = eda["EDA_Phasic"].values
-    >>>
-    >>> # Find peaks
-    >>> gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
-    >>> kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
-    >>> neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
-    >>> vanhalem2020 = nk.eda_findpeaks(eda_phasic, method="vanhalem2020")
-    >>> nabian2018 = nk.eda_findpeaks(eda_phasic, method="nabian2018")
-    >>> fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], vanhalem2020["SCR_Peaks"],
-    ...                       neurokit["SCR_Peaks"], nabian2018["SCR_Peaks"]], eda_phasic)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get phasic component
+      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
+      eda_cleaned = nk.eda_clean(eda_signal)
+      eda = nk.eda_phasic(eda_cleaned)
+      eda_phasic = eda["EDA_Phasic"].values
+
+      # Find peaks
+      gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
+      kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
+      neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
+      vanhalem2020 = nk.eda_findpeaks(eda_phasic, method="vanhalem2020")
+      nabian2018 = nk.eda_findpeaks(eda_phasic, method="nabian2018")
+      @savefig p_eda_findpeaks.png scale=100%
+      fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], vanhalem2020["SCR_Peaks"],
+                           neurokit["SCR_Peaks"], nabian2018["SCR_Peaks"]], eda_phasic)
+      @suppress
+      plt.close()
 
     References
     ----------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+    * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
       PhD ThesisUniversidade.
 
-    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
-      of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+    * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
+      monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
+      419-427.
 
-    - van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
+    * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
       Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
 
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
+    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
       Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
       journal of translational engineering in health and medicine, 6, 2800711.
       https://doi.org/10.1109/JTEHM.2018.2878000

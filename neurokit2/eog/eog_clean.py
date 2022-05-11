@@ -10,7 +10,7 @@ from ..signal import signal_filter
 
 
 def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
-    """Clean an EOG signal.
+    """**Clean an EOG signal**
 
     Prepare a raw EOG signal for eye blinks detection.
 
@@ -36,42 +36,45 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
 
     Examples
     --------
-    Examples
-    --------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> # Get data
-    >>> eog_signal = nk.data('eog_100hz')
-    >>>
-    >>> # Clean
-    >>> neurokit = nk.eog_clean(eog_signal, sampling_rate=100, method='neurokit')
-    >>> kong1998 = nk.eog_clean(eog_signal, sampling_rate=100, method='kong1998')
-    >>> agarwal2019 = nk.eog_clean(eog_signal, sampling_rate=100, method='agarwal2019')
-    >>> mne = nk.eog_clean(eog_signal, sampling_rate=100, method='mne')
-    >>> brainstorm = nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm')
-    >>> blinker = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
-    >>>
-    >>> # Visualize
-    >>> fig = pd.DataFrame({"Raw": eog_signal,
-    ...                     "neurokit": neurokit,
-    ...                     "kong1998": kong1998,
-    ...                     "agarwal2019": agarwal2019,
-    ...                     "mne": mne,
-    ...                     "brainstorm": brainstorm,
-    ...                     "blinker": blinker}).plot(subplots=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+
+      # Get data
+      eog_signal = nk.data('eog_100hz')
+
+      # Clean
+      neurokit = nk.eog_clean(eog_signal, sampling_rate=100, method='neurokit')
+      kong1998 = nk.eog_clean(eog_signal, sampling_rate=100, method='kong1998')
+      agarwal2019 = nk.eog_clean(eog_signal, sampling_rate=100, method='agarwal2019')
+      mne = nk.eog_clean(eog_signal, sampling_rate=100, method='mne')
+      brainstorm = nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm')
+      blinker = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
+
+      # Visualize
+      @savefig p.eog_clean.png scale=100%
+      fig = pd.DataFrame({"Raw": eog_signal,
+                          "neurokit": neurokit,
+                          "kong1998": kong1998,
+                          "agarwal2019": agarwal2019,
+                          "mne": mne,
+                          "brainstorm": brainstorm,
+                          "blinker": blinker}).plot(subplots=True)
+      @suppress
+      plt.close()
 
 
     References
     ----------
-    - Agarwal, M., & Sivakumar, R. (2019). Blink: A Fully Automated Unsupervised Algorithm for
-    Eye-Blink Detection in EEG Signals. In 2019 57th Annual Allerton Conference on Communication,
-    Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
-    - Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
-    extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience,
+    * Agarwal, M., & Sivakumar, R. (2019). Blink: A Fully Automated Unsupervised Algorithm for
+      Eye-Blink Detection in EEG Signals. In 2019 57th Annual Allerton Conference on Communication,
+      Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
+    * Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
+      extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience,
     11, 12.
-    - Kong, X., & Wilson, G. F. (1998). A new EOG-based eyeblink detection algorithm.
-    Behavior Research Methods, Instruments, & Computers, 30(4), 713-719.
+    * Kong, X., & Wilson, G. F. (1998). A new EOG-based eyeblink detection algorithm.
+      Behavior Research Methods, Instruments, & Computers, 30(4), 713-719.
 
     """
     # Sanitize input

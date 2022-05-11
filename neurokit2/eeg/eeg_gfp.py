@@ -15,7 +15,7 @@ def eeg_gfp(
     robust=False,
     standardize_eeg=False,
 ):
-    """Global Field Power (GFP)
+    """**Global Field Power (GFP)**
 
     Global Field Power (GFP) constitutes a reference-independent measure of response strength.
     GFP was first introduced by Lehmann and Skrandies (1980) and has since become a commonplace
@@ -49,30 +49,50 @@ def eeg_gfp(
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> eeg = nk.eeg_rereference(eeg, 'average')
-    >>> eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points
-    >>>
-    >>> # Compare L1 and L2 norms
-    >>> l1 = nk.eeg_gfp(eeg, method="l1", normalize=True)
-    >>> l2 = nk.eeg_gfp(eeg, method="l2", normalize=True)
-    >>> nk.signal_plot([l1, l2])
-    >>>
-    >>> # Mean-based vs. Median-based
-    >>> gfp = nk.eeg_gfp(eeg, normalize=True)
-    >>> gfp_r = nk.eeg_gfp(eeg, normalize=True, robust=True)
-    >>> nk.signal_plot([gfp, gfp_r])
-    >>>
-    >>> # Standardize the data
-    >>> gfp = nk.eeg_gfp(eeg, normalize=True)
-    >>> gfp_z = nk.eeg_gfp(eeg, normalize=True, standardize_eeg=True)
-    >>> nk.signal_plot([gfp, gfp_z])
+    .. ipython:: python
+
+      import neurokit2 as nk
+    
+      eeg = nk.mne_data("filt-0-40_raw")
+      eeg = nk.eeg_rereference(eeg, 'average')
+      eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points
+
+    * **Example 1:** Compare L1 and L2 norms
+
+    .. ipython:: python
+
+      l1 = nk.eeg_gfp(eeg, method="l1", normalize=True)
+      l2 = nk.eeg_gfp(eeg, method="l2", normalize=True)
+      @savefig p_eeg_gfp1.png scale=100%
+      nk.signal_plot([l1, l2])
+      @suppress
+      plt.close()
+
+    * **Example 2:** Compare Mean-based and Median-based
+
+    .. ipython:: python
+
+      gfp = nk.eeg_gfp(eeg, normalize=True)
+      gfp_r = nk.eeg_gfp(eeg, normalize=True, robust=True)
+      @savefig p_eeg_gfp2.png scale=100%
+      nk.signal_plot([gfp, gfp_r])
+      @suppress
+      plt.close()
+
+    * **Example 3:** Standardize the data
+
+    .. ipython:: python
+
+      gfp = nk.eeg_gfp(eeg, normalize=True)
+      gfp_z = nk.eeg_gfp(eeg, normalize=True, standardize_eeg=True)
+      @savefig p_eeg_gfp3.png scale=100%
+      nk.signal_plot([gfp, gfp_z])
+      @suppress
+      plt.close()
 
     References
     ----------
-    - Lehmann, D., & Skrandies, W. (1980). Reference-free identification of components of
+    * Lehmann, D., & Skrandies, W. (1980). Reference-free identification of components of
     checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
     neurophysiology, 48(6), 609-621.
 

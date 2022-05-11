@@ -5,7 +5,7 @@ from .type_converters import as_vector
 
 
 def find_closest(closest_to, list_to_search_in, direction="both", strictly=False, return_index=False):
-    """Find the closest number in the array from a given number x.
+    """**Find the closest number in the array from a given number x**
 
     Parameters
     ----------
@@ -27,18 +27,20 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Single number
-    >>> x = nk.find_closest(1.8, [3, 5, 6, 1, 2])
-    >>> x  #doctest: +SKIP
-    >>>
-    >>> y = nk.find_closest(1.8, [3, 5, 6, 1, 2], return_index=True)
-    >>> y  #doctest: +SKIP
-    >>>
-    >>> # Vectorized version
-    >>> x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
-    >>> x  #doctest: +SKIP
+    .. ipython:: python
+    
+      import neurokit2 as nk
+
+      # Single number
+      x = nk.find_closest(1.8, [3, 5, 6, 1, 2])
+      x
+
+      y = nk.find_closest(1.8, [3, 5, 6, 1, 2], return_index=True)
+      y
+
+      # Vectorized version
+      x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
+      x
 
     """
 

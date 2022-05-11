@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def eda_intervalrelated(data):
-    """Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
+    """**Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data**
 
     Parameters
     ----------
@@ -19,10 +19,8 @@ def eda_intervalrelated(data):
     DataFrame
         A dataframe containing the analyzed EDA features. The analyzed
         features consist of the following:
-        - *"SCR_Peaks_N"*: the number of occurrences
-        of Skin Conductance Response (SCR).
-        - *"SCR_Peaks_Amplitude_Mean"*: the mean amplitude of the SCR peak
-        occurrences.
+        * ``"SCR_Peaks_N"``: the number of occurrences of Skin Conductance Response (SCR).
+        * ``"SCR_Peaks_Amplitude_Mean"``: the mean amplitude of the SCR peak occurrences.
 
     See Also
     --------
@@ -30,19 +28,21 @@ def eda_intervalrelated(data):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> data = nk.data("bio_resting_8min_100hz")
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.eda_process(data["EDA"], sampling_rate=100)
-    >>>
-    >>> # Single dataframe is passed
-    >>> nk.eda_intervalrelated(df) #doctest: +SKIP
-    >>>
-    >>> epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
-    >>> nk.eda_intervalrelated(epochs) #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download data
+      data = nk.data("bio_resting_8min_100hz")
+
+      # Process the data
+      df, info = nk.eda_process(data["EDA"], sampling_rate=100)
+
+      # Single dataframe is passed
+      nk.eda_intervalrelated(df)
+
+      epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
+      nk.eda_intervalrelated(epochs)
 
     """
 

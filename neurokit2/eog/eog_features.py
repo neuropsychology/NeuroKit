@@ -7,19 +7,22 @@ from ..signal import signal_zerocrossings
 
 
 def eog_features(eog_cleaned, peaks, sampling_rate=1000):
-    """Extracts features of EOG eye blinks e.g., velocity measures, blink-amplitude-ratio (BAR), duration, and markers
-    of onset and offset of each blink.
+    """**Extracts Features of EOG Eye Blinks**
+
+    Extracts features of EOG eye blinks e.g., velocity measures, blink-amplitude-ratio (BAR),
+    duration, and markers of onset and offset of each blink.
 
     The positive amplitude velocity ratio (pAVR) and the negative amplitude velocity ratio (nAVR).
-    The positive amplitude velocity ratio is the ratio of the maximum amplitude of the blink over the
-    maximum velocity (rate of change) during the blink upStroke. Similarly, the negative amplitude
-    velocity ratio is the ratio of the maximum amplitude of the blink over the maximum velocity found
-    in the blink downStroke. These measures have units of centiseconds and are indicators of fatigue.
+    The positive amplitude velocity ratio is the ratio of the maximum amplitude of the blink over
+    the maximum velocity (rate of change) during the blink upStroke. Similarly, the negative
+    amplitude velocity ratio is the ratio of the maximum amplitude of the blink over the maximum
+    velocity found in the blink downStroke. These measures have units of centiseconds and are
+    indicators of fatigue.
 
-    The blink-amplitude ratio (BAR) is the average amplitude of the signal between the blink leftZero and
-    rightZero zero crossings divided by the average amplitude of the positive fraction of the signal
-    “outside” the blink. BAR values in the range [5, 20]. BAR is a measure of the signal-to-noise ratio
-    (SNR) of the blink to the background in a candidate signal.
+    The blink-amplitude ratio (BAR) is the average amplitude of the signal between the blink
+    leftZero and rightZero zero crossings divided by the average amplitude of the positive fraction
+    of the signal “outside” the blink. BAR values in the range [5, 20]. BAR is a measure of the
+    signal-to-noise ratio (SNR) of the blink to the background in a candidate signal.
 
     Parameters
     ----------
@@ -44,17 +47,19 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> eog_signal = nk.data('eog_100hz')
-    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
-    >>> peaks = nk.eog_findpeaks(eog_cleaned, sampling_rate=100)
-    >>> info = nk.eog_features(eog_cleaned, peaks, sampling_rate=100)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      eog_signal = nk.data('eog_100hz')
+      eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
+      peaks = nk.eog_findpeaks(eog_cleaned, sampling_rate=100)
+      info = nk.eog_features(eog_cleaned, peaks, sampling_rate=100)
 
     References
     ----------
-    - Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
+    * Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
     extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience, 11, 12.
 
     """

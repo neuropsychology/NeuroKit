@@ -16,20 +16,24 @@ import scipy.spatial
 
 
 def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **kwargs):
-    """Compute quality of the clustering using several metrices.
+    """**Compute quality of the clustering using several metrices**
 
     Parameters
     ----------
     data : np.ndarray
         A matrix array of data (e.g., channels, sample points of M/EEG data)
     clustering : DataFrame
-        Information about the distance of samples from their respective clusters, generated from ``nk.cluster()``.
+        Information about the distance of samples from their respective clusters, generated from
+        :func:`.nk.cluster`.
     clusters : np.ndarray
-        Coordinates of cluster centers, which has a shape of n_clusters x n_features, generated from ``nk.cluster()``.
+        Coordinates of cluster centers, which has a shape of n_clusters x n_features, generated
+        from :func:`.nk.cluster`.
     info : dict
-        Information about the number of clusters, the function and model used for clustering, generated from ``nk.cluster()``.
+        Information about the number of clusters, the function and model used for clustering,
+        generated from :func:`.nk.cluster`.
     n_random : int
-        The number of random initializations to cluster random data for calculating the GAP statistic.
+        The number of random initializations to cluster random data for calculating the GAP
+        statistic.
     **kwargs
         Other argument to be passed on, for instance GFP as 'sd' in microstates.
 
@@ -42,31 +46,30 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> # Load the iris dataset (without the "Species" column)
-    >>> data = nk.data("iris").drop("Species", axis=1)
-    >>>
-    >>> # Cluster
-    >>> clustering, clusters, info = nk.cluster(data, method="kmeans", n_clusters=3)
-    >>>
-    >>> # Compute indices of clustering quality
-    >>> individual, general = nk.cluster_quality(data, clustering, clusters, info)
-    >>> general #doctest: +ELLIPSIS
-       n_Clusters  Score_Silhouette  ...  Score_GAP_sk  Score_GAPmod_sk
-    0         ...               ...  ...           ...              ...
+    .. ipython:: python
 
-    [1 rows x 10 columns]
+      import neurokit2 as nk
+      import matplotlib.pyplot as plt
+
+      # Load the iris dataset
+      data = nk.data("iris")
+
+      # Cluster
+      clustering, clusters, info = nk.cluster(data, method="kmeans", n_clusters=3)
+
+      # Compute indices of clustering quality
+      individual, general = nk.cluster_quality(data, clustering, clusters, info)
+      general
+
 
     References
     ----------
-    - Tibshirani, R., Walther, G., & Hastie, T. (2001). Estimating the number of clusters in a
-    data set via the gap statistic. Journal of the Royal Statistical Society: Series B
-    (Statistical Methodology), 63(2), 411-423.
+    * Tibshirani, R., Walther, G., & Hastie, T. (2001). Estimating the number of clusters in a
+      data set via the gap statistic. Journal of the Royal Statistical Society: Series B
+      (Statistical Methodology), 63(2), 411-423.
 
-    - Mohajer, M., Englmeier, K. H., & Schmid, V. J. (2011). A comparison of Gap statistic
-    definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
+    * Mohajer, M., Englmeier, K. H., & Schmid, V. J. (2011). A comparison of Gap statistic
+      definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
 
     """
     # Sanity checks
