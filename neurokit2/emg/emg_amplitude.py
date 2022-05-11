@@ -27,7 +27,7 @@ def emg_amplitude(emg_cleaned):
     Examples
     --------
     .. ipython:: python
-    
+
       import neurokit2 as nk
       import pandas as pd
 
@@ -86,7 +86,9 @@ def _emg_amplitude_tkeo(emg_cleaned):
 # =============================================================================
 # Linear Envelope
 # =============================================================================
-def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8):
+def _emg_amplitude_envelope(
+    emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8
+):
     """Calculate the linear envelope of a signal.
 
     This function implements a 2nd-order Butterworth filter with zero lag, described by Marcos Duarte
@@ -116,12 +118,22 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
 
     """
     filtered = signal_filter(
-        emg_cleaned, sampling_rate=sampling_rate, lowcut=lowcut, highcut=highcut, method="butterworth", order=2
+        emg_cleaned,
+        sampling_rate=sampling_rate,
+        lowcut=lowcut,
+        highcut=highcut,
+        method="butterworth",
+        order=2,
     )
 
     envelope = np.abs(filtered)
     envelope = signal_filter(
-        envelope, sampling_rate=sampling_rate, lowcut=None, highcut=envelope_filter, method="butterworth", order=2
+        envelope,
+        sampling_rate=sampling_rate,
+        lowcut=None,
+        highcut=envelope_filter,
+        method="butterworth",
+        order=2,
     )
 
     return envelope

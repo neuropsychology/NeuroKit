@@ -117,7 +117,7 @@ def emg_activation(
     * **Example 4:** Silva method
 
     .. ipython:: python
-      
+
       activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="silva")
       @savefig p_emg_activation4.png scale=100%
       fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
@@ -173,24 +173,28 @@ def emg_activation(
     elif method == "biosppy":
         if emg_cleaned is None:
             raise ValueError(
-                    "NeuroKit error: emg_activation(): 'biosppy' method needs 'emg_cleaned' (cleaned EMG) "
-                    "signal to be passed."
-                             )
+                "NeuroKit error: emg_activation(): 'biosppy' method needs 'emg_cleaned' (cleaned EMG) "
+                "signal to be passed."
+            )
         if size is None:
             size = 0.05
-        activity = _emg_activation_biosppy(emg_cleaned, sampling_rate=sampling_rate, size=size, threshold=threshold)
+        activity = _emg_activation_biosppy(
+            emg_cleaned, sampling_rate=sampling_rate, size=size, threshold=threshold
+        )
 
     elif method == "silva":
         if emg_cleaned is None:
             raise ValueError(
-                    "NeuroKit error: emg_activation(): 'silva' method needs 'emg_cleaned' (cleaned EMG) "
-                    "signal to be passed."
-                             )
+                "NeuroKit error: emg_activation(): 'silva' method needs 'emg_cleaned' (cleaned EMG) "
+                "signal to be passed."
+            )
         if size is None:
             size = 20
         if threshold_size is None:
             threshold_size = 22
-        activity = _emg_activation_silva(emg_cleaned, size=size, threshold=threshold, threshold_size=threshold_size)
+        activity = _emg_activation_silva(
+            emg_cleaned, size=size, threshold=threshold, threshold_size=threshold_size
+        )
 
     else:
         raise ValueError(
@@ -202,13 +206,19 @@ def emg_activation(
 
     # Prepare Output.
     df_activity = signal_formatpeaks(
-        {"EMG_Activity": info["EMG_Activity"]}, desired_length=len(emg_amplitude), peak_indices=info["EMG_Activity"]
+        {"EMG_Activity": info["EMG_Activity"]},
+        desired_length=len(emg_amplitude),
+        peak_indices=info["EMG_Activity"],
     )
     df_onsets = signal_formatpeaks(
-        {"EMG_Onsets": info["EMG_Onsets"]}, desired_length=len(emg_amplitude), peak_indices=info["EMG_Onsets"]
+        {"EMG_Onsets": info["EMG_Onsets"]},
+        desired_length=len(emg_amplitude),
+        peak_indices=info["EMG_Onsets"],
     )
     df_offsets = signal_formatpeaks(
-        {"EMG_Offsets": info["EMG_Offsets"]}, desired_length=len(emg_amplitude), peak_indices=info["EMG_Offsets"]
+        {"EMG_Offsets": info["EMG_Offsets"]},
+        desired_length=len(emg_amplitude),
+        peak_indices=info["EMG_Offsets"],
     )
 
     # Modify output produced by signal_formatpeaks.
@@ -241,7 +251,8 @@ def _emg_activation_threshold(emg_amplitude, threshold="default"):
 
     if threshold > np.max(emg_amplitude):
         raise ValueError(
-            "NeuroKit error: emg_activation(): the threshold specified exceeds the maximum of the signal" "amplitude."
+            "NeuroKit error: emg_activation(): the threshold specified exceeds the maximum of the signal"
+            "amplitude."
         )
 
     activity = signal_binarize(emg_amplitude, method="threshold", threshold=threshold)
@@ -294,8 +305,7 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
 
 
 def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshold="default"):
-    """Adapted from `find_onsets` in Biosppy.
-    """
+    """Adapted from `find_onsets` in Biosppy."""
 
     # check inputs
     if emg_cleaned is None:
@@ -330,16 +340,16 @@ def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshol
     return activity
 
 
-def _emg_activation_silva(emg_cleaned,
-                          size=20, threshold_size=22, threshold='default'):
-    """Follows the approach by Silva et al. 2012, adapted from `Biosppy`.
-    """
+def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="default"):
+    """Follows the approach by Silva et al. 2012, adapted from `Biosppy`."""
 
     if threshold_size <= size:
-        raise ValueError("NeuroKit error: emg_activation(): The window size for calculation of the "
-                         "adaptive threshold must be bigger than the detection window size.")
+        raise ValueError(
+            "NeuroKit error: emg_activation(): The window size for calculation of the "
+            "adaptive threshold must be bigger than the detection window size."
+        )
 
-    if threshold == 'default':
+    if threshold == "default":
         threshold = 0.05
 
     # subtract baseline offset
@@ -349,10 +359,10 @@ def _emg_activation_silva(emg_cleaned,
     fwlo = np.abs(signal_zero_mean)
 
     # moving average for calculating the test function
-    tf_mvgav = np.convolve(fwlo, np.ones((size,)) / size, mode='valid')
+    tf_mvgav = np.convolve(fwlo, np.ones((size,)) / size, mode="valid")
 
     # moving average for calculating the adaptive threshold
-    threshold_mvgav = np.convolve(fwlo, np.ones((threshold_size,)) / threshold_size, mode='valid')
+    threshold_mvgav = np.convolve(fwlo, np.ones((threshold_size,)) / threshold_size, mode="valid")
 
     onset_time_list = []
     offset_time_list = []
@@ -370,8 +380,7 @@ def _emg_activation_silva(emg_cleaned,
                 onset_time_list.append(k)
                 onset = True
 
-    onsets = np.union1d(onset_time_list,
-                        offset_time_list)
+    onsets = np.union1d(onset_time_list, offset_time_list)
 
     # adjust indices because of moving average
     onsets += int(size / 2)
@@ -391,10 +400,14 @@ def _emg_activation_silva(emg_cleaned,
 # =============================================================================
 def _emg_activation_activations(activity, duration_min=0.05):
 
-    activations = events_find(activity, threshold=0.5, threshold_keep="above", duration_min=duration_min)
+    activations = events_find(
+        activity, threshold=0.5, threshold_keep="above", duration_min=duration_min
+    )
     activations["offset"] = activations["onset"] + activations["duration"]
 
-    baseline = events_find(activity == 0, threshold=0.5, threshold_keep="above", duration_min=duration_min)
+    baseline = events_find(
+        activity == 0, threshold=0.5, threshold_keep="above", duration_min=duration_min
+    )
     baseline["offset"] = baseline["onset"] + baseline["duration"]
 
     # Cross-comparison

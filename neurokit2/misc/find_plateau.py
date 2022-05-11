@@ -25,7 +25,7 @@ def find_plateau(values, show=True):
     Example
     ----------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       # Generate values manually

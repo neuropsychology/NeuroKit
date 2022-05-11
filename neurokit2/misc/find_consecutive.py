@@ -17,7 +17,7 @@ def find_consecutive(x):
     Examples
     ---------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       x = [2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 20]

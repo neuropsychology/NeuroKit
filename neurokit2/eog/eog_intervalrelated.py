@@ -31,7 +31,7 @@ def eog_intervalrelated(data):
     Examples
     ----------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       # Download data
@@ -65,7 +65,7 @@ def eog_intervalrelated(data):
             intervals[index] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]['Label'] = data[index]['Label'].iloc[0]
+            intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             # Rate and Blinks quantity
             intervals[index] = _eog_intervalrelated_formatinput(data[index], intervals[index])

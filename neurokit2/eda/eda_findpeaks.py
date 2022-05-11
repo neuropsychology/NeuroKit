@@ -37,7 +37,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     --------
     eda_simulate, eda_clean, eda_phasic, eda_fixpeaks, eda_peaks, eda_process, eda_plot
 
- 
+
     Examples
     ---------
     .. ipython:: python
@@ -86,13 +86,17 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         try:
             eda_phasic = eda_phasic["EDA_Phasic"]
         except KeyError:
-            raise KeyError("NeuroKit error: eda_findpeaks(): Please provide an array as the input signal.")
+            raise KeyError(
+                "NeuroKit error: eda_findpeaks(): Please provide an array as the input signal."
+            )
 
     method = method.lower()  # remove capitalised letters
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", "biosppy"]:
-        info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
+        info = _eda_findpeaks_kim2004(
+            eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min
+        )
     elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     elif method in ["vanhalem2020", "vanhalem", "halem2020"]:
@@ -117,7 +121,11 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
-    info = {"SCR_Onsets": peaks["Onsets"], "SCR_Peaks": peaks["Peaks"], "SCR_Height": eda_phasic[peaks["Peaks"]]}
+    info = {
+        "SCR_Onsets": peaks["Onsets"],
+        "SCR_Peaks": peaks["Peaks"],
+        "SCR_Height": eda_phasic[peaks["Peaks"]],
+    }
 
     return info
 
@@ -153,7 +161,12 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     """
     # smooth
     eda_phasic = signal_filter(
-        eda_phasic, sampling_rate=sampling_rate, lowcut=None, highcut=None, method="savgol", window_size=501
+        eda_phasic,
+        sampling_rate=sampling_rate,
+        lowcut=None,
+        highcut=None,
+        method="savgol",
+        window_size=501,
     )
     info = signal_findpeaks(eda_phasic)
     peaks = info["Peaks"]
@@ -172,7 +185,11 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
         keep = np.where(decrease > threshold)[0]
         idx = idx[keep]  # Update index
 
-    info = {"SCR_Onsets": info["Onsets"][idx], "SCR_Peaks": info["Peaks"][idx], "SCR_Height": info["Height"][idx]}
+    info = {
+        "SCR_Onsets": info["Onsets"][idx],
+        "SCR_Peaks": info["Peaks"][idx],
+        "SCR_Height": info["Height"][idx],
+    }
 
     return info
 
@@ -209,7 +226,9 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     # sanity check
     if len(pi) == 0 or len(ni) == 0:
-        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
+        raise ValueError(
+            "NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method."
+        )
 
     # pair vectors
     if ni[0] < pi[0]:
@@ -338,9 +357,9 @@ def _eda_findpeaks_nabian2018(eda_phasic):
 
     # Sanitize consecutive crossings
     if len(pos_crossings) > len(neg_crossings):
-        pos_crossings = pos_crossings[0:len(neg_crossings)]
+        pos_crossings = pos_crossings[0 : len(neg_crossings)]
     elif len(pos_crossings) < len(neg_crossings):
-        neg_crossings = neg_crossings[0:len(pos_crossings)]
+        neg_crossings = neg_crossings[0 : len(pos_crossings)]
 
     peaks_list = []
     onsets_list = []
@@ -358,7 +377,10 @@ def _eda_findpeaks_nabian2018(eda_phasic):
             amps_list.append(amp)
 
     # output
-    info = {"SCR_Onsets": np.array(onsets_list), "SCR_Peaks": np.hstack(np.array(peaks_list)),
-            "SCR_Height": np.array(amps_list)}
+    info = {
+        "SCR_Onsets": np.array(onsets_list),
+        "SCR_Peaks": np.hstack(np.array(peaks_list)),
+        "SCR_Height": np.array(amps_list),
+    }
 
     return info

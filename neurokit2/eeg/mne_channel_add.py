@@ -56,7 +56,7 @@ def mne_channel_add(
                               sync_index_channel=event_index_in_ecg,
                               channel_type="ecg")
     """
-    
+
     # Try loading mne
     try:
         import mne

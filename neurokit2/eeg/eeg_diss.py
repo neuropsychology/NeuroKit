@@ -35,7 +35,7 @@ def eeg_diss(eeg, gfp=None, **kwargs):
       import neurokit2 as nk
 
       eeg = nk.mne_data("filt-0-40_raw")
-      eeg = eeg.set_eeg_reference('average') 
+      eeg = eeg.set_eeg_reference('average')
 
       gfp = nk.eeg_gfp(eeg)
       diss = nk.eeg_diss(eeg, gfp=gfp)

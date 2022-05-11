@@ -36,7 +36,7 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
     Examples
     ---------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       raw = nk.mne_data(what="raw")

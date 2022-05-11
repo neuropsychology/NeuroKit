@@ -26,7 +26,7 @@ def epochs_to_df(epochs):
     Examples
     ----------
     .. ipython:: python
-    
+
       import neurokit2 as nk
       import pandas as pd
 

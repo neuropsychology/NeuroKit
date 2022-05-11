@@ -38,7 +38,7 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
     Example
     ----------
     .. ipython:: python
-    
+
       import neurokit2 as nk
       import mne
 

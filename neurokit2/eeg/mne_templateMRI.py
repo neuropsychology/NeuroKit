@@ -3,7 +3,7 @@ import os
 
 def mne_templateMRI(verbose="WARNING"):
     """**Return Path of MRI Template**
-    
+
     This function is a helper that returns the path of the MRI template for adults (the ``src`` and
     the ``bem``) that is made available through ``MNE``. It downloads the data if need be. These
     templates can be used for EEG source reconstruction when no individual MRI is available.

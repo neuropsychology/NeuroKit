@@ -34,7 +34,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
     Examples
     ------------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
@@ -86,9 +86,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         # KL(k) = abs(dispersion_diff(k) / dispersion_diff(k+1))
         rez["KL_Criterion"] = np.nan
         if idx not in [0]:
-            results[idx - 1]["KL_Criterion"] = np.abs(
-                dispersion_diff_previous / dispersion_diff
-            )
+            results[idx - 1]["KL_Criterion"] = np.abs(dispersion_diff_previous / dispersion_diff)
         # Update for next round
         dispersion_previous = dispersion_current.copy()
         dispersion_diff_previous = dispersion_diff.copy()

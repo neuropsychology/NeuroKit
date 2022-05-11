@@ -34,7 +34,7 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     Examples
     --------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       # Get data

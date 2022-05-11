@@ -31,7 +31,7 @@ def distance(X=None, method="mahalanobis"):
       # Load the iris dataset
       X = nk.data("iris")
       vector = nk.distance(X)
-      vector 
+      vector
 
     """
     if not isinstance(X, pd.DataFrame):

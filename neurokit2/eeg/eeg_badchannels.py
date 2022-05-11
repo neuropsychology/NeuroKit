@@ -38,7 +38,7 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
     Examples
     ---------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       eeg = nk.mne_data("filt-0-40_raw")

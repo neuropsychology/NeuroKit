@@ -5,7 +5,13 @@ from ..signal import signal_resample
 
 
 def emg_simulate(
-    duration=10, length=None, sampling_rate=1000, noise=0.01, burst_number=1, burst_duration=1.0, random_state=42
+    duration=10,
+    length=None,
+    sampling_rate=1000,
+    noise=0.01,
+    burst_number=1,
+    burst_duration=1.0,
+    random_state=42,
 ):
     """**Simulate an EMG signal**
 
@@ -37,7 +43,7 @@ def emg_simulate(
     Examples
     ----------
     .. ipython:: python
-    
+
       import neurokit2 as nk
       import pandas as pd
 
@@ -104,6 +110,8 @@ def emg_simulate(
     emg += np.random.normal(0, noise, len(emg))
 
     # Resample
-    emg = signal_resample(emg, sampling_rate=1000, desired_length=length, desired_sampling_rate=sampling_rate)
+    emg = signal_resample(
+        emg, sampling_rate=1000, desired_length=length, desired_sampling_rate=sampling_rate
+    )
 
     return emg

@@ -80,7 +80,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     * **Example 3:** Different colors for all events
 
     .. ipython:: python
-    
+
       signal = nk.signal_simulate(duration=20)
       events = nk.events_find(signal)
       events = [[i] for i in events['onset']]

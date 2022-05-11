@@ -553,18 +553,21 @@ g <- cor |>
 
 g |>
   mutate(importance = tidygraph::centrality_authority(weights = abs(r)),
-         group = as.factor(tidygraph::group_louvain(weights = abs(r)))) |>
+         group = as.factor(tidygraph::group_fast_greedy(weights = abs(r)))) |>
   tidygraph::activate("edges") |>
-  filter(abs(r) > 0.5) |>
+  filter(abs(r) > 0.6) |>
   tidygraph::activate("nodes") |>
   filter(!tidygraph::node_is_isolated()) |>
   ggraph(layout = 'kk') +  # fr # lgl # drl
   ggraph::geom_edge_arc(aes(edge_width=width, edge_colour=edgecolor), strength=0.1, alpha=0.7) +
   ggraph::geom_node_point(aes(size = importance, colour = group)) +
-  ggraph::geom_node_label(aes(label = name), repel=TRUE) +
-  scale_edge_color_manual(values = c("1" = "#2E7D32", "-1"="#C62828")) +
-  scale_edge_width_continuous(range = c(0.01, 2)) +
-  scale_size_continuous(range = c(0.5, 10))
+  ggraph::geom_node_label(aes(label = name, fill = group, size=importance), repel=TRUE) +
+  scale_edge_color_manual(values = c("1" = "#2E7D32", "-1"="#C62828"), guide = "none") +
+  scale_edge_width_continuous(range = c(0.01, 2), guide = "none") +
+  scale_size_continuous(range = c(0.1, 5), guide = "none") + 
+  scale_fill_material_d(guide= "none") +
+  scale_colour_material_d(guide= "none") +
+  ggraph::theme_graph()
 ```
 
 
@@ -575,12 +578,13 @@ g |>
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))
+# plot(parameters::n_components(data, cor = r))
 ```
 
 
 ```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=18}
-rez <- parameters::factor_analysis(data, cor = r, n = 15, rotation = "varimax", sort = TRUE, fm="ml")
-# rez <- parameters::principal_components(data, n = 13, sort = TRUE)
+rez <- parameters::factor_analysis(data, cor = r, n = 15, rotation = "geominT", sort = TRUE, fm="mle")
+# rez <- parameters::principal_components(data, n = 15, sort = TRUE)
 # rez
 
 col <- gsub('[[:digit:]]+', '', names(rez)[2])
@@ -607,6 +611,8 @@ idx_order <- loadings |>
   pull(Variable) |>
   as.character()
 
+separations <- table(closest)[intersect(levels(loadings$Component), unique(closest))]
+
 
 p1 <- loadings |>
   mutate(Variable = fct_relevel(Variable, rev(idx_order))) |>
@@ -614,7 +620,7 @@ p1 <- loadings |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
   geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
-  geom_vline(xintercept = head(cumsum(table(closest)[levels(loadings$Component)]), -1) + 0.5) +
+  geom_vline(xintercept = head(cumsum(separations), -1) + 0.5) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_fill_material_d("rainbow") +
   coord_flip() +
@@ -640,7 +646,7 @@ p2 <- order |>
          Duration = ifelse(is.na(Duration), 0, Duration)) |>
   ggplot(aes(x = log10(Duration), y = Index)) +
   geom_bar(aes(fill = log10(Duration)), stat = "identity") +
-  geom_hline(yintercept = head(cumsum(sort(table(closest))), -1) + 0.5) +
+  geom_hline(yintercept = head(cumsum(separations), -1) + 0.5) +
   scale_x_reverse(expand = c(0, 0)) +
   # scale_x_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) +
   scale_y_discrete(position = "right") +
