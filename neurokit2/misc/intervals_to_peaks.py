@@ -21,10 +21,13 @@ def intervals_to_peaks(intervals):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>> ibi = [500, 400, 700, 500, 300, 800, 500]
-    >>> peaks = nk.intervals_to_peaks(ibi)
-    >>> hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+      ibi = [500, 400, 700, 500, 300, 800, 500]
+      peaks = nk.intervals_to_peaks(ibi)
+      hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)
+      hrv_indices
 
     """
     peaks = np.append([0], np.cumsum(intervals))
