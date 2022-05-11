@@ -14,6 +14,7 @@ You can find here the API documentation of NeuroKit, with a description of all t
    functions_eeg
    functions_emg
    functions_eog
+   functions_epochs
    functions_events
    functions_ppg
    functions_hrv

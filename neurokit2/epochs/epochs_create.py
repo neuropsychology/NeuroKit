@@ -16,7 +16,7 @@ def epochs_create(
     event_conditions=None,
     baseline_correction=False,
 ):
-    """Epoching a dataframe.
+    """**Epoching a dataframe**
 
     Parameters
     ----------
@@ -63,30 +63,46 @@ def epochs_create(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>>
-    >>> # Find events
-    >>> events = nk.events_find(data["Photosensor"],
-    ...                         threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> fig1 = nk.events_plot(events, data)
-    >>> fig1 #doctest: +SKIP
-    >>>
-    >>> # Create epochs
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
-    >>> fig2 = nk.epochs_plot(epochs)
-    >>> fig2 #doctest: +SKIP
-    >>>
-    >>> # Baseline correction
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
-    >>> fig3 = nk.epochs_plot(epochs)
-    >>> fig3 #doctest: +SKIP
-    >>>
-    >>> # Chunk into n blocks of 1 second
-    >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
+    * **Step 1:** Find events
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      data = nk.data("bio_eventrelated_100hz")
+
+      # Find events
+      events = nk.events_find(data["Photosensor"],
+                              threshold_keep='below',
+                              event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+      @savefig p_epochs_create1_png scale = 100%
+      fig1 = nk.events_plot(events, data)
+      @suppress
+      plt.close()
+
+    * **Step 2:** Create epochs
+
+    .. ipython:: python
+
+      epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
+      @savefig p_epochs_create1_png scale = 100%
+      fig2 = nk.epochs_plot(epochs)
+      @suppress
+      plt.close()
+
+    * **Step 2:** Baseline correction
+
+    .. ipython:: python
+
+      epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
+      @savefig p_epochs_create1_png scale = 100%
+      fig3 = nk.epochs_plot(epochs)
+      @suppress
+      plt.close()
+
+      # Chunk into n blocks of 1 second
+      epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
 
     """
 

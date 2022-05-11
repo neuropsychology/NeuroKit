@@ -3,7 +3,7 @@ import numpy as np
 
 
 def epochs_to_array(epochs):
-    """Convert epochs to an array.
+    """**Convert epochs to an array**
 
     TODO: make it work with uneven epochs (not the same length).
 
@@ -25,16 +25,21 @@ def epochs_to_array(epochs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> # Get data
-    >>> signal = nk.signal_simulate(sampling_rate=100)
-    >>>
-    >>> # Create epochs
-    >>> epochs = nk.epochs_create(signal, events=[400, 430, 460], sampling_rate=100, epochs_end=1)
-    >>> X = nk.epochs_to_array(epochs)
-    >>> nk.signal_plot(X.T)
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+
+      # Get data
+      signal = nk.signal_simulate(sampling_rate=100)
+
+      # Create epochs
+      epochs = nk.epochs_create(signal, events=[400, 430, 460], sampling_rate=100, epochs_end=1)
+      X = nk.epochs_to_array(epochs)
+      @savefig p_epochs_to_array.png scale = 100%
+      nk.signal_plot(X.T)
+      @suppress
+      plt.close()
 
     """
     example_array = epochs[list(epochs.keys())[0]].select_dtypes(include=["number"])
