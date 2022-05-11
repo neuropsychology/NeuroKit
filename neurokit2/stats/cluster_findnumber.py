@@ -7,34 +7,34 @@ from .cluster_quality import cluster_quality
 
 
 def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
-    """Find the optimal number of clusters based on different metrices of quality.
+    """**Find the optimal number of clusters based on different metrices of quality**
 
     Parameters
     ----------
     data : np.ndarray
         An array (channels, times) of M/EEG data.
     method : str
-        The clustering algorithm to be passed into ``nk.cluster()``.
+        The clustering algorithm to be passed into :func:`.nk.cluster`.
     n_max : int
-        Runs the clustering alogrithm from 1 to n_max desired clusters in ``nk.cluster()`` with quality
-        metrices produced for each cluster number.
+        Runs the clustering alogrithm from 1 to n_max desired clusters in :func:`.nk.cluster` with
+        quality metrices produced for each cluster number.
     show : bool
         Plot indices normalized on the same scale.
     **kwargs
-        Other arguments to be passed into ``nk.cluster()`` and ``nk.cluster_quality()``.
+        Other arguments to be passed into :func:`.nk.cluster` and :func:`.nk.cluster_quality`.
 
     Returns
     -------
     DataFrame
         The different quality scores for each number of clusters:
-        - Score_Silhouette
-        - Score_Calinski
-        - Score_Bouldin
-        - Score_VarianceExplained
-        - Score_GAP
-        - Score_GAPmod
-        - Score_GAP_diff
-        - Score_GAPmod_diff
+        * Score_Silhouette
+        * Score_Calinski
+        * Score_Bouldin
+        * Score_VarianceExplained
+        * Score_GAP
+        * Score_GAPmod
+        * Score_GAP_diff
+        * Score_GAPmod_diff
 
     See Also
     --------
@@ -42,13 +42,18 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Load the iris dataset (without the "Species" column)
-    >>> data = nk.data("iris").drop("Species", axis=1)
-    >>>
-    >>> # How many clusters
-    >>> results = nk.cluster_findnumber(data, method="kmeans", show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Load the iris dataset
+      data = nk.data("iris")
+
+      # How many clusters
+      @savefig p_cluster_findnumber1.png scale=100%
+      results = nk.cluster_findnumber(data, method="kmeans", show=True)
+      @suppress
+      plt.close()
 
     """
     results = []
