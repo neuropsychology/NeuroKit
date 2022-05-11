@@ -27,15 +27,15 @@ def fractal_dfa(
     trend between the scale factors and the fluctuations. For multifractal DFA, the slope values
     under different *q* values are actually generalised Hurst exponents *h*. Monofractal DFA
     corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the **Hurst
-    exponent** (:math:`*h*_{(2)}`).
+    exponent** (:math:`h_{(2)}`).
 
-    The Hurst exponent is the measure of long range autocorrelation of a signal, and *h*(2) > 0.5
-    suggests the presence of long range correlation, while *h*(2) < 0.5 suggests short range
-    correlations. If h(2) = 0.5, it indicates uncorrelated indiscriminative fluctuations, i.e. a
-    Brownian motion.
+    The Hurst exponent is the measure of long range autocorrelation of a signal, and
+    :math:`h_{(2)} > 0.5` suggests the presence of long range correlation, while
+    :math:`h_{(2)} < 0.5`suggests short range correlations. If `h_{(2)} = 0.5`, it indicates
+    uncorrelated indiscriminative fluctuations, i.e. a Brownian motion.
 
     Multifractal DFA returns the generalised Hurst exponents *h* for different values of *q*. It is
-    converted to the multifractal **scaling exponent** *Tau* :math:`\\tau`, which non-linear
+    converted to the multifractal **scaling exponent** *Tau* :math:`\\tau_{(q)}`, which non-linear
     relationship with *q* can indicate multifractility. From there, we derive the singularity
     exponent *H* (or :math:`\\alpha`) (also known as Hölder's exponents) and the singularity
     dimension *D* (or :math:`f(\\alpha)`). The variation of *D* with *H* is known as multifractal
@@ -69,7 +69,7 @@ def fractal_dfa(
 
     .. note ::
 
-        An improvement is needed to implement the modified formula to compute the slope when
+        Help is needed to implement the modified formula to compute the slope when
         *q* = 0. See for instance `Faini (2021)
         <https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254>`_.
 

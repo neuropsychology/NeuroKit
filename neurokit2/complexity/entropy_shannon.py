@@ -18,7 +18,7 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
       ShanEn = -\\sum_{x \\in \\mathcal{X}} p(x) \\log_2 p(x)
 
     Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
-    (see :func`entropy_differential`).
+    (see :func:`entropy_differential`).
 
     Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B",
     "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
