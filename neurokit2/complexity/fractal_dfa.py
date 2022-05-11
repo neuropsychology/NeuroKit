@@ -339,7 +339,7 @@ def _singularity_spectrum(q, slopes):
     out["Peak"] = out["H"][np.nanargmax(out["D"])]
 
     # The mean of the maximum and minimum values of singularity exponent H
-    out["Mean"] = np.nanmean(out["H"])
+    out["Mean"] = (np.nanmax(out["H"]) - np.nanmin(out["H"])) / 2
 
     # The value of singularity spectrum D, corresponding to the maximum value of
     # singularity exponent H, indicates the maximum fluctuation of the signal.
