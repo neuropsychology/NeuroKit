@@ -122,7 +122,9 @@ def test_ecg_findpeaks():
 
     sampling_rate = 1000
 
-    ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0, method="simple", random_state=42)
+    ecg = nk.ecg_simulate(
+        duration=60, sampling_rate=sampling_rate, noise=0, method="simple", random_state=42
+    )
 
     ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
 
@@ -135,11 +137,15 @@ def test_ecg_findpeaks():
     assert len(fig.axes) == 2
 
     # Test pantompkins1985 method
-    info_pantom = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
+    info_pantom = nk.ecg_findpeaks(
+        nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985"
+    )
     assert info_pantom["ECG_R_Peaks"].size == 70
 
     # Test hamilton2002 method
-    info_hamilton = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
+    info_hamilton = nk.ecg_findpeaks(
+        nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002"
+    )
     assert info_hamilton["ECG_R_Peaks"].size == 69
 
     # Test christov2004 method
@@ -155,7 +161,9 @@ def test_ecg_findpeaks():
     assert info_elgendi["ECG_R_Peaks"].size == 70
 
     # Test engzeemod2012 method
-    info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
+    info_engzeemod = nk.ecg_findpeaks(
+        nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012"
+    )
     assert info_engzeemod["ECG_R_Peaks"].size == 69
 
     # Test kalidas2017 method
@@ -176,9 +184,13 @@ def test_ecg_eventrelated():
     ecg_eventrelated = nk.ecg_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Min"]) < np.array(ecg_eventrelated["ECG_Rate_Mean"]))
+    assert np.alltrue(
+        np.array(ecg_eventrelated["ECG_Rate_Min"]) < np.array(ecg_eventrelated["ECG_Rate_Mean"])
+    )
 
-    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Mean"]) < np.array(ecg_eventrelated["ECG_Rate_Max"]))
+    assert np.alltrue(
+        np.array(ecg_eventrelated["ECG_Rate_Mean"]) < np.array(ecg_eventrelated["ECG_Rate_Max"])
+    )
 
     assert len(ecg_eventrelated["Label"]) == 3
 
@@ -189,7 +201,9 @@ def test_ecg_eventrelated():
         del first_epoch_copy["ECG_Phase_Atrial"]
         nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an.*`ECG_Phase_Ventricular`"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an.*`ECG_Phase_Ventricular`"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["ECG_Phase_Ventricular"]
@@ -251,23 +265,66 @@ def test_ecg_intervalrelated():
     df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
 
     columns = [
-        'ECG_Rate_Mean', 'HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD',
-        'HRV_CVNN', 'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
-        'HRV_IQRNN', 'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI',
-        'HRV_ULF', 'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF',
-        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2',
-        'HRV_SD1SD2', 'HRV_S', 'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified',
-        'HRV_PIP', 'HRV_IALS', 'HRV_PSS', 'HRV_PAS', 'HRV_GI', 'HRV_SI',
-        'HRV_AI', 'HRV_PI', 'HRV_C1d', 'HRV_C1a', 'HRV_SD1d', 'HRV_SD1a',
-        'HRV_C2d', 'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a', 'HRV_Cd', 'HRV_Ca',
-        'HRV_SDNNd', 'HRV_SDNNa', 'HRV_DFA_alpha1',
-        'HRV_DFA_alpha1_ExpRange', 'HRV_DFA_alpha1_ExpMean',
-        'HRV_DFA_alpha1_DimRange', 'HRV_DFA_alpha1_DimMean',
-        'HRV_DFA_alpha2', 'HRV_DFA_alpha2_ExpRange',
-        'HRV_DFA_alpha2_ExpMean', 'HRV_DFA_alpha2_DimRange',
-        'HRV_DFA_alpha2_DimMean', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE',
-        'HRV_CMSE', 'HRV_RCMSE', 'HRV_CD'
-        ]
+        "ECG_Rate_Mean",
+        "HRV_RMSSD",
+        "HRV_MeanNN",
+        "HRV_SDNN",
+        "HRV_SDSD",
+        "HRV_CVNN",
+        "HRV_CVSD",
+        "HRV_MedianNN",
+        "HRV_MadNN",
+        "HRV_MCVNN",
+        "HRV_IQRNN",
+        "HRV_pNN50",
+        "HRV_pNN20",
+        "HRV_TINN",
+        "HRV_HTI",
+        "HRV_ULF",
+        "HRV_VLF",
+        "HRV_LF",
+        "HRV_HF",
+        "HRV_VHF",
+        "HRV_LFHF",
+        "HRV_LFn",
+        "HRV_HFn",
+        "HRV_LnHF",
+        "HRV_SD1",
+        "HRV_SD2",
+        "HRV_SD1SD2",
+        "HRV_S",
+        "HRV_CSI",
+        "HRV_CVI",
+        "HRV_CSI_Modified",
+        "HRV_PIP",
+        "HRV_IALS",
+        "HRV_PSS",
+        "HRV_PAS",
+        "HRV_GI",
+        "HRV_SI",
+        "HRV_AI",
+        "HRV_PI",
+        "HRV_C1d",
+        "HRV_C1a",
+        "HRV_SD1d",
+        "HRV_SD1a",
+        "HRV_C2d",
+        "HRV_C2a",
+        "HRV_SD2d",
+        "HRV_SD2a",
+        "HRV_Cd",
+        "HRV_Ca",
+        "HRV_SDNNd",
+        "HRV_SDNNa",
+        "HRV_DFA_alpha1",
+        "HRV_DFA_alpha2",
+        "HRV_ApEn",
+        "HRV_SampEn",
+        "HRV_MSE",
+        "HRV_CMSE",
+        "HRV_RCMSE",
+        "HRV_CD",
+    ]
 
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df, sampling_rate=100)
@@ -279,9 +336,8 @@ def test_ecg_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
-    columns.append('Label')
-    epochs = nk.epochs_create(df, events=[0, 15000],
-                              sampling_rate=100, epochs_end=150)
+    columns.append("Label")
+    epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     features_dict = nk.ecg_intervalrelated(epochs, sampling_rate=100)
 
     assert (elem in columns for elem in np.array(features_dict.columns.values, dtype=str))

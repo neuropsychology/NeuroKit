@@ -2,7 +2,7 @@ Learn Python in 10 minutes
 =========================================
 
 .. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see these guides <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_).
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this guide <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_).
 
 
 You have no experience in computer science? You are afraid of code? You feel betrayed because you didn't expect to do programming in psychology studies? **Relax!** We got you covered.
@@ -278,7 +278,7 @@ Packages
 
 Interestingly, Python alone does not include a lot of functions. **And that's also its strength**, because it allows to easily use functions developped by other people, that are stored in **packages** (or *modules*). A package is a collection of functions that can be downloaded and used in your code.
 
-One of the most popular package is **numpy** (for *NUM*rical *PY*thon), including a lot of functions for maths and scientific programming. It is likely that this package is already **installed** on your Python distribution. However, installing a package doesn't mean you can use it. In order to use a package, you have to **import it** (*load it*) in your script, before using it. This usually happens at the top of a Python file, like this:
+One of the most popular package is **numpy** (for *NUM* -erical *PY* -thon), including a lot of functions for maths and scientific programming. It is likely that this package is already **installed** on your Python distribution (note that to install a package in Python, you have to do that from outside Python, running for instance ``pip install numpy`` in your *console* - and not in Python). However, installing a package doesn't mean you can use it. In order to use a package, you have to **import it** (*load it*) in your script, before using it. This usually happens at the top of a Python file, like this:
 
 .. ipython:: python
 

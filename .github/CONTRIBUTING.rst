@@ -8,9 +8,10 @@ This package aims at being beginner-friendly. And if you're not yet familiar wit
 .. tip::
 
     Contributions come in many forms, not necessarily code. It can be answering to issues to help
-    others, creating content (youtube videos, tweets, tiktoks...), tipping in `a bit of money
-    <https://github.com/sponsors/DominiqueMakowski>`_, or even just sharing ideas about the
-    development of the package.
+    others, creating content (youtube videos, tweets, tiktoks...), tipping in a `bit of money
+    <https://github.com/sponsors/DominiqueMakowski>`_, or even just `sharing ideas
+    <https://github.com/neuropsychology/NeuroKit/discussions>| _ about the development of the
+    package.
 
 
 Why contribute to NeuroKit?

@@ -14,7 +14,8 @@ from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
-from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
+from .utils_complexity_coarsegraining import (_get_scales,
+                                              complexity_coarsegraining)
 
 
 def entropy_multiscale(
@@ -76,11 +77,11 @@ def entropy_multiscale(
         create a range until the specified int. See :func:`complexity_coarsegraining` for details.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     method : str
         What version of multiscale entropy to compute. Can be one of ``"MSEn"``, ``"CMSEn"``,
         ``"RCMSEn"``, ``"MMSEn"``, ``"IMSEn"``, ``"MSApEn"``, ``"MSPEn"``, ``"CMSPEn"``,

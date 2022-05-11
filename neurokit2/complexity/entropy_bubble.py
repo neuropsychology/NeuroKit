@@ -6,7 +6,7 @@ from .entropy_permutation import _entropy_permutation
 from .entropy_renyi import entropy_renyi
 
 
-def entropy_bubble(signal, dimension=3, delay=1, alpha=2, **kwargs):
+def entropy_bubble(signal, delay=1, dimension=3, alpha=2, **kwargs):
     """**Bubble Entropy (BubblEn)**
 
     Introduced by Manis et al. (2017) with the goal of being independent of parameters such as
@@ -23,11 +23,11 @@ def entropy_bubble(signal, dimension=3, delay=1, alpha=2, **kwargs):
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     alpha : float
         The *alpha* :math:`\\alpha` parameter (default to 1) for :func:`Rényi entropy <entropy_renyi>`).
     **kwargs : optional

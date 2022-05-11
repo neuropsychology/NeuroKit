@@ -58,6 +58,11 @@ Transformation
 """""""""""""""""""""
 .. autofunction:: neurokit2.signal_noise
 
+*signal_surrogate()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_surrogate
+
+
 
 Peaks
 ^^^^^^^^^^^^^^^^

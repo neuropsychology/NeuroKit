@@ -20,20 +20,58 @@ def fractal_dfa(
 ):
     """**(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)**
 
-    Detrended fluctuation analysis, much like the Hurst exponent, is used to find long-term
-    statistical dependencies in time series.
+    Detrended fluctuation analysis (DFA) is used to find long-term statistical dependencies in time
+    series.
 
     For monofractal DFA, the output *alpha* :math:`\\alpha` corresponds to the slope of the linear
     trend between the scale factors and the fluctuations. For multifractal DFA, the slope values
-    under different *q* values are actually generalised Hurst exponents *h*.
+    under different *q* values are actually generalised Hurst exponents *h*. Monofractal DFA
+    corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the **Hurst
+    exponent** (:math:`*h*_{(2)}`).
 
-    The output is for multifractal DFA is a dataframe containing the following features:
+    The Hurst exponent is the measure of long range autocorrelation of a signal, and *h*(2) > 0.5
+    suggests the presence of long range correlation, while *h*(2) < 0.5 suggests short range
+    correlations. If h(2) = 0.5, it indicates uncorrelated indiscriminative fluctuations, i.e. a
+    Brownian motion.
 
-    * TODO.
-    * Need to complete the docstrings.
+    Multifractal DFA returns the generalised Hurst exponents *h* for different values of *q*. It is
+    converted to the multifractal **scaling exponent** *Tau* :math:`\\tau`, which non-linear
+    relationship with *q* can indicate multifractility. From there, we derive the singularity
+    exponent *H* (or :math:`\\alpha`) (also known as Hölder's exponents) and the singularity
+    dimension *D* (or :math:`f(\\alpha)`). The variation of *D* with *H* is known as multifractal
+    singularity spectrum (MSP), and usually has shape of an inverted parabola. It measures the long
+    range correlation property of a signal. From these elements, different features are extracted:
+
+    * **Width**: The width of the singularity spectrum and quantifies the degree of the
+      multifractality. In the case of monofractal signals, the MSP width is zero, since *h*(q) is
+      independent of *q*.
+    * **Peak**: The value of the singularity exponent *H* corresponding to peak of
+      singularity dimension *D*. It is a measure of the self-affinity of the signal, and a high
+      value is an indicator of high degree of correlation between the data points. In the other
+      words, the process is recurrent and repetitive.
+    * **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which
+      quantifies the average fluctuations of the signal.
+    * **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of
+      singularity exponent *H*, indicates the maximum fluctuation of the signal.
+    * **Delta**: the vertical distance between the singularity spectrum *D* where the singularity
+      exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the
+      signal.
+    * **Asymmetry**: The asymmetric ratio (AR) is as the centrality of the peak of the spectrum.
+      AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et al., 2015).
+    * **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second
+      derivative of *h*(q). See Orozco-Duque et al. (2015).
+    * **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the
+      generalized Hurst's exponents between consecutive moment orders is a more robust index of the
+      distribution of the generalized Hurst's exponents (Faini et al., 2021).
 
     This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its
     multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``.
+
+    .. note ::
+
+        An improvement is needed to implement the modified formula to compute the slope when
+        *q* = 0. See for instance `Faini (2021)
+        <https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254>`_.
 
     Parameters
     ----------
@@ -50,10 +88,11 @@ def fractal_dfa(
         non-overlapping windows will be used.
     integrate : bool
         It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
-        which corresponds to the signal 'profile'). Note that it leads to the flattening of the
-        signal, which can lead to the loss of some details (see Ihlen, 2012 for an explanation).
-        Note that for strongly anticorrelated signals, this transformation should be applied  two
-        times (i.e., provide ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        which corresponds to the signal 'profile') in order to avoid having too small exponent
+        values. Note that it leads to the flattening of the signal, which can lead to the loss of
+        some details (see Ihlen, 2012 for an explanation). Note that for strongly anticorrelated
+        signals, this transformation should be applied  two times (i.e., provide
+        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
     order : int
        The order of the polynomial trend for detrending, 1 for the linear trend.
     multifractal : bool
@@ -135,6 +174,12 @@ def fractal_dfa(
 
     References
     -----------
+    * Faini, A., Parati, G., & Castiglioni, P. (2021). Multiscale assessment of the degree of
+      multifractality for physiological time series. Philosophical Transactions of the Royal
+      Society A, 379(2212), 20200254.
+    * Orozco-Duque, A., Novak, D., Kremen, V., & Bustamante, J. (2015). Multifractal analysis for
+      grading complex fractionated electrograms in atrial fibrillation. Physiological Measurement,
+      36(11), 2269-2284.
     * Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
       fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
     * Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S.,
@@ -201,18 +246,30 @@ def fractal_dfa(
         slopes = slopes[0]
 
     # Prepare output
-    info["Fluctuation"] = fluctuations
+    info["Fluctuations"] = fluctuations
     info["Alpha"] = slopes
 
     # Extract features
     if multifractal is True:
-        info.update(_singularity_spectrum(q=q, slopes=slopes))
-        out = {
-            k: v
-            for k, v in info.items()
-            if k in ["ExpRange", "ExpMean", "DimRange", "DimMean", "HMax", "HDelta", "HAR"]
-        }
-        out = pd.DataFrame(out, index=[0])
+        info.update(_singularity_spectrum(q=q[:, 0], slopes=slopes))
+        out = pd.DataFrame(
+            {
+                k: v
+                for k, v in info.items()
+                if k
+                in [
+                    "Peak",
+                    "Width",
+                    "Mean",
+                    "Max",
+                    "Delta",
+                    "Asymmetry",
+                    "Fluctuation",
+                    "Increment",
+                ]
+            },
+            index=[0],
+        )
     else:
         out = slopes
 
@@ -250,65 +307,75 @@ def _singularity_spectrum(q, slopes):
     needed. Here defaulted to `q = list(range(-5,5))`, where the `0` element
     is removed by `_cleanse_q()`.
 
-    Returns
-    -------
-    tau: np.array
-        Scaling exponents `τ`. A usually increasing function of `q` from
-        which the fractality of the data can be determined by its shape. A truly
-        linear tau indicates monofractality, whereas a curved one (usually
-        curving around small `q` values) indicates multifractality.
-    Hq: np.array
-        Singularity strength `H`. The width of this function indicates the
-        strength of the multifractality. A width of `max(H) - min(H) ≈ 0`
-        means the data is monofractal.
-    Dq: np.array
-        Singularity spectrum `Dq`. The location of the maximum of `Dq` (with
-        `H` as the abscissa) should be 1 and indicates the most prominent
-        exponent in the data.
-
-    Notes
-    -----
     This was first designed and implemented by Leonardo Rydin in
     `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
+
     """
+    # Components of the singularity spectrum
+    # ---------------------------------------
     # The generalised Hurst exponents `h(q)` from MFDFA, which are simply the slopes of each DFA
     # for various `q` values
     out = {"h": slopes}
 
-    # Calculate the Scaling Exponent Tau
-    # https://github.com/LRydin/MFDFA/issues/30
-    out["Tau"] = q[:, 0] * slopes - 1
+    # The generalised Hurst exponent h(q) is related to the Scaling Exponent Tau t(q):
+    # Should it be (q - 1) * slopes (https://github.com/LRydin/MFDFA/issues/30)?
+    out["Tau"] = q * slopes - 1
 
     # Calculate Singularity Exponent H or α, which needs tau
-    out["H"] = np.gradient(out["Tau"]) / np.gradient(q[:, 0])
+    out["H"] = np.gradient(out["Tau"]) / np.gradient(q)
 
     # Calculate Singularity Dimension Dq or f(α), which needs tau and q
-    # The relation between α and f(α) is called the Multifractal (MF) spectrum or singularity
-    # spectrum
-    out["D"] = q[:, 0] * out["H"] - out["Tau"]
-
-    # Calculate the singularity
-    out["ExpRange"] = np.nanmax(out["H"]) - np.nanmin(out["H"])
-    out["ExpMean"] = np.nanmean(out["H"])
-    out["DimRange"] = np.nanmax(out["D"]) - np.nanmin(out["D"])
-    out["DimMean"] = np.nanmean(out["D"])
+    # The relation between α and f(α) (H and D) is called the Multifractal (MF) spectrum or
+    # singularity spectrum, which resembles the shape of an inverted parabola.
+    out["D"] = q * out["H"] - out["Tau"]
 
     # Features (Orozco-Duque et al., 2015)
-    # the singularity exponent, for which the spectrum takes its
-    # maximum value (α0)
-    out["HMax"] = out["H"][np.nanargmax(out["D"])]
-    # the spectrum width delta
-    out["HDelta"] = np.nanmax(out["H"]) - np.nanmin(out["H"])
+    # ---------------------------------------
+    # The width of the MSP quantifies the degree of the multifractality
+    # the spectrum width delta quantifies the degree of the multifractality.
+    out["Width"] = np.nanmax(out["H"]) - np.nanmin(out["H"])
+
+    # the singularity exponent, for which the spectrum D takes its maximum value (α0)
+    out["Peak"] = out["H"][np.nanargmax(out["D"])]
+
+    # The mean of the maximum and minimum values of singularity exponent H
+    out["Mean"] = (np.nanmax(out["H"]) + np.nanmin(out["H"])) / 2
+
+    # The value of singularity spectrum D, corresponding to the maximum value of
+    # singularity exponent H, indicates the maximum fluctuation of the signal.
+    out["Max"] = out["D"][np.nanargmax(out["H"])]
+
+    # The vertical distance between the singularity spectrum *D* where the singularity
+    # exponents are at their minimum and maximum.
+    out["Delta"] = out["D"][np.nanargmax(out["H"])] - out["D"][np.nanargmin(out["H"])]
+
     # the asymmetric ratio (AR) defined as the ratio between h calculated with negative q and the
     # total width of the spectrum. If the multifractal spectrum is symmetric, AR should be equal to
     # 0.5
-    out["HAR"] = (np.nanmin(out["H"]) - out["HMax"]) / out["HDelta"]
+    out["Asymmetry"] = (np.nanmin(out["H"]) - out["Peak"]) / out["Width"]
 
     # h-fluctuation index (hFI), which is defined as the power of the second derivative of h(q)
+    # hFI tends to zero in high fractionation signals.
+    if len(slopes) > 3:
+        # Help needed to double check that!
+        out["Fluctuation"] = np.sum(np.diff(np.diff(out["h"])) ** 2) / (2 * np.max(np.abs(q)) + 2)
+    else:
+        out["Fluctuation"] = np.nan
     # hFI tends to zero in high fractionation signals. hFI has no reference point when a set of
-    # signals is evaluated, so hFI must be normalised, so that hFIn = 1 is the most organised and
+    # signals is evaluated, so hFI must be normalisedd, so that hFIn = 1 is the most organised and
     # the most regular signal in the set
-    # TODO.
+    # BUT the formula in Orozco-Duque (2015) is weird, as HFI is a single value so cannot be
+    # normalized by its range...
+
+    # Faini (2021): new index that describes the distribution of the generalized Hurst's exponents
+    # without requiring the Legendre transform. This index, αCF, is the cumulative function of the
+    # squared increments of the generalized Hurst's exponents between consecutive moment orders.
+    out["Increment"] = np.sum(np.gradient(slopes) ** 2 / np.gradient(q))
+
+    # Other indices from the singularity spectrum
+    # out["ExpRange"] = np.nanmax(out["H"]) - np.nanmin(out["H"])
+    # out["DimRange"] = np.nanmax(out["D"]) - np.nanmin(out["D"])
+    # out["DimMean"] = np.nanmean(out["D"])
 
     return out
 
@@ -444,7 +511,7 @@ def _fractal_dfa_plot(info, scale, fluctuations):
     fluctfit = 2 ** np.polyval(polyfit, np.log2(scale))
     plt.loglog(scale, fluctuations, "o", c="#90A4AE")
     plt.xlabel(r"$\log_{2}$(Scale)")
-    plt.ylabel(r"$\log_{2}$(Fluctuation)")
+    plt.ylabel(r"$\log_{2}$(Fluctuations)")
     plt.loglog(scale, fluctfit, c="#E91E63", label=r"$\alpha$ = {:.3f}".format(info["Alpha"]))
 
     plt.legend(loc="lower right")
@@ -491,7 +558,7 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
         ax_fluctuation.loglog(scale, fluctfit, c=colors[i], base=2, label="_no_legend_")
 
     ax_fluctuation.set_xlabel(r"$\log_{2}$(Scale)")
-    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
+    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuations)")
     ax_fluctuation.legend(loc="lower right")
 
     # Plot the singularity spectrum
@@ -499,10 +566,24 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
     ax_spectrum.set_ylabel(r"Singularity Dimension ($D$)")
     ax_spectrum.set_xlabel(r"Singularity Exponent ($H$)")
     ax_spectrum.axvline(
-        x=info["HMax"],
+        x=info["Peak"],
         color="black",
         linestyle="dashed",
-        label=r"HMax = {:.3f}".format(info["HMax"]),
+        label=r"Peak = {:.3f}".format(info["Peak"]),
+    )
+    ax_spectrum.plot(
+        [np.nanmin(info["H"]), np.nanmax(info["H"])],
+        [np.nanmin(info["D"])] * 2,
+        color="red",
+        linestyle="solid",
+        label=r"Width = {:.3f}".format(info["Width"]),
+    )
+    ax_spectrum.plot(
+        [np.nanmin(info["H"]), np.nanmax(info["H"])],
+        [info["D"][-1], info["D"][0]],
+        color="#B71C1C",
+        linestyle="dotted",
+        label=r"Delta = {:.3f}".format(info["Delta"]),
     )
     ax_spectrum.plot(info["H"], info["D"], "o-", c="#FFC107")
     ax_spectrum.legend(loc="lower right")

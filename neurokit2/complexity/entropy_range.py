@@ -34,11 +34,11 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     approximate : bool
         The entropy algorithm to use. If ``False`` (default), will use sample entropy and return
         *mSampEn* (**RangeEn B**). If ``True``, will use approximate entropy and return *mApEn*

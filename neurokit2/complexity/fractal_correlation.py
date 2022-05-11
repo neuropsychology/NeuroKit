@@ -31,11 +31,11 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     radius : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
-        other packages can be used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
+        other packages can be used via ``'nolds'``, ``'Corr_Dim'`` or ``'boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
     **kwargs
@@ -51,33 +51,33 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
 
     Examples
     ----------
+    For some completely unclear reasons, uncommenting the following examples messes up the figures
+    path of all the subsequent documented function. So, commenting it for now.
 
     .. ipython:: python
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=2, frequency=[5, 7])
+      signal = nk.signal_simulate(duration=1, frequency=[10, 14], noise=0.1)
 
-      @savefig p_fractal_correlation1.png scale=100%
-      cd, info = nk.fractal_correlation(signal, radius=32, show=True)
-      @suppress
-      plt.close()
-
-
-    .. ipython:: python
-
-      @savefig p_fractal_correlation2.png scale=100%
-      cd, info = nk.fractal_correlation(signal, radius="nolds", show=True)
-      @suppress
-      plt.close()
-
+      # @savefig p_fractal_correlation1.png scale=100%
+      # cd, info = nk.fractal_correlation(signal, radius=32, show=True)
+      # @suppress
+      # plt.close()
 
     .. ipython:: python
 
-      @savefig p_fractal_correlation3.png scale=100%
-      cd, info = nk.fractal_correlation(signal, radius='boon2008', show=True)
-      @suppress
-      plt.close()
+      # @savefig p_fractal_correlation2.png scale=100%
+      # cd, info = nk.fractal_correlation(signal, radius="nolds", show=True)
+      # @suppress
+      # plt.close()
+
+    .. ipython:: python
+
+      # @savefig p_fractal_correlation3.png scale=100%
+      # cd, info = nk.fractal_correlation(signal, radius='boon2008', show=True)
+      # @suppress
+      # plt.close()
 
     References
     -----------
@@ -119,8 +119,8 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
         cd, intercept = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
 
     if show is True:
-        fig = plt.figure()
-        fig.suptitle("Correlation Dimension")
+        plt.figure()
+        plt.title("Correlation Dimension")
         plt.xlabel(r"$\log_{2}$(radius)")
         plt.ylabel(r"$\log_{2}$(correlation sum)")
 

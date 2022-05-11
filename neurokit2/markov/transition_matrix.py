@@ -9,12 +9,10 @@ from ..misc import as_vector
 def transition_matrix(sequence, order=1, adjust=True, show=False):
     """**Transition Matrix**
 
-    A Transition Matrix (also known as a stochastic matrix or a Markov matrix) is the first step to
-    describe a sequence of states, also known as **discrete Markov chains**. Each of its entries is
-    a probability of transitioning from one state to the other.
-
-    Computes the observed transition matrix and performs a
-    Chi-square test against the expected transition matrix.
+    A **Transition Matrix** (also known as a stochastic matrix or a **Markov matrix**) is a
+    convenient way of representing and describing a sequence of (discrete) states, also known as
+    **discrete Markov chains**. Each of its entries is a probability of transitioning from one
+    state to the other.
 
     Parameters
     ----------
@@ -52,9 +50,9 @@ def transition_matrix(sequence, order=1, adjust=True, show=False):
 
       tm
 
-    In this example, the transition from D is unknown, resulting in an absence of transitioning
-    probability. As this can cause issues, unknown probabilities are replaced by a uniform
-    distribution, but this can be turned off using the ``adjust`` argument.
+    In this example, the transition from D is unknown (it is the last element), resulting in an
+    absence of transitioning probability. As this can cause issues, unknown probabilities are
+    replaced by a uniform distribution, but this can be turned off using the ``adjust`` argument.
 
     .. ipython:: python
 

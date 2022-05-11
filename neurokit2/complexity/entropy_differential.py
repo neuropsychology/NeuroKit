@@ -3,7 +3,7 @@ import pandas as pd
 import scipy.stats
 
 
-def entropy_differential(signal, **kwargs):
+def entropy_differential(signal, base=2, **kwargs):
     """**Differential entropy (DiffEn)**
 
     Differential entropy (DiffEn; also referred to as continuous entropy) started as an
@@ -17,6 +17,7 @@ def entropy_differential(signal, **kwargs):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+
     **kwargs : optional
         Other arguments passed to ``scipy.stats.differential_entropy()``.
 
@@ -24,13 +25,17 @@ def entropy_differential(signal, **kwargs):
     --------
     diffen : float
         The Differential entropy of the signal.
+    base: float
+        The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.
+        stats.entropy()`` uses Euler's number (``np.e``) as default (the natural logarithm), giving
+        a measure of information expressed in *nats*.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Differential entropy.
 
     See Also
     --------
-    entropy_shannon, entropy_cumulative_residual
+    entropy_shannon, entropy_cumulativeresidual, entropy_kl
 
     Examples
     ----------
@@ -69,6 +74,6 @@ def entropy_differential(signal, **kwargs):
     else:
         method = "vasicek"
 
-    diffen = scipy.stats.differential_entropy(signal, method=method, **kwargs)
+    diffen = scipy.stats.differential_entropy(signal, method=method, base=base, **kwargs)
 
-    return diffen, {"Method": method}
+    return diffen, {"Method": method, "Base": base}

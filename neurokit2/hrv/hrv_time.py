@@ -110,30 +110,23 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
       Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
       https://doi.org/10.3390/s21123998
-
     * Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
       (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
       56(4), 674-678.
-
     * Han, L., Zhang, Q., Chen, X., Zhan, Q., Yang, T., & Zhao, Z. (2017). Detecting work-related
       stress with a wearable device. Computers in Industry, 90, 42-49.
-
     * Hovsepian, K., Al'Absi, M., Ertin, E., Kamarck, T., Nakajima, M., & Kumar, S. (2015). cStress:
       towards a gold standard for continuous stress assessment in the mobile environment. In
       Proceedings of the 2015 ACM international joint conference on pervasive and ubiquitous
       computing (pp. 493-504).
-
     * Parent, M., Tiwari, A., Albuquerque, I., Gagnon, J. F., Lafond, D., Tremblay, S., & Falk, T.
       H. (2019). A multimodal approach to improve the robustness of physiological stress prediction
       during physical activity. In 2019 IEEE International Conference on Systems, Man and
       Cybernetics (SMC) (pp. 4131-4136). IEEE.
-
     * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
       electrophysiology review, 6(3), 239-244.
-
     * Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
       norms. Frontiers in public health, 5, 258.
-
     * Subramaniam, S. D., & Dass, B. (2022). An Efficient Convolutional Neural Network for Acute
       Pain Recognition Using HRV Features. In Proceedings of the International e-Conference on
       Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.
@@ -158,7 +151,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         out["SDNNI" + str(i)] = _sdnni(rri, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -248,7 +241,7 @@ def _sdnni(rri, window=1):
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2**14
+    min_error = 2 ** 14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]

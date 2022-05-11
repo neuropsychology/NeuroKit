@@ -57,9 +57,9 @@ Fractal Dimension
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_hurst
 
-.. *fractal_correlation()*
-.. """"""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.fractal_correlation
+*fractal_correlation()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_correlation
 
 *fractal_dfa()*
 """"""""""""""""""""""
@@ -80,6 +80,10 @@ Entropy
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_differential
 
+*entropy_power()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_power
+
 *entropy_tsallis()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_tsallis
@@ -99,6 +103,10 @@ Entropy
 *entropy_svd()*
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
+
+*entropy_kl()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_kl
 
 *entropy_spectral()*
 """"""""""""""""""""
@@ -175,6 +183,10 @@ Other indices
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fisher_information
 
+*fishershannon_information()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fishershannon_information
+
 *complexity_hjorth()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
@@ -205,6 +217,10 @@ Utilities
 *complexity_simulate()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_simulate
+
+*complexity_embedding()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_embedding
 
 *complexity_attractor()*
 """"""""""""""""""""""""""

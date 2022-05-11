@@ -7,18 +7,10 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import (
-    complexity_lempelziv,
-    entropy_approximate,
-    entropy_fuzzy,
-    entropy_multiscale,
-    entropy_sample,
-    entropy_shannon,
-    fractal_correlation,
-    fractal_dfa,
-    fractal_higuchi,
-    fractal_katz,
-)
+from ..complexity import (complexity_lempelziv, entropy_approximate,
+                          entropy_fuzzy, entropy_multiscale, entropy_sample,
+                          entropy_shannon, fractal_correlation, fractal_dfa,
+                          fractal_higuchi, fractal_katz)
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -107,20 +99,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
       corresponding to short-term correlations. See :func:`.fractal_dfa()`.
     * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
       corresponding to long-term correlations. See :func:`.fractal_dfa()`.
-    * **DFA_alpha1_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal
-      corresponding to short-term correlations. ExpRange is the range of singularity exponents,
-      corresponding to the width of the singularity spectrum. See :func:`.fractal_dfa()`.
-    * **DFA_alpha2_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal,
-      corresponding to long-term correlations. See :func:`.fractal_dfa()`.
-    * **DFA_alpha1_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
-    * **DFA_alpha2_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
-    * **DFA_alpha1_DimRange**: Multifractal DFA (short-term correlations). DimRange is the range of
-      singularity dimensions, corresponding to the height of the singularity spectrum.
-    * **DFA_alpha2_DimRange**: Multifractal DFA (long-term correlations).
-    * **DFA_alpha1_DimMean**: Multifractal DFA (short-term correlations). Dimmean is the mean of
-      singularity dimensions.
-    * **DFA_alpha2_DimMean**: Multifractal DFA (long-term correlations). Dimmean is the mean of
-      singularity dimensions.
+    * **MFDFA indices**: Indices related to the :func:`multifractal spectrum <.fractal_dfa()>`.
 
     Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), but
     are not implemented yet (but soon).
@@ -235,18 +214,18 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     # Complexity
     tolerance = 0.2 * np.std(rri, ddof=1)
-    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, tolerance=tolerance)[0]
-    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, tolerance=tolerance)[0]
-    out["ShanEn"] = entropy_shannon(rri)[0]
-    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, tolerance=tolerance)[0]
-    out["MSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="MSEn")[0]
-    out["CMSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="CMSEn")[0]
-    out["RCMSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="RCMSEn")[0]
+    out["ApEn"], _ = entropy_approximate(rri, delay=1, dimension=2, tolerance=tolerance)
+    out["SampEn"], _ = entropy_sample(rri, delay=1, dimension=2, tolerance=tolerance)
+    out["ShanEn"], _ = entropy_shannon(rri)
+    out["FuzzyEn"], _ = entropy_fuzzy(rri, delay=1, dimension=2, tolerance=tolerance)
+    out["MSEn"], _ = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="MSEn")
+    out["CMSEn"], _ = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="CMSEn")
+    out["RCMSEn"], _ = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="RCMSEn")
 
-    out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)[0]
-    out["HFD"] = fractal_higuchi(rri, k_max=10, **kwargs)[0]
-    out["KFD"] = fractal_katz(rri)[0]
-    out["LZC"] = complexity_lempelziv(rri, **kwargs)[0]
+    out["CD"], _ = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
+    out["HFD"], _ = fractal_higuchi(rri, k_max=10, **kwargs)
+    out["KFD"], _ = fractal_katz(rri)
+    out["LZC"], _ = complexity_lempelziv(rri, **kwargs)
 
     if show:
         _hrv_nonlinear_show(rri, out)
@@ -447,15 +426,13 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # Compute DFA alpha1
     short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
     # For monofractal
-    out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)[0]
+    out["DFA_alpha1"], _ = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)
     # For multifractal
-    mdfa_alpha1 = fractal_dfa(
+    mdfa_alpha1, _ = fractal_dfa(
         rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs
-    )[1]
-    out["DFA_alpha1_ExpRange"] = mdfa_alpha1["ExpRange"]
-    out["DFA_alpha1_ExpMean"] = mdfa_alpha1["ExpMean"]
-    out["DFA_alpha1_DimRange"] = mdfa_alpha1["DimRange"]
-    out["DFA_alpha1_DimMean"] = mdfa_alpha1["DimMean"]
+    )
+    for k in mdfa_alpha1.columns:
+        out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
     # Compute DFA alpha2
     # sanatize max_beats
@@ -471,15 +448,13 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     else:
         long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
         # For monofractal
-        out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)[0]
+        out["DFA_alpha2"], _ = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)
         # For multifractal
-        mdfa_alpha2 = fractal_dfa(
+        mdfa_alpha2, _ = fractal_dfa(
             rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs
-        )[1]
-        out["DFA_alpha2_ExpRange"] = mdfa_alpha2["ExpRange"]
-        out["DFA_alpha2_ExpMean"] = mdfa_alpha2["ExpMean"]
-        out["DFA_alpha2_DimRange"] = mdfa_alpha2["DimRange"]
-        out["DFA_alpha2_DimMean"] = mdfa_alpha2["DimMean"]
+        )
+        for k in mdfa_alpha2.columns:
+            out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
 
     return out
 

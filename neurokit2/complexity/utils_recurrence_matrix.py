@@ -25,11 +25,11 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter. A rule of
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter. A rule of
         thumb is to set *r* so that the percentage of points classified as recurrences is about
         2-5%.
     show : bool

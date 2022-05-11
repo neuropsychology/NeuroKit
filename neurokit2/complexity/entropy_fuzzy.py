@@ -23,11 +23,11 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     **kwargs
         Other arguments.
 

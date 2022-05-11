@@ -20,7 +20,7 @@ def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     bins : int or str
         Method to find the number of bins. Can be a number, or one of ``"Sturges"``, ``"Rice"``,
         ``"Doane"``, or ``"sqrt"``.

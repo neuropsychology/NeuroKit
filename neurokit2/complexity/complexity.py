@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 
 from .complexity_hjorth import complexity_hjorth
-from .fractal_hurst import fractal_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
@@ -20,6 +19,7 @@ from .entropy_svd import entropy_svd
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
+from .fractal_hurst import fractal_hurst
 from .fractal_katz import fractal_katz
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
@@ -30,19 +30,31 @@ from .information_fisher import fisher_information
 
 
 def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="sd", **kwargs):
-    """**Automated Complexity and Chaos Analysis**
+    """**Complexity and Chaos Analysis**
 
-    This function can be used to compute a large number of complexity metrics and features. For more
-    control, you can run each function separately. Note that it does not include Recurrence
-    Quantification Analysis (RQA, ``nk.complexity_rqa()``) which currently requires an additional
-    dependency.
+    Measuring the complexity of a signal refers to the quantification of various aspects related to
+    concepts such as **chaos**, **entropy**, **unpredictability**, and **fractal dimension**.
+
+    .. tip::
+
+        We recommend checking our `open-access preprint <https://psyarxiv.com/f8k3x/>`_ for an
+        introduction to **fractal physiology** and its application in neuroscience.
+
+    There are many indices that have been developped and used to assess the complexity of signals,
+    and all of them come with different specificities and limitations. While they should be used in
+    an informed manner, it is also convenient to have a single function that can compute multiple
+    indices at once.
+
+    The ``nk.complexity()`` function can be used to compute a large number of complexity metrics
+    and features. While this is great for exploratory analyses, we recommend running each function
+    separately, to gain more control over the parameters and information that you get.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
-    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_ results:
+    <https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html>`_ results:
 
-    .. figure:: ../../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png
+    .. figure:: ../../studies/complexity_benchmark/figures/computation_time-1.png
        :alt: Complexity Benchmark (Makowski).
-       :target: https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html
+       :target: https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html
 
     Parameters
     ----------
@@ -56,11 +68,11 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
 
     Returns
     --------
@@ -71,8 +83,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
 
     See Also
     --------
-    entropy_permutation, entropy_differential, entropy_svd, fractal_katz, fractal_petrosian,
-    fractal_sevcik, fisher_information, complexity_hjorth, complexity_rqa
+    complexity_delay, complexity_dimension, complexity_tolerance
 
     Examples
     ----------
@@ -94,7 +105,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
     .. ipython:: python
 
       # Slow, with specific parameters for Higuchi and MFDFA
-      df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
+      df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 3))
       df
 
     * **Example 3**: Compute complexity over time
@@ -244,13 +255,11 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         )
 
         # Other
-        df["DFA"], info["DFA"] = fractal_dfa(signal)
-        _, info["MFDFA"] = fractal_dfa(signal, multifractal=True, **kwargs)
-        df["MFDFA_ExpRange"] = info["MFDFA"]["ExpRange"]
-        df["MFDFA_ExpMean"] = info["MFDFA"]["ExpMean"]
-        df["MFDFA_DimRange"] = info["MFDFA"]["DimRange"]
-        df["MFDFA_DimMean"] = info["MFDFA"]["DimMean"]
         df["LLE"], info["LLE"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
+        df["DFA"], info["DFA"] = fractal_dfa(signal)
+        mfdfa, _ = fractal_dfa(signal, multifractal=True, **kwargs)
+        for k in mfdfa.columns:
+            df["MFDFA_" + k] = mfdfa[k].values[0]
 
     # Prepare output
     df = pd.DataFrame.from_dict(df, orient="index").T  # Convert to dataframe
