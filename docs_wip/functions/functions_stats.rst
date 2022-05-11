@@ -28,3 +28,7 @@ Stats
 *fit_error()*
 """"""""""""""
 .. autofunction:: neurokit2.fit_error
+
+*fit_loess()*
+""""""""""""""
+.. autofunction:: neurokit2.fit_loess
