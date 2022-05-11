@@ -8,18 +8,22 @@ from .rescale import rescale
 
 
 def summary_plot(x, errorbars=0, **kwargs):
-    """Descriptive plot.
+    """**Descriptive plot**
 
     Visualize a distribution with density, histogram, boxplot and rugs plots all at once.
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import numpy as np
-    >>>
-    >>> x = np.random.normal(size=100)
-    >>> fig = nk.summary_plot(x)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import numpy as np
+
+      x = np.random.normal(size=100)
+      @savefig p_summary1.png scale=100%
+      fig = nk.summary_plot(x)
+      @suppress
+      plt.close()
 
     """
 
