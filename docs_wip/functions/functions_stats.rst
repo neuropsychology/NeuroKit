@@ -32,3 +32,11 @@ Stats
 *fit_loess()*
 """"""""""""""
 .. autofunction:: neurokit2.fit_loess
+
+*fit_mixture()*
+""""""""""""""""
+.. autofunction:: neurokit2.fit_mixture
+
+*fit_polynomial()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.fit_polynomial
