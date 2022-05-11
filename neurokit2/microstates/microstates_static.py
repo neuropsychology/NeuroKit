@@ -7,7 +7,7 @@ from ..misc import find_groups, as_vector
 
 
 def microstates_static(microstates, sampling_rate=1000, show=False):
-    """Static properties of microstates.
+    """**Static properties of microstates**
 
     The duration of each microstate is also referred to as the Ratio of Time Covered (RTT) in
     some microstates publications.
@@ -29,14 +29,13 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
-    >>> nk.microstates_static(microstates, sampling_rate=100)  #doctest: +ELLIPSIS
-      Microstate_0_Proportion  ...  Microstate_Average_DurationMedian
-    0 ...                      ...  ...
+    .. ipython:: python
+    
+      import neurokit2 as nk
 
-    [1 rows x 14 columns]
+      microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
+      nk.microstates_static(microstates, sampling_rate=100)
+
 
     """
     out = {}

@@ -5,7 +5,7 @@ from ..markov import transition_matrix
 
 
 def microstates_dynamic(microstates):
-    """Dynamic properties of microstates (transition pattern)
+    """**Dynamic properties of microstates (transition pattern)**
 
     Based on https://github.com/Frederic-vW/eeg_microstates and https://github.com/maximtrp/mchmm
 
@@ -19,9 +19,9 @@ def microstates_dynamic(microstates):
     -------
     DataFrame
         Dynamic properties of microstates:
-        - Results of the observed transition matrix
-        - Chi-square test statistics of the observed microstates against the expected microstates
-        - Symmetry test statistics of the observed microstates against the expected microstates
+        * Results of the observed transition matrix
+        * Chi-square test statistics of the observed microstates against the expected microstates
+        * Symmetry test statistics of the observed microstates against the expected microstates
 
     See Also
     --------
