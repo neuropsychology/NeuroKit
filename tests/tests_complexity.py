@@ -30,15 +30,11 @@ def test_complexity_sanity():
 
     # Fractal
     fractal_dfa, parameters = nk.fractal_dfa(signal, scale=np.array([4, 8, 12, 20]))
-    assert parameters["Fluctuation"].shape == (4, 1)
+    assert parameters["Fluctuations"].shape == (4, 1)
     assert np.allclose(fractal_dfa, 2.10090484, atol=0.000001)
 
     fractal_mdfa, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
-    assert parameters["Fluctuation"].shape == (70, len(mdfa_q))
-    assert np.allclose(parameters["DimMean"], 0.6412650812085934, atol=0.000001)
-    assert np.allclose(parameters["DimRange"], 1.1105927013188868, atol=0.000001)
-    assert np.allclose(parameters["ExpMean"], 2.350615727142904, atol=0.000001)
-    assert np.allclose(parameters["ExpRange"], 0.9937858280904406, atol=0.000001)
+    assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
 
     assert np.allclose(nk.fractal_correlation(signal)[0], 0.7930504156910694, atol=0.000001)
     assert np.allclose(
