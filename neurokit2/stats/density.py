@@ -5,7 +5,7 @@ import scipy.stats
 
 
 def density(x, desired_length=100, bandwith=1, show=False):
-    """Density estimation.
+    """**Density estimation**
 
     Computes kernel density estimates.
 
@@ -22,23 +22,33 @@ def density(x, desired_length=100, bandwith=1, show=False):
 
     Returns
     -------
-    x, y
+    x
         The x axis of the density estimation.
     y
         The y axis of the density estimation.
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.ecg_simulate(duration=20)
-    >>> x, y = nk.density(signal, bandwith=0.5, show=True)
-    >>>
-    >>> # Bandwidth comparison
-    >>> x, y1 = nk.density(signal, bandwith=0.5)
-    >>> x, y2 = nk.density(signal, bandwith=1)
-    >>> x, y3 = nk.density(signal, bandwith=2)
-    >>> pd.DataFrame({"x": x, "y1": y1, "y2": y2, "y3": y3}).plot(x="x") #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.ecg_simulate(duration=20)
+      @savefig p_density1.png scale=100%
+      x, y = nk.density(signal, bandwith=0.5, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Bandwidth comparison
+      x, y1 = nk.density(signal, bandwith=0.5)
+      x, y2 = nk.density(signal, bandwith=1)
+      x, y3 = nk.density(signal, bandwith=2)
+      @savefig p_density2.png scale=100%
+      pd.DataFrame({"x": x, "y1": y1, "y2": y2, "y3": y3}).plot(x="x")
+      @suppress
+      plt.close()
 
     """
     density_function = scipy.stats.gaussian_kde(x, bw_method="scott")
