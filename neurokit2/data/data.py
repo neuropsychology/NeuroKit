@@ -11,7 +11,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
     NeuroKit includes datasets that can be used for testing. These datasets are not downloaded
     automatically with the package (to avoid increasing its weight), but can be downloaded via the
-    ``nk.data()`` function (note that an internet connexion is necessary). See the examples below.
+    ``nk.data()`` function (note that an internet connection is necessary). See the examples below.
 
     **Signals**: The following signals (that will return an array) are available:
 
