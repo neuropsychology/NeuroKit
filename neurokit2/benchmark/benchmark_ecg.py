@@ -8,7 +8,7 @@ from ..signal import signal_period
 
 
 def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
-    """Benchmark ECG preprocessing pipelines.
+    """**Benchmark ECG preprocessing pipelines**
 
     Parameters
     ----------
@@ -33,21 +33,23 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Define a preprocessing routine
-    >>> def function(ecg, sampling_rate):
-    >>>     signal, info = nk.ecg_peaks(ecg, method='engzeemod2012', sampling_rate=sampling_rate)
-    >>>     return info["ECG_R_Peaks"]
-    >>>
-    >>> # Synthetic example
-    >>> ecg = nk.ecg_simulate(duration=20, sampling_rate=200)
-    >>> true_rpeaks = nk.ecg_peaks(ecg, sampling_rate=200)[1]["ECG_R_Peaks"]
-    >>>
-    >>> nk.benchmark_ecg_preprocessing(function, ecg, true_rpeaks, sampling_rate=200)
-    >>>
-    >>> # Example using database (commented-out)
-    >>> # nk.benchmark_ecg_preprocessing(function, r'path/to/GUDB_database')
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Define a preprocessing routine
+      def function(ecg, sampling_rate):
+          signal, info = nk.ecg_peaks(ecg, method='engzeemod2012', sampling_rate=sampling_rate)
+          return info["ECG_R_Peaks"]
+
+      # Synthetic example
+      ecg = nk.ecg_simulate(duration=20, sampling_rate=200)
+      true_rpeaks = nk.ecg_peaks(ecg, sampling_rate=200)[1]["ECG_R_Peaks"]
+
+      nk.benchmark_ecg_preprocessing(function, ecg, true_rpeaks, sampling_rate=200)
+
+      # Example using database (commented-out)
+      # nk.benchmark_ecg_preprocessing(function, r'path/to/GUDB_database')
 
     """
     # find data
