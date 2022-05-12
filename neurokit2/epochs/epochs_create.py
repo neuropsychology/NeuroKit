@@ -16,7 +16,9 @@ def epochs_create(
     event_conditions=None,
     baseline_correction=False,
 ):
-    """**Epoching a dataframe**
+    """**Create Epochs**
+
+    Create epochs of a signal or a dataframe.
 
     Parameters
     ----------
@@ -63,7 +65,8 @@ def epochs_create(
 
     Examples
     ----------
-    * **Example 1:** Find events
+    * **Example 1**: Find events
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -76,32 +79,32 @@ def epochs_create(
                               threshold_keep='below',
                               event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
 
-      @savefig p_epochs_create1.png scale = 100%
+      @savefig p_epochs_create1.png scale=100%
       fig = nk.events_plot(events, data)
       @suppress
       plt.close()
 
-    * **Example 2:** Create epochs
+    * **Example 2**: Create epochs
 
     .. ipython:: python
 
       epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
-      @savefig p_epochs_create2.png scale = 100%
+      @savefig p_epochs_create2.png scale=100%
       fig = nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
-    * **Example 3:** Baseline correction
+    * **Example 3**: Baseline correction
 
     .. ipython:: python
 
       epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
-      @savefig p_epochs_create3.png scale = 100%
+      @savefig p_epochs_create3.png scale=100%
       fig = nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
-    * **Example 4:** Arbitrary epoching
+    * **Example 4**: Arbitrary epoching
 
     .. ipython:: python
 
