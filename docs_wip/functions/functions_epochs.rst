@@ -4,7 +4,7 @@ Epochs
 Main
 ^^^^^^^^^^^^^^^^
 *epochs_create()*
-"""""""""""""""
+"""""""""""""""""""
 .. autofunction:: neurokit2.epochs.epochs_create
 
 *epochs_plot()*
@@ -12,7 +12,7 @@ Main
 .. autofunction:: neurokit2.epochs.epochs_plot
 
 *epochs_to_array()*
-""""""""""""""
+""""""""""""""""""""
 .. autofunction:: neurokit2.epochs.epochs_to_array
 
 *epochs_to_df()*
