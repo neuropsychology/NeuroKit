@@ -54,13 +54,15 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
 
       # Visualize
       @savefig p.eog_clean.png scale=100%
-      fig = pd.DataFrame({"Raw": eog_signal,
-                          "neurokit": neurokit,
-                          "kong1998": kong1998,
-                          "agarwal2019": agarwal2019,
-                          "mne": mne,
-                          "brainstorm": brainstorm,
-                          "blinker": blinker}).plot(subplots=True)
+      fig = pd.DataFrame(
+          {"Raw": eog_signal,
+           "neurokit": neurokit,
+            "kong1998": kong1998,
+            "agarwal2019": agarwal2019,
+            "mne": mne,
+            "brainstorm": brainstorm,
+            "blinker": blinker}
+      ).plot(subplots=True)
       @suppress
       plt.close()
 
