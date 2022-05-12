@@ -39,30 +39,31 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
     .. ipython:: python
 
       import neurokit2 as nk
-      import pandas as pd
 
       # Get data
       eog_signal = nk.data('eog_100hz')
 
       # Clean
-      neurokit = nk.eog_clean(eog_signal, sampling_rate=100, method='neurokit')
-      kong1998 = nk.eog_clean(eog_signal, sampling_rate=100, method='kong1998')
-      agarwal2019 = nk.eog_clean(eog_signal, sampling_rate=100, method='agarwal2019')
-      mne = nk.eog_clean(eog_signal, sampling_rate=100, method='mne')
-      brainstorm = nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm')
-      blinker = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
+      df = {"Raw": eog_signal}
+      df["neurokit"] = nk.eog_clean(eog_signal, sampling_rate=100, method='neurokit')
+      df["kong1998"] = nk.eog_clean(eog_signal, sampling_rate=100, method='kong1998')
+      df["agarwal2019"] = nk.eog_clean(eog_signal, sampling_rate=100, method='agarwal2019')
+      df["mne"] = nk.eog_clean(eog_signal, sampling_rate=100, method='mne')
+      df["brainstorm"] = nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm')
+      df["blinker"] = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
+
+      signals = [eog_signal,
+                 nk.eog_clean(eog_signal, sampling_rate=100, method='neurokit'),
+                 nk.eog_clean(eog_signal, sampling_rate=100, method='kong1998'),
+                 nk.eog_clean(eog_signal, sampling_rate=100, method='agarwal2019'),
+                 nk.eog_clean(eog_signal, sampling_rate=100, method='mne'),
+                 nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm'),
+                 nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')]
+
 
       # Visualize
       @savefig p.eog_clean.png scale=100%
-      fig = pd.DataFrame(
-          {"Raw": eog_signal,
-           "neurokit": neurokit,
-            "kong1998": kong1998,
-            "agarwal2019": agarwal2019,
-            "mne": mne,
-            "brainstorm": brainstorm,
-            "blinker": blinker}
-      ).plot(subplots=True)
+      pd.DataFrame(df).plot(subplots=True)
       @suppress
       plt.close()
 
