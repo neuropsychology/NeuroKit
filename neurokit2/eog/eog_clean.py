@@ -53,6 +53,8 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
       blinker = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
 
       # Visualize
+      eog_signal = eog_signal.to_numpy().flatten()
+      
       @savefig p.eog_clean.png scale=100%
       fig = pd.DataFrame({"Raw": eog_signal,
                           "neurokit": neurokit,
@@ -71,8 +73,8 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
       Eye-Blink Detection in EEG Signals. In 2019 57th Annual Allerton Conference on Communication,
       Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
     * Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
-      extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience,
-    11, 12.
+      extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in
+      neuroscience, 11, 12.
     * Kong, X., & Wilson, G. F. (1998). A new EOG-based eyeblink detection algorithm.
       Behavior Research Methods, Instruments, & Computers, 30(4), 713-719.
 
