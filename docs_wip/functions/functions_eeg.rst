@@ -15,7 +15,7 @@ EEG
 
 *eeg_power()*
 """"""""""""""
-.. autofuction:: neurokit2.eeg.eeg_power
+.. autofunction:: neurokit2.eeg.eeg_power
 
 *eeg_rereference()*
 """"""""""""""""""""

@@ -79,7 +79,7 @@ def complexity_delay(
       embedded data of a large size) and thus, slow processing, they describe an optimisation
       method to jointly determine *m* and :math:`\\tau`, based on the **entropy ratio**.
 
-    .. todo::
+    .. note::
 
       We would like to implement the joint-estimation by `Matilla-García et al. (2021)
       <https://www.mdpi.com/1099-4300/23/2/221>`_, please get in touch if you can help us!

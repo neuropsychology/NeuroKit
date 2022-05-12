@@ -26,8 +26,8 @@ def fractal_dfa(
     For monofractal DFA, the output *alpha* :math:`\\alpha` corresponds to the slope of the linear
     trend between the scale factors and the fluctuations. For multifractal DFA, the slope values
     under different *q* values are actually generalised Hurst exponents *h*. Monofractal DFA
-    corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the **Hurst
-    exponent** (:math:`h_{(2)}`).
+    corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the
+    **Hurst exponent** (:math:`h_{(2)}`).
 
     The Hurst exponent is the measure of long range autocorrelation of a signal, and
     :math:`h_{(2)} > 0.5` suggests the presence of long range correlation, while

@@ -20,6 +20,7 @@ Main
 """""""""""""""""
 .. autofunction:: neurokit2.eda.eda_simulate
 
+
 Preprocessing
 ^^^^^^^^^^^^^^^^
 
@@ -59,5 +60,5 @@ Analysis
 .. autofunction:: neurokit2.eda.eda_eventrelated
 
 *eda_intervalrelated()*
-"""""""""""""""""""""
+"""""""""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_intervalrelated
