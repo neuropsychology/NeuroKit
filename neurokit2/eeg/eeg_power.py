@@ -10,7 +10,8 @@ def eeg_power(
 ):
     """**EEG Power in Different Frequency Bands**
 
-    See our `walkthrough <https://neurokit2.readthedocs.io/en/latest/examples/eeg_power.html>`_ for details.
+    See our `walkthrough <https://neurokit2.readthedocs.io/en/latest/examples/eeg_power.html>`_ for
+    details.
 
     * **Gamma** (30-80 Hz)
     * **Beta** (13-30 Hz)
@@ -57,8 +58,8 @@ def eeg_power(
     References
     ----------
     - Lehmann, D., & Skrandies, W. (1980). Reference-free identification of components of
-    checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
-    neurophysiology, 48(6), 609-621.
+      checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
+      neurophysiology, 48(6), 609-621.
 
     """
 

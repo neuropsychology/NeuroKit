@@ -93,8 +93,8 @@ def eeg_gfp(
     References
     ----------
     * Lehmann, D., & Skrandies, W. (1980). Reference-free identification of components of
-    checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
-    neurophysiology, 48(6), 609-621.
+      checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
+      neurophysiology, 48(6), 609-621.
 
     """
     # If MNE object

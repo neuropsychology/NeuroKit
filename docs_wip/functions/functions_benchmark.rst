@@ -1,5 +1,5 @@
-Benchmark
--------
+Benchmarking
+-------------
 
 *benchmark_ecg()*
 """"""""""""""""""
