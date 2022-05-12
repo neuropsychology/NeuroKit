@@ -34,6 +34,7 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
     Examples
     ---------
     .. ipython:: python
+      :verbatim:
 
       import neurokit2 as nk
 
