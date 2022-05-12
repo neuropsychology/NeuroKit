@@ -74,8 +74,10 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 
       lap = nk.eeg_rereference(raw, 'lap')
       @savefig p_eeg_rereference3.png scale=100%
-      nk.signal_plot([avg_mne.get_data()[0, 0:1000],
-                      lap.get_data()[0, 0:1000]], standardize=True)
+      nk.signal_plot(
+          [avg_mne.get_data()[0, 0:1000], lap.get_data()[0, 0:1000]],
+          standardize=True
+      )
       @suppress
       plt.close()
 
