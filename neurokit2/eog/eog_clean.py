@@ -52,15 +52,6 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
       df["brainstorm"] = nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm')
       df["blinker"] = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
 
-      signals = [eog_signal,
-                 nk.eog_clean(eog_signal, sampling_rate=100, method='neurokit'),
-                 nk.eog_clean(eog_signal, sampling_rate=100, method='kong1998'),
-                 nk.eog_clean(eog_signal, sampling_rate=100, method='agarwal2019'),
-                 nk.eog_clean(eog_signal, sampling_rate=100, method='mne'),
-                 nk.eog_clean(eog_signal, sampling_rate=100, method='brainstorm'),
-                 nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')]
-
-
       # Visualize
       @savefig p.eog_clean.png scale=100%
       pd.DataFrame(df).plot(subplots=True)
