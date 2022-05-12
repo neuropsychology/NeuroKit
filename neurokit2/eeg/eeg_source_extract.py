@@ -37,9 +37,13 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
 
       import neurokit2 as nk
 
+      raw = nk.mne_data("filt-0-40_raw")
+
       src, bem = nk.mne_templateMRI()
+
       stc, src = nk.eeg_source(raw, src, bem)
       data = nk.eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes")
+      data.head()
 
     """
     # Try loading mne
@@ -55,7 +59,7 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
     labels = mne.read_labels_from_annot(
         subject="fsaverage",
         parc=segmentation,
-        subjects_dir=mne.datasets.sample.data_path() + "/subjects",
+        subjects_dir=str(mne.datasets.sample.data_path()) + "/subjects",
         verbose=verbose,
     )
 

@@ -26,7 +26,7 @@ EEG
 .. autofunction:: neurokit2.eeg.eeg_source
 
 *eeg_source_extract()*
-"""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.eeg.eeg_source_extract
 
 *mne_channel_add()*
@@ -34,7 +34,7 @@ EEG
 .. autofunction:: neurokit2.eeg.mne_channel_add
 
 *mne_channel_extract()*
-""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.eeg.mne_channel_extract
 
 *mne_crop()*
