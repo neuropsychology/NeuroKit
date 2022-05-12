@@ -23,6 +23,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     -------
     signals : DataFrame
         A DataFrame of same length as `emg_signal` containing the following columns:
+
         * ``"EMG_Raw"``: the raw signal.
         * ``"EMG_Clean"``: the cleaned signal.
         * ``"EMG_Amplitude"``: the signal amplitude, or the activation level of the signal.
@@ -30,6 +31,7 @@ def emg_process(emg_signal, sampling_rate=1000):
           specified,marked as "1" in a list of zeros.
         * ``"EMG_Onsets"``: the onsets of the amplitude, marked as "1" in a list of zeros.
         * ``"EMG_Offsets"``: the offsets of the amplitude, marked as "1" in a list of zeros.
+
     info : dict
         A dictionary containing the information of each amplitude onset, offset, and peak activity
         (see `emg_activation()`), as well as the signals' sampling rate.
@@ -62,11 +64,15 @@ def emg_process(emg_signal, sampling_rate=1000):
     amplitude = emg_amplitude(emg_cleaned)
 
     # Get onsets, offsets, and periods of activity
-    activity_signal, info = emg_activation(amplitude, sampling_rate=sampling_rate, threshold="default")
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    activity_signal, info = emg_activation(
+        amplitude, sampling_rate=sampling_rate, threshold="default"
+    )
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Prepare output
-    signals = pd.DataFrame({"EMG_Raw": emg_signal, "EMG_Clean": emg_cleaned, "EMG_Amplitude": amplitude})
+    signals = pd.DataFrame(
+        {"EMG_Raw": emg_signal, "EMG_Clean": emg_cleaned, "EMG_Amplitude": amplitude}
+    )
 
     signals = pd.concat([signals, activity_signal], axis=1)
 

@@ -39,7 +39,8 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
     info : dict
         A dictionary containing information of the features of the EOG blinks, accessible with keys
         "Blink_LeftZeros" (point when eye closes), "Blink_RightZeros" (point when eye opens),
-        "Blink_pAVR", "Blink_nAVR", "Blink_BAR", and "Blink_Duration" (duration of each blink in seconds).
+        "Blink_pAVR", "Blink_nAVR", "Blink_BAR", and "Blink_Duration" (duration of each blink in
+        seconds).
 
     See Also
     --------
@@ -60,7 +61,8 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
     References
     ----------
     * Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
-    extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience, 11, 12.
+      extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in
+      neuroscience, 11, 12.
 
     """
 
@@ -114,7 +116,11 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
 
     # Calculate blink landmarks
     epochs = epochs_create(
-        eog_cleaned, events=candidates, sampling_rate=sampling_rate, epochs_start=-0.5, epochs_end=0.5
+        eog_cleaned,
+        events=candidates,
+        sampling_rate=sampling_rate,
+        epochs_start=-0.5,
+        epochs_end=0.5,
     )
 
     # max value marker
@@ -158,7 +164,9 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
         else:
             max_value_t = epochs[i].Signal.idxmax()
             sliced_before = epochs[i].loc[slice(max_value_t), :]
-            leftzero = sliced_before["Index"].loc[sliced_before["Signal"] == sliced_before["Signal"].min()]
+            leftzero = sliced_before["Index"].loc[
+                sliced_before["Signal"] == sliced_before["Signal"].min()
+            ]
             leftzero = int(np.array(leftzero))
 
         if (max_position + 1) < len(crossings_idx):  # crosses zero point
@@ -167,7 +175,9 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
             max_value_t = epochs[i].Signal.idxmax()
             sliced_before = epochs[i].loc[slice(max_value_t), :]
             sliced_after = epochs[i].tail(epochs[i].shape[0] - sliced_before.shape[0])
-            rightzero = sliced_after["Index"].loc[sliced_after["Signal"] == sliced_after["Signal"].min()]
+            rightzero = sliced_after["Index"].loc[
+                sliced_after["Signal"] == sliced_after["Signal"].min()
+            ]
             rightzero = int(np.array(rightzero))
 
         # upstroke and downstroke markers

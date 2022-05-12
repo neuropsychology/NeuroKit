@@ -12,9 +12,10 @@ from ..signal import signal_detrend
 def emg_clean(emg_signal, sampling_rate=1000):
     """**Preprocess an electromyography (emg) signal**
 
-    Clean an EMG signal using a set of parameters, such as: in `BioSPPy
-    <https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/emg.py>>`_:
-    fourth order 100 Hz highpass Butterworth filter followed by a constant detrending.
+    Clean an EMG signal using a set of parameters. Only one method is available at the moment.
+
+    * **BioSPPy**: fourth order 100 Hz highpass Butterworth filter followed by a constant
+      detrending.
 
     Parameters
     ----------

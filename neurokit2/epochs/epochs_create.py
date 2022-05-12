@@ -63,8 +63,7 @@ def epochs_create(
 
     Examples
     ----------
-    * **Step 1:** Find events
-
+    * **Example 1:** Find events
     .. ipython:: python
 
       import neurokit2 as nk
@@ -76,30 +75,35 @@ def epochs_create(
       events = nk.events_find(data["Photosensor"],
                               threshold_keep='below',
                               event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-      @savefig p_epochs_create1_png scale = 100%
-      fig1 = nk.events_plot(events, data)
+
+      @savefig p_epochs_create1.png scale = 100%
+      fig = nk.events_plot(events, data)
       @suppress
       plt.close()
 
-    * **Step 2:** Create epochs
+    * **Example 2:** Create epochs
 
     .. ipython:: python
 
       epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
-      @savefig p_epochs_create1_png scale = 100%
-      fig2 = nk.epochs_plot(epochs)
+      @savefig p_epochs_create2.png scale = 100%
+      fig = nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
-    * **Step 2:** Baseline correction
+    * **Example 3:** Baseline correction
 
     .. ipython:: python
 
       epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
-      @savefig p_epochs_create1_png scale = 100%
-      fig3 = nk.epochs_plot(epochs)
+      @savefig p_epochs_create3.png scale = 100%
+      fig = nk.epochs_plot(epochs)
       @suppress
       plt.close()
+
+    * **Example 4:** Arbitrary epoching
+
+    .. ipython:: python
 
       # Chunk into n blocks of 1 second
       epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)

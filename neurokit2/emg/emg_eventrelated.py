@@ -28,10 +28,11 @@ def emg_eventrelated(epochs, silent=False):
         A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated
         by the `Label` column (if not present, by the `Index` column). The analyzed features consist
         of the following:
-            * ``"EMG_Activation*``: indication of whether there is muscular activation following the onset
-            of the event (1 if present, 0 if absent) and if so, its corresponding amplitude features
-            and the number of activations in each epoch. If there is no activation, nans are displayed
-            for the below features.
+
+            * ``"EMG_Activation*``: indication of whether there is muscular activation following
+              the onset of the event (1 if present, 0 if absent) and if so, its corresponding
+              amplitude features and the number of activations in each epoch. If there is no
+              activation, nans are displayed for the below features.
             * ``"EMG_Amplitude_Mean*``: the mean amplitude of the activity.
             * ``"EMG_Amplitude_Max*``: the maximum amplitude of the activity.
             * ``"EMG_Amplitude_SD*``: the standard deviation of the activity amplitude.
