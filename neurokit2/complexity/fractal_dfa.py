@@ -42,25 +42,25 @@ def fractal_dfa(
     singularity spectrum (MSP), and usually has shape of an inverted parabola. It measures the long
     range correlation property of a signal. From these elements, different features are extracted:
 
-    * **Width**: The width of the singularity spectrum and quantifies the degree of the
+    - **Width**: The width of the singularity spectrum and quantifies the degree of the
       multifractality. In the case of monofractal signals, the MSP width is zero, since *h*(q) is
       independent of *q*.
-    * **Peak**: The value of the singularity exponent *H* corresponding to peak of
+    - **Peak**: The value of the singularity exponent *H* corresponding to peak of
       singularity dimension *D*. It is a measure of the self-affinity of the signal, and a high
       value is an indicator of high degree of correlation between the data points. In the other
       words, the process is recurrent and repetitive.
-    * **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which
+    - **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which
       quantifies the average fluctuations of the signal.
-    * **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of
+    - **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of
       singularity exponent *H*, indicates the maximum fluctuation of the signal.
-    * **Delta**: the vertical distance between the singularity spectrum *D* where the singularity
+    - **Delta**: the vertical distance between the singularity spectrum *D* where the singularity
       exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the
       signal.
-    * **Asymmetry**: The asymmetric ratio (AR) is as the centrality of the peak of the spectrum.
+    - **Asymmetry**: The asymmetric ratio (AR) is as the centrality of the peak of the spectrum.
       AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et al., 2015).
-    * **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second
+    - **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second
       derivative of *h*(q). See Orozco-Duque et al. (2015).
-    * **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the
+    - **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the
       generalized Hurst's exponents between consecutive moment orders is a more robust index of the
       distribution of the generalized Hurst's exponents (Faini et al., 2021).
 

@@ -174,7 +174,7 @@ def _complexity_simulate_mackeyglass(
     tau = sampling_rate / 2 * 100
     sampling_rate = int(n * sampling_rate / tau)
     grids = int(n * discard + sampling_rate * length)
-    x = np.empty(grids)
+    x = np.zeros(grids)
 
     if isinstance(x0, str):
         if x0 == "random":
