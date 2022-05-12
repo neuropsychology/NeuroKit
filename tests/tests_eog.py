@@ -16,7 +16,7 @@ def test_eog_clean():
 
     # test with mne.io.Raw
     raw = mne.io.read_raw_fif(
-        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True
     )
     sampling_rate = raw.info["sfreq"]
 
