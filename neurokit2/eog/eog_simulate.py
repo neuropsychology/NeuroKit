@@ -2,6 +2,9 @@ import numpy as np
 import scipy.stats
 
 
+# ==============================================================================
+# THIS IS WIP and we would like to implement an EOG simulator. Please help!
+# ==============================================================================
 def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameters="default"):
     """**Simulate a canonical blink from vertical EOG**
 

@@ -11,10 +11,6 @@ Main
 """"""""""""""
 .. autofunction:: neurokit2.eog.eog_analyze
 
-*eog_simulate()*
-"""""""""""""""""
-.. autofunction:: neurokit2.eog.eog_simulate
-
 *eog_plot()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.eog.eog_plot

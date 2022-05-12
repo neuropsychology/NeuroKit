@@ -238,13 +238,15 @@ def _complexity_simulate_ornstein(
 def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     """Generates fractional Gaussian noise.
 
-    This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of Christopher Flynn fbm in
-    https://github.com/crflynn/fbm and Davies, Robert B., and D. S. Harte. 'Tests for Hurst effect.' Biometrika 74, no.1
-    (1987): 95-101.
+    Generates fractional Gaussian noise with a Hurst index H in (0,1). If H = 1/2 this is simply
+    Gaussian noise. The current method employed is the Davies-Harte method, which fails for H ≈ 0.
 
-    Generates fractional Gaussian noise with a Hurst index H in (0,1). If H = 1/2 this is simply Gaussian
-    noise. The current method employed is the Davies–Harte method, which fails for H ≈ 0. A Cholesky
-    decomposition method and the Hosking’s method will be implemented in later versions.
+    Looking for help to implement a Cholesky decomposition method and the Hosking's method.
+    This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of
+    Christopher Flynn fbm in https://github.com/crflynn/fbm
+
+    See also Davies, Robert B., and D. S. Harte. 'Tests for Hurst effect.' Biometrika 74, no.1
+    (1987): 95-101.
 
     Parameters
     ----------

@@ -318,7 +318,6 @@ def _singularity_spectrum(q, slopes):
     out = {"h": slopes}
 
     # The generalised Hurst exponent h(q) is related to the Scaling Exponent Tau t(q):
-    # Should it be (q - 1) * slopes (https://github.com/LRydin/MFDFA/issues/30)?
     out["Tau"] = q * slopes - 1
 
     # Calculate Singularity Exponent H or α, which needs tau
