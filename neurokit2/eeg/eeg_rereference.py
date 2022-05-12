@@ -48,7 +48,7 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 
     * **Example 1:** Difference between robust average
 
-      .. ipython:: python
+    .. ipython:: python
 
       avg = nk.eeg_rereference(eeg, 'average', robust=False)
       avg_r = nk.eeg_rereference(eeg, 'average', robust=True)
@@ -58,6 +58,28 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
       @suppress
       plt.close()
 
+    * **Example 2:** Compare the rereferencing of an array vs. the MNE object
+
+    .. ipython:: python
+
+      avg_mne = raw.copy().set_eeg_reference('average', verbose=False)
+      @savefig p_eeg_rereference2.png scale=100%
+      nk.signal_plot([avg[0, 0:1000], avg_mne.get_data()[0, 0:1000]])
+      @suppress
+      plt.close()
+
+    * **Example 3:** Difference between average and LAP
+
+    .. ipython:: python
+
+      lap = nk.eeg_rereference(raw, 'lap')
+      @savefig p_eeg_rereference3.png scale=100%
+      nk.signal_plot(
+          [avg_mne.get_data()[0, 0:1000], lap.get_data()[0, 0:1000]],
+          standardize=True
+      )
+      @suppress
+      plt.close()
 
     References
     -----------
