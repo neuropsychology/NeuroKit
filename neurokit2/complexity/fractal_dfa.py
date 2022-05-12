@@ -358,7 +358,9 @@ def _singularity_spectrum(q, slopes):
     # hFI tends to zero in high fractionation signals.
     if len(slopes) > 3:
         # Help needed to double check that!
-        out["Fluctuation"] = np.sum(np.diff(np.diff(out["h"])) ** 2) / (2 * np.max(np.abs(q)) + 2)
+        out["Fluctuation"] = np.sum(np.gradient(np.gradient(out["h"])) ** 2) / (
+            2 * np.max(np.abs(q)) + 2
+        )
     else:
         out["Fluctuation"] = np.nan
     # hFI tends to zero in high fractionation signals. hFI has no reference point when a set of
