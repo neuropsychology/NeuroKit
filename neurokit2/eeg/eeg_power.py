@@ -15,9 +15,9 @@ def eeg_power(
 
     * **Gamma** (30-80 Hz)
     * **Beta** (13-30 Hz)
-      * **Beta 1** (13–16 Hz)
-      * **Beta 2** (16–20 Hz)
-      * **Beta 3** (20–30 Hz)
+      * **Beta 1** (13-16 Hz)
+      * **Beta 2** (16-20 Hz)
+      * **Beta 3** (20-30 Hz)
     * **SMR** (13-15 Hz)
     * **Alpha** (8-13 Hz)
     * **Mu** (9-11 Hz)
