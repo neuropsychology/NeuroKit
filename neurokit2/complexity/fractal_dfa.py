@@ -31,7 +31,7 @@ def fractal_dfa(
 
     The Hurst exponent is the measure of long range autocorrelation of a signal, and
     :math:`h_{(2)} > 0.5` suggests the presence of long range correlation, while
-    :math:`h_{(2)} < 0.5`suggests short range correlations. If `h_{(2)} = 0.5`, it indicates
+    :math:`h_{(2)} < 0.5`suggests short range correlations. If :math:`h_{(2)} = 0.5`, it indicates
     uncorrelated indiscriminative fluctuations, i.e. a Brownian motion.
 
     Multifractal DFA returns the generalised Hurst exponents *h* for different values of *q*. It is

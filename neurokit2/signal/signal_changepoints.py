@@ -2,6 +2,7 @@ import numpy as np
 
 from ..events import events_plot
 from ..misc import as_vector
+from .signal_plot import signal_plot
 
 
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
@@ -50,7 +51,10 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     changepoints = _signal_changepoints_pelt(signal, change=change, penalty=penalty)
 
     if show is True:
-        events_plot(changepoints, signal)
+        if len(changepoints) > 0:
+            events_plot(changepoints, signal)
+        else:
+            signal_plot(signal)
 
     return changepoints
 
@@ -82,13 +86,11 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 
     for tstar in range(2, length + 1):
         cpt_cands = R
-        seg_costs = np.zeros(len(cpt_cands))
-        for i in range(0, len(cpt_cands)):  # pylint: disable=C0200
-            seg_costs[i] = cost(cpt_cands[i], tstar)
+        seg_costs = np.array([cost(cpt_cands[i], tstar) for i in range(len(cpt_cands))])
 
         F_cost = F[cpt_cands] + seg_costs
-        F[tstar] = np.min(F_cost) + penalty
-        tau = np.argmin(F_cost)
+        F[tstar] = np.nanmin(F_cost) + penalty
+        tau = np.nanargmin(F_cost)
         candidates[tstar] = cpt_cands[tau]
 
         ineq_prune = [val < F[tstar] for val in F_cost]
@@ -96,13 +98,9 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
         R.append(tstar - 1)
         R = np.array(R, dtype=int)
 
-    last = candidates[-1]
-    changepoints = [last]
-    while last > 0:
-        last = candidates[last]
-        changepoints.append(last)
-
-    return np.sort(changepoints)
+    changepoints = np.sort(np.unique(candidates[candidates]))
+    changepoints = changepoints[changepoints > 0]
+    return changepoints
 
 
 # =============================================================================
@@ -152,11 +150,15 @@ def _signal_changepoints_cost_meanvar(signal):
         mu = (cumm[t] - cumm[s]) * ts_i
         sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu ** 2
         sig_i = 1.0 / sig
-        return (
-            (t - s) * np.log(sig)
-            + (cumm_sq[t] - cumm_sq[s]) * sig_i
-            - 2 * (cumm[t] - cumm[s]) * mu * sig_i
-            + ((t - s) * mu ** 2) * sig_i
-        )
+
+        if sig <= 0:
+            return np.nan
+        else:
+            return (
+                (t - s) * np.log(sig)
+                + (cumm_sq[t] - cumm_sq[s]) * sig_i
+                - 2 * (cumm[t] - cumm[s]) * mu * sig_i
+                + ((t - s) * mu ** 2) * sig_i
+            )
 
     return cost

@@ -58,7 +58,7 @@ Fractal Dimension
 .. autofunction:: neurokit2.complexity.fractal_hurst
 
 *fractal_correlation()*
-""""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_correlation
 
 *fractal_dfa()*
@@ -184,7 +184,7 @@ Other indices
 .. autofunction:: neurokit2.complexity.fisher_information
 
 *fishershannon_information()*
-""""""""""""""""""""""
+""""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fishershannon_information
 
 *complexity_hjorth()*
