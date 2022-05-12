@@ -179,7 +179,10 @@ def _complexity_rqa_features(rc, min_linelength=2):
 
     # Compute features
     data["Determinism"] = diag_lengths.sum() / rc[idx].sum()
-    data["Determinism_RecurrenceRate"] = data["Determinism"] / data["RecurrenceRate"]
+    if data["RecurrenceRate"] == 0:
+        data["Determinism_RecurrenceRate"] = np.nan
+    else:
+        data["Determinism_RecurrenceRate"] = data["Determinism"] / data["RecurrenceRate"]
     data["L"] = 0 if len(diag_lengths) == 0 else np.mean(diag_lengths)
     data["Divergence"] = np.nan if len(diag_lengths) == 0 else 1 / np.max(diag_lengths)
     data["LEn"] = entropy_shannon(
@@ -206,7 +209,10 @@ def _complexity_rqa_features(rc, min_linelength=2):
 
     # Compute features
     data["Laminarity"] = black_lengths.sum() / rc[idx].sum()
-    data["Laminarity_Determinism"] = data["Laminarity"] / data["Determinism"]
+    if data["Determinism"] == 0:
+        data["Laminarity_Determinism"] = np.nan
+    else:
+        data["Laminarity"] / data["Determinism"]
     data["TrappingTime"] = 0 if len(black_lengths) == 0 else np.nanmean(black_lengths)
     data["VMax"] = 0 if len(black_lengths) == 0 else np.nanmax(black_lengths)
     data["VEn"] = entropy_shannon(

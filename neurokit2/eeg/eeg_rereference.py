@@ -46,6 +46,19 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
       raw = nk.mne_data("filt-0-40_raw")
       eeg = raw.get_data()
 
+    * **Example 1:** Difference between robust average
+
+      .. ipython:: python
+
+      avg = nk.eeg_rereference(eeg, 'average', robust=False)
+      avg_r = nk.eeg_rereference(eeg, 'average', robust=True)
+
+      @savefig p_eeg_rereference1.png scale=100%
+      nk.signal_plot([avg[0, 0:1000], avg_r[0, 0:1000]], labels=["Normal", "Robust"])
+      @suppress
+      plt.close()
+
+
     References
     -----------
     * Trujillo, L. T., Stanfield, C. T., & Vela, R. D. (2017). The effect of electroencephalogram

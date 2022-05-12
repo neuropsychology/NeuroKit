@@ -53,8 +53,6 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
       blinker = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
 
       # Visualize
-      eog_signal = eog_signal.to_numpy().flatten()
-      
       @savefig p.eog_clean.png scale=100%
       fig = pd.DataFrame({"Raw": eog_signal,
                           "neurokit": neurokit,
