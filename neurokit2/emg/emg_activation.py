@@ -18,7 +18,9 @@ def emg_activation(
     threshold_size=None,
     **kwargs,
 ):
-    """**Detects onset in EMG signal based on the amplitude threshold**
+    """**Locate EMG Activity**
+
+    Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
     ----------
@@ -84,7 +86,7 @@ def emg_activation(
       emg_cleaned = nk.emg_clean(emg)
       emg_amplitude = nk.emg_amplitude(emg_cleaned)
 
-      * **Example 1:** Threshold method
+    * **Example 1:** Threshold method
 
     .. ipython:: python
 
@@ -127,12 +129,8 @@ def emg_activation(
 
     References
     ----------
-    * BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
-
-    * Modified emg.py for BioSPPy: https://gist.github.com/tostasmistas/747f4585198411c8c4bda5f312f27dfb
-
     * Silva H, Scherer R, Sousa J, Londral A , "Towards improving the ssability of
-    electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1–2, 2012.
+      electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1-2, 2012.
 
     """
     # Sanity checks.

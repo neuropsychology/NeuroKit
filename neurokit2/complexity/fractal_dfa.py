@@ -373,11 +373,6 @@ def _singularity_spectrum(q, slopes):
     # squared increments of the generalized Hurst's exponents between consecutive moment orders.
     out["Increment"] = np.sum(np.gradient(slopes) ** 2 / np.gradient(q))
 
-    # Other indices from the singularity spectrum
-    # out["ExpRange"] = np.nanmax(out["H"]) - np.nanmin(out["H"])
-    # out["DimRange"] = np.nanmax(out["D"]) - np.nanmin(out["D"])
-    # out["DimMean"] = np.nanmean(out["D"])
-
     return out
 
 
