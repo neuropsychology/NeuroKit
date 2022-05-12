@@ -12,7 +12,7 @@ from ..stats import standardize
 def eda_sympathetic(
     eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], method="posada", show=False
 ):
-    """Obtain electrodermal activity (EDA) indexes of sympathetic nervous system.
+    """**Obtain electrodermal activity (EDA) indexes of sympathetic nervous system**
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
     of EDA signal is represented in the frequency band of 0.045-0.25Hz.
@@ -45,19 +45,21 @@ def eda_sympathetic(
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eda = nk.data('bio_resting_8min_100hz')['EDA']
-    >>> indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
-    >>> indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi', show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eda = nk.data('bio_resting_8min_100hz')['EDA']
+      indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
+      indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi', show=True)
 
     References
     ----------
-    - Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., & Valenza, G. (2018).
+    * Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., & Valenza, G. (2018).
     A New Sympathovagal Balance Index from Electrodermal Activity and Instantaneous Vagal Dynamics: A Preliminary
     Cold Pressor Study. 2018 40th Annual International Conference of the IEEE Engineering in Medicine and Biology
     Society (EMBC). doi:10.1109/embc.2018.8512932
-    - Posada-Quintero, H. F., Florian, J. P., Orjuela-Cañón, A. D., Aljama-Corrales, T.,
+    * Posada-Quintero, H. F., Florian, J. P., Orjuela-Cañón, A. D., Aljama-Corrales, T.,
     Charleston-Villalobos, S., & Chon, K. H. (2016). Power spectral density analysis of electrodermal
     activity for sympathetic function assessment. Annals of biomedical engineering, 44(10), 3124-3135.
 

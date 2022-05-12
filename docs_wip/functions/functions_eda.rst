@@ -52,6 +52,10 @@ Preprocessing
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_phasic
 
+*eda_sympathetic()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_sympathetic
+
 Analysis
 ^^^^^^^^^
 
