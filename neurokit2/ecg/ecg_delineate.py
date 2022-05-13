@@ -42,22 +42,22 @@ def ecg_delineate(
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned ECG channel as returned by `ecg_clean()`.
+        The cleaned ECG channel as returned by ``ecg_clean()``.
     rpeaks : Union[list, np.array, pd.Series]
         The samples at which R-peaks occur. Accessible with the key "ECG_R_Peaks" in the info
-        dictionary returned by `ecg_findpeaks()`.
+        dictionary returned by ``ecg_findpeaks()``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        Can be one of ``'peak'`` for a peak-based method, ``'cwt'`` for continuous wavelet transform
-        or ``'dwt'`` (default) for discrete wavelet transform.
+        Can be one of ``"peak"`` for a peak-based method, ``"cwt"`` for continuous wavelet transform
+        or ``"dwt"`` (default) for discrete wavelet transform.
     show : bool
-        If True, will return a plot to visualizing the delineated waves information.
+        If ``True``, will return a plot to visualizing the delineated waves information.
     show_type: str
         The type of delineated waves information showed in the plot.
         Can be ``"peaks"``, ``"bounds_R"``, ``"bounds_T"``, ``"bounds_P"`` or ``"all"``.
     check : bool
-        Defaults to False. If True, replaces the delineated features with ``np.nan`` if its
+        Defaults to ``False``. If ``True``, replaces the delineated features with ``np.nan`` if its
         standardized distance from R-peaks is more than 3.
     **kwargs
         Other optional arguments.
@@ -83,7 +83,7 @@ def ecg_delineate(
 
     See Also
     --------
-    ecg_clean, signal_fixpeaks, ecg_peaks, signal_rate, ecg_process, ecg_plot
+    ecg_clean, .signal_fixpeaks, ecg_peaks, .signal_rate, ecg_process, ecg_plot
 
     Examples
     --------

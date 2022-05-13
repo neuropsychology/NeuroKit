@@ -20,14 +20,14 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     ecg_signal : Union[list, np.array, pd.Series]
         The raw ECG channel.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        The processing pipeline to apply. Defaults to "neurokit".
+        The processing pipeline to apply. Defaults to ``"neurokit"``.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of the same length as the `ecg_signal` containing the following columns:
+        A DataFrame of the same length as the ``ecg_signal`` containing the following columns:
 
         * ``"ECG_Raw"``: the raw signal.
         * ``"ECG_Clean"``: the cleaned signal.
@@ -58,11 +58,11 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
         * **This list is not up-to-date. Help us improve the documentation!**
     info : dict
         A dictionary containing the samples at which the R-peaks occur, accessible with the key
-        "ECG_Peaks", as well as the signals' sampling rate.
+        ``"ECG_Peaks"``, as well as the signals' sampling rate.
 
     See Also
     --------
-    ecg_clean, ecg_peaks, ecg_delineate, ecg_phase, ecg_plot, signal_rate
+    ecg_clean, ecg_peaks, ecg_delineate, ecg_phase, ecg_plot, .signal_rate
 
     Examples
     --------

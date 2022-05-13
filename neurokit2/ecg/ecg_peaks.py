@@ -16,14 +16,14 @@ def ecg_peaks(
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned ECG channel as returned by `ecg_clean()`.
+        The cleaned ECG channel as returned by ``ecg_clean()``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection. Can be one of ``'neurokit'`` (default),
-        ``'pantompkins1985'``, ``'nabian2018'``, ``'gamboa2008'``, ``'zong2003'``,
-        ``'hamilton2002'``, ``'christov2004'``, ``'engzeemod2012'``, ``'elgendi2010'``,
-        ``'kalidas2017'``, ``'martinez2003'``, ``'rodrigues2021'`` or ``'promac'``.
+        The algorithm to be used for R-peak detection. Can be one of ``"neurokit"`` (default),
+        ``"pantompkins1985"``, ``"nabian2018"``, ``"gamboa2008"``, ``"zong2003"``,
+        ``"hamilton2002"``, ``"christov2004"``, ``"engzeemod2012"``, ``"elgendi2010"``,
+        ``"kalidas2017"``, ``"martinez2003"``, ``"rodrigues2021"`` or ``"promac"``.
     correct_artifacts : bool
         Whether or not to first identify and fix artifacts as defined by
         Lipponen & Tarvainen (2019).
@@ -43,11 +43,11 @@ def ecg_peaks(
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, signal_fixpeaks
+    ecg_clean, ecg_findpeaks, .signal_fixpeaks
 
     Examples
     --------
-    * **Example 1**: Find R-peaks using the default method (``'neurokit'``).
+    * **Example 1**: Find R-peaks using the default method (``"neurokit"``).
 
     .. ipython:: python
 

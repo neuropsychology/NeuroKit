@@ -22,14 +22,14 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         DataFrame obtained from ``ecg_process()``.
     rpeaks : dict
         The samples at which the R-peak occur. Dict returned by
-        ```ecg_process()```. Defaults to None.
+        ``ecg_process()``. Defaults to ``None``.
     sampling_rate : int
         The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs to be supplied if the
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to None. Must be specified to plot artifacts.
+        Defaults to ``None``. Must be specified to plot artifacts.
     show_type : str
-        Visualize the ECG data with ``'default'`` or visualize artifacts thresholds with
-        ``'artifacts'`` produced by ``ecg_fixpeaks()``, or ``'full'`` to visualize both.
+        Visualize the ECG data with ``"default"`` or visualize artifacts thresholds with
+        ``"artifacts"`` produced by ``ecg_fixpeaks()``, or ``"full"`` to visualize both.
 
     Returns
     -------

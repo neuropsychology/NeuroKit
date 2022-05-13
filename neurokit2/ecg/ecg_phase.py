@@ -15,20 +15,20 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned ECG channel as returned by `ecg_clean()`.
+        The cleaned ECG channel as returned by ``ecg_clean()``.
     rpeaks : list or array or DataFrame or Series or dict
         The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it
-        is assumed that these containers were obtained with `ecg_findpeaks()` or `ecg_peaks()`.
+        is assumed that these containers were obtained with ``ecg_findpeaks()`` or ``ecg_peaks()``.
     delineate_info : dict
         A dictionary containing additional information of ecg delineation and can be obtained with
-        `ecg_delineate()`.
+        ``ecg_delineate()``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to None.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to ``None``.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `ecg_signal` containing the following columns:
+        A DataFrame of same length as ``ecg_signal`` containing the following columns:
 
         * ``"ECG_Phase_Atrial"``: cardiac phase, marked by "1" for systole and "0" for diastole.
         * ``"ECG_Phase_Completion_Atrial"``: cardiac phase (atrial) completion, expressed in

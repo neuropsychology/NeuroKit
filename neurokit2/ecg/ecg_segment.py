@@ -17,9 +17,9 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by ``ecg_clean()``.
     rpeaks : dict
-        The samples at which the R-peaks occur. Dict returned by ``ecg_peaks()``. Defaults to None.
+        The samples at which the R-peaks occur. Dict returned by ``ecg_peaks()``. Defaults to ``None``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     show : bool
         If ``True``, will return a plot of heartbeats. Defaults to ``False``.
 

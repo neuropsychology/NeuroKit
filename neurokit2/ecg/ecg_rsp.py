@@ -12,13 +12,13 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     Parameters
     ----------
     ecg_rate : array
-        The heart rate signal as obtained via `ecg_rate()`.
+        The heart rate signal as obtained via ``ecg_rate()``.
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
         i.e., samples/second). Defaults to 1000Hz.
     method : str
-        Can be one of ``'vangent2019'`` (default), ``'soni2019'``, ``'charlton2016'`` or
-        ``'sarkar2015'``.
+        Can be one of ``"vangent2019"`` (default), ``"soni2019"``, ``"charlton2016"`` or
+        ``"sarkar2015"``.
 
     Returns
     -------

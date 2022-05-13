@@ -18,16 +18,16 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        See ``ecg_peaks()``.
+        See :func:`ecg_peaks()`.
     sampling_rate : int
-        See ``ecg_peaks()``.
+        See :func:`ecg_peaks()`.
     method : string
-        See ``ecg_peaks()``.
+        See :func:`ecg_peaks()`.
     show : bool
         If ``True``, will return a plot to visualizing the thresholds used in the algorithm.
         Useful for debugging.
     **kwargs
-        Additional keyword arguments, usually specific for each `method`.
+        Additional keyword arguments, usually specific for each ``method``.
 
     Returns
     -------
@@ -37,7 +37,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     See Also
     --------
-    ecg_peaks, signal_fixpeaks
+    ecg_peaks, .signal_fixpeaks
 
     """
     # Try retrieving right column

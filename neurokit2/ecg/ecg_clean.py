@@ -33,11 +33,11 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     ecg_signal : Union[list, np.array, pd.Series]
         The raw ECG channel.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        The processing pipeline to apply. Can be one of ``'neurokit'`` (default),
-        ``'biosppy'``, ``'pantompkins1985'``, ``'hamilton2002'``, ``'elgendi2010'``,
-        ``'engzeemod2012'``.
+        The processing pipeline to apply. Can be one of ``"neurokit"`` (default),
+        ``"biosppy"``, ``"pantompkins1985"``, ``"hamilton2002"``, ``"elgendi2010"``,
+        ``"engzeemod2012"``.
     **kwargs
         Other arguments to be passed to specific methods.
 
@@ -48,7 +48,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
 
     See Also
     --------
-    ecg_peaks, ecg_process, ecg_plot, signal_rate, signal_filter
+    ecg_peaks, ecg_process, ecg_plot, .signal_rate, .signal_filter
 
     Examples
     --------

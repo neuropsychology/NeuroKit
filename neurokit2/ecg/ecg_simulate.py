@@ -19,7 +19,7 @@ def ecg_simulate(
     random_state=None,
     **kwargs,
 ):
-    """**Simulate an ECG/EKG signal.**
+    """**Simulate an ECG/EKG signal**
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
     the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies
@@ -37,21 +37,22 @@ def ecg_simulate(
         Noise level (amplitude of the laplace noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70. Note that for the
-        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These
-        fluctuations can cause some slight discrepancies between the requested heart rate and the
-        empirical heart rate, especially for shorter signals.
+        ``"ECGSYN"`` method, random fluctuations are to be expected to mimick a real heart rate.
+        These fluctuations can cause some slight discrepancies between the requested heart rate and
+        the empirical heart rate, especially for shorter signals.
     heart_rate_std : int
         Desired heart rate standard deviation (beats per minute).
     method : str
-        The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
-        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use
-        the model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_. If
-        'multileads', will return a DataFrame containing 12-leads (see `12-leads ECG simulation
+        The model used to generate the signal. Can be ``"simple"`` for a simulation based on
+        Daubechies wavelets that roughly approximates a single cardiac cycle. If ``"ecgsyn"``
+        (default), will use the model desbribed `McSharry et al. (2003)
+        <https://physionet.org/content/ecgsyn/>`_. If
+        ``"multileads"``, will return a DataFrame containing 12-leads (see `12-leads ECG simulation
         <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_).
     random_state : int
         Seed for the random number generator.
     **kwargs
-        Other keywords parameters for ECGSYN algorithm, such as `lfhfratio`, `ti`, `ai`, `bi`.
+        Other keywords parameters for ECGSYN algorithm, such as ``"lfhfratio"``, ``"ti"``, ``"ai"``, ``"bi"``.
 
     Returns
     -------
@@ -89,7 +90,7 @@ def ecg_simulate(
 
     See Also
     --------
-    rsp_simulate, eda_simulate, ppg_simulate, emg_simulate
+    .rsp_simulate, .eda_simulate, .ppg_simulate, .emg_simulate
 
 
     References

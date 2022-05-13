@@ -38,25 +38,25 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
     ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG signal in the form of a vector of values.
     rpeaks : tuple or list
-        The list of R-peak samples returned by `ecg_peaks()`. If None, peaks is computed from
+        The list of R-peak samples returned by ``ecg_peaks()``. If None, peaks is computed from
         the signal input.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method : str
-        The method for computing ECG signal quality, can be "averageQRS" (default) or "zhao2018".
+        The method for computing ECG signal quality, can be ``"averageQRS"`` (default) or ``"zhao2018"``.
     approach : str
-        The data fusion approach as documented in Zhao et al. (2018). Can be "simple"
-        or "fuzzy". The former performs simple heuristic fusion of SQIs and the latter performs
-        fuzzy comprehensive evaluation. If None (default), simple heuristic fusion is used.
+        The data fusion approach as documented in Zhao et al. (2018). Can be ``"simple"``
+        or ``"fuzzy"``. The former performs simple heuristic fusion of SQIs and the latter performs
+        fuzzy comprehensive evaluation. If ``None`` (default), simple heuristic fusion is used.
     **kwargs
-        Keyword arguments to be passed to `signal_power()` in the computation of basSQI and pSQI.
+        Keyword arguments to be passed to ``signal_power()`` in the computation of basSQI and pSQI.
 
     Returns
     -------
     array or str
-        Vector containing the quality index ranging from 0 to 1 for "averageQRS" method,
-        returns string classification ("Unacceptable", "Barely Acceptable" or "Excellent")
-        of the signal for "zhao2018 method".
+        Vector containing the quality index ranging from 0 to 1 for ``"averageQRS"`` method,
+        returns string classification (``Unacceptable``, ``Barely Acceptable`` or ``Excellent``)
+        of the signal for ``"zhao2018 method"``.
 
     See Also
     --------
@@ -64,7 +64,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 
     References
     ----------
-    - Zhao, Z., & Zhang, Y. (2018). "SQI quality evaluation mechanism of single-lead ECG signal
+    * Zhao, Z., & Zhang, Y. (2018). "SQI quality evaluation mechanism of single-lead ECG signal
       based on simple heuristic fusion and fuzzy comprehensive evaluation". Frontiers in
       Physiology, 9, 727.
 

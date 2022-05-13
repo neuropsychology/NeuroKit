@@ -18,10 +18,10 @@ def ecg_eventrelated(epochs, silent=False):
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or
-        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained via ``epochs_create()``,
+        or a DataFrame containing all epochs, usually obtained via ``epochs_to_df()``.
     silent : bool
-        If True, silence possible warnings.
+        If ``True``, silence possible warnings.
 
     Returns
     -------
@@ -55,7 +55,7 @@ def ecg_eventrelated(epochs, silent=False):
 
     See Also
     --------
-    events_find, epochs_create, bio_process
+    .events_find, .epochs_create, .bio_process
 
     Examples
     ----------
