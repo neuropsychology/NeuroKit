@@ -28,7 +28,7 @@ def eog_eventrelated(epochs, silent=False):
     -------
     DataFrame
         A dataframe containing the analyzed EOG features for each epoch, with each epoch indicated
-        by the ``Label`` column (if not present, by the ``Index`` column). The analyzed features
+        by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
         * ``"EOG_Rate_Baseline"``: the baseline EOG rate before stimulus onset.

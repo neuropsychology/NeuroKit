@@ -20,8 +20,8 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
         The raw vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
     sampling_rate : int
-        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second). Defaults to
-        1000.
+        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).
+        Defaults to 1000.
     **kwargs
         Other arguments passed to other functions.
 

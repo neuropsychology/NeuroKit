@@ -32,7 +32,7 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
     DataFrame
         A dataframe containing the analyzed EOG features. If
         event-related analysis is conducted, each epoch is indicated
-        by the ``Label`` column. See :func:`.eog_eventrelated` and
+        by the `Label` column. See :func:`.eog_eventrelated` and
         :func:`.eog_intervalrelated` docstrings for details.
 
     See Also
