@@ -7,7 +7,9 @@ from .cluster_quality import cluster_quality
 
 
 def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
-    """**Find the optimal number of clusters based on different metrices of quality**
+    """**Optimal Number of Clusters**
+
+    Find the optimal number of clusters based on different indices of quality of fit.
 
     Parameters
     ----------
@@ -27,6 +29,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     -------
     DataFrame
         The different quality scores for each number of clusters:
+
         * Score_Silhouette
         * Score_Calinski
         * Score_Bouldin
@@ -47,7 +50,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
       import neurokit2 as nk
 
       # Load the iris dataset
-      data = nk.data("iris")
+      data = nk.data("iris").drop("Species", axis=1)
 
       # How many clusters
       @savefig p_cluster_findnumber1.png scale=100%

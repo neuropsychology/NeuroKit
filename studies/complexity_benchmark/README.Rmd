@@ -39,11 +39,11 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these tools to characterize signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in physiology in the assessment and diagnostic of the state and health of living systems **[REF]**.
+Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these tools to characterize signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in physiology in the assessment and diagnostic of the state and health of living systems [@lau2021brain, @ehlers1995chaos].
 
 There has been a large and accelerating increase in the number of complexity indices in the past few decades. These new procedures are usually mathematically well-defined and theoretically promising. However, few empirical evidence exist to understand their differences and similarities. Moreover, some can be very expensive in terms of computation power and thus, time, which can become an issue in some applications such as high sampling-rate techniques (e.g., M/EEG) or real-time settings (brain-computer interface). As such, having a general view depicting the relationship between the indices with information about their computation time would be useful, for instance to guide the indices selection in settings where time or computational power is limited. 
 
-One of the contributing factor of this lack of empirical comparison is the lack of free, open-source, and easy to use software for computing various complexity indices. Indeed, most of them are described mathematically in journal articles, and reusable code is seldom made available, which limits their further application and validation. *NeuroKit2* [@Makowski2021neurokit] is a Python package for physiological signal processing that aims at providing the most comprehensive, accurate and fast pure Python implementations of complexity indices. 
+One of the contributing factor of this lack of empirical comparison is the lack of free, open-source, unified, and easy to use software for computing various complexity indices. Indeed, most of them are described mathematically in journal articles, and reusable code is seldom made available, which limits their further application and validation. *NeuroKit2* [@Makowski2021neurokit] is a Python package for physiological signal processing that aims at providing the most comprehensive, accurate and fast pure Python implementations of complexity indices. 
 
 Leveraging this tool, the goal of this study is to empirically compare a vast number of complexity indices, inspect how they relate to one another, and extract some recommendations for indices selection, based on their added-value and computational efficiency. Using NeuroKit2, we will compute more than a hundred complexity indices on various types of signals, with varying degrees of noise. We will then project the results on a latent space through factor analysis, and report the most interesting indices in regards to their representation of the latent dimensions.
 
@@ -757,9 +757,7 @@ As complexity science grows in size and application, a systematic approach to co
 
 Hence the choice of the current paradigm, in which we generated different types of signals to which we systematically added different types and amount of perturbations. However, we did not seek at measuring how complexity indices can discriminate between these features or systems, nor did we attempt at mimicking real-life signals or scenarios. The goal was instead to generate enough variability to reliably map the relationships between the indices. 
 
-The plurality of underlying components of empirical complexity (what is measured by complexity indices) seems to be somewhat confirmed by our results
-
-and some indices might be more or less sensitive to these features  
+The plurality of underlying components of empirical complexity (what is measured by complexity indices) seems to be somewhat confirmed by our results, showing that complexity indices are more or less sensitive to various orthogonal latent dimensions. One of the limitation of the current study has to do with the limited possibilities of interpretation of these underlying dimensions, and future studies are needed to discuss them. 
 
 Indices that were highlighted as reliably providing information about underlying dimensions ata low computational cost include... 
 

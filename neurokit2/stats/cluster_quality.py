@@ -166,17 +166,20 @@ def _cluster_quality_dispersion(data, clustering, n_clusters=4):
     Can be used to compare and find the optimal number of clusters.
     """
 
-    dispersion_state = []
-    for state in range(n_clusters):
-        idx = clustering == state
+    dispersion_state = np.full(n_clusters, np.nan)
+    for i in range(n_clusters):
+        idx = clustering == i
         data_state = data[idx, :]
         state_size = len(data_state)  # number of samples in this cluster
-        # pair-wise distance between members of the same cluster
-        distance = scipy.spatial.distance.cdist(data_state, data_state)
-        # sumsquares of distances
-        dispersion_state.append(0.5 * np.sum(distance ** 2) / state_size)
+        if state_size > 0:
+            # pair-wise distance between members of the same cluster
+            distance = scipy.spatial.distance.cdist(data_state, data_state)
+            # sumsquares of distances
+            dispersion_state[i] = (0.5 * np.nansum(distance ** 2) / state_size)
+        else:
+            dispersion_state[i] = np.nan
 
-    dispersion = np.sum(dispersion_state)
+    dispersion = np.nansum(dispersion_state)
     return dispersion
 
 
@@ -244,17 +247,19 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
     leads to an error when the denominator is 0.
     """
     n_rows, n_cols = data.shape  # n_sample, n_channel
-    var = np.sum(data ** 2) - np.sum(np.sum(clusters[clustering, :] * data, axis=1) ** 2)
+    var = np.nansum(data ** 2) - np.nansum(np.nansum(clusters[clustering, :] * data, axis=1) ** 2)
     var /= n_rows * (n_cols - 1)
-    try:
-        cv = var * (n_cols - 1) ** 2 / (n_cols - len(clusters) - 1) ** 2
-    except ZeroDivisionError:
-        cv = var
-        warnings.warn(
-            "Number of columns in data (" + str(n_cols) + ") is smaller "
-            "than the number of cluster (" + str(len(clusters)) + ") plus 1. "
-            "Returning the residual noise instead."
-        )
+    denominator = (n_cols - len(clusters) - 1) ** 2
+    if np.abs(denominator) > 0:
+        cv = var * (n_cols - 1) ** 2 / denominator
+    else:
+        # warnings.warn(
+        #     "Number of columns in data (" + str(n_cols) + ") is smaller "
+        #     "than the number of cluster (" + str(len(clusters)) + ") plus 1. "
+        #     "Returning the residual noise instead."
+        # )
+        cv = np.nan
+
     #    cv = var * (n_cols - 1)**2 / len(clusters)
     return cv
 
@@ -279,15 +284,15 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
 def _cluster_quality_gev(data, clusters, clustering, sd=None, n_clusters=4):
     """Global Variance Explained (GEV)"""
     if sd is None:
-        sd = np.std(data, axis=1)
+        sd = np.nanstd(data, axis=1)
     map_corr = _correlate_vectors(data.T, clusters[clustering].T)
 
     gev_all = np.zeros(n_clusters)
     for state in range(n_clusters):
         idx = clustering == state
-        gev_all[state] = np.sum((sd[idx] * map_corr[idx]) ** 2) / np.sum(sd ** 2)
+        gev_all[state] = np.nansum((sd[idx] * map_corr[idx]) ** 2) / np.nansum(sd ** 2)
 
-    gev = np.sum(gev_all)
+    gev = np.nansum(gev_all)
     #    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)
     return gev, gev_all
 
@@ -318,8 +323,8 @@ def _correlate_vectors(A, B, axis=0):
         For each pair of vectors, the correlation between them with shape (m, )
 
     """
-    An = A - np.mean(A, axis=axis)
-    Bn = B - np.mean(B, axis=axis)
+    An = A - np.nanmean(A, axis=axis)
+    Bn = B - np.nanmean(B, axis=axis)
     An /= np.linalg.norm(An, axis=axis)
     Bn /= np.linalg.norm(Bn, axis=axis)
-    return np.sum(An * Bn, axis=axis)
+    return np.nansum(An * Bn, axis=axis)
