@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
+
 import numpy as np
 import pandas as pd
 
-from .mad import mad
 from ..misc import NeuroKitWarning
 from ..misc.check_type import is_string
+from .mad import mad
+
 
 def standardize(data, robust=False, window=None, **kwargs):
     """**Standardization of data**
@@ -19,9 +21,9 @@ def standardize(data, robust=False, window=None, **kwargs):
     data : Union[list, np.array, pd.Series]
         Raw data.
     robust : bool
-        If True, centering is done by substracting the median from the variables and dividing it by
-        the median absolute deviation (MAD). If False, variables are standardized by substracting
-        the mean and dividing it by the standard deviation (SD).
+        If ``True``, centering is done by substracting the median from the variables and dividing
+        it by the median absolute deviation (MAD). If ``False``, variables are standardized by
+        substracting the mean and dividing it by the standard deviation (SD).
     window : int
         Perform a rolling window standardization, i.e., apply a standardization on a window of the
         specified number of samples that rolls along the main axis of the signal. Can be used for

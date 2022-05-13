@@ -4,14 +4,15 @@ import numpy as np
 def signal_noise(duration=10, sampling_rate=1000, beta=1):
     """**Simulate noise**
 
-    This function generates pure Gaussian (1/f)**beta noise. The power-spectrum of the generated
-    noise is proportional to S(f) = (1 / f)**beta. The following categories of noise have been
+    This function generates pure Gaussian ``(1/f)**beta`` noise. The power-spectrum of the generated
+    noise is proportional to ``S(f) = (1 / f)**beta``. The following categories of noise have been
     described:
-    - violet noise: beta = -2
-    - blue noise: beta = -1
-    - white noise: beta = 0
-    - flicker / pink noise: beta = 1
-    - brown noise: beta = 2
+
+    * violet noise: beta = -2
+    * blue noise: beta = -1
+    * white noise: beta = 0
+    * flicker / pink noise: beta = 1
+    * brown noise: beta = 2
 
     Parameters
     ----------

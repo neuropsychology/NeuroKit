@@ -53,7 +53,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
       df["blinker"] = nk.eog_clean(eog_signal, sampling_rate=100, method='blinker')
 
       # Visualize
-      @savefig p.eog_clean.png scale=100%
+      @savefig p_eog_clean.png scale=100%
       pd.DataFrame(df).plot(subplots=True)
       @suppress
       plt.close()

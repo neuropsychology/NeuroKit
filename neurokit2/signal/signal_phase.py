@@ -19,8 +19,8 @@ def signal_phase(signal, method="radians"):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        The values in which the phase is expressed. Can be 'radians' (default), 'degrees'
-        (for values between 0 and 360) or 'percents' (for values between 0 and 1).
+        The values in which the phase is expressed. Can be ``"radians"`` (default),
+        ``"degrees"`` (for values between 0 and 360) or ``"percents"`` (for values between 0 and 1).
 
     See Also
     --------

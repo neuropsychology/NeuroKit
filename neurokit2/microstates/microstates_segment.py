@@ -66,7 +66,8 @@ def microstates_segment(
         Standardized (z-score) the data across time prior to GFP extraction
         using :func:`.nk.standardize`.
     n_runs : int
-        The number of random initializations to use for the k-means algorithm. The best fitting segmentation across all initializations is used. Defaults to 10.
+        The number of random initializations to use for the k-means algorithm. The best fitting
+        segmentation across all initializations is used. Defaults to 10.
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.

@@ -66,25 +66,26 @@ def signal_timefrequency(
     max_frequency : float
         The maximum frequency.
     window : int
-        Length of each segment in seconds. If None (default), window will be automatically
-        calculated. For STFT method
+        Length of each segment in seconds. If ``None`` (default), window will be automatically
+        calculated. For ``"STFT" method``.
     window_type : str
-        Type of window to create, defaults to 'hann'. See :func:`.scipy.signal.get_window` to see
-        full options of windows. For STFT method.
+        Type of window to create, defaults to ``"hann"``. See :func:`.scipy.signal.get_window` to
+        see full options of windows. For ``"STFT" method``.
     mode : str
-        Type of return values for STFT method. Can be 'psd', 'complex' (default, equivalent to
-        output of STFT with no padding or boundary extension), 'magnitude', 'angle', 'phase'.
-        Defaults to 'psd'.
+        Type of return values for ``"STFT" method``. Can be ``"psd"``, ``"complex"`` (default,
+        equivalent to output of ``"STFT"`` with no padding or boundary extension), ``"magnitude"``,
+        ``"angle"``, ``"phase"``. Defaults to ``"psd"``.
     nfreqbin : int, float
-        Number of frequency bins. If None (default), nfreqbin will be set to 0.5*sampling_rate.
+        Number of frequency bins. If ``None`` (default), nfreqbin will be set to
+        ``0.5*sampling_rate``.
     overlap : int
-        Number of points to overlap between segments. If None, noverlap = nperseg // 8.
-        Defaults to None.
+        Number of points to overlap between segments. If ``None``, ``noverlap = nperseg // 8``.
+        Defaults to ``None``.
     analytical_signal : bool
-        If True, analytical signal instead of actual signal is used in Wigner Ville Distribution
-        methods.
+        If ``True``, analytical signal instead of actual signal is used in `Wigner Ville
+        Distribution` methods.
     show : bool
-        If True, will return two PSD plots.
+        If ``True``, will return two PSD plots.
 
     Returns
     -------

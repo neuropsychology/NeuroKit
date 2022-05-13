@@ -7,8 +7,8 @@ import scipy.signal
 def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     """Compute the synchrony (coupling) between two signals.
 
-    Compute a continuous index of coupling between two signals either using the 'hilbert' method to
-    get the instantaneous phase synchrony, or using rolling window correlation.
+    Compute a continuous index of coupling between two signals either using the ``"hilbert"``
+    method to get the instantaneous phase synchrony, or using rolling window correlation.
 
     The instantaneous phase synchrony measures the phase similarities between signals at each
     timepoint. The phase refers to the angle of the signal, calculated through the hilbert
@@ -27,7 +27,7 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     signal2 : Union[list, np.array, pd.Series]
         Time series in the form of a vector of values.
     method : str
-        The method to use. Can be one of 'hilbert' or 'correlation'.
+        The method to use. Can be one of ``"hilbert"`` or ``"correlation"``.
     window_size : int
         Only used if ``method='correlation'``. The number of samples to use for rolling correlation.
 

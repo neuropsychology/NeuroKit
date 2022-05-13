@@ -35,7 +35,7 @@ def emg_amplitude(emg_cleaned):
       cleaned = nk.emg_clean(emg, sampling_rate=1000)
 
       amplitude = nk.emg_amplitude(cleaned)
-      @savefig p.emg_amplitude.png scale=100%
+      @savefig p_emg_amplitude1.png scale=100%
       fig = pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True)
       @suppress
       plt.close()

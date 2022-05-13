@@ -48,7 +48,7 @@ def emg_simulate(
       import pandas as pd
 
       emg = nk.emg_simulate(duration=10, burst_number=3)
-      @savefig p.emg_simulate.png scale=100%
+      @savefig p_emg_simulate1.png scale=100%
       fig = nk.signal_plot(emg)
       @suppress
       plt.close()

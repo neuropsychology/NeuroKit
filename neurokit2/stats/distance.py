@@ -17,7 +17,8 @@ def distance(X=None, method="mahalanobis"):
     X : array or DataFrame
         A dataframe of values.
     method : str
-        The method to use. One of 'mahalanobis' or 'mean' for the average distance from the mean.
+        The method to use. One of ``"mahalanobis"`` or ``"mean"`` for the average distance from the
+        mean.
 
     Returns
     -------

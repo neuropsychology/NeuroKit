@@ -12,7 +12,7 @@ def signal_rate(
     ``60 / period``, where the period is the time between the peaks (see func:`.signal_period`).
 
     .. note:: This function is implemented under :func:`.signal_rate`, but it also re-exported under
-       different names, such as :func:`.ecg_rate`, :func:`.ppg_rate()`, or :func:`.rsp_rate`. The
+       different names, such as :func:`.ecg_rate`, :func:`.ppg_rate`, or :func:`.rsp_rate`. The
        aliases provided for consistency.
 
     Parameters
@@ -27,14 +27,14 @@ def signal_rate(
         Defaults to 1000.
     desired_length : int
         If left at the default None, the returned rated will have the same number of elements as
-        peaks. If set to a value larger than the sample at which the last peak occurs in the signal
-        (i.e., peaks[-1]), the returned rate will be interpolated between peaks over
-        `desired_length` samples. To interpolate the rate over the entire duration of the signal,
-        set desired_length to the number of samples in the signal. Cannot be smaller than or equal
-        to the sample at which the last peak occurs in the signal. Defaults to None.
+        ``peaks``. If set to a value larger than the sample at which the last peak occurs in the
+        signal (i.e., ``peaks[-1]``), the returned rate will be interpolated between peaks over
+        ``desired_length`` samples. To interpolate the rate over the entire duration of the signal,
+        set ``desired_length`` to the number of samples in the signal. Cannot be smaller than or
+        equal to the sample at which the last peak occurs in the signal. Defaults to ``None``.
     interpolation_method : str
         Method used to interpolate the rate between peaks. See :func:`.signal_interpolate`.
-        'monotone_cubic' is chosen as the default interpolation method since it ensures monotone
+        ``"monotone_cubic"`` is chosen as the default interpolation method since it ensures monotone
         interpolation between data points (i.e., it prevents physiologically implausible
         "overshoots" or "undershoots" in the y-direction). In contrast, the widely used cubic
         spline interpolation does not ensure monotonicity.

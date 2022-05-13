@@ -15,7 +15,7 @@ def rescale(data, to=[0, 1], scale=None):
         New range of values of the data after rescaling.
     scale : list
         A list or tuple of two values specifying the actual range
-        of the data. If None, the minimum and the maximum of the
+        of the data. If ``None``, the minimum and the maximum of the
         provided data will be used.
 
     Returns

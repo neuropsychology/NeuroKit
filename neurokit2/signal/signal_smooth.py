@@ -18,17 +18,20 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        Can be one of 'convolution' (default) or 'loess'.
+        Can be one of ``"convolution"`` (default) or ``"loess"``.
     kernel : Union[str, np.array]
-        Only used if ``method`` is 'convolution'. Type of kernel to use; if array, use directly as
-        the kernel. Can be one of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming',
-        'hann', 'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris', 'nuttall', 'barthann',
-        'kaiser' (needs beta), 'gaussian' (needs std), 'general_gaussian' (needs power, width),
-        'slepian' (needs width) or 'chebwin' (needs attenuation).
+        Only used if ``method`` is ``"convolution"``. Type of kernel to use; if array, use directly
+        as the kernel. Can be one of ``"median"``, ``"boxzen"``, ``"boxcar"``, ``"triang"``,
+        ``"blackman"``, ``"hamming"``, ``"hann"``, ``"bartlett"``, ``"flattop"``, ``"parzen"``,
+        ``"bohman"``, ``"blackmanharris"``, ``"nuttall"``, ``"barthann"``,
+        ``"kaiser"`` (needs beta), ``"gaussian"`` (needs std), ``"general_gaussian"`` (needs power
+        width), ``"slepian"`` (needs width) or ``"chebwin"`` (needs attenuation).
     size : int
-        Only used if ``method`` is 'convolution'. Size of the kernel; ignored if kernel is an array.
+        Only used if ``method`` is ``"convolution"``. Size of the kernel; ignored if kernel is an
+        array.
     alpha : float
-        Only used if ``method`` is 'loess'. The parameter which controls the degree of smoothing.
+        Only used if ``method`` is ``"loess"``. The parameter which controls the degree of
+        smoothing.
 
     Returns
     -------
@@ -54,13 +57,13 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
 
       size = len(signal)/100
       signals = pd.DataFrame({"Raw": distorted,
-                              "Median": nk.signal_smooth(distorted, kernel='median', size=size-1),
-                              "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size),
-                              "Triang": nk.signal_smooth(distorted, kernel='triang', size=size),
-                              "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size),
-                              "Loess_01": nk.signal_smooth(distorted, method='loess', alpha=0.1),
-                              "Loess_02": nk.signal_smooth(distorted, method='loess', alpha=0.2),
-                              "Loess_05": nk.signal_smooth(distorted, method='loess', alpha=0.5)})
+                              "Median": nk.signal_smooth(distorted, kernel="median", size=size-1),
+                              "BoxZen": nk.signal_smooth(distorted, kernel="boxzen", size=size),
+                              "Triang": nk.signal_smooth(distorted, kernel="triang", size=size),
+                              "Blackman": nk.signal_smooth(distorted, kernel="blackman", size=size),
+                              "Loess_01": nk.signal_smooth(distorted, method="loess", alpha=0.1),
+                              "Loess_02": nk.signal_smooth(distorted, method="loess", alpha=0.2),
+                              "Loess_05": nk.signal_smooth(distorted, method="loess", alpha=0.5)})
       @savefig p_signal_smooth1.png scale=100%
       fig = signals.plot()
       @suppress

@@ -15,7 +15,7 @@ def find_plateau(values, show=True):
     values : ndarray
         An array of values.
     show : bool
-        If True, will return the plot visualizing the trajectory and point of plateau.
+        If ``True``, will return the plot visualizing the trajectory and point of plateau.
 
     Returns
     ----------
@@ -34,8 +34,12 @@ def find_plateau(values, show=True):
       y = y + 0.05 * np.random.normal(size=len(x))
 
       # Find plateau
+      @savefig p_find_plateau1.png scale=100%
       plateau = nk.find_plateau(y, show=True)
+      @suppress
+      plt.close()
       plateau
+
 
     """
 

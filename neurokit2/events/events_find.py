@@ -31,12 +31,13 @@ def events_find(
     event_channel : array or list
         The channel containing the events.
     threshold : str or float
-        The threshold value by which to select the events. If "auto", takes the value between the
-        max and the min.
+        The threshold value by which to select the events. If ``"auto"``, takes the value between
+        the max and the min.
     threshold_keep : str
-        "above" or "below", define the events as above or under the threshold. For photosensors, a
-        white screen corresponds usually to higher values. Therefore, if your events are signaled by
-        a black colour, events values are the lower ones, and you should set the cut to "below".
+        ``"above"`` or ``"below"``, define the events as above or under the threshold. For
+        photosensors, a white screen corresponds usually to higher values. Therefore, if your
+        events are signaled by a black colour, events values are the lower ones, and you should set
+        the cut to ``"below"``.
     start_at : int
         Keep events which onset is after a particular time point.
     end_at : int
@@ -46,16 +47,17 @@ def events_find(
     duration_max : int
         The maximum duration of an event to be considered as such (in time points).
     inter_min : int
-        The minimum duration after an event for the subsequent event to be considered as such (in time
-        points). Useful when spurious consecutive events are created due to very high sampling rate.
+        The minimum duration after an event for the subsequent event to be considered as such (in
+        time points). Useful when spurious consecutive events are created due to very high sampling
+        rate.
     discard_first : int
         Discard first or last n events. Useful if the experiment starts with some spurious events.
-        If discard_first=0, no first event is removed.
+        If ``discard_first=0``, no first event is removed.
     discard_last : int
         Discard first or last n events. Useful if the experiment ends with some spurious events.
-        If discard_last=0, no last event is removed.
+        If ``discard_last=0``, no last event is removed.
     event_labels : list
-        A list containing unique event identifiers. If `None`, will use the event index number.
+        A list containing unique event identifiers. If ``None``, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
@@ -63,8 +65,8 @@ def events_find(
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, 'onset' for event onsets, 'duration' for event durations, 'label'
-        for the event identifiers and the optional 'conditions' passed to `event_conditions`.
+        Dict containing 3 or 4 arrays, ``"onset"`` for event onsets, ``"duration"`` for event durations, ``"label"`` for the event identifiers and the optional ``"conditions"`` passed
+        to ``event_conditions``.
 
     See Also
     --------
@@ -113,7 +115,6 @@ def events_find(
     if end_at is not None:
         events["duration"] = events["duration"][events["onset"] <= end_at]
         events["onset"] = events["onset"][events["onset"] <= end_at]
-
 
     # Remove based on interval min
     if inter_min > 0:

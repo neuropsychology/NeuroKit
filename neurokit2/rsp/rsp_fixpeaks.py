@@ -24,7 +24,8 @@ def rsp_fixpeaks(peaks, troughs=None):
     -------
     info : dict
         A dictionary containing additional information, in this case the samples at which
-        inhalation onsets and exhalation onsets occur, accessible with the keys ``"RSP_Troughs"`` and ``"RSP_Peaks"``, respectively.
+        inhalation onsets and exhalation onsets occur, accessible with the keys ``"RSP_Troughs"``
+        and ``"RSP_Peaks"``, respectively.
 
     See Also
     --------

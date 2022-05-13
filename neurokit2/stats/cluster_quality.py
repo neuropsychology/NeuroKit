@@ -30,7 +30,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
         The number of random initializations to cluster random data for calculating the GAP
         statistic.
     **kwargs
-        Other argument to be passed on, for instance GFP as 'sd' in microstates.
+        Other argument to be passed on, for instance ``GFP`` as ``'sd'`` in microstates.
 
     Returns
     -------
@@ -149,7 +149,7 @@ def _cluster_quality_sumsquares(data, clusters, clustering):
     for idx in range(len(data)):
         cluster_identity = clustering[idx]
         min_distance.append(distance[idx, cluster_identity])
-    min_distance_squared = [i ** 2 for i in min_distance]
+    min_distance_squared = [i**2 for i in min_distance]
     return np.sum(min_distance_squared)
 
 
@@ -168,7 +168,7 @@ def _cluster_quality_dispersion(data, clustering, n_clusters=4):
             # pair-wise distance between members of the same cluster
             distance = scipy.spatial.distance.cdist(data_state, data_state)
             # sumsquares of distances
-            dispersion_state[i] = (0.5 * np.nansum(distance ** 2) / state_size)
+            dispersion_state[i] = 0.5 * np.nansum(distance**2) / state_size
         else:
             dispersion_state[i] = np.nan
 
@@ -240,7 +240,7 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
     leads to an error when the denominator is 0.
     """
     n_rows, n_cols = data.shape  # n_sample, n_channel
-    var = np.nansum(data ** 2) - np.nansum(np.nansum(clusters[clustering, :] * data, axis=1) ** 2)
+    var = np.nansum(data**2) - np.nansum(np.nansum(clusters[clustering, :] * data, axis=1) ** 2)
     var /= n_rows * (n_cols - 1)
     denominator = (n_cols - len(clusters) - 1) ** 2
     if np.abs(denominator) > 0:
@@ -283,7 +283,7 @@ def _cluster_quality_gev(data, clusters, clustering, sd=None, n_clusters=4):
     gev_all = np.zeros(n_clusters)
     for state in range(n_clusters):
         idx = clustering == state
-        gev_all[state] = np.nansum((sd[idx] * map_corr[idx]) ** 2) / np.nansum(sd ** 2)
+        gev_all[state] = np.nansum((sd[idx] * map_corr[idx]) ** 2) / np.nansum(sd**2)
 
     gev = np.nansum(gev_all)
     #    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)

@@ -24,7 +24,7 @@ def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameter
       blink_gamma = _eog_simulate_blink(sampling_rate=100,
                                         method='gamma',
                                         parameters=[2.659, 5.172, 0.317])
-      @savefig p.eog_simulate.png scale=100%
+      @savefig p_eog_simulate1.png scale=100%
       nk.signal_plot([blink_scr, blink_gamma], sampling_rate=100)
       @suppress
       plt.close()

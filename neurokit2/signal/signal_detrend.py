@@ -20,27 +20,28 @@ def signal_detrend(
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        Can be one of 'polynomial' (default; traditional detrending of a given order) or
-        'tarvainen2002' to use the smoothness priors approach described by Tarvainen (2002) (mostly
-        used in HRV analyses as a lowpass filter to remove complex trends), 'loess' for LOESS
-        smoothing trend removal or 'locreg' for local linear regression (the 'runline' algorithm
-        from chronux).
+        Can be one of ``"polynomial"`` (default; traditional detrending of a given order) or
+        ``"tarvainen2002"`` to use the smoothness priors approach described by Tarvainen (2002)
+        (mostly used in HRV analyses as a lowpass filter to remove complex trends), ``"loess"`` for
+        LOESS smoothing trend removal or ``"locreg"`` for local linear regression (the *'runline'*
+        algorithm from chronux).
     order : int
-        Only used if `method` is 'polynomial'. The order of the polynomial. 0, 1 or > 1 for a
+        Only used if ``method`` is ``"polynomial"``. The order of the polynomial. 0, 1 or > 1 for a
         baseline ('constant detrend', i.e., remove only the mean), linear (remove the linear trend)
-        or polynomial detrending, respectively. Can also be 'auto', in which case it will attempt
-        to find the optimal order to minimize the RMSE.
+        or polynomial detrending, respectively. Can also be ``"auto"``, in which case it will
+        attempt to find the optimal order to minimize the RMSE.
     regularization : int
-        Only used if `method='tarvainen2002'`. The regularization parameter (default to 500).
+        Only used if ``method="tarvainen2002"``. The regularization parameter (default to 500).
     alpha : float
-        Only used if `method` is 'loess'. The parameter which controls the degree of smoothing.
+        Only used if ``method`` is "loess". The parameter which controls the degree of smoothing.
     window : float
-        Only used if `method` is 'locreg'. The detrending 'window' should correspond to the desired
-        low frequency band to remove multiplied by the sampling rate (for instance, ``1.5*1000``
-        will remove frequencies below 1.5Hz for a signal sampled at 1000Hz).
+        Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
+        desired low frequency band to remove multiplied by the sampling rate
+        (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at
+        1000Hz).
     stepsize : float
-        Only used if `method` is 'locreg'. Similarly to 'window', 'stepsize' should also be
-        multiplied by the sampling rate.
+        Only used if ``method`` is ``"locreg"``. Similarly to ``window``, ``stepsize`` should also
+        be multiplied by the sampling rate.
 
 
     Returns
@@ -79,13 +80,13 @@ def signal_detrend(
       poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)
 
       # Method 2: Tarvainen's smoothness priors approach (Tarvainen et al., 2002)
-      tarvainen = nk.signal_detrend(signal, method='tarvainen2002')
+      tarvainen = nk.signal_detrend(signal, method="tarvainen2002")
 
       # Method 3: LOESS smoothing trend removal
-      loess = nk.signal_detrend(signal, method='loess')
+      loess = nk.signal_detrend(signal, method="loess")
 
       # Method 4: Local linear regression (100Hz)
-      locreg = nk.signal_detrend(signal, method='locreg',
+      locreg = nk.signal_detrend(signal, method="locreg",
                                  window=1.5*100, stepsize=0.02*100)
 
       # Visualize different methods
@@ -101,7 +102,7 @@ def signal_detrend(
                            "Local Regression": locreg}).plot(subplots=True)
       # Plot horizontal lines to better visualize the detrending
       for subplot in axes:
-          subplot.axhline(y=0, color='k', linestyle='--')
+          subplot.axhline(y=0, color="k", linestyle="--")
       @suppress
       plt.close()
 

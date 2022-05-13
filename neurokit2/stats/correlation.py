@@ -16,7 +16,7 @@ def cor(x, y, method="pearson", show=False):
     y : Union[list, np.array, pd.Series]
         Vectors of values.
     method : str
-        Correlation method. Can be one of 'pearson', 'spearman', 'kendall'.
+        Correlation method. Can be one of ``"pearson"``, ``"spearman"``, ``"kendall"``.
     show : bool
         Draw a scatterplot with a regression line.
 

@@ -14,7 +14,7 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
         A list of durations. If none is passed, will take the duration
         between each onset (i.e., will assume that events are consecutive).
     event_labels : list
-        A list containing unique event identifiers. If `None`, will use the event index number.
+        A list containing unique event identifiers. If ``None``, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
@@ -22,8 +22,8 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, ``'onset'`` for event onsets, ``'duration'`` for event
-        durations, ``'label'`` for the event identifiers and the optional ``'conditions'`` passed
+        Dict containing 3 or 4 arrays, ``"onset"`` for event onsets, ``"duration"`` for event
+        durations, ``"label"`` for the event identifiers and the optional ``"conditions"`` passed
         to ``event_conditions``.
 
     See Also

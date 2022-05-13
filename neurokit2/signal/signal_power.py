@@ -29,12 +29,12 @@ def signal_power(
     continuous : bool
         Compute instant frequency, or continuous power.
     show : bool
-        If True, will return a Poincaré plot. Defaults to False.
+        If ``True``, will return a Poincaré plot. Defaults to ``False``.
     normalize : bool
-        Normalization of power by maximum PSD value. Default to True.
+        Normalization of power by maximum PSD value. Default to ``True``.
         Normalization allows comparison between different PSD methods.
     **kwargs
-        Keyword arguments to be passed to :func:`.signal_psd()`.
+        Keyword arguments to be passed to :func:`.signal_psd`.
 
     See Also
     --------
@@ -44,7 +44,7 @@ def signal_power(
     -------
     pd.DataFrame
         A DataFrame containing the Power Spectrum values and a plot if
-        ``show`` is True.
+        ``show`` is ``True``.
 
     Examples
     --------
