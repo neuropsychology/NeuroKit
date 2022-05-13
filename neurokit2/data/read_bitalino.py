@@ -23,10 +23,10 @@ def read_bitalino(
     Parameters
     ----------
     filename :  str
-        Filename (with or without the extension) of an OpenSignals file (e.g., 'data.txt').
+        Filename (with or without the extension) of an OpenSignals file (e.g., ``"data.txt"``).
     sampling_rate : int
         Sampling rate (in Hz, i.e., samples/second). Defaults to the original sampling rate at
-        which signals were sampled if set to "max". If the sampling rate is set to a given value,
+        which signals were sampled if set to ``max``. If the sampling rate is set to a given value,
         will resample the signals to the desired value. Note that the value of the sampling rate is
         outputted along with the data.
     resample_method : str
@@ -34,9 +34,9 @@ def read_bitalino(
     events_annotation : bool
         Defaults to False. If True, will read signal annotation events.
     events_annotation_directory : str
-        If None (default), reads signal annotation events from the same location where the acquired
-        file is stored. If not, specify the predefined OpenSignals (r)evolution folder directory of
-        where the 'EventsAnnotation.txt' file is stored.
+        If ``None`` (default), reads signal annotation events from the same location where the
+        acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder
+        directory of where the ``"EventsAnnotation.txt"`` file is stored.
 
     Returns
     ----------
@@ -45,11 +45,11 @@ def read_bitalino(
         of pandas dataframes (one dataframe per device) if multiple devices are read.
     info : dict
         The metadata information containing the sensors, corresponding channel names, sampling
-        rate, and the events annotation timings if `events_annotation` is True.
+        rate, and the events annotation timings if ``events_annotation`` is ``True``.
 
     See Also
     --------
-    read_acqknowledge, signal_resample
+    .read_acqknowledge, .signal_resample
 
     Examples
     --------

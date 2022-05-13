@@ -18,11 +18,11 @@ def read_acqknowledge(
     Parameters
     ----------
     filename :  str
-        Filename (with or without the extension) of a BIOPAC's AcqKnowledge file (e.g., 'data.acq').
+        Filename (with or without the extension) of a BIOPAC's AcqKnowledge file (e.g., ``"data.acq"``).
     sampling_rate : int
         Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain
         signals recorded at different rates, harmonization is necessary in order to convert it
-        to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum
+        to a DataFrame. Thus, if `sampling_rate` is set to ``max`` (default), will keep the maximum
         recorded sampling rate and upsample the channels with lower rate if necessary (using the
         :func:`.signal_resample()` function). If the sampling rate is set to a given value, will
         resample the signals to the desired value. Note that the value of the sampling rate is
@@ -31,8 +31,8 @@ def read_acqknowledge(
         Method of resampling (see :func:`.signal_resample()`).
     impute_missing : bool
         Sometimes, due to connections issues, there are lapses in the recorded signal (short
-        periods without signal). If 'impute_missing' is True, will automatically fill the signal
-        interruptions using padding.
+        periods without signal). If ``impute_missing`` is ``True``, will automatically fill the
+        signal interruptions using padding.
 
     Returns
     ----------
@@ -43,7 +43,7 @@ def read_acqknowledge(
 
     See Also
     --------
-    signal_resample
+    .signal_resample
 
     Example
     ----------
