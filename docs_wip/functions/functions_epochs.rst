@@ -11,9 +11,9 @@ Main
 .. """""""""""""""""
 .. .. autofunction:: neurokit2.epochs.epochs_plot
 
-.. *epochs_to_array()*
-.. """"""""""""""""""""
-.. .. autofunction:: neurokit2.epochs.epochs_to_array
+*epochs_to_array()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.epochs.epochs_to_array
 
 *epochs_to_df()*
 """"""""""""""""""""""

@@ -16,7 +16,8 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
     legend : bool
         Display the legend (the key of each epoch).
     show : bool
-        If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
+        If ``True``, will return a plot. If ``False``, will return a DataFrame that can be plotted
+        externally.
 
     Returns
     ----------
@@ -41,7 +42,8 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
                               threshold_keep='below',
                               event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
       epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
-      @savefig p_epochs_plot1_png scale = 100%
+
+      @savefig p_epochs_plot1_png scale=100%
       fig1 = nk.epochs_plot(epochs)
       @suppress
       plt.close()
@@ -54,7 +56,8 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
       events = nk.ecg_findpeaks(signal)
       epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5,
       epochs_end=0.5)
-      @savefig p_epochs_plot2_png scale = 100%
+
+      @savefig p_epochs_plot2_png scale=100%
       fig2 = nk.epochs_plot(epochs)
       @suppress
       plt.close()
