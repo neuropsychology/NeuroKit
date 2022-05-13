@@ -555,12 +555,12 @@ title="Open an issue"
 <span class="sd">    eeg : np.ndarray</span>
 <span class="sd">        An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</span>
 <span class="sd">    reference : str</span>
-<span class="sd">        See ``mne.set_eeg_reference()``. Can be a string (e.g., &#39;average&#39;, &#39;lap&#39; for Laplacian</span>
+<span class="sd">        See :func:`.mne.set_eeg_reference()`. Can be a string (e.g., &#39;average&#39;, &#39;lap&#39; for Laplacian</span>
 <span class="sd">        &quot;reference-free&quot; transformation, i.e., CSD), or a list (e.g., [&#39;TP9&#39;, &#39;TP10&#39;] for mastoid</span>
 <span class="sd">        reference).</span>
 <span class="sd">    robust : bool</span>
-<span class="sd">        Only applied if reference is &#39;average&#39;. If True, will substract the median instead of</span>
-<span class="sd">        the mean.</span>
+<span class="sd">        Only applied if reference is ``average``. If ``True``, will substract the median instead</span>
+<span class="sd">        of the mean.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Optional arguments to be passed into ``mne.set_eeg_rereference()``.</span>
 

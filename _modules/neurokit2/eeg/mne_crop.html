@@ -536,7 +536,7 @@ title="Open an issue"
 <div class="viewcode-block" id="mne_crop"><a class="viewcode-back" href="../../../functions/functions_eeg.html#neurokit2.eeg.mne_crop">[docs]</a><span class="k">def</span> <span class="nf">mne_crop</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_tmax</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Crop mne.Raw objects**</span>
 
-<span class="sd">    This function is similar to `raw.crop()` (same arguments), but with a few critical differences:</span>
+<span class="sd">    This function is similar to ``raw.crop()`` (same arguments), but with a few critical differences:</span>
 <span class="sd">    * It recreates a whole new Raw object, and as such drops all information pertaining to the</span>
 <span class="sd">    original data (which MNE keeps, see https://github.com/mne-tools/mne-python/issues/9759).</span>
 <span class="sd">    * There is the possibility of specifying directly the first and last samples (instead of in</span>
@@ -547,14 +547,14 @@ title="Open an issue"
 <span class="sd">    raw : mne.io.Raw</span>
 <span class="sd">        Raw EEG data.</span>
 <span class="sd">    path : str</span>
-<span class="sd">        Defaults to None, assuming that the MNE data folder already exists. If not,</span>
+<span class="sd">        Defaults to ``None``, assuming that the MNE data folder already exists. If not,</span>
 <span class="sd">        specify the directory to download the folder.</span>
 <span class="sd">    tmin : float</span>
-<span class="sd">        See ``mne.Raw.crop()``</span>
+<span class="sd">        See :func:`mne.Raw.crop()`.</span>
 <span class="sd">    tmax : float</span>
-<span class="sd">        See ``mne.Raw.crop()``</span>
+<span class="sd">        See :func:`mne.Raw.crop()`.</span>
 <span class="sd">    include_tmax : float</span>
-<span class="sd">        See ``mne.Raw.crop()``</span>
+<span class="sd">        See :func:`mne.Raw.crop()`.</span>
 <span class="sd">    smin : int</span>
 <span class="sd">        Cropping start in samples.</span>
 <span class="sd">    samx : int</span>

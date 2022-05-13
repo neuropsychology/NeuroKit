@@ -812,6 +812,7 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_badchannels">
 <span class="sig-name descname"><span class="pre">eeg_badchannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_badchannels.html#eeg_badchannels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_badchannels" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Find bad channels</strong></p>
+<p>Find bad channels among the EEG channels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -829,8 +830,9 @@ beyond 2.33 SD from the mean will be classified as outliers.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>list</em> – List of bad channel names</p></li>
-<li><p><em>DataFrame</em> – Information of each channel, such as standard deviation (SD), mean, median absolute deviation (MAD),
-skewness, kurtosis, amplitude, highest density intervals, number of zero crossings.</p></li>
+<li><p><em>DataFrame</em> – Information of each channel, such as standard deviation (SD), mean, median absolute
+deviation (MAD), skewness, kurtosis, amplitude, highest density intervals, number of zero
+crossings.</p></li>
 </ul>
 </p>
 </dd>
@@ -861,7 +863,7 @@ is first scaled to unitary strength by dividing by the instantaneous GFP.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
-<li><p><strong>gfp</strong> (<em>list</em>) – The Global Field Power (GFP). If None, will be obtained via <code class="docutils literal notranslate"><span class="pre">eeg_gfp()</span></code>.</p></li>
+<li><p><strong>gfp</strong> (<em>list</em>) – The Global Field Power (GFP). If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will be obtained via <code class="docutils literal notranslate"><span class="pre">eeg_gfp()</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – Optional arguments to be passed into <code class="docutils literal notranslate"><span class="pre">nk.eeg_gfp()</span></code>.</p></li>
 </ul>
 </dd>
@@ -913,12 +915,12 @@ at a given time.</p>
 <li><p><strong>eeg</strong> (<em>array</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
 smoothing is requested.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Can be either ‘l1’ or ‘l2’ to use the L1 or L2 norm.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be either <code class="docutils literal notranslate"><span class="pre">l1</span></code> or <code class="docutils literal notranslate"><span class="pre">l2</span></code> to use the L1 or L2 norm.</p></li>
 <li><p><strong>normalize</strong> (<em>bool</em>) – Normalize GFP.</p></li>
-<li><p><strong>smooth</strong> (<em>float</em>) – Can be either None or a float. If a float, will use this value, multiplied by the
+<li><p><strong>smooth</strong> (<em>float</em>) – Can be either <code class="docutils literal notranslate"><span class="pre">None</span></code> or a float. If a float, will use this value, multiplied by the
 sampling rate.</p></li>
-<li><p><strong>robust</strong> (<em>bool</em>) – If True, the GFP extraction (and the data standardization if requested) will be done using
-the median/MAD instead of the mean/SD.</p></li>
+<li><p><strong>robust</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the GFP extraction (and the data standardization if requested) will be done
+using the median/MAD instead of the mean/SD.</p></li>
 <li><p><strong>standardize_eeg</strong> (<em>bool</em>) – Standardize (z-score) the data across time prior to GFP extraction using <code class="docutils literal notranslate"><span class="pre">nk.standardize()</span></code>.</p></li>
 </ul>
 </dd>
@@ -1117,11 +1119,11 @@ channels.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
-<li><p><strong>reference</strong> (<em>str</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.set_eeg_reference()</span></code>. Can be a string (e.g., ‘average’, ‘lap’ for Laplacian
+<li><p><strong>reference</strong> (<em>str</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">mne.set_eeg_reference()</span></code>. Can be a string (e.g., ‘average’, ‘lap’ for Laplacian
 “reference-free” transformation, i.e., CSD), or a list (e.g., [‘TP9’, ‘TP10’] for mastoid
 reference).</p></li>
-<li><p><strong>robust</strong> (<em>bool</em>) – Only applied if reference is ‘average’. If True, will substract the median instead of
-the mean.</p></li>
+<li><p><strong>robust</strong> (<em>bool</em>) – Only applied if reference is <code class="docutils literal notranslate"><span class="pre">average</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will substract the median instead
+of the mean.</p></li>
 <li><p><strong>**kwargs</strong> – Optional arguments to be passed into <code class="docutils literal notranslate"><span class="pre">mne.set_eeg_rereference()</span></code>.</p></li>
 </ul>
 </dd>
@@ -1190,13 +1192,13 @@ EEG signals. Frontiers in Neuroscience, 11, 425.</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data.</p></li>
-<li><p><strong>src</strong> (<em>mne.SourceSpace</em>) – Source space. See <code class="docutils literal notranslate"><span class="pre">mne_templateMRI()</span></code> to obtain it from an MRI template.</p></li>
-<li><p><strong>bem</strong> (<em>mne.Bem</em>) – BEM model. See <code class="docutils literal notranslate"><span class="pre">mne_templateMRI()</span></code> to obtain it from an MRI template.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Can be ‘sLORETA’, ‘MNE’ or ‘dSPM’. See <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.apply_inverse_raw()</span></code>.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If True, shows the location of the electrodes on the head. See <code class="docutils literal notranslate"><span class="pre">mne.viz.plot_alignment()</span></code>.</p></li>
+<li><p><strong>src</strong> (<em>mne.SourceSpace</em>) – Source space. See <a class="reference internal" href="#neurokit2.eeg.mne_templateMRI" title="neurokit2.eeg.mne_templateMRI"><code class="xref py py-func docutils literal notranslate"><span class="pre">mne_templateMRI()</span></code></a> to obtain it from an MRI template.</p></li>
+<li><p><strong>bem</strong> (<em>mne.Bem</em>) – BEM model. See <a class="reference internal" href="#neurokit2.eeg.mne_templateMRI" title="neurokit2.eeg.mne_templateMRI"><code class="xref py py-func docutils literal notranslate"><span class="pre">mne_templateMRI()</span></code></a> to obtain it from an MRI template.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;sLORETA&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;MNE&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;dSPM&quot;</span></code>. See <code class="xref py py-func docutils literal notranslate"><span class="pre">mne.minimum_norm.apply_inverse_raw()</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, shows the location of the electrodes on the head. See <code class="xref py py-func docutils literal notranslate"><span class="pre">mne.viz.plot_alignment()</span></code>.</p></li>
 <li><p><strong>verbose</strong> (<em>str</em>) – Verbosity level for MNE.</p></li>
-<li><p><strong>**kwargs</strong> – Other arguments to be passed to <code class="docutils literal notranslate"><span class="pre">mne.make_forward_solution()</span></code> and <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.make_inverse_operator()</span></code>
-and <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.apply_inverse_raw()</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <code class="docutils literal notranslate"><span class="pre">mne.make_forward_solution()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.make_inverse_operator()</span></code> and <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.apply_inverse_raw()</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1272,9 +1274,9 @@ data following a particular index and add it.</p>
 <li><p><strong>sync_index_raw</strong> (<em>int or list</em>) – An index (e.g., the onset of the same event marked in the same signal), in the raw data, by
 which to align the two inputs. This can be used in case the EEG data and the channel to add
 do not have the same onsets and must be aligned through some common event.</p></li>
-<li><p><strong>sync_index_channel</strong> (<em>int or list</em>) – An index (e.g., the onset of the same event marked in the same signal), in the channel to add,
-by which to align the two inputs. This can be used in case the EEG data and the channel to add
-do not have the same onsets and must be aligned through some common event.</p></li>
+<li><p><strong>sync_index_channel</strong> (<em>int or list</em>) – An index (e.g., the onset of the same event marked in the same signal), in the channel to
+add, by which to align the two inputs. This can be used in case the EEG data and the channel
+to add do not have the same onsets and must be aligned through some common event.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1317,19 +1319,19 @@ do not have the same onsets and must be aligned through some common event.</p></
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data.</p></li>
-<li><p><strong>what</strong> (<em>str or list</em>) – Can be ‘MEG’, which will extract all MEG channels, ‘EEG’, which will extract all EEG channels, or ‘EOG’,
-which will extract all EOG channels (that is, if channel names are named with prefixes of their type e.g.,
-‘EEG 001’ etc. or ‘EOG 061’). Provide exact a single or a list of channel’s name(s) if not
-(e.g., [‘124’, ‘125’]).</p></li>
+<li><p><strong>what</strong> (<em>str or list</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;MEG&quot;</span></code>, which will extract all MEG channels, <code class="docutils literal notranslate"><span class="pre">&quot;EEG&quot;</span></code>, which will extract all EEG
+channels, or <code class="docutils literal notranslate"><span class="pre">&quot;EOG&quot;</span></code>, which will extract all EOG channels (that is, if channel names are
+named with prefixes of their type e.g., ‘EEG 001’ etc. or ‘EOG 061’). Provide exact a single
+or a list of channel’s name(s) if not (e.g., [‘124’, ‘125’]).</p></li>
 <li><p><strong>name</strong> (<em>str or list</em>) – Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
-Otherwise, defaults to None.</p></li>
-<li><p><strong>add_firstsamples</strong> (<em>bool</em>) – Defaults to <cite>False</cite>. MNE’s objects store the value of a delay between
+Otherwise, defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>add_firstsamples</strong> (<em>bool</em>) – Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>. MNE’s objects store the value of a delay between
 the start of the system and the start of the recording
 (see <a class="reference external" href="https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp">https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp</a>).
-Taking this into account can be useful when extracting channels from the Raw object to detect events indices
-that are passed back to MNE again. When <cite>add_firstsamples</cite> is set to <cite>True</cite>, the offset will be explicitly
-added at the beginning of the signal and filled with NaNs. If <cite>add_firstsamples</cite> is a float or an integer,
-the offset will filled with these values instead. If it is set to <cite>“backfill”</cite>, will prepend with the first
+Taking this into account can be useful when extracting channels from the Raw object to
+detect events indices that are passed back to MNE again. When <code class="docutils literal notranslate"><span class="pre">add_firstsamples</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">True</span></code>, the offset will be explicitly added at the beginning of the signal and filled with
+NaNs. If <code class="docutils literal notranslate"><span class="pre">add_firstsamples</span></code> is a float or an integer, the offset will filled with these values instead. If it is set to <code class="docutils literal notranslate"><span class="pre">backfill</span></code>, will prepend with the first
 real value.</p></li>
 </ul>
 </dd>
@@ -1358,7 +1360,7 @@ real value.</p></li>
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_crop">
 <span class="sig-name descname"><span class="pre">mne_crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_crop.html#mne_crop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_crop" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Crop mne.Raw objects</strong></p>
-<p>This function is similar to <cite>raw.crop()</cite> (same arguments), but with a few critical differences:
+<p>This function is similar to <code class="docutils literal notranslate"><span class="pre">raw.crop()</span></code> (same arguments), but with a few critical differences:
 * It recreates a whole new Raw object, and as such drops all information pertaining to the
 original data (which MNE keeps, see <a class="reference external" href="https://github.com/mne-tools/mne-python/issues/9759">https://github.com/mne-tools/mne-python/issues/9759</a>).
 * There is the possibility of specifying directly the first and last samples (instead of in
@@ -1367,11 +1369,11 @@ time unit).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data.</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Defaults to None, assuming that the MNE data folder already exists. If not,
+<li><p><strong>path</strong> (<em>str</em>) – Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, assuming that the MNE data folder already exists. If not,
 specify the directory to download the folder.</p></li>
-<li><p><strong>tmin</strong> (<em>float</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code></p></li>
-<li><p><strong>tmax</strong> (<em>float</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code></p></li>
-<li><p><strong>include_tmax</strong> (<em>float</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code></p></li>
+<li><p><strong>tmin</strong> (<em>float</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code>.</p></li>
+<li><p><strong>tmax</strong> (<em>float</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code>.</p></li>
+<li><p><strong>include_tmax</strong> (<em>float</em>) – See <code class="xref py py-func docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code>.</p></li>
 <li><p><strong>smin</strong> (<em>int</em>) – Cropping start in samples.</p></li>
 <li><p><strong>samx</strong> (<em>int</em>) – Cropping end in samples.</p></li>
 </ul>
@@ -1399,12 +1401,13 @@ specify the directory to download the folder.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_data">
 <span class="sig-name descname"><span class="pre">mne_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_data.html#mne_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_data" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Utility function to easily access MNE datasets</strong></p>
+<dd><p><strong>Access MNE Datasets</strong></p>
+<p>Utility function to easily access MNE datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>what</strong> (<em>str</em>) – Can be ‘raw’ or ‘filt-0-40_raw’ (a filtered version).</p></li>
-<li><p><strong>path</strong> (<em>str</em>) – Defaults to None, assuming that the MNE data folder already exists. If not,
+<li><p><strong>what</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;raw&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;filt-0-40_raw&quot;</span></code> (a filtered version).</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, assuming that the MNE data folder already exists. If not,
 specify the directory to download the folder.</p></li>
 </ul>
 </dd>
@@ -1430,7 +1433,7 @@ specify the directory to download the folder.</p></li>
 <span class="sig-name descname"><span class="pre">mne_templateMRI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_templateMRI.html#mne_templateMRI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_templateMRI" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Return Path of MRI Template</strong></p>
 <p>This function is a helper that returns the path of the MRI template for adults (the <code class="docutils literal notranslate"><span class="pre">src</span></code> and
-the <code class="docutils literal notranslate"><span class="pre">bem</span></code>) that is made available through <code class="docutils literal notranslate"><span class="pre">MNE</span></code>. It downloads the data if need be. These
+the <code class="docutils literal notranslate"><span class="pre">bem</span></code>) that is made available through <code class="docutils literal notranslate"><span class="pre">&quot;MNE&quot;</span></code>. It downloads the data if need be. These
 templates can be used for EEG source reconstruction when no individual MRI is available.</p>
 <p>See <a class="reference external" href="https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html">https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html</a></p>
 <dl class="field-list simple">
@@ -1452,7 +1455,8 @@ templates can be used for EEG source reconstruction when no individual MRI is av
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_to_df">
 <span class="sig-name descname"><span class="pre">mne_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_df" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Convert MNE objects to dataframe or dict of dataframes</strong></p>
+<dd><p><strong>Conversion from MNE to dataframes</strong></p>
+<p>Convert MNE objects to dataframe or dict of dataframes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>eeg</strong> (<em>Union[mne.io.Raw, mne.Epochs]</em>) – Raw or Epochs M/EEG data from MNE.</p>
@@ -1464,8 +1468,8 @@ templates can be used for EEG source reconstruction when no individual MRI is av
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>DataFrame</em> – A DataFrame containing all epochs identifiable by the ‘Epoch’ column, which time axis
-is stored in the ‘Time’ column.</p>
+<dd class="field-odd"><p><em>DataFrame</em> – A DataFrame containing all epochs identifiable by the <code class="docutils literal notranslate"><span class="pre">&quot;Epoch&quot;</span></code> column, which time axis
+is stored in the <code class="docutils literal notranslate"><span class="pre">&quot;Time&quot;</span></code> column.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>

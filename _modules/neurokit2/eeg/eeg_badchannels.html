@@ -543,6 +543,8 @@ title="Open an issue"
 <div class="viewcode-block" id="eeg_badchannels"><a class="viewcode-back" href="../../../functions/functions_eeg.html#neurokit2.eeg.eeg_badchannels">[docs]</a><span class="k">def</span> <span class="nf">eeg_badchannels</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">bad_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Find bad channels**</span>
 
+<span class="sd">    Find bad channels among the EEG channels.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    eeg : np.ndarray</span>
@@ -564,8 +566,9 @@ title="Open an issue"
 <span class="sd">    list</span>
 <span class="sd">        List of bad channel names</span>
 <span class="sd">    DataFrame</span>
-<span class="sd">        Information of each channel, such as standard deviation (SD), mean, median absolute deviation (MAD),</span>
-<span class="sd">        skewness, kurtosis, amplitude, highest density intervals, number of zero crossings.</span>
+<span class="sd">        Information of each channel, such as standard deviation (SD), mean, median absolute</span>
+<span class="sd">        deviation (MAD), skewness, kurtosis, amplitude, highest density intervals, number of zero</span>
+<span class="sd">        crossings.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ---------</span>
