@@ -19,11 +19,11 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
     eog_signal : Union[list, np.array, pd.Series]
         The raw EOG channel (either vertical or horizontal).
     sampling_rate : int
-        The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
-        The processing pipeline to apply. Can be one of 'neurokit' (default), 'agarwal2019',
-        'mne' (requires the MNE package to be installed), 'brainstorm', 'kong1998'.
+        The processing pipeline to apply. Can be one of ``"neurokit"`` (default), "agarwal2019",
+        "mne" (requires the MNE package to be installed), "brainstorm", "kong1998".
 
     Returns
     -------

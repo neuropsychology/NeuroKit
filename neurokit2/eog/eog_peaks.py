@@ -8,17 +8,17 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     Parameters
     ----------
     veog_cleaned : Union[list, np.array, pd.Series]
-        The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
-        appear as upward peaks.
+        The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks
+        must appear as upward peaks.
     sampling_rate : int
-        The signal sampling rate (in Hz, i.e., samples/second). Needed for method 'blinker' or
-        'jammes2008'.
+        The signal sampling rate (in Hz, i.e., samples/second). Needed for method ``"blinker"`` or
+        ``"jammes2008"``.
     method : str
-        The peak detection algorithm. Can be one of 'neurokit', 'mne' (requires the MNE package
-        to be installed), or 'brainstorm' or 'blinker'.
+        The peak detection algorithm. Can be one of ``"neurokit"``, ``"mne"`` (requires the MNE
+        package to be installed), or ``"brainstorm"`` or ``"blinker"``.
     sampling_rate : int
-        The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
-        method to be used is 'blinker', otherwise defaults to None.
+        The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be
+        supplied if the method to be used is ``"blinker"``, otherwise defaults to ``None``.
     **kwargs
         Other arguments passed to functions.
 

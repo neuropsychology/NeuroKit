@@ -13,8 +13,8 @@ from .eog_simulate import _eog_simulate_blink
 def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     """**Locate EOG eye blinks**
 
-    Low-level function used by `eog_peaks()` to identify blinks in an EOG signal using a different
-    set of algorithms. See `eog_peaks()` for details.
+    Low-level function used by :func:`.eog_peaks` to identify blinks in an EOG signal using a
+    different set of algorithms. See :func:`.eog_peaks` for details.
 
     Parameters
     ----------
@@ -22,14 +22,14 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
         The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks
         must appear as upward peaks.
     sampling_rate : int
-        The signal sampling rate (in Hz, i.e., samples/second). Needed for method 'blinker' or
-        'jammes2008'.
+        The signal sampling rate (in Hz, i.e., samples/second). Needed for method ``"blinker"`` or
+        ``"jammes2008"``.
     method : str
-        The peak detection algorithm. Can be one of 'neurokit', 'mne' (requires the MNE package
-        to be installed), or 'brainstorm' or 'blinker'.
+        The peak detection algorithm. Can be one of ``"neurokit"``, ``"mne"`` (requires the MNE
+        package to be installed), or ``"brainstorm"`` or ``"blinker"``.
     sampling_rate : int
         The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied
-        if the method to be used is 'blinker', otherwise defaults to None.
+        if the method to be used is ``"'blinker"``, otherwise defaults to ``None``.
     **kwargs
         Other arguments passed to functions.
 

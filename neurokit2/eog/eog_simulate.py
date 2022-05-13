@@ -10,8 +10,8 @@ def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameter
 
     Recommended parameters:
 
-    * For method 'scr': ``[3.644, 0.422, 0.356, 0.943]``
-    * For method 'gamma': ``[2.659, 5.172, 0.317]``
+    * For method ``"scr"``: ``[3.644, 0.422, 0.356, 0.943]``
+    * For method ``"gamma"``: ``[2.659, 5.172, 0.317]``
 
     Examples
     --------

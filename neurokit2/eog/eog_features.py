@@ -27,20 +27,20 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
     Parameters
     ----------
     eog_cleaned : Union[list, np.array, pd.Series]
-        The cleaned EOG channel, extracted from `eog_clean()`.
+        The cleaned EOG channel, extracted from :func:`.eog_clean`.
     peaks : np.array
         Vector containing the samples at which EOG-peaks occur.
     sampling_rate : int
-        The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
 
     Returns
     -------
     info : dict
         A dictionary containing information of the features of the EOG blinks, accessible with keys
-        "Blink_LeftZeros" (point when eye closes), "Blink_RightZeros" (point when eye opens),
-        "Blink_pAVR", "Blink_nAVR", "Blink_BAR", and "Blink_Duration" (duration of each blink in
-        seconds).
+        ``"Blink_LeftZeros"`` (point when eye closes), ``"Blink_RightZeros"`` (point when eye opens)
+        , ``"Blink_pAVR"``, ``"Blink_nAVR"``, ``"Blink_BAR"``, and ``"Blink_Duration"`` (duration
+        of each blink in seconds).
 
     See Also
     --------
