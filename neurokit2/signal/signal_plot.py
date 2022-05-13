@@ -147,7 +147,7 @@ def signal_plot(
             for ax, col, color in zip(axes, continuous_columns, colors):
                 ax.plot(signal[col], c=color, **kwargs)
         else:
-            plot = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
+            _ = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
 
         if sampling_rate is None and signal.index.is_integer():
             plt.xlabel("Samples")

@@ -6,7 +6,10 @@ from .ppg_intervalrelated import ppg_intervalrelated
 
 
 def ppg_analyze(data, sampling_rate=1000, method="auto"):
-    """**Performs PPG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data**.
+    """**Photoplethysmography (PPG) Analysis**.
+
+    Performs PPG analysis on either epochs (event-related analysis) or on longer periods of data
+    such as resting-state data.
 
     Parameters
     ----------
@@ -21,7 +24,8 @@ def ppg_analyze(data, sampling_rate=1000, method="auto"):
     method : str
         Can be one of ``"event-related"`` for event-related analysis on epochs, or
         ``"interval-related"`` for analysis on longer periods of data. Defaults to ``"auto"`` where
-        the right method will be chosen based on the mean duration of the data (``"event-related"`` for duration under 10s).
+        the right method will be chosen based on the mean duration of the data (``"event-related"``
+        for duration under 10s).
 
     Returns
     -------

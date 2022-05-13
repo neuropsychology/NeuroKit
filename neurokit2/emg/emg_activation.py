@@ -4,7 +4,8 @@ import pandas as pd
 
 from ..events import events_find
 from ..misc import as_vector
-from ..signal import signal_binarize, signal_changepoints, signal_formatpeaks, signal_smooth
+from ..signal import (signal_binarize, signal_changepoints, signal_formatpeaks,
+                      signal_smooth)
 
 
 def emg_activation(
@@ -26,11 +27,12 @@ def emg_activation(
     ----------
     emg_amplitude : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
-        ``emg_amplitude()`` for methods like ``"threshold"`` or ``"mixture"``), and / or the cleaned EMG signal (for methods like ``"pelt"``, ``"biosppy"`` or ``"silva"``).
+        ``emg_amplitude()`` for methods like ``"threshold"`` or ``"mixture"``), and / or the
+        cleaned EMG signal (for methods like ``"pelt"``, ``"biosppy"`` or ``"silva"``).
     emg_cleaned : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
-        ``emg_amplitude()`` for methods like ``"threshold"`` or ``"mixture"``), and / or the cleaned EMG signal
-        (for methods like ``"pelt"``, ``"biosppy"`` or ``"silva"``).
+        ``emg_amplitude()`` for methods like ``"threshold"`` or ``"mixture"``), and / or the
+        cleaned EMG signal (for methods like ``"pelt"``, ``"biosppy"`` or ``"silva"``).
     sampling_rate : int
         The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
     method : str
@@ -42,20 +44,20 @@ def emg_activation(
     threshold : str
         If ``method`` is ``"mixture"``, then it corresponds to the minimum probability required to
         be considered as activated (default to 0.33). If ``method`` is ``"threshold"``, then it
-        corresponds to the minimum amplitude to detect as onset i.e., defaults to one tenth of the standard deviation of ``emg_amplitude``.
-        If ``method`` is ``"silva"``, defaults to 0.05. If ``method`` is ``"biosppy"``, defaults to
-        1.2 times of the mean of the absolute of the smoothed, full-wave-rectified signal. If
-        ``method`` is ``"pelt"``, threshold defaults to
+        corresponds to the minimum amplitude to detect as onset i.e., defaults to one tenth of the
+        standard deviation of ``emg_amplitude``. If ``method`` is ``"silva"``, defaults to 0.05. If
+        ``method`` is ``"biosppy"``, defaults to 1.2 times of the mean of the absolute of the
+        smoothed, full-wave-rectified signal. If ``method`` is ``"pelt"``, threshold defaults to
         ``None`` as changepoints are used as a basis for detection.
     duration_min : float
         The minimum duration of a period of activity or non-activity in seconds.
         If ``default``, will be set to 0.05 (50 ms).
     size: float or int
-        Detection window size (seconds). Applicable only if ``method`` is ``"biosppy"`` or ``"silva"``. If
-        ``None``, defaults to 0.05 for ``"biosppy"`` and 20 for ``"silva"``.
+        Detection window size (seconds). Applicable only if ``method`` is ``"biosppy"`` or
+        ``"silva"``. If ``None``, defaults to 0.05 for ``"biosppy"`` and 20 for ``"silva"``.
     threshold_size : int
-        Window size for calculation of the adaptive threshold. Must be bigger than the detection window size.
-        Applicable only if ``method`` is ``"silva``". If ``None``, defaults to 22.
+        Window size for calculation of the adaptive threshold. Must be bigger than the detection
+        window size. Applicable only if ``method`` is ``"silva``". If ``None``, defaults to 22.
     kwargs : optional
         Other arguments.
 
@@ -63,14 +65,14 @@ def emg_activation(
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the samples at which the onsets,
-        offsets, and periods of activations of the EMG signal occur, accessible with the key ``"EMG_Onsets"``,
-        ``"EMG_Offsets"``, and ``"EMG_Activity"`` respectively.
+        A dictionary containing additional information, in this case the samples at which the
+        onsets, offsets, and periods of activations of the EMG signal occur, accessible with the
+        key ``"EMG_Onsets"``, ``"EMG_Offsets"``, and ``"EMG_Activity"`` respectively.
     activity_signal : DataFrame
-        A DataFrame of same length as the input signal in which occurences of onsets, offsets, and activity
-        (above the threshold) of the EMG signal are marked as "1" in lists of zeros with the same
-        length as ``emg_amplitude``. Accessible with the keys ``"EMG_Onsets"``, ``"EMG_Offsets"``,
-        and ``"EMG_Activity"`` respectively.
+        A DataFrame of same length as the input signal in which occurences of onsets, offsets, and
+        activity (above the threshold) of the EMG signal are marked as "1" in lists of zeros with
+        the same length as ``emg_amplitude``. Accessible with the keys ``"EMG_Onsets"``,
+        ``"EMG_Offsets"``, and ``"EMG_Activity"`` respectively.
 
     See Also
     --------
