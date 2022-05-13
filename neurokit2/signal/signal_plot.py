@@ -114,12 +114,11 @@ def signal_plot(
         for col in events_columns:
             vector = signal[col]
             events.append(np.where(vector == np.max(vector.unique()))[0])
-        plot = events_plot(events, signal=signal[continuous_columns])
-
+        events_plot(events, signal=signal[continuous_columns])
         if sampling_rate is None and signal.index.is_integer():
-            plot.gca().set_xlabel("Samples")
+            plt.gca().set_xlabel("Samples")
         else:
-            plot.gca().set_xlabel(title_x)
+            plt.gca().set_xlabel(title_x)
 
     else:
 
