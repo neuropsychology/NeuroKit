@@ -17,12 +17,12 @@ def emg_process(emg_signal, sampling_rate=1000):
     emg_signal : Union[list, np.array, pd.Series]
         The raw electromyography channel.
     sampling_rate : int
-        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `emg_signal` containing the following columns:
+        A DataFrame of same length as ``emg_signal`` containing the following columns:
 
         * ``"EMG_Raw"``: the raw signal.
         * ``"EMG_Clean"``: the cleaned signal.
@@ -34,7 +34,7 @@ def emg_process(emg_signal, sampling_rate=1000):
 
     info : dict
         A dictionary containing the information of each amplitude onset, offset, and peak activity
-        (see `emg_activation()`), as well as the signals' sampling rate.
+        (see :func:`emg_activation`), as well as the signals' sampling rate.
 
     See Also
     --------

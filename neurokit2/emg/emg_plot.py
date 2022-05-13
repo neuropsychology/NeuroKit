@@ -5,16 +5,18 @@ import pandas as pd
 
 
 def emg_plot(emg_signals, sampling_rate=None):
-    """**Visualize electromyography (EMG) data**
+    """**EMG Graph**
+
+    Visualize electromyography (EMG) data.
 
     Parameters
     ----------
     emg_signals : DataFrame
-        DataFrame obtained from `emg_process()`.
+        DataFrame obtained from ``emg_process()``.
     sampling_rate : int
         The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to None.
+        Defaults to ``None``.
 
     Returns
     -------
