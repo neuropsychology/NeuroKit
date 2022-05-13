@@ -39,9 +39,9 @@ You can navigate to the different sections using the left panel. We recommend ch
    authors
    cite_us
    installation
-   resources/index
-   functions/index
    examples/index
+   functions/index
+   resources/index
    studies/index
    Repository <https://github.com/neuropsychology/NeuroKit>
 

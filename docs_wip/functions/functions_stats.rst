@@ -4,7 +4,7 @@ Stats
 Utilities
 ^^^^^^^^^^^^^^^^
 *correlation()*
-""""""""""""
+""""""""""""""""
 .. autofunction:: neurokit2.cor
 
 *density()*

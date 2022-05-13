@@ -41,7 +41,7 @@ def distance(X=None, method="mahalanobis"):
 
     .. ipython:: python
 
-      data["DistanceZ"] = nk.distance(data.drop("Distance", axis=1), method="mean")
+      data["DistanceZ"] = np.abs(nk.distance(data.drop("Distance", axis=1), method="mean"))
 
       @savefig p_distance2.png scale=100%
       fig = data.plot(x="Petal.Length", y="Sepal.Length", s="DistanceZ", c="DistanceZ", kind="scatter")
