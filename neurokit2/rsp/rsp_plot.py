@@ -10,7 +10,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
         Parameters
         ----------
         rsp_signals : DataFrame
-            DataFrame obtained from `rsp_process()`.
+            DataFrame obtained from :func:`.rsp_process`.
         sampling_rate : int
             The desired sampling rate (in Hz, i.e., samples/second).
 

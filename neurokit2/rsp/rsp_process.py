@@ -11,7 +11,8 @@ from .rsp_phase import rsp_phase
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """**Process a respiration (RSP) signal**
 
-    Convenience function that automatically processes a respiration signal with one of the following methods:
+    Convenience function that automatically processes a respiration signal with one of the
+    following methods:
 
     * `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
 
@@ -22,14 +23,15 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     rsp_signal : Union[list, np.array, pd.Series]
         The raw respiration channel (as measured, for instance, by a respiration belt).
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018" (default) or "biosppy".
+        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default)
+        or ``"biosppy"``.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `rsp_signal` containing the following columns:
+        A DataFrame of same length as :func:`.rsp_signal` containing the following columns:
 
         * ``"RSP_Raw"``: the raw signal.
         * ``"RSP_Clean"``: the cleaned signal.
@@ -44,7 +46,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
           1), representing the stage of the current respiratory phase.
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
-        accessible with the keys "RSP_Peaks", and "RSP_Troughs" respectively, as well as the
+        accessible with the keys ``"RSP_Peaks"``, and ``"RSP_Troughs"`` respectively, as well as the
         signals' sampling rate.
 
     See Also

@@ -6,26 +6,25 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 def rsp_fixpeaks(peaks, troughs=None):
     """**Correct RSP peaks**
 
-    Low-level function used by `rsp_peaks()` to correct the peaks found by `rsp_findpeaks()`.
-    Doesn't do anything for now for RSP. See `rsp_peaks()` for details.
+    Low-level function used by :func:`.rsp_peaks` to correct the peaks found
+    by :func:`.rsp_findpeaks`. Doesn't do anything for now for RSP.
+    See :func:`.rsp_peaks` for details.
 
     Parameters
     ----------
     peaks : list or array or DataFrame or Series or dict
         The samples at which respiration peaks (exhalation onsets) occur. If a dict or a DataFrame
-        is passed, it is assumed that these containers were obtained with `rsp_findpeaks()`.
+        is passed, it is assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     troughs : list or array or DataFrame or Series or dict
         The samples at which respiration troughs (inhalation onsets) occur. If a dict or a
-        DataFrame is passed, it is assumed that these containers were obtained with
-        `rsp_findpeak()`.
+        DataFrame is passed, it is assumed that these containers were obtained
+        with :func:`.rsp_findpeaks`.
 
     Returns
     -------
     info : dict
         A dictionary containing additional information, in this case the samples at which
-        inhalation onsets
-        and exhalation onsets occur, accessible with the keys "RSP_Troughs" and "RSP_Peaks",
-        respectively.
+        inhalation onsets and exhalation onsets occur, accessible with the keys ``"RSP_Troughs"`` and ``"RSP_Peaks"``, respectively.
 
     See Also
     --------

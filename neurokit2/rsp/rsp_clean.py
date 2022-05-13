@@ -14,9 +14,9 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     Clean a respiration signal using different sets of parameters, such as:
 
-    * **khodadad2018**: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
+    * ``"khodadad2018"``: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
       filter)
-    * **BioSPPy**: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
+    * ``"BioSPPy"``: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
       detrending).
 
     Parameters
@@ -24,9 +24,10 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     rsp_signal : Union[list, np.array, pd.Series]
         The raw respiration channel (as measured, for instance, by a respiration belt).
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018" (default) or "biosppy".
+        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default) or
+        ``"biosppy"``.
 
     Returns
     -------

@@ -14,16 +14,17 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     Parameters
     ----------
     rsp_cleaned : Union[list, np.array, pd.Series]
-        The cleaned respiration channel as returned by `rsp_clean()`.
+        The cleaned respiration channel as returned by :func:`.rsp_clean`.
     peaks : list or array or DataFrame or Series or dict
         The samples at which the respiration peaks (exhalation onsets) occur. If a dict or a
-        DataFrame is passed, it is assumed that these containers were obtained with `rsp_findpeaks()`.
+        DataFrame is passed, it is assumed that these containers were obtained
+        with :func:`rsp_findpeaks`.
     troughs : list or array or DataFrame or Series or dict
         The samples at which the respiration troughs (inhalation onsets) occur. If a dict or a
-        is passed, it is assumed that these containers were obtained with `rsp_findpeaks()`.
+        is passed, it is assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     interpolation_method : str
-        Method used to interpolate the amplitude between peaks. See `signal_interpolate()`.
-        'monotone_cubic' is chosen as the default interpolation method since it ensures monotone
+        Method used to interpolate the amplitude between peaks. See :func:`.signal_interpolate`.
+        ``"monotone_cubic"`` is chosen as the default interpolation method since it ensures monotone
         interpolation between data point (i.e., it prevents physiologically implausible "overshoots"
         or "undershoots" in the y-direction). In contrast, the widely used cubic spline
         'interpolation does not ensure monotonicity.

@@ -19,18 +19,19 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
     Parameters
     ----------
     rsp_rate : array
-        Array containing the respiratory rate, produced by `signal_rate()`.
+        Array containing the respiratory rate, produced by :func:`.signal_rate`.
     troughs : dict
         The samples at which the inhalation onsets occur.
-        Dict returned by `rsp_peaks()` (Accessible with the key, "RSP_Troughs"). Defaults to None.
+        Dict returned by :func:`rsp_peaks` (Accessible with the key, ``"RSP_Troughs"``).
+        Defaults to ``None``.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
-        If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval
-        against the next successive one. The ellipse centers around the average breath-to-breath interval.
-        Defaults to False.
+        If ``True``, will return a Poincaré plot, a scattergram, which plots each breath-to-breath
+        interval against the next successive one. The ellipse centers around the average
+        breath-to-breath interval. Defaults to ``False``.
     silent : bool
-        If False, warnings will be printed. Default to True.
+        If ``False``, warnings will be printed. Default to ``True``.
 
     Returns
     -------
@@ -47,12 +48,12 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
         * ``"RRV-pBBx"``: the proportion of breath-to-breath intervals that are greater than x
           seconds,
           out of the total number of intervals.
-        * ``"RRV_VLF"``: spectral power density pertaining to very low frequency band i.e., 0 to .
-          04 Hz by default.
-        * ``"RRV_LF"``: spectral power density pertaining to low frequency band i.e., .04 to .15
-          Hz by default.
-        * ``"RRV_HF"``: spectral power density pertaining to high frequency band i.e., .15 to .4
-          Hz by default.
+        * ``"RRV_VLF"``: spectral power density pertaining to very low frequency band (i.e., 0 to .
+          04 Hz) by default.
+        * ``"RRV_LF"``: spectral power density pertaining to low frequency band (i.e., .04 to .15
+          Hz) by default.
+        * ``"RRV_HF"``: spectral power density pertaining to high frequency band (i.e., .15 to .4
+          Hz) by default.
         * ``"RRV_LFHF"``: the ratio of low frequency power to high frequency power.
         * ``"RRV_LFn"``: the normalized low frequency, obtained by dividing the low frequency
           power by the total power.
@@ -65,12 +66,13 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
           Poincaré plot along the line of identity. It is an index of long-term variability.
         * ``"RRV_SD2SD1"``: the ratio between short and long term fluctuations of the
           breath-to-breath intervals (SD2 divided by SD1).
-        * ``"RRV_ApEn"``: the approximate entropy of RRV, calculated by `entropy_approximate()`.
-        * ``"RRV_SampEn"``: the sample entropy of RRV, calculated by `entropy_sample()`.
+        * ``"RRV_ApEn"``: the approximate entropy of RRV, calculated
+          by :func:`.entropy_approximate`.
+        * ``"RRV_SampEn"``: the sample entropy of RRV, calculated by :func:`.entropy_sample`.
         * ``"RRV_DFA_alpha1"``: the "short-term" fluctuation value generated from Detrended
-          Fluctuation
-          Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath
-          intervals. Will only be computed if mora than 160 breath cycles in the signal.
+          Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the
+          breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the
+          signal.
         * ``"RRV_DFA_alpha2"``: the long-term fluctuation value. Will only be computed if mora
           than 640 breath cycles in the signal.
         * **MFDFA indices**: Indices related to the :func:`multifractal spectrum <.fractal_dfa()>`.

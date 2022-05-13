@@ -31,9 +31,9 @@ def rsp_simulate(
     respiratory_rate : float
         Desired number of breath cycles in one minute.
     method : str
-        The model used to generate the signal. Can be 'sinusoidal' for a simulation based on a
+        The model used to generate the signal. Can be ``"sinusoidal"`` for a simulation based on a
         trigonometric sine wave that roughly approximates a single respiratory cycle. If
-        'breathmetrics' (default), will use an advanced model desbribed by
+        ``"breathmetrics"`` (default), will use an advanced model desbribed by
         `Noto, et al. (2018) <https://github.com/zelanolab/breathmetrics>`_.
     random_state : int
         Seed for the random number generator.

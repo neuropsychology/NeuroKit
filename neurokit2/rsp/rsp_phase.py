@@ -15,22 +15,24 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     ----------
     peaks : list or array or DataFrame or Series or dict
         The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with `rsp_findpeaks()`.
+        assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     troughs : list or array or DataFrame or Series or dict
         The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with `rsp_findpeaks()`.
+        assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     desired_length : int
-        By default, the returned respiration rate has the same number of elements as `peaks`. If set
-        to an integer, the returned rate will be interpolated between `peaks` over `desired_length`
-        samples. Has no effect if a DataFrame is passed in as the `peaks` argument.
+        By default, the returned respiration rate has the same number of elements as ``peaks``. If
+        set to an integer, the returned rate will be interpolated between ``peaks`` over
+        ``desired_length`` samples. Has no effect if a DataFrame is passed in as the ``peaks``
+        argument.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `rsp_signal` containing the following columns:
-        - *"RSP_Phase"*: breathing phase, marked by "1" for inspiration and "0" for expiration.
-        - *"RSP_Phase_Completion"*: breathing phase completion, expressed in percentage (from 0 to 1),
-        representing the stage of the current respiratory phase.
+        A DataFrame of same length as :func:`.rsp_signal` containing the following columns:
+
+        * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
+        * ``"RSP_Phase_Completion"``: breathing phase completion, expressed in percentage (from 0
+          to 1), representing the stage of the current respiratory phase.
 
     See Also
     --------
