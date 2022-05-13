@@ -23,10 +23,10 @@ def ppg_simulate(
 ):
     """**Simulate a photoplethysmogram (PPG) signal**
 
-    Phenomenological approximation of PPG. The PPG wave is described with four landmarks: wave onset,
-    location of the systolic peak, location of the dicrotic notch and location of the diastolic peaks.
-    These landmarks are defined as x and y coordinates (in a  time series). These coordinates are
-    then interpolated at the desired sampling rate to obtain the PPG signal.
+    Phenomenological approximation of PPG. The PPG wave is described with four landmarks: wave
+    onset, location of the systolic peak, location of the dicrotic notch and location of the
+    diastolic peaks. These landmarks are defined as x and y coordinates (in a time series). These
+    coordinates are then interpolated at the desired sampling rate to obtain the PPG signal.
 
     Parameters
     ----------
@@ -36,7 +36,7 @@ def ppg_simulate(
         The desired sampling rate (in Hz, i.e., samples/second). The default is 1000.
     heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70. Note that for the
-        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These
+        ECGSYN method, random fluctuations are to be expected to mimic a real heart rate. These
         fluctuations can cause some slight discrepancies between the requested heart rate and the
         empirical heart rate, especially for shorter signals.
     frequency_modulation : float
@@ -54,14 +54,14 @@ def ppg_simulate(
     powerline_amplitude : float
         Float between 0 and 1. Determines how pronounced the powerline artifact (50 Hz) is
         (0 corresponds to absence of powerline artifact). Note that powerline_amplitude > 0 is only
-        possible if 'sampling_rate' is >= 500. The default is 0.1.
+        possible if ``sampling_rate`` is >= 500. The default is 0.1.
     burst_amplitude : float
         Float between 0 and 1. Determines how pronounced high frequency burst artifacts are
         (0 corresponds to absence of bursts). The default is 1.
     burst_number : int
         Determines how many high frequency burst artifacts occur. The default is 0.
     show : bool
-        If true, returns a plot of the landmarks and interpolated PPG. Useful for debugging.
+        If ``True``, returns a plot of the landmarks and interpolated PPG. Useful for debugging.
     random_state : int
         Seed for the random number generator. Keep it fixed for reproducible results.
 

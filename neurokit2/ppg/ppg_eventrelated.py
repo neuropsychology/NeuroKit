@@ -13,18 +13,18 @@ def ppg_eventrelated(epochs, silent=False):
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial,
-        usually obtained via `epochs_create()`, or a DataFrame
-        containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained
+        via :func:`.epochs_create`, or a DataFrame containing all epochs, usually obtained
+        via :func:`.epochs_to_df`.
     silent : bool
-        If True, silence possible warnings.
+        If ``True``, silence possible warnings.
 
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed PPG features for each epoch, with each epoch indicated by
-        the `Label` column (if not present, by the `Index` column). The analyzed features consist of
-        the following:
+        A dataframe containing the analyzed PPG features for each epoch, with each epoch indicated
+        by the `Label` column (if not present, by the `Index` column). The analyzed features
+        consist of the following:
 
         * ``"PPG_Rate_Baseline"``: the baseline heart rate (at stimulus onset).
 

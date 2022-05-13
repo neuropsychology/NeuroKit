@@ -18,12 +18,12 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     ppg_signal : Union[list, np.array, pd.Series]
         The raw PPG channel.
     sampling_rate : int
-        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.emg_signal` (in Hz, i.e., samples/second).
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `emg_signal` containing the following columns:
+        A DataFrame of same length as :func:`.emg_signal` containing the following columns:
 
         * ``"PPG_Raw"``: the raw signal.
         * ``"PPG_Clean"``: the cleaned signal.

@@ -13,20 +13,20 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
     Parameters
     ----------
     ppg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned PPG channel as returned by `ppg_clean()`.
+        The cleaned PPG channel as returned by :func:`.ppg_clean`.
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.
     method : str
-        The processing pipeline to apply. Can be one of "elgendi". The default is "elgendi".
+        The processing pipeline to apply. Can be one of ``"elgendi"``. The default is ``"elgendi"``.
     show : bool
-        If True, returns a plot of the thresholds used during peak detection. Useful for debugging.
-        The default is False.
+        If ``True``, returns a plot of the thresholds used during peak detection. Useful for
+        debugging. The default is ``False``.
 
     Returns
     -------
     info : dict
         A dictionary containing additional information, in this case the samples at which systolic
-        peaks occur, accessible with the key "PPG_Peaks".
+        peaks occur, accessible with the key ``"PPG_Peaks"``.
 
     See Also
     --------

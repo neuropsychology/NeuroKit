@@ -10,10 +10,10 @@ def ppg_plot(ppg_signals, sampling_rate=None):
     Parameters
     ----------
     ppg_signals : DataFrame
-        DataFrame obtained from `ppg_process()`.
+        DataFrame obtained from :func:`.ppg_process`.
     sampling_rate : int
-        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if the data
-        should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to None.
+        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if
+        the data should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to ``None``.
 
     Returns
     -------
