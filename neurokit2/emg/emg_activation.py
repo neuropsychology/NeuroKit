@@ -94,6 +94,7 @@ def emg_activation(
     .. ipython:: python
 
       activity, info = nk.emg_activation(emg_amplitude=emg_amplitude, method="threshold")
+
       @savefig p_emg_activation1.png scale=100%
       nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
       @suppress

@@ -31,7 +31,8 @@ def emg_plot(emg_signals, sampling_rate=None):
 
       emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
       emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
-      @savefig p.emg_plot.png scale=100%
+
+      @savefig p_emg_plot.png scale=100%
       fig = nk.emg_plot(emg_signals)
       @suppress
       plt.close()
