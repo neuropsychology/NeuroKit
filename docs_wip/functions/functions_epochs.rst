@@ -3,9 +3,9 @@ Epochs
 
 Main
 ^^^^^^^^^^^^^^^^
-.. *epochs_create()*
-.. """""""""""""""""""
-.. .. autofunction:: neurokit2.epochs.epochs_create
+*epochs_create()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.epochs.epochs_create
 
 *epochs_plot()*
 """""""""""""""""

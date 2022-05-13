@@ -98,7 +98,7 @@ The script to generate the data can be found at ...
 
 We started by generating 5 types of signals, one random-walk, two oscillatory signals made (one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at ... different lengths (). The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at ... different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
 
-The combination of these parameters resulted in a total of `r 32*5*5*6` signal iterations. For each of them, we computed ... indices, and additionally basic metric such as the standard deviation (*SD*), the *length* of the signal and its mean *frequency*. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices used, please refer to NeuroKit's documentation (https://neuropsychology.github.io/NeuroKit).
+The combination of these parameters resulted in a total of `r 32*5*5*6` signal iterations. For each of them, we computed ... indices, and additionally basic metric such as the standard deviation (*SD*), the *length* of the signal and its dominant *frequency*. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices used, please refer to NeuroKit's documentation (https://neuropsychology.github.io/NeuroKit).
 
 
 ## Results
@@ -495,7 +495,7 @@ cor <- get_cor(data, plot=TRUE)
 
 We ran a Pearson correlation analysis using the *correlation* R package [@correlationArticle, @seeArticle, @parametersArticle, @modelbasedPackage].
 
-Complexity indices, despite their multitude, their unicities and specificities, do indeed share similarities. They form clusters (some indices, by design, index the predictability, whereas other the randomness).
+Complexity indices, despite their multitude, their unicities and specificities, do indeed share similarities. They form clusters (some indices, by design, index the "predictability", whereas other the "randomness", and thus are negatively related to one-another).
 
 ### Factor Analysis
 

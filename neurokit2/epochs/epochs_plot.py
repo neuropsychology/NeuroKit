@@ -37,7 +37,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
                               event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
       epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
 
-      @savefig p_epochs_plot1_png scale=100%
+      @savefig p_epochs_plot1.png scale=100%
       nk.epochs_plot(epochs)
       @suppress
       plt.close()
@@ -51,7 +51,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
       epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5,
       epochs_end=0.5)
 
-      @savefig p_epochs_plot2_png scale=100%
+      @savefig p_epochs_plot.png scale=100%
       nk.epochs_plot(epochs)
       @suppress
       plt.close()
@@ -88,6 +88,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
         fig, ax = plt.subplots(nrows=len(cols))
         for i, col in enumerate(cols):
             _epochs_plot(data, ax=ax[i], col=col, legend=legend)
+
 
 # -------------------------------------------------------------------------------------------------
 # Utils
