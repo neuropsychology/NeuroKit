@@ -44,8 +44,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Events" href="functions_events.html" />
-    <link rel="prev" title="EOG" href="functions_eog.html" />
+    <link rel="next" title="Data" href="functions_data.html" />
+    <link rel="prev" title="Events" href="functions_events.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -220,42 +220,12 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="functions_bio.html">
-     Bio
+     General
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="functions_ecg.html">
      ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="functions_eda.html">
-     EDA
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="functions_eeg.html">
-     EEG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="functions_emg.html">
-     EMG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="functions_eog.html">
-     EOG
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Epochs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="functions_events.html">
-     Events
     </a>
    </li>
    <li class="toctree-l2">
@@ -274,8 +244,43 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="functions_signal.html">
      Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Epochs
     </a>
    </li>
    <li class="toctree-l2">
@@ -294,18 +299,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="functions_microstates.html">
-     Microstates
+    <a class="reference internal" href="functions_stats.html">
+     Stats
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="functions_misc.html">
      Misc
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="functions_stats.html">
-     Stats
     </a>
    </li>
    <li class="toctree-l2">
@@ -599,6 +599,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-plot">
+     <em>
+      epochs_plot()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-to-array">
      <em>
       epochs_to_array()
@@ -639,6 +646,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-plot">
+     <em>
+      epochs_plot()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-to-array">
      <em>
       epochs_to_array()
@@ -668,6 +682,67 @@ title="Print to PDF"
 <h1>Epochs<a class="headerlink" href="#epochs" title="Permalink to this headline">#</a></h1>
 <section id="main">
 <h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="epochs-plot">
+<h3><em>epochs_plot()</em><a class="headerlink" href="#epochs-plot" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.epochs.epochs_plot">
+<span class="sig-name descname"><span class="pre">epochs_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_plot.html#epochs_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_plot" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Epochs visualization</strong></p>
+<p>Plot epochs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <cite>epochs_create()</cite>.</p></li>
+<li><p><strong>legend</strong> (<em>bool</em>) – Display the legend (the key of each epoch).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will return a DataFrame that can be plotted
+externally.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>epochs</strong> (<em>dict</em>) – dict containing all epochs.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_to_df" title="neurokit2.epochs.epochs_to_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_to_df</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example with data</strong></p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                        <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">fig1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_epochs_plot1_png"><img alt="savefig/p_epochs_plot1_png" src="savefig/p_epochs_plot1_png" /></a>
+<ul class="simple">
+<li><p><strong>Example with ECG Peaks</strong></p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">   ...: </span><span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [9]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_epochs_plot2_png"><img alt="savefig/p_epochs_plot2_png" src="savefig/p_epochs_plot2_png" /></a>
+</dd></dl>
+
+</section>
 <section id="epochs-to-array">
 <h3><em>epochs_to_array()</em><a class="headerlink" href="#epochs-to-array" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -689,7 +764,7 @@ title="Print to PDF"
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -728,7 +803,7 @@ is stored in the ‘Time’ column.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -772,17 +847,17 @@ is stored in the ‘Time’ column.</p>
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="functions_eog.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="functions_events.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">EOG</p>
+            <p class="prev-next-title">Events</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="functions_events.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_data.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Events</p>
+        <p class="prev-next-title">Data</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
