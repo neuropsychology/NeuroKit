@@ -599,6 +599,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-create">
+     <em>
+      epochs_create()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-plot">
      <em>
       epochs_plot()
@@ -646,6 +653,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-create">
+     <em>
+      epochs_create()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-plot">
      <em>
       epochs_plot()
@@ -682,6 +696,95 @@ title="Print to PDF"
 <h1>Epochs<a class="headerlink" href="#epochs" title="Permalink to this headline">#</a></h1>
 <section id="main">
 <h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="epochs-create">
+<h3><em>epochs_create()</em><a class="headerlink" href="#epochs-create" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.epochs.epochs_create">
+<span class="sig-name descname"><span class="pre">epochs_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'from_events'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_correction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_create.html#epochs_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_create" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Create Epochs</strong></p>
+<p>Create epochs of a signal or a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>DataFrame</em>) – A DataFrame containing the different signal(s) as different columns.
+If a vector of values is passed, it will be transformed in a DataFrame
+with a single ‘Signal’ column.</p></li>
+<li><p><strong>events</strong> (<em>list or ndarray or dict</em>) – Events onset location. If a dict is passed (e.g., from <code class="docutils literal notranslate"><span class="pre">events_find()</span></code>),
+will select only the ‘onset’ list. If an integer is passed,
+will use this number to create an evenly spaced list of events. If None,
+will chunk the signal into successive blocks of the set duration.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>epochs_start</strong> (<em>int, list</em>) – Epochs start relative to events_onsets (in seconds). The start can be negative to start
+epochs before a given event (to have a baseline for instance). An integer can be specified
+to have the same start for all epochs. A list of equal length to the events can be
+specified to have a different start for each epoch.</p></li>
+<li><p><strong>epochs_end</strong> (<em>int, list</em>) – Epochs end relative to events_onsets (in seconds). An integer can be specified to have the
+same end for all epochs. A list of equal length to the events can be specified to have a
+different end for each epoch. If <code class="docutils literal notranslate"><span class="pre">&quot;from_events&quot;</span></code>, events must be a dict (from
+<a class="reference internal" href="functions_events.html#neurokit2.events.events_find" title="neurokit2.events.events_find"><code class="xref py py-func docutils literal notranslate"><span class="pre">events_find()</span></code></a>). Duration from events will be used as <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code>.</p></li>
+<li><p><strong>event_labels</strong> (<em>list</em>) – A list containing unique event identifiers. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will use the event index number.</p></li>
+<li><p><strong>event_conditions</strong> (<em>list</em>) – An optional list containing, for each event, for example the trial category, group or
+experimental conditions.</p></li>
+<li><p><strong>baseline_correction</strong> (<em>bool</em>) – Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all epochs.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_to_df" title="neurokit2.epochs.epochs_to_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_to_df</span></code></a>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1</strong>: Find events</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Get data</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Find events</span>
+<span class="gp">In [3]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                        <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_epochs_create1.png"><img alt="../_images/p_epochs_create1.png" src="../_images/p_epochs_create1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2</strong>: Create epochs</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_epochs_create2.png"><img alt="../_images/p_epochs_create2.png" src="../_images/p_epochs_create2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3</strong>: Baseline correction</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">   ...: </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">baseline_correction</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_epochs_create3.png"><img alt="../_images/p_epochs_create3.png" src="../_images/p_epochs_create3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 4</strong>: Arbitrary epoching</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Chunk into n blocks of 1 second</span>
+<span class="gp">In [9]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
 <section id="epochs-plot">
 <h3><em>epochs_plot()</em><a class="headerlink" href="#epochs-plot" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -701,7 +804,7 @@ externally.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_to_df" title="neurokit2.epochs.epochs_to_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_to_df</span></code></a></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code></a>, <a class="reference internal" href="#neurokit2.epochs.epochs_to_df" title="neurokit2.epochs.epochs_to_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_to_df</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -721,7 +824,7 @@ externally.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_epochs_plot1_png"><img alt="savefig/p_epochs_plot1_png" src="savefig/p_epochs_plot1_png" /></a>
+<a class="reference internal image-reference" href="../_images/p_epochs_plot1.png"><img alt="../_images/p_epochs_plot1.png" src="../_images/p_epochs_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <ul class="simple">
 <li><p><strong>Example with ECG Peaks</strong></p></li>
 </ul>
@@ -736,7 +839,7 @@ externally.</p></li>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_epochs_plot2_png"><img alt="savefig/p_epochs_plot2_png" src="savefig/p_epochs_plot2_png" /></a>
+<a class="reference internal image-reference" href="../_images/p_epochs_plot.png"><img alt="../_images/p_epochs_plot.png" src="../_images/p_epochs_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -753,7 +856,7 @@ externally.</p></li>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <code class="xref py py-func docutils literal notranslate"><span class="pre">epochs_create()</span></code>.</p>
+<dd class="field-odd"><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <a class="reference internal" href="#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-func docutils literal notranslate"><span class="pre">epochs_create()</span></code></a>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>array</em> – An array containing all signals.</p>
@@ -761,7 +864,7 @@ externally.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code></a>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -800,7 +903,7 @@ is stored in the ‘Time’ column.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code></a>, <a class="reference internal" href="#neurokit2.epochs.epochs_plot" title="neurokit2.epochs.epochs_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>

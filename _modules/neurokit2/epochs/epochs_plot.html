@@ -569,7 +569,7 @@ title="Open an issue"
 <span class="sd">                              event_conditions=[&quot;Negative&quot;, &quot;Neutral&quot;, &quot;Neutral&quot;, &quot;Negative&quot;])</span>
 <span class="sd">      epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)</span>
 
-<span class="sd">      @savefig p_epochs_plot1_png scale=100%</span>
+<span class="sd">      @savefig p_epochs_plot1.png scale=100%</span>
 <span class="sd">      nk.epochs_plot(epochs)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -583,7 +583,7 @@ title="Open an issue"
 <span class="sd">      epochs = nk.epochs_create(signal, events=events[&quot;ECG_R_Peaks&quot;], epochs_start=-0.5,</span>
 <span class="sd">      epochs_end=0.5)</span>
 
-<span class="sd">      @savefig p_epochs_plot2_png scale=100%</span>
+<span class="sd">      @savefig p_epochs_plot.png scale=100%</span>
 <span class="sd">      nk.epochs_plot(epochs)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -620,6 +620,7 @@ title="Open an issue"
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
             <span class="n">_epochs_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">)</span></div>
+
 
 <span class="c1"># -------------------------------------------------------------------------------------------------</span>
 <span class="c1"># Utils</span>
