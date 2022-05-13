@@ -5,7 +5,7 @@ import scipy.spatial
 import sklearn.cluster
 import sklearn.metrics
 import sklearn.mixture
-import sklearn.model_selection  # sklearn version > 0.20
+import sklearn.model_selection
 
 
 def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **kwargs):
