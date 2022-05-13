@@ -16,19 +16,20 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
         Time lag. If specified, one value of autocorrelation between signal with its lag self will
         be returned.
     demean : bool
-        If True, the mean of the signal will be subtracted from the signal before ACF computation.
+        If ``True``, the mean of the signal will be subtracted from the signal before ACF
+        computation.
     method : str
-        Can be 'correlation' (using :func:`.np.correlate`) or 'fft' (Fast Fourier Transform;
+        Can be ``"correlation"`` (using :func:`.np.correlate`) or ``"fft"`` (Fast Fourier Transform;
         default).
     show : bool
-        If True, plot the autocorrelation at all values of lag.
+        If ``True``, plot the autocorrelation at all values of lag.
 
     Returns
     -------
     r : float
         The cross-correlation of the signal with itself at different time lags. Minimum time lag is
         0, maximum time lag is the length of the signal. Or a correlation value at a specific lag
-        if lag is not None.
+        if lag is not ``None``.
     info : dict
         A dictionary containing additional information, such as the confidence interval.
 
@@ -40,7 +41,7 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
 
       # Example 1: Using 'Correlation' Method
       signal = [1, 2, 3, 4, 5]
-      @savefig p_signal_autocor.png scale=100%
+      @savefig p_signal_autocor1.png scale=100%
       r, info = nk.signal_autocor(signal, show=True, method='correlate')
       @suppress
       plt.close()

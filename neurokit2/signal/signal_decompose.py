@@ -10,16 +10,16 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     Decomposition (EMD) or Singular spectrum analysis (SSA)-based signal separation method.
 
     The extracted components can then be recombined into meaningful sources using
-    :func:`.signal_recompose()`.
+    :func:`.signal_recompose`.
 
     Parameters
     -----------
     signal : Union[list, np.array, pd.Series]
         Vector of values.
     method : str
-        The decomposition method. Can be one of 'emd' or 'ssa'.
+        The decomposition method. Can be one of ``"emd"`` or ``"ssa"``.
     n_components : int
-        Number of components to extract. Only used for 'ssa' method. If ``None``, will default
+        Number of components to extract. Only used for ``"ssa"`` method. If ``None``, will default
         to 50.
     **kwargs
         Other arguments passed to other functions.

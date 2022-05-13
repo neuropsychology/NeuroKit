@@ -55,9 +55,10 @@ def signal_fixpeaks(
         Only when ``method = "neurokit"``. Use a robust method of standardization (see
         `standardize`) for the relative thresholds.
     method : str
-        Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
-        in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
-        ECG or PPG. "neurokit" can be used with peaks in ECG, PPG, or respiratory data.
+        Either ``"Kubios"`` or ``"neurokit"``. ``"Kubios"`` uses the artifact detection and
+        correction described in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that ``"Kubios"``
+        is only meant for peaks in ECG or PPG. ``"neurokit"`` can be used with peaks in ECG, PPG,
+        or respiratory data.
     **kwargs
         Other keyword arguments.
 
@@ -66,8 +67,8 @@ def signal_fixpeaks(
     peaks_clean : array
         The corrected peak locations.
     artifacts : dict
-        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with
-        the keys "ectopic", "missed", "extra", and "longshort".
+        Only if ``method="Kubios"``. A dictionary containing the indices of artifacts, accessible
+        with the keys ``"ectopic"``, ``"missed"``, ``"extra"``, and ``"longshort"``.
 
     See Also
     --------
@@ -82,7 +83,7 @@ def signal_fixpeaks(
       # Simulate ECG data
       ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
 
-      # Identify and Correct Peaks using 'Kubios' Method
+      # Identify and Correct Peaks using "Kubios" Method
       rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
 
       @savefig p_signal_fixpeaks1.png scale=100%

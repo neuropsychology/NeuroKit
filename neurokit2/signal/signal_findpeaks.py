@@ -43,7 +43,7 @@ def signal_findpeaks(
         ``relative_mean=True`` will use Z-scores.
     relative_median : bool
         If a relative threshold is specified, how should it be computed (i.e., relative to what?).
-        Relative to median uses a more robust form of standardization (see ``standardize()``).
+        Relative to median uses a more robust form of standardization (see :func:`.standardize`).
     relative_max : bool
         If a relative threshold is specified, how should it be computed (i.e., relative to what?).
         Relative to max will consider the maximum height as the reference.
@@ -53,15 +53,15 @@ def signal_findpeaks(
     dict
         Returns a dict itself containing 5 arrays:
 
-         * 'Peaks' contains the peaks indices (as relative to the given signal). For instance, the
-            value 3 means that the third data point of the signal is a peak.
-         * 'Distance' contains, for each peak, the closest distance with another peak. Note that
-            these values will be recomputed after filtering to match the selected peaks.
-         * 'Height' contains the prominence of each peak.
-            See :func:`.scipy.signal.peak_prominences()`.
-         * 'Width' contains the width of each peak. See :func:`.scipy.signal.peak_widths()`.
-         * 'Onset' contains the onset, start (or left trough), of each peak.
-         * 'Offset' contains the offset, end (or right trough), of each peak.
+         * ``"Peaks"``: contains the peaks indices (as relative to the given signal). For instance,
+           the value 3 means that the third data point of the signal is a peak.
+         * ``"Distance"``: contains, for each peak, the closest distance with another peak. Note
+           that these values will be recomputed after filtering to match the selected peaks.
+         * ``"Height"``: contains the prominence of each peak.
+           See :func:`.scipy.signal.peak_prominences`.
+         * ``"Width"``: contains the width of each peak. See :func:`.scipy.signal.peak_widths`.
+         * ``"Onset"``: contains the onset, start (or left trough), of each peak.
+         * ``"Offset"``: contains the offset, end (or right trough), of each peak.
 
     Examples
     ---------
@@ -74,7 +74,7 @@ def signal_findpeaks(
       info = nk.signal_findpeaks(signal)
 
       # Visualize Onsets of Peaks and Peaks of Signal
-      @savefig p_signal_findpeaks_1.png scale=100%
+      @savefig p_signal_findpeaks1.png scale=100%
       nk.events_plot([info["Onsets"], info["Peaks"]], signal)
       @suppress
       plt.close()
@@ -92,7 +92,7 @@ def signal_findpeaks(
       info2 = nk.signal_findpeaks(signal, relative_height_min=1)
 
       # Visualize Peaks
-      @savefig p_signal_findpeaks_2.png scale=100%
+      @savefig p_signal_findpeaks2.png scale=100%
       nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
       @suppress
       plt.close()

@@ -34,8 +34,8 @@ def signal_distort(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     noise_shape : str
-        The shape of the noise. Can be one of 'laplace' (default) or
-        'gaussian'.
+        The shape of the noise. Can be one of ``"laplace"`` (default) or
+        ``"gaussian"``.
     noise_amplitude : float
         The amplitude of the noise (the scale of the random function, relative
         to the standard deviation of the signal).

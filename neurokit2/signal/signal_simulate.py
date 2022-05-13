@@ -24,7 +24,7 @@ def signal_simulate(
     noise : float
         Noise level (amplitude of the laplace noise).
     silent : bool
-        If False (default), might print warnings if impossible frequencies are queried.
+        If ``False`` (default), might print warnings if impossible frequencies are queried.
 
     Returns
     -------

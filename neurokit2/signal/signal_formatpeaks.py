@@ -4,7 +4,11 @@ import pandas as pd
 
 
 def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=None):
-    """**Transforms an peak-info dict to a signal of given length**"""
+    """**Format Peaks**
+
+    Transforms a peak-info dict to a signal of given length
+
+    """
     if peak_indices is None:
         peak_indices = [key for key in info.keys() if "Peaks" in key]
 

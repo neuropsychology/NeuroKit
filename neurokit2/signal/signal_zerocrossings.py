@@ -12,8 +12,8 @@ def signal_zerocrossings(signal, direction="both"):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     direction : str
-        Direction in which the signal crosses zero, can be "positive", "negative" or "both"
-        (default).
+        Direction in which the signal crosses zero, can be ``"positive"``, ``"negative"`` or
+        ``"both"`` (default).
 
     Returns
     -------
@@ -36,8 +36,8 @@ def signal_zerocrossings(signal, direction="both"):
     .. ipython:: python
 
       # Only upward or downward zerocrossings
-      up = nk.signal_zerocrossings(signal, direction='up')
-      down = nk.signal_zerocrossings(signal, direction='down')
+      up = nk.signal_zerocrossings(signal, direction="up")
+      down = nk.signal_zerocrossings(signal, direction="down")
       @savefig p_signal_zerocrossings2.png scale=100%
       nk.events_plot([up, down], signal)
       @suppress

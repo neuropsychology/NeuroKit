@@ -15,7 +15,7 @@ def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **
     components : array
         Array of components obtained via :func:`.signal_decompose`.
     method : str
-        The decomposition method. Can be one of 'wcorr'.
+        The decomposition method. Can be one of ``"wcorr"``.
     threshold : float
         The threshold used to group components together.
     keep_sd : float
@@ -24,7 +24,7 @@ def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **
         instance, ``keep_sd=0.01`` will remove all components with SD lower than 1% of the
         max SD. This can be used to filter out noise.
     **kwargs
-        Other arguments used to override, for instance ``metric='chebyshev'``.
+        Other arguments used to override, for instance ``metric="chebyshev"``.
 
     Returns
     -------

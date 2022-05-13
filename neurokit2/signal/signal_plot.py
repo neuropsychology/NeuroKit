@@ -19,13 +19,13 @@ def signal_plot(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Needs to be supplied if
         the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to None.
+        Defaults to ``None``.
     subplots : bool
-        If True, each signal is plotted in a subplot.
+        If ``True``, each signal is plotted in a subplot.
     standardize : bool
-        If True, all signals will have the same scale (useful for visualisation).
+        If ``True``, all signals will have the same scale (useful for visualisation).
     labels : str or list
-        Defaults to None.
+        Defaults to ``None``.
     **kwargs : optional
         Arguments passed to matplotlib plotting.
 

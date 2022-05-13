@@ -33,38 +33,39 @@ def signal_psd(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method : str
-        Either 'welch' (default), 'fft', 'multitapers' (requires the 'mne' package), 'lombscargle'
-        (requires the 'astropy' package) or 'burg'.
+        Either ``"welch"`` (default), ``"fft"``, ``"multitapers"`` (requires the 'mne' package),
+        ``"lombscargle"`` (requires the 'astropy' package) or ``"burg"``.
     show : bool
-        If True, will return a plot. If False, will return the density values that can be plotted externally.
+        If ``True``, will return a plot. If ``False``, will return the density values that can be
+        plotted externally.
     normalize : bool
-        Normalization of power by maximum PSD value. Default to True.
+        Normalization of power by maximum PSD value. Default to ``True``.
         Normalization allows comparison between different PSD methods.
     min_frequency : str, float
-        The minimum frequency. If "default", min_frequency is chosen based on the sampling rate and
+        The minimum frequency. If default, min_frequency is chosen based on the sampling rate and
         length of signal to optimize the frequency resolution.
     max_frequency : float
         The maximum frequency.
     window : int
-        Length of each window in seconds (for Welch method). If None (default), window will be
+        Length of each window in seconds (for "Welch" method). If ``None`` (default), window will be
         automatically calculated to capture at least 2 cycles of min_frequency. If the length of
         recording does not allow the formal, window will be default to half of the length of
         recording.
     window_type : str
-        Desired window to use. Defaults to 'hann'. See :func:`.scipy.signal.get_window()` for list
+        Desired window to use. Defaults to ``"hann"``. See :func:`.scipy.signal.get_window` for list
         of windows.
     order : int
-        The order of autoregression (only used for autoregressive (AR) methods such as 'burg').
+        The order of autoregression (only used for autoregressive (AR) methods such as ``"burg"``).
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
-        (AR) methods such as 'burg').
+        (AR) methods such as ``"burg"``).
     order_corrected : bool
         Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
         the order, rely on the default (i.e., the corrected KIC).
     silent : bool
-        If False, warnings will be printed. Default to True.
+        If ``False``, warnings will be printed. Default to ``True``.
     **kwargs : optional
-        Keyword arguments to be passed to :func:`.scipy.signal.welch()`.
+        Keyword arguments to be passed to :func:`.scipy.signal.welch`.
 
     See Also
     --------
@@ -74,7 +75,7 @@ def signal_psd(
     -------
     data : pd.DataFrame
         A DataFrame containing the Power Spectrum values and a plot if
-        ``show`` is True.
+        ``show`` is ``True``.
 
     Examples
     --------

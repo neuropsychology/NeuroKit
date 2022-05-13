@@ -15,11 +15,11 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     signal : Union[list, np.array, pd.Series]
         Vector of values.
     change : str
-        Can be one of "meanvar" (default), "mean" or "var".
+        Can be one of ``"meanvar"`` (default), ``"mean"`` or ``"var"``.
     penalty : float
         The algorithm penalty. Defaults to ``np.log(len(signal))``.
     show : bool
-        Defaults to False.
+        Defaults to ``False``.
 
     Returns
     -------
