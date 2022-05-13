@@ -21,8 +21,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     Non-linear indices include features derived from the *Poincaré plot*, as well as other
     :func:`.complexity` indices. Note that there exist many more complexity indices that are
-    available in NeuroKit2 and that could be applied to HRV. The ``hrv_nonlinear()`` function only
-    includes the most commonly used indices.
+    available in NeuroKit2 and that could be applied to HRV. The :func:`.hrv_nonlinear` function
+    only includes the most commonly used indices.
 
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
@@ -37,8 +37,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SD2**: Standard deviation along the identity line. Index of long-term HRV changes.
     * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term
       variations in HRV.
-    * **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``). It is proportional to
-      *SD1SD2*.
+    * **S**: Area of ellipse described by *SD1* and *SD2* (``pi * SD1 * SD2``). It is
+      proportional to ``*SD1SD2*``.
     * **CSI**: The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac sympathetic
       function independent of vagal activity, calculated by dividing the longitudinal variability of
       the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).
@@ -84,21 +84,21 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     Indices of **Complexity** and **Fractal Physiology** include:
 
-    * **ApEn**: See :func:`.entropy_approximate()`.
-    * **SampEn**: See :func:`.entropy_sample()`.
-    * **ShanEn**: See :func:`.entropy_shannon()`.
-    * **FuzzyEn**: See :func:`.entropy_fuzzy()`.
-    * **MSE**: See :func:`.entropy_multiscale()`.
-    * **CMSE**: See :func:`.entropy_multiscale()`.
-    * **RCMSE**: See :func:`.entropy_multiscale()`.
-    * **CD**: See :func:`.fractal_correlation()`.
-    * **HFD**: See :func:`.fractal_higuchi()` (with ``kmax`` set to ``"default"``).
-    * **KFD**: See :func:`.fractal_katz()`.
-    * **LZC**: See :func:`.fractal_lempelziv()`.
+    * **ApEn**: See :func:`.entropy_approximate`.
+    * **SampEn**: See :func:`.entropy_sample`.
+    * **ShanEn**: See :func:`.entropy_shannon`.
+    * **FuzzyEn**: See :func:`.entropy_fuzzy`.
+    * **MSE**: See :func:`.entropy_multiscale`.
+    * **CMSE**: See :func:`.entropy_multiscale`.
+    * **RCMSE**: See :func:`.entropy_multiscale`.
+    * **CD**: See :func:`.fractal_correlation`.
+    * **HFD**: See :func:`.fractal_higuchi` (with ``kmax`` set to ``"default"``).
+    * **KFD**: See :func:`.fractal_katz`.
+    * **LZC**: See :func:`.fractal_lempelziv`.
     * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal,
-      corresponding to short-term correlations. See :func:`.fractal_dfa()`.
+      corresponding to short-term correlations. See :func:`.fractal_dfa`.
     * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
-      corresponding to long-term correlations. See :func:`.fractal_dfa()`.
+      corresponding to long-term correlations. See :func:`.fractal_dfa`.
     * **MFDFA indices**: Indices related to the :func:`multifractal spectrum <.fractal_dfa()>`.
 
     Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), but
@@ -113,16 +113,17 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     ----------
     peaks : dict
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-        Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-        ppg_peaks, ecg_process or bio_process.
+        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
+        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default 1000.
+        least twice as high as the highest frequency in vhf. By default ``1000``.
     show : bool, optional
-        If True, will return a Poincaré plot, a scattergram, which plots each RR interval against
-        the next successive one. The ellipse centers around the average RR interval. By default False.
+        If ``True``, will return a Poincaré plot, a scattergram, which plots each RR interval
+        against the next successive one. The ellipse centers around the average RR interval. By
+        default ``False``.
     **kwargs
-        Other arguments to be passed into `fractal_dfa()` and `fractal_correlation()`.
+        Other arguments to be passed into :func:`.fractal_dfa` and :func:`.fractal_correlation`.
 
 
     Returns

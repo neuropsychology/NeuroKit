@@ -35,9 +35,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default 1000.
+        least twice as high as the highest frequency in vhf. By default ``1000``.
     show : bool
-        If True, will plot the distribution of R-R intervals.
+        If ``True``, will plot the distribution of R-R intervals.
 
     Returns
     -------

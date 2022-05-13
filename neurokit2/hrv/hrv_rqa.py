@@ -19,28 +19,28 @@ def hrv_rqa(
     """**Recurrence Quantification Analysis (RQA) of Heart Rate Variability (HRV)**
 
     RQA is a type of complexity analysis used in non-linear dynamics (related to entropy and fractal
-    dimensions). See :func:`.complexity_rqa()` for more information.
+    dimensions). See :func:`.complexity_rqa` for more information.
 
     Parameters
     ----------
     peaks : dict
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-        Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-        ppg_peaks, ecg_process or bio_process.
+        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
+        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default 1000.
+        least twice as high as the highest frequency in vhf. By default ``1000``.
     delay : int
-        See :func:`.complexity_rqa()` for more information.
+        See :func:`.complexity_rqa` for more information.
     dimension : int
-        See :func:`.complexity_rqa()` for more information.
+        See :func:`.complexity_rqa` for more information.
     tolerance : float
-        See :func:`.complexity_rqa()` for more information. If "zimatore2021", will be set to half
+        See :func:`.complexity_rqa` for more information. If ``"zimatore2021"``, will be set to half
         of the mean pairwise distance between points.
     show : bool
-        See :func:`.complexity_rqa()` for more information.
+        See :func:`.complexity_rqa` for more information.
     **kwargs
-        Other arguments to be passed to :func:`.complexity_rqa()`.
+        Other arguments to be passed to :func:`.complexity_rqa`.
 
     See Also
     --------

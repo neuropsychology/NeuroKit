@@ -40,26 +40,26 @@ def hrv_frequency(
     ----------
     peaks : dict
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-        Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-        ppg_peaks, ecg_process or bio_process.
+        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
+        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default 1000.
+        least twice as high as the highest frequency in ``vhf``. By default ``1000``.
     ulf : tuple, optional
-        Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).
+        Upper and lower limit of the ultra-low frequency band. By default ``(0, 0.0033)``.
     vlf : tuple, optional
-        Upper and lower limit of the very-low frequency band. By default (0.0033, 0.04).
+        Upper and lower limit of the very-low frequency band. By default ``(0.0033, 0.04)``.
     lf : tuple, optional
-        Upper and lower limit of the low frequency band. By default (0.04, 0.15).
+        Upper and lower limit of the low frequency band. By default ``(0.04, 0.15)``.
     hf : tuple, optional
-        Upper and lower limit of the high frequency band. By default (0.15, 0.4).
+        Upper and lower limit of the high frequency band. By default ``(0.15, 0.4)``.
     vhf : tuple, optional
-        Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).
+        Upper and lower limit of the very-high frequency band. By default ``(0.4, 0.5)``.
     psd_method : str
-        Method used for spectral density estimation. For details see :func:`.signal.signal_power`.
-        By default "welch".
+        Method used for spectral density estimation. For details see :func:`.signal_power`.
+        By default ``"welch"``.
     silent : bool
-        If False, warnings will be printed. Default to True.
+        If ``False``, warnings will be printed. Default to ``True``.
     show : bool
         If ``True``, will plot the power in the different frequency bands.
     normalize : bool
@@ -67,7 +67,7 @@ def hrv_frequency(
         Normalization allows comparison between different PSD methods.
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
-        (AR) methods such as 'burg'). Defaults to None.
+        (AR) methods such as ``"burg"``). Defaults to ``None``.
     **kwargs
         Additional other arguments.
 
@@ -76,15 +76,15 @@ def hrv_frequency(
     DataFrame
         Contains frequency domain HRV metrics:
 
-        * **ULF**: The spectral power density pertaining to ultra low frequency band i.e., .0 to .
-          0033 Hz by default.
-        * **VLF**: The spectral power density pertaining to very low frequency band i.e., .0033 to .
-          04 Hz by default.
-        * **LF**: The spectral power density pertaining to low frequency band i.e., .04 to .15 Hz
+        * **ULF**: The spectral power density pertaining to ultra low frequency band (i.e., .0 to
+        .0033 Hz) by default.
+        * **VLF**: The spectral power density pertaining to very low frequency band (i.e., .0033 to
+        .04 Hz) by default.
+        * **LF**: The spectral power density pertaining to low frequency band (i.e., .04 to .15 Hz)
           by default.
-        * **HF**: The spectral power density pertaining to high frequency band i.e., .15 to .4 Hz
+        * **HF**: The spectral power density pertaining to high frequency band (i.e., .15 to .4 Hz)
           by default.
-        * **VHF**: The variability, or signal power, in very high frequency i.e., .4 to .5 Hz by
+        * **VHF**: The variability, or signal power, in very high frequency (i.e., .4 to .5 Hz) by
           default.
         * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
           the total power.
@@ -108,7 +108,7 @@ def hrv_frequency(
       # Find peaks
       peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
 
-      # Compute HRV indices using method='welch'
+      # Compute HRV indices using method="welch"
       @savefig p_hrv_freq1.png scale=100%
       hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
       @suppress
@@ -116,7 +116,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
-      # Using method ='burg'
+      # Using method ="burg"
       @savefig p_hrv_freq2.png scale=100%
       hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
       @suppress
@@ -124,7 +124,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
-      # Using method = 'lomb' (requires installation of astropy)
+      # Using method = "lomb" (requires installation of astropy)
       @savefig p_hrv_freq3.png scale=100%
       hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
       @suppress
@@ -132,7 +132,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
-      # Using method='multitapers'
+      # Using method="multitapers"
       @savefig p_hrv_freq4.png scale=100%
       hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,psd_method="multitapers")
       @suppress
