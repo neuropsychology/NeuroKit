@@ -4,7 +4,9 @@ import pandas as pd
 
 
 def mne_to_df(eeg):
-    """**Convert MNE objects to dataframe or dict of dataframes**
+    """**Conversion from MNE to dataframes**
+
+    Convert MNE objects to dataframe or dict of dataframes.
 
     Parameters
     ----------
@@ -13,13 +15,13 @@ def mne_to_df(eeg):
 
     See Also
     --------
-    mne_to_dict
+    .mne_to_dict
 
     Returns
     ----------
     DataFrame
-        A DataFrame containing all epochs identifiable by the 'Epoch' column, which time axis
-        is stored in the 'Time' column.
+        A DataFrame containing all epochs identifiable by the ``"Epoch"`` column, which time axis
+        is stored in the ``"Time"`` column.
 
     Examples
     ---------

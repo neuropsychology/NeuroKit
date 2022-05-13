@@ -27,9 +27,9 @@ def mne_channel_add(
         which to align the two inputs. This can be used in case the EEG data and the channel to add
         do not have the same onsets and must be aligned through some common event.
     sync_index_channel : int or list
-        An index (e.g., the onset of the same event marked in the same signal), in the channel to add,
-        by which to align the two inputs. This can be used in case the EEG data and the channel to add
-        do not have the same onsets and must be aligned through some common event.
+        An index (e.g., the onset of the same event marked in the same signal), in the channel to
+        add, by which to align the two inputs. This can be used in case the EEG data and the channel
+        to add do not have the same onsets and must be aligned through some common event.
 
     Returns
     ----------

@@ -23,12 +23,12 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     reference : str
-        See ``mne.set_eeg_reference()``. Can be a string (e.g., 'average', 'lap' for Laplacian
+        See :func:`.mne.set_eeg_reference()`. Can be a string (e.g., 'average', 'lap' for Laplacian
         "reference-free" transformation, i.e., CSD), or a list (e.g., ['TP9', 'TP10'] for mastoid
         reference).
     robust : bool
-        Only applied if reference is 'average'. If True, will substract the median instead of
-        the mean.
+        Only applied if reference is ``average``. If ``True``, will substract the median instead
+        of the mean.
     **kwargs
         Optional arguments to be passed into ``mne.set_eeg_rereference()``.
 

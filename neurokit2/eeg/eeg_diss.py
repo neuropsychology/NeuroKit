@@ -19,7 +19,7 @@ def eeg_diss(eeg, gfp=None, **kwargs):
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     gfp : list
-        The Global Field Power (GFP). If None, will be obtained via ``eeg_gfp()``.
+        The Global Field Power (GFP). If ``None``, will be obtained via ``eeg_gfp()``.
     **kwargs
         Optional arguments to be passed into ``nk.eeg_gfp()``.
 

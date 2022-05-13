@@ -30,15 +30,15 @@ def eeg_gfp(
         The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
         smoothing is requested.
     method : str
-        Can be either 'l1' or 'l2' to use the L1 or L2 norm.
+        Can be either ``l1`` or ``l2`` to use the L1 or L2 norm.
     normalize : bool
         Normalize GFP.
     smooth : float
-        Can be either None or a float. If a float, will use this value, multiplied by the
+        Can be either ``None`` or a float. If a float, will use this value, multiplied by the
         sampling rate.
     robust : bool
-        If True, the GFP extraction (and the data standardization if requested) will be done using
-        the median/MAD instead of the mean/SD.
+        If ``True``, the GFP extraction (and the data standardization if requested) will be done
+        using the median/MAD instead of the mean/SD.
     standardize_eeg : bool
         Standardize (z-score) the data across time prior to GFP extraction using ``nk.standardize()``.
 
