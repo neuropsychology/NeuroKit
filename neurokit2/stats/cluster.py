@@ -14,27 +14,38 @@ from .cluster_quality import _cluster_quality_distance
 
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):
-    """**Performs clustering of data according to different algorithms**
+    """**Data Clustering**
+
+    Performs clustering of data using different algorithms.
+
+    * **kmod**: Modified k-means algorithm.
+    * **kmeans**: Normal k-means.
+    * **kmedoids**: k-medoids clustering, a more stable version of k-means.
+    * **pca**: Principal Component Analysis.
+    * **ica**: Independent Component Analysis.
+    * **aahc**: Atomize and Agglomerate Hierarchical Clustering. Computationally heavy.
+    * **hierarchical**
+    * **spectral**
+    * **mixture**
+    * **mixturebayesian**
+
+    See ``sklearn`` for methods details.
 
     Parameters
     ----------
     data : np.ndarray
         Matrix array of data (E.g., an array (channels, times) of M/EEG data).
     method : str
-        The algorithm for clustering. Can be one of 'kmeans' (default), modified k-means algorithm
-        'kmod', 'kmedoids' (k-centers or k-medoids clustering),
-        'pca' (Principal Component Analysis), 'ica' (Independent Component
-        Analysis), 'agglomerative' (Atomize and Agglomerate Hierarchical Clustering),
-        'hierarchical', 'spectral', 'mixture', 'mixturebayesian'. See ``sklearn`` for methods
-        details.
+        The algorithm for clustering. Can be one of ``"kmeans"`` (default), ``"kmod"``,
+        ``"kmedoids"``, ``"pca"``, ``"ica"``, ``"aahc"``, ``"hierarchical"``, ``"spectral"``,
+        ``"mixture"``, ``"mixturebayesian"``.
     n_clusters : int
         The desired number of clusters.
     random_state : Union[int, numpy.random.RandomState]
         The ``RandomState`` for the random number generator. Defaults to ``None``, in which case a
         different random state is chosen each time this function is called.
     optimize : bool
-        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
-        For the Kmeans modified method. Default to False.
+        Optimized method in Poulsen et al. (2018) for the *k*-means modified method.
     **kwargs
         Other arguments to be passed into ``sklearn`` functions.
 
@@ -55,7 +66,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
       import matplotlib.pyplot as plt
 
       # Load the iris dataset
-      data = nk.data("iris")
+      data = nk.data("iris").drop("Species", axis=1)
 
       # Cluster using different methods
       clustering_kmeans, clusters_kmeans, info = nk.cluster(data, method="kmeans", n_clusters=3)
@@ -106,7 +117,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
       @suppress
       plt.close()
 
-    Refereneces
+    References
     -----------
     * Park, H. S., & Jun, C. H. (2009). A simple and fast algorithm for K-medoids
       clustering. Expert systems with applications, 36(2), 3336-3341.

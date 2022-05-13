@@ -34,7 +34,7 @@ def microstates_segment(
     * **kmedoids**: k-medoids clustering, a more stable version of k-means.
     * **pca**: Principal Component Analysis.
     * **ica**: Independent Component Analysis.
-    * **aahc**: Atomize and Agglomerate Hierarchical Clustering. More computationally heavy.
+    * **aahc**: Atomize and Agglomerate Hierarchical Clustering. Computationally heavy.
 
     The microstates clustering is typically fitted on the EEG data at the global field power (GFP)
     peaks to maximize the signal to noise ratio and focus on moments of high global neuronal
@@ -83,8 +83,7 @@ def microstates_segment(
         to ``None``, in which case a different seed is chosen each time this
         function is called.
     optimize : bool
-        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
-        For the k-means modified method. Default to False.
+        Optimized method in Poulsen et al. (2018) for the *k*-means modified method.
 
     Returns
     -------
@@ -167,6 +166,8 @@ def microstates_segment(
 
     References
     ----------
+    * Poulsen, A. T., Pedroni, A., Langer, N., & Hansen, L. K. (2018). Microstate EEGlab toolbox:
+      an introductory guide. BioRxiv, (289850).
     * Pascual-Marqui, R. D., Michel, C. M., & Lehmann, D. (1995). Segmentation of brain
       electrical activity into microstates: model estimation and validation. IEEE Transactions
       on Biomedical Engineering.
