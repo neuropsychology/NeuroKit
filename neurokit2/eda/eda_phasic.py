@@ -29,7 +29,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     Returns
     -------
     DataFrame
-        DataFrame containing the ``Tonic`` and the ``Phasic`` components as columns.
+        DataFrame containing the ``"Tonic"`` and the ``"Phasic"`` components as columns.
 
     See Also
     --------
@@ -54,8 +54,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
       data = pd.concat([
           # cvxEDA.add_suffix('_cvxEDA'),
           smoothMedian.add_suffix('_SmoothMedian'),
-          highpass.add_suffix('_Highpass')
-      ], axis=1)
+          highpass.add_suffix('_Highpass')], axis=1)
       data["EDA_Raw"] = eda_signal
 
       @savefig p_eda_phasic1.png scale=100%
