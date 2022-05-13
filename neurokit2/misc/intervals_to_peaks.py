@@ -26,7 +26,10 @@ def intervals_to_peaks(intervals):
       import neurokit2 as nk
       ibi = [500, 400, 700, 500, 300, 800, 500]
       peaks = nk.intervals_to_peaks(ibi)
+      @savefig p_intervals_to_peaks.png scale=100%
       hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)
+      @suppress
+      plt.close()
       hrv_indices
 
     """

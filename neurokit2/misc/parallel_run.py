@@ -9,9 +9,9 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
         A list of dictionaries. The function will iterate through this list and pass each dictionary
         inside as ``**kwargs`` to the main function.
     n_jobs : int
-        Number of cores to use. ``-2`` means all but 1. See ``joblib.Parallel()``.
+        Number of cores to use. ``-2`` means all but 1. See :func:`.joblib.Parallel`.
     **kwargs
-        Other arguments that can be passed to ``joblib.Parallel()``.
+        Other arguments that can be passed to :func:`.joblib.Parallel`.
 
     Returns
     -------

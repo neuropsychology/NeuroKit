@@ -16,11 +16,11 @@ def find_closest(
     list_to_search_in : list
         The list of values to look in.
     direction : str
-        "both" for smaller or greater, "greater" for only greater numbers and "smaller" for the closest smaller.
+        ``"both"`` for smaller or greater, ``"greater"`` for only greater numbers and ``"smaller"`` for the closest smaller.
     strictly : bool
-        False for stricly superior or inferior or True for including equal.
+        ``False`` for strictly superior or inferior or ``True`` for including equal.
     return_index : bool
-        If True, will return the index of the closest value in the list.
+        If ``True``, will return the index of the closest value in the list.
 
     Returns
     ----------

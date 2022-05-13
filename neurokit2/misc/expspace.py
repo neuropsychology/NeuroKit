@@ -18,7 +18,7 @@ def expspace(start, stop, num=50, out=int, base=1):
     out : type
         Type of the returned values. Default is int.
     base : float
-        If 1, will use ``np.exp()``, if 2 will use ``np.exp2()``.
+        If 1, will use :func:`.np.exp`, if 2 will use :func:`.np.exp2`.
 
     Returns
     -------
