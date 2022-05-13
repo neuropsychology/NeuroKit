@@ -15,9 +15,9 @@ Preprocessing
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_sanitize
 
-*signal_resample()*
-"""""""""""""""""""""
-.. autofunction:: neurokit2.signal_resample
+.. *signal_resample()*
+.. """""""""""""""""""""
+.. .. autofunction:: neurokit2.signal_resample
 
 
 Transformation

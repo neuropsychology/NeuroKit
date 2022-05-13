@@ -7,8 +7,8 @@ from ..misc import replace
 def microstates_classify(segmentation, microstates):
     """**Reorder (sort) the microstates (experimental)**
 
-    Based on the pattern of values in the vector of channels (thus, depends on how channels
-    are ordered).
+    Reorder (sort) the microstates (experimental) based on the pattern of values in the vector of
+    channels (thus, depends on how channels are ordered).
 
     Parameters
     ----------
@@ -28,7 +28,7 @@ def microstates_classify(segmentation, microstates):
 
       import neurokit2 as nk
 
-      eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
+      eeg = nk.mne_data("filt-0-40_raw").filter(1, 35, verbose=False)
       eeg = nk.eeg_rereference(eeg, 'average')
 
       # Original order

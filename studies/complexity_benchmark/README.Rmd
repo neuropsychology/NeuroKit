@@ -326,7 +326,7 @@ df |>
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-After summarizing and sorting the indices by computation time, the most striking feature are the orders of magnitude of difference between the fastest and slowest indices. Some of them are also particularly sensitive to the data length, a property which combined with computational expensiveness leads to indices being 100,000 slower to compute than other basic metrics.
+Despite the relative shortness of the signals considered (a few thousand points at most), the fully-parallelized data generation script took ...h to run on a 32-cores machine. After summarizing and sorting the indices by computation time, the most striking feature are the orders of magnitude of difference between the fastest and slowest indices. Some of them are also particularly sensitive to the data length, a property which combined with computational expensiveness leads to indices being 100,000 slower to compute than other basic metrics.
 
 Multiscale indices are among the slowest, due to their iterative nature (a given index is computed multiple times on coarse-grained subseries of the signal). Indices related to Recurrence Quantification Analysis (RQA) are also slow and don't scale well with signal length.
 

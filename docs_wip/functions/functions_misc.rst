@@ -45,6 +45,6 @@ Misc
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.replace
 
-*type_converters()*
+*as_vector()*
 """"""""""""""""""""""""""
-.. autofunction:: neurokit2.misc.type_converters
+.. autofunction:: neurokit2.misc.as_vector

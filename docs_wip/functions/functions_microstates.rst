@@ -3,6 +3,10 @@ Microstates
 
 Main
 ^^^^^^^^^^^^^^^^
+.. *microstates_segment()*
+.. """""""""""""""""""""""""
+.. .. autofunction:: neurokit2.microstates.microstates_segment
+
 .. *microstates_classify()*
 .. """""""""""""""""""""""""
 .. .. autofunction:: neurokit2.microstates.microstates_classify
@@ -23,13 +27,9 @@ Main
 .. """""""""""""""""""""""""
 .. .. autofunction:: neurokit2.microstates.microstates_peaks
 
-.. *microstates_plot()*
-.. """""""""""""""""""""""""
-.. .. autofunction:: neurokit2.microstates.microstates_plot
-
-.. *microstates_segments()*
-.. """""""""""""""""""""""""
-.. .. autofunction:: neurokit2.microstates.microstates_segments
+*microstates_plot()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.microstates.microstates_plot
 
 .. *microstates_static()*
 .. """""""""""""""""""""""""

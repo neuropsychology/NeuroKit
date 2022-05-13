@@ -5,14 +5,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
-    """**Plots the clustered microstates**
+def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=None):
+    """**Visualize Microstates**
+
+    Plots the clustered microstates.
 
     Parameters
     ----------
     microstates : np.ndarray
-        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
-        generated from ``nk.microstates_segment()``.
+        The topographic maps of the found unique microstates which has a shape of n_channels x
+        n_states, generated from :func:`microstates_segment`.
     segmentation : array
         For each sample, the index of the microstate to which the sample has been assigned. Defaults to None.
     gfp : array
@@ -20,6 +22,8 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
         the whole range of GFP values.
     info : dict
         The dictionary output of ``nk.microstates_segment()``. Defaults to None.
+    epoch : tuple
+        A sub-epoch of GFP to plot in the shape ``(beginning sample, end sample)``.
 
     Returns
     -------
@@ -32,17 +36,30 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
 
       import neurokit2 as nk
 
-      eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
-      eeg = nk.eeg_rereference(eeg, 'average')
+      # Download data
+      eeg = nk.mne_data("filt-0-40_raw")
+      # Average rereference and band-pass filtering
+      eeg = nk.eeg_rereference(eeg, 'average').filter(1, 30, verbose=False)
 
-      microstates = nk.microstates_segment(eeg, method='kmod')
-      @savefig p_microstates_plot.png scale = 100%
-      nk.microstates_plot(microstates, gfp=microstates["GFP"][0:500])
+      # Cluster microstates
+      microstates = nk.microstates_segment(eeg, method='kmeans', n_microstates=4)
+
+      @savefig p_microstates_plot1.png scale = 100%
+      fig = nk.microstates_plot(microstates, epoch=(500, 750))
       @suppress
       plt.close()
 
 
     """
+
+    try:
+        import mne
+    except ImportError as e:
+        raise ImportError(
+            "The 'mne' module is required for this function to run. ",
+            "Please install it first (`pip install mne`).",
+        ) from e
+
     # Try retrieving info
     if isinstance(microstates, dict):
         if info is None and "Info" in microstates.keys():
@@ -52,97 +69,59 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
         segmentation = microstates["Sequence"]
         microstates = microstates["Microstates"]
 
-    # Prepare figure layout
-    fig = plt.figure(constrained_layout=False)
-    spec = matplotlib.gridspec.GridSpec(ncols=len(microstates), nrows=2)
-
-    ax_bottom = fig.add_subplot(spec[1, :])  # bottom row
-
-    axes_list = []
-    for i, _ in enumerate(microstates):
-        ax = fig.add_subplot(spec[0, i])
-        axes_list.append(ax)
-
-    # Plot
-    _microstates_plot_topos(microstates, info=info, ax=axes_list)
-    _microstates_plot_segmentation(segmentation, gfp, info, ax=ax_bottom)
-
-    return fig
-
-
-def _microstates_plot_topos(microstates, info, ax=None):
-    """Plot prototypical microstate maps.
-    """
-    # Sanity check
-    if info is None:
-        raise ValueError(
-            "NeuroKit error: microstate_plot(): An MNE-object must be passed to ",
-            " 'mne_object' in order to plot the topoplots.",
-        )
-
-    try:
-        import mne
-    except ImportError as e:
-        raise ImportError(
-            "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
-            "Please install it first (`pip install mne`).",
-        ) from e  # raise ImportError with the original traceback so that direct cause of error is explicitly known
-
-    # Plot
-    if ax is None:
-        fig, ax = plt.subplots(ncols=len(microstates), figsize=(2 * len(microstates), 2))
-    else:
-        fig = None
-
-    for i, map in enumerate(microstates):
-        mne.viz.plot_topomap(map, info, axes=ax[i])
-        ax[i].set_title(f"{i}")  # use literal string interpolation
-
-    return fig
-
-
-def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
-    """Plot a microstate segmentation.
-    """
     # Sanity checks
     if gfp is None:
         raise ValueError(
-            "NeuroKit error: microstate_plot(): GFP data must be passed to ",
-            " 'gfp' in order to plot the segmentation.",
+            "GFP data must be passed to 'gfp' in order to plot the segmentation."
         )
 
+    # Prepare figure layout
+    n = len(microstates)
+    fig, ax = plt.subplot_mosaic([np.arange(n), ["GFP"]*n])
+
+    # Plot topomaps -----------------------------------------------------------
+    for i, map in enumerate(microstates):
+        _, _ = mne.viz.plot_topomap(map, info, axes=ax[i], show=False)
+        ax[i].set_title(f"{i}")
+
+    # Plot GFP ---------------------------------------------------------------
+    # Get x-axis
     if info is not None and "sfreq" in info.keys():
         times = np.arange(len(gfp)) / info["sfreq"]
     else:
         times = np.arange(len(gfp))
 
+    # Correct lengths
     if len(segmentation) > len(gfp):
         segmentation = segmentation[0 : len(gfp)]
     if len(segmentation) < len(gfp):
         gfp = gfp[0 : len(segmentation)]
 
-    # Plot
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(6 * np.ptp(times), 2))
-    else:
-        fig = None
+    if epoch is None:
+        epoch = (0, len(gfp))
 
-    n_states = len(np.unique(segmentation))
-    cmap = plt.cm.get_cmap("plasma", n_states)
-    ax.plot(times, gfp, color="black", linewidth=1)
-    for state, color in zip(range(n_states), cmap.colors):
-        ax.fill_between(times, gfp, color=color, where=(segmentation == state))
-    norm = matplotlib.colors.Normalize(vmin=0, vmax=n_states)
+    cmap = plt.cm.get_cmap("plasma", n)
+    # Plot the GFP line above the area
+    ax["GFP"].plot(times[epoch[0]:epoch[1]],
+                   gfp[epoch[0]:epoch[1]],
+                   color="black", linewidth=0.5)
+    # Plot area
+    for state, color in zip(range(n), cmap.colors):
+        ax["GFP"].fill_between(times[epoch[0]:epoch[1]],
+                               gfp[epoch[0]:epoch[1]],
+                               color=color, where=(segmentation == state)[epoch[0]:epoch[1]])
+
+    # Create legend
+    norm = matplotlib.colors.Normalize(vmin=0.5, vmax=n+0.5)
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm.set_array([])
-    plt.colorbar(sm, ax=ax)
-    ax.set_yticks([])
+    fig.colorbar(sm, ax=ax["GFP"])
+    ax["GFP"].set_yticks([])
     if info is not None and "sfreq" in info.keys():
-        ax.set_xlabel("Time (s)")
+        ax["GFP"].set_xlabel("Time (s)")
     else:
-        ax.set_xlabel("Sample")
-    ax.set_ylabel("Global Field Power (GFP)")
-    ax.set_title(f"Sequence of the {n_states} microstates")  # use literal string interpolation
-    ax.autoscale(tight=True)
+        ax["GFP"].set_xlabel("Sample")
+    ax["GFP"].set_ylabel("Global Field Power (GFP)")
+    ax["GFP"].set_title("Microstates Sequence")
 
     return fig
