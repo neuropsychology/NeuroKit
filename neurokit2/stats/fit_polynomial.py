@@ -17,14 +17,14 @@ def fit_polynomial(y, X=None, order=2, method="raw"):
     y : Union[list, np.array, pd.Series]
         The response variable (the y axis).
     X : Union[list, np.array, pd.Series]
-        Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
+        Explanatory variable (the x axis). If ``None``, will treat y as a continuous signal.
     order : int
         The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit,
-        respectively. Can also be 'auto', in which case it will attempt to find the optimal order
-        to minimize the RMSE.
+        respectively. Can also be ``"auto"``, in which case it will attempt to find the optimal
+        order to minimize the RMSE.
     method : str
-        If 'raw' (default), compute standard polynomial coefficients. If 'orthogonal', compute
-        orthogonal polynomials (and is equivalent to R's ``poly`` default behavior).
+        If ``"raw"`` (default), compute standard polynomial coefficients. If ``"orthogonal"``,
+        compute orthogonal polynomials (and is equivalent to R's ``poly`` default behavior).
 
     Returns
     -------
@@ -142,19 +142,19 @@ def _fit_polynomial(y, X, order=2):
 def _fit_polynomial_orthogonal(y, X, order=2):
     """Fit an orthogonal polynomial regression in Python (equivalent to R's poly())
 
-      from sklearn.datasets import load_iris
-      import pandas as pd
-      df = load_iris()
-      df = pd.DataFrame(data=df.data, columns=df.feature_names)
-      y = df.iloc[:, 0].values  # Sepal.Length
-      X = df.iloc[:, 1].values  # Sepal.Width
-      _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP
-      # Equivalent to R's:
-      # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    df = load_iris()
+    df = pd.DataFrame(data=df.data, columns=df.feature_names)
+    y = df.iloc[:, 0].values  # Sepal.Length
+    X = df.iloc[:, 1].values  # Sepal.Width
+    _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP
+    # Equivalent to R's:
+    # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
 
 
     """
-    X = np.transpose([X ** k for k in range(order + 1)])
+    X = np.transpose([X**k for k in range(order + 1)])
     X = np.linalg.qr(X)[0][:, 1:]
     model = sklearn.linear_model.LinearRegression().fit(X, y)
     return model.predict(X), np.insert(model.coef_, 0, model.intercept_)

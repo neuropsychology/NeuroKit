@@ -18,11 +18,11 @@ def density(x, desired_length=100, bandwidth="Scott", show=False, **kwargs):
     desired_length : int
         The amount of values in the returned density estimation.
     bandwidth : float
-        Passed to the ``method`` argument from the :func:`density_bandwidth` function.
+        Passed to the ``method`` argument from the :func:`.density_bandwidth` function.
     show : bool
         Display the density plot.
     **kwargs
-        Additional arguments to be passed to :func:`density_bandwidth`.
+        Additional arguments to be passed to :func:`.density_bandwidth`.
 
     Returns
     -------

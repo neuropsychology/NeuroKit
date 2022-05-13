@@ -8,10 +8,10 @@ import scipy.stats
 def density_bandwidth(x, method="KernSmooth", resolution=401):
     """**Bandwidth Selection for Density Estimation**
 
-    Bandwidth selector for :func:`density` estimation. See ``bw_method`` argument in
-    ``scipy.stats.gaussian_kde()``.
+    Bandwidth selector for :func:`.density` estimation. See ``bw_method`` argument in
+    :func:`.scipy.stats.gaussian_kde`.
 
-    The "KernSmooth" method is adapted from the ``dpik()`` function from the *KernSmooth* R
+    The ``"KernSmooth"`` method is adapted from the ``dpik()`` function from the *KernSmooth* R
     package. In this case, it estimates the optimal AMISE bandwidth using the direct plug-in method
     with 2 levels for the Parzen-Rosenblatt estimator with Gaussian kernel.
 
@@ -20,9 +20,9 @@ def density_bandwidth(x, method="KernSmooth", resolution=401):
     x : Union[list, np.array, pd.Series]
         A vector of values.
     method : float
-        The bandwidth of the kernel. The larger the values, the smoother the estimation. Can be an
-        number, or ``'scott'`` or ``'silverman'`` (see ``bw_method`` argument in ``scipy.stats.
-        gaussian_kde()``), or "KernSmooth".
+        The bandwidth of the kernel. The larger the values, the smoother the estimation. Can be a
+        number, or ``"scott"`` or ``"silverman"``
+        (see ``bw_method`` argument in :func:`.scipy.stats.gaussian_kde`), or ``"KernSmooth"``.
     resolution : int
         Only when ``method="KernSmooth"``. The number of equally-spaced points over which binning
         is performed to obtain kernel functional approximation (see ``gridsize`` argument in ``KernSmooth::dpik()``).
@@ -164,4 +164,4 @@ def _density_bkfe(gcounts, drv, h, a, b):
 
     gcounter = gcounts * (np.real(np.fft.ifft(kappam * Gcounts)))[0:resol]
 
-    return np.nansum(gcounter) / n ** 2
+    return np.nansum(gcounter) / n**2

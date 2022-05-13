@@ -14,7 +14,7 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     y : Union[list, np.array, pd.Series]
         The response variable (the y axis).
     X : Union[list, np.array, pd.Series]
-        Explanatory variable (the x axis). If 'None', will treat y as a continuous signal (useful
+        Explanatory variable (the x axis). If ``None``, will treat y as a continuous signal (useful
         for smoothing).
     alpha : float
         The parameter which controls the degree of smoothing, which corresponds to the proportion
@@ -86,7 +86,7 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
         delx0 = sorted_dist[span - 1]
 
         u = distance[ind[:span]] / delx0
-        w = (1 - u ** 3) ** 3
+        w = (1 - u**3) ** 3
 
         W = np.diag(w)
         A = np.vander(Nx, N=1 + order)
