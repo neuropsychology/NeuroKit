@@ -38,7 +38,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term
       variations in HRV.
     * **S**: Area of ellipse described by *SD1* and *SD2* (``pi * SD1 * SD2``). It is
-      proportional to ``*SD1SD2*``.
+      proportional to *SD1SD2*.
     * **CSI**: The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac sympathetic
       function independent of vagal activity, calculated by dividing the longitudinal variability of
       the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).
@@ -117,7 +117,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default ``1000``.
+        least twice as high as the highest frequency in vhf. By default 1000.
     show : bool, optional
         If ``True``, will return a Poincaré plot, a scattergram, which plots each RR interval
         against the next successive one. The ellipse centers around the average RR interval. By

@@ -44,17 +44,17 @@ def hrv_frequency(
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in ``vhf``. By default ``1000``.
+        least twice as high as the highest frequency in vhf. By default 1000.
     ulf : tuple, optional
-        Upper and lower limit of the ultra-low frequency band. By default ``(0, 0.0033)``.
+        Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).
     vlf : tuple, optional
-        Upper and lower limit of the very-low frequency band. By default ``(0.0033, 0.04)``.
+        Upper and lower limit of the very-low frequency band. By default (0.0033, 0.04).
     lf : tuple, optional
-        Upper and lower limit of the low frequency band. By default ``(0.04, 0.15)``.
+        Upper and lower limit of the low frequency band. By default (0.04, 0.15).
     hf : tuple, optional
-        Upper and lower limit of the high frequency band. By default ``(0.15, 0.4)``.
+        Upper and lower limit of the high frequency band. By default (0.15, 0.4).
     vhf : tuple, optional
-        Upper and lower limit of the very-high frequency band. By default ``(0.4, 0.5)``.
+        Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).
     psd_method : str
         Method used for spectral density estimation. For details see :func:`.signal_power`.
         By default ``"welch"``.

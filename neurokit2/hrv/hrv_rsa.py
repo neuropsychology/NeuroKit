@@ -83,11 +83,11 @@ def hrv_rsa(
         See below for more details.
     window : int
         For calculating RSA second by second. Length of each segment in seconds. If ``None``
-        (default), window will be set at ``32 seconds``.
+        (default), window will be set at 32 seconds.
     window_number : int
-        Between ``2 and 8``. For calculating RSA second by second. Number of windows to be
+        Between 2 and 8. For calculating RSA second by second. Number of windows to be
         calculated in Peak Matched Multiple Window. If ``None`` (default), window_number will be
-        set at ``8``.
+        set at 8.
 
     Returns
     ----------
