@@ -13,7 +13,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     Parameters
     ----------
     eda_signals : DataFrame
-        DataFrame obtained from `eda_process()`.
+        DataFrame obtained from :func:`eda_process()`.
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second). Defaults to None.
 

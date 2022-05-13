@@ -22,25 +22,26 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     Parameters
     ----------
     eda_phasic : Union[list, np.array, pd.Series]
-        The phasic component of the EDA signal (from `eda_phasic()`).
+        The phasic component of the EDA signal (from :func:`eda_phasic()`).
     sampling_rate : int
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "neurokit" (default),
-        "gamboa2008", "kim2004" (the default in BioSPPy), "vanhalem2020" or "nabian2018".
+        The processing pipeline to apply. Can be one of ``"neurokit"`` (default),
+        ``"gamboa2008"``, ``"kim2004"`` (the default in BioSPPy), ``"vanhalem2020"`` or ``"nabian2018"``.
     amplitude_min : float
-        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude
-        SCRs (peaks) as relative to the largest amplitude in the signal.
+        Only used if ``method`` is ``"neurokit"`` or ``"kim2004"``. Minimum threshold by which to
+        exclude SCRs (peaks) as relative to the largest amplitude in the signal.
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the aplitude of the SCR, the samples
-        at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
-        "SCR_Onsets", and "SCR_Peaks" respectively. It also contains the signals' sampling rate.
+        A dictionary containing additional information, in this case the aplitude of the SCR, the
+        samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
+        ``"SCR_Amplitude"``, ``"SCR_Onsets"``, and ``"SCR_Peaks"`` respectively. It also contains the signals' sampling rate.
     signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of SCR peaks are marked as
-        "1" in lists of zeros with the same length as `eda_cleaned`. Accessible with the keys "SCR_Peaks".
+        A DataFrame of same length as the input signal in which occurences of SCR peaks are marked
+        as "1" in lists of zeros with the same length as ``"eda_cleaned"``. Accessible with the keys
+        ``"SCR_Peaks"``.
 
     See Also
     --------

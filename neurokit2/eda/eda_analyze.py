@@ -23,20 +23,21 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
         The sampling frequency of the signal (in Hz, i.e., samples/second).
         Defaults to 1000Hz.
     method : str
-        Can be one of 'event-related' for event-related analysis on epochs, or 'interval-related'
-        for analysis on longer periods of data. Defaults to 'auto' where the right method will be
-        chosen based on the mean duration of the data ('event-related' for duration under 10s).
+        Can be one of ``"event-related"`` for event-related analysis on epochs, or
+        ``"interval-related"`` for analysis on longer periods of data. Defaults to ``"auto"`` where
+        the right method will be chosen based on the mean duration of the data (``"event-related"``
+        for duration under 10s).
 
     Returns
     -------
     DataFrame
         A dataframe containing the analyzed EDA features. If event-related analysis is conducted,
-        each epoch is indicated by the `Label` column. See `eda_eventrelated` and
-        `eda_intervalrelated` docstrings for details.
+        each epoch is indicated by the `Label` column. See :func:`eda_eventrelated` and
+        :func:`eda_intervalrelated` docstrings for details.
 
     See Also
     --------
-    bio_process, eda_process, epochs_create, eda_eventrelated, eda_intervalrelated
+    .bio_process, eda_process, .epochs_create, eda_eventrelated, eda_intervalrelated
 
     Examples
     ----------

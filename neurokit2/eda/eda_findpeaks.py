@@ -11,27 +11,27 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 
     Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in
     the phasic component of Electrodermal Activity (EDA) with different possible methods. See
-    `eda_peaks()` for details.
+    :func:`eda_peaks` for details.
 
     Parameters
     ----------
     eda_phasic : Union[list, np.array, pd.Series]
-        The phasic component of the EDA signal (from `eda_phasic()`).
+        The phasic component of the EDA signal (from :func:`eda_phasic`).
     sampling_rate : int
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "neurokit" (default),
-        "gamboa2008", "kim2004" (the default in BioSPPy), "vanhalem2020" or "nabian2018".
+        The processing pipeline to apply. Can be one of ``"neurokit"`` (default),
+        ``"gamboa2008"``, ``"kim2004"`` (the default in BioSPPy), ``"vanhalem2020"`` or ``"nabian2018"``.
     amplitude_min : float
-        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude
-        SCRs (peaks) as relative to the largest amplitude in the signal.
+        Only used if "method" is ``"neurokit"`` or ``"kim2004"``. Minimum threshold by which to
+        exclude SCRs (peaks) as relative to the largest amplitude in the signal.
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the aplitude of the SCR, the samples
-        at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
-        "SCR_Onsets", and "SCR_Peaks" respectively.
+        A dictionary containing additional information, in this case the aplitude of the SCR, the
+        samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
+        ``"SCR_Amplitude"``, ``"SCR_Onsets"``, and ``"SCR_Peaks"`` respectively.
 
     See Also
     --------

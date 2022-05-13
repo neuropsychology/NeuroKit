@@ -19,7 +19,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of 'neurokit' (default) or 'biosppy'.
+        The processing pipeline to apply. Can be one of ``"neurokit"`` (default) or ``"biosppy"``.
 
     Returns
     -------

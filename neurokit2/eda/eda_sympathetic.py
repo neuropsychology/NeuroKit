@@ -27,20 +27,20 @@ def eda_sympathetic(
         List indicating the frequency range to compute the the power spectral density in.
         Defaults to [0.045, 0.25].
     method : str
-        Can be one of 'ghiasi' or 'posada'.
+        Can be one of ``"ghiasi"`` or ``"posada"``.
     show : bool
         If True, will return a plot of the power spectrum of the EDA signal within the specified
         frequency band.
 
     See Also
     --------
-    signal_filter, signal_power, signal_psd
+    .signal_filter, .signal_power, .signal_psd
 
     Returns
     -------
     dict
-        A dictionary containing the EDA symptathetic indexes, accessible by keys ``'EDA_Symp'`` and
-        ``'EDA_SympN'`` (normalized, obtained by dividing EDA_Symp by total power).
+        A dictionary containing the EDA symptathetic indexes, accessible by keys ``"EDA_Symp"`` and
+        ``"EDA_SympN"`` (normalized, obtained by dividing EDA_Symp by total power).
 
     Examples
     --------

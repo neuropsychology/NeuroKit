@@ -18,13 +18,12 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
     method : str
-        The processing pipeline to apply. Can be one of "cvxEDA", "median", "smoothmedian",
-        "highpass", "biopac", or "acqknowledge".
+        The processing pipeline to apply. Can be one of ``"cvxEDA"``, ``"median"``, ``"smoothmedian"``, ``"highpass"``, ``"biopac"``, or ``"acqknowledge"``.
 
     Returns
     -------
     DataFrame
-        DataFrame containing the 'Tonic' and the 'Phasic' components as columns.
+        DataFrame containing the ``Tonic`` and the ``Phasic`` components as columns.
 
     See Also
     --------

@@ -17,14 +17,14 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
     eda_signal : Union[list, np.array, pd.Series]
         The raw EDA signal.
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of ``"rsp_signal"`` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "biosppy" or "neurokit" (default).
+        The processing pipeline to apply. Can be one of ``"biosppy"`` or ``"neurokit"`` (default).
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `eda_signal` containing the following
+        A DataFrame of same length as ``"eda_signal"`` containing the following
         columns:
 
         * ``"EDA_Raw"``: the raw signal.
@@ -53,7 +53,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
         * ``"SCR_Recovery"``: the samples at which SCR peaks recover (decline) to half amplitude,
           marked  as "1" in a list of zeros.
     info : dict
-        A dictionary containing the information of each SCR peak (see `eda_findpeaks()`),
+        A dictionary containing the information of each SCR peak (see :func:`eda_findpeaks`),
         as well as the signals' sampling rate.
 
     See Also
