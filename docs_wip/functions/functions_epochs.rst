@@ -7,9 +7,9 @@ Main
 .. """""""""""""""""""
 .. .. autofunction:: neurokit2.epochs.epochs_create
 
-.. *epochs_plot()*
-.. """""""""""""""""
-.. .. autofunction:: neurokit2.epochs.epochs_plot
+*epochs_plot()*
+"""""""""""""""""
+.. autofunction:: neurokit2.epochs.epochs_plot
 
 *epochs_to_array()*
 """"""""""""""""""""

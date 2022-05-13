@@ -41,8 +41,8 @@ def epochs_create(
     epochs_end : int, list
         Epochs end relative to events_onsets (in seconds). An integer can be specified to have the
         same end for all epochs. A list of equal length to the events can be specified to have a
-        different end for each epoch. If "from_events", events must be a dict (from
-        :func:`.events_find`). Duration from events will be used as epochs_end.
+        different end for each epoch. If ``"from_events"``, events must be a dict (from
+        :func:`.events_find`). Duration from events will be used as ``epochs_end``.
     event_labels : list
         A list containing unique event identifiers. If ``None``, will use the event index number.
     event_conditions : list
@@ -88,6 +88,7 @@ def epochs_create(
     .. ipython:: python
 
       epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
+
       @savefig p_epochs_create2.png scale=100%
       fig = nk.epochs_plot(epochs)
       @suppress
@@ -99,6 +100,7 @@ def epochs_create(
 
       epochs = nk.epochs_create(data, events, sampling_rate=100,
                                 epochs_end=3, baseline_correction=True)
+
       @savefig p_epochs_create3.png scale=100%
       fig = nk.epochs_plot(epochs)
       @suppress

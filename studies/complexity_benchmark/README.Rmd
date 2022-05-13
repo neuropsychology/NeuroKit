@@ -589,7 +589,7 @@ p2 <- order |>
 (p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
 
-#### Graph
+### Graph
 
 ```{r graph, message=FALSE, warning=FALSE, fig.width=14, fig.height=7, include=FALSE, eval=FALSE}
 library(ggraph)
@@ -625,7 +625,7 @@ p1
 ```
 
 
-#### Hierarchical Clustering
+### Hierarchical Clustering
 
 
 ```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=14}
