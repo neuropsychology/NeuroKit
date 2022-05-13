@@ -16,7 +16,6 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     Electrodermal Activity (EDA) with different possible methods, such as:
 
     * `Gamboa, H. (2008) <http://www.lx.it.pt/~afred/pub/thesisHugoGamboa.pdf>`_
-
     * `Kim et al. (2004) <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.7385&rep=rep1&type=pdf>`_
 
     Parameters
@@ -65,9 +64,13 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
       _, kim2004 = nk.eda_peaks(eda_phasic, method="kim2004")
       _, neurokit = nk.eda_peaks(eda_phasic, method="neurokit")
       _, nabian2018 = nk.eda_peaks(eda_phasic, method="nabian2018")
+
       @savefig p_eda_peaks.png scale=100%
-      nk.events_plot([nabian2018["SCR_Peaks"], kim2004["SCR_Peaks"], neurokit["SCR_Peaks"]],
-      eda_phasic)
+      nk.events_plot([
+          nabian2018["SCR_Peaks"],
+          kim2004["SCR_Peaks"],
+          neurokit["SCR_Peaks"]
+      ], eda_phasic)
       @suppress
       plt.close()
 
@@ -84,7 +87,6 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
       Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
       journal of translational engineering in health and medicine, 6, 2800711.
-      https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
     if isinstance(eda_phasic, (pd.DataFrame, pd.Series)):

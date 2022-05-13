@@ -56,8 +56,9 @@ def fractal_dfa(
     - **Delta**: the vertical distance between the singularity spectrum *D* where the singularity
       exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the
       signal.
-    - **Asymmetry**: The asymmetric ratio (AR) is as the centrality of the peak of the spectrum.
-      AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et al., 2015).
+    - **Asymmetry**: The Asymmetric Ratio (AR) corresponds to the centrality of the peak of the
+      spectrum. AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et
+      al., 2015).
     - **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second
       derivative of *h*(q). See Orozco-Duque et al. (2015).
     - **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the
