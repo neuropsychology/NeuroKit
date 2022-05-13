@@ -87,13 +87,17 @@ def rsp_intervalrelated(data, sampling_rate=1000):
             intervals[index] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]['Label'] = data[index]['Label'].iloc[0]
+            intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             # Rate, Amplitude and Phase
-            intervals[index] = _rsp_intervalrelated_formatinput(data[index], sampling_rate, intervals[index])
+            intervals[index] = _rsp_intervalrelated_formatinput(
+                data[index], sampling_rate, intervals[index]
+            )
 
             # RRV
-            intervals[index] = _rsp_intervalrelated_rrv(data[index], sampling_rate, intervals[index])
+            intervals[index] = _rsp_intervalrelated_rrv(
+                data[index], sampling_rate, intervals[index]
+            )
 
         rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
@@ -149,10 +153,9 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
     # Check for unequal lengths
     diff = abs(len(insp_start) - len(insp_end))
     if len(insp_start) > len(insp_end):
-        insp_start = insp_start[:len(insp_start)-diff]  # remove extra start points
+        insp_start = insp_start[: len(insp_start) - diff]  # remove extra start points
     elif len(insp_end) > len(insp_start):
-        insp_end = insp_end[:len(insp_end)-diff]  # remove extra end points
-
+        insp_end = insp_end[: len(insp_end) - diff]  # remove extra end points
 
     insp_times = np.array(insp_end - insp_start) / sampling_rate
 
@@ -168,15 +171,17 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
     # Check for unequal lengths
     diff = abs(len(exp_start) - len(exp_end))
     if len(exp_start) > len(exp_end):
-        exp_start = exp_start[:len(exp_start)-diff]  # remove extra start points
+        exp_start = exp_start[: len(exp_start) - diff]  # remove extra start points
     elif len(exp_end) > len(exp_start):
-        exp_end = exp_end[:len(exp_end)-diff]  # remove extra end points
+        exp_end = exp_end[: len(exp_end) - diff]  # remove extra end points
 
     exp_times = np.array(exp_end - exp_start) / sampling_rate
 
     output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
     output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
-    output["RSP_Phase_Duration_Ratio"] = output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
+    output["RSP_Phase_Duration_Ratio"] = (
+        output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
+    )
 
     return output
 

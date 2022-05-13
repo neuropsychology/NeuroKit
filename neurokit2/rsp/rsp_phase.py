@@ -63,7 +63,9 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     inspiration[peaks] = 0.0
     inspiration[troughs] = 1.0
 
-    last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
+    last_element = np.where(~np.isnan(inspiration))[0][
+        -1
+    ]  # Avoid filling beyond the last peak/trough
     inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
 
     # Phase Completion

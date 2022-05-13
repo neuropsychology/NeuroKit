@@ -132,7 +132,7 @@ def _rsp_rrv_time(bbi):
     out = {}  # Initialize empty dict
 
     # Mean based
-    out["RMSSD"] = np.sqrt(np.mean(diff_bbi ** 2))
+    out["RMSSD"] = np.sqrt(np.mean(diff_bbi**2))
 
     out["MeanBB"] = np.nanmean(bbi)
     out["SDBB"] = np.nanstd(bbi, ddof=1)

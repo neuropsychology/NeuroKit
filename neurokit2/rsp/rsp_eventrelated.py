@@ -3,10 +3,12 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
-                                         _eventrelated_rate,
-                                         _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_rate,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 from ..misc import NeuroKitWarning, find_closest
 
 
