@@ -115,10 +115,10 @@ def microstates_segment(
       # Average rereference and band-pass filtering
       eeg = nk.eeg_rereference(eeg, 'average').filter(1, 30, verbose=False)
 
-      # Segment
-      out_kmeans = nk.microstates_segment(eeg, method="kmeans")
+      # Cluster microstates
+      microstates = nk.microstates_segment(eeg, method="kmeans")
       @savefig p_microstate_segment1.png scale=100%
-      nk.microstates_plot(out_kmeans, gfp=out_kmeans["GFP"][0:500])
+      nk.microstates_plot(microstates , epoch=(500, 750))
       @suppress
       plt.close()
 

@@ -56,18 +56,20 @@ def signal_power(
       # Instant power
       signal = nk.signal_simulate(duration=60, frequency=[10, 15, 20],
                                   amplitude = [1, 2, 3], noise = 2)
+
       @savefig p_signal_power1.png scale=100%
       power_plot = nk.signal_power(signal, frequency_band=[(8, 12), (18, 22)], method="welch", show=True)
       @suppress
       plt.close()
 
-      ..ipython:: python
+    ..ipython:: python
 
       # Continuous (simulated signal)
       signal = np.concatenate((nk.ecg_simulate(duration=30, heart_rate=75), nk.ecg_simulate(duration=30, heart_rate=85)))
       power = nk.signal_power(signal, frequency_band=[(72/60, 78/60), (82/60, 88/60)], continuous=True)
       processed, _ = nk.ecg_process(signal)
       power["ECG_Rate"] = processed["ECG_Rate"]
+
       @savefig p_signal_power2.png scale=100%
       nk.signal_plot(power, standardize=True)
       @suppress
@@ -80,6 +82,7 @@ def signal_power(
       power = nk.signal_power(signal, sampling_rate=100, frequency_band=[(0.12, 0.15), (0.15, 0.4)], continuous=True)
       processed, _ = nk.ecg_process(signal, sampling_rate=100)
       power["ECG_Rate"] = processed["ECG_Rate"]
+
       @savefig p_signal_power3.png scale=100%
       nk.signal_plot(power, standardize=True)
       @supppress
