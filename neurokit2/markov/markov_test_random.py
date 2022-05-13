@@ -13,7 +13,7 @@ def markov_test_random(fm):
     influence on the next state. This "random" matrix is then compered again the observed one, and
     a Chi2 test is conducted.
 
-    If significant (e.g., *p*-value < .05), one can reject the hypothesis that observed Markov
+    If significant (e.g., ``*p*-value < .05``), one can reject the hypothesis that observed Markov
     process is random, and conclude that past states have an influence on next states.
 
     Parameters

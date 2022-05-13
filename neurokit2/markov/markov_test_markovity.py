@@ -8,7 +8,7 @@ from .transition_matrix import transition_matrix
 def markov_test_markovity(sequence):
     """**Test of Markovity**
 
-    The the Markovity (also known as Markovianity) of a symbolic sequence.
+    The Markovity (also known as Markovianity) of a symbolic sequence.
 
     .. note::
 
