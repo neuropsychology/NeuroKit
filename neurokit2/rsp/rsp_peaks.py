@@ -39,7 +39,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
         ``"RSP_Peaks"``, and ``"RSP_Troughs"``, respectively, as well as the signals' sampling rate.
     peak_signal : DataFrame
         A DataFrame of same length as the input signal in which occurrences of peaks (exhalation
-        onsets) and troughs (inhalation onsets) are marked as "1" in lists of zeros with the same length as :func:`.rsp_cleaned`. Accessible with the keys ``"RSP_Peaks"`` and
+        onsets) and troughs (inhalation onsets) are marked as "1" in lists of zeros with the same
+        length as :func:`.rsp_cleaned`. Accessible with the keys ``"RSP_Peaks"`` and
         ``"RSP_Troughs"`` respectively.
 
 

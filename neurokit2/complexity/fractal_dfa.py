@@ -70,9 +70,9 @@ def fractal_dfa(
 
     .. note ::
 
-        Help is needed to implement the modified formula to compute the slope when
-        *q* = 0. See for instance `Faini (2021)
-        <https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254>`_.
+      Help is needed to implement the modified formula to compute the slope when
+      *q* = 0. See for instance `Faini (2021)
+      <https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254>`_.
 
     Parameters
     ----------

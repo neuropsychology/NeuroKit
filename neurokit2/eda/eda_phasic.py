@@ -14,7 +14,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     .. warning::
 
-        cvxEDA algorithm seems broken. Must investigate.
+      cvxEDA algorithm seems broken. Must investigate.
 
     Parameters
     ----------
