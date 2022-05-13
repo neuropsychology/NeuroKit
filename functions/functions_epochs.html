@@ -599,6 +599,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-to-array">
+     <em>
+      epochs_to_array()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-to-df">
      <em>
       epochs_to_df()
@@ -632,6 +639,13 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-to-array">
+     <em>
+      epochs_to_array()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-to-df">
      <em>
       epochs_to_df()
@@ -654,6 +668,48 @@ title="Print to PDF"
 <h1>Epochs<a class="headerlink" href="#epochs" title="Permalink to this headline">#</a></h1>
 <section id="main">
 <h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="epochs-to-array">
+<h3><em>epochs_to_array()</em><a class="headerlink" href="#epochs-to-array" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.epochs.epochs_to_array">
+<span class="sig-name descname"><span class="pre">epochs_to_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_to_array.html#epochs_to_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_to_array" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Epochs to Array</strong></p>
+<p>Convert epochs to a numpy array.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>TODO: We would like to make it work with uneven epochs (not the same length).</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <code class="xref py py-func docutils literal notranslate"><span class="pre">epochs_create()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – An array containing all signals.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Get data</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Create epochs</span>
+<span class="gp">In [3]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">430</span><span class="p">,</span> <span class="mi">460</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="go"># Convert to epochs</span>
+<span class="gp">In [4]: </span><span class="n">X</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_to_array</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_epochs_to_array1.png"><img alt="../_images/p_epochs_to_array1.png" src="../_images/p_epochs_to_array1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
 <section id="epochs-to-df">
 <h3><em>epochs_to_df()</em><a class="headerlink" href="#epochs-to-df" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
