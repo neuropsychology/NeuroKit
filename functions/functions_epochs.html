@@ -368,6 +368,16 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../studies/ecg_benchmark.html">
      ECG Benchmark
     </a>
@@ -380,16 +390,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../studies/eog_blinktemplate.html">
      EOG blink template
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
-     Complexity Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/complexity_benchmark.html">
-     Complexity Benchmark
     </a>
    </li>
   </ul>
@@ -694,12 +694,9 @@ title="Print to PDF"
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <cite>epochs_create()</cite>.</p></li>
 <li><p><strong>legend</strong> (<em>bool</em>) – Display the legend (the key of each epoch).</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will return a DataFrame that can be plotted
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, don’t show the plot and only return a DataFrame that can be plotted
 externally.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>epochs</strong> (<em>dict</em>) – dict containing all epochs.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -721,7 +718,7 @@ externally.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">fig1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_epochs_plot1_png"><img alt="savefig/p_epochs_plot1_png" src="savefig/p_epochs_plot1_png" /></a>
@@ -736,7 +733,7 @@ externally.</p></li>
 <span class="gp">   ...: </span><span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 
-<span class="gp">In [9]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_epochs_plot2_png"><img alt="savefig/p_epochs_plot2_png" src="savefig/p_epochs_plot2_png" /></a>
