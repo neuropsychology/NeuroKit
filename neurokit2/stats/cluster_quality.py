@@ -1,22 +1,17 @@
 # -*- coding: utf-8 -*-
-import warnings
-
 import numpy as np
 import pandas as pd
+import scipy.spatial
 import sklearn.cluster
 import sklearn.metrics
 import sklearn.mixture
-
-try:
-    import sklearn.model_selection as sklearn_model_selection  # sklearn version > 0.20
-except ModuleNotFoundError:
-    import sklearn.cross_validation as sklearn_model_selection  # sklearn version < 0.20
-
-import scipy.spatial
+import sklearn.model_selection  # sklearn version > 0.20
 
 
 def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **kwargs):
-    """**Compute quality of the clustering using several metrices**
+    """**Assess Clustering Quality**
+
+    Compute quality of the clustering using several metrics.
 
     Parameters
     ----------
@@ -24,13 +19,13 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
         A matrix array of data (e.g., channels, sample points of M/EEG data)
     clustering : DataFrame
         Information about the distance of samples from their respective clusters, generated from
-        :func:`.nk.cluster`.
+        :func:`.cluster`.
     clusters : np.ndarray
         Coordinates of cluster centers, which has a shape of n_clusters x n_features, generated
-        from :func:`.nk.cluster`.
+        from :func:`.cluster`.
     info : dict
         Information about the number of clusters, the function and model used for clustering,
-        generated from :func:`.nk.cluster`.
+        generated from :func:`.cluster`.
     n_random : int
         The number of random initializations to cluster random data for calculating the GAP
         statistic.
@@ -49,10 +44,9 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     .. ipython:: python
 
       import neurokit2 as nk
-      import matplotlib.pyplot as plt
 
       # Load the iris dataset
-      data = nk.data("iris")
+      data = nk.data("iris").drop("Species", axis=1)
 
       # Cluster
       clustering, clusters, info = nk.cluster(data, method="kmeans", n_clusters=3)
@@ -67,7 +61,6 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     * Tibshirani, R., Walther, G., & Hastie, T. (2001). Estimating the number of clusters in a
       data set via the gap statistic. Journal of the Royal Statistical Society: Series B
       (Statistical Methodology), 63(2), 411-423.
-
     * Mohajer, M., Englmeier, K. H., & Schmid, V. J. (2011). A comparison of Gap statistic
       definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
 
@@ -107,7 +100,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
             general["Score_AIC"] = info["sklearn_model"].aic(data)
             general["Score_BIC"] = info["sklearn_model"].bic(data)
             general["Score_LogLikelihood"] = info["sklearn_model"].score(data)
-            sklearn_model_selection.cross_val_score(info["sklearn_model"], data, cv=10)
+            sklearn.model_selection.cross_val_score(info["sklearn_model"], data, cv=10)
 
     general = pd.DataFrame.from_dict(general, orient="index").T
     return individual, general

@@ -759,7 +759,7 @@ Hence the choice of the current paradigm, in which we generated different types 
 
 The plurality of underlying components of empirical complexity (what is measured by complexity indices) seems to be somewhat confirmed by our results, showing that complexity indices are more or less sensitive to various orthogonal latent dimensions. One of the limitation of the current study has to do with the limited possibilities of interpretation of these underlying dimensions, and future studies are needed to discuss them. 
 
-Indices that were highlighted as reliably providing information about underlying dimensions ata low computational cost include... 
+Indices that were highlighted as encapsulating information about different underlying dimensions a ta low computational cost include... 
 
 
 ## References

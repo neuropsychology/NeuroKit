@@ -1,18 +1,8 @@
 Stats
 -------
 
-*cluster()*
-""""""""""""
-.. autofunction:: neurokit2.cluster
-
-*cluster_findnumber()*
-""""""""""""""""""""""""
-.. autofunction:: neurokit2.cluster_findnumber
-
-*cluster_quality()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.cluster_quality
-
+Utilities
+^^^^^^^^^^^^^^^^
 *correlation()*
 """"""""""""
 .. autofunction:: neurokit2.cor
@@ -24,22 +14,6 @@ Stats
 *distance()*
 """"""""""""""
 .. autofunction:: neurokit2.distance
-
-*fit_error()*
-""""""""""""""
-.. autofunction:: neurokit2.fit_error
-
-*fit_loess()*
-""""""""""""""
-.. autofunction:: neurokit2.fit_loess
-
-*fit_mixture()*
-""""""""""""""""
-.. autofunction:: neurokit2.fit_mixture
-
-*fit_polynomial()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.fit_polynomial
 
 *hdi()*
 """"""""""""
@@ -60,3 +34,37 @@ Stats
 *summary()*
 """"""""""""
 .. autofunction:: neurokit2.summary_plot
+
+
+Clustering
+^^^^^^^^^^^^^^^^
+*cluster()*
+""""""""""""
+.. autofunction:: neurokit2.cluster
+
+*cluster_findnumber()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.cluster_findnumber
+
+*cluster_quality()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.cluster_quality
+
+
+Indices of fit
+^^^^^^^^^^^^^^^^
+*fit_error()*
+""""""""""""""
+.. autofunction:: neurokit2.fit_error
+
+*fit_loess()*
+""""""""""""""
+.. autofunction:: neurokit2.fit_loess
+
+*fit_mixture()*
+""""""""""""""""
+.. autofunction:: neurokit2.fit_mixture
+
+*fit_polynomial()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.fit_polynomial
