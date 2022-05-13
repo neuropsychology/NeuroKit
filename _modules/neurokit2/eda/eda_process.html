@@ -549,14 +549,14 @@ title="Open an issue"
 <span class="sd">    eda_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw EDA signal.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of ``&quot;rsp_signal&quot;`` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &quot;biosppy&quot; or &quot;neurokit&quot; (default).</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;biosppy&quot;`` or ``&quot;neurokit&quot;`` (default).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of same length as `eda_signal` containing the following</span>
+<span class="sd">        A DataFrame of same length as ``&quot;eda_signal&quot;`` containing the following</span>
 <span class="sd">        columns:</span>
 
 <span class="sd">        * ``&quot;EDA_Raw&quot;``: the raw signal.</span>
@@ -585,7 +585,7 @@ title="Open an issue"
 <span class="sd">        * ``&quot;SCR_Recovery&quot;``: the samples at which SCR peaks recover (decline) to half amplitude,</span>
 <span class="sd">          marked  as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing the information of each SCR peak (see `eda_findpeaks()`),</span>
+<span class="sd">        A dictionary containing the information of each SCR peak (see :func:`eda_findpeaks`),</span>
 <span class="sd">        as well as the signals&#39; sampling rate.</span>
 
 <span class="sd">    See Also</span>

@@ -543,27 +543,27 @@ title="Open an issue"
 
 <span class="sd">    Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in</span>
 <span class="sd">    the phasic component of Electrodermal Activity (EDA) with different possible methods. See</span>
-<span class="sd">    `eda_peaks()` for details.</span>
+<span class="sd">    :func:`eda_peaks` for details.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    eda_phasic : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The phasic component of the EDA signal (from `eda_phasic()`).</span>
+<span class="sd">        The phasic component of the EDA signal (from :func:`eda_phasic`).</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the EDA signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &quot;neurokit&quot; (default),</span>
-<span class="sd">        &quot;gamboa2008&quot;, &quot;kim2004&quot; (the default in BioSPPy), &quot;vanhalem2020&quot; or &quot;nabian2018&quot;.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;neurokit&quot;`` (default),</span>
+<span class="sd">        ``&quot;gamboa2008&quot;``, ``&quot;kim2004&quot;`` (the default in BioSPPy), ``&quot;vanhalem2020&quot;`` or ``&quot;nabian2018&quot;``.</span>
 <span class="sd">    amplitude_min : float</span>
-<span class="sd">        Only used if &#39;method&#39; is &#39;neurokit&#39; or &#39;kim2004&#39;. Minimum threshold by which to exclude</span>
-<span class="sd">        SCRs (peaks) as relative to the largest amplitude in the signal.</span>
+<span class="sd">        Only used if &quot;method&quot; is ``&quot;neurokit&quot;`` or ``&quot;kim2004&quot;``. Minimum threshold by which to</span>
+<span class="sd">        exclude SCRs (peaks) as relative to the largest amplitude in the signal.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing additional information, in this case the aplitude of the SCR, the samples</span>
-<span class="sd">        at which the SCR onset and the SCR peaks occur. Accessible with the keys &quot;SCR_Amplitude&quot;,</span>
-<span class="sd">        &quot;SCR_Onsets&quot;, and &quot;SCR_Peaks&quot; respectively.</span>
+<span class="sd">        A dictionary containing additional information, in this case the aplitude of the SCR, the</span>
+<span class="sd">        samples at which the SCR onset and the SCR peaks occur. Accessible with the keys</span>
+<span class="sd">        ``&quot;SCR_Amplitude&quot;``, ``&quot;SCR_Onsets&quot;``, and ``&quot;SCR_Peaks&quot;`` respectively.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

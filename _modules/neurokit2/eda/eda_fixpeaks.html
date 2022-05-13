@@ -539,27 +539,27 @@ title="Open an issue"
 <div class="viewcode-block" id="eda_fixpeaks"><a class="viewcode-back" href="../../../functions/functions_eda.html#neurokit2.eda.eda_fixpeaks">[docs]</a><span class="k">def</span> <span class="nf">eda_fixpeaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Correct  Skin Conductance Responses (SCR) peaks**</span>
 
-<span class="sd">    Low-level function used by `eda_peaks()` to correct the peaks found by `eda_findpeaks()`.</span>
-<span class="sd">    Doesn&#39;t do anything for now for EDA. See `eda_peaks()` for details.</span>
+<span class="sd">    Low-level function used by ``&quot;eda_peaks()&quot;`` to correct the peaks found by</span>
+<span class="sd">    ``&quot;eda_findpeaks()&quot;``. Doesn&#39;t do anything for now for EDA. See :func:`eda_peaks` for details.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks : list or array or DataFrame or Series or dict</span>
 <span class="sd">        The samples at which the SCR peaks occur. If a dict or a DataFrame is passed,</span>
-<span class="sd">        it is assumed that these containers were obtained with `eda_findpeaks()`.</span>
+<span class="sd">        it is assumed that these containers were obtained with ``&quot;eda_findpeaks()&quot;``.</span>
 <span class="sd">    onsets : list or array or DataFrame or Series or dict</span>
 <span class="sd">        The samples at which the SCR onsets occur. If a dict or a DataFrame is passed,</span>
-<span class="sd">        it is assumed that these containers were obtained with `eda_findpeaks()`. Defaults to None.</span>
+<span class="sd">        it is assumed that these containers were obtained with ``&quot;eda_findpeaks()&quot;``. Defaults to None.</span>
 <span class="sd">    height : list or array or DataFrame or Series or dict</span>
 <span class="sd">        The samples at which the amplitude of the SCR peaks occur. If a dict or a DataFrame is</span>
-<span class="sd">        passed, it is assumed that these containers were obtained with `eda_findpeaks()`. Defaults to None.</span>
+<span class="sd">        passed, it is assumed that these containers were obtained with ``&quot;eda_findpeaks()&quot;``. Defaults to None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information, in this case the aplitude of the SCR, the</span>
 <span class="sd">        samples at which the SCR onset and the SCR peaks occur. Accessible with the keys</span>
-<span class="sd">        &quot;SCR_Amplitude&quot;, &quot;SCR_Onsets&quot;, and &quot;SCR_Peaks&quot; respectively.</span>
+<span class="sd">        ``&quot;SCR_Amplitude&quot;``, ``&quot;SCR_Onsets&quot;``, and ``&quot;SCR_Peaks&quot;`` respectively.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
