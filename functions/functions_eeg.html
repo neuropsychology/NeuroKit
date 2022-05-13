@@ -1,0 +1,1587 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>EEG &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EMG" href="functions_emg.html" />
+    <link rel="prev" title="EDA" href="functions_eda.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Functions
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/functions_eeg.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs_wip/functions/functions_eeg.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/functions/functions_eeg.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-badchannels">
+   <em>
+    eeg_badchannels()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-diss">
+   <em>
+    eeg_diss()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-gfp">
+   <em>
+    eeg_gfp()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-power">
+   <em>
+    eeg_power()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-rereference">
+   <em>
+    eeg_rereference()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-source">
+   <em>
+    eeg_source()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-source-extract">
+   <em>
+    eeg_source_extract()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-channel-add">
+   <em>
+    mne_channel_add()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-channel-extract">
+   <em>
+    mne_channel_extract()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-crop">
+   <em>
+    mne_crop()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-data">
+   <em>
+    mne_data()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-templatemri">
+   <em>
+    mne_templateMRI()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-to-df">
+   <em>
+    mne_to_df()
+   </em>
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>EEG</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-badchannels">
+   <em>
+    eeg_badchannels()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-diss">
+   <em>
+    eeg_diss()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-gfp">
+   <em>
+    eeg_gfp()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-power">
+   <em>
+    eeg_power()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-rereference">
+   <em>
+    eeg_rereference()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-source">
+   <em>
+    eeg_source()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-source-extract">
+   <em>
+    eeg_source_extract()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-channel-add">
+   <em>
+    mne_channel_add()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-channel-extract">
+   <em>
+    mne_channel_extract()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-crop">
+   <em>
+    mne_crop()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-data">
+   <em>
+    mne_data()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-templatemri">
+   <em>
+    mne_templateMRI()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mne-to-df">
+   <em>
+    mne_to_df()
+   </em>
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="eeg">
+<h1>EEG<a class="headerlink" href="#eeg" title="Permalink to this headline">#</a></h1>
+<section id="eeg-badchannels">
+<h2><em>eeg_badchannels()</em><a class="headerlink" href="#eeg-badchannels" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_badchannels">
+<span class="sig-name descname"><span class="pre">eeg_badchannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_badchannels.html#eeg_badchannels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_badchannels" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Find bad channels</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
+<li><p><strong>bad_threshold</strong> (<em>float</em>) – The proportion of indices (for instance, the mean, the SD, the skewness, the kurtosis, etc.)
+on which an observation is considered an outlier to be considered as bad. The default, 0.5,
+means that a channel must score as an outlier on half or more of the indices.</p></li>
+<li><p><strong>distance_threshold</strong> (<em>float</em>) – The quantile that defines the absolute distance from the mean, i.e., the z-score for a
+value of a variable to be considered an outlier. For instance, .975 becomes
+<code class="docutils literal notranslate"><span class="pre">scipy.stats.norm.ppf(.975)</span> <span class="pre">~=</span> <span class="pre">1.96</span></code>. The default value (.99) means that all observations
+beyond 2.33 SD from the mean will be classified as outliers.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Visualize individual EEG channels with highlighted bad channels. Defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>list</em> – List of bad channel names</p></li>
+<li><p><em>DataFrame</em> – Information of each channel, such as standard deviation (SD), mean, median absolute deviation (MAD),
+skewness, kurtosis, amplitude, highest density intervals, number of zero crossings.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">bads</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_badchannels</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="eeg-diss">
+<h2><em>eeg_diss()</em><a class="headerlink" href="#eeg-diss" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_diss">
+<span class="sig-name descname"><span class="pre">eeg_diss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gfp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_diss.html#eeg_diss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_diss" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Global dissimilarity (DISS)</strong></p>
+<p>Global dissimilarity (DISS) is an index of configuration differences between two electric
+fields, independent of their strength. Like GFP, DISS was first introduced by Lehmann and
+Skrandies (1980). This parameter equals the square root of the mean of the squared differences
+between the potentials measured at each electrode (versus the average reference), each of which
+is first scaled to unitary strength by dividing by the instantaneous GFP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
+<li><p><strong>gfp</strong> (<em>list</em>) – The Global Field Power (GFP). If None, will be obtained via <code class="docutils literal notranslate"><span class="pre">eeg_gfp()</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Optional arguments to be passed into <code class="docutils literal notranslate"><span class="pre">nk.eeg_gfp()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>np.ndarray</em> – DISS of each sample point in the data.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">set_eeg_reference</span><span class="p">(</span><span class="s1">&#39;average&#39;</span><span class="p">)</span>
+<span class="go">EEG channel type selected for re-referencing</span>
+<span class="go">Applying average reference.</span>
+<span class="go">Applying a custom (&#39;EEG&#39;,) reference.</span>
+<span class="go">Removing existing average EEG reference projection.</span>
+
+<span class="gp">In [4]: </span><span class="n">gfp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">diss</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_diss</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">gfp</span><span class="o">=</span><span class="n">gfp</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">gfp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">300</span><span class="p">],</span> <span class="n">diss</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">300</span><span class="p">]],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_diss1.png"><img alt="../_images/p_eeg_diss1.png" src="../_images/p_eeg_diss1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Lehmann, D., &amp; Skrandies, W. (1980). Reference-free identification of components of
+checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
+neurophysiology, 48(6), 609-621.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="eeg-gfp">
+<h2><em>eeg_gfp()</em><a class="headerlink" href="#eeg-gfp" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_gfp">
+<span class="sig-name descname"><span class="pre">eeg_gfp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize_eeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_gfp.html#eeg_gfp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_gfp" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Global Field Power (GFP)</strong></p>
+<p>Global Field Power (GFP) constitutes a reference-independent measure of response strength.
+GFP was first introduced by Lehmann and Skrandies (1980) and has since become a commonplace
+measure among M/EEG users. Mathematically, GFP is the standard deviation of all electrodes
+at a given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eeg</strong> (<em>array</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
+smoothing is requested.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be either ‘l1’ or ‘l2’ to use the L1 or L2 norm.</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em>) – Normalize GFP.</p></li>
+<li><p><strong>smooth</strong> (<em>float</em>) – Can be either None or a float. If a float, will use this value, multiplied by the
+sampling rate.</p></li>
+<li><p><strong>robust</strong> (<em>bool</em>) – If True, the GFP extraction (and the data standardization if requested) will be done using
+the median/MAD instead of the mean/SD.</p></li>
+<li><p><strong>standardize_eeg</strong> (<em>bool</em>) – Standardize (z-score) the data across time prior to GFP extraction using <code class="docutils literal notranslate"><span class="pre">nk.standardize()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>gfp</strong> (<em>array</em>) – The global field power of each sample point in the data.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">]</span>  <span class="c1"># Get the 500 first data points</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> Compare L1 and L2 norms</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">l1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">l2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;l2&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_gfp1.png"><img alt="../_images/p_eeg_gfp1.png" src="../_images/p_eeg_gfp1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> Compare Mean-based and Median-based</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">gfp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">gfp_r</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">gfp</span><span class="p">,</span> <span class="n">gfp_r</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_gfp2.png"><img alt="../_images/p_eeg_gfp2.png" src="../_images/p_eeg_gfp2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3:</strong> Standardize the data</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">gfp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">gfp_z</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">standardize_eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">gfp</span><span class="p">,</span> <span class="n">gfp_z</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_gfp3.png"><img alt="../_images/p_eeg_gfp3.png" src="../_images/p_eeg_gfp3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Lehmann, D., &amp; Skrandies, W. (1980). Reference-free identification of components of
+checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
+neurophysiology, 48(6), 609-621.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="eeg-power">
+<h2><em>eeg_power()</em><a class="headerlink" href="#eeg-power" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_power">
+<span class="sig-name descname"><span class="pre">eeg_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Gamma',</span> <span class="pre">'Beta',</span> <span class="pre">'Alpha',</span> <span class="pre">'Theta',</span> <span class="pre">'Delta']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_power.html#eeg_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_power" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EEG Power in Different Frequency Bands</strong></p>
+<p>See our <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/examples/eeg_power.html">walkthrough</a> for
+details.</p>
+<ul class="simple">
+<li><p><strong>Gamma</strong> (30-80 Hz)</p></li>
+<li><p><strong>Beta</strong> (13-30 Hz)
+* <strong>Beta 1</strong> (13-16 Hz)
+* <strong>Beta 2</strong> (16-20 Hz)
+* <strong>Beta 3</strong> (20-30 Hz)</p></li>
+<li><p><strong>SMR</strong> (13-15 Hz)</p></li>
+<li><p><strong>Alpha</strong> (8-13 Hz)</p></li>
+<li><p><strong>Mu</strong> (9-11 Hz)</p></li>
+<li><p><strong>Theta</strong> (4-8 Hz)</p></li>
+<li><p><strong>Delta</strong> (1-4 Hz)</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eeg</strong> (<em>array</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
+smoothing is requested.</p></li>
+<li><p><strong>frequency_band</strong> (<em>list</em>) – A list of frequency bands (or tuples of frequencies).</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <code class="docutils literal notranslate"><span class="pre">nk.signal_power()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>pd.DataFrame</em> – The power in different frequency bands for each channel.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Raw objects</span>
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">by_channel</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_power</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">by_channel</span>
+<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="go">    Channel     Gamma      Beta     Alpha     Theta     Delta</span>
+<span class="go">0   EEG 001  0.007912  0.003845  0.001344  0.005561  0.027990</span>
+<span class="go">1   EEG 002  0.003008  0.001429  0.001318  0.005474  0.025051</span>
+<span class="go">2   EEG 003  0.002763  0.001745  0.001449  0.006438  0.029593</span>
+<span class="go">3   EEG 004  0.009794  0.004741  0.001129  0.002785  0.013515</span>
+<span class="go">4   EEG 005  0.004743  0.002953  0.002069  0.005958  0.020404</span>
+<span class="go">5   EEG 006  0.004320  0.002777  0.002103  0.006682  0.022649</span>
+<span class="go">6   EEG 007  0.009367  0.005632  0.001362  0.005529  0.027890</span>
+<span class="go">7   EEG 008  0.005129  0.003082  0.000821  0.001604  0.006613</span>
+<span class="go">8   EEG 009  0.011987  0.009914  0.003177  0.006579  0.018719</span>
+<span class="go">9   EEG 010  0.001643  0.001527  0.001094  0.002455  0.006542</span>
+<span class="go">10  EEG 011  0.002628  0.002971  0.003792  0.009177  0.018819</span>
+<span class="go">11  EEG 012  0.002432  0.002895  0.003991  0.010122  0.020202</span>
+<span class="go">12  EEG 013  0.003040  0.003563  0.004465  0.011526  0.024678</span>
+<span class="go">13  EEG 014  0.003615  0.004178  0.003777  0.009328  0.020882</span>
+<span class="go">14  EEG 015  0.013745  0.006523  0.002106  0.005604  0.018671</span>
+<span class="go">15  EEG 016  0.007219  0.004014  0.001714  0.004356  0.018824</span>
+<span class="go">16  EEG 017  0.008414  0.006118  0.004533  0.007178  0.020832</span>
+<span class="go">17  EEG 018  0.026925  0.012950  0.004128  0.006089  0.017233</span>
+<span class="go">18  EEG 019  0.009863  0.004590  0.004199  0.006687  0.016285</span>
+<span class="go">19  EEG 020  0.003097  0.004016  0.006036  0.011380  0.020417</span>
+<span class="go">20  EEG 021  0.002853  0.003778  0.005039  0.010954  0.019799</span>
+<span class="go">21  EEG 022  0.007752  0.005372  0.003811  0.007344  0.019457</span>
+<span class="go">22  EEG 023  0.021326  0.010365  0.002786  0.004541  0.015278</span>
+<span class="go">23  EEG 024  0.010142  0.007756  0.002913  0.004897  0.015792</span>
+<span class="go">24  EEG 025  0.002466  0.002460  0.002908  0.003842  0.010324</span>
+<span class="go">25  EEG 026  0.005942  0.003821  0.004667  0.006176  0.012652</span>
+<span class="go">26  EEG 027  0.004986  0.004818  0.009481  0.012306  0.022745</span>
+<span class="go">27  EEG 028  0.003703  0.005152  0.011114  0.014598  0.021448</span>
+<span class="go">28  EEG 029  0.002456  0.003759  0.007466  0.010999  0.016030</span>
+<span class="go">29  EEG 030  0.002779  0.004728  0.008948  0.013627  0.018948</span>
+<span class="go">30  EEG 031  0.002267  0.003528  0.006639  0.010304  0.015349</span>
+<span class="go">31  EEG 032  0.003173  0.004664  0.009127  0.012911  0.020351</span>
+<span class="go">32  EEG 033  0.003201  0.003387  0.006217  0.008563  0.016721</span>
+<span class="go">33  EEG 034  0.012991  0.006354  0.003786  0.005277  0.011984</span>
+<span class="go">34  EEG 035  0.005393  0.003147  0.004015  0.005319  0.012388</span>
+<span class="go">35  EEG 036  0.004242  0.004976  0.007777  0.010592  0.017108</span>
+<span class="go">36  EEG 037  0.003566  0.003902  0.008443  0.010912  0.015987</span>
+<span class="go">37  EEG 038  0.002264  0.003733  0.009317  0.012167  0.014198</span>
+<span class="go">38  EEG 039  0.002628  0.004949  0.012858  0.016935  0.017353</span>
+<span class="go">39  EEG 040  0.002505  0.004528  0.011440  0.014622  0.016962</span>
+<span class="go">40  EEG 041  0.002271  0.003688  0.009095  0.011596  0.014748</span>
+<span class="go">41  EEG 042  0.002863  0.002844  0.005815  0.007572  0.013053</span>
+<span class="go">42  EEG 043  0.003392  0.002936  0.005934  0.007584  0.012151</span>
+<span class="go">43  EEG 044  0.002954  0.004463  0.012985  0.016343  0.016535</span>
+<span class="go">44  EEG 045  0.002733  0.004560  0.013671  0.017794  0.016745</span>
+<span class="go">45  EEG 046  0.002135  0.003912  0.011550  0.015331  0.014197</span>
+<span class="go">46  EEG 047  0.002934  0.005714  0.017041  0.022545  0.019277</span>
+<span class="go">47  EEG 048  0.002424  0.004919  0.014250  0.018215  0.015736</span>
+<span class="go">48  EEG 049  0.002902  0.005454  0.016079  0.020178  0.018974</span>
+<span class="go">49  EEG 050  0.002850  0.004745  0.013493  0.016810  0.017974</span>
+<span class="go">50  EEG 051  0.002305  0.003441  0.009737  0.012084  0.014777</span>
+<span class="go">51  EEG 052  0.003503  0.004311  0.011720  0.014022  0.019059</span>
+<span class="go">52  EEG 054  0.003643  0.006728  0.022797  0.028264  0.022468</span>
+<span class="go">53  EEG 055  0.002806  0.004833  0.015548  0.018248  0.017857</span>
+<span class="go">54  EEG 056  0.003461  0.005189  0.016860  0.018325  0.020478</span>
+<span class="go">55  EEG 057  0.003099  0.005349  0.016453  0.020508  0.017865</span>
+<span class="go">56  EEG 058  0.003541  0.005744  0.016610  0.020882  0.019750</span>
+<span class="go">57  EEG 059  0.003236  0.005200  0.016091  0.018487  0.021359</span>
+<span class="go">58  EEG 060  0.002807  0.004353  0.007619  0.010964  0.013772</span>
+
+<span class="gp">In [5]: </span><span class="n">average</span> <span class="o">=</span> <span class="n">by_channel</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">average</span><span class="p">[</span><span class="s2">&quot;Gamma&quot;</span><span class="p">]</span>
+<span class="gh">Out[6]: </span><span class="go">0.005154868723667882</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Lehmann, D., &amp; Skrandies, W. (1980). Reference-free identification of components of
+checkerboard-evoked multichannel potential fields. Electroencephalography and clinical
+neurophysiology, 48(6), 609-621.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="eeg-rereference">
+<h2><em>eeg_rereference()</em><a class="headerlink" href="#eeg-rereference" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_rereference">
+<span class="sig-name descname"><span class="pre">eeg_rereference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_rereference.html#eeg_rereference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_rereference" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EEG Rereferencing</strong></p>
+<p>This function can be used for arrays as well as MNE objects.</p>
+<p>EEG recordings measure differences in electrical potentials between two points, which means the
+signal displayed at any channel is in fact the difference in electrical potential to some other
+recording site. Primarily, this other recording site is the ground electrode, which picks up
+electrical noise that does not reach the other scalp electrodes. Consequently, the voltage
+difference between ground and EEG scalp electrodes is also affected by this noise.</p>
+<p>The idea behind re-referencing is to express the voltage at the EEG scalp channels with respect
+to another, new reference. It can be composed of any recorded channel or an average of several
+channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
+<li><p><strong>reference</strong> (<em>str</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.set_eeg_reference()</span></code>. Can be a string (e.g., ‘average’, ‘lap’ for Laplacian
+“reference-free” transformation, i.e., CSD), or a list (e.g., [‘TP9’, ‘TP10’] for mastoid
+reference).</p></li>
+<li><p><strong>robust</strong> (<em>bool</em>) – Only applied if reference is ‘average’. If True, will substract the median instead of
+the mean.</p></li>
+<li><p><strong>**kwargs</strong> – Optional arguments to be passed into <code class="docutils literal notranslate"><span class="pre">mne.set_eeg_rereference()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>object</em> – The rereferenced raw mne object.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> Difference between robust average</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">avg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">avg_r</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">avg</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">avg_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Normal&quot;</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_rereference1.png"><img alt="../_images/p_eeg_rereference1.png" src="../_images/p_eeg_rereference1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> Compare the rereferencing of an array vs. the MNE object</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">avg_mne</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">set_eeg_reference</span><span class="p">(</span><span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">avg</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">avg_mne</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_rereference2.png"><img alt="../_images/p_eeg_rereference2.png" src="../_images/p_eeg_rereference2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3:</strong> Difference between average and LAP</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">lap</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">&#39;lap&#39;</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="p">[</span><span class="n">avg_mne</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">lap</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]],</span>
+<span class="gp">   ....: </span>    <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_rereference3.png"><img alt="../_images/p_eeg_rereference3.png" src="../_images/p_eeg_rereference3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Trujillo, L. T., Stanfield, C. T., &amp; Vela, R. D. (2017). The effect of electroencephalogram
+(EEG) reference choice on information-theoretic measures of the complexity and integration of
+EEG signals. Frontiers in Neuroscience, 11, 425.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="eeg-source">
+<h2><em>eeg_source()</em><a class="headerlink" href="#eeg-source" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_source">
+<span class="sig-name descname"><span class="pre">eeg_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sLORETA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_source.html#eeg_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_source" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Source Reconstruction for EEG data</strong></p>
+<p>Currently only for mne.Raw objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data.</p></li>
+<li><p><strong>src</strong> (<em>mne.SourceSpace</em>) – Source space. See <code class="docutils literal notranslate"><span class="pre">mne_templateMRI()</span></code> to obtain it from an MRI template.</p></li>
+<li><p><strong>bem</strong> (<em>mne.Bem</em>) – BEM model. See <code class="docutils literal notranslate"><span class="pre">mne_templateMRI()</span></code> to obtain it from an MRI template.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be ‘sLORETA’, ‘MNE’ or ‘dSPM’. See <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.apply_inverse_raw()</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If True, shows the location of the electrodes on the head. See <code class="docutils literal notranslate"><span class="pre">mne.viz.plot_alignment()</span></code>.</p></li>
+<li><p><strong>verbose</strong> (<em>str</em>) – Verbosity level for MNE.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <code class="docutils literal notranslate"><span class="pre">mne.make_forward_solution()</span></code> and <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.make_inverse_operator()</span></code>
+and <code class="docutils literal notranslate"><span class="pre">mne.minimum_norm.apply_inverse_raw()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.eeg.mne_templateMRI" title="neurokit2.eeg.mne_templateMRI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mne_templateMRI</span></code></a></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="eeg-source-extract">
+<h2><em>eeg_source_extract()</em><a class="headerlink" href="#eeg-source-extract" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_source_extract">
+<span class="sig-name descname"><span class="pre">eeg_source_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PALS_B12_Lobes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_source_extract.html#eeg_source_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_source_extract" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Extract the activity from an anatomical source</strong></p>
+<p>Returns a dataframe with the activity from each source in the segmentation.</p>
+<p>Parcellation models include:
+* ‘aparc’
+* ‘aparc.a2005s’
+* ‘aparc.a2009s’
+* ‘oasis.chubs’
+* ‘PALS_B12_Brodmann’
+* ‘PALS_B12_Lobes’
+* ‘PALS_B12_OrbitoFrontal’
+* ‘PALS_B12_Visuotopic’
+* ‘Yeo2011_17Networks_N1000’
+* ‘Yeo2011_7Networks_N1000’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stc</strong> (<em>mne.SourceEstimate</em>) – An SourceEstimate object as obtained by <code class="docutils literal notranslate"><span class="pre">eeg_source()</span></code>.</p></li>
+<li><p><strong>src</strong> (<em>mne.SourceSpaces</em>) – An SourceSpaces object as obtained by <code class="docutils literal notranslate"><span class="pre">eeg_source()</span></code>.</p></li>
+<li><p><strong>segmentation</strong> (<em>str</em>) – See above.</p></li>
+<li><p><strong>verbose</strong> (<em>str</em>) – Verbosity level for MNE.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <code class="docutils literal notranslate"><span class="pre">mne.extract_label_time_course()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">src</span><span class="p">,</span> <span class="n">bem</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_templateMRI</span><span class="p">()</span>
+
+<span class="gp">In [4]: </span><span class="n">stc</span><span class="p">,</span> <span class="n">src</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_source</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">bem</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_source_extract</span><span class="p">(</span><span class="n">stc</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">segmentation</span><span class="o">=</span><span class="s2">&quot;PALS_B12_Lobes&quot;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="mne-channel-add">
+<h2><em>mne_channel_add()</em><a class="headerlink" href="#mne-channel-add" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.mne_channel_add">
+<span class="sig-name descname"><span class="pre">mne_channel_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_index_raw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_index_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_channel_add.html#mne_channel_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_channel_add" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Add channel as array to MNE</strong></p>
+<p>Add a channel to a mne’s Raw m/eeg file. It will basically synchronize the channel to the eeg
+data following a particular index and add it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data from MNE.</p></li>
+<li><p><strong>channel</strong> (<em>list or array</em>) – The signal to be added.</p></li>
+<li><p><strong>channel_type</strong> (<em>str</em>) – Channel type. Currently supported fields are ‘ecg’, ‘bio’, ‘stim’, ‘eog’, ‘misc’, ‘seeg’,
+‘ecog’, ‘mag’, ‘eeg’, ‘ref_meg’, ‘grad’, ‘emg’, ‘hbr’ or ‘hbo’.</p></li>
+<li><p><strong>channel_name</strong> (<em>str</em>) – Desired channel name.</p></li>
+<li><p><strong>sync_index_raw</strong> (<em>int or list</em>) – An index (e.g., the onset of the same event marked in the same signal), in the raw data, by
+which to align the two inputs. This can be used in case the EEG data and the channel to add
+do not have the same onsets and must be aligned through some common event.</p></li>
+<li><p><strong>sync_index_channel</strong> (<em>int or list</em>) – An index (e.g., the onset of the same event marked in the same signal), in the channel to add,
+by which to align the two inputs. This can be used in case the EEG data and the channel to add
+do not have the same onsets and must be aligned through some common event.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>mne.io.Raw</em> – Raw data in FIF format.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">mne</span>
+
+<span class="gp">In [3]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+
+<span class="go"># Let the 42nd sample point in the EEG signal correspond to the 333rd point in the ECG</span>
+<span class="gp">In [5]: </span><span class="n">event_index_in_eeg</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="gp">In [6]: </span><span class="n">event_index_in_ecg</span> <span class="o">=</span> <span class="mi">333</span>
+
+<span class="gp">In [7]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_channel_add</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">ecg</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">sync_index_raw</span><span class="o">=</span><span class="n">event_index_in_eeg</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">sync_index_channel</span><span class="o">=</span><span class="n">event_index_in_ecg</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">channel_type</span><span class="o">=</span><span class="s2">&quot;ecg&quot;</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="mne-channel-extract">
+<h2><em>mne_channel_extract()</em><a class="headerlink" href="#mne-channel-extract" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.mne_channel_extract">
+<span class="sig-name descname"><span class="pre">mne_channel_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_firstsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_channel_extract.html#mne_channel_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_channel_extract" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Channel extraction from MNE objects</strong></p>
+<p>Select one or several channels by name and returns them in a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data.</p></li>
+<li><p><strong>what</strong> (<em>str or list</em>) – Can be ‘MEG’, which will extract all MEG channels, ‘EEG’, which will extract all EEG channels, or ‘EOG’,
+which will extract all EOG channels (that is, if channel names are named with prefixes of their type e.g.,
+‘EEG 001’ etc. or ‘EOG 061’). Provide exact a single or a list of channel’s name(s) if not
+(e.g., [‘124’, ‘125’]).</p></li>
+<li><p><strong>name</strong> (<em>str or list</em>) – Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
+Otherwise, defaults to None.</p></li>
+<li><p><strong>add_firstsamples</strong> (<em>bool</em>) – Defaults to <cite>False</cite>. MNE’s objects store the value of a delay between
+the start of the system and the start of the recording
+(see <a class="reference external" href="https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp">https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp</a>).
+Taking this into account can be useful when extracting channels from the Raw object to detect events indices
+that are passed back to MNE again. When <cite>add_firstsamples</cite> is set to <cite>True</cite>, the offset will be explicitly
+added at the beginning of the signal and filled with NaNs. If <cite>add_firstsamples</cite> is a float or an integer,
+the offset will filled with these values instead. If it is set to <cite>“backfill”</cite>, will prepend with the first
+real value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – A DataFrame or Series containing the channel(s).</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">mne</span>
+
+<span class="gp">In [3]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">raw_channel</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_channel_extract</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;EEG 060&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 055&quot;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;060&#39;</span><span class="p">,</span> <span class="s1">&#39;055&#39;</span><span class="p">])</span>
+
+<span class="gp">In [5]: </span><span class="n">eeg_channels</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_channel_extract</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s2">&quot;EEG&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="mne-crop">
+<h2><em>mne_crop()</em><a class="headerlink" href="#mne-crop" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.mne_crop">
+<span class="sig-name descname"><span class="pre">mne_crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_crop.html#mne_crop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_crop" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Crop mne.Raw objects</strong></p>
+<p>This function is similar to <cite>raw.crop()</cite> (same arguments), but with a few critical differences:
+* It recreates a whole new Raw object, and as such drops all information pertaining to the
+original data (which MNE keeps, see <a class="reference external" href="https://github.com/mne-tools/mne-python/issues/9759">https://github.com/mne-tools/mne-python/issues/9759</a>).
+* There is the possibility of specifying directly the first and last samples (instead of in
+time unit).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw</strong> (<em>mne.io.Raw</em>) – Raw EEG data.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – Defaults to None, assuming that the MNE data folder already exists. If not,
+specify the directory to download the folder.</p></li>
+<li><p><strong>tmin</strong> (<em>float</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code></p></li>
+<li><p><strong>tmax</strong> (<em>float</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code></p></li>
+<li><p><strong>include_tmax</strong> (<em>float</em>) – See <code class="docutils literal notranslate"><span class="pre">mne.Raw.crop()</span></code></p></li>
+<li><p><strong>smin</strong> (<em>int</em>) – Cropping start in samples.</p></li>
+<li><p><strong>samx</strong> (<em>int</em>) – Cropping end in samples.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>mne.io.Raw</em> – a cropped mne.Raw object.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="n">what</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">raw_cropped</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_crop</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">include_tmax</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="nb">len</span><span class="p">(</span><span class="n">raw_cropped</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">1000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="mne-data">
+<h2><em>mne_data()</em><a class="headerlink" href="#mne-data" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.mne_data">
+<span class="sig-name descname"><span class="pre">mne_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_data.html#mne_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_data" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Utility function to easily access MNE datasets</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>what</strong> (<em>str</em>) – Can be ‘raw’ or ‘filt-0-40_raw’ (a filtered version).</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – Defaults to None, assuming that the MNE data folder already exists. If not,
+specify the directory to download the folder.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>object</em> – The raw mne object.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="n">what</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="n">what</span><span class="o">=</span><span class="s2">&quot;epochs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="mne-templatemri">
+<h2><em>mne_templateMRI()</em><a class="headerlink" href="#mne-templatemri" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.mne_templateMRI">
+<span class="sig-name descname"><span class="pre">mne_templateMRI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_templateMRI.html#mne_templateMRI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_templateMRI" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Return Path of MRI Template</strong></p>
+<p>This function is a helper that returns the path of the MRI template for adults (the <code class="docutils literal notranslate"><span class="pre">src</span></code> and
+the <code class="docutils literal notranslate"><span class="pre">bem</span></code>) that is made available through <code class="docutils literal notranslate"><span class="pre">MNE</span></code>. It downloads the data if need be. These
+templates can be used for EEG source reconstruction when no individual MRI is available.</p>
+<p>See <a class="reference external" href="https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html">https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>verbose</strong> (<em>str</em>) – Verbosity level for MNE.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">src</span><span class="p">,</span> <span class="n">bem</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_templateMRI</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="mne-to-df">
+<h2><em>mne_to_df()</em><a class="headerlink" href="#mne-to-df" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.mne_to_df">
+<span class="sig-name descname"><span class="pre">mne_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_df" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Convert MNE objects to dataframe or dict of dataframes</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>eeg</strong> (<em>Union[mne.io.Raw, mne.Epochs]</em>) – Raw or Epochs M/EEG data from MNE.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mne_to_dict</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>DataFrame</em> – A DataFrame containing all epochs identifiable by the ‘Epoch’ column, which time axis
+is stored in the ‘Time’ column.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Raw objects</span>
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+<span class="gh">Out[3]: </span><span class="go"></span>
+<span class="go">             Time    EEG 001    EEG 002  ...    EEG 058    EEG 059    EEG 060</span>
+<span class="go">0        0.000000  -4.276182  -0.614833  ...   0.172054   0.142613   0.177187</span>
+<span class="go">1        0.006660 -13.719613  -2.243887  ...   0.598532  -0.210385   0.867487</span>
+<span class="go">2        0.013320 -14.106715  -1.705863  ...   2.516463   0.738738   3.247686</span>
+<span class="go">3        0.019980 -11.129011   0.357117  ...   4.067970   1.712777   4.825973</span>
+<span class="go">4        0.026639 -14.703818   2.077917  ...   4.015080   1.821963   3.875845</span>
+<span class="go">...           ...        ...        ...  ...        ...        ...        ...</span>
+<span class="go">41695  277.682047  34.466499  56.709267  ...  17.592953  19.040349   6.905037</span>
+<span class="go">41696  277.688707  26.214251  52.595785  ...  18.241601  21.146145   9.016836</span>
+<span class="go">41697  277.695367  19.576043  44.539640  ...  20.342592  23.406952  12.009144</span>
+<span class="go">41698  277.702027  17.385905  35.788460  ...  24.164947  26.420318  16.159330</span>
+<span class="go">41699  277.708686  16.283964  31.688199  ...  27.597833  28.958848  20.147470</span>
+
+<span class="go">[41700 rows x 60 columns]</span>
+
+<span class="go"># Epochs objects</span>
+<span class="gp">In [4]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;epochs&quot;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">           Time     Condition  Epoch  ...   EEG 058   EEG 059   EEG 060</span>
+<span class="go">0     -0.199795   audio/right      0  ... -0.252893 -2.647777 -0.990753</span>
+<span class="go">1     -0.193135   audio/right      0  ... -1.866898 -2.966418 -1.344063</span>
+<span class="go">2     -0.186476   audio/right      0  ... -0.085722 -0.845712  0.242641</span>
+<span class="go">3     -0.179816   audio/right      0  ...  2.890358  1.223851  2.005156</span>
+<span class="go">4     -0.173156   audio/right      0  ...  3.853468  1.556440  2.389586</span>
+<span class="go">...         ...           ...    ...  ...       ...       ...       ...</span>
+<span class="go">30523  0.472849  visual/right    317  ...  3.417263  0.898245  4.373624</span>
+<span class="go">30524  0.479509  visual/right    317  ...  3.311567  1.424799  5.198189</span>
+<span class="go">30525  0.486168  visual/right    317  ...  1.874429  0.310056  4.958517</span>
+<span class="go">30526  0.492828  visual/right    317  ...  0.135185 -1.766825  3.130921</span>
+<span class="go">30527  0.499488  visual/right    317  ...  0.199427 -2.366780  2.027200</span>
+
+<span class="go">[30528 rows x 62 columns]</span>
+
+<span class="go"># Evoked objects</span>
+<span class="gp">In [6]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;evoked&quot;</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="go">         Time                                 Condition  ...   EEG 059   EEG 060</span>
+<span class="go">0   -0.199795    0.50 × audio/left + 0.50 × audio/right  ...  0.072215  0.376835</span>
+<span class="go">1   -0.193135    0.50 × audio/left + 0.50 × audio/right  ...  0.133655  0.524040</span>
+<span class="go">2   -0.186476    0.50 × audio/left + 0.50 × audio/right  ...  0.259057  0.635795</span>
+<span class="go">3   -0.179816    0.50 × audio/left + 0.50 × audio/right  ...  0.432169  0.716484</span>
+<span class="go">4   -0.173156    0.50 × audio/left + 0.50 × audio/right  ...  0.612105  0.806934</span>
+<span class="go">..        ...                                       ...  ...       ...       ...</span>
+<span class="go">101  0.472849  0.51 × visual/left + 0.49 × visual/right  ...  2.130764  1.961003</span>
+<span class="go">102  0.479509  0.51 × visual/left + 0.49 × visual/right  ...  2.466693  2.076868</span>
+<span class="go">103  0.486168  0.51 × visual/left + 0.49 × visual/right  ...  2.796296  2.274223</span>
+<span class="go">104  0.492828  0.51 × visual/left + 0.49 × visual/right  ...  2.983311  2.395821</span>
+<span class="go">105  0.499488  0.51 × visual/left + 0.49 × visual/right  ...  3.122418  2.414186</span>
+
+<span class="go">[212 rows x 61 columns]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="functions_eda.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">EDA</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="functions_emg.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">EMG</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

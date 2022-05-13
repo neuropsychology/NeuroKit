@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.eeg.eeg_gfp &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/eeg/eeg_gfp.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.eeg.eeg_gfp</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span>
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">mad</span><span class="p">,</span> <span class="n">standardize</span>
+
+
+<div class="viewcode-block" id="eeg_gfp"><a class="viewcode-back" href="../../../functions/functions_eeg.html#neurokit2.eeg.eeg_gfp">[docs]</a><span class="k">def</span> <span class="nf">eeg_gfp</span><span class="p">(</span>
+    <span class="n">eeg</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span>
+    <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">smooth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">standardize_eeg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Global Field Power (GFP)**</span>
+
+<span class="sd">    Global Field Power (GFP) constitutes a reference-independent measure of response strength.</span>
+<span class="sd">    GFP was first introduced by Lehmann and Skrandies (1980) and has since become a commonplace</span>
+<span class="sd">    measure among M/EEG users. Mathematically, GFP is the standard deviation of all electrodes</span>
+<span class="sd">    at a given time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eeg : array</span>
+<span class="sd">        An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if</span>
+<span class="sd">        smoothing is requested.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Can be either &#39;l1&#39; or &#39;l2&#39; to use the L1 or L2 norm.</span>
+<span class="sd">    normalize : bool</span>
+<span class="sd">        Normalize GFP.</span>
+<span class="sd">    smooth : float</span>
+<span class="sd">        Can be either None or a float. If a float, will use this value, multiplied by the</span>
+<span class="sd">        sampling rate.</span>
+<span class="sd">    robust : bool</span>
+<span class="sd">        If True, the GFP extraction (and the data standardization if requested) will be done using</span>
+<span class="sd">        the median/MAD instead of the mean/SD.</span>
+<span class="sd">    standardize_eeg : bool</span>
+<span class="sd">        Standardize (z-score) the data across time prior to GFP extraction using ``nk.standardize()``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gfp : array</span>
+<span class="sd">        The global field power of each sample point in the data.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;)</span>
+<span class="sd">      eeg = nk.eeg_rereference(eeg, &#39;average&#39;)</span>
+<span class="sd">      eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points</span>
+
+<span class="sd">    * **Example 1:** Compare L1 and L2 norms</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      l1 = nk.eeg_gfp(eeg, method=&quot;l1&quot;, normalize=True)</span>
+<span class="sd">      l2 = nk.eeg_gfp(eeg, method=&quot;l2&quot;, normalize=True)</span>
+<span class="sd">      @savefig p_eeg_gfp1.png scale=100%</span>
+<span class="sd">      nk.signal_plot([l1, l2])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    * **Example 2:** Compare Mean-based and Median-based</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      gfp = nk.eeg_gfp(eeg, normalize=True)</span>
+<span class="sd">      gfp_r = nk.eeg_gfp(eeg, normalize=True, robust=True)</span>
+<span class="sd">      @savefig p_eeg_gfp2.png scale=100%</span>
+<span class="sd">      nk.signal_plot([gfp, gfp_r])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    * **Example 3:** Standardize the data</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      gfp = nk.eeg_gfp(eeg, normalize=True)</span>
+<span class="sd">      gfp_z = nk.eeg_gfp(eeg, normalize=True, standardize_eeg=True)</span>
+<span class="sd">      @savefig p_eeg_gfp3.png scale=100%</span>
+<span class="sd">      nk.signal_plot([gfp, gfp_z])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Lehmann, D., &amp; Skrandies, W. (1980). Reference-free identification of components of</span>
+<span class="sd">      checkerboard-evoked multichannel potential fields. Electroencephalography and clinical</span>
+<span class="sd">      neurophysiology, 48(6), 609-621.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># If MNE object</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>
+        <span class="n">eeg</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+
+    <span class="c1"># Normalization</span>
+    <span class="k">if</span> <span class="n">standardize_eeg</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">eeg</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span>
+
+    <span class="c1"># Compute GFP</span>
+    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;l1&quot;</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">_eeg_gfp_L1</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">_eeg_gfp_L2</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span>
+
+    <span class="c1"># Normalize (between 0 and 1)</span>
+    <span class="k">if</span> <span class="n">normalize</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">gfp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">gfp</span><span class="p">)</span>
+
+    <span class="c1"># Smooth</span>
+    <span class="k">if</span> <span class="n">smooth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">smooth</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">_eeg_gfp_smoothing</span><span class="p">(</span><span class="n">gfp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">smooth</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gfp</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Utilities</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_eeg_gfp_smoothing</span><span class="p">(</span><span class="n">gfp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Smooth the Global Field Power Curve&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: eeg_gfp(): You requested to smooth the GFP, for which &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;we need to know the sampling_rate. Please provide it as an argument.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window_size</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">window</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">gfp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;savgol&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gfp</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Methods</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_gfp_L1</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">robust</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eeg</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eeg</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gfp</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_gfp_L2</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">robust</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">mad</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gfp</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

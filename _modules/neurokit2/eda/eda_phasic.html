@@ -1,0 +1,872 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.eda.eda_phasic &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/eda/eda_phasic.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.eda.eda_phasic</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_smooth</span>
+
+
+<div class="viewcode-block" id="eda_phasic"><a class="viewcode-back" href="../../../functions/functions_eda.html#neurokit2.eda.eda_phasic">[docs]</a><span class="k">def</span> <span class="nf">eda_phasic</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Decompose Electrodermal Activity (EDA) into Phasic and Tonic components**</span>
+
+<span class="sd">    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using</span>
+<span class="sd">    different methods including cvxEDA (Greco, 2016) or Biopac&#39;s Acqknowledge algorithms.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eda_signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The raw EDA signal.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The processing pipeline to apply. Can be one of &quot;cvxEDA&quot;, &quot;median&quot;, &quot;smoothmedian&quot;,</span>
+<span class="sd">        &quot;highpass&quot;, &quot;biopac&quot;, or &quot;acqknowledge&quot;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DataFrame</span>
+<span class="sd">        DataFrame containing the &#39;Tonic&#39; and the &#39;Phasic&#39; components as columns.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    eda_simulate, eda_clean, eda_peaks, eda_process, eda_plot</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      # Simulate EDA signal</span>
+<span class="sd">      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)</span>
+
+<span class="sd">      # Decompose using different algorithms</span>
+<span class="sd">      cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;cvxeda&#39;)</span>
+<span class="sd">      smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;smoothmedian&#39;)</span>
+<span class="sd">      highpass = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;highpass&#39;)</span>
+
+<span class="sd">      data = pd.concat([cvxEDA.add_suffix(&#39;_cvxEDA&#39;), smoothMedian.add_suffix(&#39;_SmoothMedian&#39;),</span>
+<span class="sd">                        highpass.add_suffix(&#39;_Highpass&#39;)], axis=1)</span>
+<span class="sd">      data[&quot;EDA_Raw&quot;] = eda_signal</span>
+<span class="sd">      @savefig p_eda_phasic1.png scale=100%</span>
+<span class="sd">      fig = data.plot()</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      eda_signal = nk.data(&quot;bio_eventrelated_100hz&quot;)[&quot;EDA&quot;]</span>
+<span class="sd">      data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)</span>
+<span class="sd">      data[&quot;EDA_Raw&quot;] = eda_signal</span>
+<span class="sd">      @savefig p_eda_phasic2.png scale=100%</span>
+<span class="sd">      fig = nk.signal_plot(data, standardize=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    * cvxEDA: https://github.com/lciti/cvxEDA.</span>
+
+<span class="sd">    * Greco, A., Valenza, G., &amp; Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In</span>
+<span class="sd">      Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43).</span>
+<span class="sd">      Springer International Publishing.</span>
+
+<span class="sd">    * Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., &amp; Citi, L. (2016). cvxEDA: A convex</span>
+<span class="sd">      optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical</span>
+<span class="sd">      Engineering,</span>
+<span class="sd">      63(4), 797-804.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;cvxeda&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_eda_phasic_cvxeda</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothmedian&quot;</span><span class="p">]:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;highpass&quot;</span><span class="p">,</span> <span class="s2">&quot;biopac&quot;</span><span class="p">,</span> <span class="s2">&quot;acqknowledge&quot;</span><span class="p">]:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: eda_clean(): &#39;method&#39; should be one of &#39;biosppy&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Acqknowledge</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">smoothing_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
+<span class="sd">    issue/)&quot;&quot;&quot;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">smoothing_factor</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="n">tonic</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">phasic</span> <span class="o">=</span> <span class="n">eda_signal</span> <span class="o">-</span> <span class="n">tonic</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">),</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)})</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span> <span class="nf">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
+<span class="sd">    issue/)&quot;&quot;&quot;</span>
+    <span class="n">phasic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
+    <span class="n">tonic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">),</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)})</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># cvxEDA</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_eda_phasic_cvxeda</span><span class="p">(</span>
+    <span class="n">eda_signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">tau0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">tau1</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">delta_knot</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">8e-4</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+    <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">reltol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A convex optimization approach to electrodermal activity processing (CVXEDA).</span>
+
+<span class="sd">    This function implements the cvxEDA algorithm described in &quot;cvxEDA: a</span>
+<span class="sd">    Convex Optimization Approach to Electrodermal Activity Processing&quot; (Greco et al., 2015).</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">       eda_signal : list or array</span>
+<span class="sd">           raw EDA signal array.</span>
+<span class="sd">       sampling_rate : int</span>
+<span class="sd">           Sampling rate (samples/second).</span>
+<span class="sd">       tau0 : float</span>
+<span class="sd">           Slow time constant of the Bateman function.</span>
+<span class="sd">       tau1 : float</span>
+<span class="sd">           Fast time constant of the Bateman function.</span>
+<span class="sd">       delta_knot : float</span>
+<span class="sd">           Time between knots of the tonic spline function.</span>
+<span class="sd">       alpha : float</span>
+<span class="sd">           Penalization for the sparse SMNA driver.</span>
+<span class="sd">       gamma : float</span>
+<span class="sd">           Penalization for the tonic spline coefficients.</span>
+<span class="sd">       solver : bool</span>
+<span class="sd">           Sparse QP solver to be used, see cvxopt.solvers.qp</span>
+<span class="sd">       reltol : float</span>
+<span class="sd">           Solver options, see http://cvxopt.org/userguide/coneprog.html#algorithm-parameters</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dataframe</span>
+<span class="sd">        Contains EDA tonic and phasic signals.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Try loading cvx</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">cvxopt</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: eda_decompose(): the &#39;cvxopt&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Please install it first (`pip install cvxopt`).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Internal functions</span>
+    <span class="k">def</span> <span class="nf">_cvx</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+    <span class="n">frequency</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>
+    <span class="n">eda</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>
+
+    <span class="c1"># bateman ARMA model</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="n">tau1</span><span class="p">,</span> <span class="n">tau0</span><span class="p">)</span>  <span class="c1"># a1 &gt; a0</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">tau1</span><span class="p">,</span> <span class="n">tau0</span><span class="p">)</span>
+    <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span><span class="n">a1</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a0</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">),</span>
+            <span class="mf">2.0</span> <span class="o">*</span> <span class="n">a1</span> <span class="o">*</span> <span class="n">a0</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">8.0</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">a1</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a0</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a0</span><span class="p">)</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+
+    <span class="c1"># matrices for ARMA model</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ma</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+    <span class="c1"># spline</span>
+    <span class="n">delta_knot_s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">delta_knot</span> <span class="o">/</span> <span class="n">frequency</span><span class="p">))</span>
+    <span class="n">spl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">delta_knot_s</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">delta_knot_s</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)]</span>  <span class="c1"># order 1</span>
+    <span class="n">spl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">spl</span><span class="p">,</span> <span class="n">spl</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">)</span>
+    <span class="n">spl</span> <span class="o">/=</span> <span class="nb">max</span><span class="p">(</span><span class="n">spl</span><span class="p">)</span>
+    <span class="c1"># matrix of spline regressors</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spl</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spl</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">delta_knot_s</span><span class="p">)]</span>
+    <span class="n">nB</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nB</span><span class="p">),</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spl</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">spl</span><span class="p">,</span> <span class="p">(</span><span class="n">nB</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+
+    <span class="c1"># trend</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">])</span>
+    <span class="n">nC</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Solve the problem:</span>
+    <span class="c1"># .5*(M*q + B*l + C*d - eda)^2 + alpha*sum(A, 1)*p + .5*gamma*l&#39;*l</span>
+    <span class="c1"># s.t. A*q &gt;= 0</span>
+
+    <span class="n">old_options</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;reltol&quot;</span><span class="p">:</span> <span class="n">reltol</span><span class="p">,</span> <span class="s2">&quot;show_progress&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s2">&quot;conelp&quot;</span><span class="p">:</span>
+        <span class="c1"># Use conelp</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">sparse</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="o">-</span><span class="n">A</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">M</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">nB</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="p">)],</span>
+                <span class="p">[</span><span class="n">_cvx</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nC</span><span class="p">),</span> <span class="n">C</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">nB</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nC</span><span class="p">)],</span>
+                <span class="p">[</span><span class="n">_cvx</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">nB</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+                <span class="p">[</span><span class="n">_cvx</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">nB</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+                <span class="p">[</span><span class="n">_cvx</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nB</span><span class="p">),</span> <span class="n">B</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">nB</span><span class="p">),</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">nB</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">nB</span><span class="p">))],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="n">_cvx</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">eda</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">nB</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">([(</span><span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">nC</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">_cvx</span><span class="p">(</span><span class="n">nB</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">conelp</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nB</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="p">[]})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use qp</span>
+        <span class="n">Mt</span><span class="p">,</span> <span class="n">Ct</span><span class="p">,</span> <span class="n">Bt</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">sparse</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="n">Mt</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">Ct</span> <span class="o">*</span> <span class="n">M</span><span class="p">,</span> <span class="n">Bt</span> <span class="o">*</span> <span class="n">M</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">Mt</span> <span class="o">*</span> <span class="n">C</span><span class="p">,</span> <span class="n">Ct</span> <span class="o">*</span> <span class="n">C</span><span class="p">,</span> <span class="n">Bt</span> <span class="o">*</span> <span class="n">C</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">Mt</span> <span class="o">*</span> <span class="n">B</span><span class="p">,</span> <span class="n">Ct</span> <span class="o">*</span> <span class="n">B</span><span class="p">,</span> <span class="n">Bt</span> <span class="o">*</span> <span class="n">B</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">nB</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">nB</span><span class="p">))],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">([(</span><span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">Mt</span> <span class="o">*</span> <span class="n">eda</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">Ct</span> <span class="o">*</span> <span class="n">eda</span><span class="p">),</span> <span class="o">-</span><span class="p">(</span><span class="n">Bt</span> <span class="o">*</span> <span class="n">eda</span><span class="p">)])</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span>
+            <span class="n">H</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="o">-</span><span class="n">A</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">J</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))),</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span>
+        <span class="p">)</span>
+    <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">old_options</span><span class="p">)</span>
+
+    <span class="n">tonic_splines</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="o">-</span><span class="n">nB</span><span class="p">:]</span>
+    <span class="n">drift</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="n">n</span> <span class="p">:</span> <span class="n">n</span> <span class="o">+</span> <span class="n">nC</span><span class="p">]</span>
+    <span class="n">tonic</span> <span class="o">=</span> <span class="n">B</span> <span class="o">*</span> <span class="n">tonic_splines</span> <span class="o">+</span> <span class="n">C</span> <span class="o">*</span> <span class="n">drift</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">phasic</span> <span class="o">=</span> <span class="n">M</span> <span class="o">*</span> <span class="n">q</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]})</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># pyphysio</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># def _eda_phasic_pyphysio(eda_signal, sampling_rate=1000):</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    Try to implement this: https://github.com/MPBA/pyphysio/blob/master/pyphysio/estimators/Estimators.py#L190</span>
+<span class="c1">#</span>
+<span class="c1">#    Examples</span>
+<span class="c1">#    ---------</span>
+<span class="c1">#      import neurokit2 as nk</span>
+<span class="c1">#    &gt;&gt;&gt;</span>
+<span class="c1">#      eda_signal = nk.data(&quot;bio_eventrelated_100hz&quot;)[&quot;EDA&quot;].values</span>
+<span class="c1">#      sampling_rate = 100</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    bateman = _eda_simulate_bateman(sampling_rate=sampling_rate)</span>
+<span class="c1">#    bateman_peak = np.argmax(bateman)</span>
+<span class="c1">#</span>
+<span class="c1">#    # Prepare the input signal to avoid starting/ending peaks in the driver</span>
+<span class="c1">#    bateman_first_half = bateman[0:bateman_peak + 1]</span>
+<span class="c1">#    bateman_first_half = eda_signal[0] * (bateman_first_half - np.min(bateman_first_half)) / (</span>
+<span class="c1">#        np.max(bateman_first_half) - np.min(bateman_first_half))</span>
+<span class="c1">#</span>
+<span class="c1">#    bateman_second_half = bateman[bateman_peak:]</span>
+<span class="c1">#    bateman_second_half = eda_signal[-1] * (bateman_second_half - np.min(bateman_second_half)) / (</span>
+<span class="c1">#        np.max(bateman_second_half) - np.min(bateman_second_half))</span>
+<span class="c1">#</span>
+<span class="c1">#    signal = np.r_[bateman_first_half, eda_signal, bateman_second_half]</span>
+<span class="c1">#</span>
+<span class="c1">#    def deconvolve(signal, irf):</span>
+<span class="c1">#        # normalize:</span>
+<span class="c1">#        irf = irf / np.sum(irf)</span>
+<span class="c1">#        # FFT method</span>
+<span class="c1">#        fft_signal = np.fft.fft(signal, n=len(signal))</span>
+<span class="c1">#        fft_irf = np.fft.fft(irf, n=len(signal))</span>
+<span class="c1">#        out = np.fft.ifft(fft_signal / fft_irf)</span>
+<span class="c1">#        return out</span>
+<span class="c1">#</span>
+<span class="c1">#    out = deconvolve(signal, bateman)</span>
+<span class="c1">#    nk.signal_plot(out)</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

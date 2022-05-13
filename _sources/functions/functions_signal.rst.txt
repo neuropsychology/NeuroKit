@@ -1,5 +1,23 @@
 Signal
 -------
+*signal_simulate()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_simulate
+
+
+Preprocessing
+^^^^^^^^^^^^^^
+*signal_filter()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_filter
+
+*signal_sanitize()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_sanitize
+
+.. *signal_resample()*
+.. """""""""""""""""""""
+.. .. autofunction:: neurokit2.signal_resample
 
 
 Transformation
@@ -12,6 +30,10 @@ Transformation
 """"""""""""""""""""""
 .. autofunction:: neurokit2.signal_decompose
 
+*signal_recompose()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_recompose
+
 *signal_detrend()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_detrend
@@ -19,10 +41,6 @@ Transformation
 *signal_distort()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_distort
-
-*signal_filter()*
-""""""""""""""""""
-.. autofunction:: neurokit2.signal_filter
 
 *signal_flatline()*
 """"""""""""""""""""
@@ -32,9 +50,18 @@ Transformation
 """""""""""""""""""""""
 .. autofunction:: neurokit2.signal_interpolate
 
+*signal_merge()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.signal_merge
+
+*signal_noise()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.signal_noise
+
 *signal_surrogate()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.signal_surrogate
+
 
 
 Peaks
@@ -47,6 +74,10 @@ Peaks
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_fixpeaks
 
+*signal_formatpeaks()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_formatpeaks
+
 
 Analysis
 ^^^^^^^^^^^^^^^^
@@ -58,6 +89,44 @@ Analysis
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.signal_changepoints
 
+*signal_period()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_period
 
+*signal_phase()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_phase
+
+*signal_plot()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_plot
+
+*signal_power()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_power
+
+*signal_psd()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_psd
+
+*signal_rate()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_rate
+
+*signal_smooth()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_smooth
+
+*signal_synchrony()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_synchrony
+
+*signal_timefrequency()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_timefrequency
+
+*signal_zerocrossings()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_zerocrossings
 
 

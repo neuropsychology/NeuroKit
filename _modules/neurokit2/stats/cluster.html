@@ -1,0 +1,1338 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.stats.cluster &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/stats/cluster.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.stats.cluster</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial</span>
+<span class="kn">import</span> <span class="nn">sklearn.cluster</span>
+<span class="kn">import</span> <span class="nn">sklearn.decomposition</span>
+<span class="kn">import</span> <span class="nn">sklearn.mixture</span>
+
+<span class="kn">from</span> <span class="nn">.cluster_quality</span> <span class="kn">import</span> <span class="n">_cluster_quality_distance</span>
+
+
+<div class="viewcode-block" id="cluster"><a class="viewcode-back" href="../../../functions/functions_stats.html#neurokit2.cluster">[docs]</a><span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Data Clustering**</span>
+
+<span class="sd">    Performs clustering of data using different algorithms.</span>
+
+<span class="sd">    * **kmod**: Modified k-means algorithm.</span>
+<span class="sd">    * **kmeans**: Normal k-means.</span>
+<span class="sd">    * **kmedoids**: k-medoids clustering, a more stable version of k-means.</span>
+<span class="sd">    * **pca**: Principal Component Analysis.</span>
+<span class="sd">    * **ica**: Independent Component Analysis.</span>
+<span class="sd">    * **aahc**: Atomize and Agglomerate Hierarchical Clustering. Computationally heavy.</span>
+<span class="sd">    * **hierarchical**</span>
+<span class="sd">    * **spectral**</span>
+<span class="sd">    * **mixture**</span>
+<span class="sd">    * **mixturebayesian**</span>
+
+<span class="sd">    See ``sklearn`` for methods details.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : np.ndarray</span>
+<span class="sd">        Matrix array of data (E.g., an array (channels, times) of M/EEG data).</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The algorithm for clustering. Can be one of ``&quot;kmeans&quot;`` (default), ``&quot;kmod&quot;``,</span>
+<span class="sd">        ``&quot;kmedoids&quot;``, ``&quot;pca&quot;``, ``&quot;ica&quot;``, ``&quot;aahc&quot;``, ``&quot;hierarchical&quot;``, ``&quot;spectral&quot;``,</span>
+<span class="sd">        ``&quot;mixture&quot;``, ``&quot;mixturebayesian&quot;``.</span>
+<span class="sd">    n_clusters : int</span>
+<span class="sd">        The desired number of clusters.</span>
+<span class="sd">    random_state : Union[int, numpy.random.RandomState]</span>
+<span class="sd">        The ``RandomState`` for the random number generator. Defaults to ``None``, in which case a</span>
+<span class="sd">        different random state is chosen each time this function is called.</span>
+<span class="sd">    optimize : bool</span>
+<span class="sd">        Optimized method in Poulsen et al. (2018) for the *k*-means modified method.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to be passed into ``sklearn`` functions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    clustering : DataFrame</span>
+<span class="sd">        Information about the distance of samples from their respective clusters.</span>
+<span class="sd">    clusters : np.ndarray</span>
+<span class="sd">        Coordinates of cluster centers, which has a shape of n_clusters x n_features.</span>
+<span class="sd">    info : dict</span>
+<span class="sd">        Information about the number of clusters, the function and model used for clustering.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+<span class="sd">      import matplotlib.pyplot as plt</span>
+
+<span class="sd">      # Load the iris dataset</span>
+<span class="sd">      data = nk.data(&quot;iris&quot;).drop(&quot;Species&quot;, axis=1)</span>
+
+<span class="sd">      # Cluster using different methods</span>
+<span class="sd">      clustering_kmeans, clusters_kmeans, info = nk.cluster(data, method=&quot;kmeans&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_spectral, clusters_spectral, info = nk.cluster(data, method=&quot;spectral&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_hierarchical, clusters_hierarchical, info = nk.cluster(data, method=&quot;hierarchical&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_agglomerative, clusters_agglomerative, info= nk.cluster(data, method=&quot;agglomerative&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_mixture, clusters_mixture, info = nk.cluster(data, method=&quot;mixture&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_bayes, clusters_bayes, info = nk.cluster(data, method=&quot;mixturebayesian&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_pca, clusters_pca, info = nk.cluster(data, method=&quot;pca&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_ica, clusters_ica, info = nk.cluster(data, method=&quot;ica&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_kmod, clusters_kmod, info = nk.cluster(data, method=&quot;kmod&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_kmedoids, clusters_kmedoids, info = nk.cluster(data, method=&quot;kmedoids&quot;, n_clusters=3)</span>
+<span class="sd">      clustering_aahc, clusters_aahc, info = nk.cluster(data, method=&#39;aahc_frederic&#39;, n_clusters=3)</span>
+
+<span class="sd">      # Visualize classification and &#39;average cluster&#39;</span>
+<span class="sd">      @savefig p_cluster1.png scale=100%</span>
+<span class="sd">      fig, axes = plt.subplots(ncols=2, nrows=5)</span>
+<span class="sd">      axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[0, 0].set_title(&quot;k-means&quot;)</span>
+<span class="sd">      axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[0, 1].set_title(&quot;Spectral&quot;)</span>
+<span class="sd">      axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[1, 0].set_title(&quot;Hierarchical&quot;)</span>
+<span class="sd">      axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[1, 1].set_title(&quot;Agglomerative&quot;)</span>
+<span class="sd">      axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[2, 0].set_title(&quot;Mixture&quot;)</span>
+<span class="sd">      axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[2, 1].set_title(&quot;Bayesian Mixture&quot;)</span>
+<span class="sd">      axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[3, 0].set_title(&quot;PCA&quot;)</span>
+<span class="sd">      axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[3, 1].set_title(&quot;ICA&quot;)</span>
+<span class="sd">      axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[4, 0].set_title(&quot;modified K-means&quot;)</span>
+<span class="sd">      axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc[&#39;Cluster&#39;])</span>
+<span class="sd">      axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c=&#39;red&#39;)</span>
+<span class="sd">      axes[4, 1].set_title(&quot;AAHC (Frederic&#39;s method)&quot;)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    -----------</span>
+<span class="sd">    * Park, H. S., &amp; Jun, C. H. (2009). A simple and fast algorithm for K-medoids</span>
+<span class="sd">      clustering. Expert systems with applications, 36(2), 3336-3341.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanity checks</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="c1"># K-means</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="s2">&quot;k-means&quot;</span><span class="p">,</span> <span class="s2">&quot;kmean&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_kmeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Modified k-means</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmods&quot;</span><span class="p">,</span> <span class="s2">&quot;kmod&quot;</span><span class="p">,</span> <span class="s2">&quot;kmeans modified&quot;</span><span class="p">,</span> <span class="s2">&quot;modified kmeans&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_kmod</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="n">optimize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="c1"># K-medoids</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmedoids&quot;</span><span class="p">,</span> <span class="s2">&quot;k-medoids&quot;</span><span class="p">,</span> <span class="s2">&quot;k-centers&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_kmedoids</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># PCA</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="s2">&quot;principal&quot;</span><span class="p">,</span> <span class="s2">&quot;principal component analysis&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_pca</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># ICA</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ica&quot;</span><span class="p">,</span> <span class="s2">&quot;independent&quot;</span><span class="p">,</span> <span class="s2">&quot;independent component analysis&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_pca</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Mixture</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mixture&quot;</span><span class="p">,</span> <span class="s2">&quot;mixt&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_mixture</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">bayesian</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Frederic&#39;s AAHC</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;aahc_frederic&quot;</span><span class="p">,</span> <span class="s2">&quot;aahc_eegmicrostates&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_aahc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Bayesian</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bayesianmixture&quot;</span><span class="p">,</span> <span class="s2">&quot;bayesmixt&quot;</span><span class="p">,</span> <span class="s2">&quot;mixturebayesian&quot;</span><span class="p">,</span> <span class="s2">&quot;mixturebayes&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_mixture</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">bayesian</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Others</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_sklearn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># # Methods</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Kmeans</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_cluster_kmeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;K-means clustering algorithm&quot;&quot;&quot;</span>
+    <span class="c1"># Initialize clustering function</span>
+    <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">KMeans</span><span class="p">(</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Fit</span>
+    <span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Get representatives (identical to _cluster_getclusters(),</span>
+    <span class="c1"># but why recompute when already included)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+    <span class="c1"># Get distance</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clustering</span>
+
+    <span class="c1"># Copy function with given parameters</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_kmeans</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;sklearn_model&quot;</span><span class="p">:</span> <span class="n">clustering_model</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># K-medoids</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_cluster_kmedoids</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Peforms k-medoids clustering which is based on the most centrally located object in a cluster.</span>
+<span class="sd">    Less sensitive to outliers than K-means clustering.</span>
+
+<span class="sd">    Adapted from https://github.com/rakeshvar/kmedoids/. Original proposed algorithm from Park &amp; Jun (2009).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanitize</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Step 1: Initialize random medoids</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
+        <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">ids_of_medoids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Find distance between objects to their medoids, can be euclidean or manhatten</span>
+    <span class="k">def</span> <span class="nf">find_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dist_method</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dist_method</span> <span class="o">==</span> <span class="s2">&quot;euclidean&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">dist_method</span> <span class="o">==</span> <span class="s2">&quot;manhatten&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">individual_points</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">medoid_points</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids_of_medoids</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">find_distance</span><span class="p">(</span><span class="n">individual_points</span><span class="p">,</span> <span class="n">medoid_points</span><span class="p">)</span>
+
+    <span class="c1"># Assign each point to the nearest medoid</span>
+    <span class="n">segmentation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Update medoids</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+        <span class="c1"># Find new random medoids</span>
+        <span class="n">ids_of_medoids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">):</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">segmentation</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">)</span>
+            <span class="n">distances</span> <span class="o">=</span> <span class="n">find_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">data</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ids_of_medoids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distances</span><span class="p">)]</span>
+
+        <span class="c1"># Step 3: Reassign objects to medoids</span>
+        <span class="n">new_distances</span> <span class="o">=</span> <span class="n">find_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">data</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids_of_medoids</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">new_assignments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">new_distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">new_assignments</span> <span class="o">!=</span> <span class="n">segmentation</span><span class="p">)</span>
+        <span class="n">segmentation</span> <span class="o">=</span> <span class="n">new_assignments</span>
+
+        <span class="c1"># If more than 10% of assignments are equal to previous segmentation,</span>
+        <span class="c1"># go back to step 2 (threshold arbitrary?)</span>
+        <span class="k">if</span> <span class="n">diffs</span> <span class="o">&lt;=</span> <span class="mf">0.01</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="c1"># Data points as centroids</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ids_of_medoids</span><span class="p">]</span>
+
+    <span class="c1"># Get prediction</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">segmentation</span>
+
+    <span class="c1"># Copy function with given parameters</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_kmedoids</span><span class="p">,</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span>
+        <span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+        <span class="s2">&quot;clusters&quot;</span><span class="p">:</span> <span class="n">clusters</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Modified K-means</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_cluster_kmod</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">optimize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The modified K-means clustering algorithm,</span>
+
+<span class="sd">    adapted from Marijn van Vliet and Frederic von Wegner.</span>
+
+<span class="sd">    https://github.com/wmvanvliet/mne_microstates</span>
+<span class="sd">    https://github.com/Frederic-vW/eeg_microstates</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    n_clusters : int</span>
+<span class="sd">        The number of unique microstates to find. Defaults to 4.</span>
+<span class="sd">    max_iterations : int</span>
+<span class="sd">        The maximum number of iterations to perform in the k-means algorithm.</span>
+<span class="sd">        Defaults to 1000.</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        The threshold of convergence for the k-means algorithm, based on</span>
+<span class="sd">        relative change in noise variance. Defaults to 1e-6.</span>
+<span class="sd">    random_state : Union[int, numpy.random.RandomState, None]</span>
+<span class="sd">        The seed or ``RandomState`` for the random number generator. Defaults</span>
+<span class="sd">        to ``None``, in which case a different seed is chosen each time this</span>
+<span class="sd">        function is called.</span>
+<span class="sd">    optimized : bool</span>
+<span class="sd">        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.</span>
+<span class="sd">        For the Kmeans modified method. Default to False.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to be passed into ``sklearn`` functions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    clustering : DataFrame</span>
+<span class="sd">        Information about the distance of samples from their respective clusters.</span>
+<span class="sd">    clusters : np.ndarray</span>
+<span class="sd">        Coordinates of cluster centers, which has a shape of n_clusters x n_features.</span>
+<span class="sd">    info : dict</span>
+<span class="sd">        Information about the number of clusters, the function and model used for clustering.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_channels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># Cache this value for later to compute residual</span>
+    <span class="n">data_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Select random timepoints for our initial topographic maps</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
+        <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">init_times</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Initialize random cluster centroids</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">init_times</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="c1"># Normalize row-wise (across EEG channels)</span>
+    <span class="n">clusters</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Normalize the maps</span>
+
+    <span class="c1"># Initialize iteration</span>
+    <span class="n">prev_residual</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+
+        <span class="c1"># Step 3: Assign each sample to the best matching microstate</span>
+        <span class="n">activation</span> <span class="o">=</span> <span class="n">clusters</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">segmentation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">activation</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Step 4: Recompute the topographic maps of the microstates, based on the</span>
+        <span class="c1"># samples that were assigned to each state.</span>
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">):</span>
+
+            <span class="c1"># Get data fro specific state</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">segmentation</span> <span class="o">==</span> <span class="n">state</span>
+            <span class="n">data_state</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="c1"># Sanity check</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">clusters</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Retrieve map values</span>
+
+            <span class="k">if</span> <span class="n">optimize</span><span class="p">:</span>
+                <span class="c1"># Method 2 - optimized segmentation</span>
+                <span class="n">state_vals</span> <span class="o">=</span> <span class="n">data_state</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">activation</span><span class="p">[</span><span class="n">state</span><span class="p">,</span> <span class="n">idx</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Method 1 - eighen value</span>
+                <span class="c1"># step 4a</span>
+                <span class="n">Sk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data_state</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">data_state</span><span class="p">)</span>
+                <span class="c1"># step 4b</span>
+                <span class="n">eigen_vals</span><span class="p">,</span> <span class="n">eigen_vectors</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">Sk</span><span class="p">)</span>
+                <span class="n">state_vals</span> <span class="o">=</span> <span class="n">eigen_vectors</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eigen_vals</span><span class="p">))]</span>
+
+            <span class="n">state_vals</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">state_vals</span><span class="p">)</span>  <span class="c1"># Normalize Map</span>
+            <span class="n">clusters</span><span class="p">[</span><span class="n">state</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">state_vals</span>  <span class="c1"># Store map</span>
+
+        <span class="c1"># Estimate residual noise (step 5)</span>
+        <span class="n">act_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">clusters</span><span class="p">[</span><span class="n">segmentation</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data_sum_sq</span> <span class="o">-</span> <span class="n">act_sum_sq</span><span class="p">)</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_samples</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_channels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Have we converged? Convergence criterion: variance estimate (step 6)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">prev_residual</span> <span class="o">-</span> <span class="n">residual</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">threshold</span> <span class="o">*</span> <span class="n">residual</span><span class="p">):</span>
+            <span class="k">break</span>
+
+        <span class="c1"># Next iteration</span>
+        <span class="n">prev_residual</span> <span class="o">=</span> <span class="n">residual</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">max_iterations</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Modified K-means algorithm failed to converge after &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;iterations. Consider increasing &#39;max_iterations&#39;.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># De-normalize</span>
+    <span class="n">clusters_unnormalized</span> <span class="o">=</span> <span class="n">_cluster_getclusters</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">)</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters_unnormalized</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">segmentation</span>
+
+    <span class="c1"># Copy function with given parameters</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_kmod</span><span class="p">,</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span>
+        <span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+        <span class="s2">&quot;clusters_normalized&quot;</span><span class="p">:</span> <span class="n">clusters</span><span class="p">,</span>
+        <span class="s2">&quot;residual&quot;</span><span class="p">:</span> <span class="n">residual</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters_unnormalized</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># PCA</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_cluster_pca</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Principal Component Analysis (PCA) for clustering.&quot;&quot;&quot;</span>
+    <span class="c1"># Fit PCA</span>
+    <span class="n">pca</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">PCA</span><span class="p">(</span>
+        <span class="n">n_components</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">whiten</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">svd_solver</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="n">pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># clusters = np.array([pca.components_[state, :] for state in range(n_clusters)])</span>
+
+    <span class="c1"># Compute variance explained</span>
+    <span class="c1">#    explained_var = pca.explained_variance_ratio_</span>
+    <span class="c1">#    total_explained_var = np.sum(pca.explained_variance_ratio_)</span>
+
+    <span class="c1"># Get distance</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;Loading_&quot;</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">columns</span> <span class="o">==</span> <span class="n">state</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Recover states from clustering</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">_cluster_getclusters</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Copy function with given parameters</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_pca</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># ICA</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_cluster_ica</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Independent Component Analysis (ICA) for clustering.&quot;&quot;&quot;</span>
+    <span class="c1"># Fit ICA</span>
+    <span class="n">ica</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">FastICA</span><span class="p">(</span>
+        <span class="n">n_components</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+        <span class="n">whiten</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">fun</span><span class="o">=</span><span class="s2">&quot;exp&quot;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="n">ica</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1">#    clusters = np.array([ica.components_[state, :] for state in range(n_clusters)])</span>
+
+    <span class="c1"># Get distance</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;Loading_&quot;</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">columns</span> <span class="o">==</span> <span class="n">state</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Copy function with given parameters</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_ica</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Recover states from clustering</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">_cluster_getclusters</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># SKLEARN</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_cluster_sklearn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;spectral&quot;</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Spectral clustering&quot;&quot;&quot;</span>
+    <span class="c1"># Initialize clustering function</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;spectral&quot;</span><span class="p">]:</span>
+        <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">SpectralClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hierarchical&quot;</span><span class="p">,</span> <span class="s2">&quot;ward&quot;</span><span class="p">]:</span>
+        <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">AgglomerativeClustering</span><span class="p">(</span>
+            <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">linkage</span><span class="o">=</span><span class="s2">&quot;ward&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;agglomerative&quot;</span><span class="p">,</span> <span class="s2">&quot;single&quot;</span><span class="p">]:</span>
+        <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">AgglomerativeClustering</span><span class="p">(</span>
+            <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">linkage</span><span class="o">=</span><span class="s2">&quot;single&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Fit</span>
+    <span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Get representatives</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">_cluster_getclusters</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clustering</span><span class="p">)</span>
+
+    <span class="c1"># Get distance</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clustering</span>
+
+    <span class="c1"># Else, copy function</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">_cluster_sklearn</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;sklearn_model&quot;</span><span class="p">:</span> <span class="n">clustering_model</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="k">def</span> <span class="nf">_cluster_mixture</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bayesian</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mixture model&quot;&quot;&quot;</span>
+    <span class="c1"># Initialize clustering function</span>
+    <span class="k">if</span> <span class="n">bayesian</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">mixture</span><span class="o">.</span><span class="n">GaussianMixture</span><span class="p">(</span>
+            <span class="n">n_components</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">mixture</span><span class="o">.</span><span class="n">BayesianGaussianMixture</span><span class="p">(</span>
+            <span class="n">n_components</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Fit</span>
+    <span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Get representatives</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">means_</span>
+
+    <span class="c1"># Get probability</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">clustering_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;Probability_&quot;</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clustering</span>
+
+    <span class="c1"># Else, copy function</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_mixture</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;sklearn_model&quot;</span><span class="p">:</span> <span class="n">clustering_model</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># AAHC</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_cluster_aahc</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">gfp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">gfp_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">gfp_sum_sq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_peaks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),</span>
+<span class="sd">    implemented by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518</span>
+
+<span class="sd">    Preprocessing steps of GFP computation are necessary for the algorithm to run. If gfp arguments are specified,</span>
+<span class="sd">    data is assumed to have been filtered out based on gfp peaks (e.g., data[:, indices]), if not specified,</span>
+<span class="sd">    gfp indices will be calculated in the algorithm and data is assumed to be the full un-preprocessed input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Internal functions for aahc</span>
+    <span class="k">def</span> <span class="nf">extract_row</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">A_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">A</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:,</span> <span class="p">:]))</span>
+        <span class="k">return</span> <span class="n">A_</span><span class="p">,</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">extract_item</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">A_</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="n">A_</span><span class="p">,</span> <span class="n">a</span>
+
+    <span class="k">def</span> <span class="nf">locmax</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get local maxima of 1D-array</span>
+<span class="sd">        Args:</span>
+<span class="sd">            x: numeric sequence</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            m: list, 1D-indices of local maxima</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># discrete 1st derivative</span>
+        <span class="n">zc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">dx</span><span class="p">))</span>  <span class="c1"># zero-crossings of dx</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zc</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># indices of local max.</span>
+        <span class="k">return</span> <span class="n">m</span>
+
+    <span class="c1"># Sanitize</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">nch</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># If preprocessing is not Done already</span>
+    <span class="k">if</span> <span class="n">gfp</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gfp_peaks</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gfp_sum_sq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gfp</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">gfp_peaks</span> <span class="o">=</span> <span class="n">locmax</span><span class="p">(</span><span class="n">gfp</span><span class="p">)</span>
+        <span class="n">gfp_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gfp</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># normalizing constant in GEV</span>
+        <span class="k">if</span> <span class="n">use_peaks</span><span class="p">:</span>
+            <span class="n">maps</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">gfp_peaks</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># initialize clusters</span>
+            <span class="n">cluster_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">gfp_peaks</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># store original gfp peak indices</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">maps</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">cluster_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">maps</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">cluster_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">n_maps</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># cluster indices w.r.t. original size, normalized GFP peak data</span>
+    <span class="n">Ci</span> <span class="o">=</span> <span class="p">[[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_maps</span><span class="p">)]</span>
+
+    <span class="c1"># Main loop: atomize + agglomerate</span>
+    <span class="k">while</span> <span class="n">n_maps</span> <span class="o">&gt;</span> <span class="n">n_clusters</span><span class="p">:</span>
+
+        <span class="c1"># correlations of the data sequence with each cluster</span>
+        <span class="n">m_x</span><span class="p">,</span> <span class="n">s_x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">m_y</span><span class="p">,</span> <span class="n">s_y</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">maps</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">s_xy</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">nch</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">s_x</span><span class="p">,</span> <span class="n">s_y</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">m_x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">maps</span> <span class="o">-</span> <span class="n">m_y</span><span class="p">))</span> <span class="o">/</span> <span class="n">s_xy</span>
+
+        <span class="c1"># microstate sequence, ignore polarity</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">C</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># GEV (global explained variance) of cluster k</span>
+        <span class="n">gev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_maps</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_maps</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">L</span> <span class="o">==</span> <span class="n">k</span>
+            <span class="n">gev</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gfp</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">C</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">gfp_sum_sq</span>
+
+        <span class="c1"># merge cluster with the minimum GEV</span>
+        <span class="n">imin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">gev</span><span class="p">)</span>
+
+        <span class="c1"># N =&gt; N-1</span>
+        <span class="n">maps</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">extract_row</span><span class="p">(</span><span class="n">maps</span><span class="p">,</span> <span class="n">imin</span><span class="p">)</span>
+        <span class="n">Ci</span><span class="p">,</span> <span class="n">reC</span> <span class="o">=</span> <span class="n">extract_item</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">imin</span><span class="p">)</span>
+        <span class="n">re_cluster</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># indices of updated clusters</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">reC</span><span class="p">:</span>  <span class="c1"># map index to re-assign</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">cluster_data</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">m_x</span><span class="p">,</span> <span class="n">s_x</span> <span class="o">=</span> <span class="n">maps</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">maps</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">m_y</span><span class="p">,</span> <span class="n">s_y</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">c</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            <span class="n">s_xy</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">nch</span> <span class="o">*</span> <span class="n">s_x</span> <span class="o">*</span> <span class="n">s_y</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">maps</span> <span class="o">-</span> <span class="n">m_x</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="n">m_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">s_xy</span>
+            <span class="n">inew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">C</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># ignore polarity</span>
+            <span class="n">re_cluster</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inew</span><span class="p">)</span>
+            <span class="n">Ci</span><span class="p">[</span><span class="n">inew</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">n_maps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ci</span><span class="p">)</span>
+
+        <span class="c1"># Update clusters</span>
+        <span class="n">re_cluster</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">re_cluster</span><span class="p">))</span>  <span class="c1"># unique list of updated clusters</span>
+
+        <span class="c1"># re-clustering by eigenvector method</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">re_cluster</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">Ci</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Vt</span> <span class="o">=</span> <span class="n">cluster_data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">Sk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Vt</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">Vt</span><span class="p">)</span>
+            <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">Sk</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">evals</span><span class="p">))]</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># Get distance</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">cluster_data</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">idxmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">columns</span> <span class="o">==</span> <span class="n">state</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;Cluster&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Function</span>
+    <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">_cluster_aahc</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Info dump</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n_clusters&quot;</span><span class="p">:</span> <span class="n">n_clusters</span><span class="p">,</span>
+        <span class="s2">&quot;clustering_function&quot;</span><span class="p">:</span> <span class="n">clustering_function</span><span class="p">,</span>
+        <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">random_state</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">info</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># # Utils</span>
+<span class="c1"># =============================================================================</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span> <span class="nf">_cluster_getclusters</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clustering</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get average representatives of clusters&quot;&quot;&quot;</span>
+    <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clustering</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">clustering</span> <span class="o">==</span> <span class="n">i</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">)])</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
