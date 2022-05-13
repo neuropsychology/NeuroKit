@@ -597,6 +597,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#main">
    Main
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-to-df">
+     <em>
+      epochs_to_df()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -621,6 +630,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#main">
    Main
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-to-df">
+     <em>
+      epochs_to_df()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -636,6 +654,57 @@ title="Print to PDF"
 <h1>Epochs<a class="headerlink" href="#epochs" title="Permalink to this headline">#</a></h1>
 <section id="main">
 <h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="epochs-to-df">
+<h3><em>epochs_to_df()</em><a class="headerlink" href="#epochs-to-df" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.epochs.epochs_to_df">
+<span class="sig-name descname"><span class="pre">epochs_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_to_df.html#epochs_to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_to_df" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Convert epochs to a DataFrame</strong></p>
+<p>Convert epochs to a DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <cite>epochs_create()</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – A DataFrame containing all epochs identifiable by the ‘Label’ column, which time axis
+is stored in the ‘Time’ column.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_plot</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Get data</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Find events</span>
+<span class="gp">In [3]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                        <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># Create epochs</span>
+<span class="gp">In [4]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="go"># Convert to DataFrame</span>
+<span class="gp">In [5]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_to_df</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">        ECG        EDA  Photosensor       RSP  Index Label Condition      Time</span>
+<span class="go">0  0.029831  13.087004          1.0  0.847290   1024     1  Negative  0.000000</span>
+<span class="go">1  0.027267  13.089751          0.0  0.842743   1025     1  Negative  0.005008</span>
+<span class="go">2  0.033203  13.098601          0.0  0.837677   1026     1  Negative  0.010017</span>
+<span class="go">3  0.036911  13.098754          0.0  0.833618   1027     1  Negative  0.015025</span>
+<span class="go">4  0.048630  13.098296          0.0  0.829742   1028     1  Negative  0.020033</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
