@@ -753,11 +753,15 @@ p1 + p2
 
 ## Discussion
 
-As complexity science grows in size and application, a systematic approach to compare their "performance" becomes necessary to increase the clarity and structure of the field. The word *performance* is to be understood in a relative sense, as any such endaveour faces the "hard problem" of complexity science. The indices are sensitive to specific objective properties of a signal, features we consider part of over-arching concepts such as "complexity" and "chaotic". But it is unclear how these concepts transfer in a top-down fashion into a combination of lower-level features, such as short-term vs. long-term variability, auto-correlation, information, randomness, and so on. As such, it is conceptually complicated to benchmark complexity measures against a "objectively" complex vs. non-complex signals. In other words, we know that different characteristics can contribute to the "complexity" of a signal, but there is not a one-to-one correspondence between the latter and the former. 
+As complexity science grows in size and application, a systematic approach to compare their "performance" becomes necessary to increase the clarity and structure of the field. The word *performance* is here to be understood in a relative sense, as any such endeavor faces the "hard problem" of complexity science. The indices are sensitive to specific objective properties of a signal that we consider part of over-arching concepts such as "complex" and "chaotic". But it is unclear how these high-level concepts transfer back, in a top-down fashion, into a combination of lower-level features, such as short-term vs. long-term variability, auto-correlation, information, randomness, and so on. As such, it is conceptually complicated to benchmark complexity measures against "objectively" complex vs. non-complex signals. In other words, we know that different characteristics can contribute to the "complexity" of a signal, but there is not a one-to-one correspondence between the latter and the former. 
 
-Hence the choice of the current paradigm
+Hence the choice of the current paradigm, in which we generated different types of signals to which we systematically added different types and amount of perturbations. However, we did not seek at measuring how complexity indices can discriminate between these features or systems, nor did we attempt at mimicking real-life signals or scenarios. The goal was instead to generate enough variability to reliably map the relationships between the indices. 
+
+The plurality of underlying components of empirical complexity (what is measured by complexity indices) seems to be somewhat confirmed by our results
 
 and some indices might be more or less sensitive to these features  
+
+Indices that were highlighted as reliably providing information about underlying dimensions ata low computational cost include... 
 
 
 ## References

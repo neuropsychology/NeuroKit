@@ -27,9 +27,9 @@ Main
 .. """""""""""""""""""""""""
 .. .. autofunction:: neurokit2.microstates.microstates_peaks
 
-*microstates_plot()*
-"""""""""""""""""""""""""
-.. autofunction:: neurokit2.microstates.microstates_plot
+.. *microstates_plot()*
+.. """""""""""""""""""""""""
+.. .. autofunction:: neurokit2.microstates.microstates_plot
 
 .. *microstates_static()*
 .. """""""""""""""""""""""""
