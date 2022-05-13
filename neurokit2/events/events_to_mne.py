@@ -3,7 +3,10 @@ import numpy as np
 
 
 def events_to_mne(events, event_conditions=None):
-    """**Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG**
+    """**Create MNE-compatible events**
+
+    Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/
+    EEG.
 
     Parameters
     ----------
@@ -27,8 +30,6 @@ def events_to_mne(events, event_conditions=None):
     ----------
     .. ipython:: python
 
-      import numpy as np
-      import pandas as pd
       import neurokit2 as nk
 
       signal = nk.signal_simulate(duration=4)

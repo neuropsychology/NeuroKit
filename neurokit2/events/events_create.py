@@ -22,8 +22,9 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, 'onset' for event onsets, 'duration' for event durations, 'label'
-        for the event identifiers and the optional 'conditions' passed to `event_conditions`.
+        Dict containing 3 or 4 arrays, ``'onset'`` for event onsets, ``'duration'`` for event
+        durations, ``'label'`` for the event identifiers and the optional ``'conditions'`` passed
+        to ``event_conditions``.
 
     See Also
     --------
@@ -38,14 +39,20 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
       events = nk.events_create(event_onsets = [500, 1500, 2500, 5000])
       events
 
+      events = nk.events_create(event_onsets = [500, 1500, 2500, 5000],
+                                event_labels=["S1", "S2", "S3", "S4"],
+                                event_conditions=["A", "A", "B", "B"])
+      events
+
 
     """
     if event_durations is None:
         event_durations = np.diff(np.concatenate(([0], event_onsets)))
 
-    events = {"onset": event_onsets,
-              "duration": event_durations}
+    events = {"onset": event_onsets, "duration": event_durations}
 
-    events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
+    events = _events_find_label(
+        events, event_labels=event_labels, event_conditions=event_conditions
+    )
 
     return events

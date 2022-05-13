@@ -7,6 +7,7 @@ import numpy as np
 from ..misc import NeuroKitWarning
 from ..signal import signal_binarize
 
+
 def events_find(
     event_channel,
     threshold="auto",
@@ -21,15 +22,17 @@ def events_find(
     event_labels=None,
     event_conditions=None,
 ):
-    """**Find and select events in a continuous signal** (e.g., from a photosensor).
+    """**Find Events**
+
+    Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
     ----------
     event_channel : array or list
         The channel containing the events.
     threshold : str or float
-        The threshold value by which to select the events. If "auto", takes the value between the max
-        and the min.
+        The threshold value by which to select the events. If "auto", takes the value between the
+        max and the min.
     threshold_keep : str
         "above" or "below", define the events as above or under the threshold. For photosensors, a
         white screen corresponds usually to higher values. Therefore, if your events are signaled by
@@ -71,15 +74,13 @@ def events_find(
     ----------
     .. ipython:: python
 
-      import numpy as np
-      import pandas as pd
       import neurokit2 as nk
 
       signal = nk.signal_simulate(duration=4)
       events = nk.events_find(signal)
       events
 
-      @savefig p.events_find.png scale = 100%
+      @savefig p_events_find.png scale=100%
       nk.events_plot(events, signal)
       @suppress
       plt.close()

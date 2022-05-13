@@ -39,7 +39,7 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
 
       # Define a preprocessing routine
       def function(ecg, sampling_rate):
-          signal, info = nk.ecg_peaks(ecg, method='engzeemod2012', sampling_rate=sampling_rate)
+          signal, info = nk.ecg_peaks(ecg, method="engzeemod2012", sampling_rate=sampling_rate)
           return info["ECG_R_Peaks"]
 
       # Synthetic example
@@ -49,7 +49,7 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
       nk.benchmark_ecg_preprocessing(function, ecg, true_rpeaks, sampling_rate=200)
 
       # Example using database (commented-out)
-      # nk.benchmark_ecg_preprocessing(function, r'path/to/GUDB_database')
+      # nk.benchmark_ecg_preprocessing(function, r"path/to/GUDB_database")
 
     """
     # find data
