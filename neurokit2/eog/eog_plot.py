@@ -14,14 +14,14 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
     Parameters
     ----------
     eog_signals : DataFrame
-        DataFrame obtained from `eog_process()`.
+        DataFrame obtained from :func:`.eog_process`.
     peaks : dict
         The samples at which the blink peaks occur. Dict returned by
-        `eog_process()`. Defaults to None. Must be specified to plot individual blinks.
+        :func:`.eog_process`. Defaults to ``None``. Must be specified to plot individual blinks.
     sampling_rate : int
-        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if the data
-        should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to None.
-        Must be specified to plot individual blinks.
+        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if
+        the data should be plotted over time in seconds. Otherwise the data is plotted over
+        samples. Defaults to ``None``. Must be specified to plot individual blinks.
 
     Returns
     -------

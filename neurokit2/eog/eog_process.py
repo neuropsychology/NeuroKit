@@ -20,22 +20,24 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
         The raw vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
     sampling_rate : int
-        The sampling frequency of `eog_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second). Defaults to
+        1000.
     **kwargs
         Other arguments passed to other functions.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of the same length as the `eog_signal` containing the following columns:
+        A DataFrame of the same length as the :func:`.eog_signal` containing the following columns:
+
         * ``"EOG_Raw"``: the raw signal.
         * ``"EOG_Clean"``: the cleaned signal.
         * ``"EOG_Blinks"``: the blinks marked as "1" in a list of zeros.
         * ``"EOG_Rate"``: eye blinks rate interpolated between blinks.
 
     info : dict
-        A dictionary containing the samples at which the eye blinks occur, accessible with the key "EOG_Blinks"
-        as well as the signals' sampling rate.
+        A dictionary containing the samples at which the eye blinks occur, accessible with the key
+        ``"EOG_Blinks"`` as well as the signals' sampling rate.
 
     See Also
     --------
