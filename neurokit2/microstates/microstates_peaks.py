@@ -16,15 +16,15 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     gfp : list
-        The Global Field Power (GFP). If None, will be obtained via ``eeg_gfp()``.
+        The Global Field Power (GFP). If ``None``, will be obtained via :func:`.eeg_gfp`.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     distance_between : float
         The minimum distance (this value is to be multiplied by the sampling rate) between peaks.
-        The default is 0.01, which corresponds to 10 ms (as suggested in the Microstate EEGlab
+        The default is ``0.01``, which corresponds to 10 ms (as suggested in the Microstate EEGlab
         toolbox).
     **kwargs
-        Additional arguments to be passed to ``eeg_gfp()``.
+        Additional arguments to be passed to :func:`.eeg_gfp`.
 
     Returns
     -------

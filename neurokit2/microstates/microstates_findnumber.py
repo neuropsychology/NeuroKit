@@ -20,7 +20,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
     show : bool
         Plot indices normalized on the same scale.
     **kwargs
-        Arguments to be passed to ``microstates_segment()``
+        Arguments to be passed to :func:`.microstates_segment`
 
     Returns
     -------

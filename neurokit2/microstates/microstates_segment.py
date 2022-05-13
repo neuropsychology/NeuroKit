@@ -46,14 +46,14 @@ def microstates_segment(
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     n_microstates : int
-        The number of unique microstates to find. Defaults to 4.
+        The number of unique microstates to find. Defaults to ``4``.
     train : Union[str, int, float]
         Method for selecting the timepoints how which to train the clustering algorithm. Can be
-        'gfp' to use the peaks found in the Peaks in the global field power. Can be 'all', in which
-        case it will select all the datapoints. It can also be a number or a ratio, in which case
-        it will select the corresponding number of evenly spread data points. For instance,
-        ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will select
-        half the data. See ``microstates_peaks()``.
+        ``"gfp"`` to use the peaks found in the Peaks in the global field power. Can be ``"all"``,
+        in which case it will select all the datapoints. It can also be a number or a ratio, in
+        which case it will select the corresponding number of evenly spread data points. For
+        instance, ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will
+        select half the data. See :func:`.microstates_peaks`.
     method : str
         The algorithm for clustering. Can be one of ``"kmod"`` (default), ``"kmeans"``,
         ``"kmedoids"``, ``"pca"``, ``"ica"``, or ``"aahc"``.
@@ -64,24 +64,21 @@ def microstates_segment(
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     standardize_eeg : bool
         Standardized (z-score) the data across time prior to GFP extraction
-        using ``nk.standardize()``.
+        using :func:`.nk.standardize`.
     n_runs : int
-        The number of random initializations to use for the k-means algorithm.
-        The best fitting segmentation across all initializations is used.
-        Defaults to 10.
+        The number of random initializations to use for the k-means algorithm. The best fitting segmentation across all initializations is used. Defaults to ``10``.
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
-        Defaults to 1000.
+        Defaults to ``1000``.
     criterion : str
         Which criterion to use to choose the best run for modified k-means algorithm,
-        can be ``"gev"`` (default) which selects
-        the best run based on the highest global explained variance, or ``"cv"`` which selects the
-        best run based on the lowest cross-validation criterion. See ``nk.microstates_gev()``
-        and ``nk.microstates_crossvalidation()`` for more details respectively.
+        can be ``"gev"`` (default) which selects the best run based on the highest global explained
+        variance, or ``"cv"`` which selects the best run based on the lowest cross-validation
+        criterion. See :func:`.nk.microstates_gev` and :func:`.nk.microstates_crossvalidation` for
+        more details respectively.
     random_state : Union[int, numpy.random.RandomState]
-        The seed or ``RandomState`` for the random number generator. Defaults
-        to ``None``, in which case a different seed is chosen each time this
-        function is called.
+        The seed or ``RandomState`` for the random number generator. Defaults to ``None``, in which
+        case a different seed is chosen each time this function is called.
     optimize : bool
         Optimized method in Poulsen et al. (2018) for the *k*-means modified method.
 

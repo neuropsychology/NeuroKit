@@ -12,8 +12,8 @@ def microstates_dynamic(microstates):
     Parameters
     ----------
     microstates : np.ndarray
-        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
-        generated from ``nk.microstates_segment()``.
+        The topographic maps of the found unique microstates which has a shape of n_channels x
+        n_states, generated from :func:`.nk.microstates_segment`.
 
     Returns
     -------

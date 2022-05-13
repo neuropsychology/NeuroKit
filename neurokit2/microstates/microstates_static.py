@@ -18,9 +18,9 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
         The topographic maps of the found unique microstates which has a shape of n_channels x
         n_states, generated from :func:`.nk.microstates_segment`.
     sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to ``1000``.
     show : bool
-        Returns a plot of microstate duration, proportion, and lifetime distribution if True.
+        Returns a plot of microstate duration, proportion, and lifetime distribution if ``True``.
 
     Returns
     -------

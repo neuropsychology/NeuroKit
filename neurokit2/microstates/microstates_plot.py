@@ -14,14 +14,15 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
     ----------
     microstates : np.ndarray
         The topographic maps of the found unique microstates which has a shape of n_channels x
-        n_states, generated from :func:`microstates_segment`.
+        n_states, generated from :func:`.microstates_segment`.
     segmentation : array
-        For each sample, the index of the microstate to which the sample has been assigned. Defaults to None.
+        For each sample, the index of the microstate to which the sample has been assigned.
+        Defaults to ``None``.
     gfp : array
-        The range of global field power (GFP) values to visualize. Defaults to None, which will plot
-        the whole range of GFP values.
+        The range of global field power (GFP) values to visualize. Defaults to ``None``, which will
+        plot the whole range of GFP values.
     info : dict
-        The dictionary output of ``nk.microstates_segment()``. Defaults to None.
+        The dictionary output of :func:`.nk.microstates_segment`. Defaults to ``None``.
     epoch : tuple
         A sub-epoch of GFP to plot in the shape ``(beginning sample, end sample)``.
 
