@@ -62,7 +62,7 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
                                   threshold=0.33,
                                   show=True)
       @savefig p.eog_findpeaks1.png scale=100%
-      fig1 = nk.events_plot(neurokit, eog_cleaned)
+      nk.events_plot(neurokit, eog_cleaned)
       @suppress
       plt.close()
 
@@ -72,7 +72,7 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
       mne = nk.eog_findpeaks(eog_cleaned, method="mne")
       @savefig p.eog_findpeaks2.png scale=100%
-      fig2 = nk.events_plot(mne, eog_cleaned)
+      nk.events_plot(mne, eog_cleaned)
       @suppress
       plt.close()
 
@@ -82,7 +82,7 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
       brainstorm = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
       @savefig p.eog_findpeaks3.png scale=100%
-      fig3 = nk.events_plot(brainstorm, eog_cleaned)
+      nk.events_plot(brainstorm, eog_cleaned)
       @suppress
       plt.close()
 
@@ -92,14 +92,13 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
       blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
       @savefig p.eog_findpeaks4.png scale=100%
-      fig4 = nk.events_plot(blinker, eog_cleaned)
+      nk.events_plot(blinker, eog_cleaned)
       @suppress
       plt.close()
 
       # Jammes (2008) method
       # jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
-      # fig5 = nk.events_plot(jammes2008, eog_cleaned)
-      # fig5
+      # nk.events_plot(jammes2008, eog_cleaned)
 
     """
     # Sanitize input

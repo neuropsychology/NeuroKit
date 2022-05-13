@@ -46,7 +46,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
       cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
       info = nk.rsp_findpeaks(cleaned)
       @savefig p_rsp_findpeaks1.png scale=100%
-      fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+      nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
       @suppress
       plt.close()
 

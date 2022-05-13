@@ -52,7 +52,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None):
       info = nk.eda_fixpeaks(info)
 
       @savefig p_eda_fixpeaks.png scale=100%
-      fig = nk.events_plot(info["SCR_Peaks"], eda_phasic)
+      nk.events_plot(info["SCR_Peaks"], eda_phasic)
       @suppress
       plt.close()
 
