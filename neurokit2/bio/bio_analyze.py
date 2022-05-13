@@ -29,12 +29,12 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
         The sampling frequency of the signals (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
-        Can be one of "event-related" for event-related analysis on epochs,
-        or "interval-related" for analysis on longer periods of data. Defaults
-        to "auto" where the right method will be chosen based on the
+        Can be one of ``"event-related"`` for event-related analysis on epochs,
+        or ``"interval-related"`` for analysis on longer periods of data. Defaults
+        to ``auto`` where the right method will be chosen based on the
         mean duration of the data (event-related for duration under 10s).
     window_lengths : dict
-        If "constant" (default), will use the full epoch for all the signals. Can also
+        If ``constant`` (default), will use the full epoch for all the signals. Can also
         be a dictionary with the epoch start and end times for different
         types of signals, e.g., ``window_lengths = {"ECG": [0.5, 1.5], "EDA": [0.5, 3.5]}``
 
@@ -48,7 +48,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
     See Also
     ----------
-    ecg_analyze, rsp_analyze, eda_analyze, emg_analyze, eog_analyze
+    .ecg_analyze, .rsp_analyze, .eda_analyze, .emg_analyze, .eog_analyze
 
     Examples
     ----------

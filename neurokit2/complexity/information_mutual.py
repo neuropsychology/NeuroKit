@@ -20,13 +20,13 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     y : Union[list, np.array, pd.Series]
         A vector of values.
     method : str
-        Method to use. Can either be 'varoquaux' or 'nolitsa'.
+        Method to use. Can either be ``"varoquaux"`` or ``"nolitsa"``.
     bins : int
         Number of bins to use while creating the histogram.
     sigma : float
-        Sigma for Gaussian smoothing of the joint histogram. Only used if `method=='varoquaux'`.
+        Sigma for Gaussian smoothing of the joint histogram. Only used if ``method=='varoquaux'``.
     normalized : book
-        Compute normalised mutual information. Only used if `method=='varoquaux'`.
+        Compute normalised mutual information. Only used if ``method=='varoquaux'``.
 
     Returns
     -------
@@ -35,25 +35,26 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 
     See Also
     --------
-    fisher_information
+    information_fisher
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> x = [3, 3, 5, 1, 6, 3]
-    >>> y = [5, 3, 1, 3, 4, 5]
-    >>>
-    >>> nk.mutual_information(x, y, method="varoquaux") #doctest: +ELLIPSIS
-    0.2360075...
-    >>>
-    >>> nk.mutual_information(x, y, method="nolitsa") #doctest: +ELLIPSIS
-    1.4591479...
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      x = [3, 3, 5, 1, 6, 3]
+      y = [5, 3, 1, 3, 4, 5]
+
+      nk.mutual_information(x, y, method="varoquaux")
+
+      nk.mutual_information(x, y, method="nolitsa") #doctest: +ELLIPSIS
+
 
     References
     ----------
-    - Studholme, jhill & jhawkes (1998). "A normalized entropy measure of 3-D medical image alignment".
-    in Proc. Medical Imaging 1998, vol. 3338, San Diego, CA, pp. 132-143.
+    * Studholme, jhill & jhawkes (1998). "A normalized entropy measure of 3-D medical image
+      alignment". in Proc. Medical Imaging 1998, vol. 3338, San Diego, CA, pp. 132-143.
 
     """
     method = method.lower()

@@ -58,9 +58,9 @@ def complexity_rqa(
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
-        Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting
-        neighbours. A rule of thumb is to set r so that the percentage of points classified as
-        recurrences (``info['RecurrenceRate']``) is about 2-5%.
+        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     min_linelength : int
         Minimum length of diagonal and vertical lines. Default to 2.
     method : str

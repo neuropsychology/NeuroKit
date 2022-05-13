@@ -9,9 +9,9 @@ def fractal_petrosian(signal, method="C", show=False):
 
     Petrosian (1995) proposed a fast method to estimate the fractal dimension by converting the
     signal into a binary sequence from which the fractal dimension is estimated. Several variations
-    of the algorithm exist (e.g., 'A', 'B', 'C' or 'D'), primarily differing in the way the discrete
+    of the algorithm exist (e.g., ``"A"``, ``"B"``, ``"C"`` or ``"D"``), primarily differing in the way the discrete
     (symbolic) sequence is created (see func:`complexity_symbolize` for details). The most common
-    method ('C', by default) binarizes the signal by the sign of consecutive differences.
+    method (``"C"``, by default) binarizes the signal by the sign of consecutive differences.
 
     .. math::
 
@@ -22,14 +22,14 @@ def fractal_petrosian(signal, method="C", show=False):
 
     See Also
     --------
-    mutual_information, entropy_svd
+    information_mutual, entropy_svd
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str or int
-        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
+        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, and
         ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
         cases when the binarization has already been done before). See :func:`complexity_symbolize`
         for details.

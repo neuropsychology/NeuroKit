@@ -19,7 +19,7 @@ def fisher_information(signal, delay=1, dimension=2):
 
     See Also
     --------
-    entropy_svd, mutual_information, complexity_embedding, complexity_delay, complexity_dimension
+    entropy_svd, information_mutual, complexity_embedding, complexity_delay, complexity_dimension
 
     Parameters
     ----------

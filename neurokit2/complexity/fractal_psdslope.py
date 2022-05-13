@@ -29,11 +29,11 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Method to estimate the fractal dimension from the slope,
-        can be 'voss1988' (default) or 'hasselman2013'.
+        can be ``"voss1988"`` (default) or ``"hasselman2013"``.
     show : bool
         If True, returns the log-log plot of PSD versus frequency.
     **kwargs
-        Other arguments to be passed to ``signal_psd()`` (such as 'method').
+        Other arguments to be passed to ``signal_psd()`` (such as ``method``).
 
     Returns
     ----------

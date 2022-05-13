@@ -62,9 +62,9 @@ def complexity_lyapunov(
         :func:`complexity_dimension` to estimate the optimal value for this parameter. If method
         is ``"eckmann1996"``, larger values for dimension are recommended.
     tolerance : int
-        Minimum temporal separation (tolerance) between two neighbors. If 'default', finds a
-        suitable value by calculating the mean period of the data, obtained by the reciprocal of
-        the mean frequency of the power spectrum.
+        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     method : str
         The method that defines the algorithm for computing LE. Can be one of ``"rosenstein1993"``
         or ``"eckmann1996"``.
@@ -83,8 +83,8 @@ def complexity_lyapunov(
     Returns
     --------
     lle : float
-        An estimate of the largest Lyapunov exponent (LLE) if method is 'rosenstein1993', and
-        an array of LEs if 'eckmann1996'.
+        An estimate of the largest Lyapunov exponent (LLE) if method is ``"rosenstein1993"``, and
+        an array of LEs if ``"eckmann1996"``.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute LLE.

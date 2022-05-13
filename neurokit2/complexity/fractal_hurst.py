@@ -10,7 +10,7 @@ def fractal_hurst(signal, scale="default", corrected=True, show=False):
     """**Hurst Exponent (H)**
 
     This function estimates the Hurst exponent via the standard rescaled range (R/S) approach, but
-    other methods exist, such as Detrended Fluctuation Analysis (DFA, see ``fractal_dfa()``).
+    other methods exist, such as Detrended Fluctuation Analysis (DFA, see :func:`fractal_dfa`).
 
     The Hurst exponent is a measure for the "long-term memory" of a signal. It can be used to
     determine whether the time series is more, less, or equally likely to increase if it has
@@ -33,10 +33,10 @@ def fractal_hurst(signal, scale="default", corrected=True, show=False):
         A list containing the lengths of the windows (number of data points in each subseries) that
         the signal is divided into. See :func:`fractal_dfa` for more information.
     corrected : boolean
-        if True, the Anis-Lloyd-Peters correction factor will be applied to the
+        if ``True``, the Anis-Lloyd-Peters correction factor will be applied to the
         output according to the expected value for the individual (R/S) values.
     show : bool
-        If True, returns a plot.
+        If ``True``, returns a plot.
 
     See Also
     --------

@@ -18,8 +18,9 @@ def complexity_k(signal, k_max="max", show=False):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     k_max : Union[int, str, list], optional
-        Maximum number of interval times (should be greater than or equal to 3) to be tested. If 'max',
-        it selects the maximum possible value corresponding to half the length of the signal.
+        Maximum number of interval times (should be greater than or equal to 3) to be tested. If
+        ``max``, it selects the maximum possible value corresponding to half the length of the
+        signal.
     show : bool
         Visualise the slope of the curve for the selected kmax value.
 

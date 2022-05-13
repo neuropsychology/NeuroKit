@@ -56,7 +56,7 @@ def complexity_lempelziv(
 
     See Also
     --------
-    complexity_symbolize, complexity_ordinalpatterns, entropy_permutation,
+    .complexity_symbolize, .complexity_ordinalpatterns, .entropy_permutation,
 
     Examples
     ----------

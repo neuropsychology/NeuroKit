@@ -23,8 +23,8 @@ def entropy_kl(signal, delay=1, dimension=2, norm="euclidean", **kwargs):
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
     norm : str
-        The probability norm used when computing k-nearest neighbour distances. Can be "euclidean"
-        (default) or "max".
+        The probability norm used when computing k-nearest neighbour distances. Can be
+        ``"euclidean"`` (default) or ``"max"``.
     **kwargs : optional
         Other arguments (not used for now).
 

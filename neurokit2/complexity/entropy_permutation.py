@@ -46,7 +46,7 @@ def entropy_permutation(
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
     corrected : bool
-        If True, divide by log2(factorial(m)) to normalize the entropy between 0 and 1. Otherwise,
+        If ``True``, divide by log2(factorial(m)) to normalize the entropy between 0 and 1. Otherwise,
         return the permutation entropy in bit.
     weighted : bool
         If True, compute the weighted permutation entropy (WPE).

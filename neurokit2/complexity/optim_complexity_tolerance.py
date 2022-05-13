@@ -19,9 +19,9 @@ def complexity_tolerance(
 
     Many complexity algorithms are built on the notion of self-similarity and recurrence, and how
     often a system revisits its past states. Considering two states as identical is straightforward
-    for discrete systems (e.g., a sequence of "A", "B" and "C" states), but for continuous signals,
-    we cannot simply look for when the two numbers are exactly the same. Instead, we have to pick a
-    threshold by which to consider two points as similar.
+    for discrete systems (e.g., a sequence of ``"A"``, ``"B"`` and ``"C"`` states), but for
+    continuous signals, we cannot simply look for when the two numbers are exactly the same.
+    Instead, we have to pick a threshold by which to consider two points as similar.
 
     The tolerance *r* is essentially this threshold value (the numerical difference between two
     similar points that we "tolerate"). This parameter has a critical impact and is a major
@@ -29,17 +29,17 @@ def complexity_tolerance(
 
     Different methods have been described to estimate the most appropriate tolerance value:
 
-    * ``'sd'`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
+    * ``"sd"`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
       returned.
-    * ``'adjusted_sd'``: Adjusted value based on the SD and the dimension. The rationale is that
+    * ``"adjusted_sd"``: Adjusted value based on the SD and the dimension. The rationale is that
       the chebyshev distance (used in various metrics) rises logarithmically with increasing
       dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the
       chebyshev distance of vectors sampled from a univariate normal distribution. A constant of
       ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in
       https://github.com/CSchoel/nolds).
-    * ``'maxApEn'``: Different values of tolerance will be tested and the one where the approximate
+    * ``"maxApEn"``: Different values of tolerance will be tested and the one where the approximate
       entropy (ApEn) is maximized will be selected and returned.
-    * ``'recurrence'``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
+    * ``"recurrence"``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
       be returned.
 
     Parameters
@@ -55,11 +55,11 @@ def complexity_tolerance(
         linspace(0, np.max(d), 30 + 1)[1:]`` for ``"recurrence"``. You can set a lower number for
         faster results.
     delay : int
-        Only used if ``method='maxApEn'``. See ``entropy_approximate()``.
+        Only used if ``method="maxApEn"``. See :func:`entropy_approximate()`.
     dimension : int
-        Only used if ``method='maxApEn'``. See ``entropy_approximate()``.
+        Only used if ``method="maxApEn"``. See :func:`entropy_approximate()`.
     show : bool
-        If true and method is 'maxApEn', will plot the ApEn values for each value of r.
+        If ``True`` and method is ``"maxApEn"``, will plot the ApEn values for each value of r.
 
     See Also
     --------
@@ -70,7 +70,7 @@ def complexity_tolerance(
     float
         The optimal tolerance value.
     dict
-        A dictionary with the values of r and the corresponding ApEn values (when method='maxApEn').
+        A dictionary with the values of r and the corresponding ApEn values (when ``method="maxApEn"``).
 
     Examples
     ----------

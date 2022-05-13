@@ -35,9 +35,9 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     radius : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
-        other packages can be used via ``'nolds'``, ``'Corr_Dim'`` or ``'boon2008'``.
+        other packages can be used via ``"nolds"``, ``"Corr_Dim"`` or ``"boon2008"``.
     show : bool
-        Plot of correlation dimension if True. Defaults to False.
+        Plot of correlation dimension if ``True``. Defaults to ``False``.
     **kwargs
         Other arguments to be passed (not used for now).
 

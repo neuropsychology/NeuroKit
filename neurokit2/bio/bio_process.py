@@ -25,7 +25,7 @@ def bio_process(
     data : DataFrame
         The DataFrame containing all the respective signals (e.g., ecg, rsp, Photosensor etc.). If
         provided, there is no need to fill in the other arguments denoting the channel inputs.
-        Defaults to None.
+        Defaults to ``None``.
     ecg : Union[list, np.array, pd.Series]
         The raw ECG channel.
     rsp : Union[list, np.array, pd.Series]
@@ -43,7 +43,7 @@ def bio_process(
         to the processed dataframe (for instance, the Photosensor channel).
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
-        Defaults to 1000.
+        Defaults to ``1000``.
 
     Returns
     ----------
@@ -73,7 +73,7 @@ def bio_process(
 
     See Also
     ----------
-    ecg_process, rsp_process, eda_process, emg_process, ppg_process, eog_process
+    .ecg_process, .rsp_process, .eda_process, .emg_process, .ppg_process, .eog_process
 
     Example
     ----------

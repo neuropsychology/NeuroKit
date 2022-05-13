@@ -58,7 +58,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         Visualize the result.
     **kwargs
         Other arguments, such as ``R=10.0`` or ``A=2.0`` (relative and absolute tolerance, only for
-        'fnn' method).
+        ``'fnn'`` method).
 
     Returns
     -------

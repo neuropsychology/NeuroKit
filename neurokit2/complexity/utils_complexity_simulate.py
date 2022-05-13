@@ -30,7 +30,7 @@ def complexity_simulate(
         for the first dimension of a Lorenz system, ``"mackeyglass"`` to use the Mackey-Glass
         equation, or ``random`` to generate a random-walk.
     hurst_exponent : float
-        Defaults to 0.5.
+        Defaults to ``0.5``.
     **kwargs
         Other arguments.
 

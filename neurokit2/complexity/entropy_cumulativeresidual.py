@@ -44,7 +44,7 @@ def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
     CREn : float
         The cumulative residual entropy.
     info : dict
-        A dictionary containing 'Values' for each pair of events.
+        A dictionary containing ``Values`` for each pair of events.
 
     Examples
     ----------

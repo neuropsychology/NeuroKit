@@ -48,7 +48,7 @@ def complexity_hjorth(signal):
 
     See Also
     --------
-    fractal_petrosian
+    .fractal_petrosian
 
     Parameters
     ----------
@@ -61,8 +61,8 @@ def complexity_hjorth(signal):
     hjorth : float
          Hjorth's Complexity.
     info : dict
-        A dictionary containing the additional Hjorth parameters, such as ``'Mobility'`` and
-        ``'Activity'``.
+        A dictionary containing the additional Hjorth parameters, such as ``"Mobility"`` and
+        ``"Activity"``.
 
     Examples
     ----------

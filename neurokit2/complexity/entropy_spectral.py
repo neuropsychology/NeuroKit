@@ -22,7 +22,7 @@ def entropy_spectral(signal, c=None, **kwargs):
     c : int
         Number of bins of frequency.
     **kwargs : optional
-        Keyword arguments to be passed to `signal_psd()`.
+        Keyword arguments to be passed to ``signal_psd()``.
 
     Returns
     -------
@@ -33,7 +33,7 @@ def entropy_spectral(signal, c=None, **kwargs):
 
     See Also
     --------
-    entropy_shannon, entropy_wiener, signal_psd
+    entropy_shannon, entropy_wiener, .signal_psd
 
     Examples
     ----------

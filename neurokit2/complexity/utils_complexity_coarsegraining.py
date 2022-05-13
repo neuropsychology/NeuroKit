@@ -22,7 +22,7 @@ def complexity_coarsegraining(
        :target: https://doi.org/10.1016/j.physleta.2014.03.034
 
     This coarse-graining procedure is similar to moving averaging and the decimation of the original
-    time series. The length of each coarse-grained time series is N/Tau. For scale = 1, the
+    time series. The length of each coarse-grained time series is N/Tau. For ``scale = 1``, the
     coarse-grained time series is simply the original time series itself.
 
     The coarse graining procedure (used for instance in MSE) is considered a shortcoming that
@@ -33,13 +33,13 @@ def complexity_coarsegraining(
     resampling** (Liu et al. 2012), **moving average** (Wu et al. 2013), or **timeshift**
     (Wu et al. 2013).
 
-    - **Non-overlapping** (default): The coarse-grained time series are constructed by averaging
+    * **Non-overlapping** (default): The coarse-grained time series are constructed by averaging
       non-overlapping windows of given size.
-    - **Interpolate**: Interpolates (i.e., resamples) the coarse-grained time series to match the
+    * **Interpolate**: Interpolates (i.e., resamples) the coarse-grained time series to match the
       original signal length (currently using a monotonic cubic method, but let us know if you have
       any opinion on that).
-    - **Moving average**: The coarse-grained time series via a moving average.
-    - **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see
+    * **Moving average**: The coarse-grained time series via a moving average.
+    * **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see
       **Figure** below). Somewhat similar to moving-average, with the difference that the time lag
       creates new vectors.
 
@@ -56,7 +56,7 @@ def complexity_coarsegraining(
         :math:`\\tau`, it represents the scale factor and corresponds to
         the amount of coarsegraining.
     method : str
-        Can be ``"nonoverlapping"``, ``"rolling"``, ``"interpolate"``, or ``timeshift``.
+        Can be ``"nonoverlapping"``, ``"rolling"``, ``"interpolate"``, or ``"timeshift"``.
     force : bool
         If ``True``, will include all the samples (even if the last segment is too short).
     show : bool

@@ -50,7 +50,7 @@ def complexity_optimize(
     tolerance_method : str
         See :func:`complexity_tolerance`.
     show : bool
-        Defaults to False.
+        Defaults to ``False``.
 
     Returns
     -------

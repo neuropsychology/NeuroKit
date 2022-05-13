@@ -22,7 +22,7 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
         The path to a folder where you have an `Rpeaks.csv` fils or directly its loaded DataFrame.
         Such file can be obtained by running THIS SCRIPT (TO COMPLETE).
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Only used if ``ecgs``
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Only used if ``ecgs``
         and ``rpeaks`` are single vectors.
 
     Returns

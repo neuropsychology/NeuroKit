@@ -92,14 +92,14 @@ def complexity_delay(
         The maximum time delay (Tau or lag) to test.
     method : str
         The method that defines what to compute for each tested value of Tau. Can be one of
-        ``'fraser1986'``, ``'theiler1990'``, ``'casdagli1991'``, ``'rosenstein1993'``,
-        ``'rosenstein1994'``, ``'kim1999'``, or ``'lyle2021'``.
+        ``"fraser1986"``, ``"theiler1990"``, ``"casdagli1991"``, ``"rosenstein1993"``,
+        ``"rosenstein1994"``, ``"kim1999"``, or ``"lyle2021"``.
     algorithm : str
         The method used to find the optimal value of Tau given the values computed by the method.
-        If `None` (default), will select the algorithm according to the method. Modify only if you
+        If ``None`` (default), will select the algorithm according to the method. Modify only if you
         know what you are doing.
     show : bool
-        If true, will plot the metric values for each value of tau.
+        If ``True``, will plot the metric values for each value of tau.
     **kwargs : optional
         Additional arguments to be passed for C-C method.
 
