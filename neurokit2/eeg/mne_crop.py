@@ -4,7 +4,7 @@ import numpy as np
 def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
     """**Crop mne.Raw objects**
 
-    This function is similar to `raw.crop()` (same arguments), but with a few critical differences:
+    This function is similar to ``raw.crop()`` (same arguments), but with a few critical differences:
     * It recreates a whole new Raw object, and as such drops all information pertaining to the
     original data (which MNE keeps, see https://github.com/mne-tools/mne-python/issues/9759).
     * There is the possibility of specifying directly the first and last samples (instead of in
@@ -15,14 +15,14 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
     raw : mne.io.Raw
         Raw EEG data.
     path : str
-        Defaults to None, assuming that the MNE data folder already exists. If not,
+        Defaults to ``None``, assuming that the MNE data folder already exists. If not,
         specify the directory to download the folder.
     tmin : float
-        See ``mne.Raw.crop()``
+        See :func:`mne.Raw.crop()`.
     tmax : float
-        See ``mne.Raw.crop()``
+        See :func:`mne.Raw.crop()`.
     include_tmax : float
-        See ``mne.Raw.crop()``
+        See :func:`mne.Raw.crop()`.
     smin : int
         Cropping start in samples.
     samx : int

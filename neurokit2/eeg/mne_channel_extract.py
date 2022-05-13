@@ -13,21 +13,21 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
     raw : mne.io.Raw
         Raw EEG data.
     what : str or list
-        Can be 'MEG', which will extract all MEG channels, 'EEG', which will extract all EEG channels, or 'EOG',
-        which will extract all EOG channels (that is, if channel names are named with prefixes of their type e.g.,
-        'EEG 001' etc. or 'EOG 061'). Provide exact a single or a list of channel's name(s) if not
-        (e.g., ['124', '125']).
+        Can be ``"MEG"``, which will extract all MEG channels, ``"EEG"``, which will extract all EEG
+        channels, or ``"EOG"``, which will extract all EOG channels (that is, if channel names are
+        named with prefixes of their type e.g., 'EEG 001' etc. or 'EOG 061'). Provide exact a single
+        or a list of channel's name(s) if not (e.g., ['124', '125']).
     name : str or list
         Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
-        Otherwise, defaults to None.
+        Otherwise, defaults to ``None``.
     add_firstsamples : bool
-        Defaults to `False`. MNE's objects store the value of a delay between
+        Defaults to ``False``. MNE's objects store the value of a delay between
         the start of the system and the start of the recording
         (see https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp).
-        Taking this into account can be useful when extracting channels from the Raw object to detect events indices
-        that are passed back to MNE again. When `add_firstsamples` is set to `True`, the offset will be explicitly
-        added at the beginning of the signal and filled with NaNs. If `add_firstsamples` is a float or an integer,
-        the offset will filled with these values instead. If it is set to `"backfill"`, will prepend with the first
+        Taking this into account can be useful when extracting channels from the Raw object to
+        detect events indices that are passed back to MNE again. When ``add_firstsamples`` is set to
+        ``True``, the offset will be explicitly added at the beginning of the signal and filled with
+        NaNs. If ``add_firstsamples`` is a float or an integer, the offset will filled with these values instead. If it is set to ``backfill``, will prepend with the first
         real value.
 
     Returns
