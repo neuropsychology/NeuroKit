@@ -16,14 +16,8 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
     legend : bool
         Display the legend (the key of each epoch).
     show : bool
-        If ``True``, will return a plot. If ``False``, will return a DataFrame that can be plotted
+        If ``False``, don't show the plot and only return a DataFrame that can be plotted
         externally.
-
-    Returns
-    ----------
-    epochs : dict
-        dict containing all epochs.
-
 
     See Also
     ----------
@@ -44,7 +38,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
       epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
 
       @savefig p_epochs_plot1_png scale=100%
-      fig1 = nk.epochs_plot(epochs)
+      nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
@@ -58,7 +52,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
       epochs_end=0.5)
 
       @savefig p_epochs_plot2_png scale=100%
-      fig2 = nk.epochs_plot(epochs)
+      nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
@@ -87,19 +81,17 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
     cols = data.columns.values
     cols = [x for x in cols if x not in ["Time", "Condition", "Label", "Index"]]
 
-    if show:
-        if len(cols) == 1:
-            fig, ax = plt.subplots()
-            _epochs_plot(data, ax, cols[0], legend=legend)
-        else:
-            fig, ax = plt.subplots(nrows=len(cols))
-            for i, col in enumerate(cols):
-                _epochs_plot(data, ax=ax[i], col=col, legend=legend)
-        return fig
+    if len(cols) == 1:
+        fig, ax = plt.subplots()
+        _epochs_plot(data, ax, cols[0], legend=legend)
+    else:
+        fig, ax = plt.subplots(nrows=len(cols))
+        for i, col in enumerate(cols):
+            _epochs_plot(data, ax=ax[i], col=col, legend=legend)
 
-    return data
-
-
+# -------------------------------------------------------------------------------------------------
+# Utils
+# -------------------------------------------------------------------------------------------------
 def _epochs_mne_sanitize(epochs, what):
     """Channel array extraction from MNE for plotting.
     Select one or several channels by name and returns them in a dataframe.

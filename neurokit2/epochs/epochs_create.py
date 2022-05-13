@@ -90,7 +90,7 @@ def epochs_create(
       epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
 
       @savefig p_epochs_create2.png scale=100%
-      fig = nk.epochs_plot(epochs)
+      nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
@@ -102,7 +102,7 @@ def epochs_create(
                                 epochs_end=3, baseline_correction=True)
 
       @savefig p_epochs_create3.png scale=100%
-      fig = nk.epochs_plot(epochs)
+      nk.epochs_plot(epochs)
       @suppress
       plt.close()
 
