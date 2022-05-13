@@ -29,7 +29,7 @@ def signal_zerocrossings(signal, direction="both"):
       signal = nk.signal_simulate(duration=5)
       zeros = nk.signal_zerocrossings(signal)
       @savefig p_signal_zerocrossings1.png scale=100%
-      fig = nk.events_plot(zeros, signal)
+      nk.events_plot(zeros, signal)
       @suppress
       plt.close()
 
@@ -39,7 +39,7 @@ def signal_zerocrossings(signal, direction="both"):
       up = nk.signal_zerocrossings(signal, direction='up')
       down = nk.signal_zerocrossings(signal, direction='down')
       @savefig p_signal_zerocrossings2.png scale=100%
-      fig2 = nk.events_plot([up, down], signal)
+      nk.events_plot([up, down], signal)
       @suppress
       plt.close()
 

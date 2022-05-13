@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
+def events_plot(events, signal=None, color="red", linestyle="--"):
     """**Visualize Events**
 
     Plot events in signal.
@@ -18,8 +18,6 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         the onsets.
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
-    show : bool
-        If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
     color : str
         Argument passed to matplotlib plotting.
     linestyle : str
@@ -41,7 +39,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
       import neurokit2 as nk
 
       @savefig p_events_plot1.png scale = 100%
-      fig = nk.events_plot([1, 3, 5])
+      nk.events_plot([1, 3, 5])
       @suppress
       plt.close()
 
@@ -52,7 +50,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
       signal = nk.signal_simulate(duration=4)
       events = nk.events_find(signal)
       @savefig p_events_plot2.png scale = 100%
-      fig1 = nk.events_plot(events, signal)
+      nk.events_plot(events, signal)
       @suppress
       plt.close()
 
@@ -63,7 +61,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
       events1 = events["onset"]
       events2 = np.linspace(0, len(signal), 8)
       @savefig p_events_plot3.png scale = 100%
-      fig2 = nk.events_plot([events1, events2], signal)
+      nk.events_plot([events1, events2], signal)
       @suppress
       plt.close()
 
@@ -73,7 +71,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
 
       events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
       @savefig p_events_plot4.png scale = 100%
-      fig3 = nk.events_plot(events, signal)
+      nk.events_plot(events, signal)
       @suppress
       plt.close()
 
@@ -85,7 +83,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
       events = nk.events_find(signal)
       events = [[i] for i in events['onset']]
       @savefig p_events_plot5.png scale = 100%
-      fig4 = nk.events_plot(events, signal)
+      nk.events_plot(events, signal)
       @suppress
       plt.close()
 
@@ -107,18 +105,9 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     if isinstance(signal, pd.DataFrame) is False:
         signal = pd.DataFrame({"Signal": signal})
 
-    # Plot if necessary
-    if show:
-        fig = signal.plot().get_figure()
-        _events_plot(events, color=color, linestyle=linestyle)
-        return fig
-    else:
-        signal["Event_Onset"] = 0
-        signal.iloc[events] = 1
-        return signal
+    # Plot signal(s)
+    signal.plot()
 
-
-def _events_plot(events, color="red", linestyle="--"):
     # Check if events is list of lists
     try:
         len(events[0])

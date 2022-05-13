@@ -51,7 +51,7 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
                                       threshold=0.33,
                                       show=True)
       @savefig p.eog_peaks1.png scale=100%
-      fig1 = nk.events_plot(info_nk["EOG_Blinks"], eog_cleaned)
+      nk.events_plot(info_nk["EOG_Blinks"], eog_cleaned)
       @suppress
       plt.close()
 
@@ -61,7 +61,7 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
       signals, info_mne = nk.eog_peaks(eog_cleaned, method="mne")
       @savefig p.eog_peaks2.png scale=100%
-      fig2 = nk.events_plot(info_mne["EOG_Blinks"], eog_cleaned)
+      nk.events_plot(info_mne["EOG_Blinks"], eog_cleaned)
       @suppress
       plt.close()
 
@@ -71,7 +71,7 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
       signals, info_brainstorm = nk.eog_peaks(eog_cleaned, method="brainstorm")
       @savefig p.eog_peaks3.png scale=100%
-      fig3 = nk.events_plot(info_brainstorm["EOG_Blinks"], eog_cleaned)
+      nk.events_plot(info_brainstorm["EOG_Blinks"], eog_cleaned)
       @suppress
       plt.close()
 
@@ -81,7 +81,7 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
       signals, info_blinker = nk.eog_peaks(eog_cleaned, sampling_rate=100, method="blinker")
       @savefig p.eog_peaks4.png scale=100%
-      fig4 = nk.events_plot(info_blinker["EOG_Blinks"], eog_cleaned)
+      nk.events_plot(info_blinker["EOG_Blinks"], eog_cleaned)
       @suppress
       plt.close()
 

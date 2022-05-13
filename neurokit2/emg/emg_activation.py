@@ -93,7 +93,7 @@ def emg_activation(
 
       activity, info = nk.emg_activation(emg_amplitude=emg_amplitude, method="threshold")
       @savefig p_emg_activation1.png scale=100%
-      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
       @suppress
       plt.close()
 
@@ -103,7 +103,7 @@ def emg_activation(
 
       activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="pelt")
       @savefig p_emg_activation2.png scale=100%
-      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
       @suppress
       plt.close()
 
@@ -113,7 +113,7 @@ def emg_activation(
 
       activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="biosppy")
       @savefig p_emg_activation3.png scale=100%
-      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
       @suppress
       plt.close()
 
@@ -123,7 +123,7 @@ def emg_activation(
 
       activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="silva")
       @savefig p_emg_activation4.png scale=100%
-      fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+      nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
       @suppress
       plt.close()
 

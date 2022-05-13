@@ -75,7 +75,7 @@ def signal_findpeaks(
 
       # Visualize Onsets of Peaks and Peaks of Signal
       @savefig p_signal_findpeaks_1.png scale=100%
-      fig1 = nk.events_plot([info["Onsets"], info["Peaks"]], signal)
+      nk.events_plot([info["Onsets"], info["Peaks"]], signal)
       @suppress
       plt.close()
 
@@ -93,7 +93,7 @@ def signal_findpeaks(
 
       # Visualize Peaks
       @savefig p_signal_findpeaks_2.png scale=100%
-      fig2 = nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
+      nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
       @suppress
       plt.close()
 

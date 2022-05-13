@@ -42,7 +42,7 @@ def rsp_fixpeaks(peaks, troughs=None):
       info = nk.rsp_findpeaks(cleaned)
       info = nk.rsp_fixpeaks(info)
       @savefig p_rsp_fixpeaks1.png scale=100%
-      fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+      nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
       @suppress
       plt.close()
 

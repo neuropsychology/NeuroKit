@@ -57,7 +57,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
       vanhalem2020 = nk.eda_findpeaks(eda_phasic, method="vanhalem2020")
       nabian2018 = nk.eda_findpeaks(eda_phasic, method="nabian2018")
       @savefig p_eda_findpeaks.png scale=100%
-      fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], vanhalem2020["SCR_Peaks"],
+      nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], vanhalem2020["SCR_Peaks"],
                            neurokit["SCR_Peaks"], nabian2018["SCR_Peaks"]], eda_phasic)
       @suppress
       plt.close()

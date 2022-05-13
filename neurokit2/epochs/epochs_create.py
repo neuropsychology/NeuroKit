@@ -79,7 +79,7 @@ def epochs_create(
                               event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
 
       @savefig p_epochs_create1.png scale=100%
-      fig = nk.events_plot(events, data)
+      nk.events_plot(events, data)
       @suppress
       plt.close()
 
