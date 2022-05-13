@@ -12,15 +12,17 @@ from ..misc import NeuroKitWarning
 
 
 def emg_eventrelated(epochs, silent=False):
-    """**Performs event-related EMG analysis on epochs**
+    """**Event-related EMG Analysis**
+
+    Performs event-related EMG analysis on epochs.
 
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or
-        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained via ``epochs_create()``,
+        or a DataFrame containing all epochs, usually obtained via ``epochs_to_df()``.
     silent : bool
-        If True, silence possible warnings.
+        If ``True``, silence possible warnings.
 
     Returns
     -------
@@ -41,7 +43,7 @@ def emg_eventrelated(epochs, silent=False):
 
     See Also
     --------
-    emg_simulate, emg_process, events_find, epochs_create
+    emg_simulate, emg_process, .events_find, .epochs_create
 
     Examples
     ----------

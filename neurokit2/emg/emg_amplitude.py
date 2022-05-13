@@ -13,7 +13,7 @@ def emg_amplitude(emg_cleaned):
     Parameters
     ----------
     emg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned electromyography channel as returned by `emg_clean()`.
+        The cleaned electromyography channel as returned by ``emg_clean()``.
 
     Returns
     -------
