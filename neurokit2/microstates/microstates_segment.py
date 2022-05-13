@@ -46,7 +46,7 @@ def microstates_segment(
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     n_microstates : int
-        The number of unique microstates to find. Defaults to ``4``.
+        The number of unique microstates to find. Defaults to 4.
     train : Union[str, int, float]
         Method for selecting the timepoints how which to train the clustering algorithm. Can be
         ``"gfp"`` to use the peaks found in the Peaks in the global field power. Can be ``"all"``,
@@ -66,10 +66,10 @@ def microstates_segment(
         Standardized (z-score) the data across time prior to GFP extraction
         using :func:`.nk.standardize`.
     n_runs : int
-        The number of random initializations to use for the k-means algorithm. The best fitting segmentation across all initializations is used. Defaults to ``10``.
+        The number of random initializations to use for the k-means algorithm. The best fitting segmentation across all initializations is used. Defaults to 10.
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
-        Defaults to ``1000``.
+        Defaults to 1000.
     criterion : str
         Which criterion to use to choose the best run for modified k-means algorithm,
         can be ``"gev"`` (default) which selects the best run based on the highest global explained

@@ -21,7 +21,7 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     distance_between : float
         The minimum distance (this value is to be multiplied by the sampling rate) between peaks.
-        The default is ``0.01``, which corresponds to 10 ms (as suggested in the Microstate EEGlab
+        The default is 0.01, which corresponds to 10 ms (as suggested in the Microstate EEGlab
         toolbox).
     **kwargs
         Additional arguments to be passed to :func:`.eeg_gfp`.
