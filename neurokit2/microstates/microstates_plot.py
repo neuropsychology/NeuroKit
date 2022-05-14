@@ -46,7 +46,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
       microstates = nk.microstates_segment(eeg, method='kmeans', n_microstates=4)
 
       @savefig p_microstates_plot1.png scale = 100%
-      fig = nk.microstates_plot(microstates, epoch=(500, 750))
+      nk.microstates_plot(microstates, epoch=(500, 750))
       @suppress
       plt.close()
 
@@ -72,13 +72,11 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
 
     # Sanity checks
     if gfp is None:
-        raise ValueError(
-            "GFP data must be passed to 'gfp' in order to plot the segmentation."
-        )
+        raise ValueError("GFP data must be passed to 'gfp' in order to plot the segmentation.")
 
     # Prepare figure layout
     n = len(microstates)
-    fig, ax = plt.subplot_mosaic([np.arange(n), ["GFP"]*n])
+    fig, ax = plt.subplot_mosaic([np.arange(n), ["GFP"] * n])
 
     # Plot topomaps -----------------------------------------------------------
     for i, map in enumerate(microstates):
@@ -103,17 +101,20 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
 
     cmap = plt.cm.get_cmap("plasma", n)
     # Plot the GFP line above the area
-    ax["GFP"].plot(times[epoch[0]:epoch[1]],
-                   gfp[epoch[0]:epoch[1]],
-                   color="black", linewidth=0.5)
+    ax["GFP"].plot(
+        times[epoch[0] : epoch[1]], gfp[epoch[0] : epoch[1]], color="black", linewidth=0.5
+    )
     # Plot area
     for state, color in zip(range(n), cmap.colors):
-        ax["GFP"].fill_between(times[epoch[0]:epoch[1]],
-                               gfp[epoch[0]:epoch[1]],
-                               color=color, where=(segmentation == state)[epoch[0]:epoch[1]])
+        ax["GFP"].fill_between(
+            times[epoch[0] : epoch[1]],
+            gfp[epoch[0] : epoch[1]],
+            color=color,
+            where=(segmentation == state)[epoch[0] : epoch[1]],
+        )
 
     # Create legend
-    norm = matplotlib.colors.Normalize(vmin=0.5, vmax=n+0.5)
+    norm = matplotlib.colors.Normalize(vmin=0.5, vmax=n + 0.5)
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm.set_array([])
     fig.colorbar(sm, ax=ax["GFP"])
@@ -124,5 +125,3 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
         ax["GFP"].set_xlabel("Sample")
     ax["GFP"].set_ylabel("Global Field Power (GFP)")
     ax["GFP"].set_title("Microstates Sequence")
-
-    return fig
