@@ -9,7 +9,7 @@ import neurokit2 as nk
 
 # setup matplotlib with Agg to run on server
 matplotlib.use("Agg")
-
+plt.rcParams["figure.figsize"] = (10, 6.5)
 
 # =============================================================================
 # Quick Example
@@ -59,7 +59,8 @@ plot = data.plot(
 fig = plt.gcf()
 fig.set_size_inches(10, 6, forward=True)
 [ax.legend(loc=1) for ax in plt.gcf().axes]
-fig.savefig("README_simulation.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_simulation.png", dpi=300)
 
 # =============================================================================
 # Electrodermal Activity (EDA) processing
@@ -75,9 +76,9 @@ signals, info = nk.eda_process(eda, sampling_rate=250)
 nk.eda_plot(signals, sampling_rate=None)
 
 # Save it
-plot = nk.eda_plot(signals, sampling_rate=None)
-plot.set_size_inches(10, 6, forward=True)
-plot.savefig("README_eda.png", dpi=300, h_pad=3)
+nk.eda_plot(signals, sampling_rate=None)
+plt.tight_layout()
+plt.savefig("README_eda.png", dpi=300)
 
 # =============================================================================
 # Cardiac activity (ECG) processing
@@ -94,8 +95,8 @@ nk.ecg_plot(signals, sampling_rate=250)
 
 # Save it
 plot = nk.ecg_plot(signals, sampling_rate=250)
-plot.set_size_inches(10, 6, forward=True)
-plot.savefig("README_ecg.png", dpi=300, h_pad=3)
+plt.tight_layout()
+plot.savefig("README_ecg.png", dpi=300)
 
 # =============================================================================
 # Respiration (RSP) processing
@@ -112,8 +113,8 @@ nk.rsp_plot(signals, sampling_rate=250)
 
 # Save it
 plot = nk.rsp_plot(signals, sampling_rate=250)
-plot.set_size_inches(10, 6, forward=True)
-plot.savefig("README_rsp.png", dpi=300, h_pad=3)
+plt.tight_layout()
+plt.savefig("README_rsp.png", dpi=300)
 
 # =============================================================================
 # Electromyography (EMG) processing
@@ -129,9 +130,9 @@ signals, info = nk.emg_process(emg, sampling_rate=250)
 nk.emg_plot(signals, sampling_rate=250)
 
 # Save it
-plot = nk.emg_plot(signals, sampling_rate=250)
-plot.set_size_inches(10, 6, forward=True)
-plot.savefig("README_emg.png", dpi=300, h_pad=3)
+nk.emg_plot(signals, sampling_rate=250)
+plt.tight_layout()
+plt.savefig("README_emg.png", dpi=300)
 
 # =============================================================================
 # Photoplethysmography (PPG/BVP)
@@ -148,8 +149,8 @@ nk.ppg_plot(signals, sampling_rate=250)
 
 # Save it
 plot = nk.ppg_plot(signals, sampling_rate=250)
-plot.set_size_inches(10, 6, forward=True)
-plot.savefig("README_ppg.png", dpi=300, h_pad=3)
+plt.tight_layout()
+plot.savefig("README_ppg.png", dpi=300)
 
 # =============================================================================
 # Electrooculography (EOG)
@@ -163,8 +164,8 @@ signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
 # Plot
 plot = nk.eog_plot(signals, peaks=info, sampling_rate=100)
-plot.set_size_inches(10, 6, forward=True)
-plot.savefig("README_eog.png", dpi=300, h_pad=3)
+plt.tight_layout()
+plot.savefig("README_eog.png", dpi=300)
 
 # =============================================================================
 # Signal Processing
@@ -193,13 +194,15 @@ plot = nk.signal_plot([original, distorted, cleaned])
 
 # Save plot
 fig = plt.gcf()
-fig.set_size_inches(10, 6)
-fig.savefig("README_signalprocessing.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_signalprocessing.png", dpi=300)
 
 
 # =============================================================================
 # Heart Rate Variability
 # =============================================================================
+# Reset plot size
+plt.rcParams["figure.figsize"] = plt.rcParamsDefault["figure.figsize"]
 
 # Download data
 data = nk.data("bio_resting_8min_100hz")

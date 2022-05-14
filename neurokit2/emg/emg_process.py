@@ -50,7 +50,7 @@ def emg_process(emg_signal, sampling_rate=1000):
       signals, info = nk.emg_process(emg, sampling_rate=1000)
 
       @savefig p_emg_process1.png scale=100%
-      fig = nk.emg_plot(signals)
+      nk.emg_plot(signals)
       @suppress
       plt.close()
 

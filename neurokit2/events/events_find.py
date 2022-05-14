@@ -65,7 +65,8 @@ def events_find(
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, ``"onset"`` for event onsets, ``"duration"`` for event durations, ``"label"`` for the event identifiers and the optional ``"conditions"`` passed
+        Dict containing 3 or 4 arrays, ``"onset"`` for event onsets, ``"duration"`` for event
+        durations, ``"label"`` for the event identifiers and the optional ``"conditions"`` passed
         to ``event_conditions``.
 
     See Also
