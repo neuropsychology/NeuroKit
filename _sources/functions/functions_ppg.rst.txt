@@ -41,8 +41,9 @@ Analysis
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ppg.ppg_intervalrelated
 
-*Other*
-^^^^^^^^^
+
+
+*Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.ppg
    :members:

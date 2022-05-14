@@ -713,9 +713,18 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-neurokit2.ecg">
+  <a class="reference internal nav-link" href="#miscellaneous">
    Miscellaneous
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-findpeaks">
+     <em>
+      ecg_findpeaks()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -856,9 +865,18 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-neurokit2.ecg">
+  <a class="reference internal nav-link" href="#miscellaneous">
    Miscellaneous
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-findpeaks">
+     <em>
+      ecg_findpeaks()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -1995,9 +2013,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.702648          0.982887</span>
-<span class="go">2     2        10000  ...                          0.451745          0.961230</span>
-<span class="go">3     3        15000  ...                          0.088531          0.952249</span>
+<span class="go">1     1         5000  ...                          0.672764          0.952368</span>
+<span class="go">2     2        10000  ...                          0.403766          0.971302</span>
+<span class="go">3     3        15000  ...                          0.134269          0.955537</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -2098,9 +2116,10 @@ separately processed DataFrames.</p></li>
 
 </section>
 </section>
-<section id="module-neurokit2.ecg">
-<span id="miscellaneous"></span><h2>Miscellaneous<a class="headerlink" href="#module-neurokit2.ecg" title="Permalink to this headline">#</a></h2>
-<p>Submodule for NeuroKit.</p>
+<section id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">#</a></h2>
+<section id="ecg-findpeaks">
+<h3><em>ecg_findpeaks()</em><a class="headerlink" href="#ecg-findpeaks" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ecg.ecg_findpeaks">
 <span class="sig-name descname"><span class="pre">ecg_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ecg/ecg_findpeaks.html#ecg_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ecg.ecg_findpeaks" title="Permalink to this definition">#</a></dt>
@@ -2129,6 +2148,9 @@ samples at which R-peaks occur, accessible with the key <code class="docutils li
 </div>
 </dd></dl>
 
+<p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
+<span class="target" id="module-neurokit2.ecg"></span><p>Submodule for NeuroKit.</p>
+</section>
 </section>
 </section>
 

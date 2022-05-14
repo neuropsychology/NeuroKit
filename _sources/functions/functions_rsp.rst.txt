@@ -67,8 +67,8 @@ Analysis
 .. autofunction:: neurokit2.rsp.rsp_intervalrelated
 
 
-*Other*
-^^^^^^^^^
+
+*Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.rsp
    :members:
