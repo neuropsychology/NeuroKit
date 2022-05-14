@@ -97,7 +97,7 @@ def bio_process(
       @savefig p_bio_process1.png scale=100%
       fig = bio_df.iloc[:, 0:14].plot(subplots=True)
       @suppress
-      fig = matplotlib.pyplot.gcf()
+      fig = plt.gcf()
       fig.set_size_inches(15, 10)
       plt.close()
 
