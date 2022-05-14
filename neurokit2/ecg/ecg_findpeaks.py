@@ -5,14 +5,19 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import (
+    signal_findpeaks,
+    signal_plot,
+    signal_sanitize,
+    signal_smooth,
+    signal_zerocrossings,
+)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
     """**Locate R-peaks**
 
-    Low-level function used by ``ecg_peaks()`` to identify R-peaks in an ECG signal using a
+    Low-level function used by :func:`ecg_peaks` to identify R-peaks in an ECG signal using a
     different set of algorithms. Use the main function and see its documentation for details.
 
     Parameters

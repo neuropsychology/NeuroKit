@@ -50,6 +50,10 @@ Preprocessing
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_rate
 
+*ecg_segment()*
+"""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_segment
+
 Analysis
 ^^^^^^^^^
 *ecg_eventrelated()*
@@ -63,12 +67,7 @@ Analysis
 
 Miscellaneous
 ^^^^^^^^^^^^^^^^
-*ecg_segment()*
-"""""""""""""""""
-.. autofunction:: neurokit2.ecg.ecg_segment
 
-*Other*
-"""""""""""""
 
 .. automodule:: neurokit2.ecg
    :members:
