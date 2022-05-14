@@ -897,10 +897,10 @@ AcqKnowledge file).</p>
 signals recorded at different rates, harmonization is necessary in order to convert it
 to a DataFrame. Thus, if <cite>sampling_rate</cite> is set to <code class="docutils literal notranslate"><span class="pre">max</span></code> (default), will keep the maximum
 recorded sampling rate and upsample the channels with lower rate if necessary (using the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code> function). If the sampling rate is set to a given value, will
+<a class="reference internal" href="functions_signal.html#neurokit2.signal_resample" title="neurokit2.signal_resample"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code></a> function). If the sampling rate is set to a given value, will
 resample the signals to the desired value. Note that the value of the sampling rate is
 outputted along with the data.</p></li>
-<li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code>).</p></li>
+<li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <a class="reference internal" href="functions_signal.html#neurokit2.signal_resample" title="neurokit2.signal_resample"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code></a>).</p></li>
 <li><p><strong>impute_missing</strong> (<em>bool</em>) – Sometimes, due to connections issues, there are lapses in the recorded signal (short
 periods without signal). If <code class="docutils literal notranslate"><span class="pre">impute_missing</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, will automatically fill the
 signal interruptions using padding.</p></li>
@@ -916,7 +916,7 @@ signal interruptions using padding.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_resample</span></code></p>
+<p><a class="reference internal" href="functions_signal.html#neurokit2.signal_resample" title="neurokit2.signal_resample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_resample</span></code></a></p>
 </div>
 <p class="rubric">Example</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -943,7 +943,7 @@ OpenSignals file).</p>
 which signals were sampled if set to <code class="docutils literal notranslate"><span class="pre">max</span></code>. If the sampling rate is set to a given value,
 will resample the signals to the desired value. Note that the value of the sampling rate is
 outputted along with the data.</p></li>
-<li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code>).</p></li>
+<li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <a class="reference internal" href="functions_signal.html#neurokit2.signal_resample" title="neurokit2.signal_resample"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code></a>).</p></li>
 <li><p><strong>events_annotation</strong> (<em>bool</em>) – Defaults to False. If True, will read signal annotation events.</p></li>
 <li><p><strong>events_annotation_directory</strong> (<em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), reads signal annotation events from the same location where the
 acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder
@@ -962,7 +962,7 @@ rate, and the events annotation timings if <code class="docutils literal notrans
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.data.read_acqknowledge" title="neurokit2.data.read_acqknowledge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_acqknowledge</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_resample</span></code></p>
+<p><a class="reference internal" href="#neurokit2.data.read_acqknowledge" title="neurokit2.data.read_acqknowledge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_acqknowledge</span></code></a>, <a class="reference internal" href="functions_signal.html#neurokit2.signal_resample" title="neurokit2.signal_resample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_resample</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
