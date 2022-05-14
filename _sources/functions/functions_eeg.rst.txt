@@ -1,6 +1,8 @@
 EEG
 -------
 
+Features
+^^^^^^^^^^^^^^^^
 *eeg_badchannels()*
 """""""""""""""""""
 .. autofunction:: neurokit2.eeg.eeg_badchannels
@@ -29,6 +31,9 @@ EEG
 """""""""""""""""""""""
 .. autofunction:: neurokit2.eeg.eeg_source_extract
 
+
+MNE-Utilities
+^^^^^^^^^^^^^^^^
 *mne_channel_add()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.eeg.mne_channel_add

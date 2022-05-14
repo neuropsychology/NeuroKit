@@ -1267,7 +1267,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.18314731684916052</span>
+<span class="gh">Out[5]: </span><span class="go">-0.31223221102142346</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1318,7 +1318,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">21</span>
+<span class="gh">Out[4]: </span><span class="go">10</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1585,8 +1585,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.362            1387.0</span>
-<span class="go">2     2        10000  ...         0.365            1358.0</span>
+<span class="go">1     1         5000  ...         0.363            1731.0</span>
+<span class="go">2     2        10000  ...         0.361            1324.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1990,9 +1990,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.932519</span>
-<span class="go">2     2        10000  ...        0.0              0.671155</span>
-<span class="go">3     3        15000  ...        1.0              0.560000</span>
+<span class="go">1     1         5000  ...        1.0              0.832892</span>
+<span class="go">2     2        10000  ...        0.0              0.323227</span>
+<span class="go">3     3        15000  ...        0.0              0.956007</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -2502,7 +2502,7 @@ than 640 breath cycles in the signal.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">     RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1284.415301  4170.789474  770.109197  ...    0.600663  0.019858         inf</span>
+<span class="go">0  1195.185713  4139.368421  717.874502  ...    0.602448  0.044397    1.098612</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>

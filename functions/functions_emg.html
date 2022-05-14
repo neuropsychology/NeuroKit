@@ -634,9 +634,9 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#emg-activation">
+    <a class="reference internal nav-link" href="#emg-clean">
      <em>
-      emg_activation()
+      emg_clean()
      </em>
     </a>
    </li>
@@ -648,9 +648,9 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#emg-clean">
+    <a class="reference internal nav-link" href="#emg-activation">
      <em>
-      emg_clean()
+      emg_activation()
      </em>
     </a>
    </li>
@@ -737,9 +737,9 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#emg-activation">
+    <a class="reference internal nav-link" href="#emg-clean">
      <em>
-      emg_activation()
+      emg_clean()
      </em>
     </a>
    </li>
@@ -751,9 +751,9 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#emg-clean">
+    <a class="reference internal nav-link" href="#emg-activation">
      <em>
-      emg_clean()
+      emg_activation()
      </em>
     </a>
    </li>
@@ -999,6 +999,87 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">None</s
 </section>
 <section id="preprocessing">
 <h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">#</a></h2>
+<section id="emg-clean">
+<h3><em>emg_clean()</em><a class="headerlink" href="#emg-clean" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_clean">
+<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Preprocess an electromyography (emg) signal</strong></p>
+<p>Clean an EMG signal using a set of parameters. Only one method is available at the moment.</p>
+<ul class="simple">
+<li><p><strong>BioSPPy</strong>: fourth order 100 Hz highpass Butterworth filter followed by a constant
+detrending.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EMG channel.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).
+Defaults to 1000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the cleaned EMG signal.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_amplitude" title="neurokit2.emg.emg_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG_Raw&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;EMG_Cleaned&quot;</span><span class="p">:</span><span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)})</span>
+
+<span class="gp">In [5]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_clean1.png"><img alt="../_images/p_emg_clean1.png" src="../_images/p_emg_clean1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="emg-amplitude">
+<h3><em>emg_amplitude()</em><a class="headerlink" href="#emg-amplitude" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_amplitude">
+<span class="sig-name descname"><span class="pre">emg_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_amplitude.html#emg_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_amplitude" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Compute electromyography (EMG) amplitude</strong></p>
+<p>Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
+linear envelope of the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>emg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned electromyography channel as returned by <code class="docutils literal notranslate"><span class="pre">emg_clean()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – A vector containing the electromyography amplitude.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_clean" title="neurokit2.emg.emg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_rate</span></code>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_amplitude</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_amplitude1.png"><img alt="../_images/p_emg_amplitude1.png" src="../_images/p_emg_amplitude1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
 <section id="emg-activation">
 <h3><em>emg_activation()</em><a class="headerlink" href="#emg-activation" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -1106,87 +1187,6 @@ the same length as <code class="docutils literal notranslate"><span class="pre">
 <li><p>Silva H, Scherer R, Sousa J, Londral A , “Towards improving the ssability of
 electromyographic interfacess”, Journal of Oral Rehabilitation, pp. 1-2, 2012.</p></li>
 </ul>
-</dd></dl>
-
-</section>
-<section id="emg-amplitude">
-<h3><em>emg_amplitude()</em><a class="headerlink" href="#emg-amplitude" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.emg.emg_amplitude">
-<span class="sig-name descname"><span class="pre">emg_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_amplitude.html#emg_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_amplitude" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Compute electromyography (EMG) amplitude</strong></p>
-<p>Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
-linear envelope of the signal.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>emg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned electromyography channel as returned by <code class="docutils literal notranslate"><span class="pre">emg_clean()</span></code>.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – A vector containing the electromyography amplitude.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.emg.emg_clean" title="neurokit2.emg.emg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_rate</span></code>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_amplitude</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
-
-<span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_emg_amplitude1.png"><img alt="../_images/p_emg_amplitude1.png" src="../_images/p_emg_amplitude1.png" style="width: 640.0px; height: 480.0px;" /></a>
-</dd></dl>
-
-</section>
-<section id="emg-clean">
-<h3><em>emg_clean()</em><a class="headerlink" href="#emg-clean" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.emg.emg_clean">
-<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Preprocess an electromyography (emg) signal</strong></p>
-<p>Clean an EMG signal using a set of parameters. Only one method is available at the moment.</p>
-<ul class="simple">
-<li><p><strong>BioSPPy</strong>: fourth order 100 Hz highpass Butterworth filter followed by a constant
-detrending.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>emg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EMG channel.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).
-Defaults to 1000.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – Vector containing the cleaned EMG signal.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.emg.emg_amplitude" title="neurokit2.emg.emg_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG_Raw&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;EMG_Cleaned&quot;</span><span class="p">:</span><span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)})</span>
-
-<span class="gp">In [5]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_emg_clean1.png"><img alt="../_images/p_emg_clean1.png" src="../_images/p_emg_clean1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -1305,6 +1305,8 @@ separately processed DataFrames.</p>
 </div>
 </dd></dl>
 
+<p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
+<span class="target" id="module-neurokit2.emg"></span><p>Submodule for NeuroKit.</p>
 </section>
 </section>
 </section>

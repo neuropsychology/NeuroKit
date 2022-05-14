@@ -48,3 +48,11 @@ Misc
 *as_vector()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.as_vector
+
+
+*Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
+
+.. automodule:: neurokit2.misc
+   :members:
+   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, intervals_to_peaks, listify, parallel_run, replace, as_vector
+

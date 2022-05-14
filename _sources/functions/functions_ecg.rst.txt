@@ -67,7 +67,6 @@ Analysis
 
 Miscellaneous
 ^^^^^^^^^^^^^^^^
-
 *ecg_findpeaks()*
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_findpeaks
