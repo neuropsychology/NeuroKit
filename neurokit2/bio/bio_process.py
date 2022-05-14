@@ -95,7 +95,7 @@ def bio_process(
     .. ipython:: python
 
       # Visualize a subset of signals
-      @savefig p_bio_process1.png scale=100% width=1000px
+      @savefig p_bio_process1.png scale=100% width=1000
       fig = bio_df.iloc[:, 0:16].plot(subplots=True)
       @suppress
       plt.close()
