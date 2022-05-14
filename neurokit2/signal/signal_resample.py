@@ -63,47 +63,10 @@ def signal_resample(
       downsampled_pandas = nk.signal_resample(signal, method="pandas",
                                               sampling_rate=1000, desired_sampling_rate=500)
 
-      # Upsample
-      upsampled_interpolation = nk.signal_resample(downsampled_interpolation,
-                                                   method="interpolation",
-                                                   sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT",
-                                         sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_poly = nk.signal_resample(downsampled_poly, method="poly",
-                                          sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_numpy = nk.signal_resample(downsampled_numpy, method="numpy",
-                                           sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas",
-                                            sampling_rate=500, desired_sampling_rate=1000)
-
-      # Compare with original
-      @savefig p_signal_resample1.png scale=100%
-      fig = pd.DataFrame({"Original": signal,
-                          "Interpolation": upsampled_interpolation,
-                          "FFT": upsampled_fft,
-                          "Poly": upsampled_poly,
-                          "Numpy": upsampled_numpy,
-                          "Pandas": upsampled_pandas}).plot(style=".-")
-      @supress
-      plt.close()
-
-    .. ipython:: python
-
-      # Timing benchmarks
-      %timeit nk.signal_resample(signal, method="interpolation",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="FFT",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="poly",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="numpy",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="pandas",
-                                 sampling_rate=1000, desired_sampling_rate=500)
 
     See Also
     --------
-    scipy.signal.resample_poly, scipy.signal.resample, scipy.ndimage.zoom
+    signal_interpolate
 
     """
     if desired_length is None:
