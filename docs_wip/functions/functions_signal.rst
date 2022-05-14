@@ -64,19 +64,15 @@ Transformation
 
 
 
-.. Peaks
-.. ^^^^^^^^^^^^^^^^
-.. *signal_findpeaks()*
-.. """""""""""""""""""""
-.. .. autofunction:: neurokit2.signal_findpeaks
+Peaks
+^^^^^^^^^^^^^^^^
+*signal_findpeaks()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.signal_findpeaks
 
-.. *signal_fixpeaks()*
-.. """"""""""""""""""""
-.. .. autofunction:: neurokit2.signal_fixpeaks
-
-.. *signal_formatpeaks()*
-.. """"""""""""""""""""""""
-.. .. autofunction:: neurokit2.signal_formatpeaks
+*signal_fixpeaks()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_fixpeaks
 
 
 Analysis

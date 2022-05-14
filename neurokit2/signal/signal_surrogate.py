@@ -40,8 +40,6 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
       surrogate_iaaft = nk.signal_surrogate(signal, method = "IAAFT")
       surrogate_random = nk.signal_surrogate(signal, method = "random")
 
-      @suppress
-      # @savefig p_complexity_delay6.png scale=100%
       @savefig p_signal_surrogate1.png scale=100%
       plt.plot(surrogate_random, label = "Random Surrogate")
       plt.plot(surrogate_iaaft, label = "IAAFT Surrogate")
