@@ -27,8 +27,7 @@ Sub-domains
 .. autofunction:: neurokit2.hrv.hrv_rqa
 
 
-*Other*
-^^^^^^^^^
+*Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.hrv
    :members:
