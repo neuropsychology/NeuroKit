@@ -14,7 +14,7 @@ def fractal_capacity(signal, delay=1, rounding=3, show=False):
     Examples
     ---------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
