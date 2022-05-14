@@ -64,69 +64,69 @@ Transformation
 
 
 
-Peaks
-^^^^^^^^^^^^^^^^
-*signal_findpeaks()*
-"""""""""""""""""""""
-.. autofunction:: neurokit2.signal_findpeaks
+.. Peaks
+.. ^^^^^^^^^^^^^^^^
+.. *signal_findpeaks()*
+.. """""""""""""""""""""
+.. .. autofunction:: neurokit2.signal_findpeaks
 
-*signal_fixpeaks()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.signal_fixpeaks
+.. *signal_fixpeaks()*
+.. """"""""""""""""""""
+.. .. autofunction:: neurokit2.signal_fixpeaks
 
 .. *signal_formatpeaks()*
 .. """"""""""""""""""""""""
 .. .. autofunction:: neurokit2.signal_formatpeaks
 
 
-.. Analysis
-.. ^^^^^^^^^^^^^^^^
-.. *signal_autocor()*
-.. """"""""""""""""""""
-.. .. autofunction:: neurokit2.signal_autocor
+Analysis
+^^^^^^^^^^^^^^^^
+*signal_autocor()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_autocor
 
-.. *signal_changepoints()*
-.. """"""""""""""""""""""""
-.. .. autofunction:: neurokit2.signal_changepoints
+*signal_changepoints()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_changepoints
 
-.. *signal_period()*
-.. """"""""""""""""""""
-.. .. autofunction:: neurokit2.signal_period
+*signal_period()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_period
 
-.. *signal_phase()*
-.. """"""""""""""""""
-.. .. autofunction:: neurokit2.signal_phase
+*signal_phase()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_phase
 
-.. *signal_plot()*
-.. """"""""""""""""""
-.. .. autofunction:: neurokit2.signal_plot
+*signal_plot()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_plot
 
-.. *signal_power()*
-.. """"""""""""""""""
-.. .. autofunction:: neurokit2.signal_power
+*signal_power()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_power
 
-.. *signal_psd()*
-.. """"""""""""""""""
-.. .. autofunction:: neurokit2.signal_psd
+*signal_psd()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_psd
 
-.. *signal_rate()*
-.. """"""""""""""""""
-.. .. autofunction:: neurokit2.signal_rate
+*signal_rate()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_rate
 
-.. *signal_smooth()*
-.. """"""""""""""""""
-.. .. autofunction:: neurokit2.signal_smooth
+*signal_smooth()*
+""""""""""""""""""
+.. autofunction:: neurokit2.signal_smooth
 
-.. *signal_synchrony()*
-.. """"""""""""""""""""""
-.. .. autofunction:: neurokit2.signal_synchrony
+*signal_synchrony()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_synchrony
 
-.. *signal_timefrequency()*
-.. """""""""""""""""""""""""
-.. .. autofunction:: neurokit2.signal_timefrequency
+*signal_timefrequency()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_timefrequency
 
-.. *signal_zerocrossings()*
-.. """"""""""""""""""""""""""
-.. .. autofunction:: neurokit2.signal_zerocrossings
+*signal_zerocrossings()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_zerocrossings
 
 
