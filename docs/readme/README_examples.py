@@ -94,7 +94,7 @@ signals, info = nk.ecg_process(ecg, sampling_rate=250)
 nk.ecg_plot(signals, sampling_rate=250)
 
 # Save it
-plot = nk.ecg_plot(signals, sampling_rate=250)
+nk.ecg_plot(signals, sampling_rate=250)
 plt.tight_layout()
 plot.savefig("README_ecg.png", dpi=300)
 
@@ -112,7 +112,7 @@ signals, info = nk.rsp_process(rsp, sampling_rate=250)
 nk.rsp_plot(signals, sampling_rate=250)
 
 # Save it
-plot = nk.rsp_plot(signals, sampling_rate=250)
+nk.rsp_plot(signals, sampling_rate=250)
 plt.tight_layout()
 plt.savefig("README_rsp.png", dpi=300)
 

@@ -7,35 +7,35 @@ import pandas as pd
 def rsp_plot(rsp_signals, sampling_rate=None):
     """**Visualize respiration (RSP) data**
 
-        Parameters
-        ----------
-        rsp_signals : DataFrame
-            DataFrame obtained from :func:`.rsp_process`.
-        sampling_rate : int
-            The desired sampling rate (in Hz, i.e., samples/second).
+    Parameters
+    ----------
+    rsp_signals : DataFrame
+        DataFrame obtained from :func:`.rsp_process`.
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
 
-        Examples
-        --------
-        .. ipython:: python
+    Examples
+    --------
+    .. ipython:: python
 
-          import neurokit2 as nk
+      import neurokit2 as nk
 
-          rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-          rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
 
-          @savefig p_rsp_plot1.png scale=100%
-          fig = nk.rsp_plot(rsp_signals)
-          @suppress
-          plt.close()
+      @savefig p_rsp_plot1.png scale=100%
+      fig = nk.rsp_plot(rsp_signals)
+      @suppress
+      plt.close()
 
-        Returns
-        -------
-        fig
-            Figure representing a plot of the processed rsp signals.
+    Returns
+    -------
+    fig
+        Figure representing a plot of the processed rsp signals.
 
-        See Also
-        --------
-        rsp_process
+    See Also
+    --------
+    rsp_process
 
     """
     # Mark peaks, troughs and phases.
@@ -124,9 +124,6 @@ def rsp_plot(rsp_signals, sampling_rate=None):
         amplitude_mean = np.mean(rsp_signals["RSP_Amplitude"])
         ax2.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#009688")
         ax2.legend(loc="upper right")
-
-    # plt.show()
-    return fig
 
 
 # =============================================================================

@@ -177,5 +177,3 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         fig = signal_fixpeaks(
             rpeaks, sampling_rate=sampling_rate, iterative=True, show=True, method="Kubios"
         )
-
-    return fig
