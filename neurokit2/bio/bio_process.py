@@ -89,12 +89,16 @@ def bio_process(
 
       bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, eog=None,
       sampling_rate=250)
-      bio_df
+      bio_df.head()
 
-      # Visualize all signals
-      @savefig p_bio_process1.png scale=100% width=10
-      fig = nk.standardize(bio_df).plot(subplots=True)
+    .. ipython:: python
+
+      # Visualize a subset of signals
+      @savefig p_bio_process1.png scale=100%
+      fig = bio_df.iloc[:, 0:14].plot(subplots=True)
       @suppress
+      fig = matplotlib.pyplot.gcf()
+      fig.set_size_inches(15, 10)
       plt.close()
 
     .. ipython:: python
@@ -104,7 +108,7 @@ def bio_process(
       data = nk.data('bio_eventrelated_100hz')[:len(eog)]
       bio_df2, bio_info2 = nk.bio_process(ecg=data['ECG'], rsp=data['RSP'], eda=data['EDA'],
       emg=None, eog=eog, keep=data['Photosensor'], sampling_rate=100)
-      bio_df2
+      bio_df2.head()
 
       # Visualize all signals
       @savefig p_bio_process2.png scale=100%

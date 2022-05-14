@@ -38,7 +38,7 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
 
       import neurokit2 as nk
 
-      @savefig p_events_plot1.png scale = 100%
+      @savefig p_events_plot1.png scale=100%
       nk.events_plot([1, 3, 5])
       @suppress
       plt.close()
@@ -49,7 +49,8 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
 
       signal = nk.signal_simulate(duration=4)
       events = nk.events_find(signal)
-      @savefig p_events_plot2.png scale = 100%
+
+      @savefig p_events_plot2.png scale=100%
       nk.events_plot(events, signal)
       @suppress
       plt.close()
@@ -60,7 +61,8 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
 
       events1 = events["onset"]
       events2 = np.linspace(0, len(signal), 8)
-      @savefig p_events_plot3.png scale = 100%
+
+      @savefig p_events_plot3.png scale=100%
       nk.events_plot([events1, events2], signal)
       @suppress
       plt.close()
@@ -70,7 +72,8 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
     .. ipython:: python
 
       events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
-      @savefig p_events_plot4.png scale = 100%
+
+      @savefig p_events_plot4.png scale=100%
       nk.events_plot(events, signal)
       @suppress
       plt.close()
@@ -82,7 +85,8 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
       signal = nk.signal_simulate(duration=10)
       events = nk.events_find(signal)
       events = [[i] for i in events['onset']]
-      @savefig p_events_plot5.png scale = 100%
+
+      @savefig p_events_plot5.png scale=100%
       nk.events_plot(events, signal)
       @suppress
       plt.close()
