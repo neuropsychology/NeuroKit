@@ -15,6 +15,7 @@ Main
 """"""""""""""""""""""
 .. autofunction:: neurokit2.eog.eog_plot
 
+
 Preprocessing
 ^^^^^^^^^^^^^^^^
 *eog_clean()*
@@ -24,10 +25,6 @@ Preprocessing
 *eog_features()*
 """"""""""""""""""
 .. autofunction:: neurokit2.eog.eog_features
-
-*eog_findpeaks()*
-""""""""""""""""""
-.. autofunction:: neurokit2.eog.eog_findpeaks
 
 *eog_peaks()*
 """"""""""""""
@@ -45,4 +42,13 @@ Analysis
 .. autofunction:: neurokit2.eog.eog_intervalrelated
 
 
+Miscellaneous
+^^^^^^^^^^^^^^^^
+*eog_findpeaks()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.eog_findpeaks
 
+
+.. automodule:: neurokit2.eog
+   :members:
+   :exclude-members: eog_process, eog_analyze, eog_plot, eog_clean, eog_features, eog_peaks, eog_eventrelated, eog_intervalrelated, eog_findpeaks
