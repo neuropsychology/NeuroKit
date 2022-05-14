@@ -743,56 +743,49 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">   ...: </span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 
-<span class="gp">In [7]: </span><span class="n">bio_df</span>
+<span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
-<span class="go">       ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0     1.089183  -0.074245  70.057084  ...            0    0.008   7.937253</span>
-<span class="go">1     1.036841  -0.196981  70.057084  ...            0    0.008   7.937253</span>
-<span class="go">2     0.901059  -0.332686  70.057084  ...            0    0.008   7.937253</span>
-<span class="go">3     0.707534  -0.486014  70.057084  ...            0    0.008   7.937253</span>
-<span class="go">4     0.483721  -0.654042  70.057084  ...            0    0.008   7.937253</span>
-<span class="go">...        ...        ...        ...  ...          ...      ...        ...</span>
-<span class="go">9995 -0.084518  -0.036861  69.767442  ...            0    0.024   7.901275</span>
-<span class="go">9996 -0.083326  -0.034589  69.767442  ...            0    0.024   7.901275</span>
-<span class="go">9997 -0.081903  -0.032085  69.767442  ...            0    0.024   7.901275</span>
-<span class="go">9998 -0.080069  -0.029388  69.767442  ...            0    0.024   7.901275</span>
-<span class="go">9999 -0.077658  -0.026571  69.767442  ...            0    0.024   7.901275</span>
+<span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
+<span class="go">0  1.081238  -0.076439  70.006223  ...            0    0.016   7.906957</span>
+<span class="go">1  1.029437  -0.198315  70.006223  ...            0    0.016   7.906957</span>
+<span class="go">2  0.894846  -0.333438  70.006223  ...            0    0.016   7.906957</span>
+<span class="go">3  0.702324  -0.486770  70.006223  ...            0    0.016   7.906957</span>
+<span class="go">4  0.478511  -0.655679  70.006223  ...            0    0.016   7.906957</span>
 
-<span class="go">[10000 rows x 46 columns]</span>
-
-<span class="go"># Visualize all signals</span>
-<span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">bio_df</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[5 rows x 46 columns]</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 10.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize a subset of signals</span>
+<span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># With Actual Data</span>
-<span class="gp">In [9]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
+<span class="gp">In [11]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
 
-<span class="gp">In [10]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_eventrelated_100hz&#39;</span><span class="p">)[:</span><span class="nb">len</span><span class="p">(</span><span class="n">eog</span><span class="p">)]</span>
+<span class="gp">In [12]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_eventrelated_100hz&#39;</span><span class="p">)[:</span><span class="nb">len</span><span class="p">(</span><span class="n">eog</span><span class="p">)]</span>
 
-<span class="gp">In [11]: </span><span class="n">bio_df2</span><span class="p">,</span> <span class="n">bio_info2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ECG&#39;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;RSP&#39;</span><span class="p">],</span> <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;EDA&#39;</span><span class="p">],</span>
+<span class="gp">In [13]: </span><span class="n">bio_df2</span><span class="p">,</span> <span class="n">bio_info2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ECG&#39;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;RSP&#39;</span><span class="p">],</span> <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;EDA&#39;</span><span class="p">],</span>
 <span class="gp">   ....: </span><span class="n">emg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="n">eog</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [12]: </span><span class="n">bio_df2</span>
-<span class="gh">Out[12]: </span><span class="go"></span>
-<span class="go">        ECG_Raw  ECG_Clean   ECG_Rate  ...  Photosensor  RSA_P2T  RSA_Gates</span>
-<span class="go">0     -0.015869   0.001499  61.486770  ...          5.0     0.09   8.372153</span>
-<span class="go">1     -0.011703   0.004621  61.486770  ...          5.0     0.09   8.372153</span>
-<span class="go">2     -0.009766   0.005260  61.486770  ...          5.0     0.09   8.372153</span>
-<span class="go">3     -0.013321   0.004423  61.486770  ...          5.0     0.09   8.372153</span>
-<span class="go">4     -0.009583   0.005670  61.486770  ...          5.0     0.09   8.372153</span>
-<span class="go">...         ...        ...        ...  ...          ...      ...        ...</span>
-<span class="go">11995 -0.078903  -0.100016  70.588235  ...          5.0     0.06   8.547471</span>
-<span class="go">11996 -0.070740  -0.089212  70.588235  ...          5.0     0.06   8.547471</span>
-<span class="go">11997 -0.062714  -0.077518  70.588235  ...          5.0     0.06   8.547471</span>
-<span class="go">11998 -0.052139  -0.065251  70.588235  ...          5.0     0.06   8.547471</span>
-<span class="go">11999 -0.045425  -0.054046  70.588235  ...          5.0     0.06   8.547471</span>
+<span class="gp">In [14]: </span><span class="n">bio_df2</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gh">Out[14]: </span><span class="go"></span>
+<span class="go">    ECG_Raw  ECG_Clean  ECG_Rate  ...  Photosensor  RSA_P2T  RSA_Gates</span>
+<span class="go">0 -0.015869   0.001499  61.48677  ...          5.0     0.09   8.372153</span>
+<span class="go">1 -0.011703   0.004621  61.48677  ...          5.0     0.09   8.372153</span>
+<span class="go">2 -0.009766   0.005260  61.48677  ...          5.0     0.09   8.372153</span>
+<span class="go">3 -0.013321   0.004423  61.48677  ...          5.0     0.09   8.372153</span>
+<span class="go">4 -0.009583   0.005670  61.48677  ...          5.0     0.09   8.372153</span>
 
-<span class="go">[12000 rows x 45 columns]</span>
+<span class="go">[5 rows x 45 columns]</span>
 
 <span class="go"># Visualize all signals</span>
-<span class="gp">In [13]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">bio_df2</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [15]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">bio_df2</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_bio_process2.png"><img alt="../_images/p_bio_process2.png" src="../_images/p_bio_process2.png" style="width: 640.0px; height: 480.0px;" /></a>
