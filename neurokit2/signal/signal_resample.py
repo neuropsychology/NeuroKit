@@ -16,8 +16,6 @@ def signal_resample(
 
     Up- or down-sample a signal. The user can specify either a desired length for the vector, or
     input the original sampling rate and the desired sampling rate.
-    See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of
-    the methods.
 
     Parameters
     ----------
@@ -30,10 +28,10 @@ def signal_resample(
     desired_sampling_rate : int
         The desired (output) sampling frequency (in Hz, i.e., samples/second).
     method : str
-        Can be ``"interpolation"`` (see :func:`.scipy.ndimage.zoom`), ``"numpy"`` for numpy's
-        interpolation (see :func:`.numpy.interp`),``"pandas"`` for Pandas' time series resampling,
-        ``"poly"`` (see :func:.`scipy.signal.resample_poly`) or ``"FFT"``
-        (see :func:`.scipy.signal.resample`) for the Fourier method. ``"FFT"`` is the most accurate
+        Can be ``"interpolation"`` (see ``scipy.ndimage.zoom()``), ``"numpy"`` for numpy's
+        interpolation (see ``np.interp()``),``"pandas"`` for Pandas' time series resampling,
+        ``"poly"`` (see ``scipy.signal.resample_poly()``) or ``"FFT"`` (see
+        ``scipy.signal.resample()``) for the Fourier method. ``"FFT"`` is the most accurate
         (if the signal is periodic), but becomes exponentially slower as the signal length
         increases. In contrast, ``"interpolation"`` is the fastest, followed by ``"numpy"``,
         ``"poly"`` and ``"pandas"``.

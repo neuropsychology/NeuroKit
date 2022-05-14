@@ -68,3 +68,10 @@ Indices of fit
 *fit_polynomial()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.fit_polynomial
+
+
+*Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
+
+.. automodule:: neurokit2.stats
+   :members:
+   :exclude-members: cor, density, distance, hdi, mad, rescale, standardize, summary_plot, cluster, cluster_findnumber, cluster_quality, fit_error, fit_loess, fit_mixture, fit_polynomial
