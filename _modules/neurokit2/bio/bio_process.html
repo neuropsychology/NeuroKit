@@ -217,7 +217,7 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/functions_bio.html">
-     General
+     bio submodule
     </a>
    </li>
    <li class="toctree-l2">
@@ -609,6 +609,7 @@ title="Open an issue"
 
 <span class="sd">    Example</span>
 <span class="sd">    ----------</span>
+<span class="sd">    **Example 1**: Using synthetic data</span>
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
@@ -621,30 +622,29 @@ title="Open an issue"
 
 <span class="sd">      bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, eog=None,</span>
 <span class="sd">      sampling_rate=250)</span>
-<span class="sd">      bio_df.head()</span>
-
-<span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # Visualize a subset of signals</span>
 <span class="sd">      @savefig p_bio_process1.png scale=100%</span>
-<span class="sd">      fig = bio_df.iloc[:, 0:14].plot(subplots=True)</span>
+<span class="sd">      fig = bio_df.iloc[:, 0:16].plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
-<span class="sd">      fig = plt.gcf()</span>
-<span class="sd">      fig.set_size_inches(15, 10)</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">      bio_df.head()</span>
+
+<span class="sd">    **Example 2**: Using a real dataset</span>
 <span class="sd">    .. ipython:: python</span>
 
-<span class="sd">      # With Actual Data</span>
+<span class="sd">      # Download EOG signal separately</span>
 <span class="sd">      eog = nk.data(&#39;eog_100hz&#39;)</span>
+<span class="sd">      # Download data but crop with same length as eog signal</span>
 <span class="sd">      data = nk.data(&#39;bio_eventrelated_100hz&#39;)[:len(eog)]</span>
+
 <span class="sd">      bio_df2, bio_info2 = nk.bio_process(ecg=data[&#39;ECG&#39;], rsp=data[&#39;RSP&#39;], eda=data[&#39;EDA&#39;],</span>
 <span class="sd">      emg=None, eog=eog, keep=data[&#39;Photosensor&#39;], sampling_rate=100)</span>
-<span class="sd">      bio_df2.head()</span>
 
 <span class="sd">      # Visualize all signals</span>
 <span class="sd">      @savefig p_bio_process2.png scale=100%</span>
-<span class="sd">      fig2 = nk.standardize(bio_df2).plot(subplots=True)</span>
+<span class="sd">      fig = bio_df2.iloc[:, 0:16].plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

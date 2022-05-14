@@ -220,7 +220,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="functions_bio.html">
-     General
+     bio submodule
     </a>
    </li>
    <li class="toctree-l2">
@@ -613,6 +613,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#events-plot">
+     <em>
+      events_plot()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#events-to-mne">
      <em>
       events_to_mne()
@@ -656,6 +663,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#events-find">
      <em>
       events_find()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#events-plot">
+     <em>
+      events_plot()
      </em>
     </a>
    </li>
@@ -707,7 +721,7 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.events.events_to_mne" title="neurokit2.events.events_to_mne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_to_mne</span></code></a>, <a class="reference internal" href="#neurokit2.events.events_find" title="neurokit2.events.events_find"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.events.events_plot" title="neurokit2.events.events_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code></a>, <a class="reference internal" href="#neurokit2.events.events_to_mne" title="neurokit2.events.events_to_mne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_to_mne</span></code></a>, <a class="reference internal" href="#neurokit2.events.events_find" title="neurokit2.events.events_find"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code></a></p>
 </div>
 <p class="rubric">Example</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -777,7 +791,7 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.events.events_to_mne" title="neurokit2.events.events_to_mne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_to_mne</span></code></a>, <a class="reference internal" href="#neurokit2.events.events_create" title="neurokit2.events.events_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_create</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.events.events_plot" title="neurokit2.events.events_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code></a>, <a class="reference internal" href="#neurokit2.events.events_to_mne" title="neurokit2.events.events_to_mne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_to_mne</span></code></a>, <a class="reference internal" href="#neurokit2.events.events_create" title="neurokit2.events.events_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_create</span></code></a></p>
 </div>
 <p class="rubric">Example</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -796,6 +810,86 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_events_find.png"><img alt="../_images/p_events_find.png" src="../_images/p_events_find.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="events-plot">
+<h3><em>events_plot()</em><a class="headerlink" href="#events-plot" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.events.events_plot">
+<span class="sig-name descname"><span class="pre">events_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'--'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/events/events_plot.html#events_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.events.events_plot" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Visualize Events</strong></p>
+<p>Plot events in signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>events</strong> (<em>list or ndarray or dict</em>) – Events onset location. Can also be a list of lists, in which case it will mark them with
+different colors. If a dict is passed (e.g., from <a class="reference internal" href="#neurokit2.events.events_find" title="neurokit2.events.events_find"><code class="xref py py-func docutils literal notranslate"><span class="pre">events_find()</span></code></a>), it will only plot
+the onsets.</p></li>
+<li><p><strong>signal</strong> (<em>array or DataFrame</em>) – Signal array (can be a dataframe with many signals).</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – Argument passed to matplotlib plotting.</p></li>
+<li><p><strong>linestyle</strong> (<em>str</em>) – Argument passed to matplotlib plotting.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>fig</em> – Figure representing a plot of the signal and the event markers.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.events.events_find" title="neurokit2.events.events_find"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_events_plot1.png"><img alt="../_images/p_events_plot1.png" src="../_images/p_events_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 1</strong>: With signal</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_events_plot2.png"><img alt="../_images/p_events_plot2.png" src="../_images/p_events_plot2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2</strong>: Different events</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">events1</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span>
+
+<span class="gp">In [7]: </span><span class="n">events2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">events1</span><span class="p">,</span> <span class="n">events2</span><span class="p">],</span> <span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_events_plot3.png"><img alt="../_images/p_events_plot3.png" src="../_images/p_events_plot3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3</strong>: Conditions</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">])</span>
+
+<span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_events_plot4.png"><img alt="../_images/p_events_plot4.png" src="../_images/p_events_plot4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 4</strong>: Different colors for all events</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">events</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="s1">&#39;onset&#39;</span><span class="p">]]</span>
+
+<span class="gp">In [14]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_events_plot5.png"><img alt="../_images/p_events_plot5.png" src="../_images/p_events_plot5.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>

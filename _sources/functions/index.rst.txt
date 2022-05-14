@@ -8,7 +8,7 @@ You can find here the API documentation of NeuroKit, with a description of all t
    :caption: Modules
    :titlesonly:
 
-   General <functions_bio>
+   functions_bio
    functions_ecg
    functions_ppg
    functions_hrv

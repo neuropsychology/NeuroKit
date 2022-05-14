@@ -217,7 +217,7 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/functions_bio.html">
-     General
+     bio submodule
     </a>
    </li>
    <li class="toctree-l2">
@@ -537,14 +537,19 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_plot</span><span class="p">,</span> <span class="n">signal_sanitize</span><span class="p">,</span>
-                      <span class="n">signal_smooth</span><span class="p">,</span> <span class="n">signal_zerocrossings</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_findpeaks</span><span class="p">,</span>
+    <span class="n">signal_plot</span><span class="p">,</span>
+    <span class="n">signal_sanitize</span><span class="p">,</span>
+    <span class="n">signal_smooth</span><span class="p">,</span>
+    <span class="n">signal_zerocrossings</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="ecg_findpeaks"><a class="viewcode-back" href="../../../functions/functions_ecg.html#neurokit2.ecg.ecg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Locate R-peaks**</span>
 
-<span class="sd">    Low-level function used by ``ecg_peaks()`` to identify R-peaks in an ECG signal using a</span>
+<span class="sd">    Low-level function used by :func:`ecg_peaks` to identify R-peaks in an ECG signal using a</span>
 <span class="sd">    different set of algorithms. Use the main function and see its documentation for details.</span>
 
 <span class="sd">    Parameters</span>

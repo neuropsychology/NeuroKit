@@ -220,7 +220,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="functions_bio.html">
-     General
+     bio submodule
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -682,6 +682,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-segment">
+     <em>
+      ecg_segment()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -706,25 +713,9 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#miscellaneous">
+  <a class="reference internal nav-link" href="#module-neurokit2.ecg">
    Miscellaneous
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#ecg-segment">
-     <em>
-      ecg_segment()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#module-neurokit2.ecg">
-     <em>
-      Other
-     </em>
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -834,6 +825,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-segment">
+     <em>
+      ecg_segment()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -858,25 +856,9 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#miscellaneous">
+  <a class="reference internal nav-link" href="#module-neurokit2.ecg">
    Miscellaneous
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#ecg-segment">
-     <em>
-      ecg_segment()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#module-neurokit2.ecg">
-     <em>
-      Other
-     </em>
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -1904,6 +1886,42 @@ spline interpolation does not ensure monotonicity.</p></li>
 </dd></dl>
 
 </section>
+<section id="ecg-segment">
+<h3><em>ecg_segment()</em><a class="headerlink" href="#ecg-segment" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_segment">
+<span class="sig-name descname"><span class="pre">ecg_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ecg/ecg_segment.html#ecg_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ecg.ecg_segment" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Segment an ECG signal into single heartbeats</strong></p>
+<p>Segment an ECG signal into single heartbeats. Convenient for visualizing all the heart beats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned ECG channel as returned by <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>.</p></li>
+<li><p><strong>rpeaks</strong> (<em>dict</em>) – The samples at which the R-peaks occur. Dict returned by <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot of heartbeats. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all segmented heartbeats.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.ecg.ecg_clean" title="neurokit2.ecg.ecg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">qrs_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_ecg_segment.png"><img alt="../_images/p_ecg_segment.png" src="../_images/p_ecg_segment.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
 </section>
 <section id="analysis">
 <h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">#</a></h2>
@@ -1977,9 +1995,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.685185          0.954902</span>
-<span class="go">2     2        10000  ...                          0.379798          0.909412</span>
-<span class="go">3     3        15000  ...                          0.085595          0.943202</span>
+<span class="go">1     1         5000  ...                          0.702648          0.982887</span>
+<span class="go">2     2        10000  ...                          0.451745          0.961230</span>
+<span class="go">3     3        15000  ...                          0.088531          0.952249</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -2080,52 +2098,14 @@ separately processed DataFrames.</p></li>
 
 </section>
 </section>
-<section id="miscellaneous">
-<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">#</a></h2>
-<section id="ecg-segment">
-<h3><em>ecg_segment()</em><a class="headerlink" href="#ecg-segment" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.ecg.ecg_segment">
-<span class="sig-name descname"><span class="pre">ecg_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ecg/ecg_segment.html#ecg_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ecg.ecg_segment" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Segment an ECG signal into single heartbeats</strong></p>
-<p>Segment an ECG signal into single heartbeats. Convenient for visualizing all the heart beats.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ecg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned ECG channel as returned by <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>.</p></li>
-<li><p><strong>rpeaks</strong> (<em>dict</em>) – The samples at which the R-peaks occur. Dict returned by <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot of heartbeats. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all segmented heartbeats.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ecg.ecg_clean" title="neurokit2.ecg.ecg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_plot</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">qrs_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_ecg_segment.png"><img alt="../_images/p_ecg_segment.png" src="../_images/p_ecg_segment.png" style="width: 640.0px; height: 480.0px;" /></a>
-</dd></dl>
-
-</section>
 <section id="module-neurokit2.ecg">
-<span id="other"></span><h3><em>Other</em><a class="headerlink" href="#module-neurokit2.ecg" title="Permalink to this headline">#</a></h3>
+<span id="miscellaneous"></span><h2>Miscellaneous<a class="headerlink" href="#module-neurokit2.ecg" title="Permalink to this headline">#</a></h2>
 <p>Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ecg.ecg_findpeaks">
 <span class="sig-name descname"><span class="pre">ecg_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ecg/ecg_findpeaks.html#ecg_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ecg.ecg_findpeaks" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Locate R-peaks</strong></p>
-<p>Low-level function used by <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code> to identify R-peaks in an ECG signal using a
+<p>Low-level function used by <a class="reference internal" href="#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a> to identify R-peaks in an ECG signal using a
 different set of algorithms. Use the main function and see its documentation for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2149,7 +2129,6 @@ samples at which R-peaks occur, accessible with the key <code class="docutils li
 </div>
 </dd></dl>
 
-</section>
 </section>
 </section>
 
