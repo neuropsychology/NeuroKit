@@ -81,12 +81,16 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
     # Plot cleaned and raw EOG
     ax0.set_title("Raw and Cleaned Signal")
     ax0.plot(x_axis, eog_signals["EOG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-    ax0.plot(x_axis, eog_signals["EOG_Clean"], color="#49A4FD", label="Cleaned", zorder=1, linewidth=1.5)
+    ax0.plot(
+        x_axis, eog_signals["EOG_Clean"], color="#49A4FD", label="Cleaned", zorder=1, linewidth=1.5
+    )
     ax0.set_ylabel("Amplitude (mV)")
 
     # Plot blinks
     blinks = np.where(eog_signals["EOG_Blinks"] == 1)[0]
-    ax0.scatter(x_axis[blinks], eog_signals["EOG_Clean"][blinks], color="#0146D7", label="Blinks", zorder=2)
+    ax0.scatter(
+        x_axis[blinks], eog_signals["EOG_Clean"][blinks], color="#0146D7", label="Blinks", zorder=2
+    )
     ax0.legend(loc="upper right")
 
     # Rate
@@ -110,7 +114,9 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
             epochs_end=0.7,
         )
         events_array = epochs_to_array(events)  # Convert to 2D array
-        events_array = standardize(events_array)  # Rescale so that all the blinks are on the same scale
+        events_array = standardize(
+            events_array
+        )  # Rescale so that all the blinks are on the same scale
 
         blinks_df = epochs_to_df(events)
         blinks_wide = blinks_df.pivot(index="Time", columns="Label", values="Signal")
@@ -130,5 +136,3 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
             label="Median",
         )
         ax2.legend(loc="upper right")
-
-    return fig

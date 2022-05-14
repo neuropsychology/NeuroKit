@@ -72,11 +72,15 @@ def ppg_plot(ppg_signals, sampling_rate=None):
     # Plot cleaned and raw PPG
     ax0.set_title("Raw and Cleaned Signal")
     ax0.plot(x_axis, ppg_signals["PPG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-    ax0.plot(x_axis, ppg_signals["PPG_Clean"], color="#FB1CF0", label="Cleaned", zorder=1, linewidth=1.5)
+    ax0.plot(
+        x_axis, ppg_signals["PPG_Clean"], color="#FB1CF0", label="Cleaned", zorder=1, linewidth=1.5
+    )
 
     # Plot peaks
     peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
-    ax0.scatter(x_axis[peaks], ppg_signals["PPG_Clean"][peaks], color="#D60574", label="Peaks", zorder=2)
+    ax0.scatter(
+        x_axis[peaks], ppg_signals["PPG_Clean"][peaks], color="#D60574", label="Peaks", zorder=2
+    )
     ax0.legend(loc="upper right")
 
     # Rate
@@ -85,5 +89,3 @@ def ppg_plot(ppg_signals, sampling_rate=None):
     ax1.plot(x_axis, ppg_signals["PPG_Rate"], color="#FB661C", label="Rate", linewidth=1.5)
     ax1.axhline(y=ppg_rate_mean, label="Mean", linestyle="--", color="#FBB41C")
     ax1.legend(loc="upper right")
-
-    return fig

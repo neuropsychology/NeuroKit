@@ -148,7 +148,7 @@ signals, info = nk.ppg_process(ppg, sampling_rate=250)
 nk.ppg_plot(signals, sampling_rate=250)
 
 # Save it
-plot = nk.ppg_plot(signals, sampling_rate=250)
+nk.ppg_plot(signals, sampling_rate=250)
 plt.tight_layout()
 plot.savefig("README_ppg.png", dpi=300)
 
@@ -163,7 +163,7 @@ eog_signal = nk.data("eog_100hz")
 signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
 # Plot
-plot = nk.eog_plot(signals, peaks=info, sampling_rate=100)
+nk.eog_plot(signals, peaks=info, sampling_rate=100)
 plt.tight_layout()
 plot.savefig("README_eog.png", dpi=300)
 

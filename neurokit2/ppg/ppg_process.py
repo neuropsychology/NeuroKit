@@ -46,7 +46,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
       ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
       signals, info = nk.ppg_process(ppg, sampling_rate=1000)
       @savefig p_ppg_process1.png scale=100%
-      fig = nk.ppg_plot(signals)
+      nk.ppg_plot(signals)
       @suppress
       plt.close()
 
