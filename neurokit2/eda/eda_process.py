@@ -69,7 +69,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
       eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
       signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
       @savefig p_eda_process.png scale=100%
-      fig = nk.eda_plot(signals)
+      nk.eda_plot(signals)
       @suppress
       plt.close()
 
