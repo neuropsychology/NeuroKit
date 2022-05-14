@@ -78,4 +78,4 @@ Miscellaneous
 
 .. automodule:: neurokit2.eda
    :members:
-   :exclude-members: eda_process, eda_analyze, ead_plot, eda_clean, eda_simulate, eda_autocor, eda_phasic, eda_changepoints, eda_peaks, eda_fixpeaks, eda_sympathetic, eda_eventrelated, eda_intervalrelated, eda_findpeaks
+   :exclude-members: eda_process, eda_analyze, eda_plot, eda_clean, eda_simulate, eda_autocor, eda_phasic, eda_changepoints, eda_peaks, eda_fixpeaks, eda_sympathetic, eda_eventrelated, eda_intervalrelated, eda_findpeaks
