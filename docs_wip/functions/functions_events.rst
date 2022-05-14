@@ -11,9 +11,9 @@ Main
 """"""""""""""""
 .. autofunction:: neurokit2.events.events_find
 
-*events_plot()*
-"""""""""""""""""
-.. autofunction:: neurokit2.events.events_plot
+.. *events_plot()*
+.. """""""""""""""""
+.. .. autofunction:: neurokit2.events.events_plot
 
 *events_to_mne()*
 """"""""""""""""""""""
