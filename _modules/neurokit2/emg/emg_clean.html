@@ -554,7 +554,7 @@ title="Open an issue"
 <span class="sd">    emg_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw EMG channel.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).</span>
 <span class="sd">        Defaults to 1000.</span>
 
 <span class="sd">    Returns</span>
@@ -575,7 +575,7 @@ title="Open an issue"
 
 <span class="sd">      emg = nk.emg_simulate(duration=10, sampling_rate=1000)</span>
 <span class="sd">      signals = pd.DataFrame({&quot;EMG_Raw&quot;: emg, &quot;EMG_Cleaned&quot;:nk.emg_clean(emg, sampling_rate=1000)})</span>
-<span class="sd">      @savefig p.emg_clean.png scale=100%</span>
+<span class="sd">      @savefig p_emg_clean1.png scale=100%</span>
 <span class="sd">      fig = signals.plot()</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>

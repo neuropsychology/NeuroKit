@@ -559,20 +559,20 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    eog_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned EOG channel, extracted from `eog_clean()`.</span>
+<span class="sd">        The cleaned EOG channel, extracted from :func:`.eog_clean`.</span>
 <span class="sd">    peaks : np.array</span>
 <span class="sd">        Vector containing the samples at which EOG-peaks occur.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).</span>
 <span class="sd">        Defaults to 1000.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing information of the features of the EOG blinks, accessible with keys</span>
-<span class="sd">        &quot;Blink_LeftZeros&quot; (point when eye closes), &quot;Blink_RightZeros&quot; (point when eye opens),</span>
-<span class="sd">        &quot;Blink_pAVR&quot;, &quot;Blink_nAVR&quot;, &quot;Blink_BAR&quot;, and &quot;Blink_Duration&quot; (duration of each blink in</span>
-<span class="sd">        seconds).</span>
+<span class="sd">        ``&quot;Blink_LeftZeros&quot;`` (point when eye closes), ``&quot;Blink_RightZeros&quot;`` (point when eye opens)</span>
+<span class="sd">        , ``&quot;Blink_pAVR&quot;``, ``&quot;Blink_nAVR&quot;``, ``&quot;Blink_BAR&quot;``, and ``&quot;Blink_Duration&quot;`` (duration</span>
+<span class="sd">        of each blink in seconds).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

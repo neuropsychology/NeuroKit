@@ -538,10 +538,15 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="eda_phasic"><a class="viewcode-back" href="../../../functions/functions_eda.html#neurokit2.eda.eda_phasic">[docs]</a><span class="k">def</span> <span class="nf">eda_phasic</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Decompose Electrodermal Activity (EDA) into Phasic and Tonic components**</span>
+    <span class="sd">&quot;&quot;&quot;**Decompose Electrodermal Activity (EDA) into Phasic and Tonic Components**</span>
 
-<span class="sd">    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using</span>
-<span class="sd">    different methods including cvxEDA (Greco, 2016) or Biopac&#39;s Acqknowledge algorithms.</span>
+<span class="sd">    Decompose the Electrodermal Activity (EDA) into two components, namely **Phasic** and</span>
+<span class="sd">    **Tonic**, using different methods including cvxEDA (Greco, 2016) or Biopac&#39;s Acqknowledge</span>
+<span class="sd">    algorithms.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">      cvxEDA algorithm seems broken. Must investigate.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -550,12 +555,13 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;cvxEDA&quot;``, ``&quot;median&quot;``, ``&quot;smoothmedian&quot;``, ``&quot;highpass&quot;``, ``&quot;biopac&quot;``, or ``&quot;acqknowledge&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;cvxEDA&quot;``, ``&quot;median&quot;``,</span>
+<span class="sd">        ``&quot;smoothmedian&quot;``, ``&quot;highpass&quot;``, ``&quot;biopac&quot;``, or ``&quot;acqknowledge&quot;``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    DataFrame</span>
-<span class="sd">        DataFrame containing the ``Tonic`` and the ``Phasic`` components as columns.</span>
+<span class="sd">        DataFrame containing the ``&quot;Tonic&quot;`` and the ``&quot;Phasic&quot;`` components as columns.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -564,6 +570,7 @@ title="Open an issue"
 
 <span class="sd">    Examples</span>
 <span class="sd">    ---------</span>
+<span class="sd">    **Example 1**: Methods comparison.</span>
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
@@ -572,40 +579,43 @@ title="Open an issue"
 <span class="sd">      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)</span>
 
 <span class="sd">      # Decompose using different algorithms</span>
-<span class="sd">      cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;cvxeda&#39;)</span>
+<span class="sd">      # cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;cvxeda&#39;)</span>
 <span class="sd">      smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;smoothmedian&#39;)</span>
 <span class="sd">      highpass = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;highpass&#39;)</span>
 
-<span class="sd">      data = pd.concat([cvxEDA.add_suffix(&#39;_cvxEDA&#39;), smoothMedian.add_suffix(&#39;_SmoothMedian&#39;),</span>
-<span class="sd">                        highpass.add_suffix(&#39;_Highpass&#39;)], axis=1)</span>
+<span class="sd">      data = pd.concat([</span>
+<span class="sd">          # cvxEDA.add_suffix(&#39;_cvxEDA&#39;),</span>
+<span class="sd">          smoothMedian.add_suffix(&#39;_SmoothMedian&#39;),</span>
+<span class="sd">          highpass.add_suffix(&#39;_Highpass&#39;)], axis=1)</span>
 <span class="sd">      data[&quot;EDA_Raw&quot;] = eda_signal</span>
+
 <span class="sd">      @savefig p_eda_phasic1.png scale=100%</span>
 <span class="sd">      fig = data.plot()</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
+
+<span class="sd">    **Example 2**: Real data.</span>
 
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      eda_signal = nk.data(&quot;bio_eventrelated_100hz&quot;)[&quot;EDA&quot;]</span>
 <span class="sd">      data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)</span>
 <span class="sd">      data[&quot;EDA_Raw&quot;] = eda_signal</span>
+
 <span class="sd">      @savefig p_eda_phasic2.png scale=100%</span>
-<span class="sd">      fig = nk.signal_plot(data, standardize=True)</span>
+<span class="sd">      nk.signal_plot(data, standardize=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    References</span>
 <span class="sd">    -----------</span>
-<span class="sd">    * cvxEDA: https://github.com/lciti/cvxEDA.</span>
-
 <span class="sd">    * Greco, A., Valenza, G., &amp; Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In</span>
 <span class="sd">      Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43).</span>
 <span class="sd">      Springer International Publishing.</span>
-
 <span class="sd">    * Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., &amp; Citi, L. (2016). cvxEDA: A convex</span>
 <span class="sd">      optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical</span>
-<span class="sd">      Engineering,</span>
-<span class="sd">      63(4), 797-804.</span>
+<span class="sd">      Engineering, 63(4), 797-804.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
@@ -665,7 +675,6 @@ title="Open an issue"
 
 <span class="sd">    This function implements the cvxEDA algorithm described in &quot;cvxEDA: a</span>
 <span class="sd">    Convex Optimization Approach to Electrodermal Activity Processing&quot; (Greco et al., 2015).</span>
-
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -750,8 +759,6 @@ title="Open an issue"
     <span class="c1"># .5*(M*q + B*l + C*d - eda)^2 + alpha*sum(A, 1)*p + .5*gamma*l&#39;*l</span>
     <span class="c1"># s.t. A*q &gt;= 0</span>
 
-    <span class="n">old_options</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
     <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;reltol&quot;</span><span class="p">:</span> <span class="n">reltol</span><span class="p">,</span> <span class="s2">&quot;show_progress&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
     <span class="k">if</span> <span class="n">solver</span> <span class="o">==</span> <span class="s2">&quot;conelp&quot;</span><span class="p">:</span>
         <span class="c1"># Use conelp</span>
@@ -779,10 +786,9 @@ title="Open an issue"
         <span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">([(</span><span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">Mt</span> <span class="o">*</span> <span class="n">eda</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">Ct</span> <span class="o">*</span> <span class="n">eda</span><span class="p">),</span> <span class="o">-</span><span class="p">(</span><span class="n">Bt</span> <span class="o">*</span> <span class="n">eda</span><span class="p">)])</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span>
-            <span class="n">H</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="o">-</span><span class="n">A</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">J</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))),</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span>
+            <span class="n">H</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">(</span><span class="o">-</span><span class="n">A</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">I</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">J</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))),</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">kktsolver</span><span class="o">=</span><span class="s1">&#39;chol2&#39;</span>
         <span class="p">)</span>
     <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">old_options</span><span class="p">)</span>
 
     <span class="n">tonic_splines</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="o">-</span><span class="n">nB</span><span class="p">:]</span>
     <span class="n">drift</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="n">n</span> <span class="p">:</span> <span class="n">n</span> <span class="o">+</span> <span class="n">nC</span><span class="p">]</span>

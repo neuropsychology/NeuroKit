@@ -551,11 +551,11 @@ title="Open an issue"
 <span class="sd">    eog_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw EOG channel (either vertical or horizontal).</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).</span>
 <span class="sd">        Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &#39;neurokit&#39; (default), &#39;agarwal2019&#39;,</span>
-<span class="sd">        &#39;mne&#39; (requires the MNE package to be installed), &#39;brainstorm&#39;, &#39;kong1998&#39;.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;neurokit&quot;`` (default), &quot;agarwal2019&quot;,</span>
+<span class="sd">        &quot;mne&quot; (requires the MNE package to be installed), &quot;brainstorm&quot;, &quot;kong1998&quot;.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -585,7 +585,7 @@ title="Open an issue"
 <span class="sd">      df[&quot;blinker&quot;] = nk.eog_clean(eog_signal, sampling_rate=100, method=&#39;blinker&#39;)</span>
 
 <span class="sd">      # Visualize</span>
-<span class="sd">      @savefig p.eog_clean.png scale=100%</span>
+<span class="sd">      @savefig p_eog_clean.png scale=100%</span>
 <span class="sd">      pd.DataFrame(df).plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>

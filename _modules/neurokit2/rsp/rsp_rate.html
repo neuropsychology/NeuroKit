@@ -533,7 +533,8 @@ title="Open an issue"
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span> <span class="n">signal_resample</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span>
+                      <span class="n">signal_resample</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_peaks</span>
 
 
@@ -553,29 +554,31 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rsp_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned respiration channel as returned by `rsp_clean()`.</span>
+<span class="sd">        The cleaned respiration channel as returned by :func:`.rsp_clean`.</span>
 <span class="sd">    troughs : Union[list, np.array, pd.Series, pd.DataFrame]</span>
-<span class="sd">        The respiration troughs (inhalation onsets) as returned by `rsp_peaks()`.</span>
+<span class="sd">        The respiration troughs (inhalation onsets) as returned by :func:`.rsp_peaks`.</span>
 <span class="sd">        If None (default), inhalation onsets will be automatically identified from the</span>
-<span class="sd">        `rsp_clean` signal.</span>
+<span class="sd">        :func:`.rsp_clean` signal.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of &#39;rsp_cleaned&#39; (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    window : int</span>
 <span class="sd">        The duration of the sliding window (in second). Default to 10 seconds.</span>
 <span class="sd">    hop_size : int</span>
 <span class="sd">        The number of samples between each successive window. Default to 1 sample.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Method can either be &quot;trough&quot; or &quot;xcorr&quot;. In &quot;trough&quot; method, respiratory rate is calculated from the</span>
-<span class="sd">        periods between successive inspirations (i.e., inhalation onsets/troughs).</span>
-<span class="sd">        In &quot;xcorr&quot; method, cross-correlations between the changes in respiration with a bank of</span>
-<span class="sd">        sinusoids of different frequencies are caclulated to indentify the principal frequency of oscillation.</span>
+<span class="sd">        Method can either be ``&quot;trough&quot;`` or ``&quot;xcorr&quot;``. In ``&quot;trough&quot;`` method, respiratory rate</span>
+<span class="sd">        is calculated from the periods between successive inspirations (i.e., inhalation onsets/</span>
+<span class="sd">        troughs). In ``&quot;xcorr&quot;`` method, cross-correlations between the changes in respiration with</span>
+<span class="sd">        a bank of sinusoids of different frequencies are calculated to identify the principal</span>
+<span class="sd">        frequency of oscillation.</span>
 <span class="sd">    peak_method : str</span>
-<span class="sd">        Method to identify successive respiratory inspirations, only relevant if method is &quot;trough&quot;.</span>
-<span class="sd">        Can be one of &quot;khodadad2018&quot; (default) or &quot;biosppy&quot;.</span>
+<span class="sd">        Method to identify successive respiratory inspirations, only relevant if method is</span>
+<span class="sd">        ``&quot;trough&quot;``. Can be one of ``&quot;khodadad2018&quot;`` (default) or ``&quot;biosppy&quot;``.</span>
 <span class="sd">    interpolation_method : str</span>
-<span class="sd">        Method used to interpolate the rate between inhalation onsets. See `signal_interpolate()`. &#39;monotone_cubic&#39;</span>
-<span class="sd">        is chosen as the default interpolation method since it ensures monotone interpolation between</span>
-<span class="sd">        data points (i.e., it prevents physiologically implausible &quot;overshoots&quot; or &quot;undershoots&quot; in the</span>
+<span class="sd">        Method used to interpolate the rate between inhalation onsets.</span>
+<span class="sd">        See :func:`.signal_interpolate`. ``&quot;monotone_cubic&quot;`` is chosen as the default</span>
+<span class="sd">        interpolation method since it ensures monotone interpolation between data points (i.e., it</span>
+<span class="sd">        prevents physiologically implausible &quot;overshoots&quot; or &quot;undershoots&quot; in the</span>
 <span class="sd">        y-direction). In contrast, the widely used cubic spline interpolation does not ensure</span>
 <span class="sd">        monotonicity.</span>
 

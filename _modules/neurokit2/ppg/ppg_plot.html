@@ -542,10 +542,10 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ppg_signals : DataFrame</span>
-<span class="sd">        DataFrame obtained from `ppg_process()`.</span>
+<span class="sd">        DataFrame obtained from :func:`.ppg_process`.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if the data</span>
-<span class="sd">        should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to None.</span>
+<span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if</span>
+<span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to ``None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -604,11 +604,15 @@ title="Open an issue"
     <span class="c1"># Plot cleaned and raw PPG</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Raw&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FB1CF0&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FB1CF0&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
+    <span class="p">)</span>
 
     <span class="c1"># Plot peaks</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#D60574&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Peaks&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#D60574&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Peaks&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
     <span class="c1"># Rate</span>
@@ -616,9 +620,7 @@ title="Open an issue"
     <span class="n">ppg_rate_mean</span> <span class="o">=</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Rate&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FB661C&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Rate&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">ppg_rate_mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FBB41C&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">fig</span></div>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
 </pre></div>
 
               </div>

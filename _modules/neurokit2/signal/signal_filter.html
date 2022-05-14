@@ -551,35 +551,37 @@ title="Open an issue"
     <span class="n">powerline</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Filter a signal using &#39;butterworth&#39;, &#39;fir&#39; or &#39;savgol&#39; filters**</span>
+    <span class="sd">&quot;&quot;&quot;**Filter a signal using &quot;butterworth&quot;, &quot;fir&quot; or &quot;savgol&quot; filters**</span>
 
-<span class="sd">    Apply a lowpass (if &#39;highcut&#39; frequency is provided), highpass (if &#39;lowcut&#39; frequency is</span>
+<span class="sd">    Apply a lowpass (if &quot;highcut&quot; frequency is provided), highpass (if &quot;lowcut&quot; frequency is</span>
 <span class="sd">    provided) or bandpass (if both are provided) filter to the signal.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
-<span class="sd">        or &quot;bandstop&quot;.</span>
+<span class="sd">        or ``&quot;bandstop&quot;``.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    lowcut : float</span>
-<span class="sd">        Lower cutoff frequency in Hz. The default is None.</span>
+<span class="sd">        Lower cutoff frequency in Hz. The default is ``None``.</span>
 <span class="sd">    highcut : float</span>
-<span class="sd">        Upper cutoff frequency in Hz. The default is None.</span>
+<span class="sd">        Upper cutoff frequency in Hz. The default is ``None``.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be one of &quot;butterworth&quot;, &quot;fir&quot;, &quot;bessel&quot; or &quot;savgol&quot;. Note that for Butterworth, the</span>
-<span class="sd">        function uses the SOS method from ``scipy.signal.sosfiltfilt``, recommended for general</span>
-<span class="sd">        purpose filtering. One can also specify &quot;butterworth_ba&quot; for a more traditional and legacy</span>
-<span class="sd">        method (often implemented in other software).</span>
+<span class="sd">        Can be one of ``&quot;butterworth&quot;``, ``&quot;fir&quot;``, ``&quot;bessel&quot;`` or ``&quot;savgol&quot;``. Note that for</span>
+<span class="sd">        Butterworth, the function uses the SOS method from :func:`.scipy.signal.sosfiltfilt`,</span>
+<span class="sd">        recommended for general purpose filtering. One can also specify ``&quot;butterworth_ba&quot;`` for a</span>
+<span class="sd">        more traditional and legacy method (often implemented in other software).</span>
 <span class="sd">    order : int</span>
-<span class="sd">        Only used if method is &quot;butterworth&quot; or &quot;savgol&quot;. Order of the filter (default is 2).</span>
+<span class="sd">        Only used if ``method`` is ``&quot;butterworth&quot;`` or ``&quot;savgol&quot;``. Order of the filter (default</span>
+<span class="sd">        is 2).</span>
 <span class="sd">    window_size : int</span>
-<span class="sd">        Only used if method is &quot;savgol&quot;. The length of the filter window (i.e. the number of</span>
-<span class="sd">        coefficients). Must be an odd integer. If &#39;default&#39;, will be set to the sampling rate</span>
+<span class="sd">        Only used if ``method`` is ``&quot;savgol&quot;``. The length of the filter window (i.e. the number of</span>
+<span class="sd">        coefficients). Must be an odd integer. If default, will be set to the sampling rate</span>
 <span class="sd">        divided by 10 (101 if the sampling rate is 1000 Hz).</span>
 <span class="sd">    powerline : int</span>
-<span class="sd">        Only used if method is &quot;powerline&quot;. The powerline frequency (normally 50 Hz or 60 Hz).</span>
+<span class="sd">        Only used if ``method`` is ``&quot;powerline&quot;``.</span>
+<span class="sd">        The powerline frequency (normally 50 Hz or 60Hz).</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, plot the filtered signal as an overlay of the original.</span>
 
@@ -606,17 +608,17 @@ title="Open an issue"
 <span class="sd">      # Visualize Lowpass Filtered Signal using Different Methods</span>
 <span class="sd">      @savefig p_signal_filter1.png scale=100%</span>
 <span class="sd">      fig1 = pd.DataFrame({&quot;Raw&quot;: signal,</span>
-<span class="sd">                         &quot;Butter_2&quot;: nk.signal_filter(signal, highcut=3, method=&#39;butterworth&#39;,</span>
+<span class="sd">                         &quot;Butter_2&quot;: nk.signal_filter(signal, highcut=3, method=&quot;butterworth&quot;,</span>
 <span class="sd">                          order=2),</span>
 <span class="sd">                         &quot;Butter_2_BA&quot;: nk.signal_filter(signal, highcut=3,</span>
-<span class="sd">                          method=&#39;butterworth_ba&#39;, order=2),</span>
-<span class="sd">                         &quot;Butter_5&quot;: nk.signal_filter(signal, highcut=3, method=&#39;butterworth&#39;,</span>
+<span class="sd">                          method=&quot;butterworth_ba&quot;, order=2),</span>
+<span class="sd">                         &quot;Butter_5&quot;: nk.signal_filter(signal, highcut=3, method=&quot;butterworth&quot;,</span>
 <span class="sd">                          order=5),</span>
 <span class="sd">                         &quot;Butter_5_BA&quot;: nk.signal_filter(signal, highcut=3,</span>
-<span class="sd">                          method=&#39;butterworth_ba&#39;, order=5),</span>
-<span class="sd">                         &quot;Bessel_2&quot;: nk.signal_filter(signal, highcut=3, method=&#39;bessel&#39;, order=2),</span>
-<span class="sd">                         &quot;Bessel_5&quot;: nk.signal_filter(signal, highcut=3, method=&#39;bessel&#39;, order=5),</span>
-<span class="sd">                         &quot;FIR&quot;: nk.signal_filter(signal, highcut=3, method=&#39;fir&#39;)}).plot(subplots=True)</span>
+<span class="sd">                          method=&quot;butterworth_ba&quot;, order=5),</span>
+<span class="sd">                         &quot;Bessel_2&quot;: nk.signal_filter(signal, highcut=3, method=&quot;bessel&quot;, order=2),</span>
+<span class="sd">                         &quot;Bessel_5&quot;: nk.signal_filter(signal, highcut=3, method=&quot;bessel&quot;, order=5),</span>
+<span class="sd">                         &quot;FIR&quot;: nk.signal_filter(signal, highcut=3, method=&quot;fir&quot;)}).plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -625,17 +627,17 @@ title="Open an issue"
 <span class="sd">      # Visualize Highpass Filtered Signal using Different Methods</span>
 <span class="sd">      @savefig p_signal_filter2.png scale=100%</span>
 <span class="sd">      fig2 = pd.DataFrame({&quot;Raw&quot;: signal,</span>
-<span class="sd">                          &quot;Butter_2&quot;: nk.signal_filter(signal, lowcut=2, method=&#39;butterworth&#39;,</span>
+<span class="sd">                          &quot;Butter_2&quot;: nk.signal_filter(signal, lowcut=2, method=&quot;butterworth&quot;,</span>
 <span class="sd">                          order=2),</span>
 <span class="sd">                          &quot;Butter_2_ba&quot;: nk.signal_filter(signal, lowcut=2,</span>
-<span class="sd">                          method=&#39;butterworth_ba&#39;, order=2),</span>
-<span class="sd">                          &quot;Butter_5&quot;: nk.signal_filter(signal, lowcut=2, method=&#39;butterworth&#39;,</span>
+<span class="sd">                          method=&quot;butterworth_ba&quot;, order=2),</span>
+<span class="sd">                          &quot;Butter_5&quot;: nk.signal_filter(signal, lowcut=2, method=&quot;butterworth&quot;,</span>
 <span class="sd">                          order=5),</span>
 <span class="sd">                          &quot;Butter_5_BA&quot;: nk.signal_filter(signal, lowcut=2,</span>
-<span class="sd">                          method=&#39;butterworth_ba&#39;, order=5),</span>
-<span class="sd">                          &quot;Bessel_2&quot;: nk.signal_filter(signal, lowcut=2, method=&#39;bessel&#39;, order=2),</span>
-<span class="sd">                          &quot;Bessel_5&quot;: nk.signal_filter(signal, lowcut=2, method=&#39;bessel&#39;, order=5),</span>
-<span class="sd">                          &quot;FIR&quot;: nk.signal_filter(signal, lowcut=2, method=&#39;fir&#39;)}).plot(subplots=True)</span>
+<span class="sd">                          method=&quot;butterworth_ba&quot;, order=5),</span>
+<span class="sd">                          &quot;Bessel_2&quot;: nk.signal_filter(signal, lowcut=2, method=&quot;bessel&quot;, order=2),</span>
+<span class="sd">                          &quot;Bessel_5&quot;: nk.signal_filter(signal, lowcut=2, method=&quot;bessel&quot;, order=5),</span>
+<span class="sd">                          &quot;FIR&quot;: nk.signal_filter(signal, lowcut=2, method=&quot;fir&quot;)}).plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -651,20 +653,20 @@ title="Open an issue"
 <span class="sd">      @savefig p_signal_filter3.png scale=100%</span>
 <span class="sd">      fig3 = pd.DataFrame({&quot;Raw&quot;: signal,</span>
 <span class="sd">                           &quot;Butter_2&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                        method=&#39;butterworth&#39;, order=2),</span>
+<span class="sd">                                                        method=&quot;butterworth&quot;, order=2),</span>
 <span class="sd">                           &quot;Butter_2_BA&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                           method=&#39;butterworth_ba&#39;, order=2),</span>
+<span class="sd">                                                           method=&quot;butterworth_ba&quot;, order=2),</span>
 <span class="sd">                           &quot;Butter_5&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                        method=&#39;butterworth&#39;, order=5),</span>
+<span class="sd">                                                        method=&quot;butterworth&quot;, order=5),</span>
 <span class="sd">                           &quot;Butter_5_BA&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                           method=&#39;butterworth_ba&#39;, order=5),</span>
+<span class="sd">                                                           method=&quot;butterworth_ba&quot;, order=5),</span>
 <span class="sd">                           &quot;Bessel_2&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                        method=&#39;bessel&#39;, order=2),</span>
+<span class="sd">                                                        method=&quot;bessel&quot;, order=2),</span>
 <span class="sd">                           &quot;Bessel_5&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                        method=&#39;bessel&#39;, order=5),</span>
+<span class="sd">                                                        method=&quot;bessel&quot;, order=5),</span>
 <span class="sd">                           &quot;FIR&quot;: nk.signal_filter(signal, lowcut=10/60, highcut=30/60,</span>
-<span class="sd">                                                   method=&#39;fir&#39;),</span>
-<span class="sd">                           &quot;Savgol&quot;: nk.signal_filter(signal, method=&#39;savgol&#39;)}).plot(subplots=True)</span>
+<span class="sd">                                                   method=&quot;fir&quot;),</span>
+<span class="sd">                           &quot;Savgol&quot;: nk.signal_filter(signal, method=&quot;savgol&quot;)}).plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

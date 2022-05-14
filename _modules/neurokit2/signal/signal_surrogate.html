@@ -538,19 +538,19 @@ title="Open an issue"
 
 <span class="sd">    Generate a surrogate version of a signal. Different methods are available, such as:</span>
 
-<span class="sd">    * **random**: Performs a random permutation of the signal value. This way, the signal</span>
+<span class="sd">    * ``&quot;random&quot;``: Performs a random permutation of the signal value. This way, the signal</span>
 <span class="sd">      distribution is unaffected and the serial correlations are cancelled, yielding a whitened</span>
 <span class="sd">      signal with an distribution identical to that of the original.</span>
-<span class="sd">    * **IAAFT**: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate. It is</span>
-<span class="sd">      a phase randomized, amplitude adjusted surrogates with the same power spectrum (to a very</span>
-<span class="sd">      high accuracy) and distribution as the original data, using an iterative scheme.</span>
+<span class="sd">    * ``&quot;IAAFT&quot;``: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate.</span>
+<span class="sd">      It is a phase randomized, amplitude adjusted surrogates with the same power spectrum (to a</span>
+<span class="sd">      very high accuracy) and distribution as the original data, using an iterative scheme.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be &quot;random&quot; or &quot;IAAFT&quot;.</span>
+<span class="sd">        Can be ``&quot;random&quot;`` or ``&quot;IAAFT&quot;``.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other keywords arguments, such as ``max_iter``(by default 1000).</span>
 
@@ -572,7 +572,7 @@ title="Open an issue"
 <span class="sd">      surrogate_iaaft = nk.signal_surrogate(signal, method = &quot;IAAFT&quot;)</span>
 <span class="sd">      surrogate_random = nk.signal_surrogate(signal, method = &quot;random&quot;)</span>
 
-<span class="sd">      @savefig p_complexity_delay6.png scale=100%</span>
+<span class="sd">      @savefig p_signal_surrogate1.png scale=100%</span>
 <span class="sd">      plt.plot(surrogate_random, label = &quot;Random Surrogate&quot;)</span>
 <span class="sd">      plt.plot(surrogate_iaaft, label = &quot;IAAFT Surrogate&quot;)</span>
 <span class="sd">      plt.plot(signal, label = &quot;Original&quot;)</span>
@@ -586,10 +586,13 @@ title="Open an issue"
 
 <span class="sd">    .. ipython:: python</span>
 
+<span class="sd">      @savefig p_signal_surrogate2.png scale=100%</span>
 <span class="sd">      plt.plot(*nk.density(signal), label = &quot;Original&quot;)</span>
 <span class="sd">      plt.plot(*nk.density(surrogate_iaaft), label = &quot;IAAFT Surrogate&quot;)</span>
 <span class="sd">      plt.plot(*nk.density(surrogate_random), label = &quot;Random Surrogate&quot;)</span>
 <span class="sd">      plt.legend()</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    However, the power spectrum of the IAAFT surrogate is preserved.</span>
 
@@ -598,7 +601,10 @@ title="Open an issue"
 <span class="sd">      f = nk.signal_psd(signal, max_frequency=20)</span>
 <span class="sd">      f[&quot;IAAFT&quot;] = nk.signal_psd(surrogate_iaaft, max_frequency=20)[&quot;Power&quot;]</span>
 <span class="sd">      f[&quot;Random&quot;] = nk.signal_psd(surrogate_random, max_frequency=20)[&quot;Power&quot;]</span>
+<span class="sd">      @savefig p_signal_surrogate3.png scale=100%</span>
 <span class="sd">      f.plot(&quot;Frequency&quot;, [&quot;Power&quot;, &quot;IAAFT&quot;, &quot;Random&quot;])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 
 <span class="sd">    References</span>
@@ -662,7 +668,7 @@ title="Open an issue"
         <span class="n">surrogate</span> <span class="o">=</span> <span class="n">sort</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">s</span><span class="p">))]</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">surrogate</span><span class="p">)</span>
-        <span class="n">current_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">amplitudes</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">current_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">amplitudes</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
         <span class="c1"># Check convergence</span>
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_error</span> <span class="o">-</span> <span class="n">previous_error</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">previous_error</span><span class="p">):</span>
@@ -670,7 +676,7 @@ title="Open an issue"
         <span class="n">previous_error</span> <span class="o">=</span> <span class="n">current_error</span>
 
     <span class="c1"># Normalize error w.r.t. mean of the &quot;true&quot; power spectrum.</span>
-    <span class="n">rmsd</span> <span class="o">=</span> <span class="n">current_error</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitudes</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">rmsd</span> <span class="o">=</span> <span class="n">current_error</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitudes</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">surrogate</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">rmsd</span>
 </pre></div>
 

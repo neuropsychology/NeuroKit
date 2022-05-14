@@ -587,9 +587,10 @@ title="Open an issue"
 <span class="sd">        Only when ``method = &quot;neurokit&quot;``. Use a robust method of standardization (see</span>
 <span class="sd">        `standardize`) for the relative thresholds.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Either &quot;Kubios&quot; or &quot;Neurokit&quot;. &quot;Kubios&quot; uses the artifact detection and correction described</span>
-<span class="sd">        in Lipponen, J. A., &amp; Tarvainen, M. P. (2019). Note that &quot;Kubios&quot; is only meant for peaks in</span>
-<span class="sd">        ECG or PPG. &quot;neurokit&quot; can be used with peaks in ECG, PPG, or respiratory data.</span>
+<span class="sd">        Either ``&quot;Kubios&quot;`` or ``&quot;neurokit&quot;``. ``&quot;Kubios&quot;`` uses the artifact detection and</span>
+<span class="sd">        correction described in Lipponen, J. A., &amp; Tarvainen, M. P. (2019). Note that ``&quot;Kubios&quot;``</span>
+<span class="sd">        is only meant for peaks in ECG or PPG. ``&quot;neurokit&quot;`` can be used with peaks in ECG, PPG,</span>
+<span class="sd">        or respiratory data.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other keyword arguments.</span>
 
@@ -598,8 +599,8 @@ title="Open an issue"
 <span class="sd">    peaks_clean : array</span>
 <span class="sd">        The corrected peak locations.</span>
 <span class="sd">    artifacts : dict</span>
-<span class="sd">        Only if method=&quot;Kubios&quot;. A dictionary containing the indices of artifacts, accessible with</span>
-<span class="sd">        the keys &quot;ectopic&quot;, &quot;missed&quot;, &quot;extra&quot;, and &quot;longshort&quot;.</span>
+<span class="sd">        Only if ``method=&quot;Kubios&quot;``. A dictionary containing the indices of artifacts, accessible</span>
+<span class="sd">        with the keys ``&quot;ectopic&quot;``, ``&quot;missed&quot;``, ``&quot;extra&quot;``, and ``&quot;longshort&quot;``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -614,7 +615,7 @@ title="Open an issue"
 <span class="sd">      # Simulate ECG data</span>
 <span class="sd">      ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)</span>
 
-<span class="sd">      # Identify and Correct Peaks using &#39;Kubios&#39; Method</span>
+<span class="sd">      # Identify and Correct Peaks using &quot;Kubios&quot; Method</span>
 <span class="sd">      rpeaks_uncorrected = nk.ecg_findpeaks(ecg)</span>
 
 <span class="sd">      @savefig p_signal_fixpeaks1.png scale=100%</span>

@@ -550,17 +550,20 @@ title="Open an issue"
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be one of &#39;convolution&#39; (default) or &#39;loess&#39;.</span>
+<span class="sd">        Can be one of ``&quot;convolution&quot;`` (default) or ``&quot;loess&quot;``.</span>
 <span class="sd">    kernel : Union[str, np.array]</span>
-<span class="sd">        Only used if ``method`` is &#39;convolution&#39;. Type of kernel to use; if array, use directly as</span>
-<span class="sd">        the kernel. Can be one of &#39;median&#39;, &#39;boxzen&#39;, &#39;boxcar&#39;, &#39;triang&#39;, &#39;blackman&#39;, &#39;hamming&#39;,</span>
-<span class="sd">        &#39;hann&#39;, &#39;bartlett&#39;, &#39;flattop&#39;, &#39;parzen&#39;, &#39;bohman&#39;, &#39;blackmanharris&#39;, &#39;nuttall&#39;, &#39;barthann&#39;,</span>
-<span class="sd">        &#39;kaiser&#39; (needs beta), &#39;gaussian&#39; (needs std), &#39;general_gaussian&#39; (needs power, width),</span>
-<span class="sd">        &#39;slepian&#39; (needs width) or &#39;chebwin&#39; (needs attenuation).</span>
+<span class="sd">        Only used if ``method`` is ``&quot;convolution&quot;``. Type of kernel to use; if array, use directly</span>
+<span class="sd">        as the kernel. Can be one of ``&quot;median&quot;``, ``&quot;boxzen&quot;``, ``&quot;boxcar&quot;``, ``&quot;triang&quot;``,</span>
+<span class="sd">        ``&quot;blackman&quot;``, ``&quot;hamming&quot;``, ``&quot;hann&quot;``, ``&quot;bartlett&quot;``, ``&quot;flattop&quot;``, ``&quot;parzen&quot;``,</span>
+<span class="sd">        ``&quot;bohman&quot;``, ``&quot;blackmanharris&quot;``, ``&quot;nuttall&quot;``, ``&quot;barthann&quot;``,</span>
+<span class="sd">        ``&quot;kaiser&quot;`` (needs beta), ``&quot;gaussian&quot;`` (needs std), ``&quot;general_gaussian&quot;`` (needs power</span>
+<span class="sd">        width), ``&quot;slepian&quot;`` (needs width) or ``&quot;chebwin&quot;`` (needs attenuation).</span>
 <span class="sd">    size : int</span>
-<span class="sd">        Only used if ``method`` is &#39;convolution&#39;. Size of the kernel; ignored if kernel is an array.</span>
+<span class="sd">        Only used if ``method`` is ``&quot;convolution&quot;``. Size of the kernel; ignored if kernel is an</span>
+<span class="sd">        array.</span>
 <span class="sd">    alpha : float</span>
-<span class="sd">        Only used if ``method`` is &#39;loess&#39;. The parameter which controls the degree of smoothing.</span>
+<span class="sd">        Only used if ``method`` is ``&quot;loess&quot;``. The parameter which controls the degree of</span>
+<span class="sd">        smoothing.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -586,13 +589,13 @@ title="Open an issue"
 
 <span class="sd">      size = len(signal)/100</span>
 <span class="sd">      signals = pd.DataFrame({&quot;Raw&quot;: distorted,</span>
-<span class="sd">                              &quot;Median&quot;: nk.signal_smooth(distorted, kernel=&#39;median&#39;, size=size-1),</span>
-<span class="sd">                              &quot;BoxZen&quot;: nk.signal_smooth(distorted, kernel=&#39;boxzen&#39;, size=size),</span>
-<span class="sd">                              &quot;Triang&quot;: nk.signal_smooth(distorted, kernel=&#39;triang&#39;, size=size),</span>
-<span class="sd">                              &quot;Blackman&quot;: nk.signal_smooth(distorted, kernel=&#39;blackman&#39;, size=size),</span>
-<span class="sd">                              &quot;Loess_01&quot;: nk.signal_smooth(distorted, method=&#39;loess&#39;, alpha=0.1),</span>
-<span class="sd">                              &quot;Loess_02&quot;: nk.signal_smooth(distorted, method=&#39;loess&#39;, alpha=0.2),</span>
-<span class="sd">                              &quot;Loess_05&quot;: nk.signal_smooth(distorted, method=&#39;loess&#39;, alpha=0.5)})</span>
+<span class="sd">                              &quot;Median&quot;: nk.signal_smooth(distorted, kernel=&quot;median&quot;, size=size-1),</span>
+<span class="sd">                              &quot;BoxZen&quot;: nk.signal_smooth(distorted, kernel=&quot;boxzen&quot;, size=size),</span>
+<span class="sd">                              &quot;Triang&quot;: nk.signal_smooth(distorted, kernel=&quot;triang&quot;, size=size),</span>
+<span class="sd">                              &quot;Blackman&quot;: nk.signal_smooth(distorted, kernel=&quot;blackman&quot;, size=size),</span>
+<span class="sd">                              &quot;Loess_01&quot;: nk.signal_smooth(distorted, method=&quot;loess&quot;, alpha=0.1),</span>
+<span class="sd">                              &quot;Loess_02&quot;: nk.signal_smooth(distorted, method=&quot;loess&quot;, alpha=0.2),</span>
+<span class="sd">                              &quot;Loess_05&quot;: nk.signal_smooth(distorted, method=&quot;loess&quot;, alpha=0.5)})</span>
 <span class="sd">      @savefig p_signal_smooth1.png scale=100%</span>
 <span class="sd">      fig = signals.plot()</span>
 <span class="sd">      @suppress</span>

@@ -552,22 +552,24 @@ title="Open an issue"
 <span class="sd">        The raw vertical EOG channel. Note that it must be positively oriented, i.e., blinks must</span>
 <span class="sd">        appear as upward peaks.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `eog_signal` (in Hz, i.e., samples/second). Defaults to 1000.</span>
+<span class="sd">        The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        Defaults to 1000.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments passed to other functions.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of the same length as the `eog_signal` containing the following columns:</span>
+<span class="sd">        A DataFrame of the same length as the :func:`.eog_signal` containing the following columns:</span>
+
 <span class="sd">        * ``&quot;EOG_Raw&quot;``: the raw signal.</span>
 <span class="sd">        * ``&quot;EOG_Clean&quot;``: the cleaned signal.</span>
 <span class="sd">        * ``&quot;EOG_Blinks&quot;``: the blinks marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;EOG_Rate&quot;``: eye blinks rate interpolated between blinks.</span>
 
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing the samples at which the eye blinks occur, accessible with the key &quot;EOG_Blinks&quot;</span>
-<span class="sd">        as well as the signals&#39; sampling rate.</span>
+<span class="sd">        A dictionary containing the samples at which the eye blinks occur, accessible with the key</span>
+<span class="sd">        ``&quot;EOG_Blinks&quot;`` as well as the signals&#39; sampling rate.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

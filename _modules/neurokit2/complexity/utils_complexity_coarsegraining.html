@@ -554,7 +554,7 @@ title="Open an issue"
 <span class="sd">       :target: https://doi.org/10.1016/j.physleta.2014.03.034</span>
 
 <span class="sd">    This coarse-graining procedure is similar to moving averaging and the decimation of the original</span>
-<span class="sd">    time series. The length of each coarse-grained time series is N/Tau. For scale = 1, the</span>
+<span class="sd">    time series. The length of each coarse-grained time series is N/Tau. For ``scale = 1``, the</span>
 <span class="sd">    coarse-grained time series is simply the original time series itself.</span>
 
 <span class="sd">    The coarse graining procedure (used for instance in MSE) is considered a shortcoming that</span>
@@ -565,13 +565,13 @@ title="Open an issue"
 <span class="sd">    resampling** (Liu et al. 2012), **moving average** (Wu et al. 2013), or **timeshift**</span>
 <span class="sd">    (Wu et al. 2013).</span>
 
-<span class="sd">    - **Non-overlapping** (default): The coarse-grained time series are constructed by averaging</span>
+<span class="sd">    * **Non-overlapping** (default): The coarse-grained time series are constructed by averaging</span>
 <span class="sd">      non-overlapping windows of given size.</span>
-<span class="sd">    - **Interpolate**: Interpolates (i.e., resamples) the coarse-grained time series to match the</span>
+<span class="sd">    * **Interpolate**: Interpolates (i.e., resamples) the coarse-grained time series to match the</span>
 <span class="sd">      original signal length (currently using a monotonic cubic method, but let us know if you have</span>
 <span class="sd">      any opinion on that).</span>
-<span class="sd">    - **Moving average**: The coarse-grained time series via a moving average.</span>
-<span class="sd">    - **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see</span>
+<span class="sd">    * **Moving average**: The coarse-grained time series via a moving average.</span>
+<span class="sd">    * **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see</span>
 <span class="sd">      **Figure** below). Somewhat similar to moving-average, with the difference that the time lag</span>
 <span class="sd">      creates new vectors.</span>
 
@@ -588,7 +588,7 @@ title="Open an issue"
 <span class="sd">        :math:`\\tau`, it represents the scale factor and corresponds to</span>
 <span class="sd">        the amount of coarsegraining.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be ``&quot;nonoverlapping&quot;``, ``&quot;rolling&quot;``, ``&quot;interpolate&quot;``, or ``timeshift``.</span>
+<span class="sd">        Can be ``&quot;nonoverlapping&quot;``, ``&quot;rolling&quot;``, ``&quot;interpolate&quot;``, or ``&quot;timeshift&quot;``.</span>
 <span class="sd">    force : bool</span>
 <span class="sd">        If ``True``, will include all the samples (even if the last segment is too short).</span>
 <span class="sd">    show : bool</span>

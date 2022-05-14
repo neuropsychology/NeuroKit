@@ -537,16 +537,18 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="emg_plot"><a class="viewcode-back" href="../../../functions/functions_emg.html#neurokit2.emg.emg_plot">[docs]</a><span class="k">def</span> <span class="nf">emg_plot</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Visualize electromyography (EMG) data**</span>
+    <span class="sd">&quot;&quot;&quot;**EMG Graph**</span>
+
+<span class="sd">    Visualize electromyography (EMG) data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    emg_signals : DataFrame</span>
-<span class="sd">        DataFrame obtained from `emg_process()`.</span>
+<span class="sd">        DataFrame obtained from ``emg_process()``.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the</span>
 <span class="sd">        data should be plotted over time in seconds. Otherwise the data is plotted over samples.</span>
-<span class="sd">        Defaults to None.</span>
+<span class="sd">        Defaults to ``None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -561,8 +563,9 @@ title="Open an issue"
 
 <span class="sd">      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)</span>
 <span class="sd">      emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)</span>
-<span class="sd">      @savefig p.emg_plot.png scale=100%</span>
-<span class="sd">      fig = nk.emg_plot(emg_signals)</span>
+
+<span class="sd">      @savefig p_emg_plot.png scale=100%</span>
+<span class="sd">      nk.emg_plot(emg_signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -601,12 +604,16 @@ title="Open an issue"
     <span class="c1"># Plot cleaned and raw EMG.</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Raw&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
+    <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
     <span class="c1"># Plot Amplitude.</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Muscle Activation&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Amplitude&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF9800&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Amplitude&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF9800&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
+    <span class="p">)</span>
 
     <span class="c1"># Shade activity regions.</span>
     <span class="n">activity_signal</span> <span class="o">=</span> <span class="n">_emg_plot_activity</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">offsets</span><span class="p">)</span>
@@ -621,8 +628,16 @@ title="Open an issue"
     <span class="p">)</span>
 
     <span class="c1"># Mark onsets and offsets.</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Amplitude&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f03e65&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="n">offsets</span><span class="p">],</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Amplitude&quot;</span><span class="p">][</span><span class="n">offsets</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f03e65&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span> <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Amplitude&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f03e65&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">offsets</span><span class="p">],</span>
+        <span class="n">emg_signals</span><span class="p">[</span><span class="s2">&quot;EMG_Amplitude&quot;</span><span class="p">][</span><span class="n">offsets</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f03e65&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">onsets</span> <span class="o">=</span> <span class="n">onsets</span> <span class="o">/</span> <span class="n">sampling_rate</span>
@@ -631,10 +646,7 @@ title="Open an issue"
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">onsets</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">offsets</span><span class="p">)):</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4a4a4a&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4a4a4a&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">fig</span></div>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
 
 
 <span class="c1"># =============================================================================</span>

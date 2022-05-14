@@ -551,18 +551,19 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rsp_rate : array</span>
-<span class="sd">        Array containing the respiratory rate, produced by `signal_rate()`.</span>
+<span class="sd">        Array containing the respiratory rate, produced by :func:`.signal_rate`.</span>
 <span class="sd">    troughs : dict</span>
 <span class="sd">        The samples at which the inhalation onsets occur.</span>
-<span class="sd">        Dict returned by `rsp_peaks()` (Accessible with the key, &quot;RSP_Troughs&quot;). Defaults to None.</span>
+<span class="sd">        Dict returned by :func:`rsp_peaks` (Accessible with the key, ``&quot;RSP_Troughs&quot;``).</span>
+<span class="sd">        Defaults to ``None``.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    show : bool</span>
-<span class="sd">        If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval</span>
-<span class="sd">        against the next successive one. The ellipse centers around the average breath-to-breath interval.</span>
-<span class="sd">        Defaults to False.</span>
+<span class="sd">        If ``True``, will return a Poincaré plot, a scattergram, which plots each breath-to-breath</span>
+<span class="sd">        interval against the next successive one. The ellipse centers around the average</span>
+<span class="sd">        breath-to-breath interval. Defaults to ``False``.</span>
 <span class="sd">    silent : bool</span>
-<span class="sd">        If False, warnings will be printed. Default to True.</span>
+<span class="sd">        If ``False``, warnings will be printed. Default to ``True``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -579,12 +580,12 @@ title="Open an issue"
 <span class="sd">        * ``&quot;RRV-pBBx&quot;``: the proportion of breath-to-breath intervals that are greater than x</span>
 <span class="sd">          seconds,</span>
 <span class="sd">          out of the total number of intervals.</span>
-<span class="sd">        * ``&quot;RRV_VLF&quot;``: spectral power density pertaining to very low frequency band i.e., 0 to .</span>
-<span class="sd">          04 Hz by default.</span>
-<span class="sd">        * ``&quot;RRV_LF&quot;``: spectral power density pertaining to low frequency band i.e., .04 to .15</span>
-<span class="sd">          Hz by default.</span>
-<span class="sd">        * ``&quot;RRV_HF&quot;``: spectral power density pertaining to high frequency band i.e., .15 to .4</span>
-<span class="sd">          Hz by default.</span>
+<span class="sd">        * ``&quot;RRV_VLF&quot;``: spectral power density pertaining to very low frequency band (i.e., 0 to .</span>
+<span class="sd">          04 Hz) by default.</span>
+<span class="sd">        * ``&quot;RRV_LF&quot;``: spectral power density pertaining to low frequency band (i.e., .04 to .15</span>
+<span class="sd">          Hz) by default.</span>
+<span class="sd">        * ``&quot;RRV_HF&quot;``: spectral power density pertaining to high frequency band (i.e., .15 to .4</span>
+<span class="sd">          Hz) by default.</span>
 <span class="sd">        * ``&quot;RRV_LFHF&quot;``: the ratio of low frequency power to high frequency power.</span>
 <span class="sd">        * ``&quot;RRV_LFn&quot;``: the normalized low frequency, obtained by dividing the low frequency</span>
 <span class="sd">          power by the total power.</span>
@@ -597,12 +598,13 @@ title="Open an issue"
 <span class="sd">          Poincaré plot along the line of identity. It is an index of long-term variability.</span>
 <span class="sd">        * ``&quot;RRV_SD2SD1&quot;``: the ratio between short and long term fluctuations of the</span>
 <span class="sd">          breath-to-breath intervals (SD2 divided by SD1).</span>
-<span class="sd">        * ``&quot;RRV_ApEn&quot;``: the approximate entropy of RRV, calculated by `entropy_approximate()`.</span>
-<span class="sd">        * ``&quot;RRV_SampEn&quot;``: the sample entropy of RRV, calculated by `entropy_sample()`.</span>
+<span class="sd">        * ``&quot;RRV_ApEn&quot;``: the approximate entropy of RRV, calculated</span>
+<span class="sd">          by :func:`.entropy_approximate`.</span>
+<span class="sd">        * ``&quot;RRV_SampEn&quot;``: the sample entropy of RRV, calculated by :func:`.entropy_sample`.</span>
 <span class="sd">        * ``&quot;RRV_DFA_alpha1&quot;``: the &quot;short-term&quot; fluctuation value generated from Detrended</span>
-<span class="sd">          Fluctuation</span>
-<span class="sd">          Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath</span>
-<span class="sd">          intervals. Will only be computed if mora than 160 breath cycles in the signal.</span>
+<span class="sd">          Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the</span>
+<span class="sd">          breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the</span>
+<span class="sd">          signal.</span>
 <span class="sd">        * ``&quot;RRV_DFA_alpha2&quot;``: the long-term fluctuation value. Will only be computed if mora</span>
 <span class="sd">          than 640 breath cycles in the signal.</span>
 <span class="sd">        * **MFDFA indices**: Indices related to the :func:`multifractal spectrum &lt;.fractal_dfa()&gt;`.</span>
@@ -662,7 +664,7 @@ title="Open an issue"
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty dict</span>
 
     <span class="c1"># Mean based</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RMSSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff_bbi</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RMSSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff_bbi</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MeanBB&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">bbi</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDBB&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">bbi</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

@@ -548,7 +548,6 @@ title="Open an issue"
 <span class="sd">    Electrodermal Activity (EDA) with different possible methods, such as:</span>
 
 <span class="sd">    * `Gamboa, H. (2008) &lt;http://www.lx.it.pt/~afred/pub/thesisHugoGamboa.pdf&gt;`_</span>
-
 <span class="sd">    * `Kim et al. (2004) &lt;http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.7385&amp;rep=rep1&amp;type=pdf&gt;`_</span>
 
 <span class="sd">    Parameters</span>
@@ -597,9 +596,13 @@ title="Open an issue"
 <span class="sd">      _, kim2004 = nk.eda_peaks(eda_phasic, method=&quot;kim2004&quot;)</span>
 <span class="sd">      _, neurokit = nk.eda_peaks(eda_phasic, method=&quot;neurokit&quot;)</span>
 <span class="sd">      _, nabian2018 = nk.eda_peaks(eda_phasic, method=&quot;nabian2018&quot;)</span>
+
 <span class="sd">      @savefig p_eda_peaks.png scale=100%</span>
-<span class="sd">      nk.events_plot([nabian2018[&quot;SCR_Peaks&quot;], kim2004[&quot;SCR_Peaks&quot;], neurokit[&quot;SCR_Peaks&quot;]],</span>
-<span class="sd">      eda_phasic)</span>
+<span class="sd">      nk.events_plot([</span>
+<span class="sd">          nabian2018[&quot;SCR_Peaks&quot;],</span>
+<span class="sd">          kim2004[&quot;SCR_Peaks&quot;],</span>
+<span class="sd">          neurokit[&quot;SCR_Peaks&quot;]</span>
+<span class="sd">      ], eda_phasic)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -616,7 +619,6 @@ title="Open an issue"
 <span class="sd">    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018). An</span>
 <span class="sd">      Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE</span>
 <span class="sd">      journal of translational engineering in health and medicine, 6, 2800711.</span>
-<span class="sd">      https://doi.org/10.1109/JTEHM.2018.2878000</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)):</span>

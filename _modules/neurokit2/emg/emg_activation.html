@@ -536,7 +536,8 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">..events</span> <span class="kn">import</span> <span class="n">events_find</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_binarize</span><span class="p">,</span> <span class="n">signal_changepoints</span><span class="p">,</span> <span class="n">signal_formatpeaks</span><span class="p">,</span> <span class="n">signal_smooth</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_binarize</span><span class="p">,</span> <span class="n">signal_changepoints</span><span class="p">,</span> <span class="n">signal_formatpeaks</span><span class="p">,</span>
+                      <span class="n">signal_smooth</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="emg_activation"><a class="viewcode-back" href="../../../functions/functions_emg.html#neurokit2.emg.emg_activation">[docs]</a><span class="k">def</span> <span class="nf">emg_activation</span><span class="p">(</span>
@@ -558,35 +559,37 @@ title="Open an issue"
 <span class="sd">    ----------</span>
 <span class="sd">    emg_amplitude : array</span>
 <span class="sd">        At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from</span>
-<span class="sd">        ``emg_amplitude()`` for methods like &#39;threshold&#39; or &#39;mixture&#39;), and / or the cleaned EMG signal</span>
-<span class="sd">        (for methods like &#39;pelt&#39;, &#39;biosppy&#39; or &#39;silva&#39;).</span>
+<span class="sd">        ``emg_amplitude()`` for methods like ``&quot;threshold&quot;`` or ``&quot;mixture&quot;``), and / or the</span>
+<span class="sd">        cleaned EMG signal (for methods like ``&quot;pelt&quot;``, ``&quot;biosppy&quot;`` or ``&quot;silva&quot;``).</span>
 <span class="sd">    emg_cleaned : array</span>
 <span class="sd">        At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from</span>
-<span class="sd">        ``emg_amplitude()`` for methods like &#39;threshold&#39; or &#39;mixture&#39;), and / or the cleaned EMG signal</span>
-<span class="sd">        (for methods like &#39;pelt&#39;, &#39;biosppy&#39; or &#39;silva&#39;).</span>
+<span class="sd">        ``emg_amplitude()`` for methods like ``&quot;threshold&quot;`` or ``&quot;mixture&quot;``), and / or the</span>
+<span class="sd">        cleaned EMG signal (for methods like ``&quot;pelt&quot;``, ``&quot;biosppy&quot;`` or ``&quot;silva&quot;``).</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The algorithm used to discriminate between activity and baseline. Can be one of &#39;mixture&#39;</span>
-<span class="sd">        (default) or &#39;threshold&#39;. If &#39;mixture&#39;, will use a Gaussian Mixture Model to categorize</span>
-<span class="sd">        between the two states. If &#39;threshold&#39;, will consider as activated all points which</span>
-<span class="sd">        amplitude is superior to the threshold. Can also be `pelt` or `biosppy` or `silva`.</span>
+<span class="sd">        The algorithm used to discriminate between activity and baseline. Can be one of</span>
+<span class="sd">        ``&quot;mixture&quot;`` (default) or ``&quot;threshold&quot;``. If ``&quot;mixture&quot;``, will use a Gaussian Mixture</span>
+<span class="sd">        Model to categorize between the two states. If ``&quot;threshold&quot;``, will consider as activated</span>
+<span class="sd">        all points which amplitude is superior to the threshold. Can also be ``&quot;pelt&quot;`` or</span>
+<span class="sd">        ``&quot;biosppy&quot;`` or ``&quot;silva&quot;``.</span>
 <span class="sd">    threshold : str</span>
-<span class="sd">        If ``method`` is &#39;mixture&#39;, then it corresponds to the minimum probability required to be considered</span>
-<span class="sd">        as activated (default to 0.33). If `method` is &#39;threshold&#39;, then it corresponds to the minimum</span>
-<span class="sd">        amplitude to detect as onset i.e., defaults to one tenth of the standard deviation of ``emg_amplitude``.</span>
-<span class="sd">        If ``method`` is &#39;silva&#39;, defaults to 0.05. If ``method`` is &#39;biosppy&#39;, defaults to 1.2 times of the mean</span>
-<span class="sd">        of the absolute of the smoothed, full-wave-rectified signal. If ``method`` is &#39;pelt&#39;, threshold defaults to</span>
-<span class="sd">        None as changepoints are used as a basis for detection.</span>
+<span class="sd">        If ``method`` is ``&quot;mixture&quot;``, then it corresponds to the minimum probability required to</span>
+<span class="sd">        be considered as activated (default to 0.33). If ``method`` is ``&quot;threshold&quot;``, then it</span>
+<span class="sd">        corresponds to the minimum amplitude to detect as onset i.e., defaults to one tenth of the</span>
+<span class="sd">        standard deviation of ``emg_amplitude``. If ``method`` is ``&quot;silva&quot;``, defaults to 0.05. If</span>
+<span class="sd">        ``method`` is ``&quot;biosppy&quot;``, defaults to 1.2 times of the mean of the absolute of the</span>
+<span class="sd">        smoothed, full-wave-rectified signal. If ``method`` is ``&quot;pelt&quot;``, threshold defaults to</span>
+<span class="sd">        ``None`` as changepoints are used as a basis for detection.</span>
 <span class="sd">    duration_min : float</span>
 <span class="sd">        The minimum duration of a period of activity or non-activity in seconds.</span>
-<span class="sd">        If &#39;default&#39;, will be set to 0.05 (50 ms).</span>
+<span class="sd">        If ``default``, will be set to 0.05 (50 ms).</span>
 <span class="sd">    size: float or int</span>
-<span class="sd">        Detection window size (seconds). Applicable only if ``method`` is &#39;biosppy&#39; or &#39;silva&#39;. If None, defaults to</span>
-<span class="sd">        0.05 for &#39;biosppy&#39; and 20 for &#39;silva&#39;.</span>
+<span class="sd">        Detection window size (seconds). Applicable only if ``method`` is ``&quot;biosppy&quot;`` or</span>
+<span class="sd">        ``&quot;silva&quot;``. If ``None``, defaults to 0.05 for ``&quot;biosppy&quot;`` and 20 for ``&quot;silva&quot;``.</span>
 <span class="sd">    threshold_size : int</span>
-<span class="sd">        Window size for calculation of the adaptive threshold. Must be bigger than the detection window size.</span>
-<span class="sd">        Applicable only if ``method`` is &#39;silva&#39;. If None, defaults to 22.</span>
+<span class="sd">        Window size for calculation of the adaptive threshold. Must be bigger than the detection</span>
+<span class="sd">        window size. Applicable only if ``method`` is ``&quot;silva``&quot;. If ``None``, defaults to 22.</span>
 <span class="sd">    kwargs : optional</span>
 <span class="sd">        Other arguments.</span>
 
@@ -594,14 +597,14 @@ title="Open an issue"
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing additional information, in this case the samples at which the onsets,</span>
-<span class="sd">        offsets, and periods of activations of the EMG signal occur, accessible with the key &quot;EMG_Onsets&quot;,</span>
-<span class="sd">        &quot;EMG_Offsets&quot;, and &quot;EMG_Activity&quot; respectively.</span>
+<span class="sd">        A dictionary containing additional information, in this case the samples at which the</span>
+<span class="sd">        onsets, offsets, and periods of activations of the EMG signal occur, accessible with the</span>
+<span class="sd">        key ``&quot;EMG_Onsets&quot;``, ``&quot;EMG_Offsets&quot;``, and ``&quot;EMG_Activity&quot;`` respectively.</span>
 <span class="sd">    activity_signal : DataFrame</span>
-<span class="sd">        A DataFrame of same length as the input signal in which occurences of onsets, offsets, and activity</span>
-<span class="sd">        (above the threshold) of the EMG signal are marked as &quot;1&quot; in lists of zeros with the same</span>
-<span class="sd">        length as `emg_amplitude`. Accessible with the keys &quot;EMG_Onsets&quot;, &quot;EMG_Offsets&quot;, and &quot;EMG_Activity&quot;</span>
-<span class="sd">        respectively.</span>
+<span class="sd">        A DataFrame of same length as the input signal in which occurences of onsets, offsets, and</span>
+<span class="sd">        activity (above the threshold) of the EMG signal are marked as &quot;1&quot; in lists of zeros with</span>
+<span class="sd">        the same length as ``emg_amplitude``. Accessible with the keys ``&quot;EMG_Onsets&quot;``,</span>
+<span class="sd">        ``&quot;EMG_Offsets&quot;``, and ``&quot;EMG_Activity&quot;`` respectively.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -623,8 +626,9 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      activity, info = nk.emg_activation(emg_amplitude=emg_amplitude, method=&quot;threshold&quot;)</span>
+
 <span class="sd">      @savefig p_emg_activation1.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
+<span class="sd">      nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -634,7 +638,7 @@ title="Open an issue"
 
 <span class="sd">      activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method=&quot;pelt&quot;)</span>
 <span class="sd">      @savefig p_emg_activation2.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
+<span class="sd">      nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -644,7 +648,7 @@ title="Open an issue"
 
 <span class="sd">      activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method=&quot;biosppy&quot;)</span>
 <span class="sd">      @savefig p_emg_activation3.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
+<span class="sd">      nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -654,7 +658,7 @@ title="Open an issue"
 
 <span class="sd">      activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method=&quot;silva&quot;)</span>
 <span class="sd">      @savefig p_emg_activation4.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
+<span class="sd">      nk.events_plot([info[&quot;EMG_Offsets&quot;], info[&quot;EMG_Onsets&quot;]], emg_cleaned)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

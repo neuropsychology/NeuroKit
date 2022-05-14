@@ -551,8 +551,8 @@ title="Open an issue"
 <span class="sd">    ----------</span>
 <span class="sd">    epochs : Union[dict, pd.DataFrame]</span>
 <span class="sd">        A dict containing one DataFrame per event/trial,</span>
-<span class="sd">        usually obtained via `epochs_create()`, or a DataFrame</span>
-<span class="sd">        containing all epochs, usually obtained via `epochs_to_df()`.</span>
+<span class="sd">        usually obtained via :func:`.epochs_create`, or a DataFrame</span>
+<span class="sd">        containing all epochs, usually obtained via :func:`.epochs_to_df`.</span>
 <span class="sd">    silent : bool</span>
 <span class="sd">        If True, silence possible warnings.</span>
 
@@ -560,8 +560,8 @@ title="Open an issue"
 <span class="sd">    -------</span>
 <span class="sd">    DataFrame</span>
 <span class="sd">        A dataframe containing the analyzed EOG features for each epoch, with each epoch indicated</span>
-<span class="sd">        by the `Label` column (if not present, by the `Index` column). The analyzed features consist</span>
-<span class="sd">        of the following:</span>
+<span class="sd">        by the `Label` column (if not present, by the `Index` column). The analyzed features</span>
+<span class="sd">        consist of the following:</span>
 
 <span class="sd">        * ``&quot;EOG_Rate_Baseline&quot;``: the baseline EOG rate before stimulus onset.</span>
 

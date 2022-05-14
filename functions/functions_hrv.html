@@ -852,7 +852,7 @@ Can be a list of indices or the output(s) of other functions such as <a class="r
 <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="functions_bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a></p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If True, will plot the distribution of R-R intervals.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will plot the distribution of R-R intervals.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -964,8 +964,8 @@ recommended minima for HF, LF and LF/HF, respectively.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-ppg_peaks, ecg_process or bio_process.</p></li>
+Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="functions_bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>ulf</strong> (<em>tuple, optional</em>) – Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).</p></li>
@@ -973,29 +973,33 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>lf</strong> (<em>tuple, optional</em>) – Upper and lower limit of the low frequency band. By default (0.04, 0.15).</p></li>
 <li><p><strong>hf</strong> (<em>tuple, optional</em>) – Upper and lower limit of the high frequency band. By default (0.15, 0.4).</p></li>
 <li><p><strong>vhf</strong> (<em>tuple, optional</em>) – Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).</p></li>
-<li><p><strong>psd_method</strong> (<em>str</em>) – Method used for spectral density estimation. For details see <code class="xref py py-func docutils literal notranslate"><span class="pre">signal.signal_power()</span></code>.
-By default “welch”.</p></li>
-<li><p><strong>silent</strong> (<em>bool</em>) – If False, warnings will be printed. Default to True.</p></li>
+<li><p><strong>psd_method</strong> (<em>str</em>) – Method used for spectral density estimation. For details see <a class="reference internal" href="functions_signal.html#neurokit2.signal_power" title="neurokit2.signal_power"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_power()</span></code></a>.
+By default <code class="docutils literal notranslate"><span class="pre">&quot;welch&quot;</span></code>.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, warnings will be printed. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will plot the power in the different frequency bands.</p></li>
 <li><p><strong>normalize</strong> (<em>bool</em>) – Normalization of power by maximum PSD value. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Normalization allows comparison between different PSD methods.</p></li>
 <li><p><strong>order_criteria</strong> (<em>str</em>) – The criteria to automatically select order in parametric PSD (only used for autoregressive
-(AR) methods such as ‘burg’). Defaults to None.</p></li>
+(AR) methods such as <code class="docutils literal notranslate"><span class="pre">&quot;burg&quot;</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – Additional other arguments.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – Contains frequency domain HRV metrics:</p>
 <ul class="simple">
-<li><p><strong>ULF</strong>: The spectral power density pertaining to ultra low frequency band i.e., .0 to .
-0033 Hz by default.</p></li>
-<li><p><strong>VLF</strong>: The spectral power density pertaining to very low frequency band i.e., .0033 to .
-04 Hz by default.</p></li>
-<li><p><strong>LF</strong>: The spectral power density pertaining to low frequency band i.e., .04 to .15 Hz
+<li><p><strong>ULF</strong>: The spectral power density pertaining to ultra low frequency band (i.e., .0 to</p></li>
+</ul>
+<p>.0033 Hz) by default.
+* <strong>VLF</strong>: The spectral power density pertaining to very low frequency band (i.e., .0033 to
+.04 Hz) by default.
+* <strong>LF</strong>: The spectral power density pertaining to low frequency band (i.e., .04 to .15 Hz)</p>
+<blockquote>
+<div><p>by default.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><strong>HF</strong>: The spectral power density pertaining to high frequency band (i.e., .15 to .4 Hz)
 by default.</p></li>
-<li><p><strong>HF</strong>: The spectral power density pertaining to high frequency band i.e., .15 to .4 Hz
-by default.</p></li>
-<li><p><strong>VHF</strong>: The variability, or signal power, in very high frequency i.e., .4 to .5 Hz by
+<li><p><strong>VHF</strong>: The variability, or signal power, in very high frequency (i.e., .4 to .5 Hz) by
 default.</p></li>
 <li><p><strong>LFn</strong>: The normalized low frequency, obtained by dividing the low frequency power by
 the total power.</p></li>
@@ -1019,22 +1023,22 @@ the total power.</p></li>
 <span class="go"># Find peaks</span>
 <span class="gp">In [3]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<span class="go"># Compute HRV indices using method=&#39;welch&#39;</span>
+<span class="go"># Compute HRV indices using method=&quot;welch&quot;</span>
 <span class="gp">In [4]: </span><span class="n">hrv_welch</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_hrv_freq1.png"><img alt="../_images/p_hrv_freq1.png" src="../_images/p_hrv_freq1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method =&#39;burg&#39;</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method =&quot;burg&quot;</span>
 <span class="gp">In [5]: </span><span class="n">hrv_burg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;burg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_hrv_freq2.png"><img alt="../_images/p_hrv_freq2.png" src="../_images/p_hrv_freq2.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method = &#39;lomb&#39; (requires installation of astropy)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method = &quot;lomb&quot; (requires installation of astropy)</span>
 <span class="gp">In [6]: </span><span class="n">hrv_lomb</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;lomb&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_hrv_freq3.png"><img alt="../_images/p_hrv_freq3.png" src="../_images/p_hrv_freq3.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method=&#39;multitapers&#39;</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using method=&quot;multitapers&quot;</span>
 <span class="gp">In [7]: </span><span class="n">hrv_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">psd_method</span><span class="o">=</span><span class="s2">&quot;multitapers&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1064,8 +1068,8 @@ Rate Variability. Simul. Notes Eur., 27(4), 183-190.</p></li>
 <dd><p><strong>Computes nonlinear indices of Heart Rate Variability (HRV)</strong></p>
 <p>Non-linear indices include features derived from the <em>Poincaré plot</em>, as well as other
 <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity()</span></code></a> indices. Note that there exist many more complexity indices that are
-available in NeuroKit2 and that could be applied to HRV. The <code class="docutils literal notranslate"><span class="pre">hrv_nonlinear()</span></code> function only
-includes the most commonly used indices.</p>
+available in NeuroKit2 and that could be applied to HRV. The <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-func docutils literal notranslate"><span class="pre">hrv_nonlinear()</span></code></a> function
+only includes the most commonly used indices.</p>
 <p>The <strong>Poincaré plot</strong> is a graphical representation of each NN interval plotted against its
 preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
 between successive NN intervals.</p>
@@ -1078,8 +1082,8 @@ with both.</p></li>
 <li><p><strong>SD2</strong>: Standard deviation along the identity line. Index of long-term HRV changes.</p></li>
 <li><p><strong>SD1/SD2</strong>: ratio of <em>SD1</em> to <em>SD2</em>. Describes the ratio of short term to long term
 variations in HRV.</p></li>
-<li><p><strong>S</strong>: Area of ellipse described by SD1 and SD2 (<code class="docutils literal notranslate"><span class="pre">pi</span> <span class="pre">*</span> <span class="pre">SD1</span> <span class="pre">*</span> <span class="pre">SD2</span></code>). It is proportional to
-<em>SD1SD2</em>.</p></li>
+<li><p><strong>S</strong>: Area of ellipse described by <em>SD1</em> and <em>SD2</em> (<code class="docutils literal notranslate"><span class="pre">pi</span> <span class="pre">*</span> <span class="pre">SD1</span> <span class="pre">*</span> <span class="pre">SD2</span></code>). It is
+proportional to <em>SD1SD2</em>.</p></li>
 <li><p><strong>CSI</strong>: The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac sympathetic
 function independent of vagal activity, calculated by dividing the longitudinal variability of
 the Poincaré plot (<code class="docutils literal notranslate"><span class="pre">4*SD2</span></code>) by its transverse variability (<code class="docutils literal notranslate"><span class="pre">4*SD1</span></code>).</p></li>
@@ -1152,13 +1156,14 @@ are not implemented yet (but soon).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-ppg_peaks, ecg_process or bio_process.</p></li>
+Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="functions_bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
-<li><p><strong>show</strong> (<em>bool, optional</em>) – If True, will return a Poincaré plot, a scattergram, which plots each RR interval against
-the next successive one. The ellipse centers around the average RR interval. By default False.</p></li>
-<li><p><strong>**kwargs</strong> – Other arguments to be passed into <cite>fractal_dfa()</cite> and <cite>fractal_correlation()</cite>.</p></li>
+<li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a Poincaré plot, a scattergram, which plots each RR interval
+against the next successive one. The ellipse centers around the average RR interval. By
+default <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed into <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_dfa()</span></code></a> and <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.fractal_correlation" title="neurokit2.complexity.fractal_correlation"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_correlation()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1236,13 +1241,13 @@ dimensions). See <a class="reference internal" href="functions_complexity.html#n
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-ppg_peaks, ecg_process or bio_process.</p></li>
+Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="functions_bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>delay</strong> (<em>int</em>) – See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a> for more information.</p></li>
 <li><p><strong>dimension</strong> (<em>int</em>) – See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a> for more information.</p></li>
-<li><p><strong>tolerance</strong> (<em>float</em>) – See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a> for more information. If “zimatore2021”, will be set to half
+<li><p><strong>tolerance</strong> (<em>float</em>) – See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a> for more information. If <code class="docutils literal notranslate"><span class="pre">&quot;zimatore2021&quot;</span></code>, will be set to half
 of the mean pairwise distance between points.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – See <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a> for more information.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a>.</p></li>
@@ -1303,7 +1308,7 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 coherence’ (though these terms are often encompassing a wider meaning), is the naturally
 occurring variation in heart rate during the breathing cycle. Metrics to quantify it are often
 used as a measure of parasympathetic nervous system activity. Neurophysiology informs us that
-the functional output of the myelinated vagus originating from the nucleus ambiguus has a
+the functional output of the myelinated vagus originating from the nucleus ambiguous has a
 respiratory rhythm. Thus, there would a temporal relation between the respiratory rhythm being
 expressed in the firing of these efferent pathways and the functional effect on the heart rate
 rhythm manifested as RSA. Several methods exist to quantify RSA:</p>
@@ -1333,35 +1338,38 @@ is low.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ecg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <cite>ecg_process()</cite>. Should contain columns <cite>ECG_Rate</cite> and <cite>ECG_R_Peaks</cite>.
-Can also take a DataFrame comprising of both ECG and RSP signals, generated by <cite>bio_process()</cite>.</p></li>
-<li><p><strong>rsp_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <cite>rsp_process()</cite>. Should contain columns <cite>RSP_Phase</cite> and <cite>RSP_PhaseCompletion</cite>.
-No impact when a DataFrame comprising of both the ECG and RSP signals are passed as <cite>ecg_signals</cite>.
-Defaults to None.</p></li>
-<li><p><strong>rpeaks</strong> (<em>dict</em>) – The samples at which the R-peaks of the ECG signal occur. Dict returned by <cite>ecg_peaks()</cite>,
-<cite>ecg_process()</cite>, or <cite>bio_process()</cite>. Defaults to None.</p></li>
+<li><p><strong>ecg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a>. Should contain columns <code class="docutils literal notranslate"><span class="pre">ECG_Rate</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ECG_R_Peaks</span></code>. Can also take a DataFrame comprising of both ECG and RSP signals,
+generated by <a class="reference internal" href="functions_bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.</p></li>
+<li><p><strong>rsp_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="functions_rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a>. Should contain columns <code class="docutils literal notranslate"><span class="pre">RSP_Phase</span></code> and
+<code class="docutils literal notranslate"><span class="pre">RSP_PhaseCompletion</span></code>. No impact when a DataFrame comprising of both the ECG and RSP
+signals are passed as <code class="docutils literal notranslate"><span class="pre">ecg_signals</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>rpeaks</strong> (<em>dict</em>) – The samples at which the R-peaks of the ECG signal occur. Dict returned by
+<a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a>, or <a class="reference internal" href="functions_bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of signals (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>continuous</strong> (<em>bool</em>) – If False, will return RSA properties computed from the data (one value per index).
-If True, will return continuous estimations of RSA of the same length as the signal.
+<li><p><strong>continuous</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, will return RSA properties computed from the data (one value per index).
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return continuous estimations of RSA of the same length as the signal.
 See below for more details.</p></li>
-<li><p><strong>window</strong> (<em>int</em>) – For calculating RSA second by second. Length of each segment in seconds. If None (default),
-window will be set at 32 seconds.</p></li>
-<li><p><strong>window_number</strong> (<em>int</em>) – Between 2 and 8. For caculating RSA second by second. Number of windows to be calculated in
-Peak Matched Multiple Window. If None (default), window_number will be set at 8.</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – For calculating RSA second by second. Length of each segment in seconds. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(default), window will be set at 32 seconds.</p></li>
+<li><p><strong>window_number</strong> (<em>int</em>) – Between 2 and 8. For calculating RSA second by second. Number of windows to be
+calculated in Peak Matched Multiple Window. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), window_number will be
+set at 8.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p><strong>rsa</strong> (<em>dict</em>) – A dictionary containing the RSA features, which includes:</p>
 <ul class="simple">
-<li><p>”RSA_P2T_Values”: the estimate of RSA during each breath cycle, produced by subtracting
-the shortest heart period (or RR interval) from the longest heart period in ms.</p></li>
-<li><p>”RSA_P2T_Mean”: the mean peak-to-trough across all cycles in ms</p></li>
-<li><p>”RSA_P2T_Mean_log”: the logarithm of the mean of RSA estimates.</p></li>
-<li><p>”RSA_P2T_SD”: the standard deviation of all RSA estimates.</p></li>
-<li><p>”RSA_P2T_NoRSA”: the number of breath cycles
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_Values&quot;</span></code>: the estimate of RSA during each breath cycle, produced by
+subtracting the shortest heart period (or RR interval) from the longest heart period in
+ms.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_Mean&quot;</span></code>: the mean peak-to-trough across all cycles in ms</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_Mean_log&quot;</span></code>: the logarithm of the mean of RSA estimates.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_SD&quot;</span></code>: the standard deviation of all RSA estimates.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_NoRSA&quot;</span></code>: the number of breath cycles
 from which RSA could not be calculated.</p></li>
-<li><p>”RSA_PorgesBohrer”: the Porges-Bohrer estimate of RSA, optimal
-when the signal to noise ratio is low, in ln(ms^2).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_PorgesBohrer&quot;</span></code>: the Porges-Bohrer estimate of RSA, optimal
+when the signal to noise ratio is low, in <code class="docutils literal notranslate"><span class="pre">ln(ms^2)</span></code>.</p></li>
 </ul>
 </p>
 </dd>

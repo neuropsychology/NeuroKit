@@ -551,13 +551,13 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second). Needs to be supplied if</span>
 <span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over samples.</span>
-<span class="sd">        Defaults to None.</span>
+<span class="sd">        Defaults to ``None``.</span>
 <span class="sd">    subplots : bool</span>
-<span class="sd">        If True, each signal is plotted in a subplot.</span>
+<span class="sd">        If ``True``, each signal is plotted in a subplot.</span>
 <span class="sd">    standardize : bool</span>
-<span class="sd">        If True, all signals will have the same scale (useful for visualisation).</span>
+<span class="sd">        If ``True``, all signals will have the same scale (useful for visualisation).</span>
 <span class="sd">    labels : str or list</span>
-<span class="sd">        Defaults to None.</span>
+<span class="sd">        Defaults to ``None``.</span>
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Arguments passed to matplotlib plotting.</span>
 
@@ -646,12 +646,11 @@ title="Open an issue"
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">events_columns</span><span class="p">:</span>
             <span class="n">vector</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
             <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vector</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">unique</span><span class="p">()))[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">plot</span> <span class="o">=</span> <span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">[</span><span class="n">continuous_columns</span><span class="p">])</span>
-
+        <span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">[</span><span class="n">continuous_columns</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">signal</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
-            <span class="n">plot</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">plot</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">title_x</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">title_x</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
 
@@ -680,7 +679,7 @@ title="Open an issue"
             <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">continuous_columns</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">plot</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">continuous_columns</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">continuous_columns</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">signal</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>

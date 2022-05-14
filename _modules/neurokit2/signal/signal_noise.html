@@ -536,14 +536,15 @@ title="Open an issue"
 <div class="viewcode-block" id="signal_noise"><a class="viewcode-back" href="../../../functions/functions_signal.html#neurokit2.signal_noise">[docs]</a><span class="k">def</span> <span class="nf">signal_noise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Simulate noise**</span>
 
-<span class="sd">    This function generates pure Gaussian (1/f)**beta noise. The power-spectrum of the generated</span>
-<span class="sd">    noise is proportional to S(f) = (1 / f)**beta. The following categories of noise have been</span>
+<span class="sd">    This function generates pure Gaussian ``(1/f)**beta`` noise. The power-spectrum of the generated</span>
+<span class="sd">    noise is proportional to ``S(f) = (1 / f)**beta``. The following categories of noise have been</span>
 <span class="sd">    described:</span>
-<span class="sd">    - violet noise: beta = -2</span>
-<span class="sd">    - blue noise: beta = -1</span>
-<span class="sd">    - white noise: beta = 0</span>
-<span class="sd">    - flicker / pink noise: beta = 1</span>
-<span class="sd">    - brown noise: beta = 2</span>
+
+<span class="sd">    * violet noise: beta = -2</span>
+<span class="sd">    * blue noise: beta = -1</span>
+<span class="sd">    * white noise: beta = 0</span>
+<span class="sd">    * flicker / pink noise: beta = 1</span>
+<span class="sd">    * brown noise: beta = 2</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

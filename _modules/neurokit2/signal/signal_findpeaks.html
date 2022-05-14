@@ -575,7 +575,7 @@ title="Open an issue"
 <span class="sd">        ``relative_mean=True`` will use Z-scores.</span>
 <span class="sd">    relative_median : bool</span>
 <span class="sd">        If a relative threshold is specified, how should it be computed (i.e., relative to what?).</span>
-<span class="sd">        Relative to median uses a more robust form of standardization (see ``standardize()``).</span>
+<span class="sd">        Relative to median uses a more robust form of standardization (see :func:`.standardize`).</span>
 <span class="sd">    relative_max : bool</span>
 <span class="sd">        If a relative threshold is specified, how should it be computed (i.e., relative to what?).</span>
 <span class="sd">        Relative to max will consider the maximum height as the reference.</span>
@@ -585,15 +585,15 @@ title="Open an issue"
 <span class="sd">    dict</span>
 <span class="sd">        Returns a dict itself containing 5 arrays:</span>
 
-<span class="sd">         * &#39;Peaks&#39; contains the peaks indices (as relative to the given signal). For instance, the</span>
-<span class="sd">            value 3 means that the third data point of the signal is a peak.</span>
-<span class="sd">         * &#39;Distance&#39; contains, for each peak, the closest distance with another peak. Note that</span>
-<span class="sd">            these values will be recomputed after filtering to match the selected peaks.</span>
-<span class="sd">         * &#39;Height&#39; contains the prominence of each peak.</span>
-<span class="sd">            See :func:`.scipy.signal.peak_prominences()`.</span>
-<span class="sd">         * &#39;Width&#39; contains the width of each peak. See :func:`.scipy.signal.peak_widths()`.</span>
-<span class="sd">         * &#39;Onset&#39; contains the onset, start (or left trough), of each peak.</span>
-<span class="sd">         * &#39;Offset&#39; contains the offset, end (or right trough), of each peak.</span>
+<span class="sd">         * ``&quot;Peaks&quot;``: contains the peaks indices (as relative to the given signal). For instance,</span>
+<span class="sd">           the value 3 means that the third data point of the signal is a peak.</span>
+<span class="sd">         * ``&quot;Distance&quot;``: contains, for each peak, the closest distance with another peak. Note</span>
+<span class="sd">           that these values will be recomputed after filtering to match the selected peaks.</span>
+<span class="sd">         * ``&quot;Height&quot;``: contains the prominence of each peak.</span>
+<span class="sd">           See :func:`.scipy.signal.peak_prominences`.</span>
+<span class="sd">         * ``&quot;Width&quot;``: contains the width of each peak. See :func:`.scipy.signal.peak_widths`.</span>
+<span class="sd">         * ``&quot;Onset&quot;``: contains the onset, start (or left trough), of each peak.</span>
+<span class="sd">         * ``&quot;Offset&quot;``: contains the offset, end (or right trough), of each peak.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ---------</span>
@@ -606,8 +606,8 @@ title="Open an issue"
 <span class="sd">      info = nk.signal_findpeaks(signal)</span>
 
 <span class="sd">      # Visualize Onsets of Peaks and Peaks of Signal</span>
-<span class="sd">      @savefig p_signal_findpeaks_1.png scale=100%</span>
-<span class="sd">      fig1 = nk.events_plot([info[&quot;Onsets&quot;], info[&quot;Peaks&quot;]], signal)</span>
+<span class="sd">      @savefig p_signal_findpeaks1.png scale=100%</span>
+<span class="sd">      nk.events_plot([info[&quot;Onsets&quot;], info[&quot;Peaks&quot;]], signal)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -624,8 +624,8 @@ title="Open an issue"
 <span class="sd">      info2 = nk.signal_findpeaks(signal, relative_height_min=1)</span>
 
 <span class="sd">      # Visualize Peaks</span>
-<span class="sd">      @savefig p_signal_findpeaks_2.png scale=100%</span>
-<span class="sd">      fig2 = nk.events_plot([info1[&quot;Peaks&quot;], info2[&quot;Peaks&quot;]], signal)</span>
+<span class="sd">      @savefig p_signal_findpeaks2.png scale=100%</span>
+<span class="sd">      nk.events_plot([info1[&quot;Peaks&quot;], info2[&quot;Peaks&quot;]], signal)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

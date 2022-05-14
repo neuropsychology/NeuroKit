@@ -551,28 +551,28 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;**Recurrence Quantification Analysis (RQA) of Heart Rate Variability (HRV)**</span>
 
 <span class="sd">    RQA is a type of complexity analysis used in non-linear dynamics (related to entropy and fractal</span>
-<span class="sd">    dimensions). See :func:`.complexity_rqa()` for more information.</span>
+<span class="sd">    dimensions). See :func:`.complexity_rqa` for more information.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks : dict</span>
 <span class="sd">        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.</span>
-<span class="sd">        Can be a list of indices or the output(s) of other functions such as ecg_peaks,</span>
-<span class="sd">        ppg_peaks, ecg_process or bio_process.</span>
+<span class="sd">        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,</span>
+<span class="sd">        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.</span>
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at</span>
 <span class="sd">        least twice as high as the highest frequency in vhf. By default 1000.</span>
 <span class="sd">    delay : int</span>
-<span class="sd">        See :func:`.complexity_rqa()` for more information.</span>
+<span class="sd">        See :func:`.complexity_rqa` for more information.</span>
 <span class="sd">    dimension : int</span>
-<span class="sd">        See :func:`.complexity_rqa()` for more information.</span>
+<span class="sd">        See :func:`.complexity_rqa` for more information.</span>
 <span class="sd">    tolerance : float</span>
-<span class="sd">        See :func:`.complexity_rqa()` for more information. If &quot;zimatore2021&quot;, will be set to half</span>
+<span class="sd">        See :func:`.complexity_rqa` for more information. If ``&quot;zimatore2021&quot;``, will be set to half</span>
 <span class="sd">        of the mean pairwise distance between points.</span>
 <span class="sd">    show : bool</span>
-<span class="sd">        See :func:`.complexity_rqa()` for more information.</span>
+<span class="sd">        See :func:`.complexity_rqa` for more information.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Other arguments to be passed to :func:`.complexity_rqa()`.</span>
+<span class="sd">        Other arguments to be passed to :func:`.complexity_rqa`.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

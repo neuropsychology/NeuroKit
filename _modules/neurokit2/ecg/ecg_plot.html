@@ -554,14 +554,14 @@ title="Open an issue"
 <span class="sd">        DataFrame obtained from ``ecg_process()``.</span>
 <span class="sd">    rpeaks : dict</span>
 <span class="sd">        The samples at which the R-peak occur. Dict returned by</span>
-<span class="sd">        ```ecg_process()```. Defaults to None.</span>
+<span class="sd">        ``ecg_process()``. Defaults to ``None``.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs to be supplied if the</span>
 <span class="sd">        data should be plotted over time in seconds. Otherwise the data is plotted over samples.</span>
-<span class="sd">        Defaults to None. Must be specified to plot artifacts.</span>
+<span class="sd">        Defaults to ``None``. Must be specified to plot artifacts.</span>
 <span class="sd">    show_type : str</span>
-<span class="sd">        Visualize the ECG data with ``&#39;default&#39;`` or visualize artifacts thresholds with</span>
-<span class="sd">        ``&#39;artifacts&#39;`` produced by ``ecg_fixpeaks()``, or ``&#39;full&#39;`` to visualize both.</span>
+<span class="sd">        Visualize the ECG data with ``&quot;default&quot;`` or visualize artifacts thresholds with</span>
+<span class="sd">        ``&quot;artifacts&quot;`` produced by ``ecg_fixpeaks()``, or ``&quot;full&quot;`` to visualize both.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -708,9 +708,7 @@ title="Open an issue"
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
             <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Kubios&quot;</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">fig</span></div>
+        <span class="p">)</span></div>
 </pre></div>
 
               </div>

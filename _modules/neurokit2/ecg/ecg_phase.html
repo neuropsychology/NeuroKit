@@ -547,20 +547,20 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ecg_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned ECG channel as returned by `ecg_clean()`.</span>
+<span class="sd">        The cleaned ECG channel as returned by ``ecg_clean()``.</span>
 <span class="sd">    rpeaks : list or array or DataFrame or Series or dict</span>
 <span class="sd">        The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it</span>
-<span class="sd">        is assumed that these containers were obtained with `ecg_findpeaks()` or `ecg_peaks()`.</span>
+<span class="sd">        is assumed that these containers were obtained with ``ecg_findpeaks()`` or ``ecg_peaks()``.</span>
 <span class="sd">    delineate_info : dict</span>
 <span class="sd">        A dictionary containing additional information of ecg delineation and can be obtained with</span>
-<span class="sd">        `ecg_delineate()`.</span>
+<span class="sd">        ``ecg_delineate()``.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to None.</span>
+<span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to ``None``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of same length as `ecg_signal` containing the following columns:</span>
+<span class="sd">        A DataFrame of same length as ``ecg_signal`` containing the following columns:</span>
 
 <span class="sd">        * ``&quot;ECG_Phase_Atrial&quot;``: cardiac phase, marked by &quot;1&quot; for systole and &quot;0&quot; for diastole.</span>
 <span class="sd">        * ``&quot;ECG_Phase_Completion_Atrial&quot;``: cardiac phase (atrial) completion, expressed in</span>

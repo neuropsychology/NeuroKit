@@ -543,7 +543,8 @@ title="Open an issue"
 <div class="viewcode-block" id="rsp_process"><a class="viewcode-back" href="../../../functions/functions_rsp.html#neurokit2.rsp.rsp_process">[docs]</a><span class="k">def</span> <span class="nf">rsp_process</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Process a respiration (RSP) signal**</span>
 
-<span class="sd">    Convenience function that automatically processes a respiration signal with one of the following methods:</span>
+<span class="sd">    Convenience function that automatically processes a respiration signal with one of the</span>
+<span class="sd">    following methods:</span>
 
 <span class="sd">    * `Khodadad et al. (2018) &lt;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&gt;`_</span>
 
@@ -554,14 +555,15 @@ title="Open an issue"
 <span class="sd">    rsp_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw respiration channel (as measured, for instance, by a respiration belt).</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.rsp_signal` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &quot;khodadad2018&quot; (default) or &quot;biosppy&quot;.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default)</span>
+<span class="sd">        or ``&quot;biosppy&quot;``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of same length as `rsp_signal` containing the following columns:</span>
+<span class="sd">        A DataFrame of same length as :func:`.rsp_signal` containing the following columns:</span>
 
 <span class="sd">        * ``&quot;RSP_Raw&quot;``: the raw signal.</span>
 <span class="sd">        * ``&quot;RSP_Clean&quot;``: the cleaned signal.</span>
@@ -576,7 +578,7 @@ title="Open an issue"
 <span class="sd">          1), representing the stage of the current respiratory phase.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,</span>
-<span class="sd">        accessible with the keys &quot;RSP_Peaks&quot;, and &quot;RSP_Troughs&quot; respectively, as well as the</span>
+<span class="sd">        accessible with the keys ``&quot;RSP_Peaks&quot;``, and ``&quot;RSP_Troughs&quot;`` respectively, as well as the</span>
 <span class="sd">        signals&#39; sampling rate.</span>
 
 <span class="sd">    See Also</span>

@@ -550,12 +550,12 @@ title="Open an issue"
 <span class="sd">    ppg_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw PPG channel.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.emg_signal` (in Hz, i.e., samples/second).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of same length as `emg_signal` containing the following columns:</span>
+<span class="sd">        A DataFrame of same length as :func:`.emg_signal` containing the following columns:</span>
 
 <span class="sd">        * ``&quot;PPG_Raw&quot;``: the raw signal.</span>
 <span class="sd">        * ``&quot;PPG_Clean&quot;``: the cleaned signal.</span>
@@ -578,7 +578,7 @@ title="Open an issue"
 <span class="sd">      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)</span>
 <span class="sd">      signals, info = nk.ppg_process(ppg, sampling_rate=1000)</span>
 <span class="sd">      @savefig p_ppg_process1.png scale=100%</span>
-<span class="sd">      fig = nk.ppg_plot(signals)</span>
+<span class="sd">      nk.ppg_plot(signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

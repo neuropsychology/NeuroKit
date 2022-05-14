@@ -558,7 +558,10 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 <span class="sd">      ibi = [500, 400, 700, 500, 300, 800, 500]</span>
 <span class="sd">      peaks = nk.intervals_to_peaks(ibi)</span>
+<span class="sd">      @savefig p_intervals_to_peaks.png scale=100%</span>
 <span class="sd">      hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 <span class="sd">      hrv_indices</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>

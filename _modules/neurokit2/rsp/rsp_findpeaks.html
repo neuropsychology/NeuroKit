@@ -538,20 +538,21 @@ title="Open an issue"
 <div class="viewcode-block" id="rsp_findpeaks"><a class="viewcode-back" href="../../../functions/functions_rsp.html#neurokit2.rsp.rsp_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">rsp_findpeaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Extract extrema in a respiration (RSP) signal**</span>
 
-<span class="sd">    Low-level function used by `rsp_peaks()` to identify inhalation and exhalation onsets (troughs</span>
-<span class="sd">    and peaks respectively) in a preprocessed respiration signal using different sets of parameters.</span>
-<span class="sd">    See `rsp_peaks()` for details.</span>
+<span class="sd">    Low-level function used by :func:`.rsp_peaks` to identify inhalation and exhalation onsets</span>
+<span class="sd">    (troughs and peaks respectively) in a preprocessed respiration signal using different sets of</span>
+<span class="sd">    parameters. See :func:`.rsp_peaks` for details.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rsp_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned respiration channel as returned by `rsp_clean()`.</span>
+<span class="sd">        The cleaned respiration channel as returned by :func:`.rsp_clean`.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of &#39;rsp_cleaned&#39; (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &quot;khodadad2018&quot; (default) or &quot;biosppy&quot;.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default) or</span>
+<span class="sd">        ``&quot;biosppy&quot;``.</span>
 <span class="sd">    amplitude_min : float</span>
-<span class="sd">        Only applies if method is &quot;khodadad2018&quot;. Extrema that have a vertical distance smaller</span>
+<span class="sd">        Only applies if method is ``&quot;khodadad2018&quot;``. Extrema that have a vertical distance smaller</span>
 <span class="sd">        than(outlier_threshold * average vertical distance) to any direct neighbour are removed as</span>
 <span class="sd">        false positive outliers. I.e., outlier_threshold should be a float with positive sign (the</span>
 <span class="sd">        default is 0.3). Larger values of outlier_threshold correspond to more conservative</span>
@@ -561,12 +562,12 @@ title="Open an issue"
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information, in this case the samples at which inhalation</span>
-<span class="sd">        onsets and exhalation onsets occur, accessible with the keys &quot;RSP_Troughs&quot; and &quot;RSP_Peaks&quot;, respectively.</span>
+<span class="sd">        onsets and exhalation onsets occur, accessible with the keys ``&quot;RSP_Troughs&quot;`` and</span>
+<span class="sd">        ``&quot;RSP_Peaks&quot;``, respectively.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    rsp_clean, rsp_fixpeaks, rsp_peaks, signal_rate, rsp_amplitude,</span>
-<span class="sd">    rsp_process, rsp_plot</span>
+<span class="sd">    rsp_clean, rsp_fixpeaks, rsp_peaks, signal_rate, rsp_amplitude, rsp_process, rsp_plot</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -578,7 +579,7 @@ title="Open an issue"
 <span class="sd">      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)</span>
 <span class="sd">      info = nk.rsp_findpeaks(cleaned)</span>
 <span class="sd">      @savefig p_rsp_findpeaks1.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot([info[&quot;RSP_Peaks&quot;], info[&quot;RSP_Troughs&quot;]], cleaned)</span>
+<span class="sd">      nk.events_plot([info[&quot;RSP_Peaks&quot;], info[&quot;RSP_Troughs&quot;]], cleaned)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

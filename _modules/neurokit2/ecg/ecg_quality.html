@@ -570,25 +570,25 @@ title="Open an issue"
 <span class="sd">    ecg_cleaned : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The cleaned ECG signal in the form of a vector of values.</span>
 <span class="sd">    rpeaks : tuple or list</span>
-<span class="sd">        The list of R-peak samples returned by `ecg_peaks()`. If None, peaks is computed from</span>
+<span class="sd">        The list of R-peak samples returned by ``ecg_peaks()``. If None, peaks is computed from</span>
 <span class="sd">        the signal input.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The method for computing ECG signal quality, can be &quot;averageQRS&quot; (default) or &quot;zhao2018&quot;.</span>
+<span class="sd">        The method for computing ECG signal quality, can be ``&quot;averageQRS&quot;`` (default) or ``&quot;zhao2018&quot;``.</span>
 <span class="sd">    approach : str</span>
-<span class="sd">        The data fusion approach as documented in Zhao et al. (2018). Can be &quot;simple&quot;</span>
-<span class="sd">        or &quot;fuzzy&quot;. The former performs simple heuristic fusion of SQIs and the latter performs</span>
-<span class="sd">        fuzzy comprehensive evaluation. If None (default), simple heuristic fusion is used.</span>
+<span class="sd">        The data fusion approach as documented in Zhao et al. (2018). Can be ``&quot;simple&quot;``</span>
+<span class="sd">        or ``&quot;fuzzy&quot;``. The former performs simple heuristic fusion of SQIs and the latter performs</span>
+<span class="sd">        fuzzy comprehensive evaluation. If ``None`` (default), simple heuristic fusion is used.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Keyword arguments to be passed to `signal_power()` in the computation of basSQI and pSQI.</span>
+<span class="sd">        Keyword arguments to be passed to ``signal_power()`` in the computation of basSQI and pSQI.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    array or str</span>
-<span class="sd">        Vector containing the quality index ranging from 0 to 1 for &quot;averageQRS&quot; method,</span>
-<span class="sd">        returns string classification (&quot;Unacceptable&quot;, &quot;Barely Acceptable&quot; or &quot;Excellent&quot;)</span>
-<span class="sd">        of the signal for &quot;zhao2018 method&quot;.</span>
+<span class="sd">        Vector containing the quality index ranging from 0 to 1 for ``&quot;averageQRS&quot;`` method,</span>
+<span class="sd">        returns string classification (``Unacceptable``, ``Barely Acceptable`` or ``Excellent``)</span>
+<span class="sd">        of the signal for ``&quot;zhao2018 method&quot;``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -596,7 +596,7 @@ title="Open an issue"
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    - Zhao, Z., &amp; Zhang, Y. (2018). &quot;SQI quality evaluation mechanism of single-lead ECG signal</span>
+<span class="sd">    * Zhao, Z., &amp; Zhang, Y. (2018). &quot;SQI quality evaluation mechanism of single-lead ECG signal</span>
 <span class="sd">      based on simple heuristic fusion and fuzzy comprehensive evaluation&quot;. Frontiers in</span>
 <span class="sd">      Physiology, 9, 727.</span>
 

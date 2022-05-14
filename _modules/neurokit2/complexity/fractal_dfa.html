@@ -574,25 +574,26 @@ title="Open an issue"
 <span class="sd">    singularity spectrum (MSP), and usually has shape of an inverted parabola. It measures the long</span>
 <span class="sd">    range correlation property of a signal. From these elements, different features are extracted:</span>
 
-<span class="sd">    - **Width**: The width of the singularity spectrum and quantifies the degree of the</span>
+<span class="sd">    * **Width**: The width of the singularity spectrum and quantifies the degree of the</span>
 <span class="sd">      multifractality. In the case of monofractal signals, the MSP width is zero, since *h*(q) is</span>
 <span class="sd">      independent of *q*.</span>
-<span class="sd">    - **Peak**: The value of the singularity exponent *H* corresponding to peak of</span>
+<span class="sd">    * **Peak**: The value of the singularity exponent *H* corresponding to peak of</span>
 <span class="sd">      singularity dimension *D*. It is a measure of the self-affinity of the signal, and a high</span>
 <span class="sd">      value is an indicator of high degree of correlation between the data points. In the other</span>
 <span class="sd">      words, the process is recurrent and repetitive.</span>
-<span class="sd">    - **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which</span>
+<span class="sd">    * **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which</span>
 <span class="sd">      quantifies the average fluctuations of the signal.</span>
-<span class="sd">    - **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of</span>
+<span class="sd">    * **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of</span>
 <span class="sd">      singularity exponent *H*, indicates the maximum fluctuation of the signal.</span>
-<span class="sd">    - **Delta**: the vertical distance between the singularity spectrum *D* where the singularity</span>
+<span class="sd">    * **Delta**: the vertical distance between the singularity spectrum *D* where the singularity</span>
 <span class="sd">      exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the</span>
 <span class="sd">      signal.</span>
-<span class="sd">    - **Asymmetry**: The asymmetric ratio (AR) is as the centrality of the peak of the spectrum.</span>
-<span class="sd">      AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et al., 2015).</span>
-<span class="sd">    - **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second</span>
+<span class="sd">    * **Asymmetry**: The Asymmetric Ratio (AR) corresponds to the centrality of the peak of the</span>
+<span class="sd">      spectrum. AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et</span>
+<span class="sd">      al., 2015).</span>
+<span class="sd">    * **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second</span>
 <span class="sd">      derivative of *h*(q). See Orozco-Duque et al. (2015).</span>
-<span class="sd">    - **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the</span>
+<span class="sd">    * **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the</span>
 <span class="sd">      generalized Hurst&#39;s exponents between consecutive moment orders is a more robust index of the</span>
 <span class="sd">      distribution of the generalized Hurst&#39;s exponents (Faini et al., 2021).</span>
 
@@ -601,9 +602,9 @@ title="Open an issue"
 
 <span class="sd">    .. note ::</span>
 
-<span class="sd">        Help is needed to implement the modified formula to compute the slope when</span>
-<span class="sd">        *q* = 0. See for instance `Faini (2021)</span>
-<span class="sd">        &lt;https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254&gt;`_.</span>
+<span class="sd">      Help is needed to implement the modified formula to compute the slope when</span>
+<span class="sd">      *q* = 0. See for instance `Faini (2021)</span>
+<span class="sd">      &lt;https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254&gt;`_.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -628,7 +629,7 @@ title="Open an issue"
 <span class="sd">    order : int</span>
 <span class="sd">       The order of the polynomial trend for detrending, 1 for the linear trend.</span>
 <span class="sd">    multifractal : bool</span>
-<span class="sd">        If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the</span>
+<span class="sd">        If ``True``, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the</span>
 <span class="sd">        argument ``q`` is taken into account.</span>
 <span class="sd">    q : Union[int, list, np.array]</span>
 <span class="sd">        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between</span>
@@ -646,13 +647,13 @@ title="Open an issue"
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dfa : float or pd.DataFrame</span>
-<span class="sd">        If ``multifractal`` is False, one DFA value is returned for a single time series.</span>
+<span class="sd">        If ``multifractal`` is ``False``, one DFA value is returned for a single time series.</span>
 <span class="sd">    parameters : dict</span>
 <span class="sd">        A dictionary containing additional information regarding the parameters used</span>
-<span class="sd">        to compute DFA. If ``multifractal`` is False, the dictionary contains q value, a</span>
+<span class="sd">        to compute DFA. If ``multifractal`` is ``False``, the dictionary contains q value, a</span>
 <span class="sd">        series of windows, fluctuations of each window and the</span>
 <span class="sd">        slopes value of the log2(windows) versus log2(fluctuations) plot. If</span>
-<span class="sd">        ``multifractal`` is True, the dictionary additionally contains the</span>
+<span class="sd">        ``multifractal`` is ``True``, the dictionary additionally contains the</span>
 <span class="sd">        parameters of the singularity spectrum.</span>
 
 <span class="sd">    See Also</span>

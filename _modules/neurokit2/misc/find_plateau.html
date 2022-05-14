@@ -547,7 +547,7 @@ title="Open an issue"
 <span class="sd">    values : ndarray</span>
 <span class="sd">        An array of values.</span>
 <span class="sd">    show : bool</span>
-<span class="sd">        If True, will return the plot visualizing the trajectory and point of plateau.</span>
+<span class="sd">        If ``True``, will return the plot visualizing the trajectory and point of plateau.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
@@ -566,8 +566,12 @@ title="Open an issue"
 <span class="sd">      y = y + 0.05 * np.random.normal(size=len(x))</span>
 
 <span class="sd">      # Find plateau</span>
+<span class="sd">      @savefig p_find_plateau1.png scale=100%</span>
 <span class="sd">      plateau = nk.find_plateau(y, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 <span class="sd">      plateau</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

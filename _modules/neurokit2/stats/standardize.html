@@ -532,12 +532,14 @@ title="Open an issue"
   <h1>Source code for neurokit2.stats.standardize</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">.mad</span> <span class="kn">import</span> <span class="n">mad</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..misc.check_type</span> <span class="kn">import</span> <span class="n">is_string</span>
+<span class="kn">from</span> <span class="nn">.mad</span> <span class="kn">import</span> <span class="n">mad</span>
+
 
 <div class="viewcode-block" id="standardize"><a class="viewcode-back" href="../../../functions/functions_stats.html#neurokit2.standardize">[docs]</a><span class="k">def</span> <span class="nf">standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Standardization of data**</span>
@@ -551,9 +553,9 @@ title="Open an issue"
 <span class="sd">    data : Union[list, np.array, pd.Series]</span>
 <span class="sd">        Raw data.</span>
 <span class="sd">    robust : bool</span>
-<span class="sd">        If True, centering is done by substracting the median from the variables and dividing it by</span>
-<span class="sd">        the median absolute deviation (MAD). If False, variables are standardized by substracting</span>
-<span class="sd">        the mean and dividing it by the standard deviation (SD).</span>
+<span class="sd">        If ``True``, centering is done by substracting the median from the variables and dividing</span>
+<span class="sd">        it by the median absolute deviation (MAD). If ``False``, variables are standardized by</span>
+<span class="sd">        substracting the mean and dividing it by the standard deviation (SD).</span>
 <span class="sd">    window : int</span>
 <span class="sd">        Perform a rolling window standardization, i.e., apply a standardization on a window of the</span>
 <span class="sd">        specified number of samples that rolls along the main axis of the signal. Can be used for</span>

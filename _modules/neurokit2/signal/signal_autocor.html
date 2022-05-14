@@ -548,19 +548,20 @@ title="Open an issue"
 <span class="sd">        Time lag. If specified, one value of autocorrelation between signal with its lag self will</span>
 <span class="sd">        be returned.</span>
 <span class="sd">    demean : bool</span>
-<span class="sd">        If True, the mean of the signal will be subtracted from the signal before ACF computation.</span>
+<span class="sd">        If ``True``, the mean of the signal will be subtracted from the signal before ACF</span>
+<span class="sd">        computation.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be &#39;correlation&#39; (using :func:`.np.correlate`) or &#39;fft&#39; (Fast Fourier Transform;</span>
+<span class="sd">        Can be ``&quot;correlation&quot;`` (using :func:`.np.correlate`) or ``&quot;fft&quot;`` (Fast Fourier Transform;</span>
 <span class="sd">        default).</span>
 <span class="sd">    show : bool</span>
-<span class="sd">        If True, plot the autocorrelation at all values of lag.</span>
+<span class="sd">        If ``True``, plot the autocorrelation at all values of lag.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    r : float</span>
 <span class="sd">        The cross-correlation of the signal with itself at different time lags. Minimum time lag is</span>
 <span class="sd">        0, maximum time lag is the length of the signal. Or a correlation value at a specific lag</span>
-<span class="sd">        if lag is not None.</span>
+<span class="sd">        if lag is not ``None``.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information, such as the confidence interval.</span>
 
@@ -572,7 +573,7 @@ title="Open an issue"
 
 <span class="sd">      # Example 1: Using &#39;Correlation&#39; Method</span>
 <span class="sd">      signal = [1, 2, 3, 4, 5]</span>
-<span class="sd">      @savefig p_signal_autocor.png scale=100%</span>
+<span class="sd">      @savefig p_signal_autocor1.png scale=100%</span>
 <span class="sd">      r, info = nk.signal_autocor(signal, show=True, method=&#39;correlate&#39;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>

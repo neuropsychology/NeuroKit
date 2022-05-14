@@ -552,27 +552,28 @@ title="Open an issue"
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be one of &#39;polynomial&#39; (default; traditional detrending of a given order) or</span>
-<span class="sd">        &#39;tarvainen2002&#39; to use the smoothness priors approach described by Tarvainen (2002) (mostly</span>
-<span class="sd">        used in HRV analyses as a lowpass filter to remove complex trends), &#39;loess&#39; for LOESS</span>
-<span class="sd">        smoothing trend removal or &#39;locreg&#39; for local linear regression (the &#39;runline&#39; algorithm</span>
-<span class="sd">        from chronux).</span>
+<span class="sd">        Can be one of ``&quot;polynomial&quot;`` (default; traditional detrending of a given order) or</span>
+<span class="sd">        ``&quot;tarvainen2002&quot;`` to use the smoothness priors approach described by Tarvainen (2002)</span>
+<span class="sd">        (mostly used in HRV analyses as a lowpass filter to remove complex trends), ``&quot;loess&quot;`` for</span>
+<span class="sd">        LOESS smoothing trend removal or ``&quot;locreg&quot;`` for local linear regression (the *&#39;runline&#39;*</span>
+<span class="sd">        algorithm from chronux).</span>
 <span class="sd">    order : int</span>
-<span class="sd">        Only used if `method` is &#39;polynomial&#39;. The order of the polynomial. 0, 1 or &gt; 1 for a</span>
+<span class="sd">        Only used if ``method`` is ``&quot;polynomial&quot;``. The order of the polynomial. 0, 1 or &gt; 1 for a</span>
 <span class="sd">        baseline (&#39;constant detrend&#39;, i.e., remove only the mean), linear (remove the linear trend)</span>
-<span class="sd">        or polynomial detrending, respectively. Can also be &#39;auto&#39;, in which case it will attempt</span>
-<span class="sd">        to find the optimal order to minimize the RMSE.</span>
+<span class="sd">        or polynomial detrending, respectively. Can also be ``&quot;auto&quot;``, in which case it will</span>
+<span class="sd">        attempt to find the optimal order to minimize the RMSE.</span>
 <span class="sd">    regularization : int</span>
-<span class="sd">        Only used if `method=&#39;tarvainen2002&#39;`. The regularization parameter (default to 500).</span>
+<span class="sd">        Only used if ``method=&quot;tarvainen2002&quot;``. The regularization parameter (default to 500).</span>
 <span class="sd">    alpha : float</span>
-<span class="sd">        Only used if `method` is &#39;loess&#39;. The parameter which controls the degree of smoothing.</span>
+<span class="sd">        Only used if ``method`` is &quot;loess&quot;. The parameter which controls the degree of smoothing.</span>
 <span class="sd">    window : float</span>
-<span class="sd">        Only used if `method` is &#39;locreg&#39;. The detrending &#39;window&#39; should correspond to the desired</span>
-<span class="sd">        low frequency band to remove multiplied by the sampling rate (for instance, ``1.5*1000``</span>
-<span class="sd">        will remove frequencies below 1.5Hz for a signal sampled at 1000Hz).</span>
+<span class="sd">        Only used if ``method`` is &quot;locreg&quot;. The detrending ``window`` should correspond to the</span>
+<span class="sd">        desired low frequency band to remove multiplied by the sampling rate</span>
+<span class="sd">        (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at</span>
+<span class="sd">        1000Hz).</span>
 <span class="sd">    stepsize : float</span>
-<span class="sd">        Only used if `method` is &#39;locreg&#39;. Similarly to &#39;window&#39;, &#39;stepsize&#39; should also be</span>
-<span class="sd">        multiplied by the sampling rate.</span>
+<span class="sd">        Only used if ``method`` is ``&quot;locreg&quot;``. Similarly to ``window``, ``stepsize`` should also</span>
+<span class="sd">        be multiplied by the sampling rate.</span>
 
 
 <span class="sd">    Returns</span>
@@ -611,13 +612,13 @@ title="Open an issue"
 <span class="sd">      poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)</span>
 
 <span class="sd">      # Method 2: Tarvainen&#39;s smoothness priors approach (Tarvainen et al., 2002)</span>
-<span class="sd">      tarvainen = nk.signal_detrend(signal, method=&#39;tarvainen2002&#39;)</span>
+<span class="sd">      tarvainen = nk.signal_detrend(signal, method=&quot;tarvainen2002&quot;)</span>
 
 <span class="sd">      # Method 3: LOESS smoothing trend removal</span>
-<span class="sd">      loess = nk.signal_detrend(signal, method=&#39;loess&#39;)</span>
+<span class="sd">      loess = nk.signal_detrend(signal, method=&quot;loess&quot;)</span>
 
 <span class="sd">      # Method 4: Local linear regression (100Hz)</span>
-<span class="sd">      locreg = nk.signal_detrend(signal, method=&#39;locreg&#39;,</span>
+<span class="sd">      locreg = nk.signal_detrend(signal, method=&quot;locreg&quot;,</span>
 <span class="sd">                                 window=1.5*100, stepsize=0.02*100)</span>
 
 <span class="sd">      # Visualize different methods</span>
@@ -633,7 +634,7 @@ title="Open an issue"
 <span class="sd">                           &quot;Local Regression&quot;: locreg}).plot(subplots=True)</span>
 <span class="sd">      # Plot horizontal lines to better visualize the detrending</span>
 <span class="sd">      for subplot in axes:</span>
-<span class="sd">          subplot.axhline(y=0, color=&#39;k&#39;, linestyle=&#39;--&#39;)</span>
+<span class="sd">          subplot.axhline(y=0, color=&quot;k&quot;, linestyle=&quot;--&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

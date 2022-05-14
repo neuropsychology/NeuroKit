@@ -589,7 +589,7 @@ title="Open an issue"
 <span class="sd">      vanhalem2020 = nk.eda_findpeaks(eda_phasic, method=&quot;vanhalem2020&quot;)</span>
 <span class="sd">      nabian2018 = nk.eda_findpeaks(eda_phasic, method=&quot;nabian2018&quot;)</span>
 <span class="sd">      @savefig p_eda_findpeaks.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot([gamboa2008[&quot;SCR_Peaks&quot;], kim2004[&quot;SCR_Peaks&quot;], vanhalem2020[&quot;SCR_Peaks&quot;],</span>
+<span class="sd">      nk.events_plot([gamboa2008[&quot;SCR_Peaks&quot;], kim2004[&quot;SCR_Peaks&quot;], vanhalem2020[&quot;SCR_Peaks&quot;],</span>
 <span class="sd">                           neurokit[&quot;SCR_Peaks&quot;], nabian2018[&quot;SCR_Peaks&quot;]], eda_phasic)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>

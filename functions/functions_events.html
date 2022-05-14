@@ -694,14 +694,14 @@ title="Print to PDF"
 <li><p><strong>event_onsets</strong> (<em>array or list</em>) – A list of events onset.</p></li>
 <li><p><strong>event_durations</strong> (<em>array or list</em>) – A list of durations. If none is passed, will take the duration
 between each onset (i.e., will assume that events are consecutive).</p></li>
-<li><p><strong>event_labels</strong> (<em>list</em>) – A list containing unique event identifiers. If <cite>None</cite>, will use the event index number.</p></li>
+<li><p><strong>event_labels</strong> (<em>list</em>) – A list containing unique event identifiers. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will use the event index number.</p></li>
 <li><p><strong>event_conditions</strong> (<em>list</em>) – An optional list containing, for each event, for example the trial category, group or
 experimental conditions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>dict</em> – Dict containing 3 or 4 arrays, <code class="docutils literal notranslate"><span class="pre">'onset'</span></code> for event onsets, <code class="docutils literal notranslate"><span class="pre">'duration'</span></code> for event
-durations, <code class="docutils literal notranslate"><span class="pre">'label'</span></code> for the event identifiers and the optional <code class="docutils literal notranslate"><span class="pre">'conditions'</span></code> passed
+<dd class="field-even"><p><em>dict</em> – Dict containing 3 or 4 arrays, <code class="docutils literal notranslate"><span class="pre">&quot;onset&quot;</span></code> for event onsets, <code class="docutils literal notranslate"><span class="pre">&quot;duration&quot;</span></code> for event
+durations, <code class="docutils literal notranslate"><span class="pre">&quot;label&quot;</span></code> for the event identifiers and the optional <code class="docutils literal notranslate"><span class="pre">&quot;conditions&quot;</span></code> passed
 to <code class="docutils literal notranslate"><span class="pre">event_conditions</span></code>.</p>
 </dd>
 </dl>
@@ -747,29 +747,32 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>event_channel</strong> (<em>array or list</em>) – The channel containing the events.</p></li>
-<li><p><strong>threshold</strong> (<em>str or float</em>) – The threshold value by which to select the events. If “auto”, takes the value between the
-max and the min.</p></li>
-<li><p><strong>threshold_keep</strong> (<em>str</em>) – “above” or “below”, define the events as above or under the threshold. For photosensors, a
-white screen corresponds usually to higher values. Therefore, if your events are signaled by
-a black colour, events values are the lower ones, and you should set the cut to “below”.</p></li>
+<li><p><strong>threshold</strong> (<em>str or float</em>) – The threshold value by which to select the events. If <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>, takes the value between
+the max and the min.</p></li>
+<li><p><strong>threshold_keep</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">&quot;above&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;below&quot;</span></code>, define the events as above or under the threshold. For
+photosensors, a white screen corresponds usually to higher values. Therefore, if your
+events are signaled by a black colour, events values are the lower ones, and you should set
+the cut to <code class="docutils literal notranslate"><span class="pre">&quot;below&quot;</span></code>.</p></li>
 <li><p><strong>start_at</strong> (<em>int</em>) – Keep events which onset is after a particular time point.</p></li>
 <li><p><strong>end_at</strong> (<em>int</em>) – Keep events which onset is before a particular time point.</p></li>
 <li><p><strong>duration_min</strong> (<em>int</em>) – The minimum duration of an event to be considered as such (in time points).</p></li>
 <li><p><strong>duration_max</strong> (<em>int</em>) – The maximum duration of an event to be considered as such (in time points).</p></li>
-<li><p><strong>inter_min</strong> (<em>int</em>) – The minimum duration after an event for the subsequent event to be considered as such (in time
-points). Useful when spurious consecutive events are created due to very high sampling rate.</p></li>
+<li><p><strong>inter_min</strong> (<em>int</em>) – The minimum duration after an event for the subsequent event to be considered as such (in
+time points). Useful when spurious consecutive events are created due to very high sampling
+rate.</p></li>
 <li><p><strong>discard_first</strong> (<em>int</em>) – Discard first or last n events. Useful if the experiment starts with some spurious events.
-If discard_first=0, no first event is removed.</p></li>
+If <code class="docutils literal notranslate"><span class="pre">discard_first=0</span></code>, no first event is removed.</p></li>
 <li><p><strong>discard_last</strong> (<em>int</em>) – Discard first or last n events. Useful if the experiment ends with some spurious events.
-If discard_last=0, no last event is removed.</p></li>
-<li><p><strong>event_labels</strong> (<em>list</em>) – A list containing unique event identifiers. If <cite>None</cite>, will use the event index number.</p></li>
+If <code class="docutils literal notranslate"><span class="pre">discard_last=0</span></code>, no last event is removed.</p></li>
+<li><p><strong>event_labels</strong> (<em>list</em>) – A list containing unique event identifiers. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will use the event index number.</p></li>
 <li><p><strong>event_conditions</strong> (<em>list</em>) – An optional list containing, for each event, for example the trial category, group or
 experimental conditions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>dict</em> – Dict containing 3 or 4 arrays, ‘onset’ for event onsets, ‘duration’ for event durations, ‘label’
-for the event identifiers and the optional ‘conditions’ passed to <cite>event_conditions</cite>.</p>
+<dd class="field-even"><p><em>dict</em> – Dict containing 3 or 4 arrays, <code class="docutils literal notranslate"><span class="pre">&quot;onset&quot;</span></code> for event onsets, <code class="docutils literal notranslate"><span class="pre">&quot;duration&quot;</span></code> for event
+durations, <code class="docutils literal notranslate"><span class="pre">&quot;label&quot;</span></code> for the event identifiers and the optional <code class="docutils literal notranslate"><span class="pre">&quot;conditions&quot;</span></code> passed
+to <code class="docutils literal notranslate"><span class="pre">event_conditions</span></code>.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -790,7 +793,6 @@ for the event identifiers and the optional ‘conditions’ passed to <cite>even
 <span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U21&#39;)}</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_events_find.png"><img alt="../_images/p_events_find.png" src="../_images/p_events_find.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -808,14 +810,14 @@ EEG.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>events</strong> (<em>list or ndarray or dict</em>) – Events onset location. Can also be a dict obtained through ‘events_find()’.</p></li>
+<li><p><strong>events</strong> (<em>list or ndarray or dict</em>) – Events onset location. Can also be a dict obtained through :func:<a href="#id1"><span class="problematic" id="id2">`</span></a>.events_find’.</p></li>
 <li><p><strong>event_conditions</strong> (<em>list</em>) – An optional list containing, for each event, for example the trial category, group or
-experimental conditions. Defaults to None.</p></li>
+experimental conditions. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>tuple</em> – MNE-formatted events and the event id, that can be added via ‘raw.add_events(events),
-and a dictionary with event’s names.</p>
+<dd class="field-even"><p><em>tuple</em> – MNE-formatted events and the event id, that can be added
+via <code class="xref py py-func docutils literal notranslate"><span class="pre">raw.add_events(events)()</span></code>, and a dictionary with event’s names.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -847,7 +849,7 @@ and a dictionary with event’s names.</p>
 <span class="gp">In [8]: </span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_to_mne</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">event_id</span>
-<span class="gh">Out[9]: </span><span class="go">{&#39;B&#39;: 0, &#39;A&#39;: 1}</span>
+<span class="gh">Out[9]: </span><span class="go">{&#39;A&#39;: 0, &#39;B&#39;: 1}</span>
 </pre></div>
 </div>
 </dd></dl>

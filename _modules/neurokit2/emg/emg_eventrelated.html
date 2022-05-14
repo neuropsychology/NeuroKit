@@ -544,15 +544,17 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="emg_eventrelated"><a class="viewcode-back" href="../../../functions/functions_emg.html#neurokit2.emg.emg_eventrelated">[docs]</a><span class="k">def</span> <span class="nf">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Performs event-related EMG analysis on epochs**</span>
+    <span class="sd">&quot;&quot;&quot;**Event-related EMG Analysis**</span>
+
+<span class="sd">    Performs event-related EMG analysis on epochs.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    epochs : Union[dict, pd.DataFrame]</span>
-<span class="sd">        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or</span>
-<span class="sd">        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.</span>
+<span class="sd">        A dict containing one DataFrame per event/trial, usually obtained via ``epochs_create()``,</span>
+<span class="sd">        or a DataFrame containing all epochs, usually obtained via ``epochs_to_df()``.</span>
 <span class="sd">    silent : bool</span>
-<span class="sd">        If True, silence possible warnings.</span>
+<span class="sd">        If ``True``, silence possible warnings.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -573,7 +575,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    emg_simulate, emg_process, events_find, epochs_create</span>
+<span class="sd">    emg_simulate, emg_process, .events_find, .epochs_create</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>

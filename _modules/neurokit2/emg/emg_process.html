@@ -549,12 +549,12 @@ title="Open an issue"
 <span class="sd">    emg_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw electromyography channel.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of same length as `emg_signal` containing the following columns:</span>
+<span class="sd">        A DataFrame of same length as ``emg_signal`` containing the following columns:</span>
 
 <span class="sd">        * ``&quot;EMG_Raw&quot;``: the raw signal.</span>
 <span class="sd">        * ``&quot;EMG_Clean&quot;``: the cleaned signal.</span>
@@ -566,7 +566,7 @@ title="Open an issue"
 
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the information of each amplitude onset, offset, and peak activity</span>
-<span class="sd">        (see `emg_activation()`), as well as the signals&#39; sampling rate.</span>
+<span class="sd">        (see :func:`emg_activation`), as well as the signals&#39; sampling rate.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -580,8 +580,9 @@ title="Open an issue"
 
 <span class="sd">      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)</span>
 <span class="sd">      signals, info = nk.emg_process(emg, sampling_rate=1000)</span>
-<span class="sd">      @savefig p.emg_process.png scale=100%</span>
-<span class="sd">      fig = nk.emg_plot(signals)</span>
+
+<span class="sd">      @savefig p_emg_process1.png scale=100%</span>
+<span class="sd">      nk.emg_plot(signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

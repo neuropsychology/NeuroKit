@@ -561,12 +561,12 @@ title="Open an issue"
 <span class="sd">        The sampling frequency of the signals (in Hz, i.e., samples/second).</span>
 <span class="sd">        Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be one of &quot;event-related&quot; for event-related analysis on epochs,</span>
-<span class="sd">        or &quot;interval-related&quot; for analysis on longer periods of data. Defaults</span>
-<span class="sd">        to &quot;auto&quot; where the right method will be chosen based on the</span>
+<span class="sd">        Can be one of ``&quot;event-related&quot;`` for event-related analysis on epochs,</span>
+<span class="sd">        or ``&quot;interval-related&quot;`` for analysis on longer periods of data. Defaults</span>
+<span class="sd">        to ``auto`` where the right method will be chosen based on the</span>
 <span class="sd">        mean duration of the data (event-related for duration under 10s).</span>
 <span class="sd">    window_lengths : dict</span>
-<span class="sd">        If &quot;constant&quot; (default), will use the full epoch for all the signals. Can also</span>
+<span class="sd">        If ``constant`` (default), will use the full epoch for all the signals. Can also</span>
 <span class="sd">        be a dictionary with the epoch start and end times for different</span>
 <span class="sd">        types of signals, e.g., ``window_lengths = {&quot;ECG&quot;: [0.5, 1.5], &quot;EDA&quot;: [0.5, 3.5]}``</span>
 
@@ -580,7 +580,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    ----------</span>
-<span class="sd">    ecg_analyze, rsp_analyze, eda_analyze, emg_analyze, eog_analyze</span>
+<span class="sd">    .ecg_analyze, .rsp_analyze, .eda_analyze, .emg_analyze, .eog_analyze</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>

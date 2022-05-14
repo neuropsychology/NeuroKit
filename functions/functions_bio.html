@@ -682,7 +682,7 @@ electrodermal activity (EDA) and electromyography signals (EMG).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>DataFrame</em>) – The DataFrame containing all the respective signals (e.g., ecg, rsp, Photosensor etc.). If
 provided, there is no need to fill in the other arguments denoting the channel inputs.
-Defaults to None.</p></li>
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>ecg</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw ECG channel.</p></li>
 <li><p><strong>rsp</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw RSP channel (as measured, for instance, by a respiration belt).</p></li>
 <li><p><strong>eda</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA channel.</p></li>
@@ -692,7 +692,7 @@ Defaults to None.</p></li>
 <li><p><strong>keep</strong> (<em>DataFrame</em>) – Dataframe or channels to add by concatenation
 to the processed dataframe (for instance, the Photosensor channel).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signals (in Hz, i.e., samples/second).
-Defaults to 1000.</p></li>
+Defaults to <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -725,7 +725,7 @@ as well as the signals’ sampling rate.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_process</span></code></p>
+<p><a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a>, <a class="reference internal" href="functions_rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="functions_eda.html#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="functions_emg.html#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="functions_ppg.html#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a>, <a class="reference internal" href="functions_eog.html#neurokit2.eog.eog_process" title="neurokit2.eog.eog_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_process</span></code></a></p>
 </div>
 <p class="rubric">Example</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -746,17 +746,17 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">       ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0     1.029446  -0.070931  69.984448  ...            0    0.020   7.947698</span>
-<span class="go">1     0.978668  -0.189949  69.984448  ...            0    0.020   7.947698</span>
-<span class="go">2     0.846954  -0.321528  69.984448  ...            0    0.020   7.947698</span>
-<span class="go">3     0.659260  -0.470168  69.984448  ...            0    0.020   7.947698</span>
-<span class="go">4     0.442241  -0.633022  69.984448  ...            0    0.020   7.947698</span>
+<span class="go">0     1.077048  -0.070780  70.049813  ...            0    0.044   8.019901</span>
+<span class="go">1     1.024427  -0.194043  70.049813  ...            0    0.044   8.019901</span>
+<span class="go">2     0.887981  -0.330234  70.049813  ...            0    0.044   8.019901</span>
+<span class="go">3     0.693694  -0.483939  70.049813  ...            0    0.044   8.019901</span>
+<span class="go">4     0.469305  -0.652149  70.049813  ...            0    0.044   8.019901</span>
 <span class="go">...        ...        ...        ...  ...          ...      ...        ...</span>
-<span class="go">9995 -0.102388  -0.044379  69.444444  ...            0    0.008   7.974195</span>
-<span class="go">9996 -0.101558  -0.042446  69.444444  ...            0    0.008   7.974195</span>
-<span class="go">9997 -0.100724  -0.040512  69.444444  ...            0    0.008   7.974195</span>
-<span class="go">9998 -0.099870  -0.038573  69.444444  ...            0    0.008   7.974195</span>
-<span class="go">9999 -0.098981  -0.036630  69.444444  ...            0    0.008   7.974195</span>
+<span class="go">9995 -0.090098  -0.039073  69.767442  ...            0    0.020   7.932151</span>
+<span class="go">9996 -0.088167  -0.036509  69.767442  ...            0    0.020   7.932151</span>
+<span class="go">9997 -0.085867  -0.033670  69.767442  ...            0    0.020   7.932151</span>
+<span class="go">9998 -0.083003  -0.030593  69.767442  ...            0    0.020   7.932151</span>
+<span class="go">9999 -0.079404  -0.027370  69.767442  ...            0    0.020   7.932151</span>
 
 <span class="go">[10000 rows x 46 columns]</span>
 
@@ -817,11 +817,11 @@ produced by <a class="reference internal" href="#neurokit2.bio_process" title="n
 epochs object.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signals (in Hz, i.e., samples/second).
 Defaults to 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Can be one of “event-related” for event-related analysis on epochs,
-or “interval-related” for analysis on longer periods of data. Defaults
-to “auto” where the right method will be chosen based on the
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;event-related&quot;</span></code> for event-related analysis on epochs,
+or <code class="docutils literal notranslate"><span class="pre">&quot;interval-related&quot;</span></code> for analysis on longer periods of data. Defaults
+to <code class="docutils literal notranslate"><span class="pre">auto</span></code> where the right method will be chosen based on the
 mean duration of the data (event-related for duration under 10s).</p></li>
-<li><p><strong>window_lengths</strong> (<em>dict</em>) – If “constant” (default), will use the full epoch for all the signals. Can also
+<li><p><strong>window_lengths</strong> (<em>dict</em>) – If <code class="docutils literal notranslate"><span class="pre">constant</span></code> (default), will use the full epoch for all the signals. Can also
 be a dictionary with the epoch start and end times for different
 types of signals, e.g., <code class="docutils literal notranslate"><span class="pre">window_lengths</span> <span class="pre">=</span> <span class="pre">{&quot;ECG&quot;:</span> <span class="pre">[0.5,</span> <span class="pre">1.5],</span> <span class="pre">&quot;EDA&quot;:</span> <span class="pre">[0.5,</span> <span class="pre">3.5]}</span></code></p></li>
 </ul>
@@ -835,7 +835,7 @@ produced by <a class="reference internal" href="functions_hrv.html#neurokit2.hrv
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_analyze</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_analyze</span></code></p>
+<p><a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_analyze" title="neurokit2.ecg.ecg_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_analyze</span></code></a>, <a class="reference internal" href="functions_rsp.html#neurokit2.rsp.rsp_analyze" title="neurokit2.rsp.rsp_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_analyze</span></code></a>, <a class="reference internal" href="functions_eda.html#neurokit2.eda.eda_analyze" title="neurokit2.eda.eda_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_analyze</span></code></a>, <a class="reference internal" href="functions_emg.html#neurokit2.emg.emg_analyze" title="neurokit2.emg.emg_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_analyze</span></code></a>, <a class="reference internal" href="functions_eog.html#neurokit2.eog.eog_analyze" title="neurokit2.eog.eog_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_analyze</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>

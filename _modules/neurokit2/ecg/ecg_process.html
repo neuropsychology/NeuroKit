@@ -552,14 +552,14 @@ title="Open an issue"
 <span class="sd">    ecg_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw ECG channel.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.</span>
+<span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Defaults to &quot;neurokit&quot;.</span>
+<span class="sd">        The processing pipeline to apply. Defaults to ``&quot;neurokit&quot;``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of the same length as the `ecg_signal` containing the following columns:</span>
+<span class="sd">        A DataFrame of the same length as the ``ecg_signal`` containing the following columns:</span>
 
 <span class="sd">        * ``&quot;ECG_Raw&quot;``: the raw signal.</span>
 <span class="sd">        * ``&quot;ECG_Clean&quot;``: the cleaned signal.</span>
@@ -590,11 +590,11 @@ title="Open an issue"
 <span class="sd">        * **This list is not up-to-date. Help us improve the documentation!**</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the samples at which the R-peaks occur, accessible with the key</span>
-<span class="sd">        &quot;ECG_Peaks&quot;, as well as the signals&#39; sampling rate.</span>
+<span class="sd">        ``&quot;ECG_Peaks&quot;``, as well as the signals&#39; sampling rate.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ecg_clean, ecg_peaks, ecg_delineate, ecg_phase, ecg_plot, signal_rate</span>
+<span class="sd">    ecg_clean, ecg_peaks, ecg_delineate, ecg_phase, ecg_plot, .signal_rate</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>

@@ -541,9 +541,9 @@ title="Open an issue"
 
 <span class="sd">    Petrosian (1995) proposed a fast method to estimate the fractal dimension by converting the</span>
 <span class="sd">    signal into a binary sequence from which the fractal dimension is estimated. Several variations</span>
-<span class="sd">    of the algorithm exist (e.g., &#39;A&#39;, &#39;B&#39;, &#39;C&#39; or &#39;D&#39;), primarily differing in the way the discrete</span>
+<span class="sd">    of the algorithm exist (e.g., ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;`` or ``&quot;D&quot;``), primarily differing in the way the discrete</span>
 <span class="sd">    (symbolic) sequence is created (see func:`complexity_symbolize` for details). The most common</span>
-<span class="sd">    method (&#39;C&#39;, by default) binarizes the signal by the sign of consecutive differences.</span>
+<span class="sd">    method (``&quot;C&quot;``, by default) binarizes the signal by the sign of consecutive differences.</span>
 
 <span class="sd">    .. math::</span>
 
@@ -554,14 +554,14 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    mutual_information, entropy_svd</span>
+<span class="sd">    information_mutual, entropy_svd</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    method : str or int</span>
-<span class="sd">        Method of symbolization. Can be one of ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;``, ``&quot;D&quot;``, ``&quot;r&quot;``, an</span>
+<span class="sd">        Method of symbolization. Can be one of ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;``, ``&quot;D&quot;``, ``&quot;r&quot;``, and</span>
 <span class="sd">        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in</span>
 <span class="sd">        cases when the binarization has already been done before). See :func:`complexity_symbolize`</span>
 <span class="sd">        for details.</span>

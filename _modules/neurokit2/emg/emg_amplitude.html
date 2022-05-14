@@ -545,7 +545,7 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    emg_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned electromyography channel as returned by `emg_clean()`.</span>
+<span class="sd">        The cleaned electromyography channel as returned by ``emg_clean()``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -567,7 +567,7 @@ title="Open an issue"
 <span class="sd">      cleaned = nk.emg_clean(emg, sampling_rate=1000)</span>
 
 <span class="sd">      amplitude = nk.emg_amplitude(cleaned)</span>
-<span class="sd">      @savefig p.emg_amplitude.png scale=100%</span>
+<span class="sd">      @savefig p_emg_amplitude1.png scale=100%</span>
 <span class="sd">      fig = pd.DataFrame({&quot;EMG&quot;: emg, &quot;Amplitude&quot;: amplitude}).plot(subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>

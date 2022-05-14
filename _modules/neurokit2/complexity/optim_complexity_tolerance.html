@@ -551,9 +551,9 @@ title="Open an issue"
 
 <span class="sd">    Many complexity algorithms are built on the notion of self-similarity and recurrence, and how</span>
 <span class="sd">    often a system revisits its past states. Considering two states as identical is straightforward</span>
-<span class="sd">    for discrete systems (e.g., a sequence of &quot;A&quot;, &quot;B&quot; and &quot;C&quot; states), but for continuous signals,</span>
-<span class="sd">    we cannot simply look for when the two numbers are exactly the same. Instead, we have to pick a</span>
-<span class="sd">    threshold by which to consider two points as similar.</span>
+<span class="sd">    for discrete systems (e.g., a sequence of ``&quot;A&quot;``, ``&quot;B&quot;`` and ``&quot;C&quot;`` states), but for</span>
+<span class="sd">    continuous signals, we cannot simply look for when the two numbers are exactly the same.</span>
+<span class="sd">    Instead, we have to pick a threshold by which to consider two points as similar.</span>
 
 <span class="sd">    The tolerance *r* is essentially this threshold value (the numerical difference between two</span>
 <span class="sd">    similar points that we &quot;tolerate&quot;). This parameter has a critical impact and is a major</span>
@@ -561,17 +561,17 @@ title="Open an issue"
 
 <span class="sd">    Different methods have been described to estimate the most appropriate tolerance value:</span>
 
-<span class="sd">    * ``&#39;sd&#39;`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be</span>
+<span class="sd">    * ``&quot;sd&quot;`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be</span>
 <span class="sd">      returned.</span>
-<span class="sd">    * ``&#39;adjusted_sd&#39;``: Adjusted value based on the SD and the dimension. The rationale is that</span>
+<span class="sd">    * ``&quot;adjusted_sd&quot;``: Adjusted value based on the SD and the dimension. The rationale is that</span>
 <span class="sd">      the chebyshev distance (used in various metrics) rises logarithmically with increasing</span>
 <span class="sd">      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the</span>
 <span class="sd">      chebyshev distance of vectors sampled from a univariate normal distribution. A constant of</span>
 <span class="sd">      ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in</span>
 <span class="sd">      https://github.com/CSchoel/nolds).</span>
-<span class="sd">    * ``&#39;maxApEn&#39;``: Different values of tolerance will be tested and the one where the approximate</span>
+<span class="sd">    * ``&quot;maxApEn&quot;``: Different values of tolerance will be tested and the one where the approximate</span>
 <span class="sd">      entropy (ApEn) is maximized will be selected and returned.</span>
-<span class="sd">    * ``&#39;recurrence&#39;``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will</span>
+<span class="sd">    * ``&quot;recurrence&quot;``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will</span>
 <span class="sd">      be returned.</span>
 
 <span class="sd">    Parameters</span>
@@ -587,11 +587,11 @@ title="Open an issue"
 <span class="sd">        linspace(0, np.max(d), 30 + 1)[1:]`` for ``&quot;recurrence&quot;``. You can set a lower number for</span>
 <span class="sd">        faster results.</span>
 <span class="sd">    delay : int</span>
-<span class="sd">        Only used if ``method=&#39;maxApEn&#39;``. See ``entropy_approximate()``.</span>
+<span class="sd">        Only used if ``method=&quot;maxApEn&quot;``. See :func:`entropy_approximate()`.</span>
 <span class="sd">    dimension : int</span>
-<span class="sd">        Only used if ``method=&#39;maxApEn&#39;``. See ``entropy_approximate()``.</span>
+<span class="sd">        Only used if ``method=&quot;maxApEn&quot;``. See :func:`entropy_approximate()`.</span>
 <span class="sd">    show : bool</span>
-<span class="sd">        If true and method is &#39;maxApEn&#39;, will plot the ApEn values for each value of r.</span>
+<span class="sd">        If ``True`` and method is ``&quot;maxApEn&quot;``, will plot the ApEn values for each value of r.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -602,7 +602,7 @@ title="Open an issue"
 <span class="sd">    float</span>
 <span class="sd">        The optimal tolerance value.</span>
 <span class="sd">    dict</span>
-<span class="sd">        A dictionary with the values of r and the corresponding ApEn values (when method=&#39;maxApEn&#39;).</span>
+<span class="sd">        A dictionary with the values of r and the corresponding ApEn values (when ``method=&quot;maxApEn&quot;``).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>

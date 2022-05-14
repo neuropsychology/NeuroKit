@@ -540,8 +540,8 @@ title="Open an issue"
 <div class="viewcode-block" id="rsp_peaks"><a class="viewcode-back" href="../../../functions/functions_rsp.html#neurokit2.rsp.rsp_peaks">[docs]</a><span class="k">def</span> <span class="nf">rsp_peaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Identify extrema in a respiration (RSP) signal**</span>
 
-<span class="sd">    This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process peaks (exhalation onsets)</span>
-<span class="sd">    and troughs (inhalation onsets) in a preprocessed respiration signal using</span>
+<span class="sd">    This function :func:`.rsp_findpeaks` and :func:`.rsp_fixpeaks` to identify and process peaks</span>
+<span class="sd">    (exhalation onsets) and troughs (inhalation onsets) in a preprocessed respiration signal using</span>
 <span class="sd">    different sets of parameters, such as:</span>
 
 <span class="sd">    * `Khodadad et al. (2018) &lt;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&gt;`_</span>
@@ -550,11 +550,12 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rsp_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned respiration channel as returned by `rsp_clean()`.</span>
+<span class="sd">        The cleaned respiration channel as returned by :func:`.rsp_clean`.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of &#39;rsp_cleaned&#39; (in Hz, i.e., samples/second).</span>
+<span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &quot;khodadad2018&quot; (default) or &quot;biosppy&quot;.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default)</span>
+<span class="sd">        or ``&quot;biosppy&quot;``.</span>
 <span class="sd">    amplitude_min : float</span>
 <span class="sd">        Only applies if method is ``&quot;khodadad2018&quot;``. Extrema that have a vertical distance smaller</span>
 <span class="sd">        than (outlier_threshold * average vertical distance) to any direct neighbour are removed as</span>
@@ -565,13 +566,14 @@ title="Open an issue"
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing additional information, in this case the samples at which peaks (exhalation onsets)</span>
-<span class="sd">        and troughs (inhalation onsets) occur, accessible with the keys &quot;RSP_Peaks&quot;, and &quot;RSP_Troughs&quot;,</span>
-<span class="sd">        respectively, as well as the signals&#39; sampling rate.</span>
+<span class="sd">        A dictionary containing additional information, in this case the samples at which peaks</span>
+<span class="sd">        (exhalation onsets) and troughs (inhalation onsets) occur, accessible with the keys</span>
+<span class="sd">        ``&quot;RSP_Peaks&quot;``, and ``&quot;RSP_Troughs&quot;``, respectively, as well as the signals&#39; sampling rate.</span>
 <span class="sd">    peak_signal : DataFrame</span>
-<span class="sd">        A DataFrame of same length as the input signal in which occurences of peaks (exhalation onsets)</span>
-<span class="sd">        and troughs (inhalation onsets) are marked as &quot;1&quot; in lists of zeros with the same length as `rsp_cleaned`.</span>
-<span class="sd">        Accessible with the keys &quot;RSP_Peaks&quot; and &quot;RSP_Troughs&quot; respectively.</span>
+<span class="sd">        A DataFrame of same length as the input signal in which occurrences of peaks (exhalation</span>
+<span class="sd">        onsets) and troughs (inhalation onsets) are marked as &quot;1&quot; in lists of zeros with the same</span>
+<span class="sd">        length as :func:`.rsp_cleaned`. Accessible with the keys ``&quot;RSP_Peaks&quot;`` and</span>
+<span class="sd">        ``&quot;RSP_Troughs&quot;`` respectively.</span>
 
 
 <span class="sd">    See Also</span>

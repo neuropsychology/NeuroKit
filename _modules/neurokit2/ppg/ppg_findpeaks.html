@@ -545,20 +545,20 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ppg_cleaned : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The cleaned PPG channel as returned by `ppg_clean()`.</span>
+<span class="sd">        The cleaned PPG channel as returned by :func:`.ppg_clean`.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of &quot;elgendi&quot;. The default is &quot;elgendi&quot;.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``. The default is ``&quot;elgendi&quot;``.</span>
 <span class="sd">    show : bool</span>
-<span class="sd">        If True, returns a plot of the thresholds used during peak detection. Useful for debugging.</span>
-<span class="sd">        The default is False.</span>
+<span class="sd">        If ``True``, returns a plot of the thresholds used during peak detection. Useful for</span>
+<span class="sd">        debugging. The default is ``False``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information, in this case the samples at which systolic</span>
-<span class="sd">        peaks occur, accessible with the key &quot;PPG_Peaks&quot;.</span>
+<span class="sd">        peaks occur, accessible with the key ``&quot;PPG_Peaks&quot;``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

@@ -919,7 +919,7 @@ as well as the signals’ sampling rate.</p></li>
 
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_process</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_process.png"><img alt="../_images/p_eda_process.png" src="../_images/p_eda_process.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1039,7 +1039,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 <span class="gp">In [3]: </span><span class="n">eda_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_process</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_plot</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_plot</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_plot1.png"><img alt="../_images/p_eda_plot1.png" src="../_images/p_eda_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1135,7 +1135,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.23537852516410138</span>
+<span class="gh">Out[5]: </span><span class="go">-0.1696220094748525</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1228,7 +1228,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">13</span>
+<span class="gh">Out[4]: </span><span class="go">14</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1294,7 +1294,7 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 
 <span class="gp">In [10]: </span><span class="n">nabian2018</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_findpeaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
 
-<span class="gp">In [11]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">gamboa2008</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">kim2004</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">vanhalem2020</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
+<span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">gamboa2008</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">kim2004</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">vanhalem2020</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>                     <span class="n">neurokit</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">nabian2018</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]],</span> <span class="n">eda_phasic</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 </pre></div>
@@ -1364,7 +1364,7 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 
 <span class="gp">In [7]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
 
-<span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">eda_phasic</span><span class="p">)</span>
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">eda_phasic</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_fixpeaks.png"><img alt="../_images/p_eda_fixpeaks.png" src="../_images/p_eda_fixpeaks.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1429,10 +1429,12 @@ as “1” in lists of zeros with the same length as <code class="docutils liter
 
 <span class="gp">In [8]: </span><span class="n">_</span><span class="p">,</span> <span class="n">nabian2018</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
 
-<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">nabian2018</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">kim2004</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">neurokit</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]],</span>
-<span class="gp">   ...: </span><span class="n">eda_phasic</span><span class="p">)</span>
+<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span>
+<span class="gp">   ...: </span>    <span class="n">nabian2018</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>    <span class="n">kim2004</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>    <span class="n">neurokit</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]</span>
+<span class="gp">   ...: </span><span class="p">],</span> <span class="n">eda_phasic</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[9]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_peaks.png"><img alt="../_images/p_eda_peaks.png" src="../_images/p_eda_peaks.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1448,8 +1450,7 @@ Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductan
 Arousing Events Within an Experience Sampling Framework. European Journal of Personality.</p></li>
 <li><p>Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018). An
 Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
-journal of translational engineering in health and medicine, 6, 2800711.
-<a class="reference external" href="https://doi.org/10.1109/JTEHM.2018.2878000">https://doi.org/10.1109/JTEHM.2018.2878000</a></p></li>
+journal of translational engineering in health and medicine, 6, 2800711.</p></li>
 </ul>
 </dd></dl>
 
@@ -1459,19 +1460,25 @@ journal of translational engineering in health and medicine, 6, 2800711.
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_phasic">
 <span class="sig-name descname"><span class="pre">eda_phasic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'highpass'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_phasic.html#eda_phasic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_phasic" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Decompose Electrodermal Activity (EDA) into Phasic and Tonic components</strong></p>
-<p>Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using
-different methods including cvxEDA (Greco, 2016) or Biopac’s Acqknowledge algorithms.</p>
+<dd><p><strong>Decompose Electrodermal Activity (EDA) into Phasic and Tonic Components</strong></p>
+<p>Decompose the Electrodermal Activity (EDA) into two components, namely <strong>Phasic</strong> and
+<strong>Tonic</strong>, using different methods including cvxEDA (Greco, 2016) or Biopac’s Acqknowledge
+algorithms.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>cvxEDA algorithm seems broken. Must investigate.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;cvxEDA&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;median&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;smoothmedian&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;highpass&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;biopac&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;acqknowledge&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;cvxEDA&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;median&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;smoothmedian&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;highpass&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;biopac&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;acqknowledge&quot;</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em> – DataFrame containing the <code class="docutils literal notranslate"><span class="pre">Tonic</span></code> and the <code class="docutils literal notranslate"><span class="pre">Phasic</span></code> components as columns.</p>
+<dd class="field-even"><p><em>DataFrame</em> – DataFrame containing the <code class="docutils literal notranslate"><span class="pre">&quot;Tonic&quot;</span></code> and the <code class="docutils literal notranslate"><span class="pre">&quot;Phasic&quot;</span></code> components as columns.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1479,48 +1486,47 @@ different methods including cvxEDA (Greco, 2016) or Biopac’s Acqknowledge algo
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<p><strong>Example 1</strong>: Methods comparison.
+.. ipython:: python</p>
+<blockquote>
+<div><p>import neurokit2 as nk</p>
+<p># Simulate EDA signal
+eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)</p>
+<p># Decompose using different algorithms
+# cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=’cvxeda’)
+smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method=’smoothmedian’)
+highpass = nk.eda_phasic(nk.standardize(eda_signal), method=’highpass’)</p>
+<dl class="simple">
+<dt>data = pd.concat([</dt><dd><p># cvxEDA.add_suffix(‘_cvxEDA’),
+smoothMedian.add_suffix(‘_SmoothMedian’),
+highpass.add_suffix(‘_Highpass’)], axis=1)</p>
+</dd>
+</dl>
+<p>data[“EDA_Raw”] = eda_signal</p>
+<p>&#64;savefig p_eda_phasic1.png scale=100%
+fig = data.plot()
+&#64;suppress
+plt.close()</p>
+</div></blockquote>
+<p><strong>Example 2</strong>: Real data.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)[</span><span class="s2">&quot;EDA&quot;</span><span class="p">]</span>
 
-<span class="go"># Simulate EDA signal</span>
-<span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<span class="go"># Decompose using different algorithms</span>
-<span class="gp">In [3]: </span><span class="n">cvxEDA</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;cvxeda&#39;</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span>
 
-<span class="gp">In [4]: </span><span class="n">smoothMedian</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;smoothmedian&#39;</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">highpass</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;highpass&#39;</span><span class="p">)</span>
-
-<span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">cvxEDA</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_cvxEDA&#39;</span><span class="p">),</span> <span class="n">smoothMedian</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_SmoothMedian&#39;</span><span class="p">),</span>
-<span class="gp">   ...: </span>                  <span class="n">highpass</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_Highpass&#39;</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">   ...: </span>
-
-<span class="gp">In [7]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span>
-
-<span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_eda_phasic1.png"><img alt="../_images/p_eda_phasic1.png" src="../_images/p_eda_phasic1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)[</span><span class="s2">&quot;EDA&quot;</span><span class="p">]</span>
-
-<span class="gp">In [10]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-<span class="gp">In [11]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span>
-
-<span class="gp">In [12]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_phasic2.png"><img alt="../_images/p_eda_phasic2.png" src="../_images/p_eda_phasic2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
-<li><p>cvxEDA: <a class="reference external" href="https://github.com/lciti/cvxEDA">https://github.com/lciti/cvxEDA</a>.</p></li>
 <li><p>Greco, A., Valenza, G., &amp; Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In
 Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43).
 Springer International Publishing.</p></li>
 <li><p>Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., &amp; Citi, L. (2016). cvxEDA: A convex
 optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical
-Engineering,
-63(4), 797-804.</p></li>
+Engineering, 63(4), 797-804.</p></li>
 </ul>
 </dd></dl>
 
@@ -1642,8 +1648,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.356            1038.0</span>
-<span class="go">2     2        10000  ...         0.366            1113.0</span>
+<span class="go">1     1         5000  ...         0.361            1084.0</span>
+<span class="go">2     2        10000  ...         0.365            1544.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>

@@ -544,8 +544,8 @@ title="Open an issue"
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    direction : str</span>
-<span class="sd">        Direction in which the signal crosses zero, can be &quot;positive&quot;, &quot;negative&quot; or &quot;both&quot;</span>
-<span class="sd">        (default).</span>
+<span class="sd">        Direction in which the signal crosses zero, can be ``&quot;positive&quot;``, ``&quot;negative&quot;`` or</span>
+<span class="sd">        ``&quot;both&quot;`` (default).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -561,17 +561,17 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=5)</span>
 <span class="sd">      zeros = nk.signal_zerocrossings(signal)</span>
 <span class="sd">      @savefig p_signal_zerocrossings1.png scale=100%</span>
-<span class="sd">      fig = nk.events_plot(zeros, signal)</span>
+<span class="sd">      nk.events_plot(zeros, signal)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # Only upward or downward zerocrossings</span>
-<span class="sd">      up = nk.signal_zerocrossings(signal, direction=&#39;up&#39;)</span>
-<span class="sd">      down = nk.signal_zerocrossings(signal, direction=&#39;down&#39;)</span>
+<span class="sd">      up = nk.signal_zerocrossings(signal, direction=&quot;up&quot;)</span>
+<span class="sd">      down = nk.signal_zerocrossings(signal, direction=&quot;down&quot;)</span>
 <span class="sd">      @savefig p_signal_zerocrossings2.png scale=100%</span>
-<span class="sd">      fig2 = nk.events_plot([up, down], signal)</span>
+<span class="sd">      nk.events_plot([up, down], signal)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

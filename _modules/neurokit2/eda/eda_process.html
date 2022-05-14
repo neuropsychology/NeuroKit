@@ -601,7 +601,7 @@ title="Open an issue"
 <span class="sd">      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)</span>
 <span class="sd">      signals, info = nk.eda_process(eda_signal, sampling_rate=1000)</span>
 <span class="sd">      @savefig p_eda_process.png scale=100%</span>
-<span class="sd">      fig = nk.eda_plot(signals)</span>
+<span class="sd">      nk.eda_plot(signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

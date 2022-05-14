@@ -892,18 +892,18 @@ AcqKnowledge file).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Filename (with or without the extension) of a BIOPAC’s AcqKnowledge file (e.g., ‘data.acq’).</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename (with or without the extension) of a BIOPAC’s AcqKnowledge file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.acq&quot;</span></code>).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain
 signals recorded at different rates, harmonization is necessary in order to convert it
-to a DataFrame. Thus, if <cite>sampling_rate</cite> is set to ‘max’ (default), will keep the maximum
+to a DataFrame. Thus, if <cite>sampling_rate</cite> is set to <code class="docutils literal notranslate"><span class="pre">max</span></code> (default), will keep the maximum
 recorded sampling rate and upsample the channels with lower rate if necessary (using the
 <code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code> function). If the sampling rate is set to a given value, will
 resample the signals to the desired value. Note that the value of the sampling rate is
 outputted along with the data.</p></li>
 <li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code>).</p></li>
 <li><p><strong>impute_missing</strong> (<em>bool</em>) – Sometimes, due to connections issues, there are lapses in the recorded signal (short
-periods without signal). If ‘impute_missing’ is True, will automatically fill the signal
-interruptions using padding.</p></li>
+periods without signal). If <code class="docutils literal notranslate"><span class="pre">impute_missing</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, will automatically fill the
+signal interruptions using padding.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -938,16 +938,16 @@ OpenSignals file).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Filename (with or without the extension) of an OpenSignals file (e.g., ‘data.txt’).</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename (with or without the extension) of an OpenSignals file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.txt&quot;</span></code>).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – Sampling rate (in Hz, i.e., samples/second). Defaults to the original sampling rate at
-which signals were sampled if set to “max”. If the sampling rate is set to a given value,
+which signals were sampled if set to <code class="docutils literal notranslate"><span class="pre">max</span></code>. If the sampling rate is set to a given value,
 will resample the signals to the desired value. Note that the value of the sampling rate is
 outputted along with the data.</p></li>
 <li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code>).</p></li>
 <li><p><strong>events_annotation</strong> (<em>bool</em>) – Defaults to False. If True, will read signal annotation events.</p></li>
-<li><p><strong>events_annotation_directory</strong> (<em>str</em>) – If None (default), reads signal annotation events from the same location where the acquired
-file is stored. If not, specify the predefined OpenSignals (r)evolution folder directory of
-where the ‘EventsAnnotation.txt’ file is stored.</p></li>
+<li><p><strong>events_annotation_directory</strong> (<em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), reads signal annotation events from the same location where the
+acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder
+directory of where the <code class="docutils literal notranslate"><span class="pre">&quot;EventsAnnotation.txt&quot;</span></code> file is stored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -955,7 +955,7 @@ where the ‘EventsAnnotation.txt’ file is stored.</p></li>
 <li><p><strong>df</strong> (<em>DataFrame, dict</em>) – The BITalino file as a pandas dataframe if one device was read, or a dictionary
 of pandas dataframes (one dataframe per device) if multiple devices are read.</p></li>
 <li><p><strong>info</strong> (<em>dict</em>) – The metadata information containing the sensors, corresponding channel names, sampling
-rate, and the events annotation timings if <cite>events_annotation</cite> is True.</p></li>
+rate, and the events annotation timings if <code class="docutils literal notranslate"><span class="pre">events_annotation</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </p>
 </dd>

@@ -125,7 +125,7 @@
     "# Process ecg\n",
     "ecg_signals, info = nk.ecg_process(data[\"ECG\"], sampling_rate=100)\n",
     "\n",
-    "plot = nk.ecg_plot(ecg_signals[:3000], sampling_rate=100)"
+    "nk.ecg_plot(ecg_signals[:3000], sampling_rate=100)"
    ]
   },
   {

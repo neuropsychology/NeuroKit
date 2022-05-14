@@ -539,35 +539,35 @@ title="Open an issue"
 <div class="viewcode-block" id="rsp_plot"><a class="viewcode-back" href="../../../functions/functions_rsp.html#neurokit2.rsp.rsp_plot">[docs]</a><span class="k">def</span> <span class="nf">rsp_plot</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Visualize respiration (RSP) data**</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        rsp_signals : DataFrame</span>
-<span class="sd">            DataFrame obtained from `rsp_process()`.</span>
-<span class="sd">        sampling_rate : int</span>
-<span class="sd">            The desired sampling rate (in Hz, i.e., samples/second).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rsp_signals : DataFrame</span>
+<span class="sd">        DataFrame obtained from :func:`.rsp_process`.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The desired sampling rate (in Hz, i.e., samples/second).</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        .. ipython:: python</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. ipython:: python</span>
 
-<span class="sd">          import neurokit2 as nk</span>
+<span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">          rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
-<span class="sd">          rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)</span>
+<span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
+<span class="sd">      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)</span>
 
-<span class="sd">          @savefig p_rsp_plot1.png scale=100%</span>
-<span class="sd">          fig = nk.rsp_plot(rsp_signals)</span>
-<span class="sd">          @suppress</span>
-<span class="sd">          plt.close()</span>
+<span class="sd">      @savefig p_rsp_plot1.png scale=100%</span>
+<span class="sd">      fig = nk.rsp_plot(rsp_signals)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        fig</span>
-<span class="sd">            Figure representing a plot of the processed rsp signals.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fig</span>
+<span class="sd">        Figure representing a plot of the processed rsp signals.</span>
 
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-<span class="sd">        rsp_process</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    rsp_process</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Mark peaks, troughs and phases.</span>
@@ -655,10 +655,7 @@ title="Open an issue"
         <span class="p">)</span>
         <span class="n">amplitude_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">])</span>
         <span class="n">ax2</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">amplitude_mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#009688&quot;</span><span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-
-    <span class="c1"># plt.show()</span>
-    <span class="k">return</span> <span class="n">fig</span></div>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
 
 
 <span class="c1"># =============================================================================</span>

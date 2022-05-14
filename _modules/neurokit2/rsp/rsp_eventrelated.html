@@ -535,10 +535,12 @@ title="Open an issue"
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..epochs.eventrelated_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">_eventrelated_addinfo</span><span class="p">,</span>
-                                         <span class="n">_eventrelated_rate</span><span class="p">,</span>
-                                         <span class="n">_eventrelated_sanitizeinput</span><span class="p">,</span>
-                                         <span class="n">_eventrelated_sanitizeoutput</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..epochs.eventrelated_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_eventrelated_addinfo</span><span class="p">,</span>
+    <span class="n">_eventrelated_rate</span><span class="p">,</span>
+    <span class="n">_eventrelated_sanitizeinput</span><span class="p">,</span>
+    <span class="n">_eventrelated_sanitizeoutput</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_closest</span>
 
 
@@ -548,10 +550,11 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    epochs : Union[dict, pd.DataFrame]</span>
-<span class="sd">        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or</span>
-<span class="sd">        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.</span>
+<span class="sd">        A dict containing one DataFrame per event/trial, usually obtained via</span>
+<span class="sd">        :func:`.epochs_create`, or a DataFrame containing all epochs, usually obtained</span>
+<span class="sd">        via :func:`.epochs_to_df`.</span>
 <span class="sd">    silent : bool</span>
-<span class="sd">        If True, silence possible warnings.</span>
+<span class="sd">        If ``True``, silence possible warnings.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>

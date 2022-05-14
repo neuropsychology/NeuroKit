@@ -546,7 +546,7 @@ title="Open an issue"
 <span class="sd">    y : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The response variable (the y axis).</span>
 <span class="sd">    X : Union[list, np.array, pd.Series]</span>
-<span class="sd">        Explanatory variable (the x axis). If &#39;None&#39;, will treat y as a continuous signal (useful</span>
+<span class="sd">        Explanatory variable (the x axis). If ``None``, will treat y as a continuous signal (useful</span>
 <span class="sd">        for smoothing).</span>
 <span class="sd">    alpha : float</span>
 <span class="sd">        The parameter which controls the degree of smoothing, which corresponds to the proportion</span>
@@ -618,7 +618,7 @@ title="Open an issue"
         <span class="n">delx0</span> <span class="o">=</span> <span class="n">sorted_dist</span><span class="p">[</span><span class="n">span</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 
         <span class="n">u</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">ind</span><span class="p">[:</span><span class="n">span</span><span class="p">]]</span> <span class="o">/</span> <span class="n">delx0</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span>
 
         <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vander</span><span class="p">(</span><span class="n">Nx</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="n">order</span><span class="p">)</span>

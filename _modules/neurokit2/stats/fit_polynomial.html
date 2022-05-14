@@ -549,14 +549,14 @@ title="Open an issue"
 <span class="sd">    y : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The response variable (the y axis).</span>
 <span class="sd">    X : Union[list, np.array, pd.Series]</span>
-<span class="sd">        Explanatory variable (the x axis). If &#39;None&#39;, will treat y as a continuous signal.</span>
+<span class="sd">        Explanatory variable (the x axis). If ``None``, will treat y as a continuous signal.</span>
 <span class="sd">    order : int</span>
 <span class="sd">        The order of the polynomial. 0, 1 or &gt; 1 for a baseline, linear or polynomial fit,</span>
-<span class="sd">        respectively. Can also be &#39;auto&#39;, in which case it will attempt to find the optimal order</span>
-<span class="sd">        to minimize the RMSE.</span>
+<span class="sd">        respectively. Can also be ``&quot;auto&quot;``, in which case it will attempt to find the optimal</span>
+<span class="sd">        order to minimize the RMSE.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        If &#39;raw&#39; (default), compute standard polynomial coefficients. If &#39;orthogonal&#39;, compute</span>
-<span class="sd">        orthogonal polynomials (and is equivalent to R&#39;s ``poly`` default behavior).</span>
+<span class="sd">        If ``&quot;raw&quot;`` (default), compute standard polynomial coefficients. If ``&quot;orthogonal&quot;``,</span>
+<span class="sd">        compute orthogonal polynomials (and is equivalent to R&#39;s ``poly`` default behavior).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -674,19 +674,19 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_fit_polynomial_orthogonal</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit an orthogonal polynomial regression in Python (equivalent to R&#39;s poly())</span>
 
-<span class="sd">      from sklearn.datasets import load_iris</span>
-<span class="sd">      import pandas as pd</span>
-<span class="sd">      df = load_iris()</span>
-<span class="sd">      df = pd.DataFrame(data=df.data, columns=df.feature_names)</span>
-<span class="sd">      y = df.iloc[:, 0].values  # Sepal.Length</span>
-<span class="sd">      X = df.iloc[:, 1].values  # Sepal.Width</span>
-<span class="sd">      _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP</span>
-<span class="sd">      # Equivalent to R&#39;s:</span>
-<span class="sd">      # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))</span>
+<span class="sd">    from sklearn.datasets import load_iris</span>
+<span class="sd">    import pandas as pd</span>
+<span class="sd">    df = load_iris()</span>
+<span class="sd">    df = pd.DataFrame(data=df.data, columns=df.feature_names)</span>
+<span class="sd">    y = df.iloc[:, 0].values  # Sepal.Length</span>
+<span class="sd">    X = df.iloc[:, 1].values  # Sepal.Width</span>
+<span class="sd">    _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP</span>
+<span class="sd">    # Equivalent to R&#39;s:</span>
+<span class="sd">    # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">X</span> <span class="o">**</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">X</span><span class="o">**</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">:]</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>

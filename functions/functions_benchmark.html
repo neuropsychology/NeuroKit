@@ -653,7 +653,7 @@ title="Print to PDF"
 Such file can be obtained by running THIS SCRIPT (TO COMPLETE).</p></li>
 <li><p><strong>rpeaks</strong> (<em>pd.DataFrame or str</em>) – The path to a folder where you have an <cite>Rpeaks.csv</cite> fils or directly its loaded DataFrame.
 Such file can be obtained by running THIS SCRIPT (TO COMPLETE).</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <cite>ecg_signal</cite> (in Hz, i.e., samples/second). Only used if <code class="docutils literal notranslate"><span class="pre">ecgs</span></code>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Only used if <code class="docutils literal notranslate"><span class="pre">ecgs</span></code>
 and <code class="docutils literal notranslate"><span class="pre">rpeaks</span></code> are single vectors.</p></li>
 </ul>
 </dd>
@@ -678,7 +678,7 @@ and <code class="docutils literal notranslate"><span class="pre">rpeaks</span></
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">benchmark_ecg_preprocessing</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">ecg</span><span class="p">,</span> <span class="n">true_rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">   Sampling_Rate  Duration     Score  Recording_Length Error</span>
-<span class="go">0            200  0.031128  0.018723          0.333333  None</span>
+<span class="go">0            200  0.035552  0.018813          0.333333  None</span>
 
 <span class="go"># Example using database (commented-out)</span>
 <span class="go"># nk.benchmark_ecg_preprocessing(function, r&quot;path/to/GUDB_database&quot;)</span>

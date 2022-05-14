@@ -546,14 +546,14 @@ title="Open an issue"
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    eog_signals : DataFrame</span>
-<span class="sd">        DataFrame obtained from `eog_process()`.</span>
+<span class="sd">        DataFrame obtained from :func:`.eog_process`.</span>
 <span class="sd">    peaks : dict</span>
 <span class="sd">        The samples at which the blink peaks occur. Dict returned by</span>
-<span class="sd">        `eog_process()`. Defaults to None. Must be specified to plot individual blinks.</span>
+<span class="sd">        :func:`.eog_process`. Defaults to ``None``. Must be specified to plot individual blinks.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if the data</span>
-<span class="sd">        should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to None.</span>
-<span class="sd">        Must be specified to plot individual blinks.</span>
+<span class="sd">        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if</span>
+<span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over</span>
+<span class="sd">        samples. Defaults to ``None``. Must be specified to plot individual blinks.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -613,12 +613,16 @@ title="Open an issue"
     <span class="c1"># Plot cleaned and raw EOG</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Raw&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#49A4FD&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#49A4FD&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
+    <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude (mV)&quot;</span><span class="p">)</span>
 
     <span class="c1"># Plot blinks</span>
     <span class="n">blinks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="n">blinks</span><span class="p">],</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">][</span><span class="n">blinks</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#0146D7&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Blinks&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">blinks</span><span class="p">],</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">][</span><span class="n">blinks</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#0146D7&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Blinks&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
     <span class="c1"># Rate</span>
@@ -642,7 +646,9 @@ title="Open an issue"
             <span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">events_array</span> <span class="o">=</span> <span class="n">epochs_to_array</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>  <span class="c1"># Convert to 2D array</span>
-        <span class="n">events_array</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">events_array</span><span class="p">)</span>  <span class="c1"># Rescale so that all the blinks are on the same scale</span>
+        <span class="n">events_array</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span>
+            <span class="n">events_array</span>
+        <span class="p">)</span>  <span class="c1"># Rescale so that all the blinks are on the same scale</span>
 
         <span class="n">blinks_df</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
         <span class="n">blinks_wide</span> <span class="o">=</span> <span class="n">blinks_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
@@ -661,9 +667,7 @@ title="Open an issue"
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Median&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">fig</span></div>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
 </pre></div>
 
               </div>

@@ -563,12 +563,13 @@ title="Open an issue"
 <span class="sd">    event_channel : array or list</span>
 <span class="sd">        The channel containing the events.</span>
 <span class="sd">    threshold : str or float</span>
-<span class="sd">        The threshold value by which to select the events. If &quot;auto&quot;, takes the value between the</span>
-<span class="sd">        max and the min.</span>
+<span class="sd">        The threshold value by which to select the events. If ``&quot;auto&quot;``, takes the value between</span>
+<span class="sd">        the max and the min.</span>
 <span class="sd">    threshold_keep : str</span>
-<span class="sd">        &quot;above&quot; or &quot;below&quot;, define the events as above or under the threshold. For photosensors, a</span>
-<span class="sd">        white screen corresponds usually to higher values. Therefore, if your events are signaled by</span>
-<span class="sd">        a black colour, events values are the lower ones, and you should set the cut to &quot;below&quot;.</span>
+<span class="sd">        ``&quot;above&quot;`` or ``&quot;below&quot;``, define the events as above or under the threshold. For</span>
+<span class="sd">        photosensors, a white screen corresponds usually to higher values. Therefore, if your</span>
+<span class="sd">        events are signaled by a black colour, events values are the lower ones, and you should set</span>
+<span class="sd">        the cut to ``&quot;below&quot;``.</span>
 <span class="sd">    start_at : int</span>
 <span class="sd">        Keep events which onset is after a particular time point.</span>
 <span class="sd">    end_at : int</span>
@@ -578,16 +579,17 @@ title="Open an issue"
 <span class="sd">    duration_max : int</span>
 <span class="sd">        The maximum duration of an event to be considered as such (in time points).</span>
 <span class="sd">    inter_min : int</span>
-<span class="sd">        The minimum duration after an event for the subsequent event to be considered as such (in time</span>
-<span class="sd">        points). Useful when spurious consecutive events are created due to very high sampling rate.</span>
+<span class="sd">        The minimum duration after an event for the subsequent event to be considered as such (in</span>
+<span class="sd">        time points). Useful when spurious consecutive events are created due to very high sampling</span>
+<span class="sd">        rate.</span>
 <span class="sd">    discard_first : int</span>
 <span class="sd">        Discard first or last n events. Useful if the experiment starts with some spurious events.</span>
-<span class="sd">        If discard_first=0, no first event is removed.</span>
+<span class="sd">        If ``discard_first=0``, no first event is removed.</span>
 <span class="sd">    discard_last : int</span>
 <span class="sd">        Discard first or last n events. Useful if the experiment ends with some spurious events.</span>
-<span class="sd">        If discard_last=0, no last event is removed.</span>
+<span class="sd">        If ``discard_last=0``, no last event is removed.</span>
 <span class="sd">    event_labels : list</span>
-<span class="sd">        A list containing unique event identifiers. If `None`, will use the event index number.</span>
+<span class="sd">        A list containing unique event identifiers. If ``None``, will use the event index number.</span>
 <span class="sd">    event_conditions : list</span>
 <span class="sd">        An optional list containing, for each event, for example the trial category, group or</span>
 <span class="sd">        experimental conditions.</span>
@@ -595,8 +597,9 @@ title="Open an issue"
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dict</span>
-<span class="sd">        Dict containing 3 or 4 arrays, &#39;onset&#39; for event onsets, &#39;duration&#39; for event durations, &#39;label&#39;</span>
-<span class="sd">        for the event identifiers and the optional &#39;conditions&#39; passed to `event_conditions`.</span>
+<span class="sd">        Dict containing 3 or 4 arrays, ``&quot;onset&quot;`` for event onsets, ``&quot;duration&quot;`` for event</span>
+<span class="sd">        durations, ``&quot;label&quot;`` for the event identifiers and the optional ``&quot;conditions&quot;`` passed</span>
+<span class="sd">        to ``event_conditions``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -645,7 +648,6 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">end_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">][</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">end_at</span><span class="p">]</span>
         <span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">][</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">end_at</span><span class="p">]</span>
-
 
     <span class="c1"># Remove based on interval min</span>
     <span class="k">if</span> <span class="n">inter_min</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>

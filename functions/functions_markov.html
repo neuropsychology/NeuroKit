@@ -822,7 +822,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 0, 0, 0, 1, 2, 2, 2, 2, 1, 0, 3, 1, 0])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 0, 1, 2, 2, 2, 1, 0, 3, 1, 2, 1, 0, 3, 1])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -838,7 +838,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 of each state was governed only by their overall prevalence, and that a previous state had no
 influence on the next state. This “random” matrix is then compered again the observed one, and
 a Chi2 test is conducted.</p>
-<p>If significant (e.g., <em>p</em>-value &lt; .05), one can reject the hypothesis that observed Markov
+<p>If significant (e.g., <code class="docutils literal notranslate"><span class="pre">*p*-value</span> <span class="pre">&lt;</span> <span class="pre">.05</span></code>), one can reject the hypothesis that observed Markov
 process is random, and conclude that past states have an influence on next states.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -875,9 +875,9 @@ process is random, and conclude that past states have an influence on next state
 <span class="sig-name descname"><span class="pre">markov_test_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_test_symmetry.html#markov_test_symmetry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_test_symmetry" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Is the Markov process symmetric?</strong></p>
 <p>Performs a symmetry test, to test if for instance if the transitions A -&gt; B and B -&gt; A occur
-with the same probability. If significant (e.g., <em>p</em>-value &lt; .05), one can reject the hypothesis
-that observed Markov process is symmetric, and conclude that it the transition matrix is
-asymmetric.</p>
+with the same probability. If significant (e.g., <code class="docutils literal notranslate"><span class="pre">*p*-value</span> <span class="pre">&lt;</span> <span class="pre">.05</span></code>), one can reject the
+hypothesis that observed Markov process is symmetric, and conclude that it the transition
+matrix is asymmetric.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>fm</strong> (<em>pd.DataFrame</em>) – A frequency matrix obtained from <a class="reference internal" href="#neurokit2.markov.transition_matrix" title="neurokit2.markov.transition_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">transition_matrix()</span></code></a>.</p>

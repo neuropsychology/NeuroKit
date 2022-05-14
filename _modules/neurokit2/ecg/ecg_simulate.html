@@ -551,7 +551,7 @@ title="Open an issue"
     <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Simulate an ECG/EKG signal.**</span>
+    <span class="sd">&quot;&quot;&quot;**Simulate an ECG/EKG signal**</span>
 
 <span class="sd">    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either</span>
 <span class="sd">    the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies</span>
@@ -569,21 +569,22 @@ title="Open an issue"
 <span class="sd">        Noise level (amplitude of the laplace noise).</span>
 <span class="sd">    heart_rate : int</span>
 <span class="sd">        Desired simulated heart rate (in beats per minute). The default is 70. Note that for the</span>
-<span class="sd">        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These</span>
-<span class="sd">        fluctuations can cause some slight discrepancies between the requested heart rate and the</span>
-<span class="sd">        empirical heart rate, especially for shorter signals.</span>
+<span class="sd">        ``&quot;ECGSYN&quot;`` method, random fluctuations are to be expected to mimick a real heart rate.</span>
+<span class="sd">        These fluctuations can cause some slight discrepancies between the requested heart rate and</span>
+<span class="sd">        the empirical heart rate, especially for shorter signals.</span>
 <span class="sd">    heart_rate_std : int</span>
 <span class="sd">        Desired heart rate standard deviation (beats per minute).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The model used to generate the signal. Can be &#39;simple&#39; for a simulation based on Daubechies</span>
-<span class="sd">        wavelets that roughly approximates a single cardiac cycle. If &#39;ecgsyn&#39; (default), will use</span>
-<span class="sd">        the model desbribed `McSharry et al. (2003) &lt;https://physionet.org/content/ecgsyn/&gt;`_. If</span>
-<span class="sd">        &#39;multileads&#39;, will return a DataFrame containing 12-leads (see `12-leads ECG simulation</span>
+<span class="sd">        The model used to generate the signal. Can be ``&quot;simple&quot;`` for a simulation based on</span>
+<span class="sd">        Daubechies wavelets that roughly approximates a single cardiac cycle. If ``&quot;ecgsyn&quot;``</span>
+<span class="sd">        (default), will use the model desbribed `McSharry et al. (2003)</span>
+<span class="sd">        &lt;https://physionet.org/content/ecgsyn/&gt;`_. If</span>
+<span class="sd">        ``&quot;multileads&quot;``, will return a DataFrame containing 12-leads (see `12-leads ECG simulation</span>
 <span class="sd">        &lt;https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html&gt;`_).</span>
 <span class="sd">    random_state : int</span>
 <span class="sd">        Seed for the random number generator.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Other keywords parameters for ECGSYN algorithm, such as `lfhfratio`, `ti`, `ai`, `bi`.</span>
+<span class="sd">        Other keywords parameters for ECGSYN algorithm, such as ``&quot;lfhfratio&quot;``, ``&quot;ti&quot;``, ``&quot;ai&quot;``, ``&quot;bi&quot;``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -621,7 +622,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    rsp_simulate, eda_simulate, ppg_simulate, emg_simulate</span>
+<span class="sd">    .rsp_simulate, .eda_simulate, .ppg_simulate, .emg_simulate</span>
 
 
 <span class="sd">    References</span>
