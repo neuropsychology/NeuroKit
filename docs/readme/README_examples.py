@@ -96,7 +96,7 @@ nk.ecg_plot(signals, sampling_rate=250)
 # Save it
 nk.ecg_plot(signals, sampling_rate=250)
 plt.tight_layout()
-plot.savefig("README_ecg.png", dpi=300)
+plt.savefig("README_ecg.png", dpi=300)
 
 # =============================================================================
 # Respiration (RSP) processing
@@ -150,7 +150,7 @@ nk.ppg_plot(signals, sampling_rate=250)
 # Save it
 nk.ppg_plot(signals, sampling_rate=250)
 plt.tight_layout()
-plot.savefig("README_ppg.png", dpi=300)
+plt.savefig("README_ppg.png", dpi=300)
 
 # =============================================================================
 # Electrooculography (EOG)
@@ -165,7 +165,7 @@ signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 # Plot
 nk.eog_plot(signals, peaks=info, sampling_rate=100)
 plt.tight_layout()
-plot.savefig("README_eog.png", dpi=300)
+plt.savefig("README_eog.png", dpi=300)
 
 # =============================================================================
 # Signal Processing
