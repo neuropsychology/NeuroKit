@@ -78,6 +78,7 @@ def bio_process(
     Example
     ----------
     **Example 1**: Using synthetic data
+
     .. ipython:: python
 
       import neurokit2 as nk
