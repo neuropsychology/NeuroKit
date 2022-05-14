@@ -92,7 +92,7 @@ def bio_process(
       bio_df
 
       # Visualize all signals
-      @savefig p_bio_process1.png scale=100%
+      @savefig p_bio_process1.png scale=100% width=10
       fig = nk.standardize(bio_df).plot(subplots=True)
       @suppress
       plt.close()
