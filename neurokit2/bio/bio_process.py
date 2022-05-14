@@ -77,6 +77,7 @@ def bio_process(
 
     Example
     ----------
+    **Example 1**: Using synthetic data
     .. ipython:: python
 
       import neurokit2 as nk
@@ -94,25 +95,26 @@ def bio_process(
     .. ipython:: python
 
       # Visualize a subset of signals
-      @savefig p_bio_process1.png scale=100%
-      fig = bio_df.iloc[:, 0:14].plot(subplots=True)
+      @savefig p_bio_process1.png scale=100% width=1000px
+      fig = bio_df.iloc[:, 0:16].plot(subplots=True)
       @suppress
-      fig = plt.gcf()
-      fig.set_size_inches(15, 10)
       plt.close()
 
+    **Example 2**: Using a real dataset
     .. ipython:: python
 
-      # With Actual Data
+      # Download EOG signal separately
       eog = nk.data('eog_100hz')
+      # Download data but crop with same length as eog signal
       data = nk.data('bio_eventrelated_100hz')[:len(eog)]
+
       bio_df2, bio_info2 = nk.bio_process(ecg=data['ECG'], rsp=data['RSP'], eda=data['EDA'],
       emg=None, eog=eog, keep=data['Photosensor'], sampling_rate=100)
       bio_df2.head()
 
       # Visualize all signals
       @savefig p_bio_process2.png scale=100%
-      fig2 = nk.standardize(bio_df2).plot(subplots=True)
+      fig = bio_df2.iloc[:, 0:16].plot(subplots=True)
       @suppress
       plt.close()
 
