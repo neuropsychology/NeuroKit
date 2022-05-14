@@ -822,7 +822,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 0, 1, 0, 1, 2, 1, 2, 2, 2, 2, 1, 0, 0, 1])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -984,7 +984,7 @@ Markov chain tells us how long does it take for a run to go near the stationary 
 <span class="gp">In [3]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">markov_mixingtime</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">2.5095870037129875</span>
+<span class="gh">Out[4]: </span><span class="go">2.509587003712985</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>

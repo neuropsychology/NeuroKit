@@ -612,7 +612,7 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Find order</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">fit_polynomial_findorder</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+<div class="viewcode-block" id="fit_polynomial_findorder"><a class="viewcode-back" href="../../../functions/functions_stats.html#neurokit2.fit_polynomial_findorder">[docs]</a><span class="k">def</span> <span class="nf">fit_polynomial_findorder</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Polynomial Regression.</span>
 
 <span class="sd">    Find the optimal order for polynomial fitting. Currently, the only method implemented is</span>
@@ -656,7 +656,7 @@ title="Open an issue"
         <span class="n">rmse</span> <span class="o">=</span> <span class="n">fit_rmse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">rmse</span> <span class="o">&lt;</span> <span class="n">best_rmse</span> <span class="ow">or</span> <span class="n">best_rmse</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">best_order</span> <span class="o">=</span> <span class="n">order</span>
-    <span class="k">return</span> <span class="n">best_order</span>
+    <span class="k">return</span> <span class="n">best_order</span></div>
 
 
 <span class="c1"># =============================================================================</span>

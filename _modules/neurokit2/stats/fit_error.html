@@ -611,21 +611,21 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Direct accessors</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">fit_mse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
+<div class="viewcode-block" id="fit_mse"><a class="viewcode-back" href="../../../functions/functions_stats.html#neurokit2.fit_mse">[docs]</a><span class="k">def</span> <span class="nf">fit_mse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute Mean Square Error (MSE).&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)[</span><span class="s2">&quot;MSE&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)[</span><span class="s2">&quot;MSE&quot;</span><span class="p">]</span></div>
 
 
-<span class="k">def</span> <span class="nf">fit_rmse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
+<div class="viewcode-block" id="fit_rmse"><a class="viewcode-back" href="../../../functions/functions_stats.html#neurokit2.fit_rmse">[docs]</a><span class="k">def</span> <span class="nf">fit_rmse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute Root Mean Square Error (RMSE).&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span></div>
 
 
-<span class="k">def</span> <span class="nf">fit_r2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">adjusted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="fit_r2"><a class="viewcode-back" href="../../../functions/functions_stats.html#neurokit2.fit_r2">[docs]</a><span class="k">def</span> <span class="nf">fit_r2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">adjusted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute R2.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">adjusted</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="n">n_parameters</span><span class="p">)[</span><span class="s2">&quot;R2_adjusted&quot;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="n">n_parameters</span><span class="p">)[</span><span class="s2">&quot;R2&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="n">n_parameters</span><span class="p">)[</span><span class="s2">&quot;R2&quot;</span><span class="p">]</span></div>
 
 
 <span class="c1"># =============================================================================</span>

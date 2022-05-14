@@ -63,7 +63,6 @@ Transformation
 .. autofunction:: neurokit2.signal_surrogate
 
 
-
 Peaks
 ^^^^^^^^^^^^^^^^
 *signal_findpeaks()*
@@ -126,3 +125,9 @@ Analysis
 .. autofunction:: neurokit2.signal_zerocrossings
 
 
+*Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
+
+
+.. automodule:: neurokit2.signal
+   :members:
+   :exclude-members: signal_simulate, signal_filter, signal_sanitize, signal_resample, signal_binarize, signal_decompose, signal_recompose, signal_detrend, signal_distort, signal_flatline, signal_interpolate, signal_merge, signal_noise, signal_surrogate, signal_findpeaks, signal_fixpeaks, signal_autocor, signal_changepoints, signal_period, signal_phase, signal_plot, signal_power, signal_psd, signal_rate, signal_smooth, signal_synchrony, signal_timefrequency, signal_zerocrossings
