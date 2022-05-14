@@ -746,17 +746,17 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">       ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0     1.077048  -0.070780  70.049813  ...            0    0.044   8.019901</span>
-<span class="go">1     1.024427  -0.194043  70.049813  ...            0    0.044   8.019901</span>
-<span class="go">2     0.887981  -0.330234  70.049813  ...            0    0.044   8.019901</span>
-<span class="go">3     0.693694  -0.483939  70.049813  ...            0    0.044   8.019901</span>
-<span class="go">4     0.469305  -0.652149  70.049813  ...            0    0.044   8.019901</span>
+<span class="go">0     1.089183  -0.074245  70.057084  ...            0    0.008   7.937253</span>
+<span class="go">1     1.036841  -0.196981  70.057084  ...            0    0.008   7.937253</span>
+<span class="go">2     0.901059  -0.332686  70.057084  ...            0    0.008   7.937253</span>
+<span class="go">3     0.707534  -0.486014  70.057084  ...            0    0.008   7.937253</span>
+<span class="go">4     0.483721  -0.654042  70.057084  ...            0    0.008   7.937253</span>
 <span class="go">...        ...        ...        ...  ...          ...      ...        ...</span>
-<span class="go">9995 -0.090098  -0.039073  69.767442  ...            0    0.020   7.932151</span>
-<span class="go">9996 -0.088167  -0.036509  69.767442  ...            0    0.020   7.932151</span>
-<span class="go">9997 -0.085867  -0.033670  69.767442  ...            0    0.020   7.932151</span>
-<span class="go">9998 -0.083003  -0.030593  69.767442  ...            0    0.020   7.932151</span>
-<span class="go">9999 -0.079404  -0.027370  69.767442  ...            0    0.020   7.932151</span>
+<span class="go">9995 -0.084518  -0.036861  69.767442  ...            0    0.024   7.901275</span>
+<span class="go">9996 -0.083326  -0.034589  69.767442  ...            0    0.024   7.901275</span>
+<span class="go">9997 -0.081903  -0.032085  69.767442  ...            0    0.024   7.901275</span>
+<span class="go">9998 -0.080069  -0.029388  69.767442  ...            0    0.024   7.901275</span>
+<span class="go">9999 -0.077658  -0.026571  69.767442  ...            0    0.024   7.901275</span>
 
 <span class="go">[10000 rows x 46 columns]</span>
 
@@ -764,7 +764,7 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">bio_df</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 10.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># With Actual Data</span>
 <span class="gp">In [9]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
 
