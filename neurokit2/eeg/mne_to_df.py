@@ -25,19 +25,29 @@ def mne_to_df(eeg):
 
     Examples
     ---------
+    **Raw objects**
+
     .. ipython:: python
 
       import neurokit2 as nk
 
-      # Raw objects
+      # Download MNE Raw object
       eeg = nk.mne_data("filt-0-40_raw")
       nk.mne_to_df(eeg)
 
-      # Epochs objects
+    **Epoch objects**
+
+    .. ipython:: python
+
+      # Download MNE Epochs object
       eeg = nk.mne_data("epochs")
       nk.mne_to_df(eeg)
 
-      # Evoked objects
+    **Evoked objects**
+
+    .. ipython:: python
+
+      # Download MNE Evoked object
       eeg = nk.mne_data("evoked")
       nk.mne_to_df(eeg)
 

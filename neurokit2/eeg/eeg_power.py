@@ -50,7 +50,7 @@ def eeg_power(
       # Raw objects
       eeg = nk.mne_data("raw")
       by_channel = nk.eeg_power(eeg)
-      by_channel
+      by_channel.head()
 
       average = by_channel.mean(numeric_only=True, axis=0)
       average["Gamma"]
