@@ -7,9 +7,9 @@ Main
 .. """""""""""""""""""""""""
 .. .. autofunction:: neurokit2.microstates.microstates_segment
 
-.. *microstates_plot()*
-.. """""""""""""""""""""""""
-.. .. autofunction:: neurokit2.microstates.microstates_plot
+*microstates_plot()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.microstates.microstates_plot
 
 .. *microstates_classify()*
 .. """""""""""""""""""""""""

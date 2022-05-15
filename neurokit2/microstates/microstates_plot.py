@@ -114,7 +114,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
         )
 
     # Create legend
-    norm = matplotlib.colors.Normalize(vmin=0.5, vmax=n + 0.5)
+    norm = matplotlib.colors.Normalize(vmin=-0.5, vmax=n - 0.5)
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm.set_array([])
     fig.colorbar(sm, ax=ax["GFP"])
