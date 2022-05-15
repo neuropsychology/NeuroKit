@@ -1291,83 +1291,49 @@ increases. In contrast, <code class="docutils literal notranslate"><span class="
 </dd>
 </dl>
 <p class="rubric">Examples</p>
+<p><strong>Example 1</strong>: Downsampling</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="gp">In [3]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="go"># Downsample</span>
 <span class="gp">In [5]: </span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="gp">In [6]: </span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span> <span class="s2">&quot;FFT&quot;</span><span class="p">,</span> <span class="s2">&quot;poly&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;pandas&quot;</span><span class="p">]:</span>
-<span class="gp">   ...: </span>    <span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
 <span class="gp">   ...: </span>
+
+<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+
+<span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
-
-<span class="gp">In [8]: </span><span class="n">downsampled_interpolation</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
-<span class="gp">   ...: </span>                                               <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">   ...: </span>
-
-<span class="gp">In [9]: </span><span class="n">downsampled_fft</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;FFT&quot;</span><span class="p">,</span>
-<span class="gp">   ...: </span>                                     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">   ...: </span>
-
-<span class="gp">In [10]: </span><span class="n">downsampled_poly</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;poly&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                      <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-
-<span class="gp">In [11]: </span><span class="n">downsampled_numpy</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                       <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-
-<span class="gp">In [12]: </span><span class="n">downsampled_pandas</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pandas&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                        <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">   ....: </span>
+<a class="reference internal image-reference" href="../_images/p_signal_resample1.png"><img alt="../_images/p_signal_resample1.png" src="../_images/p_signal_resample1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p><strong>Example 2</strong>: Upsampling</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="go"># Upsample</span>
-<span class="gp">In [13]: </span><span class="n">upsampled_interpolation</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span>
-<span class="gp">   ....: </span>    <span class="n">downsampled_interpolation</span><span class="p">,</span>
-<span class="gp">   ....: </span>    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-<span class="gp">   ....: </span>    <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">1000</span>
-<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">In [10]: </span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="gp">In [11]: </span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span> <span class="s2">&quot;FFT&quot;</span><span class="p">,</span> <span class="s2">&quot;poly&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;pandas&quot;</span><span class="p">]:</span>
+<span class="gp">   ....: </span>    <span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [14]: </span><span class="n">upsampled_fft</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">downsampled_fft</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;FFT&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                   <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="gp">   ....: </span>
+<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()],</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 
-<span class="gp">In [15]: </span><span class="n">upsampled_poly</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">downsampled_poly</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;poly&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-
-<span class="gp">In [16]: </span><span class="n">upsampled_numpy</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">downsampled_numpy</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="gp">In [17]: </span><span class="n">upsampled_pandas</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_resample</span><span class="p">(</span><span class="n">downsampled_pandas</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pandas&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                                      <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-
-<span class="go"># Compare with original</span>
-<span class="gp">In [18]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Original&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
-<span class="gp">   ....: </span>                    <span class="s2">&quot;Interpolation&quot;</span><span class="p">:</span> <span class="n">upsampled_interpolation</span><span class="p">,</span>
-<span class="gp">   ....: </span>                    <span class="s2">&quot;FFT&quot;</span><span class="p">:</span> <span class="n">upsampled_fft</span><span class="p">,</span>
-<span class="gp">   ....: </span>                    <span class="s2">&quot;Poly&quot;</span><span class="p">:</span> <span class="n">upsampled_poly</span><span class="p">,</span>
-<span class="gp">   ....: </span>                    <span class="s2">&quot;Numpy&quot;</span><span class="p">:</span> <span class="n">upsampled_numpy</span><span class="p">,</span>
-<span class="gp">   ....: </span>                    <span class="s2">&quot;Pandas&quot;</span><span class="p">:</span> <span class="n">upsampled_pandas</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;.-&quot;</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-
-<span class="gp">In [19]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_resample1.png"><img alt="../_images/p_signal_resample1.png" src="../_images/p_signal_resample1.png" style="width: 1200.0px; height: 1200.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Timing benchmarks</span>
-<span class="gp">In [20]: </span><span class="o">%</span><span class="k">timeit</span> nk.signal_resample(signal, method=&quot;interpolation&quot;,
+<a class="reference internal image-reference" href="../_images/p_signal_resample2.png"><img alt="../_images/p_signal_resample2.png" src="../_images/p_signal_resample2.png" style="width: 1200.0px; height: 1200.0px;" /></a>
+<p><strong>Example 3</strong>: Benchmark</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="go"># Timing benchmarks</span>
+<span class="gp">In [15]: </span><span class="o">%</span><span class="k">timeit</span> nk.signal_resample(signal, method=&quot;interpolation&quot;,
 <span class="gp">   ....: </span>                           <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 <span class="gp">   ....: </span><span class="o">%</span><span class="k">timeit</span> nk.signal_resample(signal, method=&quot;FFT&quot;,
 <span class="gp">   ....: </span>                           <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
@@ -1814,7 +1780,7 @@ See <a class="reference external" href="https://docs.scipy.org/doc/scipy/referen
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f6c00b54ee0&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fd7ccd1a380&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1931,19 +1897,19 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c09f1edd0&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7c5194be0&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6bf5307040&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7caf85330&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c0548ebf0&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7caf858a0&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6bf56e0070&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7caf85d20&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c03231450&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7caf85fc0&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" src="../_images/p_signal_noise2.png" style="width: 1200.0px; height: 1200.0px;" /></a>
@@ -1990,16 +1956,16 @@ very high accuracy) and distribution as the original data, using an iterative sc
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c09d57280&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7caf76800&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c09fc9c60&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7cc199c90&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c09fca6b0&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7cc198a00&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f6c07271c30&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fd7ca3a8130&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -2008,16 +1974,16 @@ very high accuracy) and distribution as the original data, using an iterative sc
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c01db3940&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7cc17df60&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c09d77610&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7cc18e9e0&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f6c09d76fb0&gt;]</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd7cc18c5e0&gt;]</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f6c084b7c40&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fd7caf76cb0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" src="../_images/p_signal_surrogate2.png" style="width: 640.0px; height: 480.0px;" /></a>

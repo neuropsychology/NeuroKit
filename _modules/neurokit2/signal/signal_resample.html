@@ -575,64 +575,49 @@ title="Open an issue"
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    **Example 1**: Downsampling</span>
+
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import numpy as np</span>
 <span class="sd">      import pandas as pd</span>
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal = np.cos(np.linspace(start=0, stop=20, num=100))</span>
+<span class="sd">      signal = nk.signal_simulate(duration=1, sampling_rate=500, frequency=3)</span>
 
 <span class="sd">      # Downsample</span>
 <span class="sd">      data = {}</span>
 <span class="sd">      for m in [&quot;interpolation&quot;, &quot;FFT&quot;, &quot;poly&quot;, &quot;numpy&quot;, &quot;pandas&quot;]:</span>
-<span class="sd">          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_length=250, method=m)</span>
+<span class="sd">          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_sampling_rate=30, method=m)</span>
 
-<span class="sd">    .. ipython:: python</span>
-<span class="sd">      :verbatim:</span>
-
-<span class="sd">      nk.signal_plot([data[m] for m in data.keys()])</span>
-
-<span class="sd">      downsampled_interpolation = nk.signal_resample(signal, method=&quot;interpolation&quot;,</span>
-<span class="sd">                                                     sampling_rate=1000, desired_sampling_rate=500)</span>
-<span class="sd">      downsampled_fft = nk.signal_resample(signal, method=&quot;FFT&quot;,</span>
-<span class="sd">                                           sampling_rate=1000, desired_sampling_rate=500)</span>
-<span class="sd">      downsampled_poly = nk.signal_resample(signal, method=&quot;poly&quot;,</span>
-<span class="sd">                                            sampling_rate=1000, desired_sampling_rate=500)</span>
-<span class="sd">      downsampled_numpy = nk.signal_resample(signal, method=&quot;numpy&quot;,</span>
-<span class="sd">                                             sampling_rate=1000, desired_sampling_rate=500)</span>
-<span class="sd">      downsampled_pandas = nk.signal_resample(signal, method=&quot;pandas&quot;,</span>
-<span class="sd">                                              sampling_rate=1000, desired_sampling_rate=500)</span>
-
-<span class="sd">      # Upsample</span>
-<span class="sd">      upsampled_interpolation = nk.signal_resample(</span>
-<span class="sd">          downsampled_interpolation,</span>
-<span class="sd">          method=&quot;interpolation&quot;,</span>
-<span class="sd">          sampling_rate=500,</span>
-<span class="sd">          desired_sampling_rate=1000</span>
-<span class="sd">      )</span>
-<span class="sd">      upsampled_fft = nk.signal_resample(downsampled_fft, method=&quot;FFT&quot;,</span>
-<span class="sd">                                         sampling_rate=500, desired_sampling_rate=1000)</span>
-<span class="sd">      upsampled_poly = nk.signal_resample(downsampled_poly, method=&quot;poly&quot;,</span>
-<span class="sd">                                          sampling_rate=500, desired_sampling_rate=1000)</span>
-<span class="sd">      upsampled_numpy = nk.signal_resample(downsampled_numpy, method=&quot;numpy&quot;,</span>
-<span class="sd">                                           sampling_rate=500, desired_sampling_rate=1000)</span>
-<span class="sd">      upsampled_pandas = nk.signal_resample(downsampled_pandas, method=&quot;pandas&quot;,</span>
-<span class="sd">                                            sampling_rate=500, desired_sampling_rate=1000)</span>
-
-<span class="sd">      # Compare with original</span>
 <span class="sd">      @savefig p_signal_resample1.png scale=100%</span>
-<span class="sd">      fig = pd.DataFrame({&quot;Original&quot;: signal,</span>
-<span class="sd">                          &quot;Interpolation&quot;: upsampled_interpolation,</span>
-<span class="sd">                          &quot;FFT&quot;: upsampled_fft,</span>
-<span class="sd">                          &quot;Poly&quot;: upsampled_poly,</span>
-<span class="sd">                          &quot;Numpy&quot;: upsampled_numpy,</span>
-<span class="sd">                          &quot;Pandas&quot;: upsampled_pandas}).plot(style=&quot;.-&quot;)</span>
+<span class="sd">      nk.signal_plot([data[m] for m in data.keys()])</span>
 <span class="sd">      @supress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    **Example 2**: Upsampling</span>
+
 <span class="sd">    .. ipython:: python</span>
 <span class="sd">      :verbatim:</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=1, sampling_rate=30, frequency=3)</span>
+
+<span class="sd">      # Upsample</span>
+<span class="sd">      data = {}</span>
+<span class="sd">      for m in [&quot;interpolation&quot;, &quot;FFT&quot;, &quot;poly&quot;, &quot;numpy&quot;, &quot;pandas&quot;]:</span>
+<span class="sd">          data[m] = nk.signal_resample(signal, sampling_rate=30, desired_sampling_rate=500, method=m)</span>
+
+<span class="sd">      @savefig p_signal_resample2.png scale=100%</span>
+<span class="sd">      nk.signal_plot([data[m] for m in data.keys()], labels=list(data.keys()))</span>
+<span class="sd">      @supress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    **Example 3**: Benchmark</span>
+
+<span class="sd">    .. ipython:: python</span>
+<span class="sd">      :verbatim:</span>
+
+<span class="sd">      signal = nk.signal_simulate(duration=1, sampling_rate=1000, frequency=3)</span>
 
 <span class="sd">      # Timing benchmarks</span>
 <span class="sd">      %timeit nk.signal_resample(signal, method=&quot;interpolation&quot;,</span>
