@@ -1,35 +1,54 @@
-Documentation
-==============
+====================================================
+**Neurophysiological Data Analysis with NeuroKit2**
+====================================================
+
+
 
 .. important::
 
-    A new website is under developpment. You can preview it `here <https://neuropsychology.github.io/NeuroKit/>`_.
+    Like the software? Don't forget to support it by `starring <https://github.com/neuropsychology/NeuroKit>`_ |:star:|, sponsoring |:revolving_hearts:|, or spreading the word |:love_letter:|
+
+    And don't forget, we don't want NeuroKit2 to become a stale, static and outdated software. We
+    count on you to help us making it better by **contributing even the tiniest improvements**
+    (a typo, a rephrasing to make things clearer, a comment to the code, a new option, etc.).
+    **NeuroKit2 belongs to you.** Make yourself part of the team!
+
+Home
+====
+
+.. warning::
+
+    This documentation is WORK IN PROGRESS. The current official documentation can be found `here <https://neurokit2.readthedocs.io/en/latest/index.html>`_.
 
 
-Welcome to **NeuroKit**'s documentation. Here you can find information and learn about Python, NeuroKit, Physiological Signals and more.
+Welcome to **NeuroKit**'s documentation, where you can find information and learn about Python, NeuroKit, Physiological Signals and more.
 
-You can navigate to the different sections using the left panel. We would recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
+.. seealso::
+
+   You can information on how to cite this documentation :ref:`here<Cite us>`.
+
+
+You can navigate to the different sections using the left panel. We recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :caption: Menu
+   :titlesonly:
 
    introduction
    authors
+   cite_us
    installation
-   start/index
    examples/index
+   functions/index
    resources/index
-   functions
    studies/index
-   datasets
-   contributing/index
+   Repository <https://github.com/neuropsychology/NeuroKit>
 
 
+.. include::  ../README.rst
+    :start-after: .. used_at_section
 
-
-.. only:: comment
-    Indices and tables
-    ==================
-    * :ref:`genindex`
-    * :ref:`modindex`
-    * :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

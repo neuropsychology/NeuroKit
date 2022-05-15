@@ -1,1 +1,3 @@
-.. mdinclude:: ../../studies/eog_blinktemplate/README.md
+.. include:: ../../studies/eog_blinktemplate/README.md
+   :parser: myst_parser.sphinx_
+
