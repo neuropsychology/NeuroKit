@@ -16,10 +16,6 @@
 Home
 ====
 
-.. warning::
-
-    This documentation is WORK IN PROGRESS. The current official documentation can be found `here <https://neurokit2.readthedocs.io/en/latest/index.html>`_.
-
 
 Welcome to **NeuroKit**'s documentation, where you can find information and learn about Python, NeuroKit, Physiological Signals and more.
 
