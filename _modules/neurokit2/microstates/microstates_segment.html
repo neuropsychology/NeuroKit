@@ -1,0 +1,858 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.microstates.microstates_segment &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_bio.html">
+     bio submodule
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/functions_benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/microstates/microstates_segment.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.microstates.microstates_segment</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">cluster</span>
+<span class="kn">from</span> <span class="nn">..stats.cluster_quality</span> <span class="kn">import</span> <span class="n">_cluster_quality_gev</span>
+<span class="kn">from</span> <span class="nn">.microstates_classify</span> <span class="kn">import</span> <span class="n">microstates_classify</span>
+<span class="kn">from</span> <span class="nn">.microstates_clean</span> <span class="kn">import</span> <span class="n">microstates_clean</span>
+
+
+<div class="viewcode-block" id="microstates_segment"><a class="viewcode-back" href="../../../functions/functions_microstates.html#neurokit2.microstates.microstates_segment">[docs]</a><span class="k">def</span> <span class="nf">microstates_segment</span><span class="p">(</span>
+    <span class="n">eeg</span><span class="p">,</span>
+    <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">train</span><span class="o">=</span><span class="s2">&quot;gfp&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmod&quot;</span><span class="p">,</span>
+    <span class="n">gfp_method</span><span class="o">=</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">standardize_eeg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">n_runs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">criterion</span><span class="o">=</span><span class="s2">&quot;gev&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">optimize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Segment M/EEG signal into Microstates**</span>
+
+<span class="sd">    This functions identifies and extracts the microstates from an M/EEG signal using different</span>
+<span class="sd">    clustering algorithms. Several runs of the clustering algorithm are performed, using different</span>
+<span class="sd">    random initializations.The run that resulted in the best segmentation, as measured by global</span>
+<span class="sd">    explained variance (GEV), is used.</span>
+
+<span class="sd">    * **kmod**: Modified k-means algorithm.</span>
+<span class="sd">    * **kmeans**: Normal k-means.</span>
+<span class="sd">    * **kmedoids**: k-medoids clustering, a more stable version of k-means.</span>
+<span class="sd">    * **pca**: Principal Component Analysis.</span>
+<span class="sd">    * **ica**: Independent Component Analysis.</span>
+<span class="sd">    * **aahc**: Atomize and Agglomerate Hierarchical Clustering. Computationally heavy.</span>
+
+<span class="sd">    The microstates clustering is typically fitted on the EEG data at the global field power (GFP)</span>
+<span class="sd">    peaks to maximize the signal to noise ratio and focus on moments of high global neuronal</span>
+<span class="sd">    synchronization. It is assumed that the topography around a GFP peak remains stable and is at</span>
+<span class="sd">    its highest signal-to-noise ratio at the GFP peak.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eeg : np.ndarray</span>
+<span class="sd">        An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</span>
+<span class="sd">    n_microstates : int</span>
+<span class="sd">        The number of unique microstates to find. Defaults to 4.</span>
+<span class="sd">    train : Union[str, int, float]</span>
+<span class="sd">        Method for selecting the timepoints how which to train the clustering algorithm. Can be</span>
+<span class="sd">        ``&quot;gfp&quot;`` to use the peaks found in the Peaks in the global field power. Can be ``&quot;all&quot;``,</span>
+<span class="sd">        in which case it will select all the datapoints. It can also be a number or a ratio, in</span>
+<span class="sd">        which case it will select the corresponding number of evenly spread data points. For</span>
+<span class="sd">        instance, ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will</span>
+<span class="sd">        select half the data. See :func:`.microstates_peaks`.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The algorithm for clustering. Can be one of ``&quot;kmod&quot;`` (default), ``&quot;kmeans&quot;``,</span>
+<span class="sd">        ``&quot;kmedoids&quot;``, ``&quot;pca&quot;``, ``&quot;ica&quot;``, or ``&quot;aahc&quot;``.</span>
+<span class="sd">    gfp_method : str</span>
+<span class="sd">        The GFP extraction method, can be either ``&quot;l1&quot;`` (default) or ``&quot;l2&quot;`` to use the L1 or L2</span>
+<span class="sd">        norm. See :func:`nk.eeg_gfp` for more details.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
+<span class="sd">    standardize_eeg : bool</span>
+<span class="sd">        Standardized (z-score) the data across time prior to GFP extraction</span>
+<span class="sd">        using :func:`.nk.standardize`.</span>
+<span class="sd">    n_runs : int</span>
+<span class="sd">        The number of random initializations to use for the k-means algorithm. The best fitting</span>
+<span class="sd">        segmentation across all initializations is used. Defaults to 10.</span>
+<span class="sd">    max_iterations : int</span>
+<span class="sd">        The maximum number of iterations to perform in the k-means algorithm.</span>
+<span class="sd">        Defaults to 1000.</span>
+<span class="sd">    criterion : str</span>
+<span class="sd">        Which criterion to use to choose the best run for modified k-means algorithm,</span>
+<span class="sd">        can be ``&quot;gev&quot;`` (default) which selects the best run based on the highest global explained</span>
+<span class="sd">        variance, or ``&quot;cv&quot;`` which selects the best run based on the lowest cross-validation</span>
+<span class="sd">        criterion. See :func:`.nk.microstates_gev` and :func:`.nk.microstates_crossvalidation` for</span>
+<span class="sd">        more details respectively.</span>
+<span class="sd">    random_state : Union[int, numpy.random.RandomState]</span>
+<span class="sd">        The seed or ``RandomState`` for the random number generator. Defaults to ``None``, in which</span>
+<span class="sd">        case a different seed is chosen each time this function is called.</span>
+<span class="sd">    optimize : bool</span>
+<span class="sd">        Optimized method in Poulsen et al. (2018) for the *k*-means modified method.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Contains information about the segmented microstates:</span>
+
+<span class="sd">        * **Microstates**: The topographic maps of the found unique microstates which has a shape of</span>
+<span class="sd">          n_channels x n_states</span>
+<span class="sd">        * **Sequence**: For each sample, the index of the microstate to which the sample has been</span>
+<span class="sd">          assigned.</span>
+<span class="sd">        * **GEV**: The global explained variance of the microstates.</span>
+<span class="sd">        * **GFP**: The global field power of the data.</span>
+<span class="sd">        * **Cross-Validation Criterion**: The cross-validation value of the iteration.</span>
+<span class="sd">        * **Explained Variance**: The explained variance of each cluster map generated by PCA.</span>
+<span class="sd">        * **Total Explained Variance**: The total explained variance of the cluster maps generated</span>
+<span class="sd">          by PCA.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    * **Example 1**: k-means Algorithm</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      # Download data</span>
+<span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;)</span>
+<span class="sd">      # Average rereference and band-pass filtering</span>
+<span class="sd">      eeg = nk.eeg_rereference(eeg, &#39;average&#39;).filter(1, 30, verbose=False)</span>
+
+<span class="sd">      # Cluster microstates</span>
+<span class="sd">      microstates = nk.microstates_segment(eeg, method=&quot;kmeans&quot;)</span>
+<span class="sd">      @savefig p_microstate_segment1.png scale=100%</span>
+<span class="sd">      nk.microstates_plot(microstates , epoch=(500, 750))</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      # Modified kmeans (currently comment out due to memory error)</span>
+<span class="sd">      #out_kmod = nk.microstates_segment(eeg, method=&#39;kmod&#39;)</span>
+<span class="sd">      # nk.microstates_plot(out_kmod, gfp=out_kmod[&quot;GFP&quot;][0:500])</span>
+
+<span class="sd">      # K-medoids (currently comment out due to memory error)</span>
+<span class="sd">      #out_kmedoids = nk.microstates_segment(eeg, method=&#39;kmedoids&#39;)</span>
+<span class="sd">      #nk.microstates_plot(out_kmedoids, gfp=out_kmedoids[&quot;GFP&quot;][0:500])</span>
+
+<span class="sd">    * **Example with PCA**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      out_pca = nk.microstates_segment(eeg, method=&#39;pca&#39;, standardize_eeg=True)</span>
+<span class="sd">      @savefig p_microstate_segment2.png scale=100%</span>
+<span class="sd">      nk.microstates_plot(out_pca, gfp=out_pca[&quot;GFP&quot;][0:500])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    * **Example with ICA**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      out_ica = nk.microstates_segment(eeg, method=&#39;ica&#39;, standardize_eeg=True)</span>
+<span class="sd">      @savefig p_microstate_segment3.png scale=100%</span>
+<span class="sd">      nk.microstates_plot(out_ica, gfp=out_ica[&quot;GFP&quot;][0:500])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    * **Example with AAHC**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      out_aahc = nk.microstates_segment(eeg, method=&#39;aahc&#39;)</span>
+<span class="sd">      @savefig p_microstate_segment4.png scale=100%</span>
+<span class="sd">      nk.microstates_plot(out_aahc, gfp=out_aahc[&quot;GFP&quot;][0:500])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    eeg_gfp, microstates_peaks, microstates_gev, microstates_crossvalidation, microstates_classify</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Poulsen, A. T., Pedroni, A., Langer, N., &amp; Hansen, L. K. (2018). Microstate EEGlab toolbox:</span>
+<span class="sd">      an introductory guide. BioRxiv, (289850).</span>
+<span class="sd">    * Pascual-Marqui, R. D., Michel, C. M., &amp; Lehmann, D. (1995). Segmentation of brain</span>
+<span class="sd">      electrical activity into microstates: model estimation and validation. IEEE Transactions</span>
+<span class="sd">      on Biomedical Engineering.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanitize input</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">gfp</span><span class="p">,</span> <span class="n">info_mne</span> <span class="o">=</span> <span class="n">microstates_clean</span><span class="p">(</span>
+        <span class="n">eeg</span><span class="p">,</span>
+        <span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">standardize_eeg</span><span class="o">=</span><span class="n">standardize_eeg</span><span class="p">,</span>
+        <span class="n">gfp_method</span><span class="o">=</span><span class="n">gfp_method</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Run clustering algorithm</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmods&quot;</span><span class="p">,</span> <span class="s2">&quot;kmod&quot;</span><span class="p">,</span> <span class="s2">&quot;kmeans modified&quot;</span><span class="p">,</span> <span class="s2">&quot;modified kmeans&quot;</span><span class="p">]:</span>
+
+        <span class="c1"># If no random state specified, generate a random state</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
+            <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+        <span class="c1"># Generate one random integer for each run</span>
+        <span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">n_runs</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Initialize values</span>
+        <span class="n">gev</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">microstates</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">segmentation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">polarity</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Do several runs of the k-means algorithm, keep track of the best segmentation.</span>
+        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span><span class="p">):</span>
+
+            <span class="c1"># Run clustering on subset of data</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">current_info</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmod&quot;</span><span class="p">,</span>
+                <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_microstates</span><span class="p">,</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">[</span><span class="n">run</span><span class="p">],</span>
+                <span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+                <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                <span class="n">optimize</span><span class="o">=</span><span class="n">optimize</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">current_microstates</span> <span class="o">=</span> <span class="n">current_info</span><span class="p">[</span><span class="s2">&quot;clusters_normalized&quot;</span><span class="p">]</span>
+            <span class="n">current_residual</span> <span class="o">=</span> <span class="n">current_info</span><span class="p">[</span><span class="s2">&quot;residual&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Run segmentation on the whole dataset</span>
+            <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g_all</span> <span class="o">=</span> <span class="n">_microstates_segment_runsegmentation</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">current_microstates</span><span class="p">,</span> <span class="n">gfp</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="n">n_microstates</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">criterion</span> <span class="o">==</span> <span class="s2">&quot;gev&quot;</span><span class="p">:</span>
+                <span class="c1"># If better (i.e., higher GEV), keep this segmentation</span>
+                <span class="k">if</span> <span class="n">g</span> <span class="o">&gt;</span> <span class="n">gev</span><span class="p">:</span>
+                    <span class="n">microstates</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">polarity</span><span class="p">,</span> <span class="n">gev</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">current_microstates</span><span class="p">,</span>
+                        <span class="n">s</span><span class="p">,</span>
+                        <span class="n">p</span><span class="p">,</span>
+                        <span class="n">g</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">gev_all</span> <span class="o">=</span> <span class="n">g_all</span>
+                    <span class="n">info</span> <span class="o">=</span> <span class="n">current_info</span>
+            <span class="k">elif</span> <span class="n">criterion</span> <span class="o">==</span> <span class="s2">&quot;cv&quot;</span><span class="p">:</span>
+                <span class="c1"># If better (i.e., lower CV), keep this segmentation</span>
+                <span class="c1"># R2 and residual are proportional, use residual instead of R2</span>
+                <span class="k">if</span> <span class="n">current_residual</span> <span class="o">&lt;</span> <span class="n">cv</span><span class="p">:</span>
+                    <span class="n">microstates</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">polarity</span> <span class="o">=</span> <span class="n">current_microstates</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span>
+                    <span class="n">cv</span><span class="p">,</span> <span class="n">gev</span><span class="p">,</span> <span class="n">gev_all</span> <span class="o">=</span> <span class="n">current_residual</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g_all</span>
+                    <span class="n">info</span> <span class="o">-=</span> <span class="n">current_info</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Run clustering algorithm on subset</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">microstates</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_microstates</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Run segmentation on the whole dataset</span>
+        <span class="n">segmentation</span><span class="p">,</span> <span class="n">polarity</span><span class="p">,</span> <span class="n">gev</span><span class="p">,</span> <span class="n">gev_all</span> <span class="o">=</span> <span class="n">_microstates_segment_runsegmentation</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">microstates</span><span class="p">,</span> <span class="n">gfp</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="n">n_microstates</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Reorder</span>
+    <span class="n">segmentation</span><span class="p">,</span> <span class="n">microstates</span> <span class="o">=</span> <span class="n">microstates_classify</span><span class="p">(</span><span class="n">segmentation</span><span class="p">,</span> <span class="n">microstates</span><span class="p">)</span>
+
+    <span class="c1"># CLustering quality</span>
+    <span class="c1">#    quality = cluster_quality(data, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)</span>
+
+    <span class="c1"># Output</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Microstates&quot;</span><span class="p">:</span> <span class="n">microstates</span><span class="p">,</span>
+        <span class="s2">&quot;Sequence&quot;</span><span class="p">:</span> <span class="n">segmentation</span><span class="p">,</span>
+        <span class="s2">&quot;GEV&quot;</span><span class="p">:</span> <span class="n">gev</span><span class="p">,</span>
+        <span class="s2">&quot;GEV_per_microstate&quot;</span><span class="p">:</span> <span class="n">gev_all</span><span class="p">,</span>
+        <span class="s2">&quot;GFP&quot;</span><span class="p">:</span> <span class="n">gfp</span><span class="p">,</span>
+        <span class="s2">&quot;Polarity&quot;</span><span class="p">:</span> <span class="n">polarity</span><span class="p">,</span>
+        <span class="s2">&quot;Info_algorithm&quot;</span><span class="p">:</span> <span class="n">info</span><span class="p">,</span>
+        <span class="s2">&quot;Info&quot;</span><span class="p">:</span> <span class="n">info_mne</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Utils</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_microstates_segment_runsegmentation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">microstates</span><span class="p">,</span> <span class="n">gfp</span><span class="p">,</span> <span class="n">n_microstates</span><span class="p">):</span>
+    <span class="c1"># Find microstate corresponding to each datapoint</span>
+    <span class="n">activation</span> <span class="o">=</span> <span class="n">microstates</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">segmentation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">activation</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">polarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="n">segmentation</span><span class="p">,</span> <span class="n">activation</span><span class="p">))</span>
+
+    <span class="c1"># Get Global Explained Variance (GEV)</span>
+    <span class="n">gev</span><span class="p">,</span> <span class="n">gev_all</span> <span class="o">=</span> <span class="n">_cluster_quality_gev</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">microstates</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="n">gfp</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_microstates</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">polarity</span><span class="p">,</span> <span class="n">gev</span><span class="p">,</span> <span class="n">gev_all</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
