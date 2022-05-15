@@ -28,13 +28,30 @@ def hrv_frequency(
 ):
     """**Computes frequency-domain indices of Heart Rate Variability (HRV)**
 
+    Computes frequency domain HRV metrics, such as the power in different frequency bands.
+
+    * **ULF**: The spectral power of ultra low frequencies (by default, .0 to
+      .0033 Hz) by default. Very long signals are required for this to index to be
+      extracted, otherwise, will return NaN.
+    * **VLF**: The spectral power of very low frequencies (by default, .0033 to .04 Hz).
+    * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).
+    * **HF**: The spectral power of high frequencies (by default, .15 to .4 Hz).
+    * **VHF**: The spectral power of very high frequencies (by default, .4 to .5 Hz).
+    * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
+      the total power.
+    * **HFn**: The normalized high frequency, obtained by dividing the low frequency power by
+      the total power.
+    * **LnHF**: The log transformed HF.
+
     Note that a minimum duration of the signal containing the peaks is recommended for some HRV
     indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the
     recommended minima for HF, LF and LF/HF, respectively.
 
     .. tip::
-        We strongly recommend checking our open-access paper `Pham et al. (2021)
-        <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
+
+      We strongly recommend checking our open-access paper `Pham et al. (2021)
+      <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
+
 
     Parameters
     ----------
@@ -72,25 +89,9 @@ def hrv_frequency(
         Additional other arguments.
 
     Returns
-    ------*
+    -------
     DataFrame
-        Contains frequency domain HRV metrics:
-
-        * **ULF**: The spectral power density pertaining to ultra low frequency band (i.e., .0 to
-        .0033 Hz) by default.
-        * **VLF**: The spectral power density pertaining to very low frequency band (i.e., .0033 to
-        .04 Hz) by default.
-        * **LF**: The spectral power density pertaining to low frequency band (i.e., .04 to .15 Hz)
-          by default.
-        * **HF**: The spectral power density pertaining to high frequency band (i.e., .15 to .4 Hz)
-          by default.
-        * **VHF**: The variability, or signal power, in very high frequency (i.e., .4 to .5 Hz) by
-          default.
-        * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
-          the total power.
-        * **HFn**: The normalized high frequency, obtained by dividing the low frequency power by
-          the total power.
-        * **LnHF**: The log transformed HF.
+        Contains frequency domain HRV metrics.
 
     See Also
     --------
@@ -142,17 +143,12 @@ def hrv_frequency(
     ----------
     * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
       Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
-      https://doi.org/10.3390/s21123998
-
     * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
       electrophysiology review, 6(3), 239-244.
-
     * Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
       norms. Frontiers in public health, 5, 258.
-
     * Boardman, A., Schlindwein, F. S., & Rocha, A. P. (2002). A study on the optimum order of
       autoregressive models for heart rate variability. Physiological measurement, 23(2), 325.
-
     * Bachler, M. (2017). Spectral Analysis of Unevenly Spaced Data: Models and Application in Heart
       Rate Variability. Simul. Notes Eur., 27(4), 183-190.
 
