@@ -124,7 +124,7 @@ html_theme_options = {
     "repository_branch": "dev",  # TODO: remove this before merging
     "use_repository_button": True,
     "use_issues_button": True,
-    "path_to_docs": "docs_wip/",
+    "path_to_docs": "docs/",
     "use_edit_page_button": True,
     "logo_only": True,
     "show_toc_level": 1,

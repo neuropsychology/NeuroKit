@@ -46,11 +46,11 @@ jobs:
 
     - name: Build documentation 📜
       run: |
-        cd docs_wip
+        cd docs
         sphinx-build -b html . _build
 
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs_wip/_build
+        publish_dir: ./docs/_build
