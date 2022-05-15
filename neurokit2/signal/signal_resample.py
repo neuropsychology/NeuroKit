@@ -43,64 +43,49 @@ def signal_resample(
 
     Examples
     --------
+    **Example 1**: Downsampling
+
     .. ipython:: python
 
       import numpy as np
       import pandas as pd
       import neurokit2 as nk
 
-      signal = np.cos(np.linspace(start=0, stop=20, num=100))
+      signal = nk.signal_simulate(duration=1, sampling_rate=500, frequency=3)
 
       # Downsample
       data = {}
       for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
-          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_length=250, method=m)
+          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_sampling_rate=30, method=m)
 
-    .. ipython:: python
-      :verbatim:
-
-      nk.signal_plot([data[m] for m in data.keys()])
-
-      downsampled_interpolation = nk.signal_resample(signal, method="interpolation",
-                                                     sampling_rate=1000, desired_sampling_rate=500)
-      downsampled_fft = nk.signal_resample(signal, method="FFT",
-                                           sampling_rate=1000, desired_sampling_rate=500)
-      downsampled_poly = nk.signal_resample(signal, method="poly",
-                                            sampling_rate=1000, desired_sampling_rate=500)
-      downsampled_numpy = nk.signal_resample(signal, method="numpy",
-                                             sampling_rate=1000, desired_sampling_rate=500)
-      downsampled_pandas = nk.signal_resample(signal, method="pandas",
-                                              sampling_rate=1000, desired_sampling_rate=500)
-
-      # Upsample
-      upsampled_interpolation = nk.signal_resample(
-          downsampled_interpolation,
-          method="interpolation",
-          sampling_rate=500,
-          desired_sampling_rate=1000
-      )
-      upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT",
-                                         sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_poly = nk.signal_resample(downsampled_poly, method="poly",
-                                          sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_numpy = nk.signal_resample(downsampled_numpy, method="numpy",
-                                           sampling_rate=500, desired_sampling_rate=1000)
-      upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas",
-                                            sampling_rate=500, desired_sampling_rate=1000)
-
-      # Compare with original
       @savefig p_signal_resample1.png scale=100%
-      fig = pd.DataFrame({"Original": signal,
-                          "Interpolation": upsampled_interpolation,
-                          "FFT": upsampled_fft,
-                          "Poly": upsampled_poly,
-                          "Numpy": upsampled_numpy,
-                          "Pandas": upsampled_pandas}).plot(style=".-")
+      nk.signal_plot([data[m] for m in data.keys()])
       @supress
       plt.close()
 
+    **Example 2**: Upsampling
+
     .. ipython:: python
       :verbatim:
+
+      signal = nk.signal_simulate(duration=1, sampling_rate=30, frequency=3)
+
+      # Upsample
+      data = {}
+      for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
+          data[m] = nk.signal_resample(signal, sampling_rate=30, desired_sampling_rate=500, method=m)
+
+      @savefig p_signal_resample2.png scale=100%
+      nk.signal_plot([data[m] for m in data.keys()], labels=list(data.keys()))
+      @supress
+      plt.close()
+
+    **Example 3**: Benchmark
+
+    .. ipython:: python
+      :verbatim:
+
+      signal = nk.signal_simulate(duration=1, sampling_rate=1000, frequency=3)
 
       # Timing benchmarks
       %timeit nk.signal_resample(signal, method="interpolation",
