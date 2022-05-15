@@ -560,13 +560,30 @@ title="Open an issue"
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Computes frequency-domain indices of Heart Rate Variability (HRV)**</span>
 
+<span class="sd">    Computes frequency domain HRV metrics, such as the power in different frequency bands.</span>
+
+<span class="sd">    * **ULF**: The spectral power of ultra low frequencies (by default, .0 to</span>
+<span class="sd">      .0033 Hz) by default. Very long signals are required for this to index to be</span>
+<span class="sd">      extracted, otherwise, will return NaN.</span>
+<span class="sd">    * **VLF**: The spectral power of very low frequencies (by default, .0033 to .04 Hz).</span>
+<span class="sd">    * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).</span>
+<span class="sd">    * **HF**: The spectral power of high frequencies (by default, .15 to .4 Hz).</span>
+<span class="sd">    * **VHF**: The spectral power of very high frequencies (by default, .4 to .5 Hz).</span>
+<span class="sd">    * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by</span>
+<span class="sd">      the total power.</span>
+<span class="sd">    * **HFn**: The normalized high frequency, obtained by dividing the low frequency power by</span>
+<span class="sd">      the total power.</span>
+<span class="sd">    * **LnHF**: The log transformed HF.</span>
+
 <span class="sd">    Note that a minimum duration of the signal containing the peaks is recommended for some HRV</span>
 <span class="sd">    indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the</span>
 <span class="sd">    recommended minima for HF, LF and LF/HF, respectively.</span>
 
 <span class="sd">    .. tip::</span>
-<span class="sd">        We strongly recommend checking our open-access paper `Pham et al. (2021)</span>
-<span class="sd">        &lt;https://doi.org/10.3390/s21123998&gt;`_ on HRV indices for more information.</span>
+
+<span class="sd">      We strongly recommend checking our open-access paper `Pham et al. (2021)</span>
+<span class="sd">      &lt;https://doi.org/10.3390/s21123998&gt;`_ on HRV indices for more information.</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -604,25 +621,9 @@ title="Open an issue"
 <span class="sd">        Additional other arguments.</span>
 
 <span class="sd">    Returns</span>
-<span class="sd">    ------*</span>
+<span class="sd">    -------</span>
 <span class="sd">    DataFrame</span>
-<span class="sd">        Contains frequency domain HRV metrics:</span>
-
-<span class="sd">        * **ULF**: The spectral power density pertaining to ultra low frequency band (i.e., .0 to</span>
-<span class="sd">        .0033 Hz) by default.</span>
-<span class="sd">        * **VLF**: The spectral power density pertaining to very low frequency band (i.e., .0033 to</span>
-<span class="sd">        .04 Hz) by default.</span>
-<span class="sd">        * **LF**: The spectral power density pertaining to low frequency band (i.e., .04 to .15 Hz)</span>
-<span class="sd">          by default.</span>
-<span class="sd">        * **HF**: The spectral power density pertaining to high frequency band (i.e., .15 to .4 Hz)</span>
-<span class="sd">          by default.</span>
-<span class="sd">        * **VHF**: The variability, or signal power, in very high frequency (i.e., .4 to .5 Hz) by</span>
-<span class="sd">          default.</span>
-<span class="sd">        * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by</span>
-<span class="sd">          the total power.</span>
-<span class="sd">        * **HFn**: The normalized high frequency, obtained by dividing the low frequency power by</span>
-<span class="sd">          the total power.</span>
-<span class="sd">        * **LnHF**: The log transformed HF.</span>
+<span class="sd">        Contains frequency domain HRV metrics.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -674,17 +675,12 @@ title="Open an issue"
 <span class="sd">    ----------</span>
 <span class="sd">    * Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in</span>
 <span class="sd">      Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.</span>
-<span class="sd">      https://doi.org/10.3390/s21123998</span>
-
 <span class="sd">    * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac</span>
 <span class="sd">      electrophysiology review, 6(3), 239-244.</span>
-
 <span class="sd">    * Shaffer, F., &amp; Ginsberg, J. P. (2017). An overview of heart rate variability metrics and</span>
 <span class="sd">      norms. Frontiers in public health, 5, 258.</span>
-
 <span class="sd">    * Boardman, A., Schlindwein, F. S., &amp; Rocha, A. P. (2002). A study on the optimum order of</span>
 <span class="sd">      autoregressive models for heart rate variability. Physiological measurement, 23(2), 325.</span>
-
 <span class="sd">    * Bachler, M. (2017). Spectral Analysis of Unevenly Spaced Data: Models and Application in Heart</span>
 <span class="sd">      Rate Variability. Simul. Notes Eur., 27(4), 183-190.</span>
 
