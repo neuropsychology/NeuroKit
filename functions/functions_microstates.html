@@ -597,6 +597,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#main">
    Main
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#microstates-plot">
+     <em>
+      microstates_plot()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -621,6 +630,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#main">
    Main
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#microstates-plot">
+     <em>
+      microstates_plot()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -636,6 +654,49 @@ title="Print to PDF"
 <h1>Microstates<a class="headerlink" href="#microstates" title="Permalink to this headline">#</a></h1>
 <section id="main">
 <h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="microstates-plot">
+<h3><em>microstates_plot()</em><a class="headerlink" href="#microstates-plot" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.microstates.microstates_plot">
+<span class="sig-name descname"><span class="pre">microstates_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microstates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gfp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_plot.html#microstates_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_plot" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Visualize Microstates</strong></p>
+<p>Plots the clustered microstates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>microstates</strong> (<em>np.ndarray</em>) – The topographic maps of the found unique microstates which has a shape of n_channels x
+n_states, generated from <code class="xref py py-func docutils literal notranslate"><span class="pre">microstates_segment()</span></code>.</p></li>
+<li><p><strong>segmentation</strong> (<em>array</em>) – For each sample, the index of the microstate to which the sample has been assigned.
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>gfp</strong> (<em>array</em>) – The range of global field power (GFP) values to visualize. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, which will
+plot the whole range of GFP values.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – The dictionary output of <code class="xref py py-func docutils literal notranslate"><span class="pre">nk.microstates_segment()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>epoch</strong> (<em>tuple</em>) – A sub-epoch of GFP to plot in the shape <code class="docutils literal notranslate"><span class="pre">(beginning</span> <span class="pre">sample,</span> <span class="pre">end</span> <span class="pre">sample)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>fig</em> – Plot of prototypical microstates maps and GFP across time.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Download data</span>
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="go"># Average rereference and band-pass filtering</span>
+<span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="go"># Cluster microstates</span>
+<span class="gp">In [4]: </span><span class="n">microstates</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;kmeans&#39;</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">750</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_microstates_plot1.png"><img alt="../_images/p_microstates_plot1.png" src="../_images/p_microstates_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
