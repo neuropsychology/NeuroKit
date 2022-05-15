@@ -1,5 +1,5 @@
-Complexity
------------
+Complexity, Fractals, and Entropy
+-----------------------------------
 
 Main
 ^^^^^^^^^^^^^^^^

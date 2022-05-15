@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Stats" href="functions_stats.html" />
-    <link rel="prev" title="Complexity" href="functions_complexity.html" />
+    <link rel="prev" title="Complexity, Fractals, and Entropy" href="functions_complexity.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -220,7 +220,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="functions_bio.html">
-     bio submodule
+     Bio
     </a>
    </li>
    <li class="toctree-l2">
@@ -822,7 +822,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 0, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 0])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -984,7 +984,7 @@ Markov chain tells us how long does it take for a run to go near the stationary 
 <span class="gp">In [3]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">markov_mixingtime</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">2.5095870037129875</span>
+<span class="gh">Out[4]: </span><span class="go">2.509587003712985</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1009,7 +1009,7 @@ Mathematical Society.</p></li>
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Complexity</p>
+            <p class="prev-next-title">Complexity, Fractals, and Entropy</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="functions_stats.html" title="next page">

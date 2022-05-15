@@ -1,5 +1,5 @@
-Microstates
-------------
+M/EEG Microstates
+------------------
 
 Main
 ^^^^^^^^^^^^^^^^
