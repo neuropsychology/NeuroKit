@@ -582,7 +582,7 @@ title="Open an issue"
 <span class="sd">      # Raw objects</span>
 <span class="sd">      eeg = nk.mne_data(&quot;raw&quot;)</span>
 <span class="sd">      by_channel = nk.eeg_power(eeg)</span>
-<span class="sd">      by_channel</span>
+<span class="sd">      by_channel.head()</span>
 
 <span class="sd">      average = by_channel.mean(numeric_only=True, axis=0)</span>
 <span class="sd">      average[&quot;Gamma&quot;]</span>

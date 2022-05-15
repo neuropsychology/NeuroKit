@@ -557,19 +557,29 @@ title="Open an issue"
 
 <span class="sd">    Examples</span>
 <span class="sd">    ---------</span>
+<span class="sd">    **Raw objects**</span>
+
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # Raw objects</span>
+<span class="sd">      # Download MNE Raw object</span>
 <span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;)</span>
 <span class="sd">      nk.mne_to_df(eeg)</span>
 
-<span class="sd">      # Epochs objects</span>
+<span class="sd">    **Epoch objects**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      # Download MNE Epochs object</span>
 <span class="sd">      eeg = nk.mne_data(&quot;epochs&quot;)</span>
 <span class="sd">      nk.mne_to_df(eeg)</span>
 
-<span class="sd">      # Evoked objects</span>
+<span class="sd">    **Evoked objects**</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      # Download MNE Evoked object</span>
 <span class="sd">      eeg = nk.mne_data(&quot;evoked&quot;)</span>
 <span class="sd">      nk.mne_to_df(eeg)</span>
 
@@ -578,7 +588,7 @@ title="Open an issue"
 
 
 <span class="c1"># Dict</span>
-<span class="k">def</span> <span class="nf">mne_to_dict</span><span class="p">(</span><span class="n">eeg</span><span class="p">):</span>
+<div class="viewcode-block" id="mne_to_dict"><a class="viewcode-back" href="../../../functions/functions_eeg.html#neurokit2.eeg.mne_to_dict">[docs]</a><span class="k">def</span> <span class="nf">mne_to_dict</span><span class="p">(</span><span class="n">eeg</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Convert MNE Raw or Epochs object to a dictionary**</span>
 
 <span class="sd">    Parameters</span>
@@ -616,7 +626,7 @@ title="Open an issue"
 <span class="sd">      nk.mne_to_dict(eeg)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_mne_convert</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">to_what</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_mne_convert</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">to_what</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">)</span></div>
 
 
 <span class="c1"># =============================================================================</span>

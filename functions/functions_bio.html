@@ -728,24 +728,38 @@ as well as the signals’ sampling rate.</p></li>
 <p><a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a>, <a class="reference internal" href="functions_rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="functions_eda.html#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="functions_emg.html#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="functions_ppg.html#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a>, <a class="reference internal" href="functions_eog.html#neurokit2.eog.eog_process" title="neurokit2.eog.eog_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_process</span></code></a></p>
 </div>
 <p class="rubric">Example</p>
-<p><strong>Example 1</strong>: Using synthetic data
-.. ipython:: python</p>
-<blockquote>
-<div><p>import neurokit2 as nk</p>
-<p># With Simulated Data
-ecg = nk.ecg_simulate(duration=40, sampling_rate=250)
-rsp = nk.rsp_simulate(duration=40, sampling_rate=250)
-eda = nk.eda_simulate(duration=40, sampling_rate=250, scr_number=3)
-emg = nk.emg_simulate(duration=40, sampling_rate=250, burst_number=5)</p>
-<p>bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, eog=None,
-sampling_rate=250)</p>
-<p># Visualize a subset of signals
-&#64;savefig p_bio_process1.png scale=100%
-fig = bio_df.iloc[:, 0:16].plot(subplots=True)
-&#64;suppress
-plt.close()</p>
-<p>bio_df.head()</p>
-</div></blockquote>
+<p><strong>Example 1</strong>: Using synthetic data</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># With Simulated Data</span>
+<span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">bio_df</span><span class="p">,</span> <span class="n">bio_info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rsp</span><span class="o">=</span><span class="n">rsp</span><span class="p">,</span> <span class="n">eda</span><span class="o">=</span><span class="n">eda</span><span class="p">,</span> <span class="n">emg</span><span class="o">=</span><span class="n">emg</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="gp">   ...: </span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># Visualize a subset of signals</span>
+<span class="gp">In [7]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
+<span class="go">0  0.555598  -0.049506  70.028011  ...            0    0.032   7.918057</span>
+<span class="go">1  0.522746  -0.126848  70.028011  ...            0    0.032   7.918057</span>
+<span class="go">2  0.437368  -0.212635  70.028011  ...            0    0.032   7.918057</span>
+<span class="go">3  0.315168  -0.310051  70.028011  ...            0    0.032   7.918057</span>
+<span class="go">4  0.172983  -0.417454  70.028011  ...            0    0.032   7.918057</span>
+
+<span class="go">[5 rows x 46 columns]</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p><strong>Example 2</strong>: Using a real dataset
 .. ipython:: python</p>
 <blockquote>

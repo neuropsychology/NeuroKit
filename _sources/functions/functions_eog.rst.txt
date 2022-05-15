@@ -46,7 +46,7 @@ Miscellaneous
 ^^^^^^^^^^^^^^^^
 *eog_findpeaks()*
 """"""""""""""""""""""""
-.. autofunction:: neurokit2.ecg.eog_findpeaks
+.. autofunction:: neurokit2.eog.eog_findpeaks
 
 
 .. automodule:: neurokit2.eog

@@ -676,7 +676,7 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#module-neurokit2.eog">
+    <a class="reference internal nav-link" href="#eog-findpeaks">
      <em>
       eog_findpeaks()
      </em>
@@ -786,7 +786,7 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#module-neurokit2.eog">
+    <a class="reference internal nav-link" href="#eog-findpeaks">
      <em>
       eog_findpeaks()
      </em>
@@ -843,7 +843,7 @@ Defaults to 1000.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.eog.eog_clean" title="neurokit2.eog.eog_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_findpeaks</span></code></p>
+<p><a class="reference internal" href="#neurokit2.eog.eog_clean" title="neurokit2.eog.eog_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eog.eog_findpeaks" title="neurokit2.eog.eog_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_findpeaks</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1079,7 +1079,7 @@ of each blink in seconds).</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.eog.eog_clean" title="neurokit2.eog.eog_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_findpeaks</span></code></p>
+<p><a class="reference internal" href="#neurokit2.eog.eog_clean" title="neurokit2.eog.eog_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eog.eog_findpeaks" title="neurokit2.eog.eog_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_findpeaks</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1320,9 +1320,93 @@ following:</p>
 </section>
 <section id="miscellaneous">
 <h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">#</a></h2>
-<section id="module-neurokit2.eog">
-<span id="eog-findpeaks"></span><h3><em>eog_findpeaks()</em><a class="headerlink" href="#module-neurokit2.eog" title="Permalink to this headline">#</a></h3>
-<p>Submodule for NeuroKit.</p>
+<section id="eog-findpeaks">
+<h3><em>eog_findpeaks()</em><a class="headerlink" href="#eog-findpeaks" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eog.eog_findpeaks">
+<span class="sig-name descname"><span class="pre">eog_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mne'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_findpeaks.html#eog_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_findpeaks" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Locate EOG eye blinks</strong></p>
+<p>Low-level function used by <a class="reference internal" href="#neurokit2.eog.eog_peaks" title="neurokit2.eog.eog_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_peaks()</span></code></a> to identify blinks in an EOG signal using a
+different set of algorithms. See <a class="reference internal" href="#neurokit2.eog.eog_peaks" title="neurokit2.eog.eog_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_peaks()</span></code></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>veog_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks
+must appear as upward peaks.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The signal sampling rate (in Hz, i.e., samples/second). Needed for method <code class="docutils literal notranslate"><span class="pre">&quot;blinker&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;jammes2008&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The peak detection algorithm. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mne&quot;</span></code> (requires the MNE
+package to be installed), or <code class="docutils literal notranslate"><span class="pre">&quot;brainstorm&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;blinker&quot;</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied
+if the method to be used is <code class="docutils literal notranslate"><span class="pre">&quot;'blinker&quot;</span></code>, otherwise defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments passed to functions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the samples at which EOG-peaks occur,</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.eog.eog_peaks" title="neurokit2.eog.eog_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_peaks</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Get data</span>
+<span class="gp">In [2]: </span><span class="n">eog_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eog_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_clean</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> NeuroKit method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">neurokit</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span>
+<span class="gp">   ...: </span>                            <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">   ...: </span>                            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                            <span class="n">threshold</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span>
+<span class="gp">   ...: </span>                            <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">neurokit</span><span class="p">,</span> <span class="n">eog_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eog_findpeaks1.png"><img alt="../_images/p_eog_findpeaks1.png" src="../_images/p_eog_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> MNE-method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">mne</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mne&quot;</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">mne</span><span class="p">,</span> <span class="n">eog_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eog_findpeaks2.png"><img alt="../_images/p_eog_findpeaks2.png" src="../_images/p_eog_findpeaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3:</strong> brainstorm method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">brainstorm</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;brainstorm&quot;</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">brainstorm</span><span class="p">,</span> <span class="n">eog_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eog_findpeaks3.png"><img alt="../_images/p_eog_findpeaks3.png" src="../_images/p_eog_findpeaks3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 4:</strong> blinker method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">blinker</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;blinker&quot;</span><span class="p">)</span>
+
+<span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">blinker</span><span class="p">,</span> <span class="n">eog_cleaned</span><span class="p">)</span>
+
+<span class="go"># Jammes (2008) method</span>
+<span class="go"># jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method=&quot;jammes2008&quot;)</span>
+<span class="go"># nk.events_plot(jammes2008, eog_cleaned)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eog_findpeaks4.png"><img alt="../_images/p_eog_findpeaks4.png" src="../_images/p_eog_findpeaks4.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+<span class="target" id="module-neurokit2.eog"></span><p>Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_rate">
 <span class="sig-name descname"><span class="pre">eog_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eog.eog_rate" title="Permalink to this definition">#</a></dt>
