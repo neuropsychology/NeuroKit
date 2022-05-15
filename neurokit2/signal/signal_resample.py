@@ -52,6 +52,15 @@ def signal_resample(
       signal = np.cos(np.linspace(start=0, stop=20, num=100))
 
       # Downsample
+      data = {}
+      for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
+          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_length=250, method=m)
+
+    .. ipython:: python
+      :verbatim:
+
+      nk.signal_plot([data[m] for m in data.keys()])
+
       downsampled_interpolation = nk.signal_resample(signal, method="interpolation",
                                                      sampling_rate=1000, desired_sampling_rate=500)
       downsampled_fft = nk.signal_resample(signal, method="FFT",
@@ -64,9 +73,12 @@ def signal_resample(
                                               sampling_rate=1000, desired_sampling_rate=500)
 
       # Upsample
-      upsampled_interpolation = nk.signal_resample(downsampled_interpolation,
-                                                   method="interpolation",
-                                                   sampling_rate=500, desired_sampling_rate=1000)
+      upsampled_interpolation = nk.signal_resample(
+          downsampled_interpolation,
+          method="interpolation",
+          sampling_rate=500,
+          desired_sampling_rate=1000
+      )
       upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT",
                                          sampling_rate=500, desired_sampling_rate=1000)
       upsampled_poly = nk.signal_resample(downsampled_poly, method="poly",
@@ -88,6 +100,7 @@ def signal_resample(
       plt.close()
 
     .. ipython:: python
+      :verbatim:
 
       # Timing benchmarks
       %timeit nk.signal_resample(signal, method="interpolation",
