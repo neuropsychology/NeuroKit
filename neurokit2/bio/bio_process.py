@@ -89,18 +89,20 @@ def bio_process(
       eda = nk.eda_simulate(duration=40, sampling_rate=250, scr_number=3)
       emg = nk.emg_simulate(duration=40, sampling_rate=250, burst_number=5)
 
-      bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, eog=None,
-      sampling_rate=250)
+      bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, sampling_rate=250)
+      bio_df.head()
+
+    .. ipython:: python
 
       # Visualize a subset of signals
       @savefig p_bio_process1.png scale=100%
-      fig = bio_df.iloc[:, 0:16].plot(subplots=True)
+      bio_df.iloc[:, 0:16].plot(subplots=True)
       @suppress
       plt.close()
 
-      bio_df.head()
 
     **Example 2**: Using a real dataset
+
     .. ipython:: python
 
       # Download EOG signal separately
@@ -108,12 +110,12 @@ def bio_process(
       # Download data but crop with same length as eog signal
       data = nk.data('bio_eventrelated_100hz')[:len(eog)]
 
-      bio_df2, bio_info2 = nk.bio_process(ecg=data['ECG'], rsp=data['RSP'], eda=data['EDA'],
+      bio_df, bio_info = nk.bio_process(ecg=data['ECG'], rsp=data['RSP'], eda=data['EDA'],
       emg=None, eog=eog, keep=data['Photosensor'], sampling_rate=100)
 
       # Visualize all signals
       @savefig p_bio_process2.png scale=100%
-      fig = bio_df2.iloc[:, 0:16].plot(subplots=True)
+      bio_df.iloc[:, 0:16].plot(subplots=True)
       @suppress
       plt.close()
 

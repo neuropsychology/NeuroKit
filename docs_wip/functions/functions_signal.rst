@@ -1,5 +1,5 @@
-Signal
--------
+Signal Processing
+------------------
 *signal_simulate()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_simulate

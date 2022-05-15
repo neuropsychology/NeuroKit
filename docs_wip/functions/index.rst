@@ -8,7 +8,7 @@ You can find here the API documentation of NeuroKit, with a description of all t
    :caption: Modules
    :titlesonly:
 
-   functions_bio
+   Bio <functions_bio>
    functions_ecg
    functions_ppg
    functions_hrv
@@ -17,16 +17,16 @@ You can find here the API documentation of NeuroKit, with a description of all t
    functions_emg
    functions_eog
    functions_eeg
-   functions_microstates
-   functions_signal
+   Microstates <functions_microstates>
+   Signal <functions_signal>
    functions_events
    functions_epochs
    functions_data
-   functions_complexity
+   Complexity <functions_complexity>
    functions_markov
    functions_stats
    functions_misc
-   functions_benchmark
+   Benchmarking <functions_benchmark>
 
 
 

@@ -1,5 +1,5 @@
-bio submodule
---------------
+Bio-related Functions
+----------------------
 
 Main
 ^^^^^^^^^^^^^^^^
