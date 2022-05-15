@@ -45,7 +45,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
       # Cluster microstates
       microstates = nk.microstates_segment(eeg, method='kmeans', n_microstates=4)
 
-      @savefig p_microstates_plot1.png scale = 100%
+      @savefig p_microstates_plot1.png scale=100%
       nk.microstates_plot(microstates, epoch=(500, 750))
       @suppress
       plt.close()
