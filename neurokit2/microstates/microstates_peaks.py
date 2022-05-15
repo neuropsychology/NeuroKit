@@ -41,7 +41,7 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
       peaks1 = nk.microstates_peaks(eeg, distance_between=0.01)
       peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)
       peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
-      @savefig p_microstates_peaks_png scale = 100%
+      @savefig p_microstates_peaks_png scale=100%
       nk.events_plot([peaks1[peaks1 < 500],
                       peaks2[peaks2 < 500],
                       peaks3[peaks3 < 500]], gfp[0:500])

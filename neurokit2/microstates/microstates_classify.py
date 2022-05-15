@@ -33,7 +33,7 @@ def microstates_classify(segmentation, microstates):
 
       # Original order
       out = nk.microstates_segment(eeg)
-      @savefig p_microstates_classify.png scale = 100%
+      @savefig p_microstates_classify.png scale=100%
       nk.microstates_plot(out, gfp=out["GFP"][0:100])
       @suppress
       plt.close()

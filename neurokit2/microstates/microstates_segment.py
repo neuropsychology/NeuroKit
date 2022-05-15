@@ -132,7 +132,7 @@ def microstates_segment(
     .. ipython:: python
 
       out_pca = nk.microstates_segment(eeg, method='pca', standardize_eeg=True)
-      @savefig p_microstate_segment2.png scale = 100%
+      @savefig p_microstate_segment2.png scale=100%
       nk.microstates_plot(out_pca, gfp=out_pca["GFP"][0:500])
       @suppress
       plt.close()
@@ -142,7 +142,7 @@ def microstates_segment(
     .. ipython:: python
 
       out_ica = nk.microstates_segment(eeg, method='ica', standardize_eeg=True)
-      @savefig p_microstate_segment3.png scale = 100%
+      @savefig p_microstate_segment3.png scale=100%
       nk.microstates_plot(out_ica, gfp=out_ica["GFP"][0:500])
       @suppress
       plt.close()
@@ -152,7 +152,7 @@ def microstates_segment(
     .. ipython:: python
 
       out_aahc = nk.microstates_segment(eeg, method='aahc')
-      @savefig p_microstate_segment4.png scale = 100%
+      @savefig p_microstate_segment4.png scale=100%
       nk.microstates_plot(out_aahc, gfp=out_aahc["GFP"][0:500])
       @suppress
       plt.close()
