@@ -10,9 +10,22 @@ dependencies:
   - pip:
     - jupyter
     - sphinx
-    - nbsphinx
-    - sphinx-nbexamples
-    - sphinx-gallery
+    - sphinx-book-theme
+    - sphinxemoji
     - sphinx-copybutton
-    - recommonmark
-    - m2r
+    - ipython
+    - myst-parser
+    - myst-nb
+    - numpy
+    - pandas
+    - scipy
+    - scikit-learn
+    - matplotlib
+    - mne
+    - PyWavelets
+    - EMD-signal
+    - astropy
+    - seaborn
+    - EMD-signal
+    - cvxopt
+    - https://github.com/neuropsychology/neurokit/zipball/dev
