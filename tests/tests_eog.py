@@ -47,7 +47,7 @@ def test_eog_findpeaks():
     eog_signal = nk.data("eog_100hz")
     eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
 
-    # Test with Neurokit
+    # Test with NeuroKit
     nk_peaks = nk.eog_findpeaks(
         eog_cleaned, sampling_rate=100, method="neurokit", threshold=0.33, show=False
     )

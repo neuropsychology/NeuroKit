@@ -10,7 +10,7 @@ This package aims at being beginner-friendly. And if you're not yet familiar wit
     Contributions come in many forms, not necessarily code. It can be answering to issues to help
     others, creating content (youtube videos, tweets, tiktoks...), tipping in a `bit of money
     <https://github.com/sponsors/DominiqueMakowski>`_, or even just `sharing ideas
-    <https://github.com/neuropsychology/NeuroKit/discussions>| _ about the development of the
+    <https://github.com/neuropsychology/NeuroKit/discussions>`_ about the development of the
     package.
 
 
@@ -19,7 +19,7 @@ Why contribute to NeuroKit?
 
 Contributing is the best way to learn programming, to meet new people, to grow your professional network, to get known in the game and to have a lot of fun. But **street cred** only is often not enough, and it's particularly important for young academics and students to get some "legit" rewards. We are fully aware of that. As such, **we are committed to crediting and rewarding contributors to the best of our abilities**.
 
-For instance, authors of significant contributions (features, tough bug fixes etc.) will be listed as official `Contributors <https://neurokit2.readthedocs.io/en/dev/authors.html>`_ section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g,participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be included in as package maintainers, in which case they'll be expected to be more generally involved in the general development direction. Finally, we expect this project (the development of the package *per se* and all of the discussions/experiments that are around it) to result in several **publications** (could be about some features of the package, but also some tutorial papers, validation studies or whatnot. Obviously, people that contributed and allowed for a paper to be written will be included as authors.
+For instance, authors of significant contributions (features, tough bug fixes etc.) will be listed as official `Contributors <https://neuropsychology.github.io/NeuroKit/authors.html>`_ section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g,participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be included in as package maintainers, in which case they'll be expected to be more generally involved in the general development direction. Finally, we expect this project (the development of the package *per se* and all of the discussions/experiments that are around it) to result in several **publications** (could be about some features of the package, but also some tutorial papers, validation studies or whatnot. Obviously, people that contributed and allowed for a paper to be written will be included as authors.
 
 Long story short, we want this project to be helpful to you, whether you're a user, a contributor, or anything else in between :) And as always, do not hesitate to ask us if you have any questions.
 
@@ -186,7 +186,7 @@ Step 2: Clone it
 
 Cloning allows you to make a *local* copy of any repositories on Github.
 
-Go to **File** menu, click **Clone Repository** and since you have forked Neurokit2, you should be able to find it easily under **Your repositories**.
+Go to **File** menu, click **Clone Repository** and since you have forked NeuroKit2, you should be able to find it easily under **Your repositories**.
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/clone_nk.PNG
 

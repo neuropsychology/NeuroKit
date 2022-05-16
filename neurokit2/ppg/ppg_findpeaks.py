@@ -64,7 +64,7 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
     if method in ["elgendi"]:
         peaks = _ppg_findpeaks_elgendi(ppg_cleaned, sampling_rate, show=show)
     else:
-        raise ValueError("Neurokit error: Please use one of the following" " methods: 'elgendi'.")
+        raise ValueError("`method` not found. Must be one of the following: 'elgendi'.")
 
     # Prepare output.
     info = {"PPG_Peaks": peaks}

@@ -83,7 +83,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     elif method in ["nabian2018"]:
         clean = _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=heart_rate)
     else:
-        raise ValueError("Neurokit error: Please use one of the following methods: 'elgendi' or 'nabian2018'.")
+        raise ValueError("`method` not found. Must be one of 'elgendi' or 'nabian2018'.")
 
     return clean
 
@@ -121,7 +121,7 @@ def _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=None):
         heart_rate = heart_rate / 60
 
         if not highcut >= 10*heart_rate and not highcut < 0.5*sampling_rate:
-            raise ValueError("Neurokit error: Highcut value should be at least 10 times heart rate and"
+            raise ValueError("Highcut value should be at least 10 times heart rate and"
                              " less than 0.5 times sampling rate.")
 
     filtered = signal_filter(ppg_signal, sampling_rate=sampling_rate, lowcut=None, highcut=highcut, order=2, method="butterworth")

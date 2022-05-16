@@ -121,7 +121,7 @@ def signal_fixpeaks(
       peaks = np.delete(peaks_true, [5, 15])  # create gaps
       peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
 
-      # Identify and Correct Peaks using 'Neurokit' Method
+      # Identify and Correct Peaks using 'NeuroKit' Method
       peaks_corrected = nk.signal_fixpeaks(
           peaks=peaks, interval_min=0.5, interval_max=1.5, method="neurokit"
       )
@@ -173,7 +173,7 @@ def _signal_fixpeaks_neurokit(
     relative_interval_max=None,
     robust=False,
 ):
-    """Neurokit method."""
+    """NeuroKit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
     peaks_clean = _interpolate_big(
@@ -560,7 +560,7 @@ def _plot_artifacts_lipponen2019(artifacts, info):
 
 
 # =============================================================================
-# Neurokit
+# NeuroKit
 # =============================================================================
 def _remove_small(
     peaks, sampling_rate=1000, interval_min=None, relative_interval_min=None, robust=False

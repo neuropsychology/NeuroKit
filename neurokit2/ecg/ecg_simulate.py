@@ -48,7 +48,7 @@ def ecg_simulate(
         (default), will use the model desbribed `McSharry et al. (2003)
         <https://physionet.org/content/ecgsyn/>`_. If
         ``"multileads"``, will return a DataFrame containing 12-leads (see `12-leads ECG simulation
-        <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_).
+        <https://neuropsychology.github.io/NeuroKit/examples/ecg_generate_12leads/ecg_generate_12leads.html>`_).
     random_state : int
         Seed for the random number generator.
     **kwargs

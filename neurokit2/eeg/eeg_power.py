@@ -10,7 +10,7 @@ def eeg_power(
 ):
     """**EEG Power in Different Frequency Bands**
 
-    See our `walkthrough <https://neurokit2.readthedocs.io/en/latest/examples/eeg_power.html>`_ for
+    See our `walkthrough <https://neuropsychology.github.io/NeuroKit/examples/eeg_power/eeg_power.html>`_ for
     details.
 
     * **Gamma** (30-80 Hz)

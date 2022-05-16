@@ -1,5 +1,5 @@
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
-        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+        :target: https://neuropsychology.github.io/NeuroKit/
 
 .. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg?logo=python&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
@@ -61,7 +61,7 @@ or `conda-forge <https://anaconda.org/conda-forge/neurokit2>`_
 
     conda install -c conda-forge neurokit2
 
-If you're not sure what to do, read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
+If you're not sure what to do, read our `installation guide <https://neuropsychology.github.io/NeuroKit/installation.html>`_.
 
 Contributing
 -------------
@@ -78,11 +78,9 @@ Contributing
         :target: https://github.com/psf/black
         :alt: Black code
 
-NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#popularity>`_ project with a large community of contributors with all levels of programming expertise. **But the package is still far from being perfect!** Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
+NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#popularity>`_ project with a large community of contributors with all levels of programming expertise. **But the package is still far from being perfect!** Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guide:
 
-- `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_
-- `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
-- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_
+- `Contributing to NeuroKit <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_
 
 Also, if you have developed new signal processing methods or algorithms and you want to **increase its usage, popularity and citations**, get in touch with us to eventually add it to NeuroKit. A great opportunity for the users as well as the original developers!
 
@@ -91,29 +89,29 @@ You have spotted an **mistake**? An **error** in a formula or code? OR there is 
 Documentation
 ----------------
 
-.. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
-        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+.. image:: https://img.shields.io/badge/documentation-online-brightgreen.svg
+        :target: https://neuropsychology.github.io/NeuroKit/
         :alt: Documentation Status
 
 .. image:: https://img.shields.io/badge/functions-API-orange.svg?colorB=2196F3
-        :target: https://neurokit2.readthedocs.io/en/latest/functions.html
+        :target: https://neuropsychology.github.io/NeuroKit/functions/index.html
         :alt: API
 
-.. image:: https://img.shields.io/badge/tutorials-help-orange.svg?colorB=E91E63
-        :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
+.. image:: https://img.shields.io/badge/tutorials-examples-orange.svg?colorB=E91E63
+        :target: https://neuropsychology.github.io/NeuroKit/examples/index.html
         :alt: Tutorials
 
-.. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
-        :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
-        :alt: PDF
+.. .. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
+..         :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+..         :alt: PDF
 
-.. image:: https://mybinder.org/badge_logo.svg
-        :target: https://mybinder.org/v2/gh/neuropsychology/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
-        :alt: Binder
+.. .. image:: https://mybinder.org/badge_logo.svg
+..         :target: https://mybinder.org/v2/gh/neuropsychology/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+..         :alt: Binder
 
-.. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
-        :target: https://gitter.im/NeuroKit/community
-        :alt: Chat on Gitter
+.. .. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
+..         :target: https://gitter.im/NeuroKit/community
+..         :alt: Chat on Gitter
 
 
 Click on the links above and check out our tutorials:
@@ -121,36 +119,33 @@ Click on the links above and check out our tutorials:
 General
 ^^^^^^^^^^
 
--  `Get familiar with Python in 10 minutes <https://neurokit2.readthedocs.io/en/latest/tutorials/learnpython.html>`_
--  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
--  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
--  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
--  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
--  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
+-  `Get familiar with Python in 10 minutes <https://neuropsychology.github.io/NeuroKit/resources/learn_python.html>`_
+-  `Recording good quality signals <https://neuropsychology.github.io/NeuroKit/resources/recording.html>`_
+-  `Install Python and NeuroKit <https://neuropsychology.github.io/NeuroKit/installation.html>`_
+-  `Included datasets <https://neuropsychology.github.io/NeuroKit/functions/functions_data.html#datasets>`_
+-  `Additional Resources <https://neuropsychology.github.io/NeuroKit/resources/resources.html>`_
 
 
 Examples
 ^^^^^^^^^^
 
--  `Simulate Artificial Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/simulation.html>`_
--  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/custom.html>`_
--  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
--  `Interval-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
--  `Analyze Electrodermal Activity (EDA) <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
--  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
--  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
--  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
--  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/complexity.html>`_
--  `Analyze Electrooculography EOG data <https://neurokit2.readthedocs.io/en/latest/examples/eog.html>`_
--  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/examples/fit_function.html>`_
+-  `Simulate Artificial Physiological Signals <https://neuropsychology.github.io/NeuroKit/examples/signal_simulation/signal_simulation.html>`_
+-  `Customize your Processing Pipeline <https://neuropsychology.github.io/NeuroKit/examples/bio_custom/bio_custom.html>`_
+-  `Event-related Analysis <https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html>`_
+-  `Interval-related Analysis <https://neuropsychology.github.io/NeuroKit/examples/bio_intervalrelated/bio_intervalrelated.html>`_
+-  `Analyze Electrodermal Activity (EDA) <https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html>`_
+-  `Analyze Respiratory Rate Variability (RRV) <https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html>`_
+-  `Extract and Visualize Individual Heartbeats <https://neuropsychology.github.io/NeuroKit/examples/ecg_heartbeats/ecg_heartbeats.html>`_
+-  `Locate P, Q, S and T waves in ECG <https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html>`_
+-  `Analyze Electrooculography EOG data <https://neuropsychology.github.io/NeuroKit/examples/eog_analyze/eog_analyze.html>`_
 
-*You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
+.. *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
 **Don't know which tutorial is suited for your case?** Follow this flowchart:
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/workflow.png
-        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+        :target: https://neuropsychology.github.io/NeuroKit/
 
 Citation
 ---------
@@ -159,7 +154,7 @@ Citation
    :target: https://zenodo.org/badge/latestdoi/218212111
 
 .. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
-   :target: https://neurokit2.readthedocs.io/en/latest/authors.html
+   :target: https://neuropsychology.github.io/NeuroKit/authors.html
 
 
 The **NeuroKit2** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_ 🎉 Additionally, you can get the reference directly from Python by running:
@@ -213,7 +208,7 @@ Physiological Data Preprocessing
 Simulate physiological signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_), PPG, RSP, EDA, and EMG signals to test your scripts and algorithms.
+You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https://neuropsychology.github.io/NeuroKit/examples/ecg_generate_12leads/ecg_generate_12leads.html>`_), PPG, RSP, EDA, and EMG signals to test your scripts and algorithms.
 
 .. code-block:: python
 
@@ -238,7 +233,7 @@ You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https:/
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_simulation.png
-        :target: https://neurokit2.readthedocs.io/en/latest/examples/simulation.html
+        :target: https://neuropsychology.github.io/NeuroKit/examples/signal_simulation/signal_simulation.html
 
 
 Electrodermal Activity (EDA/GSR)
@@ -256,7 +251,7 @@ Electrodermal Activity (EDA/GSR)
     nk.eda_plot(signals, sampling_rate=250)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png
-        :target: https://neurokit2.readthedocs.io/en/latest/examples/eda.html
+        :target: https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html
 
 
 Cardiac activity (ECG)
@@ -275,7 +270,7 @@ Cardiac activity (ECG)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png
-        :target: https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html
+        :target: https://neuropsychology.github.io/NeuroKit/examples/ecg_heartbeats/ecg_heartbeats.html
 
 
 Respiration (RSP)
@@ -294,7 +289,7 @@ Respiration (RSP)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png
-        :target: https://neurokit2.readthedocs.io/en/latest/examples/rrv.html
+        :target: https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html
 
 
 Electromyography (EMG)
@@ -355,7 +350,7 @@ Electrooculography (EOG)
 Electrogastrography (EGG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
+Consider `helping us develop it <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
 
 Physiological Data Analysis
@@ -378,7 +373,7 @@ An epoch is a short chunk of the physiological signal (usually < 10 seconds), th
 the physiological signals of interest are time-segmented accordingly. This is represented by the orange boxes in the figure above.
 In this case, using `bio_analyze()` will compute features like rate changes, peak characteristics and phase characteristics.
 
-- `Event-related example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
+- `Event-related example <https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html>`_
 
 Interval-related
 ^^^^^^^^^^^^^^^^^
@@ -399,7 +394,7 @@ applied on the entire 20s duration to investigate how physiology fluctuates in g
 In this case, using `bio_analyze()` will compute features such as rate characteristics (in particular,
 variability metrics) and peak characteristics.
 
-- `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
+- `Interval-related example <https://neuropsychology.github.io/NeuroKit/examples/bio_intervalrelated/bio_intervalrelated.html>`_
 
 
 Heart Rate Variability (HRV)
@@ -471,7 +466,7 @@ ECG Delineation
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_delineate.png
-       :target: https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html
+       :target: https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html
 
 
 
@@ -525,7 +520,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
-        :target: https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html
+        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_complexity.html
 
 
 
@@ -562,7 +557,7 @@ Signal Decomposition
     nk.signal_plot(recomposed)  # Visualize components
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_decomposition.png
-        :target: https://neurokit2.readthedocs.io/en/latest/
+        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_signal.html#signal-decompose
 
 Signal Power Spectrum Density (PSD)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -578,7 +573,7 @@ Signal Power Spectrum Density (PSD)
     burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
-        :target: https://neurokit2.readthedocs.io/en/latest/
+        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_signal.html#signal-psd
 
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -592,6 +587,7 @@ Statistics
     ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
+        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_stats.html#hdi
 
 .. used_at_section
 

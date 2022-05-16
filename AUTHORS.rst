@@ -2,7 +2,7 @@ Authors
 =======
 
 .. hint::
-   Want to be a part of the project? Read how to `contribute and join us <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_!
+   Want to be a part of the project? Read how to `contribute and join us <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
 Maintainers
 -----------

@@ -16,17 +16,17 @@ Setup
 
 The first thing you will need is to **install Python** on your computer (we have a `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this includes **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_ (called an IDE). But you can use `jupyter notebooks <https://jupyter.org/>`_, `VS Code <https://code.visualstudio.com/>`_ or `anything else <https://www.guru99.com/python-ide-code-editor.html>`_, it doesn't really matter.
 
-There is one important concept to understand here: the difference between the **CONSOLE** and the **EDITOR**. The editor is like a *cooking table* where you prepare your ingredients to make a dish, whereas the console is like the *oven*, you only open it to put the dish in it and get the result. 
+There is one important concept to understand here: the difference between the **CONSOLE** and the **EDITOR**. The editor is like a *cooking table* where you prepare your ingredients to make a dish, whereas the console is like the *oven*, you only open it to put the dish in it and get the result.
 
 The process of writing code usually happens in the editor, which is basically a text editor (such as notepad), except that it automatically highlights the code (making it easy to see functions, numbers, etc.). Importantly, you can directly *execute* a line of code (which is equivalent to copy it and paste it the *console*).
 
 For instance, try writing :code:`1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press :code:`F9` (or :code:`CTRL + ENTER`), it will **execute it** (on Spyder, but the shortcut for running a line might be different in other IDEs).
 
 
-.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/learnpython/learnpython_1.jpg
 
 
-As a result, you should see in the console the order that you gave and, below, its **output** (which is: :code:`2`). 
+As a result, you should see in the console the order that you gave and, below, its **output** (which is: :code:`2`).
 
 
 Now that the distinction between where we write the code and where the output appears is clear, take some time to explore the settings and turn the editor background to **DARK**. *Why?* Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
@@ -55,7 +55,7 @@ We can *assign* a value to a *variable* using the :code:`=` sign, for instance:
 
     x = 2
     y = 3
-    
+
 Once we execute these two lines, Python will know that :code:`x` refers to :code:`2`, and :code:`y` to :code:`3`. We can now write:
 
 .. code-block:: python
@@ -85,7 +85,7 @@ The next important thing to have in mind is that variables have **types**. Basic
 
     print(1 + 2)
     print("1" + "2")
-    
+
 What happened here? Well, quotations (:code:`"I am quoted"`) are used to represent **strings** (i.e., text). So in the second line, the numbers that we added were not numbers, but text. And when you add strings together in Python, it *concatenates* them.
 
 One can change the type of a variable with the following:
@@ -95,7 +95,7 @@ One can change the type of a variable with the following:
     int(1.0)  # transform the input to an integer
     float(1)  # transform the input to a float
     str(1)  # transform the input into text
-    
+
 Also, here I used the hashtag symbol to **make comments**, i.e., writing stuff that won't be executed by Python. This is super useful to annotate each line of your code to remember what you do - and why you do it.
 
 Types are often the source of many errors as they usually are **incompatible** between them. For instance, you cannot add a *number* (:code:`int` or :code:`float`) with a *character string*. For instance, try running :code:`3 + "a"`, it will throw a :code:`TypeError`.
@@ -153,7 +153,7 @@ So if we want the 2nd element of the list, we have to ask for the 1th:
     mylist = [1, 2, 3]
     x = mylist[1]
     print(x)
-    
+
 
 
 Control flow (if and else)
@@ -169,7 +169,7 @@ One important notion in programming is control flow. You want the code to do som
     if x < 3:
         print("lower than 3")
 
-One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon :code:`:`. The chunk is usually written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the :code:`TAB` key). 
+One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon :code:`:`. The chunk is usually written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the :code:`TAB` key).
 
 *What is identation?*
 
@@ -179,7 +179,7 @@ One very important thing to notice is that the **if statement** corresponds to a
     this
         is
             indentation
-            
+
 
 This identation must be consistent: usually one level of identation corresponds to 4 spaces. Make sure you respect that throughout your script, as this is very important in Python. If you break the rule, it will throw an **error**. Try running the following:
 
@@ -199,7 +199,7 @@ Finally, **if** statements can be followed by **else** statements, which takes c
     else:
         print("higher")
 
-Again, note the **indentation** and how the **else** statement creates a new idented chunk. 
+Again, note the **indentation** and how the **else** statement creates a new idented chunk.
 
 
 For loops
@@ -241,7 +241,7 @@ Another useful function is :code:`range()`, that creates a sequence of integers,
     mylist = [1, 2, 3]
     for var in mylist:
         print(var)
-        
+
 We can re-write it using the :code:`range()` function, to create a sequence of **length 3** (which will be from :code:`0` to :code:`2`; remember that Python indexing starts from 0!), and extracting and printing all of the elements in the list:
 
 .. code-block:: python
@@ -275,15 +275,15 @@ One of the most popular package is **numpy** (for *NUM*rical *PY*thon), includin
 .. code-block:: python
 
     import numpy
-    
-    
+
+
 Once you have imported it (you have to run that line), you can use its functions. For instance, let's use the function to compute **square roots** included in this package:
 
 .. code-block:: python
 
     x = numpy.sqrt(9)
     print(x)
-    
+
 You will notice that we have to first **write the package name**, and then a **dot**, and then the :code:`sqrt()` function. Why is it like that? Imagine you load two packages, both having a function named :code:`sqrt()`. How would the program know which one to use? Here, it knows that it has to look for the :code:`sqrt()` function in the :code:`numpy` package.
 
 You might think, *it's annoying to write the name of the package everytime*, especially if the package name is long. And this is why we sometimes use *aliases*. For instance, *numpy* is often loaded under the shortcut **np**, which makes it shorter to use:
@@ -291,7 +291,7 @@ You might think, *it's annoying to write the name of the package everytime*, esp
 .. code-block:: python
 
     import numpy as np
-    
+
     x = np.sqrt(9)
     print(x)
 
@@ -321,7 +321,7 @@ In signal processing, vectors are often used instead of lists to store the signa
     myvector = np.array([1, 2, 3])
     myvector = myvector + 1
     print(myvector)
-    
+
 Indeed, vectors allow for *vectorized* operations, which means that any operation is propagated on each element of the vector. And that's very useful for signal processing :)
 
 
@@ -345,7 +345,7 @@ This returns a vector of the same length but filled with :code:`True` (if the co
     mask = myvector <= 2
     subset = myvector[mask]
     print(subset)
-    
+
 Additionaly, we can also modify a subset of values on the fly:
 
 .. code-block:: python
@@ -353,9 +353,9 @@ Additionaly, we can also modify a subset of values on the fly:
     myvector = np.array([1, 2, 3, 2, 1])
     myvector[myvector <= 2] = 6
     print(myvector)
-    
+
 Here we assigned a new value `6` to all elements of the vector that respected the condition (were inferior or equal to 2).
-    
+
 
 Dataframes
 ------------
@@ -368,17 +368,17 @@ Dataframes are available in Python through the **pandas** package, another very 
 .. code-block:: python
 
     import pandas as pd
-    
+
     # Create variables
     var1 = [1, 2, 3]
     var2 = [5, 6, 7]
-    
+
     # Put them in a dict
     data = {"Variable1": var1, "Variable2": var2}
-    
+
     # Convert this dict to a dataframe
     data = pd.DataFrame.from_dict(data)
-    
+
     print(data)
 
 This creates a dataframe with 3 rows (the observations) and 2 columns (the variables). One can access the variables by their name:
@@ -397,9 +397,9 @@ Now that you know how to create a dataframe in Python, note that you also use **
 .. code-block:: python
 
     import pandas as pd
-    
+
     data = pd.read_excel("C:/Users/Dumbledore/Desktop/myfile.xlsx")  # this is an example
-    print(data)  
+    print(data)
 
 
 Additionally, this can also read data directly from the internet! Try running the following:
@@ -407,11 +407,11 @@ Additionally, this can also read data directly from the internet! Try running th
 .. code-block:: python
 
     import pandas as pd
-    
+
     data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv")
-    print(data)  
-    
-    
+    print(data)
+
+
 Next steps
 ------------
 
