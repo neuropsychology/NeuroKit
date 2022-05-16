@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -645,7 +645,7 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#signal-decompose">
    <em>
-    signal.decompose()
+    signal_decompose()
    </em>
   </a>
  </li>
@@ -888,7 +888,7 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#signal-decompose">
    <em>
-    signal.decompose()
+    signal_decompose()
    </em>
   </a>
  </li>
@@ -1401,7 +1401,7 @@ value between the max and the min.</p></li>
 
 </section>
 <section id="signal-decompose">
-<h2><em>signal.decompose()</em><a class="headerlink" href="#signal-decompose" title="Permalink to this headline">#</a></h2>
+<h2><em>signal_decompose()</em><a class="headerlink" href="#signal-decompose" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal_decompose">
 <span class="sig-name descname"><span class="pre">signal_decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'emd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_decompose.html#signal_decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_decompose" title="Permalink to this definition">#</a></dt>
@@ -1780,7 +1780,7 @@ See <a class="reference external" href="https://docs.scipy.org/doc/scipy/referen
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f0f53d4feb0&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fe3c5127e50&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1897,19 +1897,19 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f53f3ef20&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5aeec20&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5d2b40d0&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5fab880&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5d2b5f00&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c594e890&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5d2b55d0&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c594f340&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5d2b4130&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5f846a0&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" src="../_images/p_signal_noise2.png" style="width: 1200.0px; height: 1200.0px;" /></a>
@@ -1956,16 +1956,16 @@ very high accuracy) and distribution as the original data, using an iterative sc
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5e2f4c40&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5d90310&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5e30dbd0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5f86590&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f5e30dde0&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5f87f70&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f0f5d2b5a50&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fe3c5f853c0&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -1974,16 +1974,16 @@ very high accuracy) and distribution as the original data, using an iterative sc
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f53b7db40&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5def2e0&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f53ac8550&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5e75d20&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f53ac83d0&gt;]</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c5e760e0&gt;]</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f0f53f2d600&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fe3cc291cf0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" src="../_images/p_signal_surrogate2.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -2187,7 +2187,7 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 
 <span class="gp">In [15]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="p">[</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">11350</span><span class="p">,</span> <span class="mi">18350</span><span class="p">]))</span>  <span class="c1"># add artifacts</span>
 
-<span class="go"># Identify and Correct Peaks using &#39;Neurokit&#39; Method</span>
+<span class="go"># Identify and Correct Peaks using &#39;NeuroKit&#39; Method</span>
 <span class="gp">In [16]: </span><span class="n">peaks_corrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_fixpeaks</span><span class="p">(</span>
 <span class="gp">   ....: </span>    <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">interval_max</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span>
 <span class="gp">   ....: </span><span class="p">)</span>

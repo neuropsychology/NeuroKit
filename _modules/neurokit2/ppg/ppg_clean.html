@@ -180,7 +180,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -615,7 +615,7 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_nabian2018</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="n">heart_rate</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Neurokit error: Please use one of the following methods: &#39;elgendi&#39; or &#39;nabian2018&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`method` not found. Must be one of &#39;elgendi&#39; or &#39;nabian2018&#39;.&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span></div>
 
@@ -653,7 +653,7 @@ title="Open an issue"
         <span class="n">heart_rate</span> <span class="o">=</span> <span class="n">heart_rate</span> <span class="o">/</span> <span class="mi">60</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">highcut</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="o">*</span><span class="n">heart_rate</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">highcut</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Neurokit error: Highcut value should be at least 10 times heart rate and&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Highcut value should be at least 10 times heart rate and&quot;</span>
                              <span class="s2">&quot; less than 0.5 times sampling rate.&quot;</span><span class="p">)</span>
 
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">)</span>

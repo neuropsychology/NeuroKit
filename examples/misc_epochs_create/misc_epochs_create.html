@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -646,7 +646,7 @@ title="Print to PDF"
 <h1>Create epochs<a class="headerlink" href="#create-epochs" title="Permalink to this headline">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>In your experiment, participants undergo a number of trials (events) and these events are possibly of different conditions. You are wondering how can you locate these events on your signals and perhaps make them into epochs for future analysis?</p>
-<p>This example shows how to use Neurokit to extract epochs from data based on events localisation. In case you have multiple data files for each subject, this example also shows you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
+<p>This example shows how to use NeuroKit to extract epochs from data based on events localisation. In case you have multiple data files for each subject, this example also shows you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
@@ -687,7 +687,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7f45a197bd90&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fab0dc6bcd0&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/5f8e8f018054867beeb35a41497edc8ff44cd9c819ec5b01f37418794106741f.png" src="../../_images/5f8e8f018054867beeb35a41497edc8ff44cd9c819ec5b01f37418794106741f.png" />
@@ -703,7 +703,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>Before we can epoch the data, we have to locate the events and extract their related information. This can be done using Neurokit function <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find%3E">events_find()</a>.</p>
+<p>Before we can epoch the data, we have to locate the events and extract their related information. This can be done using NeuroKit function <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-find">events_find()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find events</span>
@@ -724,9 +724,9 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>The output of <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find%3E">events_find()</a> gives you a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> that contains the information of event onsets, event duration, event label and event condition.</p>
-<p>As stated, as the event onsets of this data are marked by event channel going from 5 to <strong>0</strong>, the <code class="docutils literal notranslate"><span class="pre">threshold_keep</span></code> is set to <code class="docutils literal notranslate"><span class="pre">below</span></code>. Depends on your data, you can customize the <code class="docutils literal notranslate"><span class="pre">arguments</span></code> in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find%3E">events_find()</a> to correctly locate the events.</p>
-<p>You can use the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot%3E">events_plot()</a> function to plot the events that have been found together with your event channel to confirm that it is correct.</p>
+<p>The output of <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-find">events_find()</a> gives you a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> that contains the information of event onsets, event duration, event label and event condition.</p>
+<p>As stated, as the event onsets of this data are marked by event channel going from 5 to <strong>0</strong>, the <code class="docutils literal notranslate"><span class="pre">threshold_keep</span></code> is set to <code class="docutils literal notranslate"><span class="pre">below</span></code>. Depends on your data, you can customize the <code class="docutils literal notranslate"><span class="pre">arguments</span></code> in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-find">events_find()</a> to correctly locate the events.</p>
+<p>You can use the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-plot">events_plot()</a> function to plot the events that have been found together with your event channel to confirm that it is correct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">])</span>
@@ -734,7 +734,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/ef332345367d7686a0421d4e5fac1e88ca7487b5c2e88020922a57f31c8ac8f6.png" src="../../_images/ef332345367d7686a0421d4e5fac1e88ca7487b5c2e88020922a57f31c8ac8f6.png" />
+<img alt="../../_images/bfd225e3ab46edbb578a6444ba8a41b235cb51f646c7c6cce833c8c388e3a57b.png" src="../../_images/bfd225e3ab46edbb578a6444ba8a41b235cb51f646c7c6cce833c8c388e3a57b.png" />
 </div>
 </div>
 <p>Or you can visualize the events together with the all other signals.</p>
@@ -745,10 +745,10 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" src="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" />
+<img alt="../../_images/4c99b21daa86e5bcf13e1b8974fd6e95cad4626e0e7efa8483acc8268bcbb79e.png" src="../../_images/4c99b21daa86e5bcf13e1b8974fd6e95cad4626e0e7efa8483acc8268bcbb79e.png" />
 </div>
 </div>
-<p>After you have located the events, you can now create epochs using the NeuroKit <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create%3E">epochs_create()</a> function. However, we recommend to process your signal first before cutting them to smaller epochs. You can read more about processing of physiological signals using NeuroKit in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/examples/custom.html%3E">Custom your Processing Pipeline</a> Example.</p>
+<p>After you have located the events, you can now create epochs using the NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_epochs.html#epochs-create">epochs_create()</a> function. However, we recommend to process your signal first before cutting them to smaller epochs. You can read more about processing of physiological signals using NeuroKit in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/bio_custom/bio_custom.html">Custom your Processing Pipeline</a> Example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process the signal</span>
@@ -833,7 +833,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>And tah dah! You now should have a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> called epochs that resembles the output of NeuroKit <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create%3E">epochs_create()</a>. Each <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> in the epochs corresponds to an event (a trial) that <code class="docutils literal notranslate"><span class="pre">Subject_001</span></code> underwent.</p>
+<p>And tah dah! You now should have a <code class="docutils literal notranslate"><span class="pre">dictionary</span></code> called epochs that resembles the output of NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/misc_epochs_create/misc_epochs_create.html">epochs_create()</a>. Each <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> in the epochs corresponds to an event (a trial) that <code class="docutils literal notranslate"><span class="pre">Subject_001</span></code> underwent.</p>
 <p>The epochs is now ready for further analysis!</p>
 </section>
 </section>

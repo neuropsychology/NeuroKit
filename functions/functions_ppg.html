@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -880,9 +880,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.080581           0.995187</span>
-<span class="go">2     2        10000  ...                  1.049676           0.974583</span>
-<span class="go">3     3        15000  ...                  1.389404           0.715174</span>
+<span class="go">1     1         5000  ...                  2.000417           0.719751</span>
+<span class="go">2     2        10000  ...                 -0.069057           0.987790</span>
+<span class="go">3     3        15000  ...                 -0.397989           0.567791</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -1101,16 +1101,16 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f58f2f610&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c8bb9ed0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7f0f598de020&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fe3c8cb4ee0&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7f0f598debc0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fe3c8cb6920&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7f0f5c7a6860&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fe3c9f86380&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1183,9 +1183,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.061663           0.980575</span>
-<span class="go">2     2        10000  ...                 -1.172936           0.945795</span>
-<span class="go">3     3        15000  ...                 -1.226136           0.427773</span>
+<span class="go">1     1         5000  ...                  2.200602           0.670972</span>
+<span class="go">2     2        10000  ...                  0.513188           0.965958</span>
+<span class="go">3     3        15000  ...                 -0.619316           0.933813</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>

@@ -180,7 +180,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -596,7 +596,7 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Neurokit error: Please use one of the following&quot;</span> <span class="s2">&quot; methods: &#39;elgendi&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Prepare output.</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">}</span>

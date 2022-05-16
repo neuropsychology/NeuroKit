@@ -23,7 +23,7 @@ The process of writing code usually happens in the editor, which is basically a 
 For instance, try writing ``1+1`` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press ``F9`` (or ``CTRL + ENTER``, or ``SHIFT + ENTER`` in VS Code), it will **execute it** (on Spyder, but the shortcut for running a line might be different in other IDEs).
 
 
-.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/learnpython/learnpython_1.jpg
 
 
 As a result, you should see in the console the order that you gave and, below, its **output** (which is: ``2``).

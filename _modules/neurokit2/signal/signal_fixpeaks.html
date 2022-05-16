@@ -180,7 +180,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -653,7 +653,7 @@ title="Open an issue"
 <span class="sd">      peaks = np.delete(peaks_true, [5, 15])  # create gaps</span>
 <span class="sd">      peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts</span>
 
-<span class="sd">      # Identify and Correct Peaks using &#39;Neurokit&#39; Method</span>
+<span class="sd">      # Identify and Correct Peaks using &#39;NeuroKit&#39; Method</span>
 <span class="sd">      peaks_corrected = nk.signal_fixpeaks(</span>
 <span class="sd">          peaks=peaks, interval_min=0.5, interval_max=1.5, method=&quot;neurokit&quot;</span>
 <span class="sd">      )</span>
@@ -705,7 +705,7 @@ title="Open an issue"
     <span class="n">relative_interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Neurokit method.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
 
     <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_remove_small</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="p">,</span> <span class="n">robust</span><span class="p">)</span>
     <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_interpolate_big</span><span class="p">(</span>
@@ -1092,7 +1092,7 @@ title="Open an issue"
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># Neurokit</span>
+<span class="c1"># NeuroKit</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_remove_small</span><span class="p">(</span>
     <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span>

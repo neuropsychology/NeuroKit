@@ -51,7 +51,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using the [read_acqknowledge()](https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>).\n"
+    "In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using the [read_acqknowledge()](https://neuropsychology.github.io/NeuroKit/functions/functions_data.html#read-acqknowledge).\n"
    ]
   },
   {
@@ -68,7 +68,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional array), or a list, you can use [ecg_process()](https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_process>) to process it.\n"
+    "Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional array), or a list, you can use [ecg_process()](https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-process) to process it.\n"
    ]
   },
   {
@@ -171,7 +171,7 @@
    "metadata": {},
    "source": [
     "\n",
-    "You can now epoch all these individual heart beats, synchronized by their R peaks with the [ecg_segment()](https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_segment) function.\n"
+    "You can now epoch all these individual heart beats, synchronized by their R peaks with the [ecg_segment()](https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-segment) function.\n"
    ]
   },
   {

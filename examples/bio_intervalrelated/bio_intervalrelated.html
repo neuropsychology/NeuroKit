@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -665,7 +665,7 @@ title="Print to PDF"
   <section id="interval-related-analysis">
 <h1>Interval-related Analysis<a class="headerlink" href="#interval-related-analysis" title="Permalink to this headline">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
-<p>This example shows how to use Neurokit to analyze longer periods of data (i.e., greater than 10 seconds) such as <strong>resting state data</strong>. If you are looking to perform event-related analysis on epochs, you can refer to this <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html">Neurokit example</a> here.</p>
+<p>This example shows how to use NeuroKit to analyze longer periods of data (i.e., greater than 10 seconds) such as <strong>resting state data</strong>. If you are looking to perform event-related analysis on epochs, you can refer to this <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html">NeuroKit example</a> here.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
@@ -703,8 +703,8 @@ title="Print to PDF"
 </section>
 <section id="process-the-signals">
 <h2>Process the Signals<a class="headerlink" href="#process-the-signals" title="Permalink to this headline">#</a></h2>
-<p>In this analysis here, we will focus on extracting <strong>ECG</strong> and <strong>RSP</strong> features. To process the respective physiological signals, you can use <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_process">ecg_process()</a> and
-<a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_process">rsp_process()</a>. You can then then visualize these signals using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_plot">ecg_plot()</a> and <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_plot">rsp_plot()</a>. For the purposes of these example, we will select just 3000 datapoints (or 30s) to visualize.</p>
+<p>In this analysis here, we will focus on extracting <strong>ECG</strong> and <strong>RSP</strong> features. To process the respective physiological signals, you can use <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-process">ecg_process()</a> and
+<a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_rsp.html#rsp-process">rsp_process()</a>. You can then then visualize these signals using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-plot">ecg_plot()</a> and <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_rsp.html#rsp-plot">rsp_plot()</a>. For the purposes of these example, we will select just 3000 datapoints (or 30s) to visualize.</p>
 <p><em>Note:</em> Do remember to specify the correct <code class="docutils literal notranslate"><span class="pre">sampling_rate</span></code> (in this case, to 100Hz) in which the signals were generated, in all the relevant functions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -735,8 +735,8 @@ title="Print to PDF"
 </section>
 <section id="extract-features">
 <h2>Extract Features<a class="headerlink" href="#extract-features" title="Permalink to this headline">#</a></h2>
-<p>Now that we have the processed signals, we can now perform the analysis using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_intervalrelated">ecg_intervalrelated()</a> and <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_intervalrelated">rsp_intervalrelated()</a>. Simply provide the processed dataframe and these functions will return a dataframe of the features pertaining to the specific signal.</p>
-<p>These features will be quite different from event-related features (See <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html">Event-related analysis example</a>) as these signals were generated over a longer period of time. Hence, apart from the mean signal rate, variability metrices pertaining to heart rate variability (HRV) and respiratory rate variability (RRV) are also extracted here.</p>
+<p>Now that we have the processed signals, we can now perform the analysis using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-intervalrelated">ecg_intervalrelated()</a> and <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_rsp.html#rsp-intervalrelated">rsp_intervalrelated()</a>. Simply provide the processed dataframe and these functions will return a dataframe of the features pertaining to the specific signal.</p>
+<p>These features will be quite different from event-related features (See <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html">Event-related analysis example</a>) as these signals were generated over a longer period of time. Hence, apart from the mean signal rate, variability metrices pertaining to heart rate variability (HRV) and respiratory rate variability (RRV) are also extracted here.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_intervalrelated</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">)</span>
@@ -896,7 +896,7 @@ title="Print to PDF"
 </section>
 <section id="optional-segmenting-the-data">
 <h2>Optional: Segmenting the Data<a class="headerlink" href="#optional-segmenting-the-data" title="Permalink to this headline">#</a></h2>
-<p>If you want to segment your data for analysis, such as analyzing two separate portions of your resting state data, you can simply do so by splitting the <code class="docutils literal notranslate"><span class="pre">ecg_signals</span></code> dataframe into <strong>epochs</strong> using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create">epochs_create()</a>. Using this example dataset, let’s say you want to analyze the first half and the second half of the ECG data. This means that each halved data would last for 60 x 2.5s = <em>150s</em>.</p>
+<p>If you want to segment your data for analysis, such as analyzing two separate portions of your resting state data, you can simply do so by splitting the <code class="docutils literal notranslate"><span class="pre">ecg_signals</span></code> dataframe into <strong>epochs</strong> using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_epochs.html#epochs-create">epochs_create()</a>. Using this example dataset, let’s say you want to analyze the first half and the second half of the ECG data. This means that each halved data would last for 60 x 2.5s = <em>150s</em>.</p>
 <p>In this function, we would also specify the onset of events to be at the 0th (for the first half of the data) and the 15000th datapoint (for the second half of the data), since there are 30000 data points in total.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

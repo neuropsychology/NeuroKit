@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -777,7 +777,7 @@ title="Print to PDF"
 </table>
 </div></div></div>
 </div>
-<p>You can see that it consists of three different signals, pertaining to ECG, PPG (an alternative determinant of heart rate as compared to ECG), and RSP (respiration). Now, let’s extract the ECG signal in the shape of a vector (i.e., a one-dimensional array), and find the peaks using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_peaks">ecg_peaks()</a>.</p>
+<p>You can see that it consists of three different signals, pertaining to ECG, PPG (an alternative determinant of heart rate as compared to ECG), and RSP (respiration). Now, let’s extract the ECG signal in the shape of a vector (i.e., a one-dimensional array), and find the peaks using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find peaks</span>
@@ -874,11 +874,11 @@ title="Print to PDF"
 </div></div><img alt="../../_images/5e1990e2d6d4ae276ca6d05e306d184ecfcb746a028a1b049bdd3446f304c8cc.png" src="../../_images/5e1990e2d6d4ae276ca6d05e306d184ecfcb746a028a1b049bdd3446f304c8cc.png" />
 </div>
 </div>
-<p>These features include the RMSSD (square root of the mean of the sum of successive differences between adjacent RR intervals), MeanNN (mean of RR intervals) so on and so forth. You can also visualize the distribution of R-R intervals by specifying <code class="docutils literal notranslate"><span class="pre">show=True</span></code> in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv_time">hrv_time()</a>.</p>
+<p>These features include the RMSSD (square root of the mean of the sum of successive differences between adjacent RR intervals), MeanNN (mean of RR intervals) so on and so forth. You can also visualize the distribution of R-R intervals by specifying <code class="docutils literal notranslate"><span class="pre">show=True</span></code> in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_hrv.html#hrv-time">hrv_time()</a>.</p>
 </section>
 <section id="frequency-domain-analysis">
 <h2>Frequency-Domain Analysis<a class="headerlink" href="#frequency-domain-analysis" title="Permalink to this headline">#</a></h2>
-<p>Now, let’s extract the frequency domain features, which involve extracting for example the spectral power density pertaining to different frequency bands. Again, you can visualize the power across frequency bands by specifying <code class="docutils literal notranslate"><span class="pre">show=True</span></code> in <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv_frequency">hrv_frequency()</a>.</p>
+<p>Now, let’s extract the frequency domain features, which involve extracting for example the spectral power density pertaining to different frequency bands. Again, you can visualize the power across frequency bands by specifying <code class="docutils literal notranslate"><span class="pre">show=True</span></code> in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_hrv.html#hrv-frequency">hrv_frequency()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hrv_freq</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_frequency</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -937,7 +937,7 @@ title="Print to PDF"
 </section>
 <section id="non-linear-domain-analysis">
 <h2>Non-Linear Domain Analysis<a class="headerlink" href="#non-linear-domain-analysis" title="Permalink to this headline">#</a></h2>
-<p>Now, let’s compute the non-linear indices with <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv_nonlinear">hrv_nonlinear()</a>.</p>
+<p>Now, let’s compute the non-linear indices with <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_hrv.html#hrv-nonlinear">hrv_nonlinear()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hrv_nonlinear</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1023,7 +1023,7 @@ title="Print to PDF"
 </section>
 <section id="all-domains">
 <h2>All Domains<a class="headerlink" href="#all-domains" title="Permalink to this headline">#</a></h2>
-<p>Finally, if you’d like to extract HRV indices from all three domains, you can simply input <code class="docutils literal notranslate"><span class="pre">peaks</span></code> into <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv">hrv()</a>, where you can specify <code class="docutils literal notranslate"><span class="pre">show=True</span></code> to visualize the combination of plots depicting the RR intervals distribution, power spectral density for frequency domains, and the poincare scattergram.</p>
+<p>Finally, if you’d like to extract HRV indices from all three domains, you can simply input <code class="docutils literal notranslate"><span class="pre">peaks</span></code> into <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_hrv.html">hrv()</a>, where you can specify <code class="docutils literal notranslate"><span class="pre">show=True</span></code> to visualize the combination of plots depicting the RR intervals distribution, power spectral density for frequency domains, and the poincare scattergram.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

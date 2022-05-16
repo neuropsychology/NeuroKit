@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -695,7 +695,7 @@ title="Print to PDF"
   <section id="event-related-analysis">
 <h1>Event-related Analysis<a class="headerlink" href="#event-related-analysis" title="Permalink to this headline">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
-<p>This example shows how to use Neurokit to extract epochs from data based on events localisation and its corresponding physiological signals. That way, you can compare <em>experimental conditions</em> with one another.</p>
+<p>This example shows how to use NeuroKit to extract epochs from data based on events localisation and its corresponding physiological signals. That way, you can compare <em>experimental conditions</em> with one another.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
@@ -720,7 +720,7 @@ title="Print to PDF"
 </div>
 <section id="the-dataset">
 <h2>The Dataset<a class="headerlink" href="#the-dataset" title="Permalink to this headline">#</a></h2>
-<p>Use the <code class="docutils literal notranslate"><span class="pre">nk.data()</span></code> function to load the dataset located on Neurokit data folder.</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">nk.data()</span></code> function to load the dataset located on NeuroKit data folder.</p>
 <p>It contains 2.5 minutes of biosignals recorded at a frequency of 100Hz (2.5 x 60 x 100 = 15000 data points).</p>
 <p>Biosignals : <strong>ECG, RSP, EDA + Photosensor (event signal)</strong></p>
 <div class="cell docutils container">
@@ -744,7 +744,7 @@ title="Print to PDF"
 </section>
 <section id="find-events">
 <h2>Find Events<a class="headerlink" href="#find-events" title="Permalink to this headline">#</a></h2>
-<p>These events can be localized and extracted using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find">events_find()</a>.</p>
+<p>These events can be localized and extracted using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-find">events_find()</a>.</p>
 <p><em>Note that you should also specify whether to select events that are higher or below the threshold using the <code class="docutils literal notranslate"><span class="pre">threshold_keep</span></code> argument.</em></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -775,12 +775,12 @@ title="Print to PDF"
 <img alt="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" src="../../_images/a7635df8c7b2fdb7b00468d37ae36a6422897e0f815ec53b83b5f258e81ff531.png" />
 </div>
 </div>
-<p>The output of <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot">events_plot()</a> shows the corresponding events in the signal, with the blue dashed line representing a Negative event and red dashed line representing a Neutral event.</p>
+<p>The output of <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-plot">events_plot()</a> shows the corresponding events in the signal, with the blue dashed line representing a Negative event and red dashed line representing a Neutral event.</p>
 </section>
 <section id="process-the-signals">
 <h2>Process the Signals<a class="headerlink" href="#process-the-signals" title="Permalink to this headline">#</a></h2>
 <p>Now that we have the events location, we can go ahead and process the data.</p>
-<p>Biosignals processing can be done quite easily using NeuroKit with the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.bio_process">bio_process()</a> function. Simply provide the appropriate biosignal channels and additional channels that you want to keep (for example, the photosensor), and <code class="docutils literal notranslate"><span class="pre">bio_process()</span></code> will take care of the rest. It will return a dataframe containing processed signals and a dictionary containing useful information.</p>
+<p>Biosignals processing can be done quite easily using NeuroKit with the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_bio.html#bio-process">bio_process()</a> function. Simply provide the appropriate biosignal channels and additional channels that you want to keep (for example, the photosensor), and <code class="docutils literal notranslate"><span class="pre">bio_process()</span></code> will take care of the rest. It will return a dataframe containing processed signals and a dictionary containing useful information.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process the signal</span>
@@ -806,7 +806,7 @@ title="Print to PDF"
 </section>
 <section id="create-epochs">
 <h2>Create Epochs<a class="headerlink" href="#create-epochs" title="Permalink to this headline">#</a></h2>
-<p>We now have to transform this dataframe into <strong>epochs</strong>, i.e. segments (chunks) of data around the <strong>events</strong> using <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create">epochs_create()</a>. We want it to start <strong>1 second before</strong> the event onset and end <strong>6 seconds</strong> after. These values are passed into the <code class="docutils literal notranslate"><span class="pre">epochs_start</span></code> and <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code> arguments, respectively.</p>
+<p>We now have to transform this dataframe into <strong>epochs</strong>, i.e. segments (chunks) of data around the <strong>events</strong> using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_epochs.html#epochs-create">epochs_create()</a>. We want it to start <strong>1 second before</strong> the event onset and end <strong>6 seconds</strong> after. These values are passed into the <code class="docutils literal notranslate"><span class="pre">epochs_start</span></code> and <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code> arguments, respectively.</p>
 <p>Our epochs will then cover the region from <strong>-1 s</strong> to <strong>+6 s</strong> (i.e., 700 data points since the signal is sampled at 100Hz).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -712,7 +712,7 @@ title="Print to PDF"
 </div>
 <section id="extract-the-cleaned-ecg-signal">
 <h2>Extract the cleaned ECG signal<a class="headerlink" href="#extract-the-cleaned-ecg-signal" title="Permalink to this headline">#</a></h2>
-<p>In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge%3E">read_acqknowledge()</a>.</p>
+<p>In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_data.html#read-acqknowledge">read_acqknowledge()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate 30 seconds of ECG Signal (recorded at 250 samples / second)</span>
@@ -721,7 +721,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional array), or a list, you can use <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_process%3E">ecg_process()</a> to process it.</p>
+<p>Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional array), or a list, you can use <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-process">ecg_process()</a> to process it.</p>
 <p><em>Note: It is critical that you specify the correct sampling rate of your signal throughout many processing functions, as this allows NeuroKit to have a time reference.</em></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -754,14 +754,14 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/94ed94edc6e5366b5b538af7fcaba643ed8dfb1a02b8b928e76cc4e40c41331a.png" src="../../_images/94ed94edc6e5366b5b538af7fcaba643ed8dfb1a02b8b928e76cc4e40c41331a.png" />
+<img alt="../../_images/45dfa6dcd3b7e0a272758fda9a4a30d977ae2c21f57993845ccdeb3657523ab9.png" src="../../_images/45dfa6dcd3b7e0a272758fda9a4a30d977ae2c21f57993845ccdeb3657523ab9.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
 </section>
 <section id="segment-the-signal-around-the-heart-beats">
 <h2>Segment the signal around the heart beats<a class="headerlink" href="#segment-the-signal-around-the-heart-beats" title="Permalink to this headline">#</a></h2>
-<p>You can now epoch all these individual heart beats, synchronized by their R peaks with the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_segment">ecg_segment()</a> function.</p>
+<p>You can now epoch all these individual heart beats, synchronized by their R peaks with the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-segment">ecg_segment()</a> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting all the heart beats</span>
@@ -770,7 +770,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/676ea2ac8c11893246efa5dcd7316694c81de2c9fe2974e999fa0af26becc3f2.png" src="../../_images/676ea2ac8c11893246efa5dcd7316694c81de2c9fe2974e999fa0af26becc3f2.png" />
+<img alt="../../_images/88a8958cf5b13129996b07e74773b7dceeb0ecdd9f16720b2a2770d77c031e61.png" src="../../_images/88a8958cf5b13129996b07e74773b7dceeb0ecdd9f16720b2a2770d77c031e61.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -826,36 +826,36 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.208741</td>
-      <td>137</td>
+      <td>-0.189855</td>
+      <td>139</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.203455</td>
-      <td>138</td>
+      <td>-0.184549</td>
+      <td>140</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.198112</td>
-      <td>139</td>
+      <td>-0.179156</td>
+      <td>141</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.192654</td>
-      <td>140</td>
+      <td>-0.173608</td>
+      <td>142</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.187014</td>
-      <td>141</td>
+      <td>-0.167828</td>
+      <td>143</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -940,123 +940,123 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.208741</td>
-      <td>-0.136700</td>
-      <td>-0.134495</td>
-      <td>-0.137362</td>
-      <td>-0.136862</td>
-      <td>-0.139275</td>
-      <td>-0.135781</td>
-      <td>-0.131047</td>
-      <td>-0.145173</td>
-      <td>-0.134401</td>
+      <td>-0.189855</td>
+      <td>-0.125574</td>
+      <td>-0.143820</td>
+      <td>-0.140034</td>
+      <td>-0.128074</td>
+      <td>-0.132825</td>
+      <td>-0.137503</td>
+      <td>-0.135135</td>
+      <td>-0.130060</td>
+      <td>-0.127733</td>
       <td>...</td>
-      <td>-0.131830</td>
-      <td>-0.162120</td>
-      <td>-0.044880</td>
-      <td>-0.311219</td>
-      <td>-0.112348</td>
-      <td>-0.148679</td>
-      <td>-0.129549</td>
-      <td>-0.150693</td>
-      <td>-0.139651</td>
-      <td>-0.131576</td>
+      <td>-0.127452</td>
+      <td>-0.160716</td>
+      <td>-0.031844</td>
+      <td>-0.330156</td>
+      <td>-0.114466</td>
+      <td>-0.138219</td>
+      <td>-0.125738</td>
+      <td>-0.125568</td>
+      <td>-0.127145</td>
+      <td>-0.131419</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.203455</td>
-      <td>-0.135934</td>
-      <td>-0.133463</td>
-      <td>-0.136025</td>
-      <td>-0.135904</td>
-      <td>-0.138453</td>
-      <td>-0.135144</td>
-      <td>-0.130037</td>
-      <td>-0.143756</td>
-      <td>-0.133490</td>
+      <td>-0.184549</td>
+      <td>-0.124615</td>
+      <td>-0.142215</td>
+      <td>-0.139393</td>
+      <td>-0.127159</td>
+      <td>-0.131911</td>
+      <td>-0.136290</td>
+      <td>-0.134225</td>
+      <td>-0.129413</td>
+      <td>-0.126921</td>
       <td>...</td>
-      <td>-0.130996</td>
-      <td>-0.160219</td>
-      <td>-0.044185</td>
-      <td>-0.310945</td>
-      <td>-0.111166</td>
-      <td>-0.147808</td>
-      <td>-0.128607</td>
-      <td>-0.149410</td>
-      <td>-0.138504</td>
-      <td>-0.130874</td>
+      <td>-0.127119</td>
+      <td>-0.159346</td>
+      <td>-0.030559</td>
+      <td>-0.329552</td>
+      <td>-0.113167</td>
+      <td>-0.137680</td>
+      <td>-0.124419</td>
+      <td>-0.124937</td>
+      <td>-0.126332</td>
+      <td>-0.130583</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.198112</td>
-      <td>-0.135070</td>
-      <td>-0.132334</td>
-      <td>-0.134550</td>
-      <td>-0.134770</td>
-      <td>-0.137474</td>
-      <td>-0.134408</td>
-      <td>-0.128902</td>
-      <td>-0.142091</td>
-      <td>-0.132377</td>
+      <td>-0.179156</td>
+      <td>-0.123470</td>
+      <td>-0.140532</td>
+      <td>-0.138583</td>
+      <td>-0.126084</td>
+      <td>-0.130813</td>
+      <td>-0.134885</td>
+      <td>-0.133147</td>
+      <td>-0.128660</td>
+      <td>-0.126043</td>
       <td>...</td>
-      <td>-0.129978</td>
-      <td>-0.158132</td>
-      <td>-0.043347</td>
-      <td>-0.310492</td>
-      <td>-0.109818</td>
-      <td>-0.146776</td>
-      <td>-0.127525</td>
-      <td>-0.148001</td>
-      <td>-0.137199</td>
-      <td>-0.130035</td>
+      <td>-0.126698</td>
+      <td>-0.157860</td>
+      <td>-0.029085</td>
+      <td>-0.328672</td>
+      <td>-0.111675</td>
+      <td>-0.137035</td>
+      <td>-0.122981</td>
+      <td>-0.124193</td>
+      <td>-0.125418</td>
+      <td>-0.129609</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.192654</td>
-      <td>-0.134039</td>
-      <td>-0.131065</td>
-      <td>-0.132898</td>
-      <td>-0.133411</td>
-      <td>-0.136297</td>
-      <td>-0.133550</td>
-      <td>-0.127590</td>
-      <td>-0.140145</td>
-      <td>-0.131003</td>
+      <td>-0.173608</td>
+      <td>-0.122097</td>
+      <td>-0.138757</td>
+      <td>-0.137543</td>
+      <td>-0.124790</td>
+      <td>-0.129500</td>
+      <td>-0.133236</td>
+      <td>-0.131846</td>
+      <td>-0.127773</td>
+      <td>-0.125089</td>
       <td>...</td>
-      <td>-0.128719</td>
-      <td>-0.155820</td>
-      <td>-0.042316</td>
-      <td>-0.309800</td>
-      <td>-0.108256</td>
-      <td>-0.145547</td>
-      <td>-0.126236</td>
-      <td>-0.146427</td>
-      <td>-0.135697</td>
-      <td>-0.129011</td>
+      <td>-0.126165</td>
+      <td>-0.156239</td>
+      <td>-0.027392</td>
+      <td>-0.327455</td>
+      <td>-0.109951</td>
+      <td>-0.136236</td>
+      <td>-0.121398</td>
+      <td>-0.123312</td>
+      <td>-0.124371</td>
+      <td>-0.128475</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.187014</td>
-      <td>-0.132751</td>
-      <td>-0.129600</td>
-      <td>-0.131012</td>
-      <td>-0.131758</td>
-      <td>-0.134863</td>
-      <td>-0.132533</td>
-      <td>-0.126041</td>
-      <td>-0.137882</td>
-      <td>-0.129300</td>
+      <td>-0.167828</td>
+      <td>-0.120451</td>
+      <td>-0.136860</td>
+      <td>-0.136199</td>
+      <td>-0.123210</td>
+      <td>-0.127938</td>
+      <td>-0.131267</td>
+      <td>-0.130249</td>
+      <td>-0.126711</td>
+      <td>-0.124046</td>
       <td>...</td>
-      <td>-0.127155</td>
-      <td>-0.153223</td>
-      <td>-0.041034</td>
-      <td>-0.308796</td>
-      <td>-0.106429</td>
-      <td>-0.144073</td>
-      <td>-0.124660</td>
-      <td>-0.144631</td>
-      <td>-0.133937</td>
-      <td>-0.127744</td>
+      <td>-0.125494</td>
+      <td>-0.154459</td>
+      <td>-0.025440</td>
+      <td>-0.325833</td>
+      <td>-0.107952</td>
+      <td>-0.135231</td>
+      <td>-0.119640</td>
+      <td>-0.122262</td>
+      <td>-0.123142</td>
+      <td>-0.127149</td>
     </tr>
   </tbody>
 </table>
@@ -1084,7 +1084,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e35e02939a5b7d845f9c9478b19b22ebb23ab4baafe943799a74714f0d1e4846.png" src="../../_images/e35e02939a5b7d845f9c9478b19b22ebb23ab4baafe943799a74714f0d1e4846.png" />
+<img alt="../../_images/b36c9f09098c1037e88afc0b9b9e3449f72377433315ff4a01a5f6430fd8fe0f.png" src="../../_images/b36c9f09098c1037e88afc0b9b9e3449f72377433315ff4a01a5f6430fd8fe0f.png" />
 </div>
 </div>
 </section>

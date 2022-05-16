@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -717,13 +717,13 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/52852b4166f866f6a54111ecb4f421138c32c30d65dce561e773360ad2366ef3.png" src="../../_images/52852b4166f866f6a54111ecb4f421138c32c30d65dce561e773360ad2366ef3.png" />
+<img alt="../../_images/96e2d6cfe21b352c5681e8b9e9bd0227ccd8b6d57a21e38df3bd8f97a86f094d.png" src="../../_images/96e2d6cfe21b352c5681e8b9e9bd0227ccd8b6d57a21e38df3bd8f97a86f094d.png" />
 </div>
 </div>
 </section>
 <section id="building-your-own-process-function">
 <h2>Building your own <code class="docutils literal notranslate"><span class="pre">process()</span></code> function<a class="headerlink" href="#building-your-own-process-function" title="Permalink to this headline">#</a></h2>
-<p>Now, if you look at the code of <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_process.py#L49"><code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> (see <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html">here</a> for how to explore the code), you can see that it is in fact very simple.</p>
+<p>Now, if you look at the code of <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_process.py#L49"><code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> (see <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/resources/contributing.html#understanding-neurokit">here</a> for how to explore the code), you can see that it is in fact very simple.</p>
 <p>It uses what can be referred to as “mid-level functions”, such as <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>, <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, <code class="docutils literal notranslate"><span class="pre">ecg_rate()</span></code> etc.</p>
 <p>This means that you can basically <strong>re-create</strong> the <code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code> function very easily by calling these mid-level functions:</p>
 <div class="cell docutils container">
@@ -762,14 +762,14 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/52852b4166f866f6a54111ecb4f421138c32c30d65dce561e773360ad2366ef3.png" src="../../_images/52852b4166f866f6a54111ecb4f421138c32c30d65dce561e773360ad2366ef3.png" />
+<img alt="../../_images/96e2d6cfe21b352c5681e8b9e9bd0227ccd8b6d57a21e38df3bd8f97a86f094d.png" src="../../_images/96e2d6cfe21b352c5681e8b9e9bd0227ccd8b6d57a21e38df3bd8f97a86f094d.png" />
 </div>
 </div>
 </section>
 <section id="changing-the-processing-parameters">
 <h2>Changing the processing parameters<a class="headerlink" href="#changing-the-processing-parameters" title="Permalink to this headline">#</a></h2>
 <p>Now, you might want to ask, why would you re-create the processing function? Well, it allows you to <strong>change the parameters</strong> of the inside as you please. Let’s say you want to use a specific <strong>cleaning</strong> method.</p>
-<p>First, let’s look at the documentation for <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_clean"><code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code></a>, you can see that they are several different methods for cleaning which can be specified. The default is the <strong>Neurokit</strong> method, however depending on the quality of your signal (and several other factors), other methods may be more appropriate. It is up to you to make this decision.</p>
+<p>First, let’s look at the documentation for <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-clean"><code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code></a>, you can see that they are several different methods for cleaning which can be specified. The default is the <strong>NeuroKit</strong> method, however depending on the quality of your signal (and several other factors), other methods may be more appropriate. It is up to you to make this decision.</p>
 <p>You can now change the methods as you please for each function in your custom processing function that you have written above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -799,7 +799,7 @@ title="Print to PDF"
 <section id="customize-even-more">
 <h2>Customize even more!<a class="headerlink" href="#customize-even-more" title="Permalink to this headline">#</a></h2>
 <p>It is possible that none of these methods suit your needs, or that you want to test a new method. Rejoice yourself, as <em>NeuroKit</em> allows you to do that by providing what can be referred to as “low-level” functions.</p>
-<p>For instance, you can rewrite the <strong>cleaning</strong> procedure by using the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/functions.html#general-signal-processing">signal processsing tools</a> offered by NeuroKit:</p>
+<p>For instance, you can rewrite the <strong>cleaning</strong> procedure by using the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_signal.html">signal processing tools</a> offered by <em>NeuroKit</em>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_cleaning</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
@@ -848,7 +848,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/82c20ffa2a813f5bbf1654f3d17308b175b6248429dad2e1c566f5d943f06a86.png" src="../../_images/82c20ffa2a813f5bbf1654f3d17308b175b6248429dad2e1c566f5d943f06a86.png" />
+<img alt="../../_images/5693eb8649408fc2227d9f38c732f9983d6691b23ebbb655e27b2380357ecb04.png" src="../../_images/5693eb8649408fc2227d9f38c732f9983d6691b23ebbb655e27b2380357ecb04.png" />
 </div>
 </div>
 <p>This doesn’t look bad :) <strong>Can you do better?</strong></p>

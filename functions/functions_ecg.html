@@ -183,7 +183,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography EOG data (eye blinks, saccades, etc.)
+     Analyze Electrooculography (EOG)
     </a>
    </li>
    <li class="toctree-l2">
@@ -1086,7 +1086,7 @@ the empirical heart rate, especially for shorter signals.</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The model used to generate the signal. Can be <code class="docutils literal notranslate"><span class="pre">&quot;simple&quot;</span></code> for a simulation based on
 Daubechies wavelets that roughly approximates a single cardiac cycle. If <code class="docutils literal notranslate"><span class="pre">&quot;ecgsyn&quot;</span></code>
 (default), will use the model desbribed <a class="reference external" href="https://physionet.org/content/ecgsyn/">McSharry et al. (2003)</a>. If
-<code class="docutils literal notranslate"><span class="pre">&quot;multileads&quot;</span></code>, will return a DataFrame containing 12-leads (see <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html">12-leads ECG simulation</a>).</p></li>
+<code class="docutils literal notranslate"><span class="pre">&quot;multileads&quot;</span></code>, will return a DataFrame containing 12-leads (see <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/ecg_generate_12leads/ecg_generate_12leads.html">12-leads ECG simulation</a>).</p></li>
 <li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator.</p></li>
 <li><p><strong>**kwargs</strong> – Other keywords parameters for ECGSYN algorithm, such as <code class="docutils literal notranslate"><span class="pre">&quot;lfhfratio&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ti&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ai&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bi&quot;</span></code>.</p></li>
 </ul>
@@ -2013,9 +2013,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.722110          0.972842</span>
-<span class="go">2     2        10000  ...                          0.413088          0.917701</span>
-<span class="go">3     3        15000  ...                          0.093878          0.946856</span>
+<span class="go">1     1         5000  ...                          0.776860          0.944772</span>
+<span class="go">2     2        10000  ...                          0.513402          0.975997</span>
+<span class="go">3     3        15000  ...                          0.150905          0.923970</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>

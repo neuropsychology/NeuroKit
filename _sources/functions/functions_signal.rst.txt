@@ -26,7 +26,7 @@ Transformation
 """""""""""""""""""
 .. autofunction:: neurokit2.signal_binarize
 
-*signal.decompose()*
+*signal_decompose()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.signal_decompose
 

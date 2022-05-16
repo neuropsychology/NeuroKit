@@ -2,7 +2,7 @@ Additional Resources
 ======================
 
 .. important::
-   Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+   Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_).
 
 
 General Neuroimaging
