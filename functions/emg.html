@@ -1,0 +1,1361 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>EMG &#8212; NeuroKit2 0.2.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EOG" href="eog.html" />
+    <link rel="prev" title="EDA" href="eda.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Functions
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/complexity_benchmark.html">
+     Complexity Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/emg.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/functions/emg.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/functions/emg.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main">
+   Main
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-process">
+     <em>
+      emg_process()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-analyze">
+     <em>
+      emg_analyze()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-simulate">
+     <em>
+      emg_simulate()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-plot">
+     <em>
+      emg_plot()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing">
+   Preprocessing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-clean">
+     <em>
+      emg_clean()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-amplitude">
+     <em>
+      emg_amplitude()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-activation">
+     <em>
+      emg_activation()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysis">
+   Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-eventrelated">
+     <em>
+      emg_eventrelated()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-intervalrelated">
+     <em>
+      emg_intervalrelated()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>EMG</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main">
+   Main
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-process">
+     <em>
+      emg_process()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-analyze">
+     <em>
+      emg_analyze()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-simulate">
+     <em>
+      emg_simulate()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-plot">
+     <em>
+      emg_plot()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing">
+   Preprocessing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-clean">
+     <em>
+      emg_clean()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-amplitude">
+     <em>
+      emg_amplitude()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-activation">
+     <em>
+      emg_activation()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysis">
+   Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-eventrelated">
+     <em>
+      emg_eventrelated()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#emg-intervalrelated">
+     <em>
+      emg_intervalrelated()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="emg">
+<h1>EMG<a class="headerlink" href="#emg" title="Permalink to this headline">#</a></h1>
+<section id="main">
+<h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<section id="emg-process">
+<h3><em>emg_process()</em><a class="headerlink" href="#emg-process" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_process">
+<span class="sig-name descname"><span class="pre">emg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_process.html#emg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_process" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Process a electromyography (EMG) signal</strong></p>
+<p>Convenience function that automatically processes an electromyography signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw electromyography channel.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> containing the following columns:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Raw&quot;</span></code>: the raw signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Clean&quot;</span></code>: the cleaned signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude&quot;</span></code>: the signal amplitude, or the activation level of the signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activity&quot;</span></code>: the activity of the signal for which amplitude exceeds the threshold
+specified,marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Onsets&quot;</span></code>: the onsets of the amplitude, marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Offsets&quot;</span></code>: the offsets of the amplitude, marked as “1” in a list of zeros.</p></li>
+</ul>
+</li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the information of each amplitude onset, offset, and peak activity
+(see <a class="reference internal" href="#neurokit2.emg.emg_activation" title="neurokit2.emg.emg_activation"><code class="xref py py-func docutils literal notranslate"><span class="pre">emg_activation()</span></code></a>), as well as the signals’ sampling rate.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_clean" title="neurokit2.emg.emg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_amplitude" title="neurokit2.emg.emg_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_process1.png"><img alt="../_images/p_emg_process1.png" src="../_images/p_emg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="emg-analyze">
+<h3><em>emg_analyze()</em><a class="headerlink" href="#emg-analyze" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_analyze">
+<span class="sig-name descname"><span class="pre">emg_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_analyze.html#emg_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_analyze" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EMG Analysis</strong></p>
+<p>Performs EMG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dictionary of epochs, containing one DataFrame per epoch, usually obtained via
+<code class="docutils literal notranslate"><span class="pre">epochs_create()</span></code>, or a DataFrame containing all epochs, usually obtained via
+<code class="docutils literal notranslate"><span class="pre">epochs_to_df()</span></code>. Can also take a DataFrame of processed signals from a longer period of data, typically generated by
+<code class="docutils literal notranslate"><span class="pre">emg_process()</span></code> or <code class="docutils literal notranslate"><span class="pre">bio_process()</span></code>. Can also take a dict containing sets of separate
+periods of data.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;event-related&quot;</span></code> for event-related analysis on epochs, or
+<code class="docutils literal notranslate"><span class="pre">&quot;interval-related&quot;</span></code> for analysis on longer periods of data. Defaults to <code class="docutils literal notranslate"><span class="pre">auto</span></code> where
+the right method will be chosen based on the mean duration of the data (<code class="docutils literal notranslate"><span class="pre">&quot;event-related&quot;</span></code> for duration under 10s).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed EMG features. If event-related analysis is conducted,
+each epoch is indicated by the <cite>Label</cite> column. See <a class="reference internal" href="#neurokit2.emg.emg_eventrelated" title="neurokit2.emg.emg_eventrelated"><code class="xref py py-func docutils literal notranslate"><span class="pre">emg_eventrelated()</span></code></a> and
+<a class="reference internal" href="#neurokit2.emg.emg_intervalrelated" title="neurokit2.emg.emg_intervalrelated"><code class="xref py py-func docutils literal notranslate"><span class="pre">emg_intervalrelated()</span></code></a> docstrings for details.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="epochs.html#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_eventrelated" title="neurokit2.emg.emg_eventrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_eventrelated</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_intervalrelated" title="neurokit2.emg.emg_intervalrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_intervalrelated</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="go"># Example with simulated data</span>
+<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">6000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">   ...: </span>                          <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># Event-related analysis</span>
+<span class="gp">In [6]: </span><span class="n">analyze_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;event-related&quot;</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
+<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
+<span class="go">1     1         3000  ...                1.736918         1.0</span>
+<span class="go">2     2         6000  ...                     NaN         NaN</span>
+<span class="go">3     3         9000  ...                0.922511         1.0</span>
+
+<span class="go">[3 rows x 8 columns]</span>
+
+<span class="go"># Interval-related analysis</span>
+<span class="gp">In [8]: </span><span class="n">analyze_df</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_analyze</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interval-related&quot;</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">analyze_df</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
+<span class="go">0               3.0            0.245107</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="emg-simulate">
+<h3><em>emg_simulate()</em><a class="headerlink" href="#emg-simulate" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_simulate">
+<span class="sig-name descname"><span class="pre">emg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_simulate.html#emg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_simulate" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Simulate an EMG signal</strong></p>
+<p>Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<em>int</em>) – Desired recording length in seconds.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – The desired length of the signal (in samples).</p></li>
+<li><p><strong>noise</strong> (<em>float</em>) – Noise level (gaussian noise).</p></li>
+<li><p><strong>burst_number</strong> (<em>int</em>) – Desired number of bursts of activity (active muscle periods).</p></li>
+<li><p><strong>burst_duration</strong> (<em>float or list</em>) – Duration of the bursts. Can be a float (each burst will have the same duration) or a list of
+durations for each bursts.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the EMG signal.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">emg</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_simulate1.png"><img alt="../_images/p_emg_simulate1.png" src="../_images/p_emg_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_simulate</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_simulate</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_simulate</span></code></p>
+</div>
+<p class="rubric">References</p>
+<p>This function is based on <a class="reference external" href="https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/">this script</a>.</p>
+</dd></dl>
+
+</section>
+<section id="emg-plot">
+<h3><em>emg_plot()</em><a class="headerlink" href="#emg-plot" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_plot">
+<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EMG Graph</strong></p>
+<p>Visualize electromyography (EMG) data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <code class="docutils literal notranslate"><span class="pre">emg_process()</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
+data should be plotted over time in seconds. Otherwise the data is plotted over samples.
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed emg signals.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_plot.png"><img alt="../_images/p_emg_plot.png" src="../_images/p_emg_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">#</a></h2>
+<section id="emg-clean">
+<h3><em>emg_clean()</em><a class="headerlink" href="#emg-clean" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_clean">
+<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Preprocess an electromyography (emg) signal</strong></p>
+<p>Clean an EMG signal using a set of parameters. Only one method is available at the moment.</p>
+<ul class="simple">
+<li><p><strong>BioSPPy</strong>: fourth order 100 Hz highpass Butterworth filter followed by a constant
+detrending.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EMG channel.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).
+Defaults to 1000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the cleaned EMG signal.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_amplitude" title="neurokit2.emg.emg_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG_Raw&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;EMG_Cleaned&quot;</span><span class="p">:</span><span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)})</span>
+
+<span class="gp">In [5]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_clean1.png"><img alt="../_images/p_emg_clean1.png" src="../_images/p_emg_clean1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="emg-amplitude">
+<h3><em>emg_amplitude()</em><a class="headerlink" href="#emg-amplitude" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_amplitude">
+<span class="sig-name descname"><span class="pre">emg_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_amplitude.html#emg_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_amplitude" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Compute electromyography (EMG) amplitude</strong></p>
+<p>Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
+linear envelope of the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>emg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned electromyography channel as returned by <code class="docutils literal notranslate"><span class="pre">emg_clean()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – A vector containing the electromyography amplitude.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_clean" title="neurokit2.emg.emg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_rate</span></code>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [3]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_amplitude</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_amplitude1.png"><img alt="../_images/p_emg_amplitude1.png" src="../_images/p_emg_amplitude1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="emg-activation">
+<h3><em>emg_activation()</em><a class="headerlink" href="#emg-activation" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_activation">
+<span class="sig-name descname"><span class="pre">emg_activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'threshold'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_activation.html#emg_activation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_activation" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Locate EMG Activity</strong></p>
+<p>Detects onset in EMG signal based on the amplitude threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emg_amplitude</strong> (<em>array</em>) – At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
+<code class="docutils literal notranslate"><span class="pre">emg_amplitude()</span></code> for methods like <code class="docutils literal notranslate"><span class="pre">&quot;threshold&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;mixture&quot;</span></code>), and / or the
+cleaned EMG signal (for methods like <code class="docutils literal notranslate"><span class="pre">&quot;pelt&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;silva&quot;</span></code>).</p></li>
+<li><p><strong>emg_cleaned</strong> (<em>array</em>) – At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
+<code class="docutils literal notranslate"><span class="pre">emg_amplitude()</span></code> for methods like <code class="docutils literal notranslate"><span class="pre">&quot;threshold&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;mixture&quot;</span></code>), and / or the
+cleaned EMG signal (for methods like <code class="docutils literal notranslate"><span class="pre">&quot;pelt&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;silva&quot;</span></code>).</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The algorithm used to discriminate between activity and baseline. Can be one of
+<code class="docutils literal notranslate"><span class="pre">&quot;mixture&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;threshold&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">&quot;mixture&quot;</span></code>, will use a Gaussian Mixture
+Model to categorize between the two states. If <code class="docutils literal notranslate"><span class="pre">&quot;threshold&quot;</span></code>, will consider as activated
+all points which amplitude is superior to the threshold. Can also be <code class="docutils literal notranslate"><span class="pre">&quot;pelt&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;silva&quot;</span></code>.</p></li>
+<li><p><strong>threshold</strong> (<em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;mixture&quot;</span></code>, then it corresponds to the minimum probability required to
+be considered as activated (default to 0.33). If <code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;threshold&quot;</span></code>, then it
+corresponds to the minimum amplitude to detect as onset i.e., defaults to one tenth of the
+standard deviation of <code class="docutils literal notranslate"><span class="pre">emg_amplitude</span></code>. If <code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;silva&quot;</span></code>, defaults to 0.05. If
+<code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>, defaults to 1.2 times of the mean of the absolute of the
+smoothed, full-wave-rectified signal. If <code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;pelt&quot;</span></code>, threshold defaults to
+<code class="docutils literal notranslate"><span class="pre">None</span></code> as changepoints are used as a basis for detection.</p></li>
+<li><p><strong>duration_min</strong> (<em>float</em>) – The minimum duration of a period of activity or non-activity in seconds.
+If <code class="docutils literal notranslate"><span class="pre">default</span></code>, will be set to 0.05 (50 ms).</p></li>
+<li><p><strong>size</strong> (<em>float or int</em>) – Detection window size (seconds). Applicable only if <code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;silva&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to 0.05 for <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> and 20 for <code class="docutils literal notranslate"><span class="pre">&quot;silva&quot;</span></code>.</p></li>
+<li><p><strong>threshold_size</strong> (<em>int</em>) – Window size for calculation of the adaptive threshold. Must be bigger than the detection
+window size. Applicable only if <code class="docutils literal notranslate"><span class="pre">method</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;silva</span></code>”. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to 22.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – Other arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which the
+onsets, offsets, and periods of activations of the EMG signal occur, accessible with the
+key <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Onsets&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Offsets&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activity&quot;</span></code> respectively.</p></li>
+<li><p><strong>activity_signal</strong> (<em>DataFrame</em>) – A DataFrame of same length as the input signal in which occurences of onsets, offsets, and
+activity (above the threshold) of the EMG signal are marked as “1” in lists of zeros with
+the same length as <code class="docutils literal notranslate"><span class="pre">emg_amplitude</span></code>. Accessible with the keys <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Onsets&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;EMG_Offsets&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activity&quot;</span></code> respectively.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_simulate" title="neurokit2.emg.emg_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_clean" title="neurokit2.emg.emg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_amplitude" title="neurokit2.emg.emg_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate signal and obtain amplitude</span>
+<span class="gp">In [2]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">emg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_clean</span><span class="p">(</span><span class="n">emg</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">emg_amplitude</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_amplitude</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> Threshold method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">activity</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_activation</span><span class="p">(</span><span class="n">emg_amplitude</span><span class="o">=</span><span class="n">emg_amplitude</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;threshold&quot;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Offsets&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Onsets&quot;</span><span class="p">]],</span> <span class="n">emg_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_activation1.png"><img alt="../_images/p_emg_activation1.png" src="../_images/p_emg_activation1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> Pelt method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">activity</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_activation</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="o">=</span><span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pelt&quot;</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Offsets&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Onsets&quot;</span><span class="p">]],</span> <span class="n">emg_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_activation2.png"><img alt="../_images/p_emg_activation2.png" src="../_images/p_emg_activation2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3:</strong> Biosppy method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">activity</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_activation</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="o">=</span><span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;biosppy&quot;</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Offsets&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Onsets&quot;</span><span class="p">]],</span> <span class="n">emg_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_activation3.png"><img alt="../_images/p_emg_activation3.png" src="../_images/p_emg_activation3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 4:</strong> Silva method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">activity</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_activation</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="o">=</span><span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;silva&quot;</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Offsets&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;EMG_Onsets&quot;</span><span class="p">]],</span> <span class="n">emg_cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_emg_activation4.png"><img alt="../_images/p_emg_activation4.png" src="../_images/p_emg_activation4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Silva H, Scherer R, Sousa J, Londral A , “Towards improving the ssability of
+electromyographic interfacess”, Journal of Oral Rehabilitation, pp. 1-2, 2012.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+</section>
+<section id="analysis">
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">#</a></h2>
+<section id="emg-eventrelated">
+<h3><em>emg_eventrelated()</em><a class="headerlink" href="#emg-eventrelated" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_eventrelated">
+<span class="sig-name descname"><span class="pre">emg_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_eventrelated.html#emg_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_eventrelated" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Event-related EMG Analysis</strong></p>
+<p>Performs event-related EMG analysis on epochs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dict containing one DataFrame per event/trial, usually obtained via <code class="docutils literal notranslate"><span class="pre">epochs_create()</span></code>,
+or a DataFrame containing all epochs, usually obtained via <code class="docutils literal notranslate"><span class="pre">epochs_to_df()</span></code>.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, silence possible warnings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated
+by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features consist
+of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activation*</span></code>: indication of whether there is muscular activation following
+the onset of the event (1 if present, 0 if absent) and if so, its corresponding
+amplitude features and the number of activations in each epoch. If there is no
+activation, nans are displayed for the below features.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Mean*</span></code>: the mean amplitude of the activity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Max*</span></code>: the maximum amplitude of the activity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_SD*</span></code>: the standard deviation of the activity amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Max_Time*</span></code>: the time of maximum amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Bursts*</span></code>: the number of activations, or bursts of activity, within each epoch.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.emg.emg_simulate" title="neurokit2.emg.emg_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></a>, <a class="reference internal" href="events.html#neurokit2.events.events_find" title="neurokit2.events.events_find"><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code></a>, <a class="reference internal" href="epochs.html#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Example with simulated data</span>
+<span class="gp">In [2]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">6000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="gp">   ...: </span>                          <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span><span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
+<span class="go">1     1         3000  ...                1.736918         1.0</span>
+<span class="go">2     2         6000  ...                     NaN         NaN</span>
+<span class="go">3     3         9000  ...                0.922511         1.0</span>
+
+<span class="go">[3 rows x 8 columns]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="emg-intervalrelated">
+<h3><em>emg_intervalrelated()</em><a class="headerlink" href="#emg-intervalrelated" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.emg.emg_intervalrelated">
+<span class="sig-name descname"><span class="pre">emg_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_intervalrelated.html#emg_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_intervalrelated" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EMG Analysis for Interval-related Data</strong></p>
+<p>Performs EMG analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A DataFrame containing the different processed signal(s) as different columns, typically
+generated by <code class="docutils literal notranslate"><span class="pre">emg_process()</span></code> or <code class="docutils literal notranslate"><span class="pre">bio_process()</span></code>. Can also take a dict containing sets of
+separately processed DataFrames.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed EMG features. The analyzed features consist of the following:
+* <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activation_N&quot;</span></code>: the number of bursts of muscular activity.
+* <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Mean&quot;</span></code>: the mean amplitude of the muscular activity.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code></a>, <a class="reference internal" href="#neurokit2.emg.emg_eventrelated" title="neurokit2.emg.emg_eventrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_eventrelated</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Example with simulated data</span>
+<span class="gp">In [2]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="go"># Single dataframe is passed</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
+<span class="go">0               3.0             0.24434</span>
+
+<span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
+<span class="go">1     1                 2            0.251160</span>
+<span class="go">2     2                 1            0.237548</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
+<span class="target" id="module-neurokit2.emg"></span><p>Submodule for NeuroKit.</p>
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="eda.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">EDA</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="eog.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">EOG</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

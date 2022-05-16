@@ -101,7 +101,7 @@
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "These events can be localized and extracted using [events_find()](https://neuropsychology.github.io/NeuroKit/functions/functions_events.html#events-find). \n",
+                "These events can be localized and extracted using [events_find()](https://neuropsychology.github.io/NeuroKit/functions/events.html#events-find). \n",
                 "\n",
                 "*Note that you should also specify whether to select events that are higher or below the threshold using the `threshold_keep` argument.*"
             ]

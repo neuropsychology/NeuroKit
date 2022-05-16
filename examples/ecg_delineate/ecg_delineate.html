@@ -219,97 +219,97 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_bio.html">
+    <a class="reference internal" href="../../functions/bio.html">
      Bio
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_ecg.html">
+    <a class="reference internal" href="../../functions/ecg.html">
      ECG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_ppg.html">
+    <a class="reference internal" href="../../functions/ppg.html">
      PPG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_hrv.html">
+    <a class="reference internal" href="../../functions/hrv.html">
      HRV
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_rsp.html">
+    <a class="reference internal" href="../../functions/rsp.html">
      RSP
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_eda.html">
+    <a class="reference internal" href="../../functions/eda.html">
      EDA
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_emg.html">
+    <a class="reference internal" href="../../functions/emg.html">
      EMG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_eog.html">
+    <a class="reference internal" href="../../functions/eog.html">
      EOG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_eeg.html">
+    <a class="reference internal" href="../../functions/eeg.html">
      EEG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_microstates.html">
+    <a class="reference internal" href="../../functions/microstates.html">
      Microstates
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_signal.html">
+    <a class="reference internal" href="../../functions/signal.html">
      Signal
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_events.html">
+    <a class="reference internal" href="../../functions/events.html">
      Events
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_epochs.html">
+    <a class="reference internal" href="../../functions/epochs.html">
      Epochs
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_data.html">
+    <a class="reference internal" href="../../functions/data.html">
      Data
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_complexity.html">
+    <a class="reference internal" href="../../functions/complexity.html">
      Complexity
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_markov.html">
+    <a class="reference internal" href="../../functions/markov.html">
      Markov Chains
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_stats.html">
+    <a class="reference internal" href="../../functions/stats.html">
      Stats
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_misc.html">
+    <a class="reference internal" href="../../functions/misc.html">
      Misc
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_benchmark.html">
+    <a class="reference internal" href="../../functions/benchmark.html">
      Benchmarking
     </a>
    </li>
@@ -714,7 +714,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>The <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks">ecg_peaks()</a> function will return a dictionary contains the samples at which R-peaks are located.</p>
+<p>The <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks()</a> function will return a dictionary contains the samples at which R-peaks are located.</p>
 <p>Let’s visualize the R-peaks location in the signal to make sure it got detected correctly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -738,11 +738,11 @@ title="Print to PDF"
 <img alt="../../_images/9e6392da3fc749328ade0bb8828d80ef5054a2258a03d5a71807729c33a85ef6.png" src="../../_images/9e6392da3fc749328ade0bb8828d80ef5054a2258a03d5a71807729c33a85ef6.png" />
 </div>
 </div>
-<p>Visually, the R-peaks seem to have been correctly identified. You can also explore searching for R-peaks using different methods provided by NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
+<p>Visually, the R-peaks seem to have been correctly identified. You can also explore searching for R-peaks using different methods provided by NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
 </section>
 <section id="locate-other-waves-p-q-s-t-and-their-onset-and-offset">
 <h2>Locate other waves (P, Q, S, T) and their onset and offset<a class="headerlink" href="#locate-other-waves-p-q-s-t-and-their-onset-and-offset" title="Permalink to this headline">#</a></h2>
-<p>In <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-delineate">ecg_delineate()</a>, NeuroKit implements different methods to segment the QRS complexes. There are the derivative method and the other methods that make use of Wavelet to delineate the complexes.</p>
+<p>In <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-delineate">ecg_delineate()</a>, NeuroKit implements different methods to segment the QRS complexes. There are the derivative method and the other methods that make use of Wavelet to delineate the complexes.</p>
 <section id="peak-method">
 <h3>Peak method<a class="headerlink" href="#peak-method" title="Permalink to this headline">#</a></h3>
 <p>First, let’s take a look at the ‘peak’ method and its output.</p>
@@ -769,7 +769,7 @@ title="Print to PDF"
 </div>
 </div>
 <p>Visually, the ‘peak’ method seems to have correctly identified the P-peaks, Q-peaks, S-peaks and T-peaks for this signal, at least, for the first few complexes. Well done, <em>peak</em>!</p>
-<p>However, it can be quite tiring to be zooming in to each complex and inspect them one by one. To have a better overview of all complexes at once, you can make use of the <code class="docutils literal notranslate"><span class="pre">show</span></code> argument in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-delineate">ecg_delineate()</a> as below.</p>
+<p>However, it can be quite tiring to be zooming in to each complex and inspect them one by one. To have a better overview of all complexes at once, you can make use of the <code class="docutils literal notranslate"><span class="pre">show</span></code> argument in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-delineate">ecg_delineate()</a> as below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal and visualizing all peaks of ECG complexes</span>
@@ -821,7 +821,7 @@ title="Print to PDF"
 <img alt="../../_images/8b539578b4abf3a852c7bb71426620b858c08c15df2df57ffbd079c9dd924e14.png" src="../../_images/8b539578b4abf3a852c7bb71426620b858c08c15df2df57ffbd079c9dd924e14.png" />
 </div>
 </div>
-<p>Both the onsets of P-peaks and the offsets of T-peaks appears to have been correctly identified here. This information will be used to delineate cardiac phases in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-phase">ecg_phase()</a>.</p>
+<p>Both the onsets of P-peaks and the offsets of T-peaks appears to have been correctly identified here. This information will be used to delineate cardiac phases in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-phase">ecg_phase()</a>.</p>
 <p>Let’s next take a look at the continuous wavelet method.</p>
 </section>
 <section id="continuous-wavelet-method-cwt">
@@ -909,7 +909,7 @@ title="Print to PDF"
 </div>
 <p><em>Unlike the peak method, the continuous wavelet method does not idenfity the Q-peaks and S-peaks. However, it provides more information regarding the boundaries of the waves</em></p>
 <p>Visually, except a few exception, CWT method is doing a great job. However, the P-waves boundaries are not very clearly identified here.</p>
-<p>Last but not least, we will look at the third method in NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-delineate">ecg_delineate()</a> function: the discrete wavelet method.</p>
+<p>Last but not least, we will look at the third method in NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-delineate">ecg_delineate()</a> function: the discrete wavelet method.</p>
 </section>
 <section id="discrete-wavelet-method-dwt-default-method">
 <h3>Discrete Wavelet Method (DWT) - default method<a class="headerlink" href="#discrete-wavelet-method-dwt-default-method" title="Permalink to this headline">#</a></h3>

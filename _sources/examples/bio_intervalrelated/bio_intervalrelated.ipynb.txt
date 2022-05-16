@@ -86,8 +86,8 @@
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "In this analysis here, we will focus on extracting **ECG** and **RSP** features. To process the respective physiological signals, you can use [ecg_process()](https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-process) and \n",
-                "[rsp_process()](https://neuropsychology.github.io/NeuroKit/functions/functions_rsp.html#rsp-process). You can then then visualize these signals using [ecg_plot()](https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-plot) and [rsp_plot()](https://neuropsychology.github.io/NeuroKit/functions/functions_rsp.html#rsp-plot). For the purposes of these example, we will select just 3000 datapoints (or 30s) to visualize.\n",
+                "In this analysis here, we will focus on extracting **ECG** and **RSP** features. To process the respective physiological signals, you can use [ecg_process()](https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-process) and \n",
+                "[rsp_process()](https://neuropsychology.github.io/NeuroKit/functions/rsp.html#rsp-process). You can then then visualize these signals using [ecg_plot()](https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-plot) and [rsp_plot()](https://neuropsychology.github.io/NeuroKit/functions/rsp.html#rsp-plot). For the purposes of these example, we will select just 3000 datapoints (or 30s) to visualize.\n",
                 "\n",
                 "*Note:* Do remember to specify the correct `sampling_rate` (in this case, to 100Hz) in which the signals were generated, in all the relevant functions."
             ]
@@ -164,7 +164,7 @@
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "Now that we have the processed signals, we can now perform the analysis using [ecg_intervalrelated()](https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-intervalrelated) and [rsp_intervalrelated()](https://neuropsychology.github.io/NeuroKit/functions/functions_rsp.html#rsp-intervalrelated). Simply provide the processed dataframe and these functions will return a dataframe of the features pertaining to the specific signal.\n",
+                "Now that we have the processed signals, we can now perform the analysis using [ecg_intervalrelated()](https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-intervalrelated) and [rsp_intervalrelated()](https://neuropsychology.github.io/NeuroKit/functions/rsp.html#rsp-intervalrelated). Simply provide the processed dataframe and these functions will return a dataframe of the features pertaining to the specific signal.\n",
                 "\n",
                 "These features will be quite different from event-related features (See [Event-related analysis example](https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html)) as these signals were generated over a longer period of time. Hence, apart from the mean signal rate, variability metrices pertaining to heart rate variability (HRV) and respiratory rate variability (RRV) are also extracted here."
             ]
@@ -391,7 +391,7 @@
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "If you want to segment your data for analysis, such as analyzing two separate portions of your resting state data, you can simply do so by splitting the `ecg_signals` dataframe into **epochs** using [epochs_create()](https://neuropsychology.github.io/NeuroKit/functions/functions_epochs.html#epochs-create). Using this example dataset, let's say you want to analyze the first half and the second half of the ECG data. This means that each halved data would last for 60 x 2.5s = *150s*.  \n",
+                "If you want to segment your data for analysis, such as analyzing two separate portions of your resting state data, you can simply do so by splitting the `ecg_signals` dataframe into **epochs** using [epochs_create()](https://neuropsychology.github.io/NeuroKit/functions/epochs.html#epochs-create). Using this example dataset, let's say you want to analyze the first half and the second half of the ECG data. This means that each halved data would last for 60 x 2.5s = *150s*.  \n",
                 "\n",
                 "In this function, we would also specify the onset of events to be at the 0th (for the first half of the data) and the 15000th datapoint (for the second half of the data), since there are 30000 data points in total. "
             ]

@@ -8,25 +8,25 @@ You can find here the API documentation of NeuroKit, with a description of all t
    :caption: Modules
    :titlesonly:
 
-   Bio <functions_bio>
-   functions_ecg
-   functions_ppg
-   functions_hrv
-   functions_rsp
-   functions_eda
-   functions_emg
-   functions_eog
-   functions_eeg
-   Microstates <functions_microstates>
-   Signal <functions_signal>
-   functions_events
-   functions_epochs
-   functions_data
-   Complexity <functions_complexity>
-   functions_markov
-   functions_stats
-   functions_misc
-   Benchmarking <functions_benchmark>
+   Bio <bio>
+   ecg
+   ppg
+   hrv
+   rsp
+   eda
+   emg
+   eog
+   eeg
+   Microstates <microstates>
+   Signal <signal>
+   events
+   epochs
+   data
+   Complexity <complexity>
+   markov
+   stats
+   misc
+   Benchmarking <benchmark>
 
 
 

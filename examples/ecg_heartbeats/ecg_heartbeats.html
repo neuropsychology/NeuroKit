@@ -219,97 +219,97 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_bio.html">
+    <a class="reference internal" href="../../functions/bio.html">
      Bio
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_ecg.html">
+    <a class="reference internal" href="../../functions/ecg.html">
      ECG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_ppg.html">
+    <a class="reference internal" href="../../functions/ppg.html">
      PPG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_hrv.html">
+    <a class="reference internal" href="../../functions/hrv.html">
      HRV
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_rsp.html">
+    <a class="reference internal" href="../../functions/rsp.html">
      RSP
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_eda.html">
+    <a class="reference internal" href="../../functions/eda.html">
      EDA
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_emg.html">
+    <a class="reference internal" href="../../functions/emg.html">
      EMG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_eog.html">
+    <a class="reference internal" href="../../functions/eog.html">
      EOG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_eeg.html">
+    <a class="reference internal" href="../../functions/eeg.html">
      EEG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_microstates.html">
+    <a class="reference internal" href="../../functions/microstates.html">
      Microstates
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_signal.html">
+    <a class="reference internal" href="../../functions/signal.html">
      Signal
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_events.html">
+    <a class="reference internal" href="../../functions/events.html">
      Events
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_epochs.html">
+    <a class="reference internal" href="../../functions/epochs.html">
      Epochs
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_data.html">
+    <a class="reference internal" href="../../functions/data.html">
      Data
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_complexity.html">
+    <a class="reference internal" href="../../functions/complexity.html">
      Complexity
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_markov.html">
+    <a class="reference internal" href="../../functions/markov.html">
      Markov Chains
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_stats.html">
+    <a class="reference internal" href="../../functions/stats.html">
      Stats
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_misc.html">
+    <a class="reference internal" href="../../functions/misc.html">
      Misc
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../functions/functions_benchmark.html">
+    <a class="reference internal" href="../../functions/benchmark.html">
      Benchmarking
     </a>
    </li>
@@ -712,7 +712,7 @@ title="Print to PDF"
 </div>
 <section id="extract-the-cleaned-ecg-signal">
 <h2>Extract the cleaned ECG signal<a class="headerlink" href="#extract-the-cleaned-ecg-signal" title="Permalink to this headline">#</a></h2>
-<p>In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_data.html#read-acqknowledge">read_acqknowledge()</a>.</p>
+<p>In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/data.html#read-acqknowledge">read_acqknowledge()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate 30 seconds of ECG Signal (recorded at 250 samples / second)</span>
@@ -721,7 +721,7 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<p>Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional array), or a list, you can use <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-process">ecg_process()</a> to process it.</p>
+<p>Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional array), or a list, you can use <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-process">ecg_process()</a> to process it.</p>
 <p><em>Note: It is critical that you specify the correct sampling rate of your signal throughout many processing functions, as this allows NeuroKit to have a time reference.</em></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -754,14 +754,14 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/45dfa6dcd3b7e0a272758fda9a4a30d977ae2c21f57993845ccdeb3657523ab9.png" src="../../_images/45dfa6dcd3b7e0a272758fda9a4a30d977ae2c21f57993845ccdeb3657523ab9.png" />
+<img alt="../../_images/6c13d8f0c92342a95fd0dbacbe2ea370e0bf3907b44407012b359be3bf3220b0.png" src="../../_images/6c13d8f0c92342a95fd0dbacbe2ea370e0bf3907b44407012b359be3bf3220b0.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
 </section>
 <section id="segment-the-signal-around-the-heart-beats">
 <h2>Segment the signal around the heart beats<a class="headerlink" href="#segment-the-signal-around-the-heart-beats" title="Permalink to this headline">#</a></h2>
-<p>You can now epoch all these individual heart beats, synchronized by their R peaks with the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-segment">ecg_segment()</a> function.</p>
+<p>You can now epoch all these individual heart beats, synchronized by their R peaks with the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-segment">ecg_segment()</a> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting all the heart beats</span>
@@ -770,7 +770,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/88a8958cf5b13129996b07e74773b7dceeb0ecdd9f16720b2a2770d77c031e61.png" src="../../_images/88a8958cf5b13129996b07e74773b7dceeb0ecdd9f16720b2a2770d77c031e61.png" />
+<img alt="../../_images/3500441a27f5de15d36608ef6880ce2d5267673c1afb69877e089b05d7c76e6b.png" src="../../_images/3500441a27f5de15d36608ef6880ce2d5267673c1afb69877e089b05d7c76e6b.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -826,36 +826,36 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.189855</td>
-      <td>139</td>
+      <td>-0.186163</td>
+      <td>142</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.184549</td>
-      <td>140</td>
+      <td>-0.180590</td>
+      <td>143</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.179156</td>
-      <td>141</td>
+      <td>-0.174860</td>
+      <td>144</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.173608</td>
-      <td>142</td>
+      <td>-0.168938</td>
+      <td>145</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.167828</td>
-      <td>143</td>
+      <td>-0.162774</td>
+      <td>146</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -940,123 +940,123 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.189855</td>
-      <td>-0.125574</td>
-      <td>-0.143820</td>
-      <td>-0.140034</td>
-      <td>-0.128074</td>
-      <td>-0.132825</td>
-      <td>-0.137503</td>
-      <td>-0.135135</td>
-      <td>-0.130060</td>
-      <td>-0.127733</td>
+      <td>-0.186163</td>
+      <td>-0.132275</td>
+      <td>-0.133329</td>
+      <td>-0.136614</td>
+      <td>-0.116750</td>
+      <td>-0.136713</td>
+      <td>-0.138238</td>
+      <td>-0.133549</td>
+      <td>-0.138051</td>
+      <td>-0.141847</td>
       <td>...</td>
-      <td>-0.127452</td>
-      <td>-0.160716</td>
-      <td>-0.031844</td>
-      <td>-0.330156</td>
-      <td>-0.114466</td>
-      <td>-0.138219</td>
-      <td>-0.125738</td>
-      <td>-0.125568</td>
-      <td>-0.127145</td>
-      <td>-0.131419</td>
+      <td>-0.141684</td>
+      <td>-0.166094</td>
+      <td>-0.046786</td>
+      <td>-0.294149</td>
+      <td>-0.105050</td>
+      <td>-0.144220</td>
+      <td>-0.140989</td>
+      <td>-0.141188</td>
+      <td>-0.137307</td>
+      <td>-0.137126</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.184549</td>
-      <td>-0.124615</td>
-      <td>-0.142215</td>
-      <td>-0.139393</td>
-      <td>-0.127159</td>
-      <td>-0.131911</td>
-      <td>-0.136290</td>
-      <td>-0.134225</td>
-      <td>-0.129413</td>
-      <td>-0.126921</td>
+      <td>-0.180590</td>
+      <td>-0.131649</td>
+      <td>-0.132209</td>
+      <td>-0.135697</td>
+      <td>-0.115820</td>
+      <td>-0.135526</td>
+      <td>-0.137410</td>
+      <td>-0.132665</td>
+      <td>-0.137131</td>
+      <td>-0.141165</td>
       <td>...</td>
-      <td>-0.127119</td>
-      <td>-0.159346</td>
-      <td>-0.030559</td>
-      <td>-0.329552</td>
-      <td>-0.113167</td>
-      <td>-0.137680</td>
-      <td>-0.124419</td>
-      <td>-0.124937</td>
-      <td>-0.126332</td>
-      <td>-0.130583</td>
+      <td>-0.140710</td>
+      <td>-0.164956</td>
+      <td>-0.046056</td>
+      <td>-0.294278</td>
+      <td>-0.104457</td>
+      <td>-0.143613</td>
+      <td>-0.140296</td>
+      <td>-0.140411</td>
+      <td>-0.137297</td>
+      <td>-0.136668</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.179156</td>
-      <td>-0.123470</td>
-      <td>-0.140532</td>
-      <td>-0.138583</td>
-      <td>-0.126084</td>
-      <td>-0.130813</td>
-      <td>-0.134885</td>
-      <td>-0.133147</td>
-      <td>-0.128660</td>
-      <td>-0.126043</td>
+      <td>-0.174860</td>
+      <td>-0.130834</td>
+      <td>-0.130945</td>
+      <td>-0.134654</td>
+      <td>-0.114813</td>
+      <td>-0.134152</td>
+      <td>-0.136389</td>
+      <td>-0.131665</td>
+      <td>-0.136083</td>
+      <td>-0.140383</td>
       <td>...</td>
-      <td>-0.126698</td>
-      <td>-0.157860</td>
-      <td>-0.029085</td>
-      <td>-0.328672</td>
-      <td>-0.111675</td>
-      <td>-0.137035</td>
-      <td>-0.122981</td>
-      <td>-0.124193</td>
-      <td>-0.125418</td>
-      <td>-0.129609</td>
+      <td>-0.139613</td>
+      <td>-0.163675</td>
+      <td>-0.045223</td>
+      <td>-0.294243</td>
+      <td>-0.103774</td>
+      <td>-0.142811</td>
+      <td>-0.139307</td>
+      <td>-0.139473</td>
+      <td>-0.137181</td>
+      <td>-0.136038</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.173608</td>
-      <td>-0.122097</td>
-      <td>-0.138757</td>
-      <td>-0.137543</td>
-      <td>-0.124790</td>
-      <td>-0.129500</td>
-      <td>-0.133236</td>
-      <td>-0.131846</td>
-      <td>-0.127773</td>
-      <td>-0.125089</td>
+      <td>-0.168938</td>
+      <td>-0.129767</td>
+      <td>-0.129470</td>
+      <td>-0.133437</td>
+      <td>-0.113679</td>
+      <td>-0.132564</td>
+      <td>-0.135111</td>
+      <td>-0.130500</td>
+      <td>-0.134872</td>
+      <td>-0.139456</td>
       <td>...</td>
-      <td>-0.126165</td>
-      <td>-0.156239</td>
-      <td>-0.027392</td>
-      <td>-0.327455</td>
-      <td>-0.109951</td>
-      <td>-0.136236</td>
-      <td>-0.121398</td>
-      <td>-0.123312</td>
-      <td>-0.124371</td>
-      <td>-0.128475</td>
+      <td>-0.138355</td>
+      <td>-0.162223</td>
+      <td>-0.044265</td>
+      <td>-0.293995</td>
+      <td>-0.102976</td>
+      <td>-0.141763</td>
+      <td>-0.137952</td>
+      <td>-0.138324</td>
+      <td>-0.136907</td>
+      <td>-0.135202</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.167828</td>
-      <td>-0.120451</td>
-      <td>-0.136860</td>
-      <td>-0.136199</td>
-      <td>-0.123210</td>
-      <td>-0.127938</td>
-      <td>-0.131267</td>
-      <td>-0.130249</td>
-      <td>-0.126711</td>
-      <td>-0.124046</td>
+      <td>-0.162774</td>
+      <td>-0.128383</td>
+      <td>-0.127699</td>
+      <td>-0.131980</td>
+      <td>-0.112356</td>
+      <td>-0.130729</td>
+      <td>-0.133487</td>
+      <td>-0.129103</td>
+      <td>-0.133449</td>
+      <td>-0.138306</td>
       <td>...</td>
-      <td>-0.125494</td>
-      <td>-0.154459</td>
-      <td>-0.025440</td>
-      <td>-0.325833</td>
-      <td>-0.107952</td>
-      <td>-0.135231</td>
-      <td>-0.119640</td>
-      <td>-0.122262</td>
-      <td>-0.123142</td>
-      <td>-0.127149</td>
+      <td>-0.136875</td>
+      <td>-0.160564</td>
+      <td>-0.043153</td>
+      <td>-0.293477</td>
+      <td>-0.102037</td>
+      <td>-0.140408</td>
+      <td>-0.136159</td>
+      <td>-0.136901</td>
+      <td>-0.136418</td>
+      <td>-0.134122</td>
     </tr>
   </tbody>
 </table>
@@ -1084,7 +1084,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b36c9f09098c1037e88afc0b9b9e3449f72377433315ff4a01a5f6430fd8fe0f.png" src="../../_images/b36c9f09098c1037e88afc0b9b9e3449f72377433315ff4a01a5f6430fd8fe0f.png" />
+<img alt="../../_images/639fa35ad8abc94a6a4a2a7ccca6e964864c4c483ee72d76f4aae6c522462d57.png" src="../../_images/639fa35ad8abc94a6a4a2a7ccca6e964864c4c483ee72d76f4aae6c522462d57.png" />
 </div>
 </div>
 </section>
