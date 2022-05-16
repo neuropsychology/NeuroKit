@@ -122,7 +122,7 @@ General
 -  `Get familiar with Python in 10 minutes <https://neuropsychology.github.io/NeuroKit/resources/learn_python.html>`_
 -  `Recording good quality signals <https://neuropsychology.github.io/NeuroKit/resources/recording.html>`_
 -  `Install Python and NeuroKit <https://neuropsychology.github.io/NeuroKit/installation.html>`_
--  `Included datasets <https://neuropsychology.github.io/NeuroKit/functions/functions_data.html#datasets>`_
+-  `Included datasets <https://neuropsychology.github.io/NeuroKit/functions/data.html#datasets>`_
 -  `Additional Resources <https://neuropsychology.github.io/NeuroKit/resources/resources.html>`_
 
 
@@ -520,7 +520,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
-        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_complexity.html
+        :target: https://neuropsychology.github.io/NeuroKit/functions/complexity.html
 
 
 
@@ -557,7 +557,7 @@ Signal Decomposition
     nk.signal_plot(recomposed)  # Visualize components
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_decomposition.png
-        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_signal.html#signal-decompose
+        :target: https://neuropsychology.github.io/NeuroKit/functions/signal.html#signal-decompose
 
 Signal Power Spectrum Density (PSD)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -573,7 +573,7 @@ Signal Power Spectrum Density (PSD)
     burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
-        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_signal.html#signal-psd
+        :target: https://neuropsychology.github.io/NeuroKit/functions/signal.html#signal-psd
 
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -587,7 +587,7 @@ Statistics
     ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
-        :target: https://neuropsychology.github.io/NeuroKit/functions/functions_stats.html#hdi
+        :target: https://neuropsychology.github.io/NeuroKit/functions/stats.html#hdi
 
 .. used_at_section
 

@@ -139,7 +139,7 @@ The API is organized by types of signals. You'll find that each function has a *
 **If the options are not explained, they should be**. It's not your fault you don't understand. That's why we need you to contribute.
 
 
-For instance, in the **ECG section**, the `ecg_peaks function <https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks>`_ takes **4 parameters**. One of them is **method**: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function **returns** and what **type of data** has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find **related functions** in the **See also** part.  An small **example** of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.
+For instance, in the **ECG section**, the `ecg_peaks function <https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks>`_ takes **4 parameters**. One of them is **method**: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function **returns** and what **type of data** has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find **related functions** in the **See also** part.  An small **example** of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.
 
 
 2. The source on Github
@@ -264,7 +264,7 @@ If you know how to code a bit, you can check out the issues that have been flagg
 Improving documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-One of the easiest thing is to improve, complete or fix the documentation for functions. For instance the `ecg_simulate() <https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-simulate>`_ function has a documentation with a general description, a description of the arguments, some example etc. As you've surely noticed, sometimes more details would be needed, some typos are present, or some references could be added.
+One of the easiest thing is to improve, complete or fix the documentation for functions. For instance the `ecg_simulate() <https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-simulate>`_ function has a documentation with a general description, a description of the arguments, some example etc. As you've surely noticed, sometimes more details would be needed, some typos are present, or some references could be added.
 
 The documentation for functions is located alongside the function *definition* (the code of the function). The code of the `ecg_simulate()` function is `here <https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_simulate.py>`_. And as you can see, just below the function name, there is a big *string* (starting and ending with `"""`) containing the documentation.
 
