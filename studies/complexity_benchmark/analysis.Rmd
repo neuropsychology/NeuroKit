@@ -1,0 +1,65 @@
+# Introduction
+
+Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these tools to characterize signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in physiology in the assessment and diagnostic of the state and health of living systems [@lau2021brain, @ehlers1995chaos].
+
+There has been a large and accelerating increase in the number of complexity indices in the past few decades. These new procedures are usually mathematically well-defined and theoretically promising. However, few empirical evidence exist to understand their differences and similarities. Moreover, some can be very expensive in terms of computation power and thus, time, which can become an issue in some applications such as high sampling-rate techniques (e.g., M/EEG) or real-time settings (brain-computer interface). As such, having a general view depicting the relationship between the indices with information about their computation time would be useful, for instance to guide the indices selection in settings where time or computational power is limited.
+
+One of the contributing factor of this lack of empirical comparison is the lack of free, open-source, unified, and easy to use software for computing various complexity indices. Indeed, most of them are described mathematically in journal articles, and reusable code is seldom made available, which limits their further application and validation. *NeuroKit2* [@Makowski2021neurokit] is a Python package for physiological signal processing that aims at providing the most comprehensive, accurate and fast pure Python implementations of complexity indices.
+
+Leveraging this tool, the goal of this study is to empirically compare a vast number of complexity indices, inspect how they relate to one another, and extract some recommendations for indices selection, based on their added-value and computational efficiency. Using NeuroKit2, we will compute more than a hundred complexity indices on various types of signals, with varying degrees of noise. We will then project the results on a latent space through factor analysis, and report the most interesting indices in regards to their representation of the latent dimensions.
+
+
+## Methods
+
+```{r fig1_signals, message=FALSE, warning=FALSE, fig.height=16, fig.width=10, echo=FALSE, fig.cap="Different types of simulated signals, to which was added 5 types of noise (violet, blue, white, pink, and brown) with different intensities. For each signal type, the first row shows the signal with a minimal amount of noise, and the last with a maximal amount of noise. We can see that adding Brown noise turns the signal into a Random-walk (i.e., a Brownian motion)."}
+library(tidyverse)
+library(easystats)
+library(patchwork)
+
+df <- read.csv("data_Signals.csv") |>
+  mutate(
+    Method = as.factor(Method),
+    Noise = as.factor(Noise),
+    Noise = fct_recode(Noise, "Violet" = "-2", "Blue" = "-1", "White" = "0", "Pink" = "1", "Brown" = "2"),
+    Intensity = as.factor(insight::format_value(Noise_Intensity))
+  )
+
+df <- df |>
+  filter(Intensity %in% levels(df$Intensity)[c(1, round(length(levels(df$Intensity)) / 3), length(levels(df$Intensity)))])
+
+make_plot <- function(method = "Random-Walk", title = "Random-Walk", color = "red") {
+  df |>
+    filter(Method == method) |>
+    ggplot(aes(x = Duration, y = Signal)) +
+    geom_line(color = color, size=0.3) +
+    ggside::geom_ysidedensity(aes(x = stat(density))) +
+    facet_grid(Intensity ~ Noise, labeller = label_value) +
+    labs(y = NULL, title = title, x = NULL) +
+    theme_minimal() +
+    theme(
+      axis.ticks = element_blank(),
+      axis.text = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      ggside.panel.border = element_blank(),
+      ggside.panel.grid = element_blank(),
+      ggside.panel.background = element_blank()
+    )
+}
+
+p1 <- make_plot(method = "Random-Walk", title = "Random-Walk", color = "#795548")
+p2 <- make_plot(method = "lorenz_10_2.5_28", title = "Lorenz (\u03c3=10, \u03B2=2.5, \u03C1=28)", color = "#FF5722")
+p3 <- make_plot(method = "lorenz_20_2_30", title = "Lorenz (\u03c3=20, \u03B2=2, \u03C1=30)", color = "#E91E63")
+p4 <- make_plot(method = "oscillatory", title = "Oscillatory", color = "#2196F3")
+p5 <- make_plot(method = "fractal", title = "Fractal", color = "#4CAF50")
+
+p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulated Signals", theme = theme(plot.title = element_text(face = "bold", hjust = 0.5)))
+
+rm(df, p1, p2, p3, p4, p5)
+```
+
+The script to generate the data can be found at https://github.com/neuropsychology/NeuroKit/studies/complexity_benchmark/make_data.py
+
+We started by generating 5 types of signals, one random-walk, two oscillatory signals made (one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at ... different lengths (). The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
+
+The combination of these parameters resulted in a total of `r 48*5*5*5` signal iterations. For each of them, we computed 128 complexity indices, and additionally basic metric such as the standard deviation (*SD*), the *length* of the signal and its dominant *frequency*. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices included, please refer to NeuroKit's documentation (https://neuropsychology.github.io/NeuroKit).
+

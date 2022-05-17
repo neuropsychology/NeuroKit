@@ -1,0 +1,108 @@
+---
+title             : "The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2"
+shorttitle        : "Structure of Chaos"
+
+author: 
+  - name          : "Dominique Makowski"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "my@email.com"
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - "Conceptualization"
+      - "Data curation"
+      - "Formal Analysis"
+      - "Funding acquisition"
+      - "Investigation"
+      - "Methodology"
+      - "Project administration"
+      - "Resources"
+      - "Software"
+      - "Supervision"
+      - "Validation"
+      - "Visualization"
+      - "Writing – original draft"
+  - name          : "An Shu Te"
+    affiliation   : "1"
+    role:
+      - "Software"
+      - "Project administration"
+      - "Writing – review & editing"
+  - name          : "Tam Pham"
+    affiliation   : "1"
+    role:
+      - "Software"
+      - "Writing – review & editing"
+  - name          : "Zen J. Lau"
+    affiliation   : "1"
+    role:
+      - "Software"
+      - "Writing – review & editing"
+  - name          : "S.H. Annabel Chen"
+    affiliation   : "1"
+    role:
+      - "Project administration"
+      - "Writing – review & editing"
+      
+affiliation:
+  - id            : "1"
+    institution   : "Nanyang Technological University"
+
+authornote: |
+  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+  Enter author note here.
+
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  
+  One or two sentences to put the results into a more **general context**.
+  
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "chaos, complexity, fractal, physiology, noise"
+wordcount         : "X"
+
+bibliography      : "bibliography.bib"
+
+floatsintext      : no
+linenumbers       : yes
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+
+classoption       : "man"
+output            : papaja::apa6_pdf
+
+header-includes:
+  - \usepackage{fvextra}
+  - \usepackage{csquotes}
+  - \usepackage{subfig}
+  - \renewcommand*{\thesubfigure}{\MakeUppercase{\alph{subfigure}}}
+  - \raggedbottom
+---
+
+```{r, child=c('analysis.Rmd')}
+```
+
+
+
+\newpage
+
+# References
+
+::: {#refs custom-style="Bibliography"}
+:::
