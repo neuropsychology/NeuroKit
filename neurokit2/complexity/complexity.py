@@ -37,7 +37,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
 
     .. tip::
 
-        We recommend checking our `open-access preprint <https://psyarxiv.com/f8k3x/>`_ for an
+        We recommend checking our open-access `preprint <https://psyarxiv.com/f8k3x/>`_ for an
         introduction to **fractal physiology** and its application in neuroscience.
 
     There are many indices that have been developped and used to assess the complexity of signals,
@@ -48,6 +48,12 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
     The ``nk.complexity()`` function can be used to compute a large number of complexity metrics
     and features. While this is great for exploratory analyses, we recommend running each function
     separately, to gain more control over the parameters and information that you get.
+
+    .. warning::
+
+        The indices included in this function will be subjected to change in future versions,
+        depending on what the literature suggests. We recommend using this function only for quick
+        exploratory analyses, but then replacing it by the calls to the individual functions.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
     <https://neuropsychology.github.io/NeuroKit/studies/complexity_benchmark.html>`_ results:

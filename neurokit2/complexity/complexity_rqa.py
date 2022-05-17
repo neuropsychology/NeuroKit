@@ -33,19 +33,20 @@ def complexity_rqa(
     * **Trapping Time (TT)**: Average length of vertical black lines.
     * **L**: Average length of diagonal black lines. Average duration that a system is staying in
       the same state.
-    * **LEn**: Entropy of diagonal lines.
+    * **LEn**: Entropy of diagonal lines lengths.
     * **VMax**: Longest vertical line length.
-    * **VEn**: Entropy of vertical lines.
+    * **VEn**: Entropy of vertical lines lengths.
     * **W**: Average white vertical line length.
     * **WMax**: Longest white vertical line length.
-    * **WEn**: Entropy white vertical lines.
-    * Ratio determinism / recurrence rate
-    * Ratio laminarity / determinism
+    * **WEn**: Entropy of white vertical lines lengths.
+    * **DeteRec**: The ratio of determinism / recurrence rate.
+    * **LamiDet**: The ratio of laminarity / determinism.
 
     .. note::
 
       More feature exist for RQA, such as the `trend <https://juliadynamics.github.io/
-      DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend>`_
+      DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend>`_. We would like to add
+      them, but we need help. Get in touch if you're interested!
 
     Parameters
     ----------
@@ -178,11 +179,12 @@ def _complexity_rqa_features(rc, min_linelength=2):
     diag_lengths = diag_lengths[np.where(diag_lengths >= min_linelength)[0]]
 
     # Compute features
-    data["Determinism"] = diag_lengths.sum() / rc[idx].sum()
     if data["RecurrenceRate"] == 0:
-        data["Determinism_RecurrenceRate"] = np.nan
+        data["Determinism"] = np.nan
+        data["DeteRec"] = np.nan
     else:
-        data["Determinism_RecurrenceRate"] = data["Determinism"] / data["RecurrenceRate"]
+        data["Determinism"] = diag_lengths.sum() / rc[idx].sum()
+        data["DeteRec"] = data["Determinism"] / data["RecurrenceRate"]
     data["L"] = 0 if len(diag_lengths) == 0 else np.mean(diag_lengths)
     data["Divergence"] = np.nan if len(diag_lengths) == 0 else 1 / np.max(diag_lengths)
     data["LEn"] = entropy_shannon(
@@ -208,9 +210,12 @@ def _complexity_rqa_features(rc, min_linelength=2):
     white_lengths = white_lengths[np.where(white_lengths >= min_linelength)[0]]
 
     # Compute features
-    data["Laminarity"] = black_lengths.sum() / rc[idx].sum()
-    if data["Determinism"] == 0:
-        data["Laminarity_Determinism"] = np.nan
+    if rc[idx].sum() == 0:
+        data["Laminarity"] = np.nan
+    else:
+        data["Laminarity"] = black_lengths.sum() / rc[idx].sum()
+    if data["Determinism"] == 0 or np.isnan(data["Determinism"]):
+        data["LamiDet"] = np.nan
     else:
         data["Laminarity"] / data["Determinism"]
     data["TrappingTime"] = 0 if len(black_lengths) == 0 else np.nanmean(black_lengths)
@@ -280,8 +285,8 @@ def _complexity_rqa_pyrqa(signal, dimension=3, delay=1, tolerance=0.1, linelengt
         "Divergence": rqa.divergence,
         "Laminarity": rqa.laminarity,
         "TrappingTime": rqa.trapping_time,
-        "Determinism_RecurrenceRate": rqa.determinism / rqa.recurrence_rate,
-        "Laminarity_Determinism": rqa.laminarity / rqa.determinism,
+        "DeteRec": rqa.determinism / rqa.recurrence_rate,
+        "LamiDet": rqa.laminarity / rqa.determinism,
         "L": rqa.average_diagonal_line,
         "LEn": rqa.entropy_diagonal_lines,
         "VMax": rqa.longest_vertical_line,
