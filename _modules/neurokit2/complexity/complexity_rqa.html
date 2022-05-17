@@ -565,19 +565,20 @@ title="Open an issue"
 <span class="sd">    * **Trapping Time (TT)**: Average length of vertical black lines.</span>
 <span class="sd">    * **L**: Average length of diagonal black lines. Average duration that a system is staying in</span>
 <span class="sd">      the same state.</span>
-<span class="sd">    * **LEn**: Entropy of diagonal lines.</span>
+<span class="sd">    * **LEn**: Entropy of diagonal lines lengths.</span>
 <span class="sd">    * **VMax**: Longest vertical line length.</span>
-<span class="sd">    * **VEn**: Entropy of vertical lines.</span>
+<span class="sd">    * **VEn**: Entropy of vertical lines lengths.</span>
 <span class="sd">    * **W**: Average white vertical line length.</span>
 <span class="sd">    * **WMax**: Longest white vertical line length.</span>
-<span class="sd">    * **WEn**: Entropy white vertical lines.</span>
-<span class="sd">    * Ratio determinism / recurrence rate</span>
-<span class="sd">    * Ratio laminarity / determinism</span>
+<span class="sd">    * **WEn**: Entropy of white vertical lines lengths.</span>
+<span class="sd">    * **DeteRec**: The ratio of determinism / recurrence rate.</span>
+<span class="sd">    * **LamiDet**: The ratio of laminarity / determinism.</span>
 
 <span class="sd">    .. note::</span>
 
 <span class="sd">      More feature exist for RQA, such as the `trend &lt;https://juliadynamics.github.io/</span>
-<span class="sd">      DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend&gt;`_</span>
+<span class="sd">      DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend&gt;`_. We would like to add</span>
+<span class="sd">      them, but we need help. Get in touch if you&#39;re interested!</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -710,11 +711,12 @@ title="Open an issue"
     <span class="n">diag_lengths</span> <span class="o">=</span> <span class="n">diag_lengths</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diag_lengths</span> <span class="o">&gt;=</span> <span class="n">min_linelength</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="c1"># Compute features</span>
-    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diag_lengths</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RecurrenceRate&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism_RecurrenceRate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;DeteRec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism_RecurrenceRate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RecurrenceRate&quot;</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diag_lengths</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;DeteRec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RecurrenceRate&quot;</span><span class="p">]</span>
     <span class="n">data</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Divergence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">diag_lengths</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="s2">&quot;LEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span>
@@ -740,9 +742,12 @@ title="Open an issue"
     <span class="n">white_lengths</span> <span class="o">=</span> <span class="n">white_lengths</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">white_lengths</span> <span class="o">&gt;=</span> <span class="n">min_linelength</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="c1"># Compute features</span>
-    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">black_lengths</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity_Determinism&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">if</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">black_lengths</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">rc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]):</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;LamiDet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Laminarity&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Determinism&quot;</span><span class="p">]</span>
     <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TrappingTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">black_lengths</span><span class="p">)</span>
@@ -812,8 +817,8 @@ title="Open an issue"
         <span class="s2">&quot;Divergence&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">divergence</span><span class="p">,</span>
         <span class="s2">&quot;Laminarity&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">laminarity</span><span class="p">,</span>
         <span class="s2">&quot;TrappingTime&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">trapping_time</span><span class="p">,</span>
-        <span class="s2">&quot;Determinism_RecurrenceRate&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span> <span class="o">/</span> <span class="n">rqa</span><span class="o">.</span><span class="n">recurrence_rate</span><span class="p">,</span>
-        <span class="s2">&quot;Laminarity_Determinism&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">laminarity</span> <span class="o">/</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span><span class="p">,</span>
+        <span class="s2">&quot;DeteRec&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span> <span class="o">/</span> <span class="n">rqa</span><span class="o">.</span><span class="n">recurrence_rate</span><span class="p">,</span>
+        <span class="s2">&quot;LamiDet&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">laminarity</span> <span class="o">/</span> <span class="n">rqa</span><span class="o">.</span><span class="n">determinism</span><span class="p">,</span>
         <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">average_diagonal_line</span><span class="p">,</span>
         <span class="s2">&quot;LEn&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">entropy_diagonal_lines</span><span class="p">,</span>
         <span class="s2">&quot;VMax&quot;</span><span class="p">:</span> <span class="n">rqa</span><span class="o">.</span><span class="n">longest_vertical_line</span><span class="p">,</span>

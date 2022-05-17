@@ -541,10 +541,10 @@ title="Open an issue"
 <div class="viewcode-block" id="fractal_higuchi"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.fractal_higuchi">[docs]</a><span class="k">def</span> <span class="nf">fractal_higuchi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">k_max</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Higuchi&#39;s Fractal Dimension (HFD)**</span>
 
-<span class="sd">    Computes Higuchi&#39;s Fractal Dimension (HFD) by reconstructing k-max number of new</span>
-<span class="sd">    data sets. For each reconstructed data set, curve length is computed and plotted</span>
-<span class="sd">    against its corresponding k value on a log-log scale. HFD equates to the slope obtained</span>
-<span class="sd">    from fitting a least-squares method.</span>
+<span class="sd">    The Higuchi&#39;s Fractal Dimension (HFD) is an approximate value for the box-counting dimension for</span>
+<span class="sd">    time series. It is computed by reconstructing k-max number of new data sets. For each</span>
+<span class="sd">    reconstructed data set, curve length is computed and plotted against its corresponding</span>
+<span class="sd">    *k*-value on a log-log scale. HFD corresponds to the slope of the least-squares linear trend.</span>
 
 <span class="sd">    Values should fall between 1 and 2. For more information about the *k* parameter selection, see</span>
 <span class="sd">    the :func:`complexity_k` optimization function.</span>
