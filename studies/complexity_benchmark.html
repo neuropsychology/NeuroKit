@@ -613,6 +613,36 @@ title="Print to PDF"
      Computation Time
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#duplicates">
+     Duplicates
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlation">
+     Correlation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#factor-analysis">
+     Factor Analysis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlation-network">
+     Correlation Network
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hierarchical-clustering">
+     Hierarchical Clustering
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualization">
+     Visualization
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -664,6 +694,36 @@ title="Print to PDF"
      Computation Time
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#duplicates">
+     Duplicates
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlation">
+     Correlation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#factor-analysis">
+     Factor Analysis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlation-network">
+     Correlation Network
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hierarchical-clustering">
+     Hierarchical Clustering
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualization">
+     Visualization
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -704,40 +764,43 @@ unpredictability, entropy, and/or randomness. Using these tools to
 characterize signals (a subfield commonly referred to as “fractal
 physiology,” Bassingthwaighte, Liebovitch, &amp; West, 2013) has shown
 promising results in physiology in the assessment and diagnostic of the
-state and health of living systems <strong>[REF]</strong>.</p>
+state and health of living systems Ehlers (1995).</p>
 <p>There has been a large and accelerating increase in the number of
 complexity indices in the past few decades. These new procedures are
 usually mathematically well-defined and theoretically promising.
 However, few empirical evidence exist to understand their differences
 and similarities. Moreover, some can be very expensive in terms of
 computation power and thus, time, which can become an issue in some
-applications such as high sampling-rate techniques (e.g., M.EEG) or
+applications such as high sampling-rate techniques (e.g., M/EEG) or
 real-time settings (brain-computer interface). As such, having a general
 view depicting the relationship between the indices with information
 about their computation time would be useful, for instance to guide the
 indices selection in settings where time or computational power is
 limited.</p>
 <p>One of the contributing factor of this lack of empirical comparison is
-the lack of free, open-source, and easy to use software for computing
-various complexity indices. Indeed, most of them are described
+the lack of free, open-source, unified, and easy to use software for
+computing various complexity indices. Indeed, most of them are described
 mathematically in journal articles, and reusable code is seldom made
-available. NeuroKit2 (Makowski et al., 2021) is a Python package for
+available, which limits their further application and validation.
+<em>NeuroKit2</em> (Makowski et al., 2021) is a Python package for
 physiological signal processing that aims at providing the most
 comprehensive, accurate and fast pure Python implementations of
-complexity indices (fractal dimension, entropy, information, etc.).</p>
-<p>The goal of this study is to empirically compare a vast number of
-complexity indices, inspect how they relate to one another, and extract
-some recommendations for indices selection, based on their added-value
-and computational efficiency. Using NeuroKit2, we will compute more than
-a hundred complexity indices on various types of signals, with varying
-degrees of noise. We will then project the results on a latent space
-through factor analysis, and report the most interesting indices in
-regards to their representation of the latent dimensions.</p>
+complexity indices.</p>
+<p>Leveraging this tool, the goal of this study is to empirically compare a
+vast number of complexity indices, inspect how they relate to one
+another, and extract some recommendations for indices selection, based
+on their added-value and computational efficiency. Using NeuroKit2, we
+will compute more than a hundred complexity indices on various types of
+signals, with varying degrees of noise. We will then project the results
+on a latent space through factor analysis, and report the most
+interesting indices in regards to their representation of the latent
+dimensions.</p>
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">#</a></h2>
 <p><img alt="Different types of simulated signals, to which was added 5 types ofnoise (violet, blue, white, pink, and brown) with different intensities.For each signal type, the first row shows the signal with a minimalamount of noise, and the last with a maximal amount of noise. We can seethat adding Brown noise turns the signal into a Random-walk (i.e., aBrownianmotion)." src="../_images/fig1_signals-1.png" /></p>
-<p>The script to generate the data can be found at …</p>
+<p>The script to generate the data can be found at
+<a class="reference external" href="https://github.com/neuropsychology/NeuroKit/studies/complexity_benchmark/make_data.py">https://github.com/neuropsychology/NeuroKit/studies/complexity_benchmark/make_data.py</a></p>
 <p>We started by generating 5 types of signals, one random-walk, two
 oscillatory signals made (one made of harmonic frequencies that results
 in a self-repeating - fractal-like - signal), and two complex signals
@@ -759,360 +822,407 @@ pink
 <img alt="\beta=1" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Cbeta%3D1" />,
 and brown
 <img alt="\beta=2" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Cbeta%3D2" />
-noise). Each noise type was added at … different intensities (linearly
+noise). Each noise type was added at 48 different intensities (linearly
 ranging from 0.1 to 4). Examples of generated signals are presented in
 <strong>Figure 1</strong>.</p>
-<p>The combination of these parameters resulted in a total of 3200 signal
-iterations. For each of them, we computed … indices, and additionally
-basic metric such as the SD, the Length of the signal and its mean
-frequency. The parameters used (such as the time-delay
+<p>The combination of these parameters resulted in a total of 6000 signal
+iterations. For each of them, we computed 128 complexity indices, and
+additionally basic metric such as the standard deviation (<em>SD</em>), the
+<em>length</em> of the signal and its dominant <em>frequency</em>. The parameters used
+(such as the time-delay
 <img alt="\tau" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Ctau" />
 or the embedding dimension) are documented in the data generation
-script. For a complete description of the various indices used, please
-refer to NeuroKit’s documentation
+script. For a complete description of the various indices included,
+please refer to NeuroKit’s documentation
 (<a class="reference external" href="https://neuropsychology.github.io/NeuroKit">https://neuropsychology.github.io/NeuroKit</a>).</p>
 </section>
 <section id="results">
 <h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
+<p>The data analysis script, the data and the code for the figures is fully
+available at <strong>ADD LINK</strong>. The analysis was performed in R using the
+<em>easystats</em> collection of packages Makowski, Lüdecke, Ben-Shachar, &amp;
+Patil (2020/2022).</p>
 <section id="computation-time">
 <h3>Computation Time<a class="headerlink" href="#computation-time" title="Permalink to this headline">#</a></h3>
-<p><img alt="" src="../_images/computation_time-1.png" /><!-- --></p>
-<p>After summarizing and sorting the indices by computation time, the most
-striking feature are the orders of magnitude of difference between the
-fastest and slowest indices. Some of them are also particularly
-sensitive to the data length, a property which combined with
-computational expensiveness leads to indices being 100,000 slower to
-compute than other basic metrics.</p>
+<p><img alt="Median computation time difference between the different complexityindicesalgorithms." src="../_images/computation_time-1.png" /></p>
+<p>Despite the relative shortness of the signals considered (a few thousand
+points at most), the fully-parallelized data generation script took 12h
+to run on a 48-cores machine. After summarizing and sorting the indices
+by computation time, the most striking feature are the orders of
+magnitude of difference between the fastest and slowest indices. Some of
+them are also particularly sensitive to the data length, a property
+which combined with computational expensiveness leads to indices being
+100,000 slower to compute than other basic metrics.</p>
 <p>Multiscale indices are among the slowest, due to their iterative nature
 (a given index is computed multiple times on coarse-grained subseries of
-the signal).</p>
-<!-- ### Duplicates -->
-<!-- ```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15, cache=FALSE} -->
-<!-- data <- df |> -->
-<!--   mutate(i = paste(Signal, Length, Noise_Type, Noise_Intensity, sep = "__")) |> -->
-<!--   select(i, Index, Result) |> -->
-<!--   pivot_wider(names_from = "Index", values_from = "Result") |> -->
-<!--   select(-i) -->
-<!-- # pca <- principal_components(data, n=1) |> -->
-<!-- #   arrange(desc(sign(PC1)), desc(abs(PC1))) -->
-<!-- get_cor <- function(data, plot=FALSE) { -->
-<!--   cor <- correlation::correlation(data, method = "pearson", redundant = TRUE) |> -->
-<!--     correlation::cor_sort(hclust_method = "ward.D2") -->
-<!--   if(plot) { -->
-<!--     p_data <- cor |> -->
-<!--       cor_lower() |> -->
-<!--       mutate( -->
-<!--         Text = insight::format_value(r, zap_small = TRUE, digits = 3), -->
-<!--         Text = str_replace(str_remove(Text, "^0+"), "^-0+", "-"), -->
-<!--         Parameter2 = fct_rev(Parameter2) -->
-<!--       ) -->
-<!--     p <- p_data |> -->
-<!--       ggplot(aes(x = Parameter2, y = Parameter1)) + -->
-<!--       geom_tile(aes(fill = r)) + -->
-<!--       # geom_text(aes(label = Text), size = 2) + -->
-<!--       scale_fill_gradient2(low = "#2196F3", mid = "white", high = "#F44336", midpoint = 0, limit = c(-1, 1), space = "Lab", name = "Correlation", guide = "legend") + -->
-<!--       scale_x_discrete(expand = c(0, 0)) + -->
-<!--       scale_y_discrete(expand = c(0, 0)) + -->
-<!--       labs(title = "Correlation Matrix of Complexity Indices", x = NULL, y = NULL) + -->
-<!--       theme_minimal() + -->
-<!--       theme( -->
-<!--         axis.text.x = element_text(angle = 90, hjust = 1), -->
-<!--         plot.title = element_text(hjust = 0.5), -->
-<!--         panel.grid.major = element_blank(), -->
-<!--         panel.grid.minor = element_blank() -->
-<!--       ) -->
-<!--     plot(p) -->
-<!--   } -->
-<!--   cor -->
-<!-- } -->
-<!-- cor <- get_cor(data) -->
-<!-- ``` -->
-<!-- ```{r eval=TRUE, message=FALSE, warning=FALSE, include=FALSE} -->
-<!-- cor |> -->
-<!--   cor_lower() |> -->
-<!--   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |> -->
-<!--   arrange(desc(abs(r)), Parameter1) |> -->
-<!--   filter(Parameter1 != Parameter2) |> -->
-<!--   filter(abs(r) > .97) |> -->
-<!--   select(Parameter1, Parameter2, r) -->
-<!-- ``` -->
-<!-- We will start by removing redundant indices. -->
-<!-- - **CREn (B)**, and **ShanEn (B)** -->
-<!--   - Remove *CREn (B)*  because it's slower. -->
-<!-- - **CREn (D)**, **PFD (D)** and **ShanEn (D)** -->
-<!--   - Remove *CREn (D)* and *ShanEn (D)* because it's slower. -->
-<!-- - **CREn (r)**, **PFD (r)** and **ShanEn (r)** -->
-<!--   - Remove *CREn (r)* and *ShanEn (r)* because it's slower. -->
-<!-- - **PSDFD (Hasselman2013)** and **PSDFD (Voss1998)** -->
-<!--   - Remove **PSDFD (Voss1998)** because it's positively correlated with the rest. -->
-<!-- - **RangeEn (A)**, **RangeEn (Ac)** and **RangeEn (B)** -->
-<!--   - Remove **RangeEn (A)**, **RangeEn (Ac)**  because they yield undefined entropies. -->
-<!-- - **SVDEn**, and **FI** -->
-<!--   - Remove **FI**  because it's negatively correlated with the rest. -->
-<!-- - **MMSEn**, and **IMSEn** -->
-<!--   - Remove **MMSEn**  because it's slower. -->
-<!-- - **H (corrected)**, and **H (uncorrected)** -->
-<!--   - Remove **H (corrected)**  because it's slower. -->
-<!-- - **FuzzyEn**, and **FuzzyApEn** -->
-<!--   - Remove **FuzzyApEn**  because it's slower. -->
-<!-- - **SVDEn**, and **FuzzycApEn** -->
-<!--   - Remove **FuzzycApEn**  because it's slower. -->
-<!-- - **CPEn**, and **CRPEn** -->
-<!--   - Remove **CPEn**  to keep the Renyi entropy. -->
-<!-- - **NLDFD**, and **RR** -->
-<!--   - Remove **RR**  because it's slower. -->
-<!-- ```{r eval=FALSE, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE} -->
-<!-- # Duplicates -->
-<!-- # =========== -->
-<!-- averagetime <- arrange(summarize(group_by(df, Index), Duration = mean(Duration)), Duration) -->
-<!-- filter(averagetime, Index %in% c("CREn (D)", "PFD (D)", "ShanEn (D)")) -->
-<!-- filter(averagetime, Index %in% c("ShanEn (B)", "CREn (B)")) -->
-<!-- filter(averagetime, Index %in% c("ShanEn (r)", "PFD (r)", "CREn (r)")) -->
-<!-- filter(averagetime, Index %in% c("ShanEn (C)", "PFD (C)", "CREn (C)")) -->
-<!-- filter(averagetime, Index %in% c("CREn (10)", "CREn (100)")) -->
-<!-- filter(averagetime, Index %in% c("SVDEn", "FI")) -->
-<!-- filter(averagetime, Index %in% c("PSDFD (Hasselman2013)", "PSDFD (Voss1998)")) -->
-<!-- filter(averagetime, Index %in% c("MMSEn", "IMSEn")) -->
-<!-- filter(averagetime, Index %in% c("H (corrected)", "H (uncorrected)")) -->
-<!-- filter(averagetime, Index %in% c("FuzzyEn", "FuzzyApEn")) -->
-<!-- filter(averagetime, Index %in% c("RCMSEn", "FuzzyRCMSEn")) -->
-<!-- filter(averagetime, Index %in% c("SVDEn", "FuzzycApEn")) -->
-<!-- filter(averagetime, Index %in% c("CPEn", "CRPEn")) -->
-<!-- filter(averagetime, Index %in% c("NLDFD", "RR")) -->
-<!-- ``` -->
-<!-- ### Correlation -->
-<!-- ```{r message=FALSE, warning=FALSE, cache=FALSE, fig.width=16, fig.height=15} -->
-<!-- data <- data |> -->
-<!--   select( -->
-<!--     -`CREn (B)`, -->
-<!--     -`CREn (D)`, -`ShanEn (D)`, -->
-<!--     -`CREn (r)`, -`ShanEn (r)`, -->
-<!--     -`CREn (C)`, -`ShanEn (C)`, -->
-<!--     -`CREn (100)`, -->
-<!--     -`PowEn`, -->
-<!--     # -`PSDFD (Voss1998)`, -->
-<!--     # -`RangeEn (A)`, -`RangeEn (Ac)`, -->
-<!--     # -FI, -->
-<!--     # -MMSEn, -->
-<!--     -`H (corrected)` -->
-<!--     # -FuzzyApEn, -->
-<!--     # -FuzzycApEn, -->
-<!--     # -CPEn, -->
-<!--     # -RR, -->
-<!--     # -MFDFA_HDelta, -->
-<!--     # -FuzzyRCMSEn -->
-<!--     # -`CREn (1000)`, -->
-<!--     # -`CREn (100)`, -->
-<!--     # -RQA_VEn, -RQA_LEn -->
-<!--   ) -->
-<!-- cor <- get_cor(data, plot=TRUE) -->
-<!-- ``` -->
-<!-- Complexity indices, despite their multitude, their unicities and specificities, do indeed share similarities. They form clusters (some indices, by design, index the predictability, whereas other the randomness). -->
-<!-- #### Graph -->
-<!-- ```{r graph, message=FALSE, warning=FALSE, fig.width=14, fig.height=7, include=FALSE, eval=FALSE} -->
-<!-- library(ggraph) -->
-<!-- g <- cor |> -->
-<!--   cor_lower() |> -->
-<!--   mutate(width = abs(r), -->
-<!--          edgecolor = as.character(sign(r))) |> -->
-<!--   filter(!Index %in% c("SD", "Length", "Random")) |> -->
-<!--   tidygraph::as_tbl_graph(directed=FALSE) -->
-<!-- g |> -->
-<!--   mutate(importance = tidygraph::centrality_authority(weights = abs(r)), -->
-<!--          group = as.factor(tidygraph::group_louvain(weights = abs(r)))) |> -->
-<!--   tidygraph::activate("edges") |> -->
-<!--   filter(abs(r) > 0.66) |> -->
-<!--   tidygraph::activate("nodes") |> -->
-<!--   filter(!tidygraph::node_is_isolated()) |> -->
-<!--   mutate(angle = 360 * seq(0, n(), length.out=n()) / sum(n()), -->
-<!--          hjust = ifelse(angle > 90 & angle < 270, 1, 0), -->
-<!--          angle = ifelse(angle > 90 & angle < 270, 180 + angle, angle)) |> -->
-<!--   ggraph(layout = 'circle') +  # fr # lgl # drl # kk -->
-<!--   ggraph::geom_edge_arc(aes(edge_width=width, edge_colour=edgecolor), strength=0.3, alpha=0.66) + -->
-<!--   ggraph::geom_node_point(aes(size = importance), colour = "black") + -->
-<!--   # ggraph::geom_node_label(aes(label = name, fill = group, size=importance), repel=TRUE) + -->
-<!--   ggraph::geom_node_text(aes(x = x*1.05, y=y*1.05, label = name, angle = angle, hjust=hjust)) + -->
-<!--   scale_edge_color_manual(values = c("1" = "#2E7D32", "-1"="#C62828"), guide = "none") + -->
-<!--   scale_edge_width_continuous(range = c(0.005, 0.66), guide = "none") + -->
-<!--   scale_size_continuous(range = c(0.1, 2), guide = "none") + -->
-<!--   scale_fill_material_d(guide= "none") + -->
-<!--   scale_colour_material_d(guide= "none") + -->
-<!--   ggraph::theme_graph() + -->
-<!--   expand_limits(x = c(-1.5, 1.5), y = c(-1.5, 1.5)) -->
-<!-- ``` -->
-<!-- ### Misc -->
-<!-- #### Sensitivity to Signal Length -->
-<!-- ```{r message=FALSE, warning=FALSE, include=FALSE, cache=FALSE} -->
-<!-- model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random"))) -->
-<!-- parameters::parameters(model, keep = "poly.*1") |> -->
-<!--   arrange(desc(abs(Coefficient))) |> -->
-<!--   filter(p < .05) -->
-<!-- estimate_relation(model) |> -->
-<!--   ggplot(aes(x = Length, y = Predicted)) + -->
-<!--   geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = Index), alpha = 0.1) + -->
-<!--   geom_line(aes(color = Index)) + -->
-<!--   geom_point2( -->
-<!--     data = filter(df, Index != "SD"), -->
-<!--     aes(y = Result, color = Index), -->
-<!--     alpha = 0.1, size = 2 -->
-<!--   ) + -->
-<!--   scale_fill_manual(values = colors) + -->
-<!--   scale_color_manual(values = colors) + -->
-<!--   theme(legend.position = "none") + -->
-<!--   facet_wrap(~Index, scales = "free") -->
-<!-- ``` -->
-<!-- #### Sensitivity to Noise -->
-<!-- ```{r message=FALSE, warning=FALSE, include=FALSE, cache=FALSE} -->
-<!-- model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random"))) -->
-<!-- parameters::parameters(model, keep = "poly.*1") |> -->
-<!--   arrange(abs(p)) |> -->
-<!--   filter(p < .05) -->
-<!-- estimate_relation(model) |> -->
-<!--   ggplot(aes(x = Noise_Intensity, y = Predicted)) + -->
-<!--   geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = Index), alpha = 0.1) + -->
-<!--   geom_line(aes(color = Index)) + -->
-<!--   geom_point2( -->
-<!--     data = filter(df, Index != "SD"), -->
-<!--     aes(y = Result, color = Index), -->
-<!--     alpha = 0.1, size = 2 -->
-<!--   ) + -->
-<!--   scale_fill_manual(values = colors) + -->
-<!--   scale_color_manual(values = colors) + -->
-<!--   theme(legend.position = "none") + -->
-<!--   facet_wrap(~Index, scales = "free_y") -->
-<!-- ``` -->
-<!-- <!-- ### Hierarchical CLustering -->
-<p>–&gt;</p>
-<!-- <!-- ```{r message=FALSE, warning=FALSE} -->
-<p>–&gt;</p>
-<!-- <!-- n <- parameters::n_clusters(as.data.frame(t(data)), standardize = FALSE) -->
-<p>–&gt; &lt;!– <!-- plot(n) --> –&gt;</p>
-<!-- <!-- rez <- parameters::cluster_analysis(as.data.frame(t(data)),  -->
-<p>–&gt;</p>
-<!-- <!--                                     standardize = FALSE,  -->
-<p>–&gt; &lt;!– <!--                                     n=4,  --> –&gt;</p>
-<!-- <!--                                     method="hclust",  --> –\>
-<!-- <!--                                     hclust_method="ward.D2") -->
-<p>–&gt; &lt;!– <!-- # plot(rez) --> –&gt;</p>
-<!-- <!-- attributes(rez)$model |>  -->
-<p>–&gt; &lt;!– <!--   plot(hang = -1) --> –&gt; &lt;!– <!-- ``` --> –&gt;</p>
-<!-- ### Factor Analysis -->
-<!-- ```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=7} -->
-<!-- r <- correlation::cor_smooth(as.matrix(cor)) -->
-<!-- plot(parameters::n_factors(data, cor = r, n_max=20)) -->
-<!-- # plot(parameters::n_components(data, cor = r)) -->
-<!-- ``` -->
-<!-- ```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=18} -->
-<!-- rez <- parameters::factor_analysis(data, cor = r, n = 12, rotation = "varimax", sort = TRUE, fm="mle") -->
-<!-- # rez <- parameters::principal_components(data, n = 15, sort = TRUE) -->
-<!-- # rez -->
-<!-- col <- gsub('[[:digit:]]+', '', names(rez)[2]) -->
-<!-- closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with(col)), 1, \(x) which.max(abs(x)))] -->
-<!-- loadings <- attributes(rez)$loadings_long |> -->
-<!--   mutate( -->
-<!--     Loading = Loading, -->
-<!--     Component = fct_relevel(Component, rev(names(select(rez, starts_with(col))))), -->
-<!--     Variable = fct_rev(fct_relevel(Variable, rez$Variable)) -->
-<!--   ) -->
-<!-- colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Component))), levels(loadings$Component)) -->
-<!-- # Sort by sign too -->
-<!-- names(closest) <- rev(levels(loadings$Variable)) -->
-<!-- idx_order <- loadings |> -->
-<!--   mutate(Closest = closest[as.character(loadings$Variable)], -->
-<!--          Sign = sign(Loading)) |> -->
-<!--   filter(Component == Closest) |> -->
-<!--   arrange(desc(Component), desc(Sign), desc(abs(Loading))) |> -->
-<!--   pull(Variable) |> -->
-<!--   as.character() -->
-<!-- separations <- table(closest)[intersect(levels(loadings$Component), unique(closest))] -->
-<!-- p1 <- loadings |> -->
-<!--   mutate(Variable = fct_relevel(Variable, rev(idx_order))) |> -->
-<!--   # filter(Variable == "CD") |> -->
-<!--   ggplot(aes(x = Variable, y = Loading)) + -->
-<!--   geom_bar(aes(fill = Component), stat = "identity") + -->
-<!--   geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") + -->
-<!--   geom_vline(xintercept = head(cumsum(separations), -1) + 0.5) + -->
-<!--   scale_y_continuous(expand = c(0, 0)) + -->
-<!--   scale_fill_material_d("rainbow") + -->
-<!--   coord_flip() + -->
-<!--   theme_minimal() + -->
-<!--   guides(fill = guide_legend(reverse = TRUE)) + -->
-<!--   labs(x = NULL) + -->
-<!--   theme( -->
-<!--     axis.text.y = element_text( -->
-<!--       color = rev(colors[closest]), -->
-<!--       face = rev(ifelse(idx_order %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")), -->
-<!--       hjust = 0.5 -->
-<!--     ), -->
-<!--     axis.text.x = element_blank(), -->
-<!--     plot.title = element_text(hjust = 0.5), -->
-<!--     panel.grid.major = element_blank(), -->
-<!--     panel.grid.minor = element_blank() -->
-<!--   ) -->
-<!-- p2 <- order |> -->
-<!--   mutate(Duration = 1 + Duration * 10000) |> -->
-<!--   filter(Index %in% loadings$Variable) |> -->
-<!--   mutate(Index = fct_relevel(Index, levels(loadings$Variable)), -->
-<!--          Duration = ifelse(is.na(Duration), 0, Duration)) |> -->
-<!--   ggplot(aes(x = log10(Duration), y = Index)) + -->
-<!--   geom_bar(aes(fill = log10(Duration)), stat = "identity") + -->
-<!--   geom_hline(yintercept = head(cumsum(separations), -1) + 0.5) + -->
-<!--   scale_x_reverse(expand = c(0, 0)) + -->
-<!--   # scale_x_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) + -->
-<!--   scale_y_discrete(position = "right") + -->
-<!--   scale_fill_viridis_c(guide = "none") + -->
-<!--   labs(x = "Computation Time", y = NULL) + -->
-<!--   theme_minimal() + -->
-<!--   theme( -->
-<!--     axis.text.y = element_blank(), -->
-<!--     axis.text.x = element_blank(), -->
-<!--     plot.title = element_text(hjust = 0.5), -->
-<!--     panel.grid.major = element_blank(), -->
-<!--     panel.grid.minor = element_blank() -->
-<!--   ) -->
-<!-- (p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))) -->
-<!-- ``` -->
-<!-- ### Visualization -->
-<!-- ```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=7} -->
-<!-- model <- # lm(Result ~ Index * (Length + Noise_Type + poly(Noise_Intensity, 2) * Signal), -->
-<!--          mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)) + Index * (Length + Noise_Type), -->
-<!--             data=df |> -->
-<!--               filter(Index %in% c( -->
-<!--                 "NLDFD", -->
-<!--                 "SVDEn", -->
-<!--                 # "SampEn", -->
-<!--                 "PEn", -->
-<!--                 # "FuzzyEn", -->
-<!--                 # "WPEn", -->
-<!--                 "K2En", -->
-<!--                 # "PSDFD (Hasselman 2013)", -->
-<!--                 "BubbEn", -->
-<!--                 "MSPEn", -->
-<!--                 "MFDFA_Increment" -->
-<!--                 # "MFDFA_Width", -->
-<!--                 # "MFDFA_Delta" -->
-<!--                 )) |> -->
-<!--               mutate(Noise_Type = as.factor(Noise_Type))) -->
-<!-- # estimate_means(model, at = c("Index", "Signal", "Noise_Intensity", "Noise_Type")) |> -->
-<!-- #   ggplot(aes(y = Mean, x = Noise_Intensity)) + -->
-<!-- #   geom_line(aes(color = Index, size=Noise_Type)) + -->
-<!-- #   facet_grid(Noise_Type~Signal) + -->
-<!-- #   scale_linetype_manual(values = c("-2" = 3, "-1" = 4, "0" = 2, "1" = 5, "2" = 1)) + -->
-<!-- #   scale_size_manual(values = c("-2" = 0.2, "-1" = 0.4, "0" = 0.6, "1" = 0.8, "2" = 1)) + -->
-<!-- #   theme_classic() + -->
-<!-- #   theme(panel.grid.major = element_line(colour = "#EEEEEE")) -->
-<!-- estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |> -->
-<!--   ggplot(aes(y = Mean, x = Noise_Intensity)) + -->
-<!--   geom_line(aes(color = Index)) + -->
-<!--   facet_grid(~Signal) + -->
-<!--   scale_linetype_manual(values = c("-2" = 3, "-1" = 4, "0" = 2, "1" = 5, "2" = 1)) + -->
-<!--   theme_classic() + -->
-<!--   theme(panel.grid.major = element_line(colour = "#EEEEEE")) -->
-<!-- ``` -->
+the signal). Indices related to Recurrence Quantification Analysis (RQA)
+are also relatively slow and don’t scale well with signal length.</p>
+</section>
+<section id="duplicates">
+<h3>Duplicates<a class="headerlink" href="#duplicates" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">Signal</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">Noise_Type</span><span class="p">,</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;__&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Index</span><span class="p">,</span> <span class="n">Result</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="s">&quot;Result&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># pca &lt;- principal_components(data, n=1) |&gt;</span>
+<span class="c1">#   arrange(desc(sign(PC1)), desc(abs(PC1)))</span>
+
+<span class="n">get_cor</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">cor</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">correlation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;pearson&quot;</span><span class="p">,</span> <span class="n">redundant</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="n">correlation</span><span class="o">::</span><span class="nf">cor_sort</span><span class="p">(</span><span class="n">hclust_method</span> <span class="o">=</span> <span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
+
+  <span class="nf">if</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">p_data</span> <span class="o">&lt;-</span> <span class="n">cor</span> <span class="o">|&gt;</span>
+      <span class="nf">cor_lower</span><span class="p">()</span> <span class="o">|&gt;</span>
+      <span class="nf">mutate</span><span class="p">(</span>
+        <span class="n">Text</span> <span class="o">=</span> <span class="n">insight</span><span class="o">::</span><span class="nf">format_value</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">zap_small</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="m">3</span><span class="p">),</span>
+        <span class="n">Text</span> <span class="o">=</span> <span class="nf">str_replace</span><span class="p">(</span><span class="nf">str_remove</span><span class="p">(</span><span class="n">Text</span><span class="p">,</span> <span class="s">&quot;^0+&quot;</span><span class="p">),</span> <span class="s">&quot;^-0+&quot;</span><span class="p">,</span> <span class="s">&quot;-&quot;</span><span class="p">),</span>
+        <span class="n">Parameter2</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="n">Parameter2</span><span class="p">)</span>
+      <span class="p">)</span>
+
+    <span class="n">p</span> <span class="o">&lt;-</span> <span class="n">p_data</span> <span class="o">|&gt;</span>
+      <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Parameter2</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Parameter1</span><span class="p">))</span> <span class="o">+</span>
+      <span class="nf">geom_tile</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">r</span><span class="p">))</span> <span class="o">+</span>
+      <span class="c1"># geom_text(aes(label = Text), size = 2) +</span>
+      <span class="nf">scale_fill_gradient2</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="s">&quot;#2196F3&quot;</span><span class="p">,</span> <span class="n">mid</span> <span class="o">=</span> <span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="s">&quot;#F44336&quot;</span><span class="p">,</span> <span class="n">midpoint</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">space</span> <span class="o">=</span> <span class="s">&quot;Lab&quot;</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Correlation&quot;</span><span class="p">,</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;legend&quot;</span><span class="p">)</span> <span class="o">+</span>
+      <span class="nf">scale_x_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+      <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+      <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Correlation Matrix of Complexity Indices&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+      <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+      <span class="nf">theme</span><span class="p">(</span>
+        <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">90</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">),</span>
+        <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+        <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+        <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()</span>
+      <span class="p">)</span>
+    <span class="nf">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="n">cor</span>
+<span class="p">}</span>
+
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We removed statistically redundant indices, such as <em>PowEn</em> (identical
+to <em>SD</em>), <em>CREn (100)</em> (identical to <em>CREn (10)</em>), and <em>FuzzyRCMSEn</em>
+(identical to <em>RCMSEn</em>).</p>
+</section>
+<section id="correlation">
+<h3>Correlation<a class="headerlink" href="#correlation" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span>
+    <span class="o">-</span><span class="n">`FuzzyRCMSEn`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`CREn (100)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`PowEn`</span>
+  <span class="p">)</span>
+
+
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/correlation-1.png" /><!-- --></p>
+<p>The Pearson correlation analysis revealed that complexity indices,
+despite their multitude, their unicities and specificities, do indeed
+share similarities. They form clusters, with two major ones easily
+appearing to the naked eye (the blue and the red groups). These two
+anti-correlated groups are driven by the fact that some indices, by
+design, index the “predictability”, whereas other the “randomness”, and
+thus are negatively related to one-another.</p>
+</section>
+<section id="factor-analysis">
+<h3>Factor Analysis<a class="headerlink" href="#factor-analysis" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">cor_smooth</span><span class="p">(</span><span class="nf">as.matrix</span><span class="p">(</span><span class="n">cor</span><span class="p">))</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">parameters</span><span class="o">::</span><span class="nf">n_factors</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">n_max</span><span class="o">=</span><span class="m">20</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-8-1.png" /><!-- --></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot(parameters::n_components(data, cor = r))</span>
+</pre></div>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">14</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">fm</span><span class="o">=</span><span class="s">&quot;mle&quot;</span><span class="p">)</span>
+<span class="c1"># rez &lt;- parameters::principal_components(data, n = 15, sort = TRUE)</span>
+<span class="c1"># rez</span>
+
+<span class="n">col</span> <span class="o">&lt;-</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#39;[[:digit:]]+&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nf">names</span><span class="p">(</span><span class="n">rez</span><span class="p">)[</span><span class="m">2</span><span class="p">])</span>
+<span class="n">closest</span> <span class="o">&lt;-</span> <span class="nf">colnames</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">)))[</span><span class="nf">apply</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">)),</span> <span class="m">1</span><span class="p">,</span> \<span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">which.max</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)))]</span>
+
+
+<span class="n">loadings</span> <span class="o">&lt;-</span> <span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">loadings_long</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span>
+    <span class="n">Loading</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">,</span>
+    <span class="n">Component</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Component</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="n">col</span><span class="p">))))),</span>
+    <span class="n">Variable</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Variable</span><span class="p">,</span> <span class="n">rez</span><span class="o">$</span><span class="n">Variable</span><span class="p">))</span>
+  <span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">&lt;-</span> <span class="nf">setNames</span><span class="p">(</span><span class="n">see</span><span class="o">::</span><span class="nf">palette_material</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)(</span><span class="nf">length</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">))),</span> <span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">))</span>
+
+<span class="c1"># Sort by sign too</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">closest</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">rev</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">))</span>
+
+<span class="n">idx_order</span> <span class="o">&lt;-</span> <span class="n">loadings</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Closest</span> <span class="o">=</span> <span class="n">closest</span><span class="p">[</span><span class="nf">as.character</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)],</span>
+         <span class="n">Sign</span> <span class="o">=</span> <span class="nf">sign</span><span class="p">(</span><span class="n">Loading</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Component</span> <span class="o">==</span> <span class="n">Closest</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="n">Component</span><span class="p">),</span> <span class="nf">desc</span><span class="p">(</span><span class="n">Sign</span><span class="p">),</span> <span class="nf">desc</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">Loading</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">pull</span><span class="p">(</span><span class="n">Variable</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">as.character</span><span class="p">()</span>
+
+<span class="n">separations</span> <span class="o">&lt;-</span> <span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">)[</span><span class="nf">intersect</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">),</span> <span class="nf">unique</span><span class="p">(</span><span class="n">closest</span><span class="p">))]</span>
+
+<span class="n">selection</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;ShanEn (D)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;NLDFD&quot;</span><span class="p">,</span>
+               <span class="s">&quot;SVDEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;AttEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;PSDFD&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MFDFA_Mean&quot;</span><span class="p">,</span>
+               <span class="s">&quot;FuzzyMSEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MSWPEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MFDFA_Increment&quot;</span><span class="p">,</span>
+               <span class="s">&quot;ShanEn (r)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;RQA_ReccurenceRate&quot;</span><span class="p">,</span>
+               <span class="s">&quot;WPEn&quot;</span><span class="p">)</span>
+<span class="n">face</span> <span class="o">&lt;-</span> <span class="nf">rep</span><span class="p">(</span><span class="s">&quot;plain&quot;</span><span class="p">,</span> <span class="nf">length</span><span class="p">(</span><span class="n">idx_order</span><span class="p">))</span>
+<span class="n">face</span><span class="p">[</span><span class="n">idx_order</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">,</span> <span class="s">&quot;Frequency&quot;</span><span class="p">)]</span> <span class="o">&lt;-</span> <span class="s">&quot;italic&quot;</span>
+<span class="n">face</span><span class="p">[</span><span class="n">idx_order</span> <span class="o">%in%</span> <span class="n">selection</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="s">&quot;bold&quot;</span>
+
+
+<span class="n">p1</span> <span class="o">&lt;-</span> <span class="n">loadings</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Variable</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Variable</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="n">idx_order</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="c1"># filter(Variable == &quot;CD&quot;) |&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Component</span><span class="p">),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="n">separations</span><span class="p">),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_material_d</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">coord_flip</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">guides</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">guide_legend</span><span class="p">(</span><span class="n">reverse</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span>
+    <span class="n">axis.text.y</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span>
+      <span class="n">color</span> <span class="o">=</span> <span class="nf">rev</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">closest</span><span class="p">]),</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="nf">rev</span><span class="p">(</span><span class="n">face</span><span class="p">),</span>
+      <span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span>
+    <span class="p">),</span>
+    <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+    <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()</span>
+  <span class="p">)</span>
+
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">order</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="m">1</span> <span class="o">+</span> <span class="n">Duration</span> <span class="o">*</span> <span class="m">10000</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Index</span> <span class="o">%in%</span> <span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="n">idx_order</span><span class="p">)),</span>
+         <span class="n">Duration</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="n">Duration</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">)),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="n">separations</span><span class="p">),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_x_reverse</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">position</span> <span class="o">=</span> <span class="s">&quot;right&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_fill_viridis_c</span><span class="p">(</span><span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">&quot;Computation Time&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span>
+    <span class="n">axis.text.y</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+    <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()</span>
+  <span class="p">)</span>
+
+<span class="p">(</span><span class="n">p2</span> <span class="o">|</span> <span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Computation Time and Factor Loading&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/loadings-1.png" /><!-- --></p>
+<p>The aggreement method suggested that the 125 indices can be mapped on a
+multidimensional space of 14 orthogonal latent factors, that we
+extracted using a <em>varimax</em> rotation for ease of interpretation. We then
+took interest in the loading profile of each indices, and in particular
+the latent dimension that maximally related to each index.</p>
+<p>The first factor is the closest to the largest amount of indices. Many
+indices with positive and strong loadings are particularly sensitive to
+the deviation of consecutive differences (e.g., <em>ShanEn - D</em>, <em>NLDFD</em>,
+<em>PFD - D</em>). It was negatively loaded by indices related to Detrended
+Fluctuation Analysis (DFA), which tend to index the presence of
+long-term correlations. This latent factor might encapsulate the
+predominance of short-term vs. long-term unpredictability. Indices that
+are the most representative (positively and negatively) and have a
+relatively low computational cost include <em>ShanEn - D</em>, <em>NLDFD</em>, <em>PFD -
+D</em>, and <em>AttEn</em>, <em>PSDFD</em>, <em>FuzzyMSEn</em>.</p>
+<p>The second factor was loaded maximally by signal <em>length</em> and <em>SD</em>, and
+thus might not capture features of complexity <em>per se</em>. Indices the most
+related to it were indices known to be sensitive to signal length, such
+as <em>ApEn</em>.</p>
+<p>The third factor included multiscale indices, such as <em>MSWPEn</em>.</p>
+<p>The fourth factor included indices that quantified the diversity of the
+tendency of a signal to revisit a past state (within a certain tolerance
+threshold). It was positively loaded by <em>ShanEn - r</em> and negatively by
+<em>RQA - Reccurence Rate</em>.</p>
+<p>The fifth factor was loaded by permutation entropy indices, such as
+<em>WPEn</em>.</p>
+<p>The sixth factor was driven by indices that were based on converting the
+signal into a number of bins.</p>
+<p>The seventh factor was loaded positively by the amount of noise, and
+negatively by multifractal indices such as <em>MFDFA - Increment</em>,
+suggesting a sensitivity to regularity.</p>
+<p>The last notable result is that indices based on a symbolization
+(discretization) of the time series do tend to create factors alongside
+the symbolization method.</p>
+<p>Finally, as a manipulation check of our factorization method, the random
+vector does indeed form its own factor, and doesn’t load unto anything
+else.</p>
+</section>
+<section id="correlation-network">
+<h3>Correlation Network<a class="headerlink" href="#correlation-network" title="Permalink to this headline">#</a></h3>
+<p>For illustration purposes, we also represented the correlation matrix as
+a connectivity graph.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggraph</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">&lt;-</span> <span class="n">cor</span> <span class="o">|&gt;</span>
+  <span class="nf">cor_lower</span><span class="p">()</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">width</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">r</span><span class="p">),</span>
+         <span class="n">edgecolor</span> <span class="o">=</span> <span class="nf">as.character</span><span class="p">(</span><span class="nf">sign</span><span class="p">(</span><span class="n">r</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="n">Parameter1</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">,</span> <span class="s">&quot;Frequency&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">),</span>
+         <span class="o">!</span><span class="n">Parameter2</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">,</span> <span class="s">&quot;Frequency&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="n">tidygraph</span><span class="o">::</span><span class="nf">as_tbl_graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">importance</span> <span class="o">=</span> <span class="n">tidygraph</span><span class="o">::</span><span class="nf">centrality_authority</span><span class="p">(</span><span class="n">weights</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)),</span>
+         <span class="n">group</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">tidygraph</span><span class="o">::</span><span class="nf">group_louvain</span><span class="p">(</span><span class="n">weights</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">r</span><span class="p">))))</span> <span class="o">|&gt;</span>
+  <span class="n">tidygraph</span><span class="o">::</span><span class="nf">activate</span><span class="p">(</span><span class="s">&quot;edges&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">0.6</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="n">tidygraph</span><span class="o">::</span><span class="nf">activate</span><span class="p">(</span><span class="s">&quot;nodes&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="n">tidygraph</span><span class="o">::</span><span class="nf">node_is_isolated</span><span class="p">())</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">colors</span> <span class="o">=</span> <span class="n">closest</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+         <span class="n">selection</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="n">name</span> <span class="o">%in%</span> <span class="n">selection</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kc">FALSE</span><span class="p">))</span>
+
+
+<span class="n">p1</span> <span class="o">&lt;-</span> <span class="n">g</span> <span class="o">|&gt;</span>
+  <span class="nf">ggraph</span><span class="p">(</span><span class="n">layout</span> <span class="o">=</span> <span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">circular</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span>  <span class="c1"># fr # lgl # drl # kk</span>
+  <span class="n">ggraph</span><span class="o">::</span><span class="nf">geom_edge_arc</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">edge_width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">edge_colour</span><span class="o">=</span><span class="n">edgecolor</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.66</span><span class="p">,</span> <span class="n">strength</span><span class="o">=</span><span class="m">0.3</span><span class="p">)</span> <span class="o">+</span>
+  <span class="c1"># ggraph::geom_conn_bundle(aes(edge_width=width, edge_colour=edgecolor), alpha=0.66) +</span>
+  <span class="n">ggraph</span><span class="o">::</span><span class="nf">geom_node_point</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">size</span> <span class="o">=</span> <span class="n">importance</span><span class="p">))</span> <span class="o">+</span>
+  <span class="n">ggraph</span><span class="o">::</span><span class="nf">geom_node_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="m">1.05</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="o">*</span><span class="m">1.05</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">angle</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="o">-</span><span class="nf">node_angle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="m">+90</span><span class="p">)</span><span class="o">%%</span><span class="m">180</span><span class="p">)</span><span class="m">+90</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="s">&#39;outward&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">selection</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_edge_color_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;1&quot;</span> <span class="o">=</span> <span class="s">&quot;#2E7D32&quot;</span><span class="p">,</span> <span class="s">&quot;-1&quot;</span><span class="o">=</span><span class="s">&quot;#C62828&quot;</span><span class="p">),</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_edge_width_continuous</span><span class="p">(</span><span class="n">range</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.005</span><span class="p">,</span> <span class="m">0.66</span><span class="p">),</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_size_continuous</span><span class="p">(</span><span class="n">range</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.1</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_fill_material_d</span><span class="p">(</span><span class="n">guide</span><span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;TRUE&quot;</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">,</span> <span class="s">&quot;FALSE&quot;</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">),</span> <span class="n">guide</span><span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Correlation Network&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">ggraph</span><span class="o">::</span><span class="nf">theme_graph</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span><span class="o">=</span><span class="s">&quot;bold&quot;</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">0.5</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">expand_limits</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1.25</span><span class="p">,</span> <span class="m">1.25</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1.25</span><span class="p">,</span> <span class="m">1.25</span><span class="p">))</span>
+
+<span class="n">p1</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/ggm-1.png" /><!-- --></p>
+</section>
+<section id="hierarchical-clustering">
+<h3>Hierarchical Clustering<a class="headerlink" href="#hierarchical-clustering" title="Permalink to this headline">#</a></h3>
+<p>We ran hierarchical clustering (with a Ward D2 distance) to provide
+additional information or confirmation about the groups discussed above.
+This allowed us to fine-grain our recommendations of complimentary
+complexity indices.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">clust</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">SD</span><span class="p">,</span> <span class="o">-</span><span class="n">Length</span><span class="p">,</span> <span class="o">-</span><span class="n">Random</span><span class="p">,</span> <span class="o">-</span><span class="n">Frequency</span><span class="p">,</span> <span class="o">-</span><span class="n">Noise</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">t</span><span class="p">()</span> <span class="o">|&gt;</span>
+  <span class="nf">as.data.frame</span><span class="p">()</span> <span class="o">|&gt;</span>
+  <span class="nf">dist</span><span class="p">()</span> <span class="o">|&gt;</span>
+  <span class="nf">hclust</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
+
+
+<span class="n">clusters</span> <span class="o">&lt;-</span> <span class="nf">cutree</span><span class="p">(</span><span class="n">clust</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="m">150</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;red&quot;</span><span class="p">,</span> <span class="s">&quot;black&quot;</span><span class="p">,</span> <span class="n">see</span><span class="o">::</span><span class="nf">palette_material</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)(</span><span class="nf">max</span><span class="p">(</span><span class="n">clusters</span><span class="p">)))</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;TRUE&quot;</span><span class="p">,</span> <span class="s">&quot;FALSE&quot;</span><span class="p">,</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">max</span><span class="p">(</span><span class="n">clusters</span><span class="p">)))</span>
+
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">clust</span> <span class="o">|&gt;</span>
+  <span class="nf">create_layout</span><span class="p">(</span><span class="n">layout</span> <span class="o">=</span> <span class="s">&#39;dendrogram&#39;</span><span class="p">,</span> <span class="n">circular</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">repel</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">attr</span><span class="p">(</span><span class="s">&quot;graph&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="n">tidygraph</span><span class="o">::</span><span class="nf">activate</span><span class="p">(</span><span class="s">&quot;nodes&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">colors</span> <span class="o">=</span> <span class="n">closest</span><span class="p">[</span><span class="n">label</span><span class="p">],</span>
+         <span class="n">selection</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="n">label</span> <span class="o">%in%</span> <span class="n">selection</span><span class="p">,</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="kc">FALSE</span><span class="p">),</span>
+         <span class="n">cluster</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">clusters</span><span class="p">[</span><span class="n">label</span><span class="p">]))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggraph</span><span class="p">(</span><span class="n">layout</span> <span class="o">=</span> <span class="s">&#39;dendrogram&#39;</span><span class="p">,</span> <span class="n">circular</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">repel</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_edge_elbow</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">geom_node_point</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">filter</span><span class="o">=</span><span class="n">leaf</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_node_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="m">1.05</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="o">*</span><span class="m">1.05</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="p">,</span> <span class="n">angle</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="o">-</span><span class="nf">node_angle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="m">+90</span><span class="p">)</span><span class="o">%%</span><span class="m">180</span><span class="p">)</span><span class="m">+90</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="s">&#39;outward&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">selection</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_colour_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">guide</span><span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">coord_fixed</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Hierarchical Clustering&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_graph</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span><span class="o">=</span><span class="s">&quot;bold&quot;</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">0.5</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">expand_limits</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1.25</span><span class="p">,</span> <span class="m">1.25</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1.25</span><span class="p">,</span> <span class="m">1.25</span><span class="p">))</span>
+
+<span class="n">p2</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/graph-1.png" /><!-- --></p>
+</section>
+<section id="visualization">
+<h3>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">#</a></h3>
+<p>Finally, we visualized the expected value of our selection of indices
+for different types of signals under different conditions of noise.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">gam</span><span class="p">(</span><span class="n">Result</span> <span class="o">~</span> <span class="nf">s</span><span class="p">(</span><span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="nf">interaction</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">df</span> <span class="o">|&gt;</span>
+              <span class="nf">filter</span><span class="p">(</span><span class="n">Index</span> <span class="o">%in%</span> <span class="n">selection</span><span class="p">)</span> <span class="o">|&gt;</span>
+              <span class="nf">mutate</span><span class="p">(</span><span class="n">Noise_Type</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Noise_Type</span><span class="p">)))</span>
+
+<span class="nf">estimate_means</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">at</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="s">&quot;Signal&quot;</span><span class="p">,</span> <span class="s">&quot;Noise_Intensity&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">Mean</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Noise_Intensity</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Index</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_linetype_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;-2&quot;</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="s">&quot;-1&quot;</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="s">&quot;0&quot;</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="s">&quot;1&quot;</span> <span class="o">=</span> <span class="m">5</span><span class="p">,</span> <span class="s">&quot;2&quot;</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">theme_classic</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">scale_color_material</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_line</span><span class="p">(</span><span class="n">colour</span> <span class="o">=</span> <span class="s">&quot;#EEEEEE&quot;</span><span class="p">),</span>
+        <span class="n">strip.background</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s">&quot;Standardized Index Value&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s">&quot;Noise Intensity&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;Signal Type&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-9-1.png" /><!-- --></p>
 </section>
 </section>
 <section id="discussion">
 <h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h2>
+<p>As complexity science grows in size and application, a systematic
+approach to compare their “performance” becomes necessary to increase
+the clarity and structure of the field. The word <em>performance</em> is here
+to be understood in a relative sense, as any such endeavor faces the
+“hard problem” of complexity science. The indices are sensitive to
+specific objective properties of a signal that we consider part of
+over-arching concepts such as “complex” and “chaotic”. But it is unclear
+how these high-level concepts transfer back, in a top-down fashion, into
+a combination of lower-level features, such as short-term vs. long-term
+variability, auto-correlation, information, randomness, and so on. As
+such, it is conceptually complicated to benchmark complexity measures
+against “objectively” complex vs. non-complex signals. In other words,
+we know that different characteristics can contribute to the
+“complexity” of a signal, but there is not a one-to-one correspondence
+between the latter and the former.</p>
+<p>Hence the choice of the current paradigm, in which we generated
+different types of signals to which we systematically added different
+types and amount of perturbations. However, we did not seek at measuring
+how complexity indices can discriminate between these features or
+systems, nor did we attempt at mimicking real-life signals or scenarios.
+The goal was instead to generate enough variability to reliably map the
+relationships between the indices.</p>
+<p>The plurality of underlying components of empirical complexity (what is
+measured by complexity indices) seems to be somewhat confirmed by our
+results, showing that complexity indices are more or less sensitive to
+various orthogonal latent dimensions. One of the limitation of the
+current study has to do with the limited possibilities of interpretation
+of these underlying dimensions, and future studies are needed to discuss
+them.</p>
+<p>Indices that were highlighted as encapsulating information about
+different underlying dimensions at a relatively low computational cost
+include <em>ShanEn (D)</em>, <em>NLDFD</em>, <em>SVDEn</em>, <em>AttEn</em>, <em>PSDFD</em>, <em>MFDFA_Mean</em>,
+<em>FuzzyMSEn</em>, <em>MSWPEn</em>, <em>MFDFA_Increment</em>, <em>ShanEn (r)</em>,
+<em>RQA_ReccurenceRate</em> and <em>WPEn</em>. These indices might be complimentary in
+offering a comprehensive profile of the complexity of a time series.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
@@ -1121,6 +1231,39 @@ line-spacing="2">
 <div id="ref-bassingthwaighte2013fractal" class="csl-entry">
 <p>Bassingthwaighte, J. B., Liebovitch, L. S., &amp; West, B. J. (2013).
 <em>Fractal physiology</em>. Springer.</p>
+</div>
+<div id="ref-ehlers1995chaos" class="csl-entry">
+<p>Ehlers, C. L. (1995). Chaos and complexity: Can it help us to understand
+mood and behavior? <em>Archives of General Psychiatry</em>, <em>52</em>(11), 960–964.</p>
+</div>
+<div id="ref-lau2021brain" class="csl-entry">
+<p>Lau, Z. J., Pham, T., Annabel, S., &amp; Makowski, D. (2021). <em>Brain
+entropy, fractal dimensions and predictability: A review of complexity
+measures for EEG in healthy and neuropsychiatric populations</em>.</p>
+</div>
+<div id="ref-parametersArticle" class="csl-entry">
+<p>Lüdecke, D., Ben-Shachar, M., Patil, I., &amp; Makowski, D. (2020).
+Extracting, computing and exploring the parameters of statistical models
+using R. <em>Journal of Open Source Software</em>, <em>5</em>(53), 2445.
+<a class="reference external" href="https://doi.org/10.21105/joss.02445">https://doi.org/10.21105/joss.02445</a></p>
+</div>
+<div id="ref-seeArticle" class="csl-entry">
+<p>Lüdecke, D., Patil, I., Ben-Shachar, M. S., Wiernik, B. M., Waggoner,
+P., &amp; Makowski, D. (2021). <span class="nocase">see</span>: An R package
+for visualizing statistical models. <em>Journal of Open Source Software</em>,
+<em>6</em>(64), 3393. <a class="reference external" href="https://doi.org/10.21105/joss.03393">https://doi.org/10.21105/joss.03393</a></p>
+</div>
+<div id="ref-correlationArticle" class="csl-entry">
+<p>Makowski, D., Ben-Shachar, M., Patil, I., &amp; Lüdecke, D. (2020). Methods
+and algorithms for correlation analysis in R. <em>Journal of Open Source
+Software</em>, <em>5</em>(51), 2306. <a class="reference external" href="https://doi.org/10.21105/joss.02306">https://doi.org/10.21105/joss.02306</a></p>
+</div>
+<div id="ref-modelbasedPackage" class="csl-entry">
+<p>Makowski, D., Lüdecke, D., Ben-Shachar, M. S., &amp; Patil, I. (2022). <span
+class="nocase">modelbased</span>: Estimation of model-based predictions,
+contrasts and means (Version 0.7.2.1). Retrieved from
+<a class="reference external" href="https://CRAN.R-project.org/package=modelbased">https://CRAN.R-project.org/package=modelbased</a> (Original work published
+2020)</p>
 </div>
 <div id="ref-Makowski2021neurokit" class="csl-entry">
 <p>Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F.,
