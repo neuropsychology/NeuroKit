@@ -62,7 +62,7 @@ wordcount         : "X"
 
 bibliography      : "bibliography.bib"
 
-floatsintext      : yes
+floatsintext      : no
 linenumbers       : yes
 draft             : no
 mask              : no
@@ -71,18 +71,12 @@ figurelist        : yes
 tablelist         : no
 footnotelist      : no
 
-classoption       : "jou"
+classoption       : "man"
 output            : papaja::apa6_pdf
+csl: utils/apa.csl
 
 header-includes:
   - \usepackage[labelfont=bf, font={color=gray,small}]{caption}
-  - \usepackage{float}
-  - \usepackage{fvextra}
-  - \usepackage{csquotes}
-  - \usepackage{subfig}
-  - \renewcommand*{\thesubfigure}{\MakeUppercase{\alph{subfigure}}}
-  - \raggedbottom
-  - \captionsetup[figure]{textformat=empty}
 ---
 
 ```{r, child=c('analysis.Rmd')}

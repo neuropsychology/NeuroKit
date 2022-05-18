@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Introduction
 
 Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these tools to characterize signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in physiology in the assessment and diagnostic of the state and health of living systems [@lau2021brain, @ehlers1995chaos].
@@ -12,7 +17,7 @@ Leveraging this tool, the goal of this study is to empirically compare a vast nu
 ## Methods
 
  
-```{r fig1_signals, message=FALSE, warning=FALSE, fig.height=16, fig.width=10, echo=FALSE, fig.cap = "Different types of simulated signals, to which was added 5 types of noise (violet, blue, white, pink, and brown) with different intensities. For each signal type, the first row shows the signal with a minimal amount of noise, and the last with a maximal amount of noise. We can see that adding Brown noise turns the signal into a Random-walk (i.e., a Brownian motion)."}
+```{r signals, message=FALSE, warning=FALSE, fig.height=16, fig.width=10, echo=FALSE, fig.cap = "Different types of simulated signals, to which was added 5 types of noise (violet, blue, white, pink, and brown) with different intensities. For each signal type, the first row shows the signal with a minimal amount of noise, and the last with a maximal amount of noise. We can see that adding Brown noise turns the signal into a Random-walk (i.e., a Brownian motion).", cache=FALSE}
 library(tidyverse)
 library(easystats)
 library(patchwork)
@@ -70,11 +75,33 @@ The combination of these parameters resulted in a total of `r 48*5*5*5` signal i
 
 ## Results
 
-The data analysis script, the data and the code for the figures is fully available at **ADD LINK**. The analysis was performed in R using the *easystats* collection of packages [@correlationArticle, @seeArticle, @parametersArticle, @modelbasedPackage].
+The data analysis script, the data and the code for the figures is fully available at **ADD LINK**. The analysis was performed in R using the *easystats* collection of packages [@correlationArticle; @seeArticle; @parametersArticle; @modelbasedPackage].
 
 ```{r message=FALSE, warning=FALSE, results='hide', echo=FALSE}
 df <- read.csv("data_Complexity.csv") |>
-  mutate(Method = as.factor(Method))
+  mutate(Method = as.factor(Method)) |> 
+  mutate(Index = str_replace(Index, "RQA_RecurrenceRate", "RQA (RecurrenceRate)"),
+         Index = str_replace(Index, "RQA_Determinism", "RQA (Determinism)"),
+         Index = str_replace(Index, "RQA_Laminarity", "RQA (Laminarity)"),
+         Index = str_replace(Index, "RQA_TrappingTime", "RQA (TrappingTime)"),
+         Index = str_replace(Index, "RQA_DeteRec", "RQA (DeteRec)"),
+         Index = str_replace(Index, "RQA_Divergence", "RQA (Divergence)"),
+         Index = str_replace(Index, "RQA_LamiDet", "RQA (LamiDet)"),
+         Index = str_replace(Index, "RQA_LEn", "RQA (LEn)"),
+         Index = str_replace(Index, "RQA_L", "RQA (L)"),
+         Index = str_replace(Index, "RQA_VMax", "RQA (VMax)"),
+         Index = str_replace(Index, "RQA_VEn", "RQA (VEn)"),
+         Index = str_replace(Index, "RQA_WMax", "RQA (WMax)"),
+         Index = str_replace(Index, "RQA_WEn", "RQA (WEn)"),
+         Index = str_replace(Index, "RQA_W", "RQA (W)"),
+         Index = str_replace(Index, "MFDFA_Fluctuation", "MFDFA (Fluctuation)"),
+         Index = str_replace(Index, "MFDFA_Width", "MFDFA (Width)"),
+         Index = str_replace(Index, "MFDFA_Peak", "MFDFA (Peak)"),
+         Index = str_replace(Index, "MFDFA_Mean", "MFDFA (Mean)"),
+         Index = str_replace(Index, "MFDFA_Max", "MFDFA (Max)"),
+         Index = str_replace(Index, "MFDFA_Delta", "MFDFA (Delta)"),
+         Index = str_replace(Index, "MFDFA_Asymmetry", "MFDFA (Asymmetry)"),
+         Index = str_replace(Index, "MFDFA_Increment", "MFDFA (Increment)"))
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -192,30 +219,29 @@ colors <- c(
   "CD" = "#FF5722",
   "Hjorth" = "#FF5722",
   "LLE" = "#2196F3",
-  "RQA_RecurrenceRate" = "#4CAF50",
-  "RQA_Determinism" = "#4CAF50",
-  "RQA_Laminarity" = "#4CAF50",
-  "RQA_TrappingTime" = "#4CAF50",
-  "RQA_DeteRec" = "#4CAF50",
-  "RQA_Divergence" = "#4CAF50",
-  "RQA_LamiDet" = "#4CAF50",
-  "RQA_RecurrenceRate" = "#4CAF50",
-  "RQA_L" = "#4CAF50",
-  "RQA_LEn" = "#4CAF50",
-  "RQA_VMax" = "#4CAF50",
-  "RQA_VEn" = "#4CAF50",
-  "RQA_W" = "#4CAF50",
-  "RQA_WMax" = "#4CAF50",
-  "RQA_WEn" = "#4CAF50",
+  "RQA (RecurrenceRate)" = "#4CAF50",
+  "RQA (Determinism)" = "#4CAF50",
+  "RQA (Laminarity)" = "#4CAF50",
+  "RQA (TrappingTime)" = "#4CAF50",
+  "RQA (DeteRec)" = "#4CAF50",
+  "RQA (Divergence)" = "#4CAF50",
+  "RQA (LamiDet)" = "#4CAF50",
+  "RQA (L)" = "#4CAF50",
+  "RQA (LEn)" = "#4CAF50",
+  "RQA (VMax)" = "#4CAF50",
+  "RQA (VEn)" = "#4CAF50",
+  "RQA (W)" = "#4CAF50",
+  "RQA (WMax)" = "#4CAF50",
+  "RQA (WEn)" = "#4CAF50",
   "DFA" = "#4CAF50",
-  "MFDFA_Fluctuation" = "#4CAF50",
-  "MFDFA_Width" = "#4CAF50",
-  "MFDFA_Peak" = "#4CAF50",
-  "MFDFA_Mean" = "#4CAF50",
-  "MFDFA_Max" = "#4CAF50",
-  "MFDFA_Delta" = "#4CAF50",
-  "MFDFA_Asymmetry" = "#4CAF50",
-  "MFDFA_Increment" = "#4CAF50"
+  "MFDFA (Fluctuation)" = "#4CAF50",
+  "MFDFA (Width)" = "#4CAF50",
+  "MFDFA (Peak)" = "#4CAF50",
+  "MFDFA (Mean)" = "#4CAF50",
+  "MFDFA (Max)" = "#4CAF50",
+  "MFDFA (Delta)" = "#4CAF50",
+  "MFDFA (Asymmetry)" = "#4CAF50",
+  "MFDFA (Increment)" = "#4CAF50"
 )
 
 # length(unique(df$Index))
@@ -225,7 +251,8 @@ colors <- c(
 
 ### Computation Time
 
-```{r computation_time, echo=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE, eval=FALSE}
+
+```{r message=FALSE, warning=FALSE, results='hide', echo=FALSE}
 order <- df |>
   group_by(Index) |>
   summarize(Duration = median(Duration)) |>
@@ -233,7 +260,8 @@ order <- df |>
   mutate(Index = factor(Index, levels = Index))
 
 df <- mutate(df, Index = fct_relevel(Index, as.character(order$Index)))
-
+```
+```{r computation_time, echo=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE, eval=FALSE}
 p <- df |>
   filter(!Index %in% c("SD", "Length", "Noise", "Random", "Frequency")) |>
   mutate(Duration = Duration * 10000) |>
@@ -249,7 +277,7 @@ p <- df |>
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1)) +
   labs(x = NULL, y = "Computation Time")
 p
-# ggsave("fig/computation_time-1.png", p, height=10*1.25, width=16*1.25)
+# ggsave("figures/computation_time-1.png", p, height=10*1.25, width=16*1.25)
 ```
 ```{r computation_time2, eval=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
 knitr::include_graphics("computation_time-1.png") 
@@ -322,9 +350,9 @@ df <- df |>
 
 
 
-### Duplicates
+<!-- ### Duplicates -->
 
-```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15, cache=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=16, fig.height=15, cache=TRUE}
 data <- df |>
   mutate(i = paste(Signal, Length, Noise_Type, Noise_Intensity, sep = "__")) |>
   select(i, Index, Result) |>
@@ -358,7 +386,7 @@ get_cor <- function(data, plot=FALSE) {
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 90, hjust = 1),
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, face="bold"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()
       )
@@ -370,7 +398,7 @@ get_cor <- function(data, plot=FALSE) {
 cor <- get_cor(data)
 ```
 
-```{r eval=TRUE, message=FALSE, warning=FALSE, include=FALSE}
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=FALSE, cache=FALSE}
 cor |>
   cor_lower() |>
   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |>
@@ -381,7 +409,7 @@ cor |>
 ```
 
 
-We removed statistically redundant indices, such as *PowEn* (identical to *SD*), *CREn (100)*  (identical to *CREn (10)*), and *FuzzyRCMSEn* (identical to *RCMSEn*).
+For the subsequent analyses, we removed statistically redundant indices, such as *PowEn* (identical to *SD*), *CREn (100)*  (identical to *CREn (10)*), and *FuzzyRCMSEn* (identical to *RCMSEn*).
 
 
 
@@ -409,7 +437,7 @@ filter(averagetime, Index %in% c("NLDFD", "RR"))
 
 ### Correlation
 
-```{r correlation, message=FALSE, warning=FALSE, cache=FALSE, fig.width=16, fig.height=15}
+```{r correlation, message=FALSE, warning=FALSE, cache=TRUE, fig.width=16, fig.height=15, fig.cap="Correlation Matrix."}
 data <- data |>
   select(
     -`FuzzyRCMSEn`,
@@ -421,15 +449,19 @@ data <- data |>
 cor <- get_cor(data, plot=TRUE)
 ```
 
-The Pearson correlation analysis revealed that complexity indices, despite their multitude, their unicities and specificities, do indeed share similarities. They form clusters, with two major ones easily appearing to the naked eye (the blue and the red groups). These two anti-correlated groups are driven by the fact that some indices, by design, index the "predictability", whereas other the "randomness", and thus are negatively related to one-another.
+The Pearson correlation analysis revealed that complexity indices, despite their multitude, their unicities and specificities, do indeed share similarities. They form clusters, with two major ones easily appearing to the naked eye (the blue and the red groups). These two anti-correlated groups are driven by the fact that some indices, by design, index the "predictability", whereas other the "randomness", and thus are negatively related to one-another (see **Figure 2**).
 
 ### Factor Analysis
 
-```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=7}
+```{r message=FALSE, warning=FALSE, cache=TRUE}
 r <- correlation::cor_smooth(as.matrix(cor))
+```
+```{r nfactors, fig.cap="Agreement procedure for the optimal number of factors.", fig.height=7, fig.width=14, message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+n <- parameters::n_factors(data, cor = r, n_max=20)
+n
 
-plot(parameters::n_factors(data, cor = r, n_max=20))
-# plot(parameters::n_components(data, cor = r))
+plot(n) +
+  see::theme_modern()
 ```
 
 
@@ -469,12 +501,12 @@ selection <- c("ShanEn (D)",
                "SVDEn",
                "AttEn",
                "PSDFD",
-               "MFDFA_Mean",
+               "MFDFA (Mean)",
                "FuzzyMSEn",
                "MSWPEn",
-               "MFDFA_Increment",
+               "MFDFA (Increment)",
                "ShanEn (r)",
-               "RQA_ReccurenceRate",
+               "Hjorth",
                "WPEn")
 face <- rep("plain", length(idx_order))
 face[idx_order %in% c("SD", "Length", "Noise", "Random", "Frequency")] <- "italic"
@@ -483,7 +515,6 @@ face[idx_order %in% selection] <- "bold"
 
 p1 <- loadings |>
   mutate(Variable = fct_relevel(Variable, rev(idx_order))) |>
-  # filter(Variable == "CD") |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
   geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
@@ -530,35 +561,20 @@ p2 <- order |>
 (p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
 
-The aggreement method suggested that the 125 indices can be mapped on a multidimensional space of 14 orthogonal latent factors, that we extracted using a *varimax* rotation for ease of interpretation. We then took interest in the loading profile of each indices, and in particular the latent dimension that maximally related to each index.
+The agreement procedure for the optimal number of factors suggested that the 125 indices can be mapped on a multidimensional space of 14 orthogonal latent factors, that we extracted using a *varimax* rotation. We then took interest in the loading profile of each indices, and in particular the latent dimension that maximally related to each index (see **Figure 3**).
 
-The first factor is the closest to the largest amount of indices. Many indices with positive and strong loadings are particularly sensitive to the deviation of consecutive differences (e.g., *ShanEn - D*, *NLDFD*, *PFD - D*). It was negatively loaded by indices related to Detrended Fluctuation Analysis (DFA), which tend to index the presence of long-term correlations. This latent factor might encapsulate the predominance of short-term vs. long-term unpredictability. Indices that are the most representative (positively and negatively) and have a relatively low computational cost include *ShanEn - D*, *NLDFD*, *PFD - D*, and *AttEn*, *PSDFD*, *FuzzyMSEn*.
-
-The second factor was loaded maximally by signal *length* and *SD*, and thus might not capture features of complexity *per se*. Indices the most related to it were indices known to be sensitive to signal length, such as *ApEn*.
-
-The third factor included multiscale indices, such as *MSWPEn*.
-
-The fourth factor included indices that quantified the diversity of the tendency of a signal to revisit a past state (within a certain tolerance threshold). It was positively loaded by *ShanEn - r* and negatively by *RQA - Reccurence Rate*.
-
-The fifth factor was loaded by permutation entropy indices, such as *WPEn*.
-
-The sixth factor was driven by indices that were based on converting the signal into a number of bins.
-
-The seventh factor was loaded positively by the amount of noise, and negatively by multifractal indices such as *MFDFA - Increment*, suggesting a sensitivity to regularity.
-
-The last notable result is that indices based on a symbolization (discretization) of the time series do tend to create factors alongside the symbolization method.
-
-Finally, as a manipulation check of our factorization method, the random vector does indeed form its own factor, and doesn't load unto anything else.
+The first factor is the closest to the largest amount of indices. Many indices with positive and strong loadings are particularly sensitive to the deviation of consecutive differences (e.g., *ShanEn - D*, *NLDFD*, *PFD - D*). It was negatively loaded by indices related to Detrended Fluctuation Analysis (DFA), which tend to index the presence of long-term correlations. This latent factor might encapsulate the predominance of short-term vs. long-term unpredictability. Indices that are the most representative (positively and negatively) and have a relatively low computational cost include *ShanEn - D*, *NLDFD*, *PFD - D*, and *AttEn*, *PSDFD*, *FuzzyMSEn*. The second factor was loaded maximally by signal *length* and *SD*, and thus might not capture features of complexity *per se*. Indices the most related to it were indices known to be sensitive to signal length, such as *ApEn*. The third factor included multiscale indices, such as *MSWPEn*. The fourth factor included indices that quantified the diversity of the tendency of a signal to revisit a past state (within a certain tolerance threshold). It was positively loaded by *ShanEn - r* and negatively by *RQA - Reccurence Rate*. The fifth factor was loaded by permutation entropy indices, such as *WPEn*. The sixth factor was driven by indices that were based on converting the signal into a number of bins. The seventh factor was loaded positively by the amount of noise, and negatively by multifractal indices such as *MFDFA - Increment*, suggesting a sensitivity to regularity. The last notable result is that indices based on a symbolization (discretization) of the time series do tend to create factors alongside the symbolization method. Finally, as a manipulation check of our factorization method, the random vector does indeed form its own factor, and doesn't load unto anything else.
 
 
 
 
 ### Correlation Network
 
-For illustration purposes, we also represented the correlation matrix as a connectivity graph.
+For illustration purposes, we also represented the correlation matrix as a connectivity graph (see **Figure 4**).
 
-```{r ggm, message=FALSE, warning=FALSE, fig.width=13, fig.height=13, fig.cap="Correlation network of the complexity indices. Only the links where |r| > 0.6 are displayed."}
+```{r ggm, message=FALSE, warning=FALSE, fig.width=13, fig.height=13, fig.cap="Correlation network of the complexity indices. Only the links where |r| > 0.6 are displayed.", cache=TRUE}
 library(ggraph)
+extrafont::loadfonts()
 
 g <- cor |>
   cor_lower() |>
@@ -599,9 +615,9 @@ p1
 
 ### Hierarchical Clustering
 
-We ran hierarchical clustering (with a Ward D2 distance) to provide additional information or confirmation about the groups discussed above. This allowed us to fine-grain our recommendations of complimentary complexity indices.
+We ran hierarchical clustering (with a Ward D2 distance) to provide additional information or confirmation about the groups discussed above. This allowed us to fine-grain our recommendations of complimentary complexity indices (see **Figure 5**).
 
-```{r clustering, message=FALSE, warning=FALSE, fig.width=13.4, fig.height=13.4, fig.cap = "Dendrogram representing the hierarchical clustering of the complexity indices."}
+```{r clustering, message=FALSE, warning=FALSE, fig.width=13.4, fig.height=13.4, fig.cap = "Dendrogram representing the hierarchical clustering of the complexity indices.", cache=TRUE}
 clust <- data |>
   select(-SD, -Length, -Random, -Frequency, -Noise) |>
   t() |>
@@ -614,51 +630,58 @@ clusters <- cutree(clust, h = 150)
 colors <- c("red", "black", see::palette_material("rainbow")(max(clusters)))
 names(colors) <- c("TRUE", "FALSE", seq(1:max(clusters)))
 
-p2 <- clust |>
+dat <- clust |>
   create_layout(layout = 'dendrogram', circular = TRUE, repel=TRUE) |>
   attr("graph") |>
   tidygraph::activate("nodes") |>
   mutate(colors = closest[label],
          selection = ifelse(label %in% selection, TRUE, FALSE),
-         cluster = as.factor(clusters[label])) |>
+         cluster = as.factor(clusters[label]))
+
+
+p2 <- dat |>
+  tidygraph::activate("edges") |>
+  mutate(height = as.data.frame(dat)$height[from]) |>
   ggraph(layout = 'dendrogram', circular = TRUE, repel=TRUE) +
-  geom_edge_elbow() +
+  geom_edge_elbow(aes(edge_width = height)) +
   geom_node_point(aes(filter=leaf, color = cluster), size=3) +
   geom_node_text(aes(x = x*1.05, y=y*1.05, label = label, angle = -((-node_angle(x, y)+90)%%180)+90, hjust='outward', color = selection)) +
   scale_colour_manual(values=colors, guide= "none") +
+  scale_edge_width_continuous(range=c(1, 1.15), guide= "none") +
   coord_fixed() +
   ggtitle("Hierarchical Clustering") +
   theme_graph() +
   theme(plot.title = element_text(face="bold", hjust=0.5)) +
   expand_limits(x = c(-1.25, 1.25), y = c(-1.25, 1.25))
-
 p2
+# ggsave("figures/g.png", p2, width=13.4, height=13.4)
 ```
 
 
 
 
-### Visualization
+<!-- ### Visualization -->
 
-Finally, we visualized the expected value of our selection of indices for different types of signals under different conditions of noise.
+<!-- Finally, we visualized the expected value of our selection of indices for different types of signals under different conditions of noise (see **Figure 1**). -->
 
-```{r message=FALSE, warning=FALSE, fig.width=14, fig.height=7, fig.cap="Visualization of the expected value of a selection of indices depending on the signal type and of the amount of noise."}
-model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)),
-            data=df |>
-              filter(Index %in% selection) |>
-              mutate(Noise_Type = as.factor(Noise_Type)))
+<!-- ```{r models, message=FALSE, warning=FALSE, fig.width=14, fig.height=7, fig.cap="Visualization of the expected value of a selection of indices depending on the signal type and of the amount of noise.", cache=FALSE} -->
+<!-- model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)), -->
+<!--             data=df |> -->
+<!--               filter(Index %in% selection) |> -->
+<!--               mutate(Noise_Type = as.factor(Noise_Type))) -->
 
-estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |>
-  ggplot(aes(y = Mean, x = Noise_Intensity)) +
-  geom_line(aes(color = Signal), size=1) +
-  facet_wrap(~Index) +
-  scale_linetype_manual(values = c("-2" = 3, "-1" = 4, "0" = 2, "1" = 5, "2" = 1)) +
-  theme_classic() +
-  scale_color_material("rainbow") +
-  theme(panel.grid.major = element_line(colour = "#EEEEEE"),
-        strip.background = element_blank()) +
-  labs(y = "Standardized Index Value", x = "Noise Intensity", color = "Signal Type")
-```
+<!-- estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |> -->
+<!--   ggplot(aes(y = Mean, x = Noise_Intensity)) + -->
+<!--   geom_line(aes(color = Signal), size=1) + -->
+<!--   facet_wrap(~Index) + -->
+<!--   scale_linetype_manual(values = c("-2" = 3, "-1" = 4, "0" = 2, "1" = 5, "2" = 1)) + -->
+<!--   theme_classic() + -->
+<!--   scale_color_material("rainbow") + -->
+<!--   theme(panel.grid.major = element_line(colour = "#EEEEEE"), -->
+<!--         strip.background = element_blank()) + -->
+<!--   labs(y = "Standardized Index Value", x = "Noise Intensity", color = "Signal Type") -->
+<!-- ``` -->
+
 
 ## Discussion
 
