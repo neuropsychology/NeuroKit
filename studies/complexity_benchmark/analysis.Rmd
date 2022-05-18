@@ -3,7 +3,8 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-# Introduction
+
+## Introduction
 
 Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these tools to characterize signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in physiology in the assessment and diagnostic of the state and health of living systems [@lau2021brain, @ehlers1995chaos].
 
@@ -689,4 +690,4 @@ Hence the choice of the current paradigm, in which we generated different types 
 
 The plurality of underlying components of empirical complexity (what is measured by complexity indices) seems to be somewhat confirmed by our results, showing that complexity indices are more or less sensitive to various orthogonal latent dimensions. One of the limitation of the current study has to do with the limited possibilities of interpretation of these underlying dimensions, and future studies are needed to discuss them.
 
-Indices that were highlighted as encapsulating information about different underlying dimensions at a relatively low computational cost include `r datawizard::text_concatenate(paste0("*", selection, "*"))`. These indices might be complimentary in offering a comprehensive profile of the complexity of a time series. Future studies are needed to analyze the nature of the dominant sensitivities of group of indices, so that results can be more easily interpreted and integrated into new studies and novel theories.
+Indices that were highlighted as encapsulating information about different underlying dimensions at a relatively low computational cost include *ShanEn (D)* (the Shannon entropy of consecutive differences which ...), *NLDFD*, *SVDEn*, *AttEn*, *PSDFD*, *MFDFA (Mean)*, *FuzzyMSEn*, *MSWPEn*, *MFDFA (Increment)*, *ShanEn (r)*, *Hjorth* and *WPEn*. These indices might be complimentary in offering a comprehensive profile of the complexity of a time series. Future studies are needed to analyze the nature of the dominant sensitivities of group of indices, so that results can be more easily interpreted and integrated into new studies and novel theories.

@@ -55,7 +55,7 @@ affiliation:
 
 authornote: |
 abstract: |
-  Complexity quantification, such as entropy, information and fractal dimension indices, are gaining a renewed traction in psychopsyiology, as new measures with promising qualities emerge from the computational and mathematical advances. Unfortunately, few studies compare the relationship and objective performance of the plethora of existing indices, in turn hindering reproducibility, replicability, and clarity in the field. In this study, we systematically compared  125 indices of complexity by their computational weight, their representativeness of a multidimensional space of latent dimensions, and empirical proximity with other indices. We propose that the selection of a few indices, such as ..., might offer a complimentary choice in regards to the quantification of the complexity of a time series.
+  Complexity quantification, such as entropy, information and fractal dimension indices, are gaining a renewed traction in psychopsyiology, as new measures with promising qualities emerge from the computational and mathematical advances. Unfortunately, few studies compare the relationship and objective performance of the plethora of existing indices, in turn hindering reproducibility, replicability, and clarity in the field. In this study, we systematically compared  125 indices of complexity by their computational weight, their representativeness of a multidimensional space of latent dimensions, and empirical proximity with other indices. We propose that the selection of a few indices, such as *ShanEn (D)*, *NLDFD*, *SVDEn*, *AttEn*, *PSDFD*, *MFDFA (Mean)*, *FuzzyMSEn*, *MSWPEn*, *MFDFA (Increment)*, *ShanEn (r)*, *Hjorth* and *WPEn*, might offer a complimentary choice in regards to the quantification of the complexity of a time series.
   
 keywords          : "chaos, complexity, fractal, physiology, noise"
 wordcount         : "X"
@@ -86,7 +86,7 @@ header-includes:
 
 \newpage
 
-# References
+## References
 
 ::: {#refs custom-style="Bibliography"}
 :::

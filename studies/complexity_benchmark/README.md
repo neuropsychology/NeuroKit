@@ -1,9 +1,9 @@
 
+# The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2
+
 <!-- # Benchmarking and Analysis of Complexity Measures -->
 <!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
 <!-- # Measuring Chaos with NeuroKit2: An Empirical Comparison of Fractal Physiology Complexity Indices -->
-
-# The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2
 
 *This study can be referenced by* [*citing the package and the
 documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
@@ -12,7 +12,7 @@ documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
 have the time. If you want to help to make it happen, please contact
 us!**
 
-# Introduction
+## Introduction
 
 Complexity is an umbrella term for concepts derived from information
 theory, chaos theory, and fractal mathematics, used to quantify
@@ -96,8 +96,10 @@ ranging from 0.1 to 4). Examples of generated signals are presented in
 The combination of these parameters resulted in a total of 6000 signal
 iterations. For each of them, we computed 128 complexity indices, and
 additionally basic metric such as the standard deviation (*SD*), the
-*length* of the signal and its dominant *frequency*. The parameters used
-(such as the time-delay
+*length* of the signal and its dominant *frequency*. We also included a
+*random* number to make sure that our our clustering / dimensionality
+analyses accurately discriminate this unrelated feature. The parameters
+used (such as the time-delay
 ![\\tau](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctau "\tau")
 or the embedding dimension) are documented in the data generation
 script. For a complete description of the various indices included,
@@ -525,13 +527,14 @@ them.
 
 Indices that were highlighted as encapsulating information about
 different underlying dimensions at a relatively low computational cost
-include *ShanEn (D)*, *NLDFD*, *SVDEn*, *AttEn*, *PSDFD*, *MFDFA
-(Mean)*, *FuzzyMSEn*, *MSWPEn*, *MFDFA (Increment)*, *ShanEn (r)*,
-*Hjorth* and *WPEn*. These indices might be complimentary in offering a
-comprehensive profile of the complexity of a time series. Future studies
-are needed to analyze the nature of the dominant sensitivities of group
-of indices, so that results can be more easily interpreted and
-integrated into new studies and novel theories.
+include *ShanEn (D)* (the Shannon entropy of consecutive differences
+which …), *NLDFD*, *SVDEn*, *AttEn*, *PSDFD*, *MFDFA (Mean)*,
+*FuzzyMSEn*, *MSWPEn*, *MFDFA (Increment)*, *ShanEn (r)*, *Hjorth* and
+*WPEn*. These indices might be complimentary in offering a comprehensive
+profile of the complexity of a time series. Future studies are needed to
+analyze the nature of the dominant sensitivities of group of indices, so
+that results can be more easily interpreted and integrated into new
+studies and novel theories.
 
 ## References
 
