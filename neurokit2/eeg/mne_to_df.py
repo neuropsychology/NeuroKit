@@ -4,7 +4,9 @@ import pandas as pd
 
 
 def mne_to_df(eeg):
-    """Convert MNE objects to dataframe or dict of dataframes.
+    """**Conversion from MNE to dataframes**
+
+    Convert MNE objects to dataframe or dict of dataframes.
 
     Parameters
     ----------
@@ -13,29 +15,41 @@ def mne_to_df(eeg):
 
     See Also
     --------
-    mne_to_dict
+    .mne_to_dict
 
     Returns
     ----------
     DataFrame
-        A DataFrame containing all epochs identifiable by the 'Epoch' column, which time axis
-        is stored in the 'Time' column.
+        A DataFrame containing all epochs identifiable by the ``"Epoch"`` column, which time axis
+        is stored in the ``"Time"`` column.
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Raw objects
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> nk.mne_to_df(eeg) # doctest: +SKIP
-    >>>
-    >>> # Epochs objects
-    >>> eeg = nk.mne_data("epochs")
-    >>> nk.mne_to_df(eeg) # doctest: +SKIP
-    >>>
-    >>> # Evoked objects
-    >>> eeg = nk.mne_data("evoked")
-    >>> nk.mne_to_df(eeg) # doctest: +SKIP
+    **Raw objects**
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download MNE Raw object
+      eeg = nk.mne_data("filt-0-40_raw")
+      nk.mne_to_df(eeg)
+
+    **Epoch objects**
+
+    .. ipython:: python
+
+      # Download MNE Epochs object
+      eeg = nk.mne_data("epochs")
+      nk.mne_to_df(eeg)
+
+    **Evoked objects**
+
+    .. ipython:: python
+
+      # Download MNE Evoked object
+      eeg = nk.mne_data("evoked")
+      nk.mne_to_df(eeg)
 
     """
     return _mne_convert(eeg, to_what="df")
@@ -43,7 +57,7 @@ def mne_to_df(eeg):
 
 # Dict
 def mne_to_dict(eeg):
-    """Convert MNE Raw or Epochs object to a dictionnary.
+    """**Convert MNE Raw or Epochs object to a dictionary**
 
     Parameters
     ----------
@@ -62,20 +76,22 @@ def mne_to_dict(eeg):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>> import mne
-    >>>
-    >>> # Raw objects
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> nk.mne_to_dict(eeg) # doctest: +SKIP
-    >>>
-    >>> # Epochs objects
-    >>> eeg = nk.mne_data("epochs")
-    >>> nk.mne_to_dict(eeg) # doctest: +SKIP
-    >>>
-    >>> # Evoked objects
-    >>> eeg = nk.mne_data("evoked")
-    >>> nk.mne_to_dict(eeg) # doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import mne
+
+      # Raw objects
+      eeg = nk.mne_data("filt-0-40_raw")
+      nk.mne_to_dict(eeg)
+
+      # Epochs objects
+      eeg = nk.mne_data("epochs")
+      nk.mne_to_dict(eeg)
+
+      # Evoked objects
+      eeg = nk.mne_data("evoked")
+      nk.mne_to_dict(eeg)
 
     """
     return _mne_convert(eeg, to_what="dict")

@@ -6,16 +6,18 @@ import numpy as np
 import scipy.interpolate
 import scipy.misc
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def fractal_capacity(signal, delay=1, rounding=3, show=False):
     """
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
 
     """
     # From https://gist.github.com/viveksck/1110dfca01e4ec2c608515f0d5a5b1d1
@@ -85,13 +87,13 @@ def _signal_to_image(signal, rounding=3, show=False):
     """
     Examples
     ---------
-    >>> import neurokit2 as nk
+      import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate()
-    >>> nk.signal_plot(signal)
+      signal = nk.signal_simulate()
+      nk.signal_plot(signal)
     >>>
-    >>> # signal_to_image(signal, rounding=2, show=True)
-    >>> # signal_to_image(signal, rounding=1, show=True)
+      # signal_to_image(signal, rounding=2, show=True)
+      # signal_to_image(signal, rounding=1, show=True)
     """
     x = np.round(signal, rounding)
     y_vals = np.unique(x)

@@ -5,7 +5,7 @@ from .epochs_to_df import epochs_to_df
 
 
 def epochs_plot(epochs, legend=True, show=True, **kwargs):
-    """Epochs visualization
+    """**Epochs visualization**
 
     Plot epochs.
 
@@ -16,13 +16,8 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
     legend : bool
         Display the legend (the key of each epoch).
     show : bool
-        If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
-
-    Returns
-    ----------
-    epochs : dict
-        dict containing all epochs.
-
+        If ``False``, don't show the plot and only return a DataFrame that can be plotted
+        externally.
 
     See Also
     ----------
@@ -30,23 +25,36 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>> events = nk.events_find(data["Photosensor"],
-    ...                         threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
-    >>> fig1 = nk.epochs_plot(epochs)
-    >>> fig1 #doctest: +SKIP
-    >>>
-    >>> # Example with ECG Peaks
-    >>> signal = nk.ecg_simulate(duration=10)
-    >>> events = nk.ecg_findpeaks(signal)
-    >>> epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5, epochs_end=0.5)
-    >>> fig2 = nk.epochs_plot(epochs)
-    >>> fig2 #doctest: +SKIP
+    * **Example with data**
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      data = nk.data("bio_eventrelated_100hz")
+      events = nk.events_find(data["Photosensor"],
+                              threshold_keep='below',
+                              event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+      epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
+
+      @savefig p_epochs_plot1.png scale=100%
+      nk.epochs_plot(epochs)
+      @suppress
+      plt.close()
+
+    * **Example with ECG Peaks**
+
+    .. ipython:: python
+
+      signal = nk.ecg_simulate(duration=10)
+      events = nk.ecg_findpeaks(signal)
+      epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5,
+      epochs_end=0.5)
+
+      @savefig p_epochs_plot.png scale=100%
+      nk.epochs_plot(epochs)
+      @suppress
+      plt.close()
 
     """
     # sanitize epochs
@@ -73,19 +81,18 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
     cols = data.columns.values
     cols = [x for x in cols if x not in ["Time", "Condition", "Label", "Index"]]
 
-    if show:
-        if len(cols) == 1:
-            fig, ax = plt.subplots()
-            _epochs_plot(data, ax, cols[0], legend=legend)
-        else:
-            fig, ax = plt.subplots(nrows=len(cols))
-            for i, col in enumerate(cols):
-                _epochs_plot(data, ax=ax[i], col=col, legend=legend)
-        return fig
-
-    return data
+    if len(cols) == 1:
+        fig, ax = plt.subplots()
+        _epochs_plot(data, ax, cols[0], legend=legend)
+    else:
+        fig, ax = plt.subplots(nrows=len(cols))
+        for i, col in enumerate(cols):
+            _epochs_plot(data, ax=ax[i], col=col, legend=legend)
 
 
+# -------------------------------------------------------------------------------------------------
+# Utils
+# -------------------------------------------------------------------------------------------------
 def _epochs_mne_sanitize(epochs, what):
     """Channel array extraction from MNE for plotting.
     Select one or several channels by name and returns them in a dataframe.

@@ -1,0 +1,92 @@
+---
+title             : "**The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2**"
+shorttitle        : "Structure of Chaos"
+
+author: 
+  - name          : "Dominique Makowski"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "HSS 04-18, 48 Nanyang Avenue, Singapore"
+    email         : "dmakowski@ntu.edu.sg"
+    orcid         : 0000-0001-5375-9967
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - "Conceptualization"
+      - "Data curation"
+      - "Formal Analysis"
+      - "Funding acquisition"
+      - "Investigation"
+      - "Methodology"
+      - "Project administration"
+      - "Resources"
+      - "Software"
+      - "Supervision"
+      - "Validation"
+      - "Visualization"
+      - "Writing – original draft"
+  - name          : "An Shu Te"
+    affiliation   : "1"
+    orcid         : 0000-0001-8008-2824
+    role:
+      - "Software"
+      - "Project administration"
+      - "Writing – review & editing"
+  - name          : "Tam Pham"
+    affiliation   : "1"
+    orcid         : 0000-0002-6392-6703
+    role:
+      - "Software"
+      - "Writing – review & editing"
+  - name          : "Zen J. Lau"
+    affiliation   : "1"
+    orcid         : 0000-0003-4429-4082
+    role:
+      - "Software"
+      - "Writing – review & editing"
+  - name          : "S.H. Annabel Chen"
+    affiliation   : "1"
+    orcid         : 0000-0002-1540-5516
+    role:
+      - "Project administration"
+      - "Writing – review & editing"
+      
+affiliation:
+  - id            : "1"
+    institution   : "Nanyang Technological University"
+
+authornote: |
+abstract: |
+  Complexity quantification, such as entropy, information and fractal dimension indices, are gaining a renewed traction in psychopsyiology, as new measures with promising qualities emerge from the computational and mathematical advances. Unfortunately, few studies compare the relationship and objective performance of the plethora of existing indices, in turn hindering reproducibility, replicability, and clarity in the field. In this study, we systematically compared  125 indices of complexity by their computational weight, their representativeness of a multidimensional space of latent dimensions, and empirical proximity with other indices. We propose that the selection of a few indices, such as *ShanEn (D)*, *NLDFD*, *SVDEn*, *AttEn*, *PSDFD*, *MFDFA (Mean)*, *FuzzyMSEn*, *MSWPEn*, *MFDFA (Increment)*, *ShanEn (r)*, *Hjorth* and *WPEn*, might offer a complimentary choice in regards to the quantification of the complexity of a time series.
+  
+keywords          : "chaos, complexity, fractal, physiology, noise"
+wordcount         : "X"
+
+bibliography      : "bibliography.bib"
+
+floatsintext      : no
+linenumbers       : yes
+draft             : no
+mask              : no
+
+figurelist        : yes
+tablelist         : no
+footnotelist      : no
+
+classoption       : "man"
+output            : papaja::apa6_pdf
+csl: utils/apa.csl
+
+header-includes:
+  - \usepackage[labelfont=bf, font={color=gray,small}]{caption}
+---
+
+```{r, child=c('analysis.Rmd')}
+```
+
+
+
+\newpage
+
+## References
+
+::: {#refs custom-style="Bibliography"}
+:::

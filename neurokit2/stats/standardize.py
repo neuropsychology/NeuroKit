@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
+
 import numpy as np
 import pandas as pd
 
-from .mad import mad
 from ..misc import NeuroKitWarning
 from ..misc.check_type import is_string
+from .mad import mad
+
 
 def standardize(data, robust=False, window=None, **kwargs):
-    """Standardization of data.
+    """**Standardization of data**
 
     Performs a standardization of data (Z-scoring), i.e., centering and scaling, so that the data is
     expressed in terms of standard deviation (i.e., mean = 0, SD = 1) or Median Absolute Deviance
@@ -19,15 +21,15 @@ def standardize(data, robust=False, window=None, **kwargs):
     data : Union[list, np.array, pd.Series]
         Raw data.
     robust : bool
-        If True, centering is done by substracting the median from the variables and dividing it by
-        the median absolute deviation (MAD). If False, variables are standardized by substracting the
-        mean and dividing it by the standard deviation (SD).
+        If ``True``, centering is done by substracting the median from the variables and dividing
+        it by the median absolute deviation (MAD). If ``False``, variables are standardized by
+        substracting the mean and dividing it by the standard deviation (SD).
     window : int
         Perform a rolling window standardization, i.e., apply a standardization on a window of the
         specified number of samples that rolls along the main axis of the signal. Can be used for
         complex detrending.
     **kwargs : optional
-        Other arguments to be passed to ``pandas.rolling()``.
+        Other arguments to be passed to :func:`.pandas.rolling`.
 
     Returns
     ----------
@@ -37,26 +39,28 @@ def standardize(data, robust=False, window=None, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> # Simple example
-    >>> nk.standardize([3, 1, 2, 4, 6, np.nan]) #doctest: +ELLIPSIS
-    [...]
-    >>> nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True) #doctest: +ELLIPSIS
-    [...]
-    >>> nk.standardize(np.array([[1, 2, 3, 4], [5, 6, 7, 8]]).T) #doctest: +ELLIPSIS
-     array(...)
-    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
-    ...                              "B": [3, 1, 2, 4, 6, 5]})) #doctest: +ELLIPSIS
-              A         B
-    0       ...       ...
-    ...
-    >>>
-    >>> # Rolling standardization of a signal
-    >>> signal = nk.signal_simulate(frequency=[0.1, 2], sampling_rate=200)
-    >>> z = nk.standardize(signal, window=200)
-    >>> nk.signal_plot([signal, z], standardize=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+
+      # Simple example
+      nk.standardize([3, 1, 2, 4, 6, np.nan])
+
+      nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
+
+      nk.standardize(np.array([[1, 2, 3, 4], [5, 6, 7, 8]]).T)
+
+      nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
+                                   "B": [3, 1, 2, 4, 6, 5]}))
+
+      # Rolling standardization of a signal
+      signal = nk.signal_simulate(frequency=[0.1, 2], sampling_rate=200)
+      z = nk.standardize(signal, window=200)
+      @savefig p_standardize1.png scale=100%
+      nk.signal_plot([signal, z], standardize=True)
+      @suppress
+      plt.close()
 
     """
     # Return appropriate type

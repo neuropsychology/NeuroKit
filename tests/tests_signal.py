@@ -8,7 +8,6 @@ import scipy.signal
 
 import neurokit2 as nk
 
-
 # =============================================================================
 # Signal
 # =============================================================================
@@ -16,11 +15,15 @@ import neurokit2 as nk
 
 def test_signal_simulate():
     # Warning for nyquist criterion
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"Skipping requested frequency.*cannot be resolved.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r"Skipping requested frequency.*cannot be resolved.*"
+    ):
         nk.signal_simulate(sampling_rate=100, frequency=11, silent=False)
 
     # Warning for period duration
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"Skipping requested frequency.*since its period of.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r"Skipping requested frequency.*since its period of.*"
+    ):
         nk.signal_simulate(duration=1, frequency=0.1, silent=False)
 
 
@@ -38,7 +41,8 @@ def test_signal_smooth():
 def test_signal_smooth_boxcar():
     signal = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype=float)
     np.testing.assert_array_almost_equal(
-        nk.signal_smooth(signal, kernel="boxcar", size=3), [(1 + 1 + 2) / 3, 2, 3, 4, 5, 6, 7, 8, 9, (9 + 10 + 10) / 3]
+        nk.signal_smooth(signal, kernel="boxcar", size=3),
+        [(1 + 1 + 2) / 3, 2, 3, 4, 5, 6, 7, 8, 9, (9 + 10 + 10) / 3],
     )
 
 
@@ -59,14 +63,25 @@ def test_signal_resample():
     downsampled_interpolation = nk.signal_resample(
         signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500
     )
-    downsampled_numpy = nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500)
-    downsampled_pandas = nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500)
-    downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
-    downsampled_poly = nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
+    downsampled_numpy = nk.signal_resample(
+        signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500
+    )
+    downsampled_pandas = nk.signal_resample(
+        signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500
+    )
+    downsampled_fft = nk.signal_resample(
+        signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500
+    )
+    downsampled_poly = nk.signal_resample(
+        signal, method="poly", sampling_rate=1000, desired_sampling_rate=500
+    )
 
     # Upsample
     upsampled_interpolation = nk.signal_resample(
-        downsampled_interpolation, method="interpolation", sampling_rate=500, desired_sampling_rate=1000
+        downsampled_interpolation,
+        method="interpolation",
+        sampling_rate=500,
+        desired_sampling_rate=1000,
     )
     upsampled_numpy = nk.signal_resample(
         downsampled_numpy, method="numpy", sampling_rate=500, desired_sampling_rate=1000
@@ -74,8 +89,12 @@ def test_signal_resample():
     upsampled_pandas = nk.signal_resample(
         downsampled_pandas, method="pandas", sampling_rate=500, desired_sampling_rate=1000
     )
-    upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000)
-    upsampled_poly = nk.signal_resample(downsampled_poly, method="poly", sampling_rate=500, desired_sampling_rate=1000)
+    upsampled_fft = nk.signal_resample(
+        downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000
+    )
+    upsampled_poly = nk.signal_resample(
+        downsampled_poly, method="poly", sampling_rate=500, desired_sampling_rate=1000
+    )
 
     # Check
     rez = pd.DataFrame(
@@ -128,7 +147,9 @@ def test_signal_filter():
     powerline = np.sin(2 * np.pi * 50 * (samples / sampling_rate))
 
     signal_corrupted = signal + powerline
-    signal_clean = nk.signal_filter(signal_corrupted, sampling_rate=sampling_rate, method="powerline")
+    signal_clean = nk.signal_filter(
+        signal_corrupted, sampling_rate=sampling_rate, method="powerline"
+    )
 
     # import matplotlib.pyplot as plt
     # figure, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
@@ -155,7 +176,9 @@ def test_signal_findpeaks():
     signal1 = np.cos(np.linspace(start=0, stop=30, num=1000))
     info1 = nk.signal_findpeaks(signal1)
 
-    signal2 = np.concatenate([np.arange(0, 20, 0.1), np.arange(17, 30, 0.1), np.arange(30, 10, -0.1)])
+    signal2 = np.concatenate(
+        [np.arange(0, 20, 0.1), np.arange(17, 30, 0.1), np.arange(30, 10, -0.1)]
+    )
     info2 = nk.signal_findpeaks(signal2)
     assert len(info1["Peaks"]) > len(info2["Peaks"])
 
@@ -187,15 +210,23 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     duration = 120
     sampling_rate = 1000
     rsp = nk.rsp_simulate(
-        duration=duration, sampling_rate=sampling_rate, respiratory_rate=15, method="sinuosoidal", noise=0
+        duration=duration,
+        sampling_rate=sampling_rate,
+        respiratory_rate=15,
+        method="sinuosoidal",
+        noise=0,
     )
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=sampling_rate)
     signals, info = nk.rsp_peaks(rsp_cleaned)
-    rate = nk.signal_rate(signals, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
+    rate = nk.signal_rate(
+        signals, sampling_rate=sampling_rate, desired_length=duration * sampling_rate
+    )
     assert rate.shape == (signals.shape[0],)
 
     # Test with dictionary.produced from rsp_findpeaks.
-    rate = nk.signal_rate(info, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
+    rate = nk.signal_rate(
+        info, sampling_rate=sampling_rate, desired_length=duration * sampling_rate
+    )
     assert rate.shape == (duration * sampling_rate,)
 
 
@@ -263,7 +294,9 @@ def test_signal_power():
 
 def test_signal_timefrequency():
 
-    signal = nk.signal_simulate(duration=50, frequency=5) + 2 * nk.signal_simulate(duration=50, frequency=20)
+    signal = nk.signal_simulate(duration=50, frequency=5) + 2 * nk.signal_simulate(
+        duration=50, frequency=20
+    )
 
     # short-time fourier transform
     frequency, time, stft = nk.signal_timefrequency(
@@ -277,7 +310,9 @@ def test_signal_timefrequency():
     assert np.sum(stft[indices_freq5]) < np.sum(stft[indices_freq20])
 
     # wavelet transform
-    frequency, time, cwtm = nk.signal_timefrequency(signal, method="cwt", max_frequency=50, show=False)
+    frequency, time, cwtm = nk.signal_timefrequency(
+        signal, method="cwt", max_frequency=50, show=False
+    )
 
     assert len(frequency) == cwtm.shape[0]
     assert len(time) == cwtm.shape[1]
@@ -286,7 +321,9 @@ def test_signal_timefrequency():
     assert np.sum(cwtm[indices_freq5]) < np.sum(cwtm[indices_freq20])
 
     # wvd
-    frequency, time, wvd = nk.signal_timefrequency(signal, method="wvd", max_frequency=50, show=False)
+    frequency, time, wvd = nk.signal_timefrequency(
+        signal, method="wvd", max_frequency=50, show=False
+    )
     assert len(frequency) == wvd.shape[0]
     assert len(time) == wvd.shape[1]
     indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
@@ -294,7 +331,9 @@ def test_signal_timefrequency():
     assert np.sum(wvd[indices_freq5]) < np.sum(wvd[indices_freq20])
 
     # pwvd
-    frequency, time, pwvd = nk.signal_timefrequency(signal, method="pwvd", max_frequency=50, show=False)
+    frequency, time, pwvd = nk.signal_timefrequency(
+        signal, method="pwvd", max_frequency=50, show=False
+    )
     assert len(frequency) == pwvd.shape[0]
     assert len(time) == pwvd.shape[1]
     indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
@@ -310,14 +349,21 @@ def test_signal_psd(recwarn):
 
     assert list(out.columns) == ["Frequency", "Power"]
 
+
 def test_signal_distort():
     signal = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)
 
     # Warning for nyquist criterion
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*cannot be resolved.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*cannot be resolved.*"
+    ):
         nk.signal_distort(signal, sampling_rate=10, noise_amplitude=1, silent=False)
 
     # Warning for period duration
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*since its period of.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*since its period of.*"
+    ):
         signal = nk.signal_simulate(duration=1, frequency=1, sampling_rate=10)
         nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)
+
+    signal2 = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)

@@ -24,6 +24,7 @@ from .signal_resample import signal_resample
 from .signal_sanitize import signal_sanitize
 from .signal_simulate import signal_simulate
 from .signal_smooth import signal_smooth
+from .signal_surrogate import signal_surrogate
 from .signal_synchrony import signal_synchrony
 from .signal_timefrequency import signal_timefrequency
 from .signal_zerocrossings import signal_zerocrossings
@@ -54,6 +55,7 @@ __all__ = [
     "signal_changepoints",
     "signal_decompose",
     "signal_recompose",
+    "signal_surrogate",
     "signal_timefrequency",
     "signal_sanitize",
     "signal_flatline",

@@ -4,10 +4,9 @@ import sklearn.mixture
 
 
 def fit_mixture(X=None, n_clusters=2):
-    """Gaussian Mixture Model.
+    """**Gaussian Mixture Model**
 
     Performs a polynomial regression of given order.
-
 
     Parameters
     ----------
@@ -19,7 +18,9 @@ def fit_mixture(X=None, n_clusters=2):
     Returns
     -------
     pd.DataFrame
-        DataFrame containing the probability of belongning to each cluster.
+        DataFrame containing the probability of belonging to each cluster.
+    dict
+        Dictionary containing additional information such as the parameters (:func:`.n_clusters`).
 
     See Also
     ----------
@@ -27,13 +28,17 @@ def fit_mixture(X=None, n_clusters=2):
 
     Examples
     ---------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> x = nk.signal_simulate()
-    >>> probs = nk.fit_mixture(x, n_clusters=2)
-    >>> fig = nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      x = nk.signal_simulate()
+      probs, info = nk.fit_mixture(x, n_clusters=2)  # Rmb to merge with main to return ``info``
+      @savefig p_fit_mixture.png scale=100%
+      fig = nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True)
+      @suppress
+      plt.close()
 
     """
     if X.ndim == 1:
@@ -47,4 +52,4 @@ def fit_mixture(X=None, n_clusters=2):
     predicted = clf.predict_proba(X)
     probabilities = pd.DataFrame(predicted).add_prefix("Cluster_")
 
-    return probabilities
+    return probabilities, {"n_clusters": n_clusters}

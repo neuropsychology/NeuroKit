@@ -2,7 +2,7 @@ import itertools
 
 
 def find_consecutive(x):
-    """Find and group consecutive values in a list.
+    """**Find and group consecutive values in a list**
 
     Parameters
     ----------
@@ -16,11 +16,13 @@ def find_consecutive(x):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> x = [2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 20]
-    >>> nk.find_consecutive(x)
-    [(2, 3, 4, 5), (12, 13, 14, 15, 16, 17), (20,)]
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      x = [2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 20]
+      nk.find_consecutive(x)
+
 
     """
 

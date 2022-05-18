@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import sklearn.linear_model
+import sklearn.metrics
 
 from .fit_error import fit_rmse
 
 
-def fit_polynomial(y, X=None, order=2):
-    """Polynomial Regression.
+def fit_polynomial(y, X=None, order=2, method="raw"):
+    """**Polynomial Regression**
 
     Performs a polynomial regression of given order.
 
@@ -15,15 +17,21 @@ def fit_polynomial(y, X=None, order=2):
     y : Union[list, np.array, pd.Series]
         The response variable (the y axis).
     X : Union[list, np.array, pd.Series]
-        Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
+        Explanatory variable (the x axis). If ``None``, will treat y as a continuous signal.
     order : int
-        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit, respectively.
-        Can also be 'auto', it which case it will attempt to find the optimal order to minimize the RMSE.
+        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit,
+        respectively. Can also be ``"auto"``, in which case it will attempt to find the optimal
+        order to minimize the RMSE.
+    method : str
+        If ``"raw"`` (default), compute standard polynomial coefficients. If ``"orthogonal"``,
+        compute orthogonal polynomials (and is equivalent to R's ``poly`` default behavior).
 
     Returns
     -------
     array
         Prediction of the regression.
+    dict
+        Dictionary containing additional information such as the parameters (``order``) used and the coefficients (``coefs``).
 
     See Also
     ----------
@@ -31,16 +39,22 @@ def fit_polynomial(y, X=None, order=2):
 
     Examples
     ---------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
-    >>>
-    >>> pd.DataFrame({"y": y, "Poly_0": nk.fit_polynomial(y, order=0),
-    ...               "Poly_1": nk.fit_polynomial(y, order=1),
-    ...               "Poly_2": nk.fit_polynomial(y, order=2),
-    ...               "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5),
-    ...               "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      y = np.cos(np.linspace(start=0, stop=10, num=100))
+      @savefig p_fit_polynomial1.png scale=100%
+      pd.DataFrame({"y": y,
+                    "Poly_0": nk.fit_polynomial(y, order=0)[0],
+                    "Poly_1": nk.fit_polynomial(y, order=1)[0],
+                    "Poly_2": nk.fit_polynomial(y, order=2)[0],
+                    "Poly_3": nk.fit_polynomial(y, order=3)[0],
+                    "Poly_5": nk.fit_polynomial(y, order=5)[0],
+                    "Poly_auto": nk.fit_polynomial(y, order='auto')[0]}).plot()
+      @suppress
+      plt.close()
 
     """
     if X is None:
@@ -51,9 +65,16 @@ def fit_polynomial(y, X=None, order=2):
         order = fit_polynomial_findorder(y, X, max_order=6)
 
     # Make prediction
-    y_predicted = _fit_polynomial(y, X, order=order)
+    if method == "raw":
+        y_predicted, coefs = _fit_polynomial(y, X, order=order)
+    else:
+        y_predicted, coefs = _fit_polynomial_orthogonal(y, X, order=order)
 
-    return y_predicted
+    return y_predicted, {
+        "order": order,
+        "coefs": coefs,
+        "R2": sklearn.metrics.r2_score(y, y_predicted),
+    }
 
 
 # =============================================================================
@@ -85,11 +106,11 @@ def fit_polynomial_findorder(y, X=None, max_order=6):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
-    >>>
-    >>> nk.fit_polynomial_findorder(y, max_order=10)
+      import neurokit2 as nk
+
+      y = np.cos(np.linspace(start=0, stop=10, num=100))
+
+      nk.fit_polynomial_findorder(y, max_order=10)
     9
 
     """
@@ -99,7 +120,7 @@ def fit_polynomial_findorder(y, X=None, max_order=6):
 
     best_rmse = 0
     for order in range(max_order):
-        y_predicted = _fit_polynomial(y, X, order=order)
+        y_predicted, _ = _fit_polynomial(y, X, order=order)
         rmse = fit_rmse(y, y_predicted)
         if rmse < best_rmse or best_rmse == 0:
             best_order = order
@@ -112,6 +133,28 @@ def fit_polynomial_findorder(y, X=None, max_order=6):
 
 
 def _fit_polynomial(y, X, order=2):
+    coefs = np.polyfit(X, y, order)
     # Generating weights and model for polynomial function with a given degree
-    y_predicted = np.polyval(np.polyfit(X, y, order), X)
-    return y_predicted
+    y_predicted = np.polyval(coefs, X)
+    return y_predicted, coefs
+
+
+def _fit_polynomial_orthogonal(y, X, order=2):
+    """Fit an orthogonal polynomial regression in Python (equivalent to R's poly())
+
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    df = load_iris()
+    df = pd.DataFrame(data=df.data, columns=df.feature_names)
+    y = df.iloc[:, 0].values  # Sepal.Length
+    X = df.iloc[:, 1].values  # Sepal.Width
+    _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP
+    # Equivalent to R's:
+    # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
+
+
+    """
+    X = np.transpose([X**k for k in range(order + 1)])
+    X = np.linalg.qr(X)[0][:, 1:]
+    model = sklearn.linear_model.LinearRegression().fit(X, y)
+    return model.predict(X), np.insert(model.coef_, 0, model.intercept_)

@@ -26,18 +26,39 @@ def hrv_frequency(
     order_criteria=None,
     **kwargs
 ):
-    """Computes frequency-domain indices of Heart Rate Variability (HRV).
+    """**Computes frequency-domain indices of Heart Rate Variability (HRV)**
 
-    Note that a minimum duration of the signal containing the peaks is recommended for some HRV indices
-    to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the recomended
-    minima for HF, LF and LF/HF, respectively. See references for details.
+    Computes frequency domain HRV metrics, such as the power in different frequency bands.
+
+    * **ULF**: The spectral power of ultra low frequencies (by default, .0 to
+      .0033 Hz) by default. Very long signals are required for this to index to be
+      extracted, otherwise, will return NaN.
+    * **VLF**: The spectral power of very low frequencies (by default, .0033 to .04 Hz).
+    * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).
+    * **HF**: The spectral power of high frequencies (by default, .15 to .4 Hz).
+    * **VHF**: The spectral power of very high frequencies (by default, .4 to .5 Hz).
+    * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
+      the total power.
+    * **HFn**: The normalized high frequency, obtained by dividing the low frequency power by
+      the total power.
+    * **LnHF**: The log transformed HF.
+
+    Note that a minimum duration of the signal containing the peaks is recommended for some HRV
+    indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the
+    recommended minima for HF, LF and LF/HF, respectively.
+
+    .. tip::
+
+      We strongly recommend checking our open-access paper `Pham et al. (2021)
+      <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
+
 
     Parameters
     ----------
     peaks : dict
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-        Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-        ppg_peaks, ecg_process or bio_process.
+        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
+        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -52,36 +73,25 @@ def hrv_frequency(
     vhf : tuple, optional
         Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).
     psd_method : str
-        Method used for spectral density estimation. For details see signal.signal_power. By default "welch".
+        Method used for spectral density estimation. For details see :func:`.signal_power`.
+        By default ``"welch"``.
     silent : bool
-        If False, warnings will be printed. Default to True.
+        If ``False``, warnings will be printed. Default to ``True``.
     show : bool
-        If True, will plot the power in the different frequency bands.
+        If ``True``, will plot the power in the different frequency bands.
     normalize : bool
-        Normalization of power by maximum PSD value. Default to True.
+        Normalization of power by maximum PSD value. Default to ``True``.
         Normalization allows comparison between different PSD methods.
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
-        (AR) methods such as 'burg'). Defaults to None.
-    **kwargs : optional
-        Other arguments.
+        (AR) methods such as ``"burg"``). Defaults to ``None``.
+    **kwargs
+        Additional other arguments.
 
     Returns
     -------
     DataFrame
-        Contains frequency domain HRV metrics:
-        - **ULF**: The spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz
-        by default.
-        - **VLF**: The spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz
-        by default.
-        - **LF**: The spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
-        - **HF**: The spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-        - **VHF**: The variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
-        - **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
-        the total power.
-        - **HFn**: The normalized high frequency, obtained by dividing the low frequency power by
-        the total power.
-        - **LnHF**: The log transformed HF.
+        Contains frequency domain HRV metrics.
 
     See Also
     --------
@@ -89,35 +99,61 @@ def hrv_frequency(
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>>
-    >>> # Find peaks
-    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
-    >>>
-    >>> # Compute HRV indices
-    >>> hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
-    >>> hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
-    >>> hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
-    >>> hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="multitapers")
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download data
+      data = nk.data("bio_resting_5min_100hz")
+
+      # Find peaks
+      peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+
+      # Compute HRV indices using method="welch"
+      @savefig p_hrv_freq1.png scale=100%
+      hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Using method ="burg"
+      @savefig p_hrv_freq2.png scale=100%
+      hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Using method = "lomb" (requires installation of astropy)
+      @savefig p_hrv_freq3.png scale=100%
+      hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Using method="multitapers"
+      @savefig p_hrv_freq4.png scale=100%
+      hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,psd_method="multitapers")
+      @suppress
+      plt.close()
 
     References
     ----------
-    - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
-    electrophysiology review, 6(3), 239-244.
-
-    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
-    Frontiers in public health, 5, 258.
-
-    - Boardman, A., Schlindwein, F. S., & Rocha, A. P. (2002). A study on the optimum order of
-    autoregressive models for heart rate variability. Physiological measurement, 23(2), 325.
-
-    - Bachler, M. (2017). Spectral Analysis of Unevenly Spaced Data: Models and Application in Heart
-    Rate Variability. Simul. Notes Eur., 27(4), 183-190.
+    * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
+      Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+    * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
+      electrophysiology review, 6(3), 239-244.
+    * Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
+      norms. Frontiers in public health, 5, 258.
+    * Boardman, A., Schlindwein, F. S., & Rocha, A. P. (2002). A study on the optimum order of
+      autoregressive models for heart rate variability. Physiological measurement, 23(2), 325.
+    * Bachler, M. (2017). Spectral Analysis of Unevenly Spaced Data: Models and Application in Heart
+      Rate Variability. Simul. Notes Eur., 27(4), 183-190.
 
     """
+
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
     if isinstance(peaks, tuple):  # Detect actual sampling rate
@@ -129,12 +165,16 @@ def hrv_frequency(
     )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
+
+    # Find maximum frequency
+    max_frequency = np.max([np.max(i) for i in frequency_band])
+
     power = signal_power(
         rri,
         frequency_band=frequency_band,
         sampling_rate=sampling_rate,
         method=psd_method,
-        max_frequency=0.5,
+        max_frequency=max_frequency,
         show=False,
         normalize=normalize,
         order_criteria=order_criteria,
@@ -172,10 +212,16 @@ def hrv_frequency(
         _hrv_frequency_show(
             rri,
             out_bands,
+            ulf=ulf,
+            vlf=vlf,
+            lf=lf,
+            hf=hf,
+            vhf=vhf,
             sampling_rate=sampling_rate,
             psd_method=psd_method,
             order_criteria=order_criteria,
             normalize=normalize,
+            max_frequency=max_frequency,
         )
     return out
 
@@ -192,6 +238,7 @@ def _hrv_frequency_show(
     psd_method="welch",
     order_criteria=None,
     normalize=True,
+    max_frequency=0.5,
     **kwargs
 ):
 
@@ -217,7 +264,7 @@ def _hrv_frequency_show(
         show=False,
         min_frequency=min_frequency,
         method=psd_method,
-        max_frequency=0.5,
+        max_frequency=max_frequency,
         order_criteria=order_criteria,
         normalize=normalize,
     )

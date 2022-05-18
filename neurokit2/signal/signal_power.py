@@ -16,7 +16,7 @@ def signal_power(
     normalize=True,
     **kwargs,
 ):
-    """Compute the power of a signal in a given frequency band.
+    """**Compute the power of a signal in a given frequency band**
 
     Parameters
     ----------
@@ -29,12 +29,12 @@ def signal_power(
     continuous : bool
         Compute instant frequency, or continuous power.
     show : bool
-        If True, will return a Poincaré plot. Defaults to False.
+        If ``True``, will return a Poincaré plot. Defaults to ``False``.
     normalize : bool
-        Normalization of power by maximum PSD value. Default to True.
+        Normalization of power by maximum PSD value. Default to ``True``.
         Normalization allows comparison between different PSD methods.
     **kwargs
-        Keyword arguments to be passed to `signal_psd()`.
+        Keyword arguments to be passed to :func:`.signal_psd`.
 
     See Also
     --------
@@ -44,32 +44,49 @@ def signal_power(
     -------
     pd.DataFrame
         A DataFrame containing the Power Spectrum values and a plot if
-        `show` is True.
+        ``show`` is ``True``.
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import numpy as np
-    >>>
-    >>> # Instant power
-    >>> signal = nk.signal_simulate(duration=60, frequency=[10, 15, 20],
-    ...                             amplitude = [1, 2, 3], noise = 2)
-    >>> power_plot = nk.signal_power(signal, frequency_band=[(8, 12), (18, 22)], method="welch", show=True)
-    >>> power_plot #doctest: +SKIP
-    >>>
-    >>> # Continuous (simulated signal)
-    >>> signal = np.concatenate((nk.ecg_simulate(duration=30, heart_rate=75),  nk.ecg_simulate(duration=30, heart_rate=85)))
-    >>> power = nk.signal_power(signal, frequency_band=[(72/60, 78/60), (82/60, 88/60)], continuous=True)
-    >>> processed, _ = nk.ecg_process(signal)
-    >>> power["ECG_Rate"] = processed["ECG_Rate"]
-    >>> nk.signal_plot(power, standardize=True) #doctest: +SKIP
-    >>>
-    >>> # Continuous (real signal)
-    >>> signal = nk.data("bio_eventrelated_100hz")["ECG"]
-    >>> power = nk.signal_power(signal, sampling_rate=100, frequency_band=[(0.12, 0.15), (0.15, 0.4)], continuous=True)
-    >>> processed, _ = nk.ecg_process(signal, sampling_rate=100)
-    >>> power["ECG_Rate"] = processed["ECG_Rate"]
-    >>> nk.signal_plot(power, standardize=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import numpy as np
+
+      # Instant power
+      signal = nk.signal_simulate(duration=60, frequency=[10, 15, 20],
+                                  amplitude = [1, 2, 3], noise = 2)
+
+      @savefig p_signal_power1.png scale=100%
+      power_plot = nk.signal_power(signal, frequency_band=[(8, 12), (18, 22)], method="welch", show=True)
+      @suppress
+      plt.close()
+
+    ..ipython:: python
+
+      # Continuous (simulated signal)
+      signal = np.concatenate((nk.ecg_simulate(duration=30, heart_rate=75), nk.ecg_simulate(duration=30, heart_rate=85)))
+      power = nk.signal_power(signal, frequency_band=[(72/60, 78/60), (82/60, 88/60)], continuous=True)
+      processed, _ = nk.ecg_process(signal)
+      power["ECG_Rate"] = processed["ECG_Rate"]
+
+      @savefig p_signal_power2.png scale=100%
+      nk.signal_plot(power, standardize=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Continuous (real signal)
+      signal = nk.data("bio_eventrelated_100hz")["ECG"]
+      power = nk.signal_power(signal, sampling_rate=100, frequency_band=[(0.12, 0.15), (0.15, 0.4)], continuous=True)
+      processed, _ = nk.ecg_process(signal, sampling_rate=100)
+      power["ECG_Rate"] = processed["ECG_Rate"]
+
+      @savefig p_signal_power3.png scale=100%
+      nk.signal_plot(power, standardize=True)
+      @supppress
+      plt.close()
 
     """
 
@@ -225,12 +242,12 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
 
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: signal_power(): the 'mne'",
             "module is required. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e  # explicitly raise error from ImportError exception
 
     out = mne.time_frequency.tfr_array_morlet(
         [[signal]],
@@ -241,5 +258,5 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     power = np.mean(out[0][0], axis=0)
 
     out = {}
-    out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = power
+    out[f"{frequency_band[0]:.2f}-{frequency_band[1]:.2f}Hz"] = power  # use literal string format
     return out

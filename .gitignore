@@ -64,6 +64,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/_build/
+docs/savefig/
 
 # PyBuilder
 target/
@@ -197,3 +199,9 @@ data/mit_long-term/mit-bih-long-term-ecg-database-1.0.0/SHA256SUMS.txt
 data/mit_long-term/ECGs.csv
 data/mit_long-term/ECGs.csv
 .DS_Store
+docs/readme/README_popularity.py
+paper/OHBM2022/OHBM2022_Makowski.mp4
+
+
+studies/complexity_benchmark/README_cache/
+studies/complexity_benchmark/manuscript_cache/

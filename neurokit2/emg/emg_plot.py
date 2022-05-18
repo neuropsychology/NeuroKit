@@ -5,16 +5,18 @@ import pandas as pd
 
 
 def emg_plot(emg_signals, sampling_rate=None):
-    """Visualize electromyography (EMG) data.
+    """**EMG Graph**
+
+    Visualize electromyography (EMG) data.
 
     Parameters
     ----------
     emg_signals : DataFrame
-        DataFrame obtained from `emg_process()`.
+        DataFrame obtained from ``emg_process()``.
     sampling_rate : int
         The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to None.
+        Defaults to ``None``.
 
     Returns
     -------
@@ -23,12 +25,17 @@ def emg_plot(emg_signals, sampling_rate=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
-    >>> emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
-    >>> fig = nk.emg_plot(emg_signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
+      emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
+
+      @savefig p_emg_plot.png scale=100%
+      nk.emg_plot(emg_signals)
+      @suppress
+      plt.close()
 
     See Also
     --------
@@ -65,12 +72,16 @@ def emg_plot(emg_signals, sampling_rate=None):
     # Plot cleaned and raw EMG.
     ax0.set_title("Raw and Cleaned Signal")
     ax0.plot(x_axis, emg_signals["EMG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-    ax0.plot(x_axis, emg_signals["EMG_Clean"], color="#FFC107", label="Cleaned", zorder=1, linewidth=1.5)
+    ax0.plot(
+        x_axis, emg_signals["EMG_Clean"], color="#FFC107", label="Cleaned", zorder=1, linewidth=1.5
+    )
     ax0.legend(loc="upper right")
 
     # Plot Amplitude.
     ax1.set_title("Muscle Activation")
-    ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800", label="Amplitude", linewidth=1.5)
+    ax1.plot(
+        x_axis, emg_signals["EMG_Amplitude"], color="#FF9800", label="Amplitude", linewidth=1.5
+    )
 
     # Shade activity regions.
     activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
@@ -85,8 +96,16 @@ def emg_plot(emg_signals, sampling_rate=None):
     )
 
     # Mark onsets and offsets.
-    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets], color="#f03e65", label=None, zorder=3)
-    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets], color="#f03e65", label=None, zorder=3)
+    ax1.scatter(
+        x_axis[onsets], emg_signals["EMG_Amplitude"][onsets], color="#f03e65", label=None, zorder=3
+    )
+    ax1.scatter(
+        x_axis[offsets],
+        emg_signals["EMG_Amplitude"][offsets],
+        color="#f03e65",
+        label=None,
+        zorder=3,
+    )
 
     if sampling_rate is not None:
         onsets = onsets / sampling_rate
@@ -96,9 +115,6 @@ def emg_plot(emg_signals, sampling_rate=None):
         ax1.axvline(i, color="#4a4a4a", linestyle="--", label=None, zorder=2)
         ax1.axvline(j, color="#4a4a4a", linestyle="--", label=None, zorder=2)
     ax1.legend(loc="upper right")
-
-    plt.show()
-    return fig
 
 
 # =============================================================================

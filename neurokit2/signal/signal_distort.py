@@ -23,7 +23,7 @@ def signal_distort(
     random_state=None,
     silent=False,
 ):
-    """Signal distortion.
+    """**Signal distortion**
 
     Add noise of a given frequency, amplitude and shape to a signal.
 
@@ -34,8 +34,8 @@ def signal_distort(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     noise_shape : str
-        The shape of the noise. Can be one of 'laplace' (default) or
-        'gaussian'.
+        The shape of the noise. Can be one of ``"laplace"`` (default) or
+        ``"gaussian"``.
     noise_amplitude : float
         The amplitude of the noise (the scale of the random function, relative
         to the standard deviation of the signal).
@@ -69,27 +69,37 @@ def signal_distort(
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=10, frequency=0.5)
-    >>>
-    >>> # Noise
-    >>> noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200),
-    ...                       "Freq50": nk.signal_distort(signal, noise_frequency=50),
-    ...                       "Freq10": nk.signal_distort(signal, noise_frequency=10),
-    ...                       "Freq5": nk.signal_distort(signal, noise_frequency=5),
-    ...                       "Raw": signal}).plot()
-    >>> noise #doctest: +SKIP
-    >>>
-    >>> # Artifacts
-    >>> artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0,
-    ...                                                    artifacts_frequency=1, artifacts_amplitude=0.5),
-    ...                           "5Hz": nk.signal_distort(signal, noise_amplitude=0,
-    ...                                                    artifacts_frequency=5, artifacts_amplitude=0.2),
-    ...                           "Raw": signal}).plot()
-    >>> artifacts #doctest: +SKIP
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=10, frequency=0.5)
+
+      # Noise
+      @savefig p_signal_distort1.png scale=100%
+      noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200),
+                           "Freq50": nk.signal_distort(signal, noise_frequency=50),
+                           "Freq10": nk.signal_distort(signal, noise_frequency=10),
+                           "Freq5": nk.signal_distort(signal, noise_frequency=5),
+                           "Raw": signal}).plot()
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Artifacts
+      @savefig p_signal_distort2.png scale=100%
+      artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0,
+                                                        artifacts_frequency=1,
+                                                        artifacts_amplitude=0.5),
+                               "5Hz": nk.signal_distort(signal, noise_amplitude=0,
+                                                        artifacts_frequency=5,
+                                                        artifacts_amplitude=0.2),
+                               "Raw": signal}).plot()
+      @suppress
+      plt.close()
 
     """
     # Seed the random generator for reproducible results.
@@ -145,7 +155,15 @@ def signal_distort(
 
     distorted = signal + noise
 
+    # Reset random seed (so it doesn't affect global)
+    np.random.seed(None)
+
     return distorted
+
+
+# ===========================================================================
+# Types of Noise
+# ===========================================================================
 
 
 def _signal_linear_drift(signal):
@@ -201,12 +219,21 @@ def _signal_distort_artifacts(
 
 
 def _signal_distort_powerline(
-    signal, signal_sd=None, sampling_rate=1000, powerline_frequency=50, powerline_amplitude=0.1, silent=False
+    signal,
+    signal_sd=None,
+    sampling_rate=1000,
+    powerline_frequency=50,
+    powerline_amplitude=0.1,
+    silent=False,
 ):
 
     duration = len(signal) / sampling_rate
     powerline_noise = signal_simulate(
-        duration=duration, sampling_rate=sampling_rate, frequency=powerline_frequency, amplitude=1, silent=silent
+        duration=duration,
+        sampling_rate=sampling_rate,
+        frequency=powerline_frequency,
+        amplitude=1,
+        silent=silent,
     )
 
     if signal_sd is not None:
@@ -226,7 +253,9 @@ def _signal_distort_noise_multifrequency(
     silent=False,
 ):
     base_noise = np.zeros(len(signal))
-    params = listify(noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape)
+    params = listify(
+        noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape
+    )
 
     for i in range(len(params["noise_amplitude"])):
 
@@ -252,7 +281,12 @@ def _signal_distort_noise_multifrequency(
 
 
 def _signal_distort_noise(
-    n_samples, sampling_rate=1000, noise_frequency=100, noise_amplitude=0.1, noise_shape="laplace", silent=False
+    n_samples,
+    sampling_rate=1000,
+    noise_frequency=100,
+    noise_amplitude=0.1,
+    noise_shape="laplace",
+    silent=False,
 ):
 
     _noise = np.zeros(n_samples)
@@ -267,7 +301,7 @@ def _signal_distort_noise(
                 f" the sampling rate of {sampling_rate} Hz. Please increase "
                 f" sampling rate to {noise_frequency * 10} Hz or choose "
                 f" frequencies smaller than or equal to {nyquist} Hz.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         return _noise
     # Also make sure that at least one period of the frequency can be
@@ -282,7 +316,7 @@ def _signal_distort_noise(
                 f" Please choose noise frequencies larger than "
                 f" {1 / duration} Hz or increase the duration of the "
                 f" signal above {1 / noise_frequency} seconds.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         return _noise
 
@@ -293,7 +327,9 @@ def _signal_distort_noise(
     elif noise_shape == "laplace":
         _noise = np.random.laplace(0, noise_amplitude, noise_duration)
     else:
-        raise ValueError("NeuroKit error: signal_distort(): 'noise_shape' should be one of 'gaussian' or 'laplace'.")
+        raise ValueError(
+            "NeuroKit error: signal_distort(): 'noise_shape' should be one of 'gaussian' or 'laplace'."
+        )
 
     if len(_noise) != n_samples:
         _noise = signal_resample(_noise, desired_length=n_samples, method="interpolation")

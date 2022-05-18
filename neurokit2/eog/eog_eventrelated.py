@@ -13,39 +13,39 @@ from ..misc import NeuroKitWarning
 
 
 def eog_eventrelated(epochs, silent=False):
-    """Performs event-related EOG analysis on epochs.
+    """**Performs event-related EOG analysis on epochs**
 
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
         A dict containing one DataFrame per event/trial,
-        usually obtained via `epochs_create()`, or a DataFrame
-        containing all epochs, usually obtained via `epochs_to_df()`.
+        usually obtained via :func:`.epochs_create`, or a DataFrame
+        containing all epochs, usually obtained via :func:`.epochs_to_df`.
     silent : bool
         If True, silence possible warnings.
 
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed EOG features for each epoch, with each epoch indicated by
-        the `Label` column (if not present, by the `Index` column). The analyzed features consist of
-        the following:
+        A dataframe containing the analyzed EOG features for each epoch, with each epoch indicated
+        by the `Label` column (if not present, by the `Index` column). The analyzed features
+        consist of the following:
 
-        - *"EOG_Rate_Baseline"*: the baseline EOG rate before stimulus onset.
+        * ``"EOG_Rate_Baseline"``: the baseline EOG rate before stimulus onset.
 
-        - *"EOG_Rate_Max"*: the maximum EOG rate after stimulus onset.
+        * ``"EOG_Rate_Max"``: the maximum EOG rate after stimulus onset.
 
-        - *"EOG_Rate_Min"*: the minimum EOG rate after stimulus onset.
+        * ``"EOG_Rate_Min"``: the minimum EOG rate after stimulus onset.
 
-        - *"EOG_Rate_Mean"*: the mean EOG rate after stimulus onset.
+        * ``"EOG_Rate_Mean"``: the mean EOG rate after stimulus onset.
 
-        - *"EOG_Rate_SD"*: the standard deviation of the EOG rate after stimulus onset.
+        * ``"EOG_Rate_SD"``: the standard deviation of the EOG rate after stimulus onset.
 
-        - *"EOG_Rate_Max_Time"*: the time at which maximum EOG rate occurs.
+        * ``"EOG_Rate_Max_Time"``: the time at which maximum EOG rate occurs.
 
-        - *"EOG_Rate_Min_Time"*: the time at which minimum EOG rate occurs.
+        * ``"EOG_Rate_Min_Time"``: the time at which minimum EOG rate occurs.
 
-        - *"EOG_Blinks_Presence"*: marked with '1' if a blink occurs in the epoch, and '0' if not.
+        * ``"EOG_Blinks_Presence"``: marked with '1' if a blink occurs in the epoch, and '0' if not.
 
     See Also
     --------
@@ -53,24 +53,20 @@ def eog_eventrelated(epochs, silent=False):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with real data
-    >>> eog = nk.data('eog_100hz')
-    >>>
-    >>> # Process the data
-    >>> eog_signals, info = nk.bio_process(eog=eog, sampling_rate=100)
-    >>> epochs = nk.epochs_create(eog_signals, events=[500, 4000, 6000, 9000], sampling_rate=100,
-    ...                           epochs_start=-0.1,epochs_end=1.9)
-    >>>
-    >>> # Analyze
-    >>> nk.eog_eventrelated(epochs) #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  EOG_Rate_Min_Time  EOG_Blinks_Presence
-    1     1          ...  ...                ...                  ...
-    2     2          ...  ...                ...                  ...
-    3     3          ...  ...                ...                  ...
-    4     4          ...  ...                ...                  ...
-    [4 rows x 10 columns]
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Example with real data
+      eog = nk.data('eog_100hz')
+
+      # Process the data
+      eog_signals, info = nk.bio_process(eog=eog, sampling_rate=100)
+      epochs = nk.epochs_create(eog_signals, events=[500, 4000, 6000, 9000], sampling_rate=100,
+                                epochs_start=-0.1,epochs_end=1.9)
+
+      # Analyze
+      nk.eog_eventrelated(epochs)
 
     """
     # Sanity checks
@@ -106,17 +102,15 @@ def _eog_eventrelated_features(epoch, output={}):
     # Sanitize input
     if "EOG_Blinks" not in epoch:
         warn(
-            "Input does not have an `EOG_Blinks` column."
-            " Unable to process blink features.",
-            category=NeuroKitWarning
+            "Input does not have an `EOG_Blinks` column." " Unable to process blink features.",
+            category=NeuroKitWarning,
         )
         return output
 
     if "EOG_Rate" not in epoch:
         warn(
-            "Input does not have an `EOG_Rate` column."
-            " Will skip computation of EOG rate.",
-            category=NeuroKitWarning
+            "Input does not have an `EOG_Rate` column." " Will skip computation of EOG rate.",
+            category=NeuroKitWarning,
         )
         return output
 

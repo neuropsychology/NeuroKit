@@ -4,47 +4,52 @@ import pandas as pd
 
 
 def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
-    """Extract extrema in a respiration (RSP) signal.
+    """**Extract extrema in a respiration (RSP) signal**
 
-    Low-level function used by `rsp_peaks()` to identify inhalation and exhalation onsets (troughs and peaks
-    respectively) in a preprocessed respiration signal using different sets of parameters.
-    See `rsp_peaks()` for details.
+    Low-level function used by :func:`.rsp_peaks` to identify inhalation and exhalation onsets
+    (troughs and peaks respectively) in a preprocessed respiration signal using different sets of
+    parameters. See :func:`.rsp_peaks` for details.
 
     Parameters
     ----------
     rsp_cleaned : Union[list, np.array, pd.Series]
-        The cleaned respiration channel as returned by `rsp_clean()`.
+        The cleaned respiration channel as returned by :func:`.rsp_clean`.
     sampling_rate : int
-        The sampling frequency of 'rsp_cleaned' (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018" (default) or "biosppy".
+        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default) or
+        ``"biosppy"``.
     amplitude_min : float
-        Only applies if method is "khodadad2018". Extrema that have a vertical distance smaller than
-        (outlier_threshold * average vertical distance) to any direct neighbour are removed as false
-        positive outliers. I.e., outlier_threshold should be a float with positive sign (the default is
-        0.3). Larger values of outlier_threshold correspond to more conservative thresholds (i.e.,
-        more extrema removed as outliers).
+        Only applies if method is ``"khodadad2018"``. Extrema that have a vertical distance smaller
+        than(outlier_threshold * average vertical distance) to any direct neighbour are removed as
+        false positive outliers. I.e., outlier_threshold should be a float with positive sign (the
+        default is 0.3). Larger values of outlier_threshold correspond to more conservative
+        thresholds (i.e., more extrema removed as outliers).
 
     Returns
     -------
     info : dict
         A dictionary containing additional information, in this case the samples at which inhalation
-        onsets and exhalation onsets occur, accessible with the keys "RSP_Troughs" and "RSP_Peaks", respectively.
+        onsets and exhalation onsets occur, accessible with the keys ``"RSP_Troughs"`` and
+        ``"RSP_Peaks"``, respectively.
 
     See Also
     --------
-    rsp_clean, rsp_fixpeaks, rsp_peaks, signal_rate, rsp_amplitude,
-    rsp_process, rsp_plot
+    rsp_clean, rsp_fixpeaks, rsp_peaks, signal_rate, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info = nk.rsp_findpeaks(cleaned)
-    >>> fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
+      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+      info = nk.rsp_findpeaks(cleaned)
+      @savefig p_rsp_findpeaks1.png scale=100%
+      nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+      @suppress
+      plt.close()
 
     """
     # Try retrieving correct column
@@ -66,7 +71,9 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     elif method == "biosppy":
         info = _rsp_findpeaks_biosppy(cleaned, sampling_rate=sampling_rate)
     else:
-        raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'.")
+        raise ValueError(
+            "NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'."
+        )
 
     return info
 

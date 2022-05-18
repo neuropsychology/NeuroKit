@@ -10,7 +10,7 @@ from ..stats import standardize as nk_standardize
 def signal_plot(
     signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs
 ):
-    """Plot signal with events as vertical lines.
+    """**Plot signal with events as vertical lines**
 
     Parameters
     ----------
@@ -19,30 +19,40 @@ def signal_plot(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Needs to be supplied if
         the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to None.
+        Defaults to ``None``.
     subplots : bool
-        If True, each signal is plotted in a subplot.
+        If ``True``, each signal is plotted in a subplot.
     standardize : bool
-        If True, all signals will have the same scale (useful for visualisation).
+        If ``True``, all signals will have the same scale (useful for visualisation).
     labels : str or list
-        Defaults to None.
+        Defaults to ``None``.
     **kwargs : optional
         Arguments passed to matplotlib plotting.
 
     Examples
     ----------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
-    >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
-    >>>
-    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
-    ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
-    ...                      "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
-    >>> nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
-    >>> nk.signal_plot([signal, data], standardize=True)
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=10, sampling_rate=1000)
+      @savefig p_signal_plot1.png scale=100%
+      nk.signal_plot(signal, sampling_rate=1000, color="red")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
+                           "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
+                           "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+      @savefig p_signal_plot2.png scale=100%
+      nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
+      nk.signal_plot([signal, data], standardize=True)
+      @suppress
+      plt.close()
 
     """
     # Sanitize format
@@ -104,12 +114,11 @@ def signal_plot(
         for col in events_columns:
             vector = signal[col]
             events.append(np.where(vector == np.max(vector.unique()))[0])
-        plot = events_plot(events, signal=signal[continuous_columns])
-
+        events_plot(events, signal=signal[continuous_columns])
         if sampling_rate is None and signal.index.is_integer():
-            plot.gca().set_xlabel("Samples")
+            plt.gca().set_xlabel("Samples")
         else:
-            plot.gca().set_xlabel(title_x)
+            plt.gca().set_xlabel(title_x)
 
     else:
 
@@ -138,7 +147,7 @@ def signal_plot(
             for ax, col, color in zip(axes, continuous_columns, colors):
                 ax.plot(signal[col], c=color, **kwargs)
         else:
-            plot = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
+            _ = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
 
         if sampling_rate is None and signal.index.is_integer():
             plt.xlabel("Samples")

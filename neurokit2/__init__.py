@@ -10,29 +10,30 @@ import pandas as pd
 import scipy
 import sklearn
 
-# Export functions
-from .signal import *
-from .stats import *
-from .misc import *
 from .benchmark import *
-from .epochs import *
-from .events import *
+from .bio import *
+from .complexity import *
 from .data import *
 from .ecg import *
 from .eda import *
 from .eeg import *
 from .emg import *
 from .eog import *
+from .epochs import *
+from .events import *
+from .hrv import *
+from .markov import *
+from .microstates import *
+from .misc import *
 from .ppg import *
 from .rsp import *
-from .hrv import *
-from .microstates import *
-from .bio import *
-from .complexity import *
 
+# Export functions
+from .signal import *
+from .stats import *
 
 # Info
-__version__ = "0.1.7"
+__version__ = "0.2.0"
 
 
 # Maintainer info
@@ -63,7 +64,7 @@ You can cite NeuroKit2 as follows:
 
 - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
 Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
-Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
+Behavior Research Methods, 53(4), 1689-1696. https://doi.org/10.3758/s13428-020-01516-y
 
 
 Full bibtex reference:
@@ -84,9 +85,10 @@ def cite(silent=False):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> nk.cite()
+    .. ipython:: python
+
+      import neurokit2 as nk
+      nk.cite()
 
     """
     if silent is False:
@@ -102,9 +104,10 @@ def version(silent=False):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> nk.version()
+    .. ipython:: python
+
+      import neurokit2 as nk
+      nk.version()
 
     """
     if silent is False:

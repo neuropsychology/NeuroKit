@@ -1,0 +1,31 @@
+#channels:
+#  - conda-forge
+dependencies:
+  - python>=3.5
+  - sphinx
+  - pip
+  - pandoc
+  - nbconvert
+  - ipykernel
+  - pip:
+    - jupyter
+    - sphinx
+    - sphinx-book-theme
+    - sphinxemoji
+    - sphinx-copybutton
+    - ipython
+    - myst-parser
+    - myst-nb
+    - numpy
+    - pandas
+    - scipy
+    - scikit-learn
+    - matplotlib
+    - mne
+    - PyWavelets
+    - EMD-signal
+    - astropy
+    - seaborn
+    - EMD-signal
+    - cvxopt
+    - https://github.com/neuropsychology/neurokit/zipball/dev

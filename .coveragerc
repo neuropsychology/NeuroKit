@@ -1,5 +1,5 @@
 [report]
-fail_under = 60
+fail_under = 50
 show_missing = True
 
 [run]

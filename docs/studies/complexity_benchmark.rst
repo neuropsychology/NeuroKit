@@ -1,1 +1,2 @@
-.. mdinclude:: ../../studies/complexity_benchmark/README.md
+.. include:: ../../studies/complexity_benchmark/README.md
+   :parser: myst_parser.sphinx_

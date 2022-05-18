@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_psd import signal_psd
+from .entropy_shannon import entropy_shannon
 
 
-def entropy_spectral(signal, normalize=True, **kwargs):
-    """Spectral Entropy (SpEn)
+def entropy_spectral(signal, c=None, **kwargs):
+    """**Spectral Entropy (SpEn)**
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the
     frequency domain as a probability distribution, and calculates the Shannon entropy of it.
@@ -18,11 +19,10 @@ def entropy_spectral(signal, normalize=True, **kwargs):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    normalize : bool
-        If True, divide by ``log2(len(signal)/2)`` to normalize the spectral entropy between 0 and
-        1.
+    c : int
+        Number of bins of frequency.
     **kwargs : optional
-        Keyword arguments to be passed to `signal_psd()`.
+        Keyword arguments to be passed to ``signal_psd()``.
 
     Returns
     -------
@@ -33,25 +33,26 @@ def entropy_spectral(signal, normalize=True, **kwargs):
 
     See Also
     --------
-    entropy_shannon, entropy_wiener, signal_psd
+    entropy_shannon, entropy_wiener, .signal_psd
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
-    >>>
-    >>> # Spectral Entropy
-    >>> SpEn, info = nk.entropy_spectral(signal)
-    >>> SpEn #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal with Laplace Noise
+      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6, 10], noise=0.1)
+
+      # Compute Spectral Entropy
+      SpEn, info = nk.entropy_spectral(signal, c=20)
+      SpEn
 
     References
     ----------
-    - Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent
-    Structures in an
-    Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2). doi:10.1515/jnet.1991.
-    16.2.137
-
+    * Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent
+      Structures in an Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2).
+      doi:10.1515/jnet.1991.16.2.137
 
     """
     # Sanity checks
@@ -61,14 +62,13 @@ def entropy_spectral(signal, normalize=True, **kwargs):
         )
 
     # Power-spectrum density (PSD) (actual sampling rate does not matter)
-    psd = signal_psd(signal, sampling_rate=1000, method="fft", **kwargs)["Power"]
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", n=c, **kwargs)["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
-    psd = psd[psd > 0]
 
     # Compute Shannon entropy
-    se = -np.sum(psd * np.log2(psd))
+    se, _ = entropy_shannon(freq=psd)
 
-    if normalize:
-        se /= np.log2(len(psd))  # between 0 and 1
+    # Normalize
+    se /= np.log2(len(psd))  # between 0 and 1
 
-    return se, {"PSD": psd, "Normalize": normalize}
+    return se, {"PSD": psd}

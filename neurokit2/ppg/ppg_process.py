@@ -9,7 +9,7 @@ from .ppg_findpeaks import ppg_findpeaks
 
 
 def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
-    """Process a photoplethysmogram (PPG)  signal.
+    """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
 
@@ -18,16 +18,17 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     ppg_signal : Union[list, np.array, pd.Series]
         The raw PPG channel.
     sampling_rate : int
-        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.emg_signal` (in Hz, i.e., samples/second).
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `emg_signal` containing the following columns:
-        - *"PPG_Raw"*: the raw signal.
-        - *"PPG_Clean"*: the cleaned signal.
-        - *"PPG_Rate"*: the heart rate as measured based on PPG peaks.
-        - *"PPG_Peaks"*: the PPG peaks marked as "1" in a list of zeros.
+        A DataFrame of same length as :func:`.emg_signal` containing the following columns:
+
+        * ``"PPG_Raw"``: the raw signal.
+        * ``"PPG_Clean"``: the cleaned signal.
+        * ``"PPG_Rate"``: the heart rate as measured based on PPG peaks.
+        * ``"PPG_Peaks"``: the PPG peaks marked as "1" in a list of zeros.
 
     info : dict
         A dictionary containing the information of peaks and the signals' sampling rate.
@@ -38,12 +39,16 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
-    >>> signals, info = nk.ppg_process(ppg, sampling_rate=1000)
-    >>> fig = nk.ppg_plot(signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
+      signals, info = nk.ppg_process(ppg, sampling_rate=1000)
+      @savefig p_ppg_process1.png scale=100%
+      nk.ppg_plot(signals)
+      @suppress
+      plt.close()
 
     """
     # Sanitize input
@@ -54,17 +59,24 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
 
     # Find peaks
     info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **kwargs)
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
     peaks_signal = _signal_from_indices(info["PPG_Peaks"], desired_length=len(ppg_cleaned))
 
     # Rate computation
-    rate = signal_rate(info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned))
+    rate = signal_rate(
+        info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned)
+    )
 
     # Prepare output
     signals = pd.DataFrame(
-        {"PPG_Raw": ppg_signal, "PPG_Clean": ppg_cleaned, "PPG_Rate": rate, "PPG_Peaks": peaks_signal}
+        {
+            "PPG_Raw": ppg_signal,
+            "PPG_Clean": ppg_cleaned,
+            "PPG_Rate": rate,
+            "PPG_Peaks": peaks_signal,
+        }
     )
 
     return signals, info

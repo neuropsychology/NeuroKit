@@ -6,13 +6,16 @@ import scipy.signal
 
 
 def signal_resample(
-    signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"
+    signal,
+    desired_length=None,
+    sampling_rate=None,
+    desired_sampling_rate=None,
+    method="interpolation",
 ):
-    """Resample a continuous signal to a different length or sampling rate.
+    """**Resample a continuous signal to a different length or sampling rate**
 
-    Up- or down-sample a signal. The user can specify either a desired length for the vector, or input
-    the original sampling rate and the desired sampling rate.
-    See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
+    Up- or down-sample a signal. The user can specify either a desired length for the vector, or
+    input the original sampling rate and the desired sampling rate.
 
     Parameters
     ----------
@@ -25,11 +28,13 @@ def signal_resample(
     desired_sampling_rate : int
         The desired (output) sampling frequency (in Hz, i.e., samples/second).
     method : str
-        Can be 'interpolation' (see `scipy.ndimage.zoom()`), 'numpy' for numpy's interpolation
-        (see `numpy.interp()`),'pandas' for Pandas' time series resampling, 'poly' (see `scipy.signal.resample_poly()`)
-        or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate
-        (if the signal is periodic), but becomes exponentially slower as the signal length increases.
-        In contrast, 'interpolation' is the fastest, followed by 'numpy', 'poly' and 'pandas'.
+        Can be ``"interpolation"`` (see ``scipy.ndimage.zoom()``), ``"numpy"`` for numpy's
+        interpolation (see ``np.interp()``),``"pandas"`` for Pandas' time series resampling,
+        ``"poly"`` (see ``scipy.signal.resample_poly()``) or ``"FFT"`` (see
+        ``scipy.signal.resample()``) for the Fourier method. ``"FFT"`` is the most accurate
+        (if the signal is periodic), but becomes exponentially slower as the signal length
+        increases. In contrast, ``"interpolation"`` is the fastest, followed by ``"numpy"``,
+        ``"poly"`` and ``"pandas"``.
 
     Returns
     -------
@@ -38,61 +43,65 @@ def signal_resample(
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=100))
-    >>>
-    >>> # Downsample
-    >>> downsampled_interpolation = nk.signal_resample(signal, method="interpolation",
-    ...                                                sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_fft = nk.signal_resample(signal, method="FFT",
-    ...                                      sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_poly = nk.signal_resample(signal, method="poly",
-    ...                                       sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_numpy = nk.signal_resample(signal, method="numpy",
-    ...                                        sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_pandas = nk.signal_resample(signal, method="pandas",
-    ...                                         sampling_rate=1000, desired_sampling_rate=500)
-    >>>
-    >>> # Upsample
-    >>> upsampled_interpolation = nk.signal_resample(downsampled_interpolation,
-    ...                                              method="interpolation",
-    ...                                              sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT",
-    ...                                    sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_poly = nk.signal_resample(downsampled_poly, method="poly",
-    ...                                     sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_numpy = nk.signal_resample(downsampled_numpy, method="numpy",
-    ...                                      sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas",
-    ...                                       sampling_rate=500, desired_sampling_rate=1000)
-    >>>
-    >>> # Compare with original
-    >>> fig = pd.DataFrame({"Original": signal,
-    ...                     "Interpolation": upsampled_interpolation,
-    ...                     "FFT": upsampled_fft,
-    ...                     "Poly": upsampled_poly,
-    ...                     "Numpy": upsampled_numpy,
-    ...                     "Pandas": upsampled_pandas}).plot(style='.-')
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> # Timing benchmarks
-    >>> %timeit nk.signal_resample(signal, method="interpolation",
-    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="FFT",
-    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="poly",
-    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="numpy",
-    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="pandas",
-    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    **Example 1**: Downsampling
+
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=1, sampling_rate=500, frequency=3)
+
+      # Downsample
+      data = {}
+      for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
+          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_sampling_rate=30, method=m)
+
+      @savefig p_signal_resample1.png scale=100%
+      nk.signal_plot([data[m] for m in data.keys()])
+      @supress
+      plt.close()
+
+    **Example 2**: Upsampling
+
+    .. ipython:: python
+      :verbatim:
+
+      signal = nk.signal_simulate(duration=1, sampling_rate=30, frequency=3)
+
+      # Upsample
+      data = {}
+      for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
+          data[m] = nk.signal_resample(signal, sampling_rate=30, desired_sampling_rate=500, method=m)
+
+      @savefig p_signal_resample2.png scale=100%
+      nk.signal_plot([data[m] for m in data.keys()], labels=list(data.keys()))
+      @supress
+      plt.close()
+
+    **Example 3**: Benchmark
+
+    .. ipython:: python
+      :verbatim:
+
+      signal = nk.signal_simulate(duration=1, sampling_rate=1000, frequency=3)
+
+      # Timing benchmarks
+      %timeit nk.signal_resample(signal, method="interpolation",
+                                 sampling_rate=1000, desired_sampling_rate=500)
+      %timeit nk.signal_resample(signal, method="FFT",
+                                 sampling_rate=1000, desired_sampling_rate=500)
+      %timeit nk.signal_resample(signal, method="poly",
+                                 sampling_rate=1000, desired_sampling_rate=500)
+      %timeit nk.signal_resample(signal, method="numpy",
+                                 sampling_rate=1000, desired_sampling_rate=500)
+      %timeit nk.signal_resample(signal, method="pandas",
+                                 sampling_rate=1000, desired_sampling_rate=500)
 
     See Also
     --------
-    scipy.signal.resample_poly, scipy.signal.resample, scipy.ndimage.zoom
+    signal_interpolate
 
     """
     if desired_length is None:
@@ -172,7 +181,9 @@ def _resample_sanitize(resampled_signal, desired_length):
     # Adjust extremities
     diff = len(resampled_signal) - desired_length
     if diff < 0:
-        resampled_signal = np.concatenate([resampled_signal, np.full(np.abs(diff), resampled_signal[-1])])
+        resampled_signal = np.concatenate(
+            [resampled_signal, np.full(np.abs(diff), resampled_signal[-1])]
+        )
     elif diff > 0:
         resampled_signal = resampled_signal[0:desired_length]
     return resampled_signal

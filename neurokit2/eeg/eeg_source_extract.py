@@ -2,21 +2,21 @@ import pandas as pd
 
 
 def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING", **kwargs):
-    """Extract the activity from an anatomical source.
+    """**Extract the activity from an anatomical source**
 
     Returns a dataframe with the activity from each source in the segmentation.
 
     Parcellation models include:
-    - 'aparc'
-    - 'aparc.a2005s'
-    - 'aparc.a2009s'
-    - 'oasis.chubs'
-    - 'PALS_B12_Brodmann'
-    - 'PALS_B12_Lobes'
-    - 'PALS_B12_OrbitoFrontal'
-    - 'PALS_B12_Visuotopic'
-    - 'Yeo2011_17Networks_N1000'
-    - 'Yeo2011_7Networks_N1000'
+    * 'aparc'
+    * 'aparc.a2005s'
+    * 'aparc.a2009s'
+    * 'oasis.chubs'
+    * 'PALS_B12_Brodmann'
+    * 'PALS_B12_Lobes'
+    * 'PALS_B12_OrbitoFrontal'
+    * 'PALS_B12_Visuotopic'
+    * 'Yeo2011_17Networks_N1000'
+    * 'Yeo2011_7Networks_N1000'
 
     Parameters
     ----------
@@ -33,11 +33,18 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> src, bem = nk.mne_templateMRI() # doctest: +SKIP
-    >>> stc, src = nk.eeg_source(raw, src, bem) # doctest: +SKIP
-    >>> data = nk.eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes") # doctest: +SKIP
+    .. ipython:: python
+      :verbatim:
+
+      import neurokit2 as nk
+
+      raw = nk.mne_data("filt-0-40_raw")
+
+      src, bem = nk.mne_templateMRI()
+
+      stc, src = nk.eeg_source(raw, src, bem)
+      data = nk.eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes")
+      data.head()
 
     """
     # Try loading mne
@@ -53,7 +60,7 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
     labels = mne.read_labels_from_annot(
         subject="fsaverage",
         parc=segmentation,
-        subjects_dir=mne.datasets.sample.data_path() + "/subjects",
+        subjects_dir=str(mne.datasets.sample.data_path()) + "/subjects",
         verbose=verbose,
     )
 

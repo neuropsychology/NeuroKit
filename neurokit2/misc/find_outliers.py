@@ -5,7 +5,7 @@ from ..stats import standardize
 
 
 def find_outliers(data, exclude=0.05, side="both"):
-    """Identify outliers (abnormal values)
+    """**Identify outliers (abnormal values)**
 
     Extreme values identification.
 
@@ -16,8 +16,8 @@ def find_outliers(data, exclude=0.05, side="both"):
     exclude : int, float
         Proportion of extreme observation to be excluded.
     side: str
-        Can be "both", "left" or "right". If exclude=0.05 and side="both", 2.5% of extreme
-        observation of each side will be marked as outliers.
+        Can be ``"both"``, ``"left"`` or ``"right"``. If ``exclude=0.05`` and ``side="both"``, 2.5%
+        of extreme observation of each side will be marked as outliers.
 
     Returns
     ----------
@@ -26,10 +26,12 @@ def find_outliers(data, exclude=0.05, side="both"):
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>> outliers = nk.find_outliers([1, 2, 1, 5, 666, 4, 1 ,3, 5])
-    >>> outliers
-    array([False, False, False, False,  True, False, False, False, False])
+    .. ipython:: python
+
+      import neurokit2 as nk
+      outliers = nk.find_outliers([1, 2, 1, 5, 666, 4, 1 ,3, 5])
+      outliers
+
     """
 
     z = np.array(standardize(data))

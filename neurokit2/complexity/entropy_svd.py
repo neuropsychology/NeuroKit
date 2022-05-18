@@ -1,33 +1,32 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def entropy_svd(signal, delay=1, dimension=2):
-    """Singular Value Decomposition (SVD) Entropy
+    """**Singular Value Decomposition (SVD) Entropy**
 
     SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
     for an adequate explanation of the dataset. In other words, it measures feature-richness: the
     higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
-    dataset.
+    space-state. Similarly to :func:`Fisher Information (FI) <information_fisher>`, it is based on
+    the Singular Value Decomposition of the :func:`time-delay embedded <complexity_embedding>` signal.
 
     See Also
     --------
-    information_fisher
+    information_fisher, complexity_embedding, complexity_delay, complexity_dimension
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
 
     Returns
     ----------
@@ -35,15 +34,18 @@ def entropy_svd(signal, delay=1, dimension=2):
         The singular value decomposition (SVD).
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute SVD.
+        to compute SVDEn.
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> svden, info = nk.entropy_svd(signal, delay=10, dimension=3)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=1, frequency=5)
+
+      svden, info = nk.entropy_svd(signal, delay=5, dimension=3)
+      svden
 
     """
     # Sanity checks
@@ -53,7 +55,7 @@ def entropy_svd(signal, delay=1, dimension=2):
         )
 
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
-    W = np.linalg.svd(embedded, compute_uv=False)
-    W /= np.sum(W)  # normalize singular values
+    W = np.linalg.svd(embedded, compute_uv=False)  # Compute SVD
+    W /= np.sum(W)  # Normalize singular values
 
     return -1 * sum(W * np.log2(W)), {"Dimension": dimension, "Delay": delay}

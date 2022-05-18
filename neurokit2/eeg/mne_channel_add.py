@@ -6,10 +6,10 @@ import pandas as pd
 def mne_channel_add(
     raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0
 ):
-    """Add channel as array to MNE.
+    """**Add channel as array to MNE**
 
-    Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data
-    following a particular index and add it.
+    Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg
+    data following a particular index and add it.
 
     Parameters
     ----------
@@ -27,9 +27,9 @@ def mne_channel_add(
         which to align the two inputs. This can be used in case the EEG data and the channel to add
         do not have the same onsets and must be aligned through some common event.
     sync_index_channel : int or list
-        An index (e.g., the onset of the same event marked in the same signal), in the channel to add,
-        by which to align the two inputs. This can be used in case the EEG data and the channel to add
-        do not have the same onsets and must be aligned through some common event.
+        An index (e.g., the onset of the same event marked in the same signal), in the channel to
+        add, by which to align the two inputs. This can be used in case the EEG data and the channel
+        to add do not have the same onsets and must be aligned through some common event.
 
     Returns
     ----------
@@ -38,23 +38,25 @@ def mne_channel_add(
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>> import mne
-    >>>
-    >>> raw = nk.mne_data("filt-0-40_raw")
-    >>> ecg = nk.ecg_simulate(length=50000)
-    >>>
-    >>> # Let the 42nd sample point in the EEG signal correspond to the 333rd point in the ECG
-    >>> event_index_in_eeg = 42
-    >>> event_index_in_ecg = 333
-    >>>
-    >>> raw = nk.mne_channel_add(raw,
-    ...                          ecg,
-    ...                          sync_index_raw=event_index_in_eeg,
-    ...                          sync_index_channel=event_index_in_ecg,
-    ...                          channel_type="ecg")  # doctest: +SKIP
+    .. ipython:: python
 
+      import neurokit2 as nk
+      import mne
+
+      raw = nk.mne_data("filt-0-40_raw")
+      ecg = nk.ecg_simulate(length=50000)
+
+      # Let the 42nd sample point in the EEG signal correspond to the 333rd point in the ECG
+      event_index_in_eeg = 42
+      event_index_in_ecg = 333
+
+      raw = nk.mne_channel_add(raw,
+                              ecg,
+                              sync_index_raw=event_index_in_eeg,
+                              sync_index_channel=event_index_in_ecg,
+                              channel_type="ecg")
     """
+
     # Try loading mne
     try:
         import mne

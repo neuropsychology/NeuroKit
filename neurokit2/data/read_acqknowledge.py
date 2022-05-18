@@ -10,7 +10,7 @@ from ..signal import signal_resample
 def read_acqknowledge(
     filename, sampling_rate="max", resample_method="interpolation", impute_missing=True
 ):
-    """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
+    """**Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe**
 
     The function outputs both the dataframe and the sampling rate (retrieved from the
     AcqKnowledge file).
@@ -18,21 +18,21 @@ def read_acqknowledge(
     Parameters
     ----------
     filename :  str
-        Filename (with or without the extension) of a BIOPAC's AcqKnowledge file (e.g., 'data.acq').
+        Filename (with or without the extension) of a BIOPAC's AcqKnowledge file (e.g., ``"data.acq"``).
     sampling_rate : int
         Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain
         signals recorded at different rates, harmonization is necessary in order to convert it
-        to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum
+        to a DataFrame. Thus, if `sampling_rate` is set to ``max`` (default), will keep the maximum
         recorded sampling rate and upsample the channels with lower rate if necessary (using the
-        `signal_resample()` function). If the sampling rate is set to a given value, will resample
-        the signals to the desired value. Note that the value of the sampling rate is outputted
-        along with the data.
+        :func:`.signal_resample()` function). If the sampling rate is set to a given value, will
+        resample the signals to the desired value. Note that the value of the sampling rate is
+        outputted along with the data.
     resample_method : str
-        Method of resampling (see `signal_resample()`).
+        Method of resampling (see :func:`.signal_resample()`).
     impute_missing : bool
-        Sometimes, due to connections issues, the signal has some holes (short periods without
-        signal). If 'impute_missing' is True, will automatically fill the signal interruptions
-        using padding.
+        Sometimes, due to connections issues, there are lapses in the recorded signal (short
+        periods without signal). If ``impute_missing`` is ``True``, will automatically fill the
+        signal interruptions using padding.
 
     Returns
     ----------
@@ -43,13 +43,15 @@ def read_acqknowledge(
 
     See Also
     --------
-    signal_resample
+    .signal_resample
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> data, sampling_rate = nk.read_acqknowledge('file.acq') #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # data, sampling_rate = nk.read_acqknowledge('file.acq')
 
     """
     # Try loading bioread

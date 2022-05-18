@@ -11,25 +11,25 @@ from .eog_simulate import _eog_simulate_blink
 
 
 def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
-    """Locate EOG eye blinks.
+    """**Locate EOG eye blinks**
 
-    Low-level function used by `eog_peaks()` to identify blinks in an EOG signal using a different
-    set of algorithms. See `eog_peaks()` for details.
+    Low-level function used by :func:`.eog_peaks` to identify blinks in an EOG signal using a
+    different set of algorithms. See :func:`.eog_peaks` for details.
 
     Parameters
     ----------
     veog_cleaned : Union[list, np.array, pd.Series]
-        The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
-        appear as upward peaks.
+        The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks
+        must appear as upward peaks.
     sampling_rate : int
-        The signal sampling rate (in Hz, i.e., samples/second). Needed for method 'blinker' or
-        'jammes2008'.
+        The signal sampling rate (in Hz, i.e., samples/second). Needed for method ``"blinker"`` or
+        ``"jammes2008"``.
     method : str
-        The peak detection algorithm. Can be one of 'neurokit', 'mne' (requires the MNE package
-        to be installed), or 'brainstorm' or 'blinker'.
+        The peak detection algorithm. Can be one of ``"neurokit"``, ``"mne"`` (requires the MNE
+        package to be installed), or ``"brainstorm"`` or ``"blinker"``.
     sampling_rate : int
-        The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
-        method to be used is 'blinker', otherwise defaults to None.
+        The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied
+        if the method to be used is ``"'blinker"``, otherwise defaults to ``None``.
     **kwargs
         Other arguments passed to functions.
 
@@ -44,40 +44,61 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> eog_signal = nk.data('eog_100hz')
-    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
-    >>>
-    >>> # NeuroKit method
-    >>> neurokit = nk.eog_findpeaks(eog_cleaned,
-    ...                             sampling_rate=100,
-    ...                             method="neurokit",
-    ...                             threshold=0.33,
-    ...                             show=True)
-    >>> fig1 = nk.events_plot(neurokit, eog_cleaned)
-    >>> fig1  # doctest: +SKIP
-    >>>
-    >>> # MNE-method
-    >>> mne = nk.eog_findpeaks(eog_cleaned, method="mne")
-    >>> fig2 = nk.events_plot(mne, eog_cleaned)
-    >>> fig2  # doctest: +SKIP
-    >>>
-    >>> # brainstorm method
-    >>> brainstorm = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
-    >>> fig3 = nk.events_plot(brainstorm, eog_cleaned)
-    >>> fig3  # doctest: +SKIP
-    >>>
-    >>> # blinker method
-    >>> blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
-    >>> fig4 = nk.events_plot(blinker, eog_cleaned)
-    >>> fig4  # doctest: +SKIP
-    >>>
-    >>> # Jammes (2008) method
-    >>> # jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
-    >>> # fig5 = nk.events_plot(jammes2008, eog_cleaned)
-    >>> # fig5
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      eog_signal = nk.data('eog_100hz')
+      eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
+
+    * **Example 1:** NeuroKit method
+
+    .. ipython:: python
+
+      neurokit = nk.eog_findpeaks(eog_cleaned,
+                                  sampling_rate=100,
+                                  method="neurokit",
+                                  threshold=0.33,
+                                  show=True)
+      @savefig p_eog_findpeaks1.png scale=100%
+      nk.events_plot(neurokit, eog_cleaned)
+      @suppress
+      plt.close()
+
+    * **Example 2:** MNE-method
+
+    .. ipython:: python
+
+      mne = nk.eog_findpeaks(eog_cleaned, method="mne")
+      @savefig p_eog_findpeaks2.png scale=100%
+      nk.events_plot(mne, eog_cleaned)
+      @suppress
+      plt.close()
+
+    * **Example 3:** brainstorm method
+
+    .. ipython:: python
+
+      brainstorm = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
+      @savefig p_eog_findpeaks3.png scale=100%
+      nk.events_plot(brainstorm, eog_cleaned)
+      @suppress
+      plt.close()
+
+    * **Example 4:** blinker method
+
+    .. ipython:: python
+
+      blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
+      @savefig p_eog_findpeaks4.png scale=100%
+      nk.events_plot(blinker, eog_cleaned)
+      @suppress
+      plt.close()
+
+      # Jammes (2008) method
+      # jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
+      # nk.events_plot(jammes2008, eog_cleaned)
 
     """
     # Sanitize input

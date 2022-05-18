@@ -2,10 +2,11 @@ import numpy as np
 
 from ..events import events_plot
 from ..misc import as_vector
+from .signal_plot import signal_plot
 
 
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
-    """Change Point Detection.
+    """**Change Point Detection**
 
     Only the PELT method is implemented for now.
 
@@ -14,11 +15,11 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     signal : Union[list, np.array, pd.Series]
         Vector of values.
     change : str
-        Can be one of "meanvar" (default), "mean" or "var".
+        Can be one of ``"meanvar"`` (default), ``"mean"`` or ``"var"``.
     penalty : float
-        The algorithm penalty. Default to ``np.log(len(signal))``.
+        The algorithm penalty. Defaults to ``np.log(len(signal))``.
     show : bool
-        Defaults to False.
+        Defaults to ``False``.
 
     Returns
     -------
@@ -29,23 +30,31 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.emg_simulate(burst_number=3)
-    >>> fig = nk.signal_changepoints(signal, change="var", show=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.emg_simulate(burst_number=3)
+      @savefig p_signal_changepoints1.png scale=100%
+      nk.signal_changepoints(signal, change="var", show=True)
+      @suppress
+      plt.close()
+
 
     References
     ----------
-    - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear
-    computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
+    * Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a
+      linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
 
     """
     signal = as_vector(signal)
     changepoints = _signal_changepoints_pelt(signal, change=change, penalty=penalty)
 
     if show is True:
-        events_plot(changepoints, signal)
+        if len(changepoints) > 0:
+            events_plot(changepoints, signal)
+        else:
+            signal_plot(signal)
 
     return changepoints
 
@@ -77,13 +86,11 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 
     for tstar in range(2, length + 1):
         cpt_cands = R
-        seg_costs = np.zeros(len(cpt_cands))
-        for i in range(0, len(cpt_cands)):  # pylint: disable=C0200
-            seg_costs[i] = cost(cpt_cands[i], tstar)
+        seg_costs = np.array([cost(cpt_cands[i], tstar) for i in range(len(cpt_cands))])
 
         F_cost = F[cpt_cands] + seg_costs
-        F[tstar] = np.min(F_cost) + penalty
-        tau = np.argmin(F_cost)
+        F[tstar] = np.nanmin(F_cost) + penalty
+        tau = np.nanargmin(F_cost)
         candidates[tstar] = cpt_cands[tau]
 
         ineq_prune = [val < F[tstar] for val in F_cost]
@@ -91,13 +98,9 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
         R.append(tstar - 1)
         R = np.array(R, dtype=int)
 
-    last = candidates[-1]
-    changepoints = [last]
-    while last > 0:
-        last = candidates[last]
-        changepoints.append(last)
-
-    return np.sort(changepoints)
+    changepoints = np.sort(np.unique(candidates[candidates]))
+    changepoints = changepoints[changepoints > 0]
+    return changepoints
 
 
 # =============================================================================
@@ -147,11 +150,15 @@ def _signal_changepoints_cost_meanvar(signal):
         mu = (cumm[t] - cumm[s]) * ts_i
         sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu ** 2
         sig_i = 1.0 / sig
-        return (
-            (t - s) * np.log(sig)
-            + (cumm_sq[t] - cumm_sq[s]) * sig_i
-            - 2 * (cumm[t] - cumm[s]) * mu * sig_i
-            + ((t - s) * mu ** 2) * sig_i
-        )
+
+        if sig <= 0:
+            return np.nan
+        else:
+            return (
+                (t - s) * np.log(sig)
+                + (cumm_sq[t] - cumm_sq[s]) * sig_i
+                - 2 * (cumm[t] - cumm[s]) * mu * sig_i
+                + ((t - s) * mu ** 2) * sig_i
+            )
 
     return cost

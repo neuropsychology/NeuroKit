@@ -8,47 +8,47 @@ from ..epochs.eventrelated_utils import (
 
 
 def ppg_eventrelated(epochs, silent=False):
-    """Performs event-related PPG analysis on epochs.
+    """**Performs event-related PPG analysis on epochs**
 
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial,
-        usually obtained via `epochs_create()`, or a DataFrame
-        containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained
+        via :func:`.epochs_create`, or a DataFrame containing all epochs, usually obtained
+        via :func:`.epochs_to_df`.
     silent : bool
-        If True, silence possible warnings.
+        If ``True``, silence possible warnings.
 
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed PPG features for each epoch, with each epoch indicated by
-        the `Label` column (if not present, by the `Index` column). The analyzed features consist of
-        the following:
+        A dataframe containing the analyzed PPG features for each epoch, with each epoch indicated
+        by the `Label` column (if not present, by the `Index` column). The analyzed features
+        consist of the following:
 
-        - *"PPG_Rate_Baseline"*: the baseline heart rate (at stimulus onset).
+        * ``"PPG_Rate_Baseline"``: the baseline heart rate (at stimulus onset).
 
-        - *"PPG_Rate_Max"*: the maximum heart rate after stimulus onset.
+        * ``"PPG_Rate_Max"``: the maximum heart rate after stimulus onset.
 
-        - *"PPG_Rate_Min"*: the minimum heart rate after stimulus onset.
+        * ``"PPG_Rate_Min"``: the minimum heart rate after stimulus onset.
 
-        - *"PPG_Rate_Mean"*: the mean heart rate after stimulus onset.
+        * ``"PPG_Rate_Mean"``: the mean heart rate after stimulus onset.
 
-        - *"PPG_Rate_SD"*: the standard deviation of the heart rate after stimulus onset.
+        * ``"PPG_Rate_SD"``: the standard deviation of the heart rate after stimulus onset.
 
-        - *"PPG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
+        * ``"PPG_Rate_Max_Time"``: the time at which maximum heart rate occurs.
 
-        - *"PPG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
+        * ``"PPG_Rate_Min_Time"``: the time at which minimum heart rate occurs.
 
         We also include the following *experimental* features related to the parameters of a
         quadratic model:
 
-        - *"PPG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
+        * ``"PPG_Rate_Trend_Linear"``: The parameter corresponding to the linear trend.
 
-        - *"PPG_Rate_Trend_Quadratic"*: The parameter corresponding to the curvature.
+        * ``"PPG_Rate_Trend_Quadratic"``: The parameter corresponding to the curvature.
 
-        - *"PPG_Rate_Trend_R2"*: the quality of the quadratic model. If too low, the parameters might
-          not be reliable or meaningful.
+        * ``"PPG_Rate_Trend_R2"``: the quality of the quadratic model. If too low, the parameters
+          might not be reliable or meaningful.
 
     See Also
     --------
@@ -56,21 +56,17 @@ def ppg_eventrelated(epochs, silent=False):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with simulated data
-    >>> ppg, info = nk.ppg_process(nk.ppg_simulate(duration=20))
-    >>>
-    >>> # Process the data
-    >>> epochs = nk.epochs_create(ppg, events=[5000, 10000, 15000],
-    ...                           epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ppg_eventrelated(epochs) #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  PPG_Rate_Trend_Linear  PPG_Rate_Trend_R2
-    1     1          ...  ...                    ...                ...
-    2     2          ...  ...                    ...                ...
-    3     3          ...  ...                    ...                ...
+    .. ipython:: python
 
-    [3 rows x 12 columns]
+      import neurokit2 as nk
+
+      # Example with simulated data
+      ppg, info = nk.ppg_process(nk.ppg_simulate(duration=20))
+
+      # Process the data
+      epochs = nk.epochs_create(ppg, events=[5000, 10000, 15000],
+                               epochs_start=-0.1, epochs_end=1.9)
+      nk.ppg_eventrelated(epochs)
 
     """
     # Sanity checks

@@ -1,16 +1,16 @@
 Recording good quality signals
 ======================================
 
-.. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+.. important::
+   Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_).
 
-**This tutorial is a work in progress.**
+Here some useful resources to help you collect good quality signals. Remember, cleaning and processing can only get you this far, and having good signals from the start is the first step to a good analysis.
 
 Recording
 ------------
 
 - `Electrocardiogram (ECG) electrodes placement <https://www.youtube.com/watch?v=g5-39qux0Sc&feature=emb_title>`_
-- `Facial EMG electrodes placement <https://www.youtube.com/watch?v=iDzcGWIGfVQ&feature=emb_title>`_ 
+- `Facial EMG electrodes placement <https://www.youtube.com/watch?v=iDzcGWIGfVQ&feature=emb_title>`_
 - `RSP belt placement <https://www.youtube.com/watch?v=eDIJ7AiKu8s&feature=emb_title>`_
 - `Best Practices for Collecting Physiological Data <https://phys2bids.readthedocs.io/en/latest/bestpractice.html>`_
 

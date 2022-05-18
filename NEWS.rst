@@ -14,6 +14,8 @@ Breaking Changes
 New Features
 +++++++++++++
 
+* Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
+
 Fixes
 +++++++++++++
 

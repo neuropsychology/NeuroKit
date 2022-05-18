@@ -5,23 +5,28 @@ import pandas as pd
 
 
 def rsp_plot(rsp_signals, sampling_rate=None):
-    """Visualize respiration (RSP) data.
+    """**Visualize respiration (RSP) data**
 
     Parameters
     ----------
     rsp_signals : DataFrame
-        DataFrame obtained from `rsp_process()`.
+        DataFrame obtained from :func:`.rsp_process`.
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second).
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-    >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> fig = nk.rsp_plot(rsp_signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+
+      @savefig p_rsp_plot1.png scale=100%
+      fig = nk.rsp_plot(rsp_signals)
+      @suppress
+      plt.close()
 
     Returns
     -------
@@ -60,11 +65,23 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     fig.suptitle("Respiration (RSP)", fontweight="bold")
 
     ax0.plot(x_axis, rsp_signals["RSP_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-    ax0.plot(x_axis, rsp_signals["RSP_Clean"], color="#2196F3", label="Cleaned", zorder=2, linewidth=1.5)
+    ax0.plot(
+        x_axis, rsp_signals["RSP_Clean"], color="#2196F3", label="Cleaned", zorder=2, linewidth=1.5
+    )
 
-    ax0.scatter(x_axis[peaks], rsp_signals["RSP_Clean"][peaks], color="red", label="Exhalation Onsets", zorder=3)
     ax0.scatter(
-        x_axis[troughs], rsp_signals["RSP_Clean"][troughs], color="orange", label="Inhalation Onsets", zorder=4
+        x_axis[peaks],
+        rsp_signals["RSP_Clean"][peaks],
+        color="red",
+        label="Exhalation Onsets",
+        zorder=3,
+    )
+    ax0.scatter(
+        x_axis[troughs],
+        rsp_signals["RSP_Clean"][troughs],
+        color="orange",
+        label="Inhalation Onsets",
+        zorder=4,
     )
 
     # Shade region to mark inspiration and expiration.
@@ -101,13 +118,12 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     if "RSP_Amplitude" in list(rsp_signals.columns):
         ax2.set_title("Breathing Amplitude")
 
-        ax2.plot(x_axis, rsp_signals["RSP_Amplitude"], color="#009688", label="Amplitude", linewidth=1.5)
+        ax2.plot(
+            x_axis, rsp_signals["RSP_Amplitude"], color="#009688", label="Amplitude", linewidth=1.5
+        )
         amplitude_mean = np.mean(rsp_signals["RSP_Amplitude"])
         ax2.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#009688")
         ax2.legend(loc="upper right")
-
-    plt.show()
-    return fig
 
 
 # =============================================================================

@@ -6,25 +6,25 @@ from .signal_zerocrossings import signal_zerocrossings
 
 
 def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **kwargs):
-    """Combine signal sources after decomposition.
+    """**Combine signal sources after decomposition**
 
     Combine and reconstruct meaningful signal sources after signal decomposition.
 
     Parameters
     -----------
     components : array
-        Array of components obtained via ``signal_decompose()``.
+        Array of components obtained via :func:`.signal_decompose`.
     method : str
-        The decomposition method. Can be one of 'wcorr'.
+        The decomposition method. Can be one of ``"wcorr"``.
     threshold : float
         The threshold used to group components together.
     keep_sd : float
         If a float is specified, will only keep the reconstructed components that are superior
         or equal to that percentage of the max standard deviaiton (SD) of the components. For
-        instance, ``keep_sd=0.01`` will remove all components with SD is lower that 1% of the
+        instance, ``keep_sd=0.01`` will remove all components with SD lower than 1% of the
         max SD. This can be used to filter out noise.
     **kwargs
-        Other arguments to override for instance ``metric='chebyshev'``.
+        Other arguments used to override, for instance ``metric="chebyshev"``.
 
     Returns
     -------
@@ -33,21 +33,25 @@ def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Create complex signal
-    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)  # High freq
-    >>> signal += 3 * nk.signal_simulate(duration=10, frequency=3, noise=0.01)  # Higher freq
-    >>> signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and trend
-    >>> signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)
-    >>>
-    >>> # Decompose signal
-    >>> components = nk.signal_decompose(signal, method='emd')
-    >>>
-    >>> # Recompose
-    >>> recomposed = nk.signal_recompose(components, method='wcorr', threshold=0.90)
-    >>> fig = nk.signal_plot(components)  # Visualize components
-    >>> fig  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Create complex signal
+      signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)  # High freq
+      signal += 3 * nk.signal_simulate(duration=10, frequency=3, noise=0.01)  # Higher freq
+      signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and trend
+      signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)
+
+      # Decompose signal
+      components = nk.signal_decompose(signal, method='emd')
+
+      # Recompose
+      recomposed = nk.signal_recompose(components, method='wcorr', threshold=0.90)
+      @savefig p_signal_recompose1.png scale=100%
+      nk.signal_plot(components)  # Visualize components
+      @suppress
+      plt.close()
 
     """
     # Apply method
@@ -75,7 +79,9 @@ def _signal_recompose_sum(components, clusters):
     clusters = [np.where(clusters == cluster)[0] for cluster in np.unique(clusters)]
 
     if len(clusters) == 0:
-        raise ValueError("Not enough clusters of components detected. Please decrease the " "`threshold`.")
+        raise ValueError(
+            "Not enough clusters of components detected. Please decrease the " "`threshold`."
+        )
     # Initialize components matrix
     recomposed = np.zeros((len(components), len(clusters)))
     for i, indices in enumerate(clusters):
@@ -125,13 +131,15 @@ def _signal_recompose_get_wcorr(components, show=False):
 
     # Calculated weighted norms, ||F_i||_w, then invert.
     F_wnorms = np.array([w_inner(components[:, i], components[:, i]) for i in range(L)])
-    F_wnorms = F_wnorms ** -0.5
+    F_wnorms = F_wnorms**-0.5
 
     # Calculate Wcorr.
     Wcorr = np.identity(L)
     for i in range(L):
         for j in range(i + 1, L):
-            Wcorr[i, j] = abs(w_inner(components[:, i], components[:, j]) * F_wnorms[i] * F_wnorms[j])
+            Wcorr[i, j] = abs(
+                w_inner(components[:, i], components[:, j]) * F_wnorms[i] * F_wnorms[j]
+            )
             Wcorr[j, i] = Wcorr[i, j]
 
     if show is True:

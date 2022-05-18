@@ -8,7 +8,7 @@ from .eda_phasic import eda_phasic
 
 
 def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
-    """Process Electrodermal Activity (EDA).
+    """**Process Electrodermal Activity (EDA)**
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
 
@@ -17,39 +17,43 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
     eda_signal : Union[list, np.array, pd.Series]
         The raw EDA signal.
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of ``"rsp_signal"`` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "biosppy" or "neurokit" (default).
+        The processing pipeline to apply. Can be one of ``"biosppy"`` or ``"neurokit"`` (default).
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `eda_signal` containing the following
+        A DataFrame of same length as ``"eda_signal"`` containing the following
         columns:
 
-        - *"EDA_Raw"*: the raw signal.
+        * ``"EDA_Raw"``: the raw signal.
 
-        - *"EDA_Clean"*: the cleaned signal.
+        * ``"EDA_Clean"``: the cleaned signal.
 
-        - *"EDA_Tonic"*: the tonic component of the signal, or the Tonic Skin Conductance Level (SCL).
+        * ``"EDA_Tonic"``: the tonic component of the signal, or the Tonic Skin Conductance Level
+          (SCL).
 
-        - *"EDA_Phasic"*: the phasic component of the signal, or the Phasic Skin Conductance Response (SCR).
+        * ``"EDA_Phasic"``: the phasic component of the signal, or the Phasic Skin Conductance
+          Response (SCR).
 
-        - *"SCR_Onsets"*: the samples at which the onsets of the peaks occur, marked as "1" in a list of zeros.
+        * ``"SCR_Onsets"``: the samples at which the onsets of the peaks occur, marked as "1" in a
+          list of zeros.
 
-        - *"SCR_Peaks"*: the samples at which the peaks occur, marked as "1" in a list of zeros.
+        * ``"SCR_Peaks"``: the samples at which the peaks occur, marked as "1" in a list of zeros.
 
-        - *"SCR_Height"*: the SCR amplitude of the signal including the Tonic component. Note that cumulative
-          effects of close- occurring SCRs might lead to an underestimation of the amplitude.
+        * ``"SCR_Height"``: the SCR amplitude of the signal including the Tonic component. Note that
+          cumulative effects of close-occurring SCRs might lead to an underestimation of the
+          amplitude.
 
-        - *"SCR_Amplitude"*: the SCR amplitude of the signal excluding the Tonic component.
+        * ``"SCR_Amplitude"``: the SCR amplitude of the signal excluding the Tonic component.
 
-        - *"SCR_RiseTime"*: the time taken for SCR onset to reach peak amplitude within the SCR.
+        * ``"SCR_RiseTime"``: the time taken for SCR onset to reach peak amplitude within the SCR.
 
-        - *"SCR_Recovery"*: the samples at which SCR peaks recover (decline) to half amplitude, marked
-          as "1" in a list of zeros.
+        * ``"SCR_Recovery"``: the samples at which SCR peaks recover (decline) to half amplitude,
+          marked  as "1" in a list of zeros.
     info : dict
-        A dictionary containing the information of each SCR peak (see `eda_findpeaks()`),
+        A dictionary containing the information of each SCR peak (see :func:`eda_findpeaks`),
         as well as the signals' sampling rate.
 
     See Also
@@ -58,20 +62,20 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
-    >>> signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
-    >>> fig = nk.eda_plot(signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
+      signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
+      @savefig p_eda_process.png scale=100%
+      nk.eda_plot(signals)
+      @suppress
+      plt.close()
 
     """
     # Sanitize input
     eda_signal = signal_sanitize(eda_signal)
-
-    # Series check for non-default index
-    if isinstance(eda_signal, pd.Series) and isinstance(eda_signal.index, pd.RangeIndex):
-        eda_signal = eda_signal.reset_index(drop=True)
 
     # Preprocess
     eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method=method)
@@ -84,7 +88,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
         method=method,
         amplitude_min=0.1,
     )
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Store
     signals = pd.DataFrame({"EDA_Raw": eda_signal, "EDA_Clean": eda_cleaned})

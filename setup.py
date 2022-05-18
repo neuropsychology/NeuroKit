@@ -26,7 +26,7 @@ def find_version():
 
 
 # Dependencies
-requirements = ["numpy", "pandas", "scipy", "scikit-learn", "matplotlib"]
+requirements = ["numpy", "pandas", "scipy", "scikit-learn>=1.0.0", "matplotlib"]
 
 # Optional Dependencies (only needed / downloaded for testing purposes, for instance to test against some other packages)
 setup_requirements = ["pytest-runner", "numpy"]
@@ -37,6 +37,7 @@ test_requirements = requirements + [
     "mne[data]",
     "pyentrp",
     "antropy",
+    "EntropyHub",
     "nolds",
     "biosppy==0.6.1",
     "cvxopt",

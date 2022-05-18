@@ -7,20 +7,20 @@ from .microstates_segment import microstates_segment
 
 
 def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
-    """Estimate optimal number of microstates.
+    """**Estimate optimal number of microstates**
 
     Estimate the optimal number of microstates using a variety of indices.
 
     Parameters
     ----------
-    seeg : np.ndarray
+    eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     n_max : int
         Maximum number of microstates to try. A higher number leads to a longer process.
     show : bool
         Plot indices normalized on the same scale.
     **kwargs
-        Arguments to be passed to ``microstates_segment()``
+        Arguments to be passed to :func:`.microstates_segment`
 
     Returns
     -------
@@ -33,14 +33,15 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
 
     Examples
     ------------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
-    Filtering raw data ...
-    >>> eeg = nk.eeg_rereference(eeg, 'average')
-    >>>
-    >>> # Estimate optimal number (currently comment out due to memory error)
-    >>> # results = nk.microstates_findnumber(eeg, n_max=4, show=True, method="kmod")
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
+      eeg = nk.eeg_rereference(eeg, 'average')
+
+      # Estimate optimal number (currently comment out due to memory error)
+      # results = nk.microstates_findnumber(eeg, n_max=4, show=True, method="kmod")
 
     """
     # Retrieve data
@@ -85,9 +86,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         # KL(k) = abs(dispersion_diff(k) / dispersion_diff(k+1))
         rez["KL_Criterion"] = np.nan
         if idx not in [0]:
-            results[idx - 1]["KL_Criterion"] = np.abs(
-                dispersion_diff_previous / dispersion_diff
-            )
+            results[idx - 1]["KL_Criterion"] = np.abs(dispersion_diff_previous / dispersion_diff)
         # Update for next round
         dispersion_previous = dispersion_current.copy()
         dispersion_diff_previous = dispersion_diff.copy()

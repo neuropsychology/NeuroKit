@@ -13,7 +13,7 @@ def rsp_simulate(
     method="breathmetrics",
     random_state=None,
 ):
-    """Simulate a respiratory signal.
+    """**Simulate a respiratory signal**
 
     Generate an artificial (synthetic) respiratory signal of a given duration
     and rate.
@@ -31,12 +31,16 @@ def rsp_simulate(
     respiratory_rate : float
         Desired number of breath cycles in one minute.
     method : str
-        The model used to generate the signal. Can be 'sinusoidal' for a simulation based on a
+        The model used to generate the signal. Can be ``"sinusoidal"`` for a simulation based on a
         trigonometric sine wave that roughly approximates a single respiratory cycle. If
-        'breathmetrics' (default), will use an advanced model desbribed `Noto, et al. (2018)
-        <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_.
+        ``"breathmetrics"`` (default), will use an advanced model desbribed by
+        `Noto, et al. (2018) <https://github.com/zelanolab/breathmetrics>`_.
     random_state : int
         Seed for the random number generator.
+
+    See Also
+    --------
+    rsp_clean, rsp_findpeaks, signal_rate, rsp_process, rsp_plot
 
     Returns
     -------
@@ -45,24 +49,23 @@ def rsp_simulate(
 
     Examples
     --------
-    >>> import pandas as pd
-    >>> import numpy as np
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
-    >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
-    >>> fig = pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
+      rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
+
+      @savefig p_rsp_simulate1.png scale=100%
+      pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True)
+      @suppress
+      plt.close()
 
     References
     ----------
-    Noto, T., Zhou, G., Schuele, S., Templer, J., & Zelano, C. (2018). Automated analysis of breathing
-    waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597.
-    https://doi.org/10.1093/chemse/bjy045
-
-    See Also
-    --------
-    rsp_clean, rsp_findpeaks, signal_rate, rsp_process, rsp_plot
+    * Noto, T., Zhou, G., Schuele, S., Templer, J., & Zelano, C. (2018). Automated analysis of
+      breathing waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583-597.
 
     """
     # Seed the random generator for reproducible results
@@ -103,11 +106,14 @@ def rsp_simulate(
 # Simple Sinusoidal Model
 # =============================================================================
 def _rsp_simulate_sinusoidal(duration=10, sampling_rate=1000, respiratory_rate=15):
-    """Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a
-    single respiratory cycle."""
+    """Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that
+    roughly approximates a single respiratory cycle."""
     # Generate values along the length of the duration
     rsp = signal_simulate(
-        duration=duration, sampling_rate=sampling_rate, frequency=respiratory_rate / 60, amplitude=0.5
+        duration=duration,
+        sampling_rate=sampling_rate,
+        frequency=respiratory_rate / 60,
+        amplitude=0.5,
     )
 
     return rsp
@@ -189,7 +195,9 @@ def _rsp_simulate_breathmetrics_original(
 
     # Normalize phase by average breath length
     phase_variance_normed = phase_variance * sample_phase
-    phases_with_noise = np.round(np.random.randn(nCycles) * phase_variance_normed + sample_phase).astype(int)
+    phases_with_noise = np.round(
+        np.random.randn(nCycles) * phase_variance_normed + sample_phase
+    ).astype(int)
     phases_with_noise[phases_with_noise < 0] = 0
 
     # Normalize pause lengths by phase and variation
@@ -232,7 +240,9 @@ def _rsp_simulate_breathmetrics_original(
         # Determine length of inhale pause for this cycle
         if np.random.rand() < inhale_pause_percent:
             this_inhale_pauseLength = inhale_pauseLengths_with_noise[c]
-            this_inhale_pause = np.random.randn(this_inhale_pauseLength) * pause_amplitude_variance_normed
+            this_inhale_pause = (
+                np.random.randn(this_inhale_pauseLength) * pause_amplitude_variance_normed
+            )
             this_inhale_pause[this_inhale_pause < 0] = 0
         else:
             this_inhale_pauseLength = 0
@@ -241,7 +251,9 @@ def _rsp_simulate_breathmetrics_original(
         # Determine length of exhale pause for this cycle
         if np.random.rand() < exhale_pause_percent:
             this_exhale_pauseLength = exhale_pauseLengths_with_noise[c]
-            this_exhale_pause = np.random.randn(this_exhale_pauseLength) * pause_amplitude_variance_normed
+            this_exhale_pause = (
+                np.random.randn(this_exhale_pauseLength) * pause_amplitude_variance_normed
+            )
             this_exhale_pause[this_exhale_pause < 0] = 0
         else:
             this_exhale_pauseLength = 0
@@ -260,7 +272,9 @@ def _rsp_simulate_breathmetrics_original(
             this_inhale_pause = []
             this_exhale_pauseLength = 0
             this_exhale_pause = []
-            cycle_length = phases_with_noise[c] - (this_inhale_pauseLength + this_exhale_pauseLength)
+            cycle_length = phases_with_noise[c] - (
+                this_inhale_pauseLength + this_exhale_pauseLength
+            )
 
         # Compute inhale and exhale for this cycle
         this_cycle = np.sin(np.linspace(0, 2 * np.pi, cycle_length)) * amplitudes_with_noise[c]
@@ -284,7 +298,9 @@ def _rsp_simulate_breathmetrics_original(
             inhale_pause_onsets[c] = np.nan
 
         if len(this_exhale_pause) > 0:
-            exhale_pause_onsets[c] = i + this_inhale_length + this_inhale_pauseLength + this_exhale_length
+            exhale_pause_onsets[c] = (
+                i + this_inhale_length + this_inhale_pauseLength + this_exhale_length
+            )
         else:
             exhale_pause_onsets[c] = np.nan
 
@@ -302,7 +318,9 @@ def _rsp_simulate_breathmetrics_original(
         i = i + len(this_breath) - 1
 
     # Smooth signal
-    simulated_respiration = signal_smooth(simulated_respiration, kernel="boxzen", size=sampling_rate / 2)
+    simulated_respiration = signal_smooth(
+        simulated_respiration, kernel="boxzen", size=sampling_rate / 2
+    )
 
     if signal_noise == 0:
         signal_noise = 0.0001
