@@ -13,7 +13,6 @@ editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 csl: utils/apa.csl
-title: "**The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2**"
 ---
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
@@ -32,7 +31,7 @@ knitr::opts_chunk$set(
 <!-- # Benchmarking and Analysis of Complexity Measures -->
 <!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
 <!-- # Measuring Chaos with NeuroKit2: An Empirical Comparison of Fractal Physiology Complexity Indices -->
-<!-- # The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2 -->
+# The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2
 
 *This study can be referenced by* [*citing the package and the documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
 

@@ -67,9 +67,7 @@ The script to generate the data can be found at **github.com/neuropsychology/Neu
 
 We started by generating 5 types of signals, one random-walk, two oscillatory signals made (one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at ... different lengths (). The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
 
-The combination of these parameters resulted in a total of `r 48*5*5*5` signal iterations. For each of them, we computed 128 complexity indices, and additionally basic metric such as the standard deviation (*SD*), the *length* of the signal and its dominant *frequency*. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices included, please refer to NeuroKit's documentation (https://neuropsychology.github.io/NeuroKit).
-
-
+The combination of these parameters resulted in a total of `r 48*5*5*5` signal iterations. For each of them, we computed 128 complexity indices, and additionally basic metric such as the standard deviation (*SD*), the *length* of the signal and its dominant *frequency*. We also included a *random* number to make sure that our our clustering / dimensionality analyses accurately discriminate this unrelated feature. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices included, please refer to NeuroKit's documentation (https://neuropsychology.github.io/NeuroKit).
 
 
 
@@ -456,7 +454,7 @@ The Pearson correlation analysis revealed that complexity indices, despite their
 ```{r message=FALSE, warning=FALSE, cache=TRUE}
 r <- correlation::cor_smooth(as.matrix(cor))
 ```
-```{r nfactors, fig.cap="Agreement procedure for the optimal number of factors.", fig.height=7, fig.width=14, message=FALSE, warning=FALSE, include=FALSE, eval=FALSE}
+```{r nfactors, fig.cap="Agreement procedure for the optimal number of factors.", fig.height=7, fig.width=14, message=FALSE, warning=FALSE, include=TRUE, eval=TRUE}
 n <- parameters::n_factors(data, cor = r, n_max=20)
 n
 
@@ -660,27 +658,27 @@ p2
 
 
 
-<!-- ### Visualization -->
+### Visualization
 
-<!-- Finally, we visualized the expected value of our selection of indices for different types of signals under different conditions of noise (see **Figure 1**). -->
+Finally, we visualized the expected value of our selection of indices for different types of signals under different conditions of noise (see **Figure 1**).
 
-<!-- ```{r models, message=FALSE, warning=FALSE, fig.width=14, fig.height=7, fig.cap="Visualization of the expected value of a selection of indices depending on the signal type and of the amount of noise.", cache=FALSE} -->
-<!-- model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)), -->
-<!--             data=df |> -->
-<!--               filter(Index %in% selection) |> -->
-<!--               mutate(Noise_Type = as.factor(Noise_Type))) -->
+```{r models, message=FALSE, warning=FALSE, fig.width=14, fig.height=7, fig.cap="Visualization of the expected value of a selection of indices depending on the signal type and of the amount of noise.", cache=FALSE}
+model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)),
+            data=df |>
+              filter(Index %in% selection) |>
+              mutate(Noise_Type = as.factor(Noise_Type)))
 
-<!-- estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |> -->
-<!--   ggplot(aes(y = Mean, x = Noise_Intensity)) + -->
-<!--   geom_line(aes(color = Signal), size=1) + -->
-<!--   facet_wrap(~Index) + -->
-<!--   scale_linetype_manual(values = c("-2" = 3, "-1" = 4, "0" = 2, "1" = 5, "2" = 1)) + -->
-<!--   theme_classic() + -->
-<!--   scale_color_material("rainbow") + -->
-<!--   theme(panel.grid.major = element_line(colour = "#EEEEEE"), -->
-<!--         strip.background = element_blank()) + -->
-<!--   labs(y = "Standardized Index Value", x = "Noise Intensity", color = "Signal Type") -->
-<!-- ``` -->
+estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |>
+  ggplot(aes(y = Mean, x = Noise_Intensity)) +
+  geom_line(aes(color = Signal), size=1) +
+  facet_wrap(~Index) +
+  scale_linetype_manual(values = c("-2" = 3, "-1" = 4, "0" = 2, "1" = 5, "2" = 1)) +
+  theme_classic() +
+  scale_color_material("rainbow") +
+  theme(panel.grid.major = element_line(colour = "#EEEEEE"),
+        strip.background = element_blank()) +
+  labs(y = "Standardized Index Value", x = "Noise Intensity", color = "Signal Type")
+```
 
 
 ## Discussion

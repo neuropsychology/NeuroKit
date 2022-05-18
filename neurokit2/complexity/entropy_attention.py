@@ -1,21 +1,29 @@
+from warnings import warn
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import scipy.signal
+
+from ..misc import NeuroKitWarning
 
 
-def entropy_attention(signal):
+def entropy_attention(signal, show=False):
     """**Attention Entropy (AttEn)**
 
     Yang et al. (2020) propose a conceptually new approach called **Attention Entropy (AttEn)**,
-    which pays attention only to the key observations. Instead of counting the frequency of all
-    observations, it analyzes the frequency distribution of the intervals between the key
-    observations in a time-series. The advantages of the attention entropy are that it does not
-    need any parameter to tune, is robust to the time-series length, and requires only linear time
-    to compute.
+    which pays attention only to the key observations (local maxima and minima; i.e., peaks).
+    Instead of counting the frequency of all observations, it analyzes the frequency distribution
+    of the intervals between the key observations in a time-series. The advantages of the attention
+    entropy are that it does not need any parameter to tune, is robust to the time-series length,
+    and requires only linear time to compute.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    show : bool
+        If True, the local maxima and minima will be displayed.
 
     Returns
     --------
@@ -38,10 +46,16 @@ def entropy_attention(signal):
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
+      signal = nk.signal_simulate(duration=1, frequency=5, noise=0.1)
 
       # Compute Attention Entropy
-      atten, info = nk.entropy_attention(signal)
+      @savefig p_entropy_attention1.png scale=100%
+      atten, info = nk.entropy_attention(signal, method=1)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
       atten
 
 
@@ -59,14 +73,21 @@ def entropy_attention(signal):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    Xmax = _find_keypatterns(signal)
-    Xmin = _find_keypatterns(-signal)
+    # Identify key patterns
+    Xmax, _ = scipy.signal.find_peaks(signal)
+    Xmin, _ = scipy.signal.find_peaks(-signal)
+
+    if len(Xmax) == 0 or len(Xmin) == 0:
+        warn(
+            "No local maxima or minima was detected, which makes it impossible to compute AttEn"
+            ". Returning np.nan",
+            category=NeuroKitWarning,
+        )
+        return np.nan, {}
+
     Txx = np.diff(Xmax)
     Tnn = np.diff(Xmin)
     Temp = np.diff(np.sort(np.hstack((Xmax, Xmin))))
-
-    assert len(Xmax) > 0, "No local maxima found!"
-    assert len(Xmin) > 0, "No local minima found!"
 
     if Xmax[0] < Xmin[0]:
         Txn = Temp[::2]
@@ -90,7 +111,12 @@ def entropy_attention(signal):
     maxmin = -sum(Pxn * np.log(Pxn))
     minmax = -sum(Pnx * np.log(Pnx))
     minmin = -sum(Pnn * np.log(Pnn))
-    Av4 = (minmin + maxmax + maxmin + minmax) / 4
+    Av4 = np.mean([minmin, maxmax, maxmin, minmax])
+
+    if show is True:
+        plt.plot(signal, zorder=0, c="black")
+        plt.scatter(Xmax, signal[Xmax], c="green", zorder=1)
+        plt.scatter(Xmin, signal[Xmin], c="red", zorder=2)
 
     return Av4, {
         "AttEn_MaxMax": maxmax,
@@ -100,19 +126,20 @@ def entropy_attention(signal):
     }
 
 
-def _find_keypatterns(signal):
-    n = len(signal)
-    vals = np.zeros(n)
-    for i in range(1, n - 1):
-        if signal[i - 1] < signal[i] > signal[i + 1]:
-            vals[i] = i
+# def _find_keypatterns(signal):
+#     """This original function seems to be equivalent to scipy.signal.find_peaks()"""
+#     n = len(signal)
+#     vals = np.zeros(n)
+#     for i in range(1, n - 1):
+#         if signal[i - 1] < signal[i] > signal[i + 1]:
+#             vals[i] = i
 
-        elif signal[i - 1] < signal[i] == signal[i + 1]:
-            k = 1
-            while (i + k) < n - 1 and signal[i] == signal[i + k]:
-                k += 1
+#         elif signal[i - 1] < signal[i] == signal[i + 1]:
+#             k = 1
+#             while (i + k) < n - 1 and signal[i] == signal[i + k]:
+#                 k += 1
 
-            if signal[i] > signal[i + k]:
-                vals[i] = i + ((k - 1) // 2)
+#             if signal[i] > signal[i + k]:
+#                 vals[i] = i + ((k - 1) // 2)
 
-    return vals[vals != 0]
+#     return vals[vals != 0].astype(int)
