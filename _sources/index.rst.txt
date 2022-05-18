@@ -21,7 +21,7 @@ Welcome to **NeuroKit**'s documentation, where you can find information and lear
 
 .. seealso::
 
-   You can information on how to cite this documentation :ref:`here<Cite us>`.
+   You can information on how to cite this documentation `here <https://neuropsychology.github.io/NeuroKit/cite_us.html>`_.
 
 
 You can navigate to the different sections using the left panel. We recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
