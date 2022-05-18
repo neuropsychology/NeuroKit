@@ -4,8 +4,8 @@ Authors
 .. hint::
    Want to be a part of the project? Read how to `contribute and join us <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
-Maintainers
------------
+Current maintainers
+-------------------
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
