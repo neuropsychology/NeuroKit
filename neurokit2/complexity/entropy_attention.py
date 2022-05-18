@@ -50,7 +50,7 @@ def entropy_attention(signal, show=False):
 
       # Compute Attention Entropy
       @savefig p_entropy_attention1.png scale=100%
-      atten, info = nk.entropy_attention(signal, method=1)
+      atten, info = nk.entropy_attention(signal, show=True)
       @suppress
       plt.close()
 
