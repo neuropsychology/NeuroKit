@@ -78,29 +78,7 @@ The data analysis script, the data and the code for the figures is fully availab
 
 ```{r message=FALSE, warning=FALSE, results='hide', echo=FALSE}
 df <- read.csv("data_Complexity.csv") |>
-  mutate(Method = as.factor(Method)) |> 
-  mutate(Index = str_replace(Index, "RQA_RecurrenceRate", "RQA (RecurrenceRate)"),
-         Index = str_replace(Index, "RQA_Determinism", "RQA (Determinism)"),
-         Index = str_replace(Index, "RQA_Laminarity", "RQA (Laminarity)"),
-         Index = str_replace(Index, "RQA_TrappingTime", "RQA (TrappingTime)"),
-         Index = str_replace(Index, "RQA_DeteRec", "RQA (DeteRec)"),
-         Index = str_replace(Index, "RQA_Divergence", "RQA (Divergence)"),
-         Index = str_replace(Index, "RQA_LamiDet", "RQA (LamiDet)"),
-         Index = str_replace(Index, "RQA_LEn", "RQA (LEn)"),
-         Index = str_replace(Index, "RQA_L", "RQA (L)"),
-         Index = str_replace(Index, "RQA_VMax", "RQA (VMax)"),
-         Index = str_replace(Index, "RQA_VEn", "RQA (VEn)"),
-         Index = str_replace(Index, "RQA_WMax", "RQA (WMax)"),
-         Index = str_replace(Index, "RQA_WEn", "RQA (WEn)"),
-         Index = str_replace(Index, "RQA_W", "RQA (W)"),
-         Index = str_replace(Index, "MFDFA_Fluctuation", "MFDFA (Fluctuation)"),
-         Index = str_replace(Index, "MFDFA_Width", "MFDFA (Width)"),
-         Index = str_replace(Index, "MFDFA_Peak", "MFDFA (Peak)"),
-         Index = str_replace(Index, "MFDFA_Mean", "MFDFA (Mean)"),
-         Index = str_replace(Index, "MFDFA_Max", "MFDFA (Max)"),
-         Index = str_replace(Index, "MFDFA_Delta", "MFDFA (Delta)"),
-         Index = str_replace(Index, "MFDFA_Asymmetry", "MFDFA (Asymmetry)"),
-         Index = str_replace(Index, "MFDFA_Increment", "MFDFA (Increment)"))
+  mutate(Method = as.factor(Method))
 ```
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -275,8 +253,8 @@ p <- df |>
   scale_fill_manual(values = colors, guide = "none") +
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1)) +
   labs(x = NULL, y = "Computation Time")
-p
 # ggsave("figures/computation_time-1.png", p, height=10*1.25, width=16*1.25)
+p
 ```
 ```{r computation_time2, eval=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
 knitr::include_graphics("computation_time-1.png") 
@@ -464,6 +442,22 @@ plot(n) +
 ```
 
 
+```{r message=FALSE, warning=FALSE, cache=FALSE}
+selection <- c("ShanEn (D)",
+               "NLDFD",
+               "SVDEn",
+               "AttEn",
+               "MFDFA (Mean)",
+               "MFDFA (Max)",
+               "MFDFA (Increment)",
+               "MFDFA (Width)",
+               "FuzzyMSEn",
+               "MSWPEn",
+               # "Hjorth",
+               "FI",
+               "CWPEn")
+```
+
 ```{r loadings, message=FALSE, warning=FALSE, fig.width=12, fig.height=18, fig.cap="Factor loadings and computation times of the complexity indices, colored by the factor they represent the most."}
 rez <- parameters::factor_analysis(data, cor = r, n = 14, rotation = "varimax", sort = TRUE, fm="mle")
 # rez <- parameters::principal_components(data, n = 15, sort = TRUE)
@@ -495,18 +489,6 @@ idx_order <- loadings |>
 
 separations <- table(closest)[intersect(levels(loadings$Component), unique(closest))]
 
-selection <- c("ShanEn (D)",
-               "NLDFD",
-               "SVDEn",
-               "AttEn",
-               "PSDFD",
-               "MFDFA (Mean)",
-               "FuzzyMSEn",
-               "MSWPEn",
-               "MFDFA (Increment)",
-               "ShanEn (r)",
-               "Hjorth",
-               "WPEn")
 face <- rep("plain", length(idx_order))
 face[idx_order %in% c("SD", "Length", "Noise", "Random", "Frequency")] <- "italic"
 face[idx_order %in% selection] <- "bold"
@@ -516,7 +498,7 @@ p1 <- loadings |>
   mutate(Variable = fct_relevel(Variable, rev(idx_order))) |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
-  geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
+  geom_vline(xintercept = c("SD", "Length", "Noise", "Random", "Frequency"), color = "red") +
   geom_vline(xintercept = head(cumsum(separations), -1) + 0.5) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_fill_material_d("rainbow") +
@@ -652,16 +634,133 @@ p2 <- dat |>
   theme_graph() +
   theme(plot.title = element_text(face="bold", hjust=0.5)) +
   expand_limits(x = c(-1.25, 1.25), y = c(-1.25, 1.25))
-p2
 # ggsave("figures/g.png", p2, width=13.4, height=13.4)
+p2
 ```
 
 
 
 
-### Visualization
+### Indices Selection
 
-Finally, we visualized the expected value of our selection of indices for different types of signals under different conditions of noise (see **Figure 1**).
+The selection of a subset of indices was based on the following considerations: 1) high loadings on one predominant latent dimension, with additional attention to the pattern of secondary loadings. For instance, an index with a positive factor 1 loading and a negative factor 2 loading could complement another index with a similar factor 1 loading, but a positive factor 2 loading. This was helped by 2) the hierarchical clustering dendrogram, with which we attempted to indices from each (meaningful) higher order clusters. Items related to clusters that we know were related to noise, length or other artifacts were omitted. 3) A preference for indices with relatively shorter computation times. This yielded a selection of 12 indices. Next, we computed the cumulative variance explained of this selection in respect to the entirety of indices, and derived the optimal order to maximize the variance explained.
+
+The included indices were: 
+
+*NLDFD*
+*ShanEn (D)*
+*AttEn*
+*MFDFA (Mean)* 
+*MFDFA (Max)* 
+*MFDFA (Increment)*
+*MFDFA (Width)* 
+*FI*
+*FuzzyMSEn*
+*Hjorth*
+*MSWPEn* 
+*CWPEn* 
+
+The slowest included indices were *FuzzyMSEn* and *MFDFA*-related indices.
+
+
+
+```{r varexplained, echo=FALSE, fig.cap="Variance of the whole dataset of indices explained by the subselection. Each line represents a random number of selected variables. The red line represents the optimal order (i.e., the relative importance) that maximizes the variance explained. The dotted blue line represent the cumulative average computation time of the selected indices.", fig.height=7, fig.width=10, message=FALSE, warning=FALSE, cache=FALSE}
+dat <- select(data, -Random, -Frequency, -Noise, -Length, -SD)
+SumCy <- sum(cov(dat), na.rm=TRUE)   
+varex <- data.frame()
+
+get_r2 <- function(data, dat, SumCy) {
+    Cx <- cov(data)
+    Cxy <- cov(data, dat)
+    solved <- tryCatch(solve(Cx), error = function(e) NULL) 
+    if (is.null(solved)) {
+      return(NA)
+      next
+    } else {
+      VAF <- t(Cxy) %*% solved %*% Cxy
+      return(sum(VAF, na.rm=TRUE) / SumCy)
+    }
+}
+
+
+optim <- data.frame()
+final <- rep(NA, length(selection))
+for(i in 1:length(selection)) {
+  selec <- setdiff(selection, final)
+  r2s <- rep(NA, length(selec))
+  for(j in 1:length(selec)) {
+    final[i] <- selec[j]
+    temp <- final[!is.na(final)]
+    r2s[j] <- get_r2(data[temp], dat, SumCy)
+  }
+  optim <- rbind(optim,
+               data.frame(Order = i,
+                          Index = selec,
+                          VarEx = r2s))
+  final[i] <- selec[which.max(r2s)]
+  
+}
+
+varex <- data.frame()
+for(iter in 1:500) {
+  cat(paste0(iter, " "))
+  r2s <- rep(NA, length(selection))
+  set.seed(iter)
+  selec <- sample(selection)
+  for(i in 1:length(selection)) {
+    r2s[i] <- get_r2(data[selec[1:i]], dat, SumCy)
+  }
+  varex <- rbind(varex,
+                 data.frame(Index = selec, 
+                            VarExplained = r2s, 
+                            CumVar = sum(r2s, na.rm=TRUE),
+                            Order = 1:length(selection),
+                            Iteration = as.character(iter)))
+}
+
+for(i in 1:length(selection)) {
+  varex <- rbind(varex, 
+                 data.frame(Index = final[1:i], 
+                            VarExplained = get_r2(data[final[1:i]], dat, SumCy), 
+                            CumVar = max(optim$VarEx, na.rm=TRUE),
+                            Order = i,
+                            Iteration = "0"))
+}
+
+
+varex <- arrange(varex, desc(CumVar), Order)
+selection <- varex[1:length(selection), "Index"]
+higher <- varex[varex$Iteration == varex$Iteration[which(varex$VarExplained == max(varex$VarExplained, na.rm=TRUE))], ]
+
+time <- order[order$Index %in% final, ]
+time <- time[match(final, time$Index), ]
+time$CumDuration <- cumsum(time$Duration)
+time[str_starts(time$Index, "MFDFA"), "CumDuration"] <- time[time$Index == "MFDFA (Width)", "CumDuration"]
+time$VarExplained <- data_rescale(time$CumDuration, c(0.5, 0.95))
+time$Order <- as.factor(1:nrow(time))
+
+p5 <- varex |> 
+  mutate(Order = as.factor(Order)) |> 
+  ggplot(aes(x = Order, y=VarExplained)) +
+  geom_line(aes(group=Iteration), color="black", alpha=0.05, size=0.3) +
+  geom_line(aes(group=1), data=time, color="blue", alpha=0.5, size=1, linetype = "dotted") +
+  geom_line(data=varex[varex$Iteration == "0", ], size=1, color="red") +
+  annotate("label", x = 10, y = 0.5,
+           label=paste0(
+             c(paste0("Max. R² = ",  insight::format_value(max(optim$VarEx, na.rm=TRUE), as_percent=TRUE)),
+               paste0(1:length(selection), ": ", final)),
+             collapse="\n"),
+           color= "red", hjust=0, vjust=0, size=3) +
+  labs(x = "Number of Selected Indices", y = "Variance Explaiend", title="Explanatory Power of Indices Subset") +
+  scale_y_continuous(labels=scales::percent) +
+  coord_cartesian(ylim=c(0.5, 0.95)) +
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, face="bold"))
+# ggsave("figures/varexplained-1.png", p5, width=7, height=5)
+p5
+```
+
+Finally, we visualized the expected value of our selection of indices for different types of signals under different conditions of noise (see **Figure 6**). This revealed that two indices, namely *ShanEn (D)* and *NLDFD*, are primarily driven by the noise intensity (which is expected, as they capture the variability of successive differences). The other indices appear to be able to discriminate between the various types of signals (when the signal is not dominated by noise).
 
 ```{r models, message=FALSE, warning=FALSE, fig.width=14, fig.height=7, fig.cap="Visualization of the expected value of a selection of indices depending on the signal type and of the amount of noise.", cache=FALSE}
 model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)),
