@@ -634,8 +634,8 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#visualization">
-     Visualization
+    <a class="reference internal nav-link" href="#indices-selection">
+     Indices Selection
     </a>
    </li>
   </ul>
@@ -710,8 +710,8 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#visualization">
-     Visualization
+    <a class="reference internal nav-link" href="#indices-selection">
+     Indices Selection
     </a>
    </li>
   </ul>
@@ -936,6 +936,21 @@ thus are negatively related to one-another (see <strong>Figure 2</strong>).</p>
 </pre></div>
 </div>
 <p><img alt="Agreement procedure for the optimal number offactors." src="../_images/nfactors-1.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">selection</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;ShanEn (D)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;NLDFD&quot;</span><span class="p">,</span>
+               <span class="s">&quot;SVDEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;AttEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MFDFA (Mean)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MFDFA (Max)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MFDFA (Increment)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MFDFA (Width)&quot;</span><span class="p">,</span>
+               <span class="s">&quot;FuzzyMSEn&quot;</span><span class="p">,</span>
+               <span class="s">&quot;MSWPEn&quot;</span><span class="p">,</span>
+               <span class="c1"># &quot;Hjorth&quot;,</span>
+               <span class="s">&quot;FI&quot;</span><span class="p">,</span>
+               <span class="s">&quot;CWPEn&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">14</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">fm</span><span class="o">=</span><span class="s">&quot;mle&quot;</span><span class="p">)</span>
 <span class="c1"># rez &lt;- parameters::principal_components(data, n = 15, sort = TRUE)</span>
 <span class="c1"># rez</span>
@@ -966,18 +981,6 @@ thus are negatively related to one-another (see <strong>Figure 2</strong>).</p>
 
 <span class="n">separations</span> <span class="o">&lt;-</span> <span class="nf">table</span><span class="p">(</span><span class="n">closest</span><span class="p">)[</span><span class="nf">intersect</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Component</span><span class="p">),</span> <span class="nf">unique</span><span class="p">(</span><span class="n">closest</span><span class="p">))]</span>
 
-<span class="n">selection</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;ShanEn (D)&quot;</span><span class="p">,</span>
-               <span class="s">&quot;NLDFD&quot;</span><span class="p">,</span>
-               <span class="s">&quot;SVDEn&quot;</span><span class="p">,</span>
-               <span class="s">&quot;AttEn&quot;</span><span class="p">,</span>
-               <span class="s">&quot;PSDFD&quot;</span><span class="p">,</span>
-               <span class="s">&quot;MFDFA (Mean)&quot;</span><span class="p">,</span>
-               <span class="s">&quot;FuzzyMSEn&quot;</span><span class="p">,</span>
-               <span class="s">&quot;MSWPEn&quot;</span><span class="p">,</span>
-               <span class="s">&quot;MFDFA (Increment)&quot;</span><span class="p">,</span>
-               <span class="s">&quot;ShanEn (r)&quot;</span><span class="p">,</span>
-               <span class="s">&quot;Hjorth&quot;</span><span class="p">,</span>
-               <span class="s">&quot;WPEn&quot;</span><span class="p">)</span>
 <span class="n">face</span> <span class="o">&lt;-</span> <span class="nf">rep</span><span class="p">(</span><span class="s">&quot;plain&quot;</span><span class="p">,</span> <span class="nf">length</span><span class="p">(</span><span class="n">idx_order</span><span class="p">))</span>
 <span class="n">face</span><span class="p">[</span><span class="n">idx_order</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">,</span> <span class="s">&quot;Frequency&quot;</span><span class="p">)]</span> <span class="o">&lt;-</span> <span class="s">&quot;italic&quot;</span>
 <span class="n">face</span><span class="p">[</span><span class="n">idx_order</span> <span class="o">%in%</span> <span class="n">selection</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="s">&quot;bold&quot;</span>
@@ -987,7 +990,7 @@ thus are negatively related to one-another (see <strong>Figure 2</strong>).</p>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Variable</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Variable</span><span class="p">,</span> <span class="nf">rev</span><span class="p">(</span><span class="n">idx_order</span><span class="p">)))</span> <span class="o">|&gt;</span>
   <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Component</span><span class="p">),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">,</span> <span class="s">&quot;Random&quot;</span><span class="p">,</span> <span class="s">&quot;Frequency&quot;</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="n">separations</span><span class="p">),</span> <span class="m">-1</span><span class="p">)</span> <span class="o">+</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">scale_fill_material_d</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
@@ -1152,19 +1155,44 @@ complexity indices (see <strong>Figure 5</strong>).</p>
   <span class="nf">theme_graph</span><span class="p">()</span> <span class="o">+</span>
   <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span><span class="o">=</span><span class="s">&quot;bold&quot;</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">0.5</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">expand_limits</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1.25</span><span class="p">,</span> <span class="m">1.25</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1.25</span><span class="p">,</span> <span class="m">1.25</span><span class="p">))</span>
+<span class="c1"># ggsave(&quot;figures/g.png&quot;, p2, width=13.4, height=13.4)</span>
 <span class="n">p2</span>
 </pre></div>
 </div>
 <p><img alt="Dendrogram representing the hierarchical clustering of the complexityindices." src="../_images/clustering-1.png" /></p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># ggsave(&quot;figures/g.png&quot;, p2, width=13.4, height=13.4)</span>
+</section>
+<section id="indices-selection">
+<h3>Indices Selection<a class="headerlink" href="#indices-selection" title="Permalink to this headline">#</a></h3>
+<p>The selection of a subset of indices was based on the following
+considerations: 1) high loadings on one predominant latent dimension,
+with additional attention to the pattern of secondary loadings. For
+instance, an index with a positive factor 1 loading and a negative
+factor 2 loading could complement another index with a similar factor 1
+loading, but a positive factor 2 loading. This was helped by 2) the
+hierarchical clustering dendrogram, with which we attempted to indices
+from each (meaningful) higher order clusters. Items related to clusters
+that we know were related to noise, length or other artifacts were
+omitted. 3) A preference for indices with relatively shorter computation
+times. This yielded a selection of 12 indices. Next, we computed the
+cumulative variance explained of this selection in respect to the
+entirety of indices, and derived the optimal order to maximize the
+variance explained.</p>
+<p>The included indices were:</p>
+<p><em>NLDFD</em> <em>ShanEn (D)</em> <em>AttEn</em> <em>MFDFA (Mean)</em> <em>MFDFA (Max)</em> <em>MFDFA
+(Increment)</em> <em>MFDFA (Width)</em> <em>FI</em> <em>FuzzyMSEn</em> <em>Hjorth</em> <em>MSWPEn</em> <em>CWPEn</em></p>
+<p>The slowest included indices were <em>FuzzyMSEn</em> and <em>MFDFA</em>-related
+indices.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 301 302 303 304 305 306 307 308 309 310 311 312 313 314 315 316 317 318 319 320 321 322 323 324 325 326 327 328 329 330 331 332 333 334 335 336 337 338 339 340 341 342 343 344 345 346 347 348 349 350 351 352 353 354 355 356 357 358 359 360 361 362 363 364 365 366 367 368 369 370 371 372 373 374 375 376 377 378 379 380 381 382 383 384 385 386 387 388 389 390 391 392 393 394 395 396 397 398 399 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 419 420 421 422 423 424 425 426 427 428 429 430 431 432 433 434 435 436 437 438 439 440 441 442 443 444 445 446 447 448 449 450 451 452 453 454 455 456 457 458 459 460 461 462 463 464 465 466 467 468 469 470 471 472 473 474 475 476 477 478 479 480 481 482 483 484 485 486 487 488 489 490 491 492 493 494 495 496 497 498 499 500
 </pre></div>
 </div>
-</section>
-<section id="visualization">
-<h3>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">#</a></h3>
+<p><img alt="Variance of the whole dataset of indices explained by thesubselection. Each line represents a random number of selectedvariables. The red line represents the optimal order (i.e., the relativeimportance) that maximizes the variance explained. The dotted blue linerepresent the cumulative average computation time of the selectedindices." src="../_images/varexplained-1.png" /></p>
 <p>Finally, we visualized the expected value of our selection of indices
 for different types of signals under different conditions of noise (see
-<strong>Figure 1</strong>).</p>
+<strong>Figure 6</strong>). This revealed that two indices, namely <em>ShanEn (D)</em> and
+<em>NLDFD</em>, are primarily driven by the noise intensity (which is expected,
+as they capture the variability of successive differences). The other
+indices appear to be able to discriminate between the various types of
+signals (when the signal is not dominated by noise).</p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">gam</span><span class="p">(</span><span class="n">Result</span> <span class="o">~</span> <span class="nf">s</span><span class="p">(</span><span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="nf">interaction</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="n">Signal</span><span class="p">)),</span>
             <span class="n">data</span><span class="o">=</span><span class="n">df</span> <span class="o">|&gt;</span>
               <span class="nf">filter</span><span class="p">(</span><span class="n">Index</span> <span class="o">%in%</span> <span class="n">selection</span><span class="p">)</span> <span class="o">|&gt;</span>
