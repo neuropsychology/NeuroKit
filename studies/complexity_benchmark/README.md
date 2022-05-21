@@ -109,9 +109,11 @@ please refer to NeuroKit’s documentation
 ## Results
 
 The data analysis script, the data and the code for the figures is fully
-available at **ADD LINK**. The analysis was performed in R using the
-*easystats* collection of packages (Lüdecke et al., 2021; Lüdecke et
-al., 2020; Makowski et al., 2020/2022, 2020).
+available at
+**github.com/neuropsychology/NeuroKit/studies/complexity_benchmark**.
+The analysis was performed in R using the *easystats* collection of
+packages (Lüdecke et al., 2021; Lüdecke et al., 2020; Makowski et al.,
+2020/2022, 2020).
 
 ### Computation Time
 
@@ -178,8 +180,8 @@ cor <- get_cor(data)
 ```
 
 For the subsequent analyses, we removed statistically redundant indices,
-such as *PowEn* (identical to *SD*), *CREn (100)* (identical to *CREn
-(10)*), and *FuzzyRCMSEn* (identical to *RCMSEn*).
+such as *PowEn* - identical to *SD*, *CREn (100)* -identical to *CREn
+(10)*, and *FuzzyRCMSEn* - identical to *RCMSEn*.
 
 ### Correlation
 
@@ -195,8 +197,8 @@ data <- data |>
 cor <- get_cor(data, plot=TRUE)
 ```
 
-![Correlation
-Matrix.](../../studies/complexity_benchmark/figures/correlation-1.png)
+![Correlation matrix of complexity
+indices.](../../studies/complexity_benchmark/figures/correlation-1.png)
 
 The Pearson correlation analysis revealed that complexity indices,
 despite their multitude, their unicities and specificities, do indeed
@@ -213,20 +215,6 @@ r <- correlation::cor_smooth(as.matrix(cor))
 ```
 
 ``` r
-n <- parameters::n_factors(data, cor = r, n_max=20)
-n
-## # Method Agreement Procedure:
-## 
-## The choice of 14 dimensions is supported by 3 (50.00%) methods out of 6 (Optimal coordinates, Parallel analysis, Kaiser criterion).
-
-plot(n) +
-  see::theme_modern()
-```
-
-![Agreement procedure for the optimal number of
-factors.](../../studies/complexity_benchmark/figures/nfactors-1.png)
-
-``` r
 selection <- c("ShanEn (D)",
                "NLDFD",
                "SVDEn",
@@ -237,8 +225,7 @@ selection <- c("ShanEn (D)",
                "MFDFA (Width)",
                "FuzzyMSEn",
                "MSWPEn",
-               # "Hjorth",
-               "FI",
+               "Hjorth",
                "CWPEn")
 ```
 
@@ -365,10 +352,7 @@ factors alongside the symbolization method. Finally, as a manipulation
 check of our factorization method, the random vector does indeed form
 its own factor, and doesn’t load unto anything else.
 
-### Correlation Network
-
-For illustration purposes, we also represented the correlation matrix as
-a connectivity graph (see **Figure 4**).
+### Hierarchical Clustering and Connectivity Network
 
 ``` r
 library(ggraph)
@@ -414,13 +398,6 @@ p1
 \|r\| \> 0.6 are
 displayed.](../../studies/complexity_benchmark/figures/ggm-1.png)
 
-### Hierarchical Clustering
-
-We ran hierarchical clustering (with a Ward D2 distance) to provide
-additional information or confirmation about the groups discussed above.
-This allowed us to fine-grain our recommendations of complimentary
-complexity indices (see **Figure 5**).
-
 ``` r
 clust <- data |>
   select(-SD, -Length, -Random, -Frequency, -Noise) |>
@@ -464,6 +441,13 @@ p2
 ![Dendrogram representing the hierarchical clustering of the complexity
 indices.](../../studies/complexity_benchmark/figures/clustering-1.png)
 
+For illustration purposes, we represented the correlation matrix as a
+connectivity graph (see **Figure 4**). We then ran a hierarchical
+clustering (with a Ward D2 distance) to provide additional information
+or confirmation about the groups discussed above. This allowed us to
+fine-grain our recommendations of complimentary complexity indices (see
+**Figure 5**).
+
 ### Indices Selection
 
 The selection of a subset of indices was based on the following
@@ -479,28 +463,64 @@ omitted. 3) A preference for indices with relatively shorter computation
 times. This yielded a selection of 12 indices. Next, we computed the
 cumulative variance explained of this selection in respect to the
 entirety of indices, and derived the optimal order to maximize the
-variance explained.
+variance explained (see **Figure 6**). The included indices were:
 
-The included indices were:
-
-*NLDFD* *ShanEn (D)* *AttEn* *MFDFA (Mean)* *MFDFA (Max)* *MFDFA
-(Increment)* *MFDFA (Width)* *FI* *FuzzyMSEn* *Hjorth* *MSWPEn* *CWPEn*
-
-The slowest included indices were *FuzzyMSEn* and *MFDFA*-related
-indices.
-
-    ## 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 301 302 303 304 305 306 307 308 309 310 311 312 313 314 315 316 317 318 319 320 321 322 323 324 325 326 327 328 329 330 331 332 333 334 335 336 337 338 339 340 341 342 343 344 345 346 347 348 349 350 351 352 353 354 355 356 357 358 359 360 361 362 363 364 365 366 367 368 369 370 371 372 373 374 375 376 377 378 379 380 381 382 383 384 385 386 387 388 389 390 391 392 393 394 395 396 397 398 399 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 419 420 421 422 423 424 425 426 427 428 429 430 431 432 433 434 435 436 437 438 439 440 441 442 443 444 445 446 447 448 449 450 451 452 453 454 455 456 457 458 459 460 461 462 463 464 465 466 467 468 469 470 471 472 473 474 475 476 477 478 479 480 481 482 483 484 485 486 487 488 489 490 491 492 493 494 495 496 497 498 499 500
+-   *ShanEn (D)*: The Shannon Entropy of the symbolic times series
+    obtained by the “D” method described in Petrosian (1995) used
+    traditionally in the context of the Petrosian fractal dimension
+    (Esteller et al., 2001). The successive differences of the time
+    series are assigned to 1 if the difference exceeds one standard
+    deviation or 0 otherwise. The Entropy of the probabilities of these
+    two events is then computed.
+-   *MSWPEn*: The Multiscale Weighted Permutation Entropy is the entropy
+    of weighted ordinal descriptors of the time-embedded signal computed
+    at different scales obtained by a coarsegraining procedure
+    (Fadlallah et al., 2013).
+-   *CWPEn*: The Conditional Weighted Permutation Entropy is based on
+    the difference of weighted entropy between that obtained at an
+    embedding dimension
+    ![m](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;m "m")
+    and that obtained at
+    ![m+1](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;m%2B1 "m+1")
+    (Unakafov & Keller, 2014).
+-   *FuzzyMSEn*: This index corresponds to the multiscale Fuzzy Sample
+    Entropy (Ishikawa & Mieno, 1979). This algorithm is computationally
+    expensive to run.
+-   *AttEn*: The Attention Entropy is based on the frequency
+    distribution of the intervals between the local maxima and minima of
+    the time series (Yang et al., 2020).
+-   *NLDFD*: The Fractal dimension via Normalized Length Density (NLD)
+    corresponds to the average absolute consecutive differences of the
+    standardized signal (Kalauzi et al., 2009).
+-   *Hjorth*: Hjorth’s Complexity is defined as the ratio of the
+    mobility of the first derivative of the signal to the mean frequency
+    of the signal (Hjorth, 1970).
+-   *MFDFA (Width)*: The width of the multifractal singularity spectrum
+    (Kantelhardt et al., 2002) obtained via Detrended Fluctuation
+    Analysis (DFA).
+-   *MFDFA (Max)* : The value of singularity spectrum *D* corresponding
+    to the maximum value of singularity exponent *H*.
+-   *MFDFA (Mean)* : The mean of the maximum and minimum values of
+    singularity exponent *H*.
+-   *SVDEn*: Singular Value Decomposition (SVD) Entropy quantifies the
+    amount of eigenvectors needed for an adequate representation of the
+    signal (Roberts et al., 1999).
+-   *MFDFA (Increment)*: The cumulative function of the squared
+    increments of the generalized Hurst’s exponents between consecutive
+    moment orders (Faini et al., 2021).
 
 ![Variance of the whole dataset of indices explained by the
 subselection. Each line represents a random number of selected
 variables. The red line represents the optimal order (i.e., the relative
 importance) that maximizes the variance explained. The dotted blue line
-represent the cumulative average computation time of the selected
-indices.](../../studies/complexity_benchmark/figures/varexplained-1.png)
+represents the cumulative relative average computation time of the
+selected indices, and shows that FuzzyMSEn and MFDFA indices are the
+most costly
+algorithms.](../../studies/complexity_benchmark/figures/varexplained-1.png)
 
 Finally, we visualized the expected value of our selection of indices
 for different types of signals under different conditions of noise (see
-**Figure 6**). This revealed that two indices, namely *ShanEn (D)* and
+**Figure 7**). This revealed that two indices, namely *ShanEn (D)* and
 *NLDFD*, are primarily driven by the noise intensity (which is expected,
 as they capture the variability of successive differences). The other
 indices appear to be able to discriminate between the various types of
@@ -513,6 +533,7 @@ model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)),
               mutate(Noise_Type = as.factor(Noise_Type)))
 
 estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |>
+  mutate(Index = fct_relevel(Index, final)) |> 
   ggplot(aes(y = Mean, x = Noise_Intensity)) +
   geom_line(aes(color = Signal), size=1) +
   facet_wrap(~Index) +
@@ -534,44 +555,43 @@ As complexity science grows in size and application, a systematic
 approach to compare their “performance” becomes necessary to increase
 the clarity and structure of the field. The word *performance* is here
 to be understood in a relative sense, as any such endeavor faces the
-“hard problem” of complexity science. The indices are sensitive to
-specific objective properties of a signal that we consider part of
-over-arching concepts such as “complex” and “chaotic”. But it is unclear
-how these high-level concepts transfer back, in a top-down fashion, into
-a combination of lower-level features, such as short-term vs. long-term
-variability, auto-correlation, information, randomness, and so on. As
-such, it is conceptually complicated to benchmark complexity measures
-against “objectively” complex vs. non-complex signals. In other words,
-we know that different characteristics can contribute to the
-“complexity” of a signal, but there is not a one-to-one correspondence
-between the latter and the former.
+“hard problem” of complexity science. The fact that indices are
+sensitive to specific objective properties of a signal that we consider
+part of over-arching concepts such as “complex” and “chaotic”, though it
+is unclear how these high-level concepts transfer back, in a top-down
+fashion, into a combination of lower-level features, such as short-term
+vs. long-term variability, auto-correlation, information, randomness,
+and so on. As such, it is conceptually complicated to benchmark
+complexity measures against “objectively” complex vs. non-complex
+signals. In other words, we know that different characteristics can
+contribute to the “complexity” of a signal, but there is not a
+one-to-one correspondence between the latter and the former.
 
-Hence the choice of the current paradigm, in which we generated
-different types of signals to which we systematically added different
-types and amount of perturbations. However, we did not seek at measuring
-how complexity indices can discriminate between these features or
-systems, nor did we attempt at mimicking real-life signals or scenarios.
-The goal was instead to generate enough variability to reliably map the
-relationships between the indices.
+This explains the choice of the paradigm used in the present study, in
+which we generated different types of signals to which we systematically
+added different types and amount of perturbations. However, we did not
+seek at measuring how complexity indices can discriminate between these
+features or systems, nor did we attempt at mimicking real-life signals
+or scenarios. The goal was instead to generate enough variability to
+reliably map the relationships between the indices.
 
 The plurality of underlying components of empirical complexity (what is
-measured by complexity indices) seems to be somewhat confirmed by our
-results, showing that complexity indices are more or less sensitive to
-various orthogonal latent dimensions. One of the limitation of the
-current study has to do with the limited possibilities of interpretation
-of these underlying dimensions, and future studies are needed to discuss
-them.
+measured by complexity indices) seems to be confirmed by our results,
+showing that complexity indices vary in their sensitivity to various
+orthogonal latent dimensions. One of the limitation of the current study
+has to do with the limited possibilities of interpretation of these
+underlying dimensions, and future studies are needed to investigate and
+discuss them in greater depth.
 
 Indices that were highlighted as encapsulating information about
 different underlying dimensions at a relatively low computational cost
-include *ShanEn (D)* (the Shannon entropy of consecutive differences
-which …), *NLDFD*, *SVDEn*, *AttEn*, *PSDFD*, *MFDFA (Mean)*,
-*FuzzyMSEn*, *MSWPEn*, *MFDFA (Increment)*, *ShanEn (r)*, *Hjorth* and
-*WPEn*. These indices might be complimentary in offering a comprehensive
-profile of the complexity of a time series. Future studies are needed to
-analyze the nature of the dominant sensitivities of group of indices, so
-that results can be more easily interpreted and integrated into new
-studies and novel theories.
+include *ShanEn (D)*, *MSWPEn*, *CWPEn*, *FuzzyMSEn*, *AttEn*, *NLDFD*,
+*Hjorth*, *MFDFA (Width)*, *MFDFA (Max)*, *MFDFA (Mean)*, *SVDEn*,
+*MFDFA (Increment)*. These indices might be complimentary in offering a
+comprehensive profile of the complexity of a time series. Future studies
+are needed to analyze the nature of the dominant sensitivities of
+different groups of indices, so that results can be more easily
+interpreted and integrated into new studies and novel theories.
 
 ## References
 
@@ -589,6 +609,64 @@ Bassingthwaighte, J. B., Liebovitch, L. S., & West, B. J. (2013).
 
 Ehlers, C. L. (1995). Chaos and complexity: Can it help us to understand
 mood and behavior? *Archives of General Psychiatry*, *52*(11), 960–964.
+
+</div>
+
+<div id="ref-esteller2001comparison" class="csl-entry">
+
+Esteller, R., Vachtsevanos, G., Echauz, J., & Litt, B. (2001). A
+comparison of waveform fractal dimension algorithms. *IEEE Transactions
+on Circuits and Systems I: Fundamental Theory and Applications*,
+*48*(2), 177–183.
+
+</div>
+
+<div id="ref-fadlallah2013weighted" class="csl-entry">
+
+Fadlallah, B., Chen, B., Keil, A., & Príncipe, J. (2013).
+Weighted-permutation entropy: A complexity measure for time series
+incorporating amplitude information. *Physical Review E*, *87*(2),
+022911.
+
+</div>
+
+<div id="ref-faini2021multiscale" class="csl-entry">
+
+Faini, A., Parati, G., & Castiglioni, P. (2021). Multiscale assessment
+of the degree of multifractality for physiological time series.
+*Philosophical Transactions of the Royal Society A*, *379*(2212),
+20200254.
+
+</div>
+
+<div id="ref-hjorth1970eeg" class="csl-entry">
+
+Hjorth, B. (1970). EEG analysis based on time domain properties.
+*Electroencephalography and Clinical Neurophysiology*, *29*(3), 306–310.
+
+</div>
+
+<div id="ref-ishikawa1979fuzzy" class="csl-entry">
+
+Ishikawa, A., & Mieno, H. (1979). The fuzzy entropy concept and its
+application. *Fuzzy Sets and Systems*, *2*(2), 113–123.
+
+</div>
+
+<div id="ref-kalauzi2009extracting" class="csl-entry">
+
+Kalauzi, A., Bojić, T., & Rakić, L. (2009). Extracting complexity
+waveforms from one-dimensional signals. *Nonlinear Biomedical Physics*,
+*3*(1), 1–11.
+
+</div>
+
+<div id="ref-kantelhardt2002multifractal" class="csl-entry">
+
+Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S.,
+Bunde, A., & Stanley, H. E. (2002). Multifractal detrended fluctuation
+analysis of nonstationary time series. *Physica A: Statistical Mechanics
+and Its Applications*, *316*(1-4), 87–114.
 
 </div>
 
@@ -643,6 +721,38 @@ Pham, H., Schölzel, C., & Chen, S. H. A. (2021). NeuroKit2: A python
 toolbox for neurophysiological signal processing. *Behavior Research
 Methods*, *53*(4), 1689–1696.
 <https://doi.org/10.3758/s13428-020-01516-y>
+
+</div>
+
+<div id="ref-petrosian1995kolmogorov" class="csl-entry">
+
+Petrosian, A. (1995). Kolmogorov complexity of finite sequences and
+recognition of different preictal EEG patterns. *Proceedings Eighth IEEE
+Symposium on Computer-Based Medical Systems*, 212–217.
+
+</div>
+
+<div id="ref-roberts1999temporal" class="csl-entry">
+
+Roberts, S. J., Penny, W., & Rezek, I. (1999). Temporal and spatial
+complexity measures for electroencephalogram based brain-computer
+interfacing. *Medical & Biological Engineering & Computing*, *37*(1),
+93–98.
+
+</div>
+
+<div id="ref-unakafov2014conditional" class="csl-entry">
+
+Unakafov, A. M., & Keller, K. (2014). Conditional entropy of ordinal
+patterns. *Physica D: Nonlinear Phenomena*, *269*, 94–102.
+
+</div>
+
+<div id="ref-yang2020classification" class="csl-entry">
+
+Yang, J., Choudhary, G. I., Rahardja, S., & Franti, P. (2020).
+Classification of interbeat interval time-series using attention
+entropy. *IEEE Transactions on Affective Computing*.
 
 </div>
 

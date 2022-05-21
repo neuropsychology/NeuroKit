@@ -65,6 +65,9 @@ def fractal_petrosian(signal, method="C", show=False):
 
     References
     ----------
+    * Esteller, R., Vachtsevanos, G., Echauz, J., & Litt, B. (2001). A comparison of waveform
+      fractal dimension algorithms. IEEE Transactions on Circuits and Systems I: Fundamental Theory
+      and Applications, 48(2), 177-183.
     * Petrosian, A. (1995, June). Kolmogorov complexity of finite sequences and recognition of
       different preictal EEG patterns. In Proceedings eighth IEEE symposium on computer-based
       medical systems (pp. 212-217). IEEE.
