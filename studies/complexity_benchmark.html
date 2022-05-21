@@ -740,41 +740,50 @@ us!</strong></p>
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
 <p>Complexity is an umbrella term for concepts derived from information
 theory, chaos theory, and fractal mathematics, used to quantify
-unpredictability, entropy, and/or randomness. Using these tools to
-characterize signals (a subfield commonly referred to as “fractal
-physiology,” Bassingthwaighte et al., 2013) has shown promising results
-in physiology in the assessment and diagnostic of the state and health
-of living systems Ehlers (1995).</p>
-<p>There has been a large and accelerating increase in the number of
-complexity indices in the past few decades. These new procedures are
-usually mathematically well-defined and theoretically promising.
-However, few empirical evidence exist to understand their differences
-and similarities. Moreover, some can be very expensive in terms of
-computation power and thus, time, which can become an issue in some
-applications such as high sampling-rate techniques (e.g., M/EEG) or
-real-time settings (brain-computer interface). As such, having a general
-view depicting the relationship between the indices with information
-about their computation time would be useful, for instance to guide the
-indices selection in settings where time or computational power is
-limited.</p>
-<p>One of the contributing factor of this lack of empirical comparison is
-the lack of free, open-source, unified, and easy to use software for
-computing various complexity indices. Indeed, most of them are described
-mathematically in journal articles, and reusable code is seldom made
-available, which limits their further application and validation.
-<em>NeuroKit2</em> (Makowski et al., 2021) is a Python package for
-physiological signal processing that aims at providing the most
-comprehensive, accurate and fast pure Python implementations of
-complexity indices.</p>
+unpredictability, entropy, and/or randomness. Using these methods to
+characterize physiological signals (a subfield commonly referred to as
+“fractal physiology,” Bassingthwaighte et al., 2013) has shown promising
+results in the assessment and diagnostic of the state and health of
+living systems Goetz (2007).</p>
+<p>There has been an exponential increase in the number of complexity
+indices in the past few decades (A. C. Yang &amp; Tsai, 2013). Although
+these new procedures are usually mathematically well-defined and
+theoretically promising, limited empirical evidence is available to
+understand their similarities and differences (Lau et al., 2021; A. C.
+Yang &amp; Tsai, 2013). Moreover, some of these methods are
+resource-intensive and require long computation times. This complicates
+their application with techniques that utilise high sampling-rates
+(e.g., M/EEG) and makes them impractical to implement in real-time
+settings - such as brain-computer interfaces (Manis et al., 2018;
+“Refined Composite Multiscale Dispersion Entropy and Its Application to
+Biomedical Signals,” 2017). As such, having empirical data about the
+computation time of various complexity indices would prove useful, for
+instance to objectively guide their selection, especially in contexts
+where time or computational resourcse are limited.</p>
+<p>Additionally, the lack of a comprehensive open-source and user-friendly
+software for computing various complexity indices likely contributes to
+the limited availability of empirical comparison (Flood &amp; Grimm, 2021).
+Indeed, most complexity indices are only described mathematically in
+journal articles, with reusable code seldom made available, therefore
+limiting their further application and validation (Flood &amp; Grimm, 2021;
+A. C. Yang &amp; Tsai, 2013). To address this gap, we added a comprehensive
+set of complexity-related features to <em>NeuroKit2</em>, a Python package for
+physiological signal processing (Makowski et al., 2021). This submodule
+aims at enabling users to compute a vast amount of complexity indices.
+The code is designed to be as fast as possible, while still written in
+pure Python (though with the help^of dependencies such as Numpy or
+Pandas, Harris et al., 2020; McKinney et al., 2010) to maximize the
+re-usability, transparency, and correctness.</p>
 <p>Leveraging this tool, the goal of this study is to empirically compare a
-vast number of complexity indices, inspect how they relate to one
-another, and extract some recommendations for indices selection, based
-on their added-value and computational efficiency. Using <em>NeuroKit2</em>, we
-will compute more than a hundred complexity indices on various types of
-signals, with varying degrees of noise. We will then project the results
-on a latent space through factor analysis, and report the most
-interesting indices in regards to their representation of the latent
-dimensions.</p>
+large number of complexity indices, inspect how they relate to one
+another, and derive recommendations for indices selection. More
+specifically, we will quantify the complexity using 128 indices of
+various types of signals with varying degrees of noise, using
+<em>NeuroKit2</em>. We will then project the results on a latent space through
+factor analysis, and review the various indices that we find the most
+relevant and interesting in regards to their representation of the
+latent dimensions. This analysis will be complemented by hierarchical
+clustering.</p>
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">#</a></h2>
@@ -782,15 +791,15 @@ dimensions.</p>
 <p>The script to generate the data can be found at
 <strong>github.com/neuropsychology/NeuroKit/studies/complexity_benchmark</strong></p>
 <p>We started by generating 5 types of signals, one random-walk, two
-oscillatory signals made (one made of harmonic frequencies that results
-in a self-repeating - fractal-like - signal), and two complex signals
-derived from Lorenz systems (with parameters
+oscillatory signals made (with one made of harmonic frequencies that
+results in a self-repeating - fractal-like - signal), and two complex
+signals derived from Lorenz systems (with parameters
 (<img alt="\sigma = 10, \beta = 2.5, \rho = 28" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Csigma%20%3D%2010%2C%20%5Cbeta%20%3D%202.5%2C%20%5Crho%20%3D%2028" />);
 and
 (<img alt="\sigma = 20, \beta = 2, \rho = 30" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Csigma%20%3D%2020%2C%20%5Cbeta%20%3D%202%2C%20%5Crho%20%3D%2030" />),
-respectively). Each of this signal was iteratively generated at …
-different lengths (). The resulting vectors were standardized and each
-were added 5 types of
+respectively). Each of this signal was iteratively generated at 5
+different lengths. The resulting vectors were standardized and each were
+added 5 types of
 <img alt="(1/f)^\beta" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%281%2Ff%29%5E%5Cbeta" />
 noise (namely violet
 <img alt="\beta=-2" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Cbeta%3D-2" />,
@@ -807,16 +816,16 @@ ranging from 0.1 to 4). Examples of generated signals are presented in
 <strong>Figure 1</strong>.</p>
 <p>The combination of these parameters resulted in a total of 6000 signal
 iterations. For each of them, we computed 128 complexity indices, and
-additionally basic metric such as the standard deviation (<em>SD</em>), the
+additional basic metrics such as the standard deviation (<em>SD</em>), the
 <em>length</em> of the signal and its dominant <em>frequency</em>. We also included a
-<em>random</em> number to make sure that our our clustering / dimensionality
-analyses accurately discriminate this unrelated feature. The parameters
-used (such as the time-delay
+<em>random</em> number to make sure that our our dimensionality analyses
+accurately discriminate this unrelated feature. The parameters used
+(such as the time-delay
 <img alt="\tau" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Ctau" />
 or the embedding dimension) are documented in the data generation
 script. For a complete description of the various indices included,
-please refer to NeuroKit’s documentation
-(<a class="reference external" href="https://neuropsychology.github.io/NeuroKit">https://neuropsychology.github.io/NeuroKit</a>).</p>
+please refer to NeuroKit’s documentation at
+<strong><a class="reference external" href="https://neuropsychology.github.io/NeuroKit">https://neuropsychology.github.io/NeuroKit</a></strong>.</p>
 </section>
 <section id="results">
 <h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
@@ -831,15 +840,16 @@ packages (Lüdecke et al., 2021; Lüdecke et al., 2020; Makowski et al.,
 <p>Despite the relative shortness of the signals considered (a few thousand
 points at most), the fully-parallelized data generation script took 12h
 to run on a 48-cores machine. After summarizing and sorting the indices
-by computation time, the most striking feature are the orders of
-magnitude of difference between the fastest and slowest indices. Some of
-them are also particularly sensitive to the data length, a property
-which combined with computational expensiveness leads to indices being
-100,000 slower to compute than other basic metrics.</p>
-<p>Multiscale indices are among the slowest, due to their iterative nature
-(a given index is computed multiple times on coarse-grained subseries of
-the signal). Indices related to Recurrence Quantification Analysis (RQA)
-are also relatively slow and don’t scale well with signal length.</p>
+by computation time, the most striking feature is the order of magnitude
+of difference between the fastest and slowest indices. Additionally,
+some indices are particularly sensitive to the signal length, a property
+which combined with computational cost led to indices being 100,000
+times slower to compute than others.</p>
+<p>In particular, multiscale indices were among the slowest to compute due
+to their iterative nature (a given index is computed multiple times on
+coarse-grained subseries of the signal). Indices related to Recurrence
+Quantification Analysis (RQA) were also relatively slow and did not
+scale well with signal length.</p>
 <!-- ### Duplicates -->
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">Signal</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">Noise_Type</span><span class="p">,</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;__&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
@@ -887,7 +897,7 @@ are also relatively slow and don’t scale well with signal length.</p>
 </pre></div>
 </div>
 <p>For the subsequent analyses, we removed statistically redundant indices,
-such as <em>PowEn</em> - identical to <em>SD</em>, <em>CREn (100)</em> -identical to <em>CREn
+such as <em>PowEn</em> - identical to <em>SD</em>, <em>CREn (100)</em> - identical to <em>CREn
 (10)</em>, and <em>FuzzyRCMSEn</em> - identical to <em>RCMSEn</em>.</p>
 </section>
 <section id="correlation">
@@ -905,12 +915,14 @@ such as <em>PowEn</em> - identical to <em>SD</em>, <em>CREn (100)</em> -identica
 </div>
 <p><img alt="Correlation matrix of complexityindices." src="../_images/correlation-1.png" /></p>
 <p>The Pearson correlation analysis revealed that complexity indices,
-despite their multitude, their unicities and specificities, do indeed
-share similarities. They form clusters, with two major ones easily
-appearing to the naked eye (the blue and the red groups). These two
-anti-correlated groups are driven by the fact that some indices, by
-design, index the “predictability”, whereas other the “randomness”, and
-thus are negatively related to one-another (see <strong>Figure 2</strong>).</p>
+despite their multitude and their conceptual specificities, do indeed
+share similarities. They form two major clusters that are easily
+observable (the blue and the red groups in <strong>Figure 2</strong>). However, these
+two anti-correlated groups are mostly revealing of the fact that some
+indices, by design, index the “predictability”, whereas others, the
+“randomness”, and thus are negatively related to one-another. In order
+to extract finer groupings, further analyses procedures are applied
+below.</p>
 </section>
 <section id="factor-analysis">
 <h3>Factor Analysis<a class="headerlink" href="#factor-analysis" title="Permalink to this headline">#</a></h3>
@@ -1018,36 +1030,29 @@ thus are negatively related to one-another (see <strong>Figure 2</strong>).</p>
 <p>The agreement procedure for the optimal number of factors suggested that
 the 125 indices can be mapped on a multidimensional space of 14
 orthogonal latent factors, that we extracted using a <em>varimax</em> rotation.
-We then took interest in the loading profile of each indices, and in
-particular the latent dimension that maximally related to each index
-(see <strong>Figure 3</strong>).</p>
-<p>The first factor is the closest to the largest amount of indices. Many
-indices with positive and strong loadings are particularly sensitive to
-the deviation of consecutive differences (e.g., <em>ShanEn - D</em>, <em>NLDFD</em>,
-<em>PFD - D</em>). It was negatively loaded by indices related to Detrended
-Fluctuation Analysis (DFA), which tend to index the presence of
-long-term correlations. This latent factor might encapsulate the
-predominance of short-term vs. long-term unpredictability. Indices that
-are the most representative (positively and negatively) and have a
-relatively low computational cost include <em>ShanEn - D</em>, <em>NLDFD</em>, <em>PFD -
-D</em>, and <em>AttEn</em>, <em>PSDFD</em>, <em>FuzzyMSEn</em>. The second factor was loaded
-maximally by signal <em>length</em> and <em>SD</em>, and thus might not capture
-features of complexity <em>per se</em>. Indices the most related to it were
-indices known to be sensitive to signal length, such as <em>ApEn</em>. The
-third factor included multiscale indices, such as <em>MSWPEn</em>. The fourth
-factor included indices that quantified the diversity of the tendency of
-a signal to revisit a past state (within a certain tolerance threshold).
-It was positively loaded by <em>ShanEn - r</em> and negatively by <em>RQA -
-Reccurence Rate</em>. The fifth factor was loaded by permutation entropy
-indices, such as <em>WPEn</em>. The sixth factor was driven by indices that
-were based on converting the signal into a number of bins. The seventh
-factor was loaded positively by the amount of noise, and negatively by
-multifractal indices such as <em>MFDFA - Increment</em>, suggesting a
-sensitivity to regularity. The last notable result is that indices based
-on a symbolization (discretization) of the time series do tend to create
-factors alongside the symbolization method. Finally, as a manipulation
-check of our factorization method, the random vector does indeed form
-its own factor, and doesn’t load unto anything else.</p>
+We then took interest in the loading profile of each index, and in
+particular the latent dimension that it maximally relates to (see
+<strong>Figure 3</strong>).</p>
+<p>This first factor is the closest to the largest amount of indices, and
+is positively loaded by indices that are sensitive to the deviation of
+consecutive differences (e.g., <em>ShanEn - D</em>, <em>NLDFD</em>, <em>PFD - D</em>). In
+line with this, this factor was negatively loaded by indices related to
+Detrended Fluctuation Analysis (DFA), which tends to index the presence
+of long-term correlations. As such, this latent factor might encapsulate
+the predominance of short-term vs. long-term unpredictability. The
+second factor was strongly loaded by signal <em>length</em> and <em>SD</em>, and thus
+might not capture features of complexity <em>per se</em>. Indices with the most
+relation to it were indices known to be sensitive to signal length, such
+as <em>ApEn</em>. The third factor included multiscale indices, such as
+<em>MSWPEn</em>. The fourth factor was loaded by permutation entropy indices,
+such as <em>WPEn</em>. The fifth and the sixth factors were loaded by indices
+grouped by the signal symbolization method used (by a tolerance level
+<em>r</em>, or by the number of bins for the fifth and the sixth factors,
+respectively). The seventh factor was loaded positively by the amount of
+noise, and negatively by multifractal indices such as <em>MFDFA -
+Increment</em>, suggesting a sensitivity to regularity. Finally, as a
+manipulation check for our factorization method, the random vector did
+not load unto any factors.</p>
 </section>
 <section id="hierarchical-clustering-and-connectivity-network">
 <h3>Hierarchical Clustering and Connectivity Network<a class="headerlink" href="#hierarchical-clustering-and-connectivity-network" title="Permalink to this headline">#</a></h3>
@@ -1178,7 +1183,7 @@ Entropy (Ishikawa &amp; Mieno, 1979). This algorithm is computationally
 expensive to run.</p></li>
 <li><p><em>AttEn</em>: The Attention Entropy is based on the frequency
 distribution of the intervals between the local maxima and minima of
-the time series (Yang et al., 2020).</p></li>
+the time series (J. Yang et al., 2020).</p></li>
 <li><p><em>NLDFD</em>: The Fractal dimension via Normalized Length Density (NLD)
 corresponds to the average absolute consecutive differences of the
 standardized signal (Kalauzi et al., 2009).</p></li>
@@ -1230,44 +1235,54 @@ signals (when the signal is not dominated by noise).</p>
 </section>
 <section id="discussion">
 <h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h2>
-<p>As complexity science grows in size and application, a systematic
-approach to compare their “performance” becomes necessary to increase
-the clarity and structure of the field. The word <em>performance</em> is here
-to be understood in a relative sense, as any such endeavor faces the
-“hard problem” of complexity science. The fact that indices are
-sensitive to specific objective properties of a signal that we consider
-part of over-arching concepts such as “complex” and “chaotic”, though it
-is unclear how these high-level concepts transfer back, in a top-down
-fashion, into a combination of lower-level features, such as short-term
-vs. long-term variability, auto-correlation, information, randomness,
-and so on. As such, it is conceptually complicated to benchmark
-complexity measures against “objectively” complex vs. non-complex
-signals. In other words, we know that different characteristics can
-contribute to the “complexity” of a signal, but there is not a
-one-to-one correspondence between the latter and the former.</p>
-<p>This explains the choice of the paradigm used in the present study, in
-which we generated different types of signals to which we systematically
-added different types and amount of perturbations. However, we did not
-seek at measuring how complexity indices can discriminate between these
-features or systems, nor did we attempt at mimicking real-life signals
-or scenarios. The goal was instead to generate enough variability to
-reliably map the relationships between the indices.</p>
-<p>The plurality of underlying components of empirical complexity (what is
-measured by complexity indices) seems to be confirmed by our results,
-showing that complexity indices vary in their sensitivity to various
-orthogonal latent dimensions. One of the limitation of the current study
-has to do with the limited possibilities of interpretation of these
-underlying dimensions, and future studies are needed to investigate and
-discuss them in greater depth.</p>
-<p>Indices that were highlighted as encapsulating information about
-different underlying dimensions at a relatively low computational cost
-include <em>ShanEn (D)</em>, <em>MSWPEn</em>, <em>CWPEn</em>, <em>FuzzyMSEn</em>, <em>AttEn</em>, <em>NLDFD</em>,
-<em>Hjorth</em>, <em>MFDFA (Width)</em>, <em>MFDFA (Max)</em>, <em>MFDFA (Mean)</em>, <em>SVDEn</em>,
-<em>MFDFA (Increment)</em>. These indices might be complimentary in offering a
-comprehensive profile of the complexity of a time series. Future studies
-are needed to analyze the nature of the dominant sensitivities of
-different groups of indices, so that results can be more easily
-interpreted and integrated into new studies and novel theories.</p>
+<p>As the span and application of complexity science grows, a systematic
+approach to compare their “performance” becomes necessary to
+reinforcethe clarity and structure of the field. The term <em>performance</em>
+is here to be understood in a relative sense, as any such endeavor faces
+the “hard problem” of complexity science: various objective properties
+of signals (e.g., short-term vs. long-term variability,
+auto-correlation, information, randomness, Namdari &amp; Li, 2019; Xiong et
+al., 2017) participate in forming together over-arching concepts such as
+“complex” and “chaotic”. Indices that are sensitive to some of these
+objective properties are thus conceptually linked through these
+over-arching framework. However, it remains unclear how these high-level
+concepts transfer back, in a top-down fashion, into a combination of
+lower-level features. As such, it is conceptually complicated to
+benchmark complexity measures against “objectively” complex
+vs. non-complex signals. In other words, we know that different
+objective signal characteristics can contribute to the “complexity” of a
+signal, but there is not a one-to-one correspondence between the latter
+and the former.</p>
+<p>To circumvent the aforementioned consideration, we adopted a paradigm
+where we generated different types of signals to which we systematically
+added distinct types - and amount - of perturbations. It is to note that
+we did not seek at measuring how complexity indices can discriminate
+between these signal types, nor did we attempt at mimicking real-life
+signals or scenarios. The goal was instead to generate enough
+variability to reliably map the relationships between the indices.</p>
+<p>Our results empirical confirm the plurality of underlying components of
+complexity (although it is here defined somewhat circularly as what is
+measured by complexity indices), and more importantly show that
+complexity indices vary in their sensitivity to various orthogonal
+latent dimensions. However, the limited possibilities of interpretation
+of these dimensions is a limitation of the present investigation, and
+future studies are needed to investigate and discuss them in greater
+depth (for instance, by modulating specific properties of signals and
+measuring their impact on these latent dimensions).</p>
+<p>Taking into account the increasing role of complexity science as a field
+and the sheer number of complexity indices already published, our study
+aimed at empirically map the relationship between various indices and
+provide useful information to guide future researchers in their
+selection. Indices that were highlighted as encapsulating information
+about different underlying dimensions at a relatively low computational
+cost include <em>ShanEn (D)</em>, <em>MSWPEn</em>, <em>CWPEn</em>, <em>FuzzyMSEn</em>, <em>AttEn</em>,
+<em>NLDFD</em>, <em>Hjorth</em>, <em>MFDFA (Width)</em>, <em>MFDFA (Max)</em>, <em>MFDFA (Mean)</em>,
+<em>SVDEn</em>, <em>MFDFA (Increment)</em>. These indices might be complimentary in
+offering a comprehensive profile of the complexity of a time series.
+Moving forward, future studies are needed to validate, analyze and
+interpret the nature of the dominant sensitivities of indices groups, so
+that studies results can be more easily interpreted and integrated into
+new research and novel theories.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
@@ -1298,6 +1313,24 @@ incorporating amplitude information. <em>Physical Review E</em>, <em>87</em>(2),
 of the degree of multifractality for physiological time series.
 <em>Philosophical Transactions of the Royal Society A</em>, <em>379</em>(2212),
 20200254.</p>
+</div>
+<div id="ref-flood2021" class="csl-entry">
+<p>Flood, M. W., &amp; Grimm, B. (2021). EntropyHub: An open-source toolkit for
+entropic time series analysis. <em>PLOS ONE</em>, <em>16</em>(11), e0259448.
+<a class="reference external" href="https://doi.org/10.1371/journal.pone.0259448">https://doi.org/10.1371/journal.pone.0259448</a></p>
+</div>
+<div id="ref-goetz2007" class="csl-entry">
+<p>Goetz, S. J. (2007). Spatial Dynamics, Networks and Modelling ? Edited
+by Aura Reggiani and Peter Nijkamp. <em>Papers in Regional Science</em>,
+<em>86</em>(3), 523–524. <a class="reference external" href="https://doi.org/10.1111/j.1435-5957.2007.00128.x">https://doi.org/10.1111/j.1435-5957.2007.00128.x</a></p>
+</div>
+<div id="ref-harris2020array" class="csl-entry">
+<p>Harris, C. R., Millman, K. J., Walt, S. J. van der, Gommers, R.,
+Virtanen, P., Cournapeau, D., Wieser, E., Taylor, J., Berg, S., Smith,
+N. J., Kern, R., Picus, M., Hoyer, S., Kerkwijk, M. H. van, Brett, M.,
+Haldane, A., Río, J. F. del, Wiebe, M., Peterson, P., … Oliphant, T. E.
+(2020). Array programming with NumPy. <em>Nature</em>, <em>585</em>(7825), 357–362.
+<a class="reference external" href="https://doi.org/10.1038/s41586-020-2649-2">https://doi.org/10.1038/s41586-020-2649-2</a></p>
 </div>
 <div id="ref-hjorth1970eeg" class="csl-entry">
 <p>Hjorth, B. (1970). EEG analysis based on time domain properties.
@@ -1354,10 +1387,32 @@ toolbox for neurophysiological signal processing. <em>Behavior Research
 Methods</em>, <em>53</em>(4), 1689–1696.
 <a class="reference external" href="https://doi.org/10.3758/s13428-020-01516-y">https://doi.org/10.3758/s13428-020-01516-y</a></p>
 </div>
+<div id="ref-manis2018" class="csl-entry">
+<p>Manis, G., Aktaruzzaman, M., &amp; Sassi, R. (2018). Low Computational Cost
+for Sample Entropy. <em>Entropy</em>, <em>20</em>(1), 61.
+<a class="reference external" href="https://doi.org/10.3390/e20010061">https://doi.org/10.3390/e20010061</a></p>
+</div>
+<div id="ref-mckinney2010data" class="csl-entry">
+<p>McKinney, W.others. (2010). Data structures for statistical computing in
+python. <em>Proceedings of the 9th Python in Science Conference</em>, <em>445</em>,
+51–56.</p>
+</div>
+<div id="ref-namdari2019" class="csl-entry">
+<p>Namdari, A., &amp; Li, Z. (Steven). (2019). A review of entropy measures for
+uncertainty quantification of stochastic processes. <em>Advances in
+Mechanical Engineering</em>, <em>11</em>(6), 168781401985735.
+<a class="reference external" href="https://doi.org/10.1177/1687814019857350">https://doi.org/10.1177/1687814019857350</a></p>
+</div>
 <div id="ref-petrosian1995kolmogorov" class="csl-entry">
 <p>Petrosian, A. (1995). Kolmogorov complexity of finite sequences and
 recognition of different preictal EEG patterns. <em>Proceedings Eighth IEEE
 Symposium on Computer-Based Medical Systems</em>, 212–217.</p>
+</div>
+<div id="ref-refined2017" class="csl-entry">
+<p>Refined composite multiscale dispersion entropy and its application to
+biomedical signals. (2017). <em>IEEE Transactions on Biomedical
+Engineering</em>, <em>64</em>(12), 2872–2879.
+<a class="reference external" href="https://doi.org/10.1109/tbme.2017.2679136">https://doi.org/10.1109/tbme.2017.2679136</a></p>
 </div>
 <div id="ref-roberts1999temporal" class="csl-entry">
 <p>Roberts, S. J., Penny, W., &amp; Rezek, I. (1999). Temporal and spatial
@@ -1368,6 +1423,19 @@ interfacing. <em>Medical &amp; Biological Engineering &amp; Computing</em>, <em>
 <div id="ref-unakafov2014conditional" class="csl-entry">
 <p>Unakafov, A. M., &amp; Keller, K. (2014). Conditional entropy of ordinal
 patterns. <em>Physica D: Nonlinear Phenomena</em>, <em>269</em>, 94–102.</p>
+</div>
+<div id="ref-xiong2017" class="csl-entry">
+<p>Xiong, W., Faes, L., &amp; Ivanov, P. Ch. (2017). Entropy measures, entropy
+estimators, and their performance in quantifying complex dynamics:
+Effects of artifacts, nonstationarity, and long-range correlations.
+<em>Physical Review E</em>, <em>95</em>(6).
+<a class="reference external" href="https://doi.org/10.1103/physreve.95.062114">https://doi.org/10.1103/physreve.95.062114</a></p>
+</div>
+<div id="ref-yang2013" class="csl-entry">
+<p>Yang, A. C., &amp; Tsai, S.-J. (2013). Is mental illness complex? From
+behavior to brain. <em>Progress in Neuro-Psychopharmacology and Biological
+Psychiatry</em>, <em>45</em>, 253–257.
+<a class="reference external" href="https://doi.org/10.1016/j.pnpbp.2012.09.015">https://doi.org/10.1016/j.pnpbp.2012.09.015</a></p>
 </div>
 <div id="ref-yang2020classification" class="csl-entry">
 <p>Yang, J., Choudhary, G. I., Rahardja, S., &amp; Franti, P. (2020).
