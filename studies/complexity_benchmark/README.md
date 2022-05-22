@@ -126,8 +126,19 @@ packages (Lüdecke et al., 2021; Lüdecke et al., 2020; Makowski et al.,
 
 ### Computation Time
 
+Firstly, one should note that the computation times presented in
+**Figure 2** are relative and do not correspond to real times, as these
+would highly depend on the machine used. Instead, the goal is here to
+convey some intuition on the differences between different classes of
+indices (using the same machine and the same language of implementation,
+i.e., Python). It is possible that computational advances or
+improvements in the code efficiency might change some of these values,
+but we believe that the “big picture” should remain fairly stable, as it
+is to a large extend driven by the inherent nature of the algorithms
+under consideration.
+
 Despite the relative shortness of the signals considered (a few thousand
-points at most), the fully-parallelized data generation script took 12h
+points at most), the fully-parallelized data generation script took 24h
 to run on a 48-cores machine. After summarizing and sorting the indices
 by computation time, the most striking feature is the order of magnitude
 of difference between the fastest and slowest indices. Additionally,
@@ -468,7 +479,10 @@ omitted. 3) A preference for indices with relatively shorter computation
 times. This yielded a selection of 12 indices. Next, we computed the
 cumulative variance explained of this selection in respect to the
 entirety of indices, and derived the optimal order to maximize the
-variance explained (see **Figure 6**). The included indices were:
+variance explained (see **Figure 6**). The 12 included indices,
+representing
+![91.01\\%](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;91.01%5C%25 "91.01\%")
+of the variance of the whole dataset, were:
 
 -   *ShanEn (D)*: The Shannon Entropy of the symbolic times series
     obtained by the “D” method described in Petrosian (1995) used
