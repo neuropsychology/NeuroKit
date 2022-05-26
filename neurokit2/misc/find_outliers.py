@@ -7,7 +7,7 @@ from ..stats import standardize
 def find_outliers(data, 
                   exclude=0.05, 
                   side="both", 
-                  method="zscore",
+                  method="standardize",
                   **kwargs):
     """Identify outliers (abnormal values)
 
@@ -18,12 +18,15 @@ def find_outliers(data,
     data : list or ndarray
         Data array
     exclude : int, float
-        Proportion of extreme observations to be excluded for "zscore" method.
+        Proportion of extreme observations to be excluded for "standardize" method.
     side: str
         Can be "both", "left" or "right". If side="both", the extreme
         values identified on each side will be marked as outliers.
     method: str
-        Can be "zscore" or "percentile". The default is "zscore".
+        Can be "standardize" or "percentile". The default is "standardize".
+    **kwargs : optional
+        Other arguments to be passed to :func:`_find_outliers_standardize` or
+        :func:`_find_outliers_percentiles`.
 
     Returns
     ----------
@@ -40,20 +43,24 @@ def find_outliers(data,
     if side not in ["both", "left", "right"]:
         raise ValueError("side must be 'both', 'left' or 'right'.")
         
-    if method not in ["zscore", "percentile"]:
-        raise ValueError("method must be 'zscore' or 'percentile'.")
+    if method not in ["standardize", "percentile"]:
+        raise ValueError("method must be 'standardize' or 'percentile'.")
         
-    if method == "zscore":
-        outliers = _find_outliers_zscore(data, exclude=exclude, side=side)
+    if method == "standardize":
+        outliers = _find_outliers_standardize(data,
+                                         exclude=exclude, 
+                                         side=side,
+                                         **kwargs)
     elif method == "percentile":
-        outliers = _find_outliers_zscore(data, side=side, **kwargs)
+        outliers = _find_outliers_percentiles(data, side=side, **kwargs)
     return np.array(outliers)
 
 
-def _find_outliers_zscore(data, exclude=0.05, side="both"):
-    """Identify outliers (abnormal values) with z-score
+def _find_outliers_standardize(data, exclude=0.05, side="both", **kwargs):
+    """Identify outliers (abnormal values) with standardization
 
-    Extreme values identification using the z-score.
+    Extreme values identification using standardization, i.e., centering and 
+    scaling.
 
     Parameters
     ----------
@@ -64,6 +71,8 @@ def _find_outliers_zscore(data, exclude=0.05, side="both"):
     side: str
         Can be "both", "left" or "right". If exclude=0.05 and side="both", 
         2.5% of extreme observations of each side will be marked as outliers.
+    **kwargs : optional
+    Other arguments to be passed to :func:`standardize`.
 
     Returns
     ----------
@@ -73,7 +82,7 @@ def _find_outliers_zscore(data, exclude=0.05, side="both"):
     if side not in ["both", "left", "right"]:
         raise ValueError("side must be 'both', 'left' or 'right'.")
         
-    z = np.array(standardize(data))
+    z = np.array(standardize(data, **kwargs))
     if side == "both":
         outliers = abs(z) > scipy.stats.norm.ppf(1 - (exclude / 2))
     elif side == "left":
