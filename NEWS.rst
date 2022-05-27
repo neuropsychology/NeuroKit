@@ -15,6 +15,7 @@ New Features
 +++++++++++++
 
 * Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
+* Add argument `method` in `find_outliers()` calling `_find_outliers_standardize()` or `_find_outliers_percentile()`
 
 Fixes
 +++++++++++++
@@ -55,7 +56,6 @@ New Features
 * Plotting function in `eeg_badchannels()` to visualize overlay of individual EEG channels and highlighting of bad ones
 * Add `eog_peaks()` as wrapper for `eog_findpeaks()`
 * Allow `ecg_delineate()` to account for different heart rate
-* Add argument `method` in `find_outliers()` calling `_find_outliers_standardize()' or `_find_outliers_percentile()'
 
 
 Fixes
