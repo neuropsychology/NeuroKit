@@ -197,9 +197,9 @@
 
 \authornote{
 
-The authors made the following contributions. Dominique Makowski: Conceptualization, Data curation, Formal Analysis, Funding acquisition, Investigation, Methodology, Project administration, Resources, Software, Supervision, Validation, Visualization, Writing -- original draft; An Shu Te: Software, Project administration, Writing -- review \& editing; Tam Pham: Software, Writing -- review \& editing; Zen J. Lau: Software, Writing -- review \& editing; S.H. Annabel Chen: Supervision, Project administration, Writing -- review \& editing.
+Correspondence concerning this article should be addressed to Dominique Makowski, HSS 04-18, 48 Nanyang Avenue, Singapore (\href{mailto:dom.makowski@gmail.com}{\nolinkurl{dom.makowski@gmail.com}}) and Annabel Chen (\href{mailto:AnnabelChen@ntu.edu.sg}{\nolinkurl{AnnabelChen@ntu.edu.sg}}).
 
-Correspondence concerning this article should be addressed to Dominique Makowski, HSS 04-18, 48 Nanyang Avenue, Singapore. E-mail: \href{mailto:dmakowski@ntu.edu.sg}{\nolinkurl{dmakowski@ntu.edu.sg}}
+The authors made the following contributions. Dominique Makowski: Conceptualization, Data curation, Formal Analysis, Funding acquisition, Investigation, Methodology, Project administration, Resources, Software, Supervision, Validation, Visualization, Writing -- original draft; An Shu Te: Software, Project administration, Writing -- review \& editing; Tam Pham: Software, Writing -- review \& editing; Zen J. Lau: Software, Writing -- review \& editing; S.H. Annabel Chen: Supervision, Project administration, Writing -- review \& editing.
 
 }
 
@@ -221,7 +221,7 @@ Complexity is an umbrella term for concepts derived from information theory, cha
 
 There has been an exponential increase in the number of complexity indices in the past few decades (A. C. Yang \& Tsai, 2013). Although these new procedures are usually mathematically well-defined and theoretically promising, limited empirical evidence is available to understand their similarities and differences (Lau et al., 2021; A. C. Yang \& Tsai, 2013). Moreover, some of these methods are resource-intensive and require long computation times. This complicates their application with techniques that utilise high sampling-rates (e.g., M/EEG) and makes them impractical to implement in real-time settings - such as brain-computer interfaces (Manis et al., 2018; {``Refined Composite Multiscale Dispersion Entropy and Its Application to Biomedical Signals,''} 2017). As such, having empirical data about the computation time of various complexity indices would prove useful, for instance to objectively guide their selection, especially in contexts where time or computational resourcse are limited.
 
-Additionally, the lack of a comprehensive open-source and user-friendly software for computing various complexity indices likely contributes to the limited availability of empirical comparison (Flood \& Grimm, 2021). Indeed, most complexity indices are only described mathematically in journal articles, with reusable code seldom made available, therefore limiting their further application and validation (Flood \& Grimm, 2021; A. C. Yang \& Tsai, 2013). To address this gap, we added a comprehensive set of complexity-related features to \emph{NeuroKit2}, a Python package for physiological signal processing (Makowski et al., 2021). This submodule aims at enabling users to compute a vast amount of complexity indices. The code is designed to be as fast as possible, while still written in pure Python (though with the help\^{}of dependencies such as Numpy or Pandas, Harris et al., 2020; McKinney et al., 2010) to maximize the re-usability, transparency, and correctness.
+Additionally, the lack of a comprehensive open-source and user-friendly software for computing various complexity indices likely contributes to the limited availability of empirical comparison (Flood \& Grimm, 2021a). Indeed, most complexity indices are only described mathematically in journal articles, with reusable code seldom made available, therefore limiting their further application and validation (Flood \& Grimm, 2021a; A. C. Yang \& Tsai, 2013). To address this gap, we added a comprehensive set of complexity-related features to \emph{NeuroKit2}, a Python package for physiological signal processing (Makowski et al., 2021). This submodule aims at enabling users to compute a vast amount of complexity indices. The code is designed to be as fast as possible, while still written in pure Python (though with the help\^{}of dependencies such as Numpy or Pandas, Harris et al., 2020; McKinney et al., 2010) to maximize the re-usability, transparency, and correctness.
 
 Leveraging this tool, the goal of this study is to empirically compare a large number of complexity indices, inspect how they relate to one another, and derive recommendations for indices selection. More specifically, we will quantify the complexity using 128 indices of various types of signals with varying degrees of noise, using \emph{NeuroKit2}. We will then project the results on a latent space through factor analysis, and review the various indices that we find the most relevant and interesting in regards to their representation of the latent dimensions. This analysis will be complemented by hierarchical clustering.
 
@@ -234,7 +234,7 @@ Leveraging this tool, the goal of this study is to empirically compare a large n
 \caption{\label{fig:signals}Different types of simulated signals, to which was added 5 types of noise (violet, blue, white, pink, and brown) with different intensities. For each signal type, the first row shows the signal with a minimal amount of noise, and the last with a maximal amount of noise. We can see that adding Brown noise turns the signal into a Random-walk (i.e., a Brownian motion).}
 \end{figure}
 
-The script to generate the data can be found at \textbf{github.com/neuropsychology/NeuroKit/studies/complexity\_benchmark}
+The script to generate the data can be found at \textbf{github.com/neuropsychology/NeuroKit/studies/complexity\_benchmark}.
 
 We started by generating 5 types of signals, one random-walk, two oscillatory signals made (with one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters (\(\sigma = 10, \beta = 2.5, \rho = 28\)); and (\(\sigma = 20, \beta = 2, \rho = 30\)), respectively). Each of this signal was iteratively generated at 5 different lengths. The resulting vectors were standardized and each were added 5 types of \((1/f)^\beta\) noise (namely violet \(\beta=-2\), blue \(\beta=-1\), white \(\beta=0\), pink \(\beta=1\), and brown \(\beta=2\) noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in \textbf{Figure 1}.
 
@@ -361,6 +361,13 @@ Our results empirical confirm the plurality of underlying components of complexi
 
 Taking into account the increasing role of complexity science as a field and the sheer number of complexity indices already published, our study aimed at empirically map the relationship between various indices and provide useful information to guide future researchers in their selection. Indices that were highlighted as encapsulating information about different underlying dimensions at a relatively low computational cost include \emph{ShanEn (D)}, \emph{MSWPEn}, \emph{CWPEn}, \emph{FuzzyMSEn}, \emph{AttEn}, \emph{NLDFD}, \emph{Hjorth}, \emph{MFDFA (Width)}, \emph{MFDFA (Max)}, \emph{MFDFA (Mean)}, \emph{SVDEn}, \emph{MFDFA (Increment)}. These indices might be complimentary in offering a comprehensive profile of the complexity of a time series. Moving forward, future studies are needed to validate, analyze and interpret the nature of the dominant sensitivities of indices groups, so that studies results can be more easily interpreted and integrated into new research and novel theories.
 
+\hypertarget{acknowledgments}{%
+\subsection{Acknowledgments}\label{acknowledgments}}
+
+We would like to thank the contributors of NeuroKit2, as well as the people that developed and shared open-source code which helped implementing the complexity algorithms in NeuroKit2. In particular, the contributors and maintainers of packages such as \emph{nolds} (Schölzel, 2019), \emph{AntroPy} (Vallat, 2022), \emph{pyEntropy}, and \emph{EntropyHub} (Flood \& Grimm, 2021b).
+
+The study was funded partly by the Presidential Post-Doctoral Award to DM and Ministry of Education Academic Research Fund Tier 2 Grant (Project No.: MOE2019-T2-1-019) to AC.
+
 \newpage
 
 \hypertarget{references}{%
@@ -384,7 +391,10 @@ Fadlallah, B., Chen, B., Keil, A., \& Príncipe, J. (2013). Weighted-permutation
 Faini, A., Parati, G., \& Castiglioni, P. (2021). Multiscale assessment of the degree of multifractality for physiological time series. \emph{Philosophical Transactions of the Royal Society A}, \emph{379}(2212), 20200254.
 
 \leavevmode\vadjust pre{\hypertarget{ref-flood2021}{}}%
-Flood, M. W., \& Grimm, B. (2021). EntropyHub: An open-source toolkit for entropic time series analysis. \emph{PLOS ONE}, \emph{16}(11), e0259448. \url{https://doi.org/10.1371/journal.pone.0259448}
+Flood, M. W., \& Grimm, B. (2021a). EntropyHub: An open-source toolkit for entropic time series analysis. \emph{PLOS ONE}, \emph{16}(11), e0259448. \url{https://doi.org/10.1371/journal.pone.0259448}
+
+\leavevmode\vadjust pre{\hypertarget{ref-flood2021entropyhub}{}}%
+Flood, M. W., \& Grimm, B. (2021b). EntropyHub: An open-source toolkit for entropic time series analysis. \emph{Plos One}, \emph{16}(11), e0259448.
 
 \leavevmode\vadjust pre{\hypertarget{ref-goetz2007}{}}%
 Goetz, S. J. (2007). Spatial Dynamics, Networks and Modelling ? Edited by Aura Reggiani and Peter Nijkamp. \emph{Papers in Regional Science}, \emph{86}(3), 523--524. \url{https://doi.org/10.1111/j.1435-5957.2007.00128.x}
@@ -440,8 +450,14 @@ Refined composite multiscale dispersion entropy and its application to biomedica
 \leavevmode\vadjust pre{\hypertarget{ref-roberts1999temporal}{}}%
 Roberts, S. J., Penny, W., \& Rezek, I. (1999). Temporal and spatial complexity measures for electroencephalogram based brain-computer interfacing. \emph{Medical \& Biological Engineering \& Computing}, \emph{37}(1), 93--98.
 
+\leavevmode\vadjust pre{\hypertarget{ref-scholzel2019nolds}{}}%
+Schölzel, C. (2019). \emph{Nonlinear measures for dynamical systems} (Version 0.5.2) {[}Computer software{]}. Zenodo. \url{https://doi.org/10.5281/zenodo.3814723}
+
 \leavevmode\vadjust pre{\hypertarget{ref-unakafov2014conditional}{}}%
 Unakafov, A. M., \& Keller, K. (2014). Conditional entropy of ordinal patterns. \emph{Physica D: Nonlinear Phenomena}, \emph{269}, 94--102.
+
+\leavevmode\vadjust pre{\hypertarget{ref-vallat2022antropy}{}}%
+Vallat, R. (2022). \emph{AntroPy: Entropy and complexity of (EEG) time-series in python}. GitHub. \url{https://github.com/raphaelvallat/antropy}
 
 \leavevmode\vadjust pre{\hypertarget{ref-xiong2017}{}}%
 Xiong, W., Faes, L., \& Ivanov, P. Ch. (2017). Entropy measures, entropy estimators, and their performance in quantifying complex dynamics: Effects of artifacts, nonstationarity, and long-range correlations. \emph{Physical Review E}, \emph{95}(6). \url{https://doi.org/10.1103/physreve.95.062114}

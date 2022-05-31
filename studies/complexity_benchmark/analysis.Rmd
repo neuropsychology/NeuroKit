@@ -66,7 +66,8 @@ p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulat
 rm(df, p1, p2, p3, p4, p5)
 ```
 
-The script to generate the data can be found at **github.com/neuropsychology/NeuroKit/studies/complexity_benchmark**
+The script to generate the data can be found at **github.com/neuropsychology/NeuroKit/studies/complexity_benchmark**.
+
 
 We started by generating 5 types of signals, one random-walk, two oscillatory signals made (with one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at 5 different lengths. The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
 
@@ -788,3 +789,8 @@ Our results empirical confirm the plurality of underlying components of complexi
 Taking into account the increasing role of complexity science as a field and the sheer number of complexity indices already published, our study aimed at empirically map the relationship between various indices and provide useful information to guide future researchers in their selection. Indices that were highlighted as encapsulating information about different underlying dimensions at a relatively low computational cost include *ShanEn (D)*, *MSWPEn*, *CWPEn*, *FuzzyMSEn*, *AttEn*, *NLDFD*, *Hjorth*, *MFDFA (Width)*, *MFDFA (Max)*, *MFDFA (Mean)*, *SVDEn*, *MFDFA (Increment)*. These indices might be complimentary in offering a comprehensive profile of the complexity of a time series. Moving forward, future studies are needed to validate, analyze and interpret the nature of the dominant sensitivities of indices groups, so that studies results can be more easily interpreted and integrated into new research and novel theories.
 
 
+## Acknowledgments
+
+We would like to thank the contributors of NeuroKit2, as well as the people that developed and shared open-source code which helped implementing the complexity algorithms in NeuroKit2. In particular, the contributors and maintainers of packages such as *nolds* [@scholzel2019nolds], *AntroPy* [@vallat2022antropy], *pyEntropy*, and *EntropyHub* [@flood2021entropyhub]. 
+
+The study was funded partly by the Presidential Post-Doctoral Award to DM and Ministry of Education Academic Research Fund Tier 2 Grant (Project No.: MOE2019-T2-1-019) to AC.
