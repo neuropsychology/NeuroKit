@@ -64,10 +64,10 @@ affiliation:
 authornote: |
   Correspondence concerning this article should be addressed to Dominique Makowski, HSS 04-18, 48 Nanyang Avenue, Singapore (dom.makowski@gmail.com) and Annabel Chen (AnnabelChen@ntu.edu.sg).
 abstract: |
-  Complexity quantification, through entropy, information and fractal dimension indices, is gaining a renewed traction in psychopsyiology, as new measures with promising qualities emerge from the computational and mathematical advances. Unfortunately, few studies compare the relationship and objective performance of the plethora of existing metrics, in turn hindering reproducibility, replicability, consistency, and restults clarity in the field. In this study, we systematically compared  125 indices of complexity by their computational weight, their representativeness of a multidimensional space of latent dimensions, and empirical proximity with other indices. We propose that a selection of indices, including *ShanEn (D)*, *MSWPEn*, *CWPEn*, *FuzzyMSEn*, *AttEn*, *NLDFD*, *Hjorth*, *MFDFA (Width)*, *MFDFA (Max)*, *MFDFA (Mean)*, *SVDEn*, *MFDFA (Increment)*, might offer a complimentary choice in regards to the quantification of the complexity of time series.
+  Complexity quantification, through entropy, information and fractal dimension indices, is gaining a renewed traction in psychophsyiology, as new measures with promising qualities emerge from the computational and mathematical advances. Unfortunately, few studies compare the relationship and objective performance of the plethora of existing metrics, in turn hindering reproducibility, replicability, consistency, and clarity in the field. In this study, we systematically compared 125 indices of complexity by their computational weight, their representativeness of a multidimensional space of latent dimensions, and empirical proximity with other indices. We propose that a selection of indices, including *ShanEn (D)*, *MSWPEn*, *CWPEn*, *FuzzyMSEn*, *AttEn*, *NLDFD*, *Hjorth*, *MFDFA (Width)*, *MFDFA (Max)*, *MFDFA (Mean)*, *SVDEn*, *MFDFA (Increment)*, might offer a complimentary choice in regards to the quantification of the complexity of time series.
   
 keywords          : "chaos, complexity, fractal, physiology, noise"
-wordcount         : "2707"
+wordcount         : "2709"
 
 bibliography      : "bibliography.bib"
 
