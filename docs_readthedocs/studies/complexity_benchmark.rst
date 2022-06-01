@@ -1,1 +1,1 @@
-.. mdinclude:: ../../studies/complexity_benchmark/README.md
+.. mdinclude:: ../../studies/complexity_structure/README.md

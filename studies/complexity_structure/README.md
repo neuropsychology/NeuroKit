@@ -40,10 +40,10 @@ where time or computational resourcse are limited.
 
 Additionally, the lack of a comprehensive open-source and user-friendly
 software for computing various complexity indices likely contributes to
-the limited availability of empirical comparison (Flood & Grimm, 2021).
+the limited availability of empirical comparison (Flood & Grimm, 2021a).
 Indeed, most complexity indices are only described mathematically in
 journal articles, with reusable code seldom made available, therefore
-limiting their further application and validation (Flood & Grimm, 2021;
+limiting their further application and validation (Flood & Grimm, 2021a;
 A. C. Yang & Tsai, 2013). To address this gap, we added a comprehensive
 set of complexity-related features to *NeuroKit2*, a Python package for
 physiological signal processing (Makowski et al., 2021). This submodule
@@ -72,10 +72,10 @@ For each signal type, the first row shows the signal with a minimal
 amount of noise, and the last with a maximal amount of noise. We can see
 that adding Brown noise turns the signal into a Random-walk (i.e., a
 Brownian
-motion).](../../studies/complexity_benchmark/figures/signals-1.png)
+motion).](../../studies/complexity_structure/figures/signals-1.png)
 
 The script to generate the data can be found at
-**github.com/neuropsychology/NeuroKit/studies/complexity_benchmark**
+**github.com/neuropsychology/NeuroKit/studies/complexity_structure**.
 
 We started by generating 5 types of signals, one random-walk, two
 oscillatory signals made (with one made of harmonic frequencies that
@@ -119,7 +119,7 @@ please refer to NeuroKit’s documentation at
 
 The data analysis script, the data and the code for the figures is fully
 available at
-**github.com/neuropsychology/NeuroKit/studies/complexity_benchmark**.
+**github.com/neuropsychology/NeuroKit/studies/complexity_structure**.
 The analysis was performed in R using the *easystats* collection of
 packages (Lüdecke et al., 2021; Lüdecke et al., 2020; Makowski et al.,
 2020/2022, 2020).
@@ -219,7 +219,7 @@ cor <- get_cor(data, plot=TRUE)
 ```
 
 ![Correlation matrix of complexity
-indices.](../../studies/complexity_benchmark/figures/correlation-1.png)
+indices.](../../studies/complexity_structure/figures/correlation-1.png)
 
 The Pearson correlation analysis revealed that complexity indices,
 despite their multitude and their conceptual specificities, do indeed
@@ -338,7 +338,7 @@ p2 <- order |>
 
 ![Factor loadings and computation times of the complexity indices,
 colored by the factor they represent the
-most.](../../studies/complexity_benchmark/figures/loadings-1.png)
+most.](../../studies/complexity_structure/figures/loadings-1.png)
 
 The agreement procedure for the optimal number of factors suggested that
 the 125 indices can be mapped on a multidimensional space of 14
@@ -412,7 +412,7 @@ p1
 
 ![Correlation network of the complexity indices. Only the links where
 \|r\| \> 0.6 are
-displayed.](../../studies/complexity_benchmark/figures/ggm-1.png)
+displayed.](../../studies/complexity_structure/figures/ggm-1.png)
 
 ``` r
 clust <- data |>
@@ -455,7 +455,7 @@ p2
 ```
 
 ![Dendrogram representing the hierarchical clustering of the complexity
-indices.](../../studies/complexity_benchmark/figures/clustering-1.png)
+indices.](../../studies/complexity_structure/figures/clustering-1.png)
 
 For illustration purposes, we represented the correlation matrix as a
 connectivity graph (see **Figure 4**). We then ran a hierarchical
@@ -535,7 +535,7 @@ importance) that maximizes the variance explained. The dotted blue line
 represents the cumulative relative average computation time of the
 selected indices, and shows that FuzzyMSEn and MFDFA indices are the
 most costly
-algorithms.](../../studies/complexity_benchmark/figures/varexplained-1.png)
+algorithms.](../../studies/complexity_structure/figures/varexplained-1.png)
 
 Finally, we visualized the expected value of our selection of indices
 for different types of signals under different conditions of noise (see
@@ -552,7 +552,7 @@ model <- mgcv::gam(Result ~ s(Noise_Intensity, by = interaction(Index, Signal)),
               mutate(Noise_Type = as.factor(Noise_Type)))
 
 estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |>
-  mutate(Index = fct_relevel(Index, final)) |> 
+  mutate(Index = fct_relevel(Index, final)) |>
   ggplot(aes(y = Mean, x = Noise_Intensity)) +
   geom_line(aes(color = Signal), size=1) +
   facet_wrap(~Index) +
@@ -566,7 +566,7 @@ estimate_means(model, at = c("Index", "Signal", "Noise_Intensity")) |>
 
 ![Visualization of the expected value of a selection of indices
 depending on the signal type and of the amount of
-noise.](../../studies/complexity_benchmark/figures/models-1.png)
+noise.](../../studies/complexity_structure/figures/models-1.png)
 
 ## Discussion
 
@@ -597,9 +597,9 @@ between these signal types, nor did we attempt at mimicking real-life
 signals or scenarios. The goal was instead to generate enough
 variability to reliably map the relationships between the indices.
 
-Our results empirical confirm the plurality of underlying components of
-complexity (although it is here defined somewhat circularly as what is
-measured by complexity indices), and more importantly show that
+Our results empirically confirm the plurality of underlying components
+of complexity (although it is here defined somewhat circularly as what
+is measured by complexity indices), and more importantly show that
 complexity indices vary in their sensitivity to various orthogonal
 latent dimensions. However, the limited possibilities of interpretation
 of these dimensions is a limitation of the present investigation, and
@@ -621,6 +621,19 @@ Moving forward, future studies are needed to validate, analyze and
 interpret the nature of the dominant sensitivities of indices groups, so
 that studies results can be more easily interpreted and integrated into
 new research and novel theories.
+
+## Acknowledgments
+
+We would like to thank the contributors of NeuroKit2, as well as the
+people that developed and shared open-source code which helped
+implementing the complexity algorithms in NeuroKit2. In particular, the
+contributors and maintainers of packages such as *nolds* (Schölzel,
+2019), *AntroPy* (Vallat, 2022), *pyEntropy*, and *EntropyHub* (Flood &
+Grimm, 2021b).
+
+The study was funded partly by the Presidential Post-Doctoral Award to
+DM and Ministry of Education Academic Research Fund Tier 2 Grant
+(Project No.: MOE2019-T2-1-019) to AC.
 
 ## References
 
@@ -670,9 +683,16 @@ of the degree of multifractality for physiological time series.
 
 <div id="ref-flood2021" class="csl-entry">
 
-Flood, M. W., & Grimm, B. (2021). EntropyHub: An open-source toolkit for
-entropic time series analysis. *PLOS ONE*, *16*(11), e0259448.
+Flood, M. W., & Grimm, B. (2021a). EntropyHub: An open-source toolkit
+for entropic time series analysis. *PLOS ONE*, *16*(11), e0259448.
 <https://doi.org/10.1371/journal.pone.0259448>
+
+</div>
+
+<div id="ref-flood2021entropyhub" class="csl-entry">
+
+Flood, M. W., & Grimm, B. (2021b). EntropyHub: An open-source toolkit
+for entropic time series analysis. *Plos One*, *16*(11), e0259448.
 
 </div>
 
@@ -831,10 +851,25 @@ interfacing. *Medical & Biological Engineering & Computing*, *37*(1),
 
 </div>
 
+<div id="ref-scholzel2019nolds" class="csl-entry">
+
+Schölzel, C. (2019). *Nonlinear measures for dynamical systems* (Version
+0.5.2) \[Computer software\]. Zenodo.
+<https://doi.org/10.5281/zenodo.3814723>
+
+</div>
+
 <div id="ref-unakafov2014conditional" class="csl-entry">
 
 Unakafov, A. M., & Keller, K. (2014). Conditional entropy of ordinal
 patterns. *Physica D: Nonlinear Phenomena*, *269*, 94–102.
+
+</div>
+
+<div id="ref-vallat2022antropy" class="csl-entry">
+
+Vallat, R. (2022). *AntroPy: Entropy and complexity of (EEG) time-series
+in python*. GitHub. <https://github.com/raphaelvallat/antropy>
 
 </div>
 

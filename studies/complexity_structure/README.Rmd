@@ -22,7 +22,7 @@ options(digits = 3)
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi = 450,
-  fig.path = "../../studies/complexity_benchmark/figures/"
+  fig.path = "../../studies/complexity_structure/figures/"
 )
 ```
 

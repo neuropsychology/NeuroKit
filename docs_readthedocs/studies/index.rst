@@ -10,4 +10,4 @@ Contents:
    eog_blinktemplate
    hrv_structure
    erp_gam
-   complexity_benchmark
+   complexity_structure

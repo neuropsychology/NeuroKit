@@ -85,7 +85,7 @@ output            : papaja::apa6_pdf
 csl: utils/apa.csl
 
 header-includes:
-  - \usepackage[labelfont=bf, font={color=gray,small}]{caption}
+  - \usepackage[labelfont=bf, font={scriptsize, color=gray}]{caption}
 ---
 
 ```{r, child=c('analysis.Rmd')}
