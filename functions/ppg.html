@@ -880,9 +880,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.972054           0.804840</span>
-<span class="go">2     2        10000  ...                  2.841733           0.867406</span>
-<span class="go">3     3        15000  ...                 -0.650965           0.657512</span>
+<span class="go">1     1         5000  ...                  0.957468           0.556247</span>
+<span class="go">2     2        10000  ...                  3.735005           0.852430</span>
+<span class="go">3     3        15000  ...                  1.183130           0.889238</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -1101,16 +1101,16 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd9f21b1a80&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fc8d9b337f0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fd9ef693970&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x7fc8dafb6bf0&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fd9ef6934f0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x7fc8dafb7ac0&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fd9ef691e70&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x7fc8d5546e00&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1183,9 +1183,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.408241           0.853702</span>
-<span class="go">2     2        10000  ...                  3.476576           0.857479</span>
-<span class="go">3     3        15000  ...                 -0.014914           0.878142</span>
+<span class="go">1     1         5000  ...                 -1.524378           0.773312</span>
+<span class="go">2     2        10000  ...                  1.645323           0.951677</span>
+<span class="go">3     3        15000  ...                  1.209227           0.887426</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
