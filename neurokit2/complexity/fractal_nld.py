@@ -10,7 +10,7 @@ from ..stats import standardize
 def fractal_nld(signal, corrected=False):
     """**Fractal dimension via Normalized Length Density (NLDFD)**
 
-    NLDFD is a very basic index corresponding to the average of the absolute consecutive
+    NLDFD is a very simple index corresponding to the average absolute consecutive
     differences of the (standardized) signal (``np.mean(np.abs(np.diff(std_signal)))``).
     This method was developed for measuring signal complexity of very short durations (< 30
     samples), and can be used for instance when continuous signal FD changes (or "running" FD) are
@@ -102,7 +102,6 @@ def fractal_nld(signal, corrected=False):
     ----------
     * Kalauzi, A., Bojić, T., & Rakić, L. (2009). Extracting complexity waveforms from
       one-dimensional signals. Nonlinear biomedical physics, 3(1), 1-11.
-    * https://github.com/tfburns/MATLAB-functions-for-complexity-measures-of-one-dimensional-signals/blob/master/nld.m
 
     """
 

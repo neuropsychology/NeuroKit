@@ -5,7 +5,7 @@ import pandas as pd
 
 import neurokit2 as nk
 
-
+rez = pd.DataFrame({"Dupa": [1], "Strupa": [2]})
 # Utility function
 def time_function(
     x,
@@ -21,9 +21,11 @@ def time_function(
     if name == "nk_complexity_rqa":
         rez = rez.add_prefix("RQA_")
         out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
+        out["Index"] = out["Index"].str.replace("_", " (") + ")"
     elif index == "MFDFA":
         rez = rez.add_prefix("MFDFA_")
         out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
+        out["Index"] = out["Index"].str.replace("_", " (") + ")"
     else:
         out = pd.DataFrame({"Result": [rez], "Index": [index]})
     out["Duration"] = t1

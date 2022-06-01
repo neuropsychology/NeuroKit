@@ -51,8 +51,8 @@ def fractal_dfa(
       words, the process is recurrent and repetitive.
     * **Mean**: The mean of the maximum and minimum values of singularity exponent *H*, which
       quantifies the average fluctuations of the signal.
-    * **Max**: The value of singularity spectrum *D*, corresponding to the maximum value of
-      singularity exponent *H*, indicates the maximum fluctuation of the signal.
+    * **Max**: The value of singularity spectrum *D* corresponding to the maximum value of
+      singularity exponent *H*, which indicates the maximum fluctuation of the signal.
     * **Delta**: the vertical distance between the singularity spectrum *D* where the singularity
       exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the
       signal.

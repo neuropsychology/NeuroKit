@@ -23,7 +23,7 @@ def entropy_permutation(
 
     However, the main shortcoming of traditional PEn is that no information besides the order
     structure is retained when extracting the ordinal patterns, which leads to several possible
-    issues (Fadlallah et al., 2013). The **Weighted PEn** was developped to address these
+    issues (Fadlallah et al., 2013). The **Weighted PEn** was developed to address these
     limitations by incorporating significant information (regarding the amplitude) from the
     original time series into the ordinal patterns.
 
@@ -93,6 +93,8 @@ def entropy_permutation(
 
     References
     ----------
+    * Henry, M., & Judge, G. (2019). Permutation entropy and information recovery in nonlinear
+      dynamic economic time series. Econometrics, 7(1), 10.
     * Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A
       complexity measure for time series incorporating amplitude information. Physical Review E, 87
       (2), 022911.
