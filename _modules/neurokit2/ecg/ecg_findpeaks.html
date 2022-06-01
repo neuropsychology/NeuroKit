@@ -1522,11 +1522,11 @@ title="Open an issue"
     <span class="n">tf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_ecg</span><span class="p">)</span>
 
     <span class="c1"># R-peak finder FSM</span>
-    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf</span><span class="p">:</span>  <span class="c1"># ignore last second of recording</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf</span><span class="p">:</span>  <span class="c1"># ignore last sample of recording</span>
         <span class="c1"># State 1: looking for maximum</span>
         <span class="n">tf1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">Rmin</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
         <span class="n">Rpeakamp</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf1</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf1</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf</span><span class="p">:</span>
             <span class="c1"># Rpeak amplitude and position</span>
             <span class="k">if</span> <span class="n">processed_ecg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Rpeakamp</span><span class="p">:</span>
                 <span class="n">Rpeakamp</span> <span class="o">=</span> <span class="n">processed_ecg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
