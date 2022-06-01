@@ -243,7 +243,7 @@ order <- df |>
 
 df <- mutate(df, Index = fct_relevel(Index, as.character(order$Index)))
 ```
-```{r computation_time, echo=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=cache, include=FALSE, eval=FALSE}
+```{r computationtime, echo=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=cache, include=FALSE, eval=FALSE}
 p <- df |>
   filter(!Index %in% c("SD", "Length", "Noise", "Random", "Frequency")) |>
   mutate(Duration = Duration * 10000) |>
@@ -261,8 +261,8 @@ p <- df |>
 # ggsave("figures/computation_time-1.png", p, height=10*1.25, width=16*1.25)
 p
 ```
-```{r computation_time2, eval=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
-knitr::include_graphics("computation_time-1.png")
+```{r computationtime2, echo=FALSE, fig.cap="Median computation time difference between the different complexity indices algorithms.", fig.height=10*1.25, fig.width=16*1.25, message=FALSE, warning=FALSE, cache=FALSE, out.width="100%"}
+knitr::include_graphics("figures/computation_time-1.png")
 ```
 
 
