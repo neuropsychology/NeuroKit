@@ -990,11 +990,11 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
     tf = len(processed_ecg)
 
     # R-peak finder FSM
-    while i < tf:  # ignore last second of recording
+    while i < tf:  # ignore last sample of recording
         # State 1: looking for maximum
         tf1 = np.round(i + Rmin * sampling_rate)
         Rpeakamp = 0
-        while i < tf1:
+        while i < tf1 and i < tf:
             # Rpeak amplitude and position
             if processed_ecg[i] > Rpeakamp:
                 Rpeakamp = processed_ecg[i]
