@@ -1,6 +1,4 @@
 # - * - coding: utf-8 - * -
-from logging import NullHandler
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
