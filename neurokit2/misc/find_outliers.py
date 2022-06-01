@@ -31,8 +31,7 @@ def find_outliers(data, exclude=2, side="both", method="sd", **kwargs):
     method: str
         Can be "standardize" or "percentile". The default is "standardize".
     **kwargs : optional
-        Other arguments to be passed to :func:`_find_outliers_standardize` or
-        :func:`_find_outliers_percentile`.
+        Other arguments to be passed to :func:`standardize`.
 
     Returns
     ----------
