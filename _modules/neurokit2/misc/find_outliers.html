@@ -536,47 +536,117 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">standardize</span>
 
 
-<div class="viewcode-block" id="find_outliers"><a class="viewcode-back" href="../../../functions/misc.html#neurokit2.misc.find_outliers">[docs]</a><span class="k">def</span> <span class="nf">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_outliers"><a class="viewcode-back" href="../../../functions/misc.html#neurokit2.misc.find_outliers">[docs]</a><span class="k">def</span> <span class="nf">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Identify outliers (abnormal values)**</span>
 
-<span class="sd">    Extreme values identification.</span>
+<span class="sd">    Extreme values identification using different methods, such as:</span>
+
+<span class="sd">    * **sd**: Data is :func:`standardized &lt;.standardize&gt;`, i.e., centered and</span>
+<span class="sd">      scaled, and absolute value beyond a certain SD threshold are considered as outliers.</span>
+<span class="sd">    * **norm**: Extreme values identified using theoretical percentiles to identify outliers</span>
+<span class="sd">      beyond a certain theoretical percentile (assuming the data comes from a normal distribution).</span>
+<span class="sd">      For example, with this method, ``exclude=0.025`` (one-sided) corresponds to the 2.5% lower</span>
+<span class="sd">      bound of the normal distribution, which corresponds to approx. -1.96 SD. This method is</span>
+<span class="sd">      related to the **SD** one, but instead of specifying the threshold in SDs, it is specified in</span>
+<span class="sd">      percentiles.</span>
+<span class="sd">    * **percentile**: Extreme values identified using percentiles.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data : list or ndarray</span>
 <span class="sd">        Data array</span>
 <span class="sd">    exclude : int, float</span>
-<span class="sd">        Proportion of extreme observation to be excluded.</span>
+<span class="sd">        Amount of outliers to detect (depends on the chosen method).</span>
 <span class="sd">    side: str</span>
-<span class="sd">        Can be ``&quot;both&quot;``, ``&quot;left&quot;`` or ``&quot;right&quot;``. If ``exclude=0.05`` and ``side=&quot;both&quot;``, 2.5%</span>
-<span class="sd">        of extreme observation of each side will be marked as outliers.</span>
+<span class="sd">        Can be ``&quot;both&quot;``, ``&quot;left&quot;`` or ``&quot;right&quot;``. If ``exclude=0.05`` and ``side=&quot;both&quot;`` and</span>
+<span class="sd">        ``method=&quot;norm&quot;``, 2.5% of extreme observation of each side will be marked as outliers.</span>
+<span class="sd">    method: str</span>
+<span class="sd">        Can be &quot;standardize&quot; or &quot;percentile&quot;. The default is &quot;standardize&quot;.</span>
+<span class="sd">    **kwargs : optional</span>
+<span class="sd">        Other arguments to be passed to :func:`standardize`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
 <span class="sd">    outliers : ndarray</span>
-<span class="sd">        A list of True/False with True being the outliers.</span>
+<span class="sd">        A boolean vector of with ``True`` being the outliers.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .standardize</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
-<span class="sd">      outliers = nk.find_outliers([1, 2, 1, 5, 666, 4, 1 ,3, 5])</span>
-<span class="sd">      outliers</span>
+
+<span class="sd">      data = [-12, 2, 1, 3, 66.6, 2, 1, 3, 2, -42, 2, 4, 1, 12]</span>
+
+<span class="sd">      # Outliers beyond 2 SD of the mean</span>
+<span class="sd">      outliers = nk.find_outliers(data, exclude=2, side=&quot;both&quot;, method=&quot;sd&quot;)</span>
+<span class="sd">      np.where(outliers)[0]</span>
+
+<span class="sd">      # Outliers beyond 1 MAD of the Median on one side</span>
+<span class="sd">      outliers = nk.find_outliers(data, exclude=1, side=&quot;left&quot;, method=&quot;sd&quot;, robust=True)</span>
+<span class="sd">      np.where(outliers)[0]</span>
+
+<span class="sd">      # 2.5% theoretical percentiles on each side</span>
+<span class="sd">      outliers = nk.find_outliers(data, exclude=0.05, method=&quot;norm&quot;)</span>
+<span class="sd">      np.where(outliers)[0]</span>
+
+<span class="sd">      # Outliers are beyond interquartile range</span>
+<span class="sd">      outliers = nk.find_outliers(data, exclude=(0.25, 0.75), method=&quot;percentile&quot;)</span>
+<span class="sd">      np.where(outliers)[0]</span>
+
+<span class="sd">      # Outliers are beyond interdecile range</span>
+<span class="sd">      outliers = nk.find_outliers(data, exclude=(0.1, 0.9), method=&quot;percentile&quot;)</span>
+<span class="sd">      np.where(outliers)[0]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">standardize</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;both&quot;</span><span class="p">:</span>
-        <span class="n">outliers</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">exclude</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span><span class="p">:</span>
-        <span class="n">outliers</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">exclude</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span>
-        <span class="n">outliers</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">exclude</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Sanity checks</span>
+    <span class="k">if</span> <span class="n">side</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;side must be &#39;both&#39;, &#39;left&#39; or &#39;right&#39;.&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">outliers</span><span class="p">)</span></div>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;standardize&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="s2">&quot;percentile&quot;</span><span class="p">,</span> <span class="s2">&quot;norm&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;method must be &#39;standardize&#39; or &#39;percentile&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Force array</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Find thresholds</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;percentile&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exclude</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">exclude</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">exclude</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sd&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exclude</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">exclude</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">exclude</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">exclude</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="o">-</span><span class="n">right</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;both&quot;</span><span class="p">:</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="n">exclude</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">exclude</span><span class="p">)</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="o">-</span><span class="n">right</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;standardize&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="s2">&quot;norm&quot;</span><span class="p">]:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;both&quot;</span><span class="p">:</span>
+        <span class="n">outliers</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">left</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span><span class="p">:</span>
+        <span class="n">outliers</span> <span class="o">=</span> <span class="n">data</span> <span class="o">&lt;</span> <span class="n">left</span>
+    <span class="k">elif</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span>
+        <span class="n">outliers</span> <span class="o">=</span> <span class="n">data</span> <span class="o">&gt;</span> <span class="n">right</span>
+
+    <span class="k">return</span> <span class="n">outliers</span></div>
 </pre></div>
 
               </div>

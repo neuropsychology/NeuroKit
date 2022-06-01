@@ -959,29 +959,73 @@ an exponential function.</p>
 <h2><em>find_outliers()</em><a class="headerlink" href="#find-outliers" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.misc.find_outliers">
-<span class="sig-name descname"><span class="pre">find_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/misc/find_outliers.html#find_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.misc.find_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">find_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sd'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/misc/find_outliers.html#find_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.misc.find_outliers" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Identify outliers (abnormal values)</strong></p>
-<p>Extreme values identification.</p>
+<p>Extreme values identification using different methods, such as:</p>
+<ul class="simple">
+<li><p><strong>sd</strong>: Data is <a class="reference internal" href="stats.html#neurokit2.standardize" title="neurokit2.standardize"><code class="xref py py-func docutils literal notranslate"><span class="pre">standardized</span></code></a>, i.e., centered and
+scaled, and absolute value beyond a certain SD threshold are considered as outliers.</p></li>
+<li><p><strong>norm</strong>: Extreme values identified using theoretical percentiles to identify outliers
+beyond a certain theoretical percentile (assuming the data comes from a normal distribution).
+For example, with this method, <code class="docutils literal notranslate"><span class="pre">exclude=0.025</span></code> (one-sided) corresponds to the 2.5% lower
+bound of the normal distribution, which corresponds to approx. -1.96 SD. This method is
+related to the <strong>SD</strong> one, but instead of specifying the threshold in SDs, it is specified in
+percentiles.</p></li>
+<li><p><strong>percentile</strong>: Extreme values identified using percentiles.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list or ndarray</em>) – Data array</p></li>
-<li><p><strong>exclude</strong> (<em>int, float</em>) – Proportion of extreme observation to be excluded.</p></li>
-<li><p><strong>side</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">exclude=0.05</span></code> and <code class="docutils literal notranslate"><span class="pre">side=&quot;both&quot;</span></code>, 2.5%
-of extreme observation of each side will be marked as outliers.</p></li>
+<li><p><strong>exclude</strong> (<em>int, float</em>) – Amount of outliers to detect (depends on the chosen method).</p></li>
+<li><p><strong>side</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">exclude=0.05</span></code> and <code class="docutils literal notranslate"><span class="pre">side=&quot;both&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">method=&quot;norm&quot;</span></code>, 2.5% of extreme observation of each side will be marked as outliers.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be “standardize” or “percentile”. The default is “standardize”.</p></li>
+<li><p><strong>**kwargs</strong> (<em>optional</em>) – Other arguments to be passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">standardize()</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>outliers</strong> (<em>ndarray</em>) – A list of True/False with True being the outliers.</p>
+<dd class="field-even"><p><strong>outliers</strong> (<em>ndarray</em>) – A boolean vector of with <code class="docutils literal notranslate"><span class="pre">True</span></code> being the outliers.</p>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="stats.html#neurokit2.standardize" title="neurokit2.standardize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">standardize</span></code></a></p>
+</div>
 <p class="rubric">Example</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">666</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">66.6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">42</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">outliers</span>
-<span class="gh">Out[3]: </span><span class="go">array([False, False, False, False,  True, False, False, False, False])</span>
+<span class="go"># Outliers beyond 2 SD of the mean</span>
+<span class="gp">In [3]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[4]: </span><span class="go">array([4, 9])</span>
+
+<span class="go"># Outliers beyond 1 MAD of the Median on one side</span>
+<span class="gp">In [5]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[6]: </span><span class="go">array([0, 9])</span>
+
+<span class="go"># 2.5% theoretical percentiles on each side</span>
+<span class="gp">In [7]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;norm&quot;</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[8]: </span><span class="go">array([4, 9])</span>
+
+<span class="go"># Outliers are beyond interquartile range</span>
+<span class="gp">In [9]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;percentile&quot;</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[10]: </span><span class="go">array([ 0,  4,  9, 11, 13])</span>
+
+<span class="go"># Outliers are beyond interdecile range</span>
+<span class="gp">In [11]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;percentile&quot;</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gh">Out[12]: </span><span class="go">array([ 0,  4,  9, 13])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1018,7 +1062,7 @@ of extreme observation of each side will be marked as outliers.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">32</span>
+<span class="gh">Out[6]: </span><span class="go">39</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
