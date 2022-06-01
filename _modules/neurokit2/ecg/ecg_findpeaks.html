@@ -531,19 +531,16 @@ title="Open an issue"
                 
   <h1>Source code for neurokit2.ecg.ecg_findpeaks</h1><div class="highlight"><pre>
 <span></span><span class="c1"># - * - coding: utf-8 - * -</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">NullHandler</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">signal_findpeaks</span><span class="p">,</span>
-    <span class="n">signal_plot</span><span class="p">,</span>
-    <span class="n">signal_sanitize</span><span class="p">,</span>
-    <span class="n">signal_smooth</span><span class="p">,</span>
-    <span class="n">signal_zerocrossings</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_plot</span><span class="p">,</span> <span class="n">signal_sanitize</span><span class="p">,</span>
+                      <span class="n">signal_smooth</span><span class="p">,</span> <span class="n">signal_zerocrossings</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ecg_findpeaks"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1520,7 +1517,7 @@ title="Open an issue"
     <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">processed_ecg</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">squar</span><span class="p">)</span>
     <span class="n">tf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_ecg</span><span class="p">)</span>
-
+    <span class="n">rpeakpos</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1"># R-peak finder FSM</span>
     <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tf</span><span class="p">:</span>  <span class="c1"># ignore last sample of recording</span>
         <span class="c1"># State 1: looking for maximum</span>
@@ -1534,7 +1531,8 @@ title="Open an issue"
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="n">Ramptotal</span> <span class="o">=</span> <span class="p">(</span><span class="mi">19</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ramptotal</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">Rpeakamp</span>
-        <span class="n">rpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpeakpos</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rpeakpos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpeakpos</span><span class="p">)</span>
 
         <span class="c1"># State 2: waiting state</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">tf1</span> <span class="o">-</span> <span class="n">rpeakpos</span>
