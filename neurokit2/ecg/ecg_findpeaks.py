@@ -1,17 +1,14 @@
 # - * - coding: utf-8 - * -
+from logging import NullHandler
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (
-    signal_findpeaks,
-    signal_plot,
-    signal_sanitize,
-    signal_smooth,
-    signal_zerocrossings,
-)
+from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
+                      signal_smooth, signal_zerocrossings)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
@@ -988,7 +985,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
     a = [1]
     processed_ecg = scipy.signal.lfilter(b, a, squar)
     tf = len(processed_ecg)
-
+    rpeakpos = None
     # R-peak finder FSM
     while i < tf:  # ignore last sample of recording
         # State 1: looking for maximum
@@ -1002,7 +999,8 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
             i += 1
 
         Ramptotal = (19 / 20) * Ramptotal + (1 / 20) * Rpeakamp
-        rpeaks.append(rpeakpos)
+        if rpeakpos is not None:
+            rpeaks.append(rpeakpos)
 
         # State 2: waiting state
         d = tf1 - rpeakpos
