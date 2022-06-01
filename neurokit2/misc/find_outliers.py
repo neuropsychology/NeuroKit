@@ -89,8 +89,8 @@ def find_outliers(data, exclude=2, side="both", method="sd", **kwargs):
             right = np.percentile(data, exclude[1] * 100)
             left = np.percentile(data, exclude[0] * 100)
         else:
-            right = np.percentile(data, (1 - (exclude[1] / 2)) * 100)
-            left = np.percentile(data, (exclude[0] / 2) * 100)
+            right = np.percentile(data, (1 - (exclude / 2)) * 100)
+            left = np.percentile(data, (exclude / 2) * 100)
 
     elif method in ["sd"]:
         if isinstance(exclude, (list, tuple, np.ndarray)):
