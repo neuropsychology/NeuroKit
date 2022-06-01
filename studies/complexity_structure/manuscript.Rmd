@@ -67,7 +67,7 @@ abstract: |
   Complexity quantification, through entropy, information and fractal dimension indices, is gaining a renewed traction in psychopsyiology, as new measures with promising qualities emerge from the computational and mathematical advances. Unfortunately, few studies compare the relationship and objective performance of the plethora of existing metrics, in turn hindering reproducibility, replicability, consistency, and restults clarity in the field. In this study, we systematically compared  125 indices of complexity by their computational weight, their representativeness of a multidimensional space of latent dimensions, and empirical proximity with other indices. We propose that a selection of indices, including *ShanEn (D)*, *MSWPEn*, *CWPEn*, *FuzzyMSEn*, *AttEn*, *NLDFD*, *Hjorth*, *MFDFA (Width)*, *MFDFA (Max)*, *MFDFA (Mean)*, *SVDEn*, *MFDFA (Increment)*, might offer a complimentary choice in regards to the quantification of the complexity of time series.
   
 keywords          : "chaos, complexity, fractal, physiology, noise"
-wordcount         : "2587"
+wordcount         : "2707"
 
 bibliography      : "bibliography.bib"
 

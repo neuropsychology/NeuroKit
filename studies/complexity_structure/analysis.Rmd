@@ -7,11 +7,11 @@ bibliography: references.bib
 
 ## Introduction
 
-Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these methods to characterize physiological signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in the assessment and diagnostic of the state and health of living systems [@lau2021brain; @ehlers1995chaos @goetz2007].
+Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these methods to characterize physiological signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in the assessment and diagnostic of the state and health of living systems [@lau2021brain; @ehlers1995chaos; @goetz2007].
 
-There has been an exponential increase in the number of complexity indices in the past few decades [@yang2013]. Although these new procedures are usually mathematically well-defined and theoretically promising, limited empirical evidence is available to understand their similarities and differences [@lau2021brain; @yang2013]. Moreover, some of these methods are resource-intensive and require long computation times. This complicates their application with techniques that utilise high sampling-rates (e.g., M/EEG) and makes them impractical to implement in real-time settings - such as brain-computer interfaces [@refined2017; @manis2018]. As such, having empirical data about the computation time of various complexity indices would prove useful, for instance to objectively guide their selection, especially in contexts where time or computational resourcse are limited.
+There has been an exponential increase in the number of complexity indices in the past few decades [@yang2013]. Although these new procedures are usually mathematically well-defined and theoretically promising, limited empirical evidence is available to understand their similarities and differences [@lau2021brain; @yang2013]. Moreover, some of these methods are resource-intensive and require long computation times. This complicates their application with techniques that utilise high sampling-rates (e.g., M/EEG) and makes them impractical to implement in real-time settings - such as brain-computer interfaces [@azami2017refined; @manis2018]. As such, having empirical data about the computation time of various complexity indices would prove useful, for instance to objectively guide their selection, especially in contexts where time or computational resourcse are limited.
 
-Additionally, the lack of a comprehensive open-source and user-friendly software for computing various complexity indices likely contributes to the limited availability of empirical comparison [@flood2021]. Indeed, most complexity indices are only described mathematically in journal articles, with reusable code seldom made available, therefore limiting their further application and validation [@yang2013; @flood2021]. To address this gap, we added a comprehensive set of complexity-related features to *NeuroKit2*, a Python package for physiological signal processing [@Makowski2021neurokit]. This submodule aims at enabling users to compute a vast amount of complexity indices. The code is designed to be as fast as possible, while still written in pure Python [though with the help^of dependencies such as Numpy or Pandas, @harris2020array; @mckinney2010data] to maximize the re-usability, transparency, and correctness.
+Additionally, the lack of a comprehensive open-source and user-friendly software for computing various complexity indices likely contributes to the limited availability of empirical comparison [@flood2021]. Indeed, most complexity indices are only described mathematically in journal articles, with reusable code seldom made available, therefore limiting their further application and validation [@yang2013; @flood2021]. To address this gap, we added a comprehensive set of complexity-related features to *NeuroKit2*, a Python package for physiological signal processing [@Makowski2021neurokit], to provide users with a software to compute a vast amount of complexity indices. The code is designed to be as fast as possible, while still written in pure Python [though with the help of dependencies such as Numpy or Pandas, @harris2020array; @mckinney2010data] to maximize the re-usability, transparency, and correctness.
 
 Leveraging this tool, the goal of this study is to empirically compare a large number of complexity indices, inspect how they relate to one another, and derive recommendations for indices selection. More specifically, we will quantify the complexity using 128 indices of various types of signals with varying degrees of noise, using *NeuroKit2*. We will then project the results on a latent space through factor analysis, and review the various indices that we find the most relevant and interesting in regards to their representation of the latent dimensions. This analysis will be complemented by hierarchical clustering.
 
@@ -66,7 +66,8 @@ p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulat
 rm(df, p1, p2, p3, p4, p5)
 ```
 
-The script to generate the data can be found at **github.com/neuropsychology/NeuroKit/studies/complexity_structure**.
+The Python script to generate the data can be found at 
+**github.com/neuropsychology/NeuroKit/studies/complexity_structure**.
 
 
 We started by generating 5 types of signals, one random-walk, two oscillatory signals made (with one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at 5 different lengths. The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
@@ -75,7 +76,10 @@ The combination of these parameters resulted in a total of `r 48*5*5*5` signal i
 
 ## Results
 
-The data analysis script, the data and the code for the figures is fully available at **github.com/neuropsychology/NeuroKit/studies/complexity_structure**. The analysis was performed in R using the *easystats* collection of packages [@correlationArticle; @seeArticle; @parametersArticle; @modelbasedPackage].
+The data analysis script and the data are fully available at 
+**github.com/neuropsychology/NeuroKit/studies/complexity_structure**. 
+The analysis was performed in R using the *easystats* collection of packages [@correlationArticle; @seeArticle; @parametersArticle; @modelbasedPackage]. As the results are primarily presented in a graphical way via the figures, the code to fully reproduce them is also included.
+
 
 ```{r message=FALSE, warning=FALSE, results='hide', echo=FALSE}
 df <- read.csv("data_Complexity.csv") |>
@@ -305,11 +309,11 @@ df |>
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-Firstly, one should note that the computation times presented in **Figure 2** are relative and do not correspond to real times, as these would highly depend on the machine used. Instead, the goal is here to convey some intuition on the differences between different classes of indices (using the same machine and the same language of implementation, i.e., Python). It is possible that computational advances or improvements in the code efficiency might change some of these values, but we believe that the "big picture" should remain fairly stable, as it is to a large extend driven by the inherent nature of the algorithms under consideration.
+Firstly, one should note that the computation times presented in **Figure 2** are relative and do not correspond to real times, as these would highly depend on the machine used. Rather, the goal here was to convey some intuition on the differences between different classes of indices (using the same machine and the same language of implementation, i.e., Python). While it is possible that computational advances or improvements in the code efficiency might change some of these values, we believe that the "big picture" should remain fairly stable, as it is to a large extend driven by the inherent nature of the algorithms under consideration.
 
-Despite the relative shortness of the signals considered (a few thousand points at most), the fully-parallelized data generation script took 24h to run on a 48-cores machine. After summarizing and sorting the indices by computation time, the most striking feature is the order of magnitude of difference between the fastest and slowest indices. Additionally, some indices are particularly sensitive to the signal length, a property which combined with computational cost led to indices being 100,000 times slower to compute than others.
+Despite the relative shortness of the signals considered (a few thousand points at most), the fully-parallelized data generation script took about 24h to run on a 48-cores machine. After summarizing and sorting the indices by computation time, the most striking feature is the order of magnitude of difference between the fastest and slowest indices. Additionally, some indices are particularly sensitive to the signal length, a property which combined with computational cost led to indices being 100,000 times slower to compute than others.
 
-In particular, multiscale indices were among the slowest to compute due to their iterative nature (a given index is computed multiple times on coarse-grained subseries of the signal). Indices related to Recurrence Quantification Analysis (RQA) were also relatively slow and did not scale well with signal length.
+In particular, multiscale indices were among the slowest to compute due to their iterative nature (a given index being computed multiple times on coarse-grained subseries of the signal). Indices related to Recurrence Quantification Analysis (RQA) were also relatively slow and did not scale well with signal length.
 
 
 
@@ -387,7 +391,7 @@ cor |>
 ```
 
 
-For the subsequent analyses, we removed statistically redundant indices, such as *PowEn* - identical to *SD*, *CREn (100)*  - identical to *CREn (10)*, and *FuzzyRCMSEn* - identical to *RCMSEn*.
+For the subsequent analyses, we removed statistically redundant indices (which correlation was equal to 1.0), such as *PowEn* - identical to *SD*, *CREn (100)*  - identical to *CREn (10)*, and *FuzzyRCMSEn* - identical to *RCMSEn*.
 
 
 
@@ -427,7 +431,7 @@ data <- data |>
 cor <- get_cor(data, plot=TRUE)
 ```
 
-The Pearson correlation analysis revealed that complexity indices, despite their multitude and their conceptual specificities, do indeed share similarities. They form two major clusters that are easily observable (the blue and the red groups in **Figure 2**). However, these two anti-correlated groups are mostly revealing of the fact that some indices, by design, index the "predictability", whereas others, the "randomness", and thus are negatively related to one-another. In order to extract finer groupings, further analyses procedures are applied below.
+The Pearson correlation analysis revealed that complexity indices, despite their multitude and their conceptual specificities, do indeed share similarities. They form two major clusters that are easily observable (the blue and the red groups in **Figure 2**). That being said, these two anti-correlated groups are mostly revealing of the fact that some indices, by design, index the "predictability", whereas others, the "randomness", and thus are negatively related to one-another. In order to extract finer groupings, further analyses procedures are applied below.
 
 ### Factor Analysis
 
@@ -543,7 +547,7 @@ p2 <- order |>
 
 The agreement procedure for the optimal number of factors suggested that the 125 indices can be mapped on a multidimensional space of 14 orthogonal latent factors, that we extracted using a *varimax* rotation. We then took interest in the loading profile of each index, and in particular the latent dimension that it maximally relates to (see **Figure 3**).
 
-This first factor is the closest to the largest amount of indices, and is positively loaded by indices that are sensitive to the deviation of consecutive differences (e.g., *ShanEn - D*, *NLDFD*, *PFD - D*). In line with this, this factor was negatively loaded by indices related to Detrended Fluctuation Analysis (DFA), which tends to index the presence of long-term correlations. As such, this latent factor might encapsulate the predominance of short-term vs. long-term unpredictability.
+The first extracted factor is the closest to the largest amount of indices, and is positively loaded by indices that are sensitive to the deviation of consecutive differences (e.g., *ShanEn - D*, *NLDFD*, *PFD - D*). In line with this, this factor was negatively loaded by indices related to Detrended Fluctuation Analysis (DFA), which tends to index the presence of long-term correlations. As such, this latent factor might encapsulate the predominance of short-term vs. long-term unpredictability.
 The second factor was strongly loaded by signal *length* and *SD*, and thus might not capture features of complexity *per se*. Indices with the most relation to it were indices known to be sensitive to signal length, such as *ApEn*.
 The third factor included multiscale indices, such as *MSWPEn*.
 The fourth factor was loaded by permutation entropy indices, such as *WPEn*.
