@@ -33,9 +33,7 @@ knitr::opts_chunk$set(
 <!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
 <!-- # Measuring Chaos with NeuroKit2: An Empirical Comparison of Fractal Physiology Complexity Indices -->
 
-*This study can be referenced by* [*citing the package and the documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
-
-**We'd like to improve this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+*This study can be referenced by* [*citing the preprint*](https://psyarxiv.com/v5tqw/).
 
 
 
