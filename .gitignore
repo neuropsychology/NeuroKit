@@ -147,6 +147,8 @@ data/RealObjectsEEG
 studies/hrv_structure/efa.csv
 studies/hrv_structure/data_stability_1.csv
 studies/hrv_structure/data2.csv
+data/lemon/lemon/*
+data/srm_restingstate_eeg/eeg/
 data/mit_nst/data2.csv
 data/mit_long-term/download_mit_long-term.py
 *.atr

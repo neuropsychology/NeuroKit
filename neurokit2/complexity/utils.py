@@ -144,6 +144,8 @@ def _get_count(embedded, tolerance, distance="chebyshev"):
 
 def _get_count_fuzzy(embedded, tolerance, distance="chebyshev", n=1):
     # TODO: it would be good to implement 'distrange' here to have fuzzy RangeEn
+    # TODO: also, different membership functions?
+    # https://github.com/HamedAzami/FuzzyEntropy_Matlab/blob/master/FuzEn_MFs.m
     dist = sklearn.metrics.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 

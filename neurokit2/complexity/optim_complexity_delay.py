@@ -293,23 +293,24 @@ def complexity_delay(
 
     # Get optimal tau
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+
     if np.isnan(optimal):
         warn(
             "No optimal time delay is found. Nan is returned."
             " Consider using a higher `delay_max`.",
             category=NeuroKitWarning,
         )
-        return optimal
-    optimal = tau_sequence[optimal]
+    else:
+        optimal = tau_sequence[optimal]
 
-    if show is True:
-        _embedding_delay_plot(
-            signal,
-            metric_values=metric_values,
-            tau_sequence=tau_sequence,
-            tau=optimal,
-            metric=metric,
-        )
+        if show is True:
+            _embedding_delay_plot(
+                signal,
+                metric_values=metric_values,
+                tau_sequence=tau_sequence,
+                tau=optimal,
+                metric=metric,
+            )
 
     # Return optimal tau and info dict
     return optimal, {
@@ -350,6 +351,7 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
                 + "`algorithm = 'first local minimum (corrected)'` or using another method.",
                 category=NeuroKitWarning,
             )
+            optimal = np.nan
 
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
@@ -361,7 +363,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         slope_in_deg = np.rad2deg(np.arctan(slope))
         optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
     elif algorithm == "first drop below 1-(1/e) of maximum":
-        optimal = np.where(metric_values < np.max(metric_values) * (1 - 1.0 / np.e))[0][0]
+        try:
+            optimal = np.where(metric_values < np.nanmax(metric_values) * (1 - 1.0 / np.e))[0][0]
+        except IndexError:  # If no value are below that threshold
+            optimal = np.nan
 
     if not isinstance(optimal, (int, float, np.integer)):
         if len(optimal) != 0:

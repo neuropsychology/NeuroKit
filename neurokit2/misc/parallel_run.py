@@ -11,7 +11,7 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
     n_jobs : int
         Number of cores to use. ``-2`` means all but 1. See :func:`.joblib.Parallel`.
     **kwargs
-        Other arguments that can be passed to :func:`.joblib.Parallel`.
+        Other arguments that can be passed to :func:`.joblib.Parallel`, such as ``verbose``.
 
     Returns
     -------
