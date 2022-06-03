@@ -1062,7 +1062,7 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">27</span>
+<span class="gh">Out[6]: </span><span class="go">33</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1137,7 +1137,7 @@ with the first peak occurring at sample point 0.</p>
 <li><p><strong>arguments_list</strong> (<em>list</em>) – A list of dictionaries. The function will iterate through this list and pass each dictionary
 inside as <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> to the main function.</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em>) – Number of cores to use. <code class="docutils literal notranslate"><span class="pre">-2</span></code> means all but 1. See <code class="xref py py-func docutils literal notranslate"><span class="pre">joblib.Parallel()</span></code>.</p></li>
-<li><p><strong>**kwargs</strong> – Other arguments that can be passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">joblib.Parallel()</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments that can be passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">joblib.Parallel()</span></code>, such as <code class="docutils literal notranslate"><span class="pre">verbose</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

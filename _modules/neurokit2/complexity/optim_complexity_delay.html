@@ -825,23 +825,24 @@ title="Open an issue"
 
     <span class="c1"># Get optimal tau</span>
     <span class="n">optimal</span> <span class="o">=</span> <span class="n">_embedding_delay_select</span><span class="p">(</span><span class="n">metric_values</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">optimal</span><span class="p">):</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;No optimal time delay is found. Nan is returned.&quot;</span>
             <span class="s2">&quot; Consider using a higher `delay_max`.&quot;</span><span class="p">,</span>
             <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">optimal</span>
-    <span class="n">optimal</span> <span class="o">=</span> <span class="n">tau_sequence</span><span class="p">[</span><span class="n">optimal</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">optimal</span> <span class="o">=</span> <span class="n">tau_sequence</span><span class="p">[</span><span class="n">optimal</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">_embedding_delay_plot</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span>
-            <span class="n">metric_values</span><span class="o">=</span><span class="n">metric_values</span><span class="p">,</span>
-            <span class="n">tau_sequence</span><span class="o">=</span><span class="n">tau_sequence</span><span class="p">,</span>
-            <span class="n">tau</span><span class="o">=</span><span class="n">optimal</span><span class="p">,</span>
-            <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">_embedding_delay_plot</span><span class="p">(</span>
+                <span class="n">signal</span><span class="p">,</span>
+                <span class="n">metric_values</span><span class="o">=</span><span class="n">metric_values</span><span class="p">,</span>
+                <span class="n">tau_sequence</span><span class="o">=</span><span class="n">tau_sequence</span><span class="p">,</span>
+                <span class="n">tau</span><span class="o">=</span><span class="n">optimal</span><span class="p">,</span>
+                <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="c1"># Return optimal tau and info dict</span>
     <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span>
@@ -882,6 +883,7 @@ title="Open an issue"
                 <span class="o">+</span> <span class="s2">&quot;`algorithm = &#39;first local minimum (corrected)&#39;` or using another method.&quot;</span><span class="p">,</span>
                 <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="n">optimal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;first 1/e crossing&quot;</span><span class="p">:</span>
         <span class="n">metric_values</span> <span class="o">=</span> <span class="n">metric_values</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -893,7 +895,10 @@ title="Open an issue"
         <span class="n">slope_in_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">slope</span><span class="p">))</span>
         <span class="n">optimal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slope_in_deg</span> <span class="o">==</span> <span class="n">find_closest</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">slope_in_deg</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;first drop below 1-(1/e) of maximum&quot;</span><span class="p">:</span>
-        <span class="n">optimal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">metric_values</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">metric_values</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">optimal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">metric_values</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">metric_values</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>  <span class="c1"># If no value are below that threshold</span>
+            <span class="n">optimal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimal</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optimal</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
