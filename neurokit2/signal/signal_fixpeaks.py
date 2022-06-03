@@ -162,6 +162,16 @@ def _signal_fixpeaks_neurokit(
         robust,
         iterations_max=iterations_max,
     )
+    
+    valid_peaks = peaks_clean[peaks_clean >= 0]
+    n_invalid_idcs = len(peaks_clean) - len(valid_peaks)
+    if n_invalid_idcs > 0:
+        warn(
+            f" Negative peak indices detected in output. "
+            f" Removing {n_invalid_idcs}) invalid peaks. ",
+            category=NeuroKitWarning,
+        )
+        peaks_clean = valid_peaks
 
     return peaks_clean
 
