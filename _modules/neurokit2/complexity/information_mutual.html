@@ -1,0 +1,808 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.complexity.information_mutual &#8212; NeuroKit2 0.2.1 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">
+     Event-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">
+     Interval-related Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">
+     Customize your Processing Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">
+     Heart Rate Varability (HRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">
+     Extract and Visualize Individual Heartbeats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">
+     Locate P, Q, S and T waves in ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">
+     ECG-Derived Respiration (EDR)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">
+     Generating Abnormal 12-leads ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">
+     Analyze Electrodermal Activity (EDA)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">
+     Respiratory Rate Variability (RRV)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">
+     Analyze Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">
+     Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">
+     EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
+     Fit a function to a non-linear pattern
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">
+     Create epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/bio.html">
+     Bio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/eda.html">
+     EDA
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/emg.html">
+     EMG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/eog.html">
+     EOG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/eeg.html">
+     EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/microstates.html">
+     Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/signal.html">
+     Signal
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/events.html">
+     Events
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/epochs.html">
+     Epochs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/complexity.html">
+     Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/markov.html">
+     Markov Chains
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/stats.html">
+     Stats
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/misc.html">
+     Misc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/benchmark.html">
+     Benchmarking
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
+     HRV Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
+     HRV Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+     Complexity Review
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference external" href="https://psyarxiv.com/v5tqw/">
+     Complexity Structure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_eeg.html">
+     EEG Complexity: Parameters Selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/eog_blinktemplate.html">
+     EOG blink template
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
+   Repository
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/complexity/information_mutual.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for neurokit2.complexity.information_mutual</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.ndimage</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="kn">import</span> <span class="nn">sklearn.metrics</span>
+<span class="kn">import</span> <span class="nn">sklearn.neighbors</span>
+
+
+<div class="viewcode-block" id="mutual_information"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.mutual_information">[docs]</a><span class="k">def</span> <span class="nf">mutual_information</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;varoquaux&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mutual Information (MI)</span>
+
+<span class="sd">    Computes the mutual information (MI) between two vectors from a joint histogram.</span>
+<span class="sd">    The mutual information of two variables is a measure of the mutual dependence between them.</span>
+<span class="sd">    More specifically, it quantifies the &quot;amount of information&quot; obtained about one variable by</span>
+<span class="sd">    observing the other variable.</span>
+
+<span class="sd">    Different methods are available:</span>
+<span class="sd">    * **nolitsa**: Standard mutual information (a bit faster than the ``&quot;sklearn&quot;`` method).</span>
+<span class="sd">    * **varoquaux**: Applies a Gaussian filter on the joint-histogram. The smoothing amount can be</span>
+<span class="sd">      modulated via the ``sigma`` argument (by default, ``sigma=1``).</span>
+<span class="sd">    * **knn**: Non-parametric (i.e., not based on binning) estimation via nearest neighbors.</span>
+<span class="sd">      Additional parameters includes ``k`` (by default, ``k=3``), the number of nearest neighbors</span>
+<span class="sd">      to use.</span>
+<span class="sd">    * **max**: Maximum Mutual Information coefficient, i.e., the MI is maximal given a certain</span>
+<span class="sd">      combination of number of bins.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : Union[list, np.array, pd.Series]</span>
+<span class="sd">        A vector of values.</span>
+<span class="sd">    y : Union[list, np.array, pd.Series]</span>
+<span class="sd">        A vector of values.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The method to use.</span>
+<span class="sd">    bins : int</span>
+<span class="sd">        Number of bins to use while creating the histogram. Only used for ``&quot;nolitsa&quot;`` and</span>
+<span class="sd">        ``&quot;varoquaux&quot;``. If ``&quot;default&quot;``, the number of bins is estimated following</span>
+<span class="sd">        Hacine-Gharbi (2018).</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments to pass to the chosen method.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The computed similarity measure.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    information_fisher</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    **Example 1**: Simple case</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      x = [3, 3, 5, 1, 6, 3, 2, 8, 1, 2, 3, 5, 4, 0, 2]</span>
+<span class="sd">      y = [5, 3, 1, 3, 4, 5, 6, 4, 1, 3, 4, 6, 2, 1, 3]</span>
+
+<span class="sd">      nk.mutual_information(x, y, method=&quot;varoquaux&quot;)</span>
+<span class="sd">      nk.mutual_information(x, y, method=&quot;nolitsa&quot;)</span>
+<span class="sd">      nk.mutual_information(x, y, method=&quot;knn&quot;)</span>
+<span class="sd">      nk.mutual_information(x, y, method=&quot;max&quot;)</span>
+
+<span class="sd">    **Example 2**: Method comparison</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import numpy as np</span>
+<span class="sd">      import pandas as pd</span>
+
+<span class="sd">      x = np.random.normal(size=400)</span>
+<span class="sd">      y = x**2</span>
+
+<span class="sd">      data = pd.DataFrame()</span>
+<span class="sd">      for level in np.linspace(0.01, 3, 200):</span>
+<span class="sd">          noise = np.random.normal(scale=level, size=400)</span>
+<span class="sd">          rez = pd.DataFrame({&quot;Noise&quot;: [level],</span>
+<span class="sd">              &quot;MI1&quot;: [nk.mutual_information(x, y + noise, method=&quot;varoquaux&quot;, sigma=1)],</span>
+<span class="sd">              &quot;MI2&quot;: [nk.mutual_information(x, y + noise, method=&quot;varoquaux&quot;, sigma=0)],</span>
+<span class="sd">              &quot;MI3&quot;: [nk.mutual_information(x, y + noise, method=&quot;nolitsa&quot;)],</span>
+<span class="sd">              &quot;MI4&quot;: [nk.mutual_information(x, y + noise, method=&quot;knn&quot;)],</span>
+<span class="sd">              &quot;MI5&quot;: [nk.mutual_information(x, y + noise, method=&quot;max&quot;)]</span>
+<span class="sd">          })</span>
+<span class="sd">          data = pd.concat([data, rez], axis=0)</span>
+<span class="sd">      data[&quot;MI1&quot;] = nk.rescale(data[&quot;MI1&quot;])</span>
+<span class="sd">      data[&quot;MI2&quot;] = nk.rescale(data[&quot;MI2&quot;])</span>
+<span class="sd">      data[&quot;MI3&quot;] = nk.rescale(data[&quot;MI3&quot;])</span>
+<span class="sd">      data[&quot;MI4&quot;] = nk.rescale(data[&quot;MI4&quot;])</span>
+<span class="sd">      data[&quot;MI5&quot;] = nk.rescale(data[&quot;MI5&quot;])</span>
+<span class="sd">      data.plot(x=&quot;Noise&quot;, y=[&quot;MI1&quot;, &quot;MI2&quot;, &quot;MI3&quot;, &quot;MI4&quot;, &quot;MI5&quot;], kind=&quot;line&quot;)</span>
+
+<span class="sd">      # Computation time</span>
+<span class="sd">      # x = np.random.normal(size=10000)</span>
+<span class="sd">      # %timeit nk.mutual_information(x, x**2, method=&quot;varoquaux&quot;)</span>
+<span class="sd">      # %timeit nk.mutual_information(x, x**2, method=&quot;nolitsa&quot;)</span>
+<span class="sd">      # %timeit nk.mutual_information(x, x**2, method=&quot;sklearn&quot;)</span>
+<span class="sd">      # %timeit nk.mutual_information(x, x**2, method=&quot;knn&quot;, k=2)</span>
+<span class="sd">      # %timeit nk.mutual_information(x, x**2, method=&quot;knn&quot;, k=5)</span>
+<span class="sd">      # %timeit nk.mutual_information(x, x**2, method=&quot;max&quot;)</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Studholme, C., Hawkes, D. J., &amp; Hill, D. L. (1998, June). Normalized entropy measure for</span>
+<span class="sd">      multimodality image alignment. In Medical imaging 1998: image processing (Vol. 3338, pp.</span>
+<span class="sd">      132-143). SPIE.</span>
+<span class="sd">    * Hacine-Gharbi, A., &amp; Ravier, P. (2018). A binning formula of bi-histogram for joint entropy</span>
+<span class="sd">      estimation using mean square error minimization. Pattern Recognition Letters, 101, 21-28.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="c1"># https://www.freecodecamp.org/news/</span>
+        <span class="c1"># how-machines-make-predictions-finding-correlations-in-complex-data-dfd9f0d87889/</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.6</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="n">mi</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bins</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bins</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">*</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bins</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">p_x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">p_y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">new_mi</span> <span class="o">=</span> <span class="n">_mutual_information_sklearn</span><span class="p">(</span><span class="n">p_x</span><span class="p">,</span> <span class="n">p_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">new_mi</span> <span class="o">&gt;</span> <span class="n">mi</span><span class="p">:</span>
+                    <span class="n">mi</span> <span class="o">=</span> <span class="n">new_mi</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># Hacine-Gharbi (2018)</span>
+            <span class="c1"># https://stats.stackexchange.com/questions/179674/</span>
+            <span class="c1"># number-of-bins-when-computing-mutual-information</span>
+            <span class="n">bins</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span>
+            <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bins</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;varoquaux&quot;</span><span class="p">]:</span>
+            <span class="n">mi</span> <span class="o">=</span> <span class="n">_mutual_information_varoquaux</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;shannon&quot;</span><span class="p">,</span> <span class="s2">&quot;nolitsa&quot;</span><span class="p">]:</span>
+            <span class="n">mi</span> <span class="o">=</span> <span class="n">_mutual_information_nolitsa</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sklearn&quot;</span><span class="p">]:</span>
+            <span class="n">mi</span> <span class="o">=</span> <span class="n">_mutual_information_sklearn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;knn&quot;</span><span class="p">]:</span>
+            <span class="n">mi</span> <span class="o">=</span> <span class="n">_mutual_information_knn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: mutual_information(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mi</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Methods</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_mutual_information_sklearn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bins</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">p_xy</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">contingency</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">p_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">mutual_info_score</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">contingency</span><span class="o">=</span><span class="n">p_xy</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_mutual_information_varoquaux</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Based on Gael Varoquaux&#39;s implementation:</span>
+<span class="sd">    https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.&quot;&quot;&quot;</span>
+    <span class="n">jh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># smooth the jh with a gaussian filter of given sigma</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">gaussian_filter</span><span class="p">(</span><span class="n">jh</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">jh</span><span class="p">)</span>
+
+    <span class="c1"># compute marginal histograms</span>
+    <span class="n">jh</span> <span class="o">=</span> <span class="n">jh</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jh</span><span class="p">)</span>
+    <span class="n">jh</span> <span class="o">=</span> <span class="n">jh</span> <span class="o">/</span> <span class="n">sh</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jh</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">jh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jh</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">jh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">normalized</span><span class="p">:</span>
+        <span class="n">mi</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s2</span><span class="p">)))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jh</span><span class="p">)))</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">jh</span><span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">mi</span>
+
+
+<span class="k">def</span> <span class="nf">_mutual_information_nolitsa</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Based on the nolitsa package:</span>
+<span class="sd">    https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">p_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">p_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="c1"># Convert frequencies into probabilities.</span>
+    <span class="c1"># Also, in the limit p -&gt; 0, p*log(p) is 0.  We need to take out those.</span>
+    <span class="n">p_x</span> <span class="o">=</span> <span class="n">p_x</span><span class="p">[</span><span class="n">p_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_x</span><span class="p">)</span>
+    <span class="n">p_y</span> <span class="o">=</span> <span class="n">p_y</span><span class="p">[</span><span class="n">p_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_y</span><span class="p">)</span>
+    <span class="n">p_xy</span> <span class="o">=</span> <span class="n">p_xy</span><span class="p">[</span><span class="n">p_xy</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_xy</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the corresponding Shannon entropies.</span>
+    <span class="n">h_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">p_x</span><span class="p">))</span>
+    <span class="n">h_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">p_y</span><span class="p">))</span>
+    <span class="n">h_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_xy</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">p_xy</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">h_xy</span> <span class="o">-</span> <span class="n">h_x</span> <span class="o">-</span> <span class="n">h_y</span>
+
+
+<span class="k">def</span> <span class="nf">_mutual_information_knn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Based on the NPEET package:</span>
+<span class="sd">    https://github.com/gregversteeg/NPEET</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Find nearest neighbors in joint space, p=inf means max-norm</span>
+    <span class="n">dvec</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;chebyshev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">k</span><span class="p">]</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;chebyshev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dvec</span> <span class="o">-</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;chebyshev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">dvec</span> <span class="o">-</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

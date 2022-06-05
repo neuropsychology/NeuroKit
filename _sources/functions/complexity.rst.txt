@@ -187,6 +187,10 @@ Other indices
 """"""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fishershannon_information
 
+*mutual_information()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.mutual_information
+
 *complexity_hjorth()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth

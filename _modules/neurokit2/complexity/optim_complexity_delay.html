@@ -375,6 +375,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_eeg.html">
+     EEG Complexity: Parameters Selection
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../studies/ecg_benchmark.html">
      ECG Benchmark
     </a>
@@ -964,11 +969,11 @@ title="Open an issue"
             <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">current_tau</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Mutual Information&quot;</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span>
-                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;shannon&quot;</span>
+                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;varoquaux&quot;</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Mutual Information 2&quot;</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span>
-                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;varoquaux&quot;</span>
+                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Displacement&quot;</span><span class="p">:</span>
                 <span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>

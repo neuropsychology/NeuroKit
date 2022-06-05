@@ -10,6 +10,7 @@ Some of the work-in-progress studies.
    HRV Structure <https://psyarxiv.com/mwa6x/>
    Complexity Review <https://psyarxiv.com/f8k3x/>
    Complexity Structure <https://psyarxiv.com/v5tqw/>
+   EEG Complexity: Parameters Selection <complexity_eeg>
    ECG Benchmark <ecg_benchmark>
    EEG Analysis with GAMs <erp_gam>
    EOG blink template <eog_blinktemplate>

@@ -378,6 +378,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/complexity_eeg.html">
+     EEG Complexity: Parameters Selection
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../studies/ecg_benchmark.html">
      ECG Benchmark
     </a>
@@ -754,7 +759,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e17df6b3bdb6fb572a07fca2a1cdca807e26da9539b24b02bfaa27af24ca69f2.png" src="../../_images/e17df6b3bdb6fb572a07fca2a1cdca807e26da9539b24b02bfaa27af24ca69f2.png" />
+<img alt="../../_images/4ece4c25b012a939c17f3a26bdce78910d6636878e2acf0a72367f6b7ef9c7bb.png" src="../../_images/4ece4c25b012a939c17f3a26bdce78910d6636878e2acf0a72367f6b7ef9c7bb.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -770,7 +775,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/aef57e1db12e0a886dfbeb7ac452e35f17d9c2c46e22d5f6feeb5d9a86307cae.png" src="../../_images/aef57e1db12e0a886dfbeb7ac452e35f17d9c2c46e22d5f6feeb5d9a86307cae.png" />
+<img alt="../../_images/49dd31fd726ccc637c8d69667a9878eef7455db1ee8114300d867db290fb810e.png" src="../../_images/49dd31fd726ccc637c8d69667a9878eef7455db1ee8114300d867db290fb810e.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -826,36 +831,36 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.218823</td>
-      <td>133</td>
+      <td>-0.207392</td>
+      <td>138</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.213063</td>
-      <td>134</td>
+      <td>-0.202198</td>
+      <td>139</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.207298</td>
-      <td>135</td>
+      <td>-0.196910</td>
+      <td>140</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.201488</td>
-      <td>136</td>
+      <td>-0.191463</td>
+      <td>141</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.195581</td>
-      <td>137</td>
+      <td>-0.185776</td>
+      <td>142</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -940,123 +945,123 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.218823</td>
-      <td>-0.132240</td>
-      <td>-0.133192</td>
-      <td>-0.141084</td>
-      <td>-0.136196</td>
-      <td>-0.139290</td>
-      <td>-0.135442</td>
-      <td>-0.139111</td>
-      <td>-0.141077</td>
-      <td>-0.137656</td>
+      <td>-0.207392</td>
+      <td>-0.141708</td>
+      <td>-0.133963</td>
+      <td>-0.130569</td>
+      <td>-0.131631</td>
+      <td>-0.143914</td>
+      <td>-0.135985</td>
+      <td>-0.126312</td>
+      <td>-0.128739</td>
+      <td>-0.135913</td>
       <td>...</td>
-      <td>-0.134237</td>
-      <td>-0.154567</td>
-      <td>-0.098560</td>
-      <td>-0.232373</td>
-      <td>-0.128894</td>
-      <td>-0.145131</td>
-      <td>-0.137022</td>
-      <td>-0.142848</td>
-      <td>-0.145572</td>
-      <td>-0.138854</td>
+      <td>-0.124858</td>
+      <td>-0.172824</td>
+      <td>-0.036086</td>
+      <td>-0.340097</td>
+      <td>-0.125763</td>
+      <td>-0.144058</td>
+      <td>-0.130166</td>
+      <td>-0.138109</td>
+      <td>-0.136489</td>
+      <td>-0.135456</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.213063</td>
-      <td>-0.131503</td>
-      <td>-0.131951</td>
-      <td>-0.139864</td>
-      <td>-0.135222</td>
-      <td>-0.138432</td>
-      <td>-0.134356</td>
-      <td>-0.138310</td>
-      <td>-0.140222</td>
-      <td>-0.136555</td>
+      <td>-0.202198</td>
+      <td>-0.141018</td>
+      <td>-0.132600</td>
+      <td>-0.129584</td>
+      <td>-0.130791</td>
+      <td>-0.143269</td>
+      <td>-0.134875</td>
+      <td>-0.125490</td>
+      <td>-0.127998</td>
+      <td>-0.134800</td>
       <td>...</td>
-      <td>-0.133214</td>
-      <td>-0.153304</td>
-      <td>-0.097500</td>
-      <td>-0.231994</td>
-      <td>-0.128103</td>
-      <td>-0.144447</td>
-      <td>-0.135876</td>
-      <td>-0.141696</td>
-      <td>-0.145259</td>
-      <td>-0.137879</td>
+      <td>-0.123916</td>
+      <td>-0.171185</td>
+      <td>-0.035523</td>
+      <td>-0.339956</td>
+      <td>-0.124718</td>
+      <td>-0.143363</td>
+      <td>-0.129257</td>
+      <td>-0.137279</td>
+      <td>-0.135839</td>
+      <td>-0.134988</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.207298</td>
-      <td>-0.130678</td>
-      <td>-0.130531</td>
-      <td>-0.138423</td>
-      <td>-0.134069</td>
-      <td>-0.137393</td>
-      <td>-0.133135</td>
-      <td>-0.137350</td>
-      <td>-0.139239</td>
-      <td>-0.135306</td>
+      <td>-0.196910</td>
+      <td>-0.140180</td>
+      <td>-0.131166</td>
+      <td>-0.128500</td>
+      <td>-0.129765</td>
+      <td>-0.142275</td>
+      <td>-0.133540</td>
+      <td>-0.124574</td>
+      <td>-0.127142</td>
+      <td>-0.133515</td>
       <td>...</td>
-      <td>-0.132060</td>
-      <td>-0.151843</td>
-      <td>-0.096196</td>
-      <td>-0.231457</td>
-      <td>-0.127123</td>
-      <td>-0.143614</td>
-      <td>-0.134582</td>
-      <td>-0.140313</td>
-      <td>-0.144752</td>
-      <td>-0.136808</td>
+      <td>-0.122890</td>
+      <td>-0.169357</td>
+      <td>-0.034781</td>
+      <td>-0.339644</td>
+      <td>-0.123462</td>
+      <td>-0.142513</td>
+      <td>-0.128230</td>
+      <td>-0.136335</td>
+      <td>-0.135050</td>
+      <td>-0.134347</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.201488</td>
-      <td>-0.129742</td>
-      <td>-0.128891</td>
-      <td>-0.136718</td>
-      <td>-0.132687</td>
-      <td>-0.136137</td>
-      <td>-0.131733</td>
-      <td>-0.136179</td>
-      <td>-0.138082</td>
-      <td>-0.133863</td>
+      <td>-0.191463</td>
+      <td>-0.139148</td>
+      <td>-0.129637</td>
+      <td>-0.127277</td>
+      <td>-0.128502</td>
+      <td>-0.140858</td>
+      <td>-0.131942</td>
+      <td>-0.123536</td>
+      <td>-0.126131</td>
+      <td>-0.132022</td>
       <td>...</td>
-      <td>-0.130743</td>
-      <td>-0.150108</td>
-      <td>-0.094605</td>
-      <td>-0.230719</td>
-      <td>-0.125851</td>
-      <td>-0.142606</td>
-      <td>-0.133101</td>
-      <td>-0.138632</td>
-      <td>-0.144014</td>
-      <td>-0.135607</td>
+      <td>-0.121746</td>
+      <td>-0.167289</td>
+      <td>-0.033814</td>
+      <td>-0.339127</td>
+      <td>-0.121955</td>
+      <td>-0.141474</td>
+      <td>-0.127038</td>
+      <td>-0.135231</td>
+      <td>-0.134081</td>
+      <td>-0.133475</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.195581</td>
-      <td>-0.128671</td>
-      <td>-0.126990</td>
-      <td>-0.134704</td>
-      <td>-0.131014</td>
-      <td>-0.134625</td>
-      <td>-0.130083</td>
-      <td>-0.134732</td>
-      <td>-0.136691</td>
-      <td>-0.132170</td>
+      <td>-0.185776</td>
+      <td>-0.137872</td>
+      <td>-0.127978</td>
+      <td>-0.125860</td>
+      <td>-0.126946</td>
+      <td>-0.138941</td>
+      <td>-0.130028</td>
+      <td>-0.122332</td>
+      <td>-0.124910</td>
+      <td>-0.130263</td>
       <td>...</td>
-      <td>-0.129216</td>
-      <td>-0.148010</td>
-      <td>-0.092679</td>
-      <td>-0.229713</td>
-      <td>-0.124166</td>
-      <td>-0.141388</td>
-      <td>-0.131374</td>
-      <td>-0.136572</td>
-      <td>-0.142993</td>
-      <td>-0.134237</td>
+      <td>-0.120441</td>
+      <td>-0.164911</td>
+      <td>-0.032572</td>
+      <td>-0.338361</td>
+      <td>-0.120159</td>
+      <td>-0.140201</td>
+      <td>-0.125621</td>
+      <td>-0.133913</td>
+      <td>-0.132878</td>
+      <td>-0.132306</td>
     </tr>
   </tbody>
 </table>
@@ -1084,7 +1089,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4bcd54d9b8e84635de2328958c9a59f54c9bf6d00b1997ae9d22199312821e6f.png" src="../../_images/4bcd54d9b8e84635de2328958c9a59f54c9bf6d00b1997ae9d22199312821e6f.png" />
+<img alt="../../_images/8ffce6d767890c66e1a70298d7a1a77736717d642c96b7fe6fbda95a7850ea26.png" src="../../_images/8ffce6d767890c66e1a70298d7a1a77736717d642c96b7fe6fbda95a7850ea26.png" />
 </div>
 </div>
 </section>
