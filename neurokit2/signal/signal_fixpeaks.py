@@ -23,6 +23,7 @@ def signal_fixpeaks(
     robust=False,
     method="Kubios",
     iterations_max=100,
+    interpolate_on_peaks=False,
     **kwargs,
 ):
     """Correct erroneous peak placements.
@@ -133,7 +134,7 @@ def signal_fixpeaks(
             relative_interval_max=relative_interval_max,
             robust=robust,
             iterations_max=iterations_max,
-            **kwargs,
+            interpolate_on_peaks=interpolate_on_peaks,
         )
 
 
@@ -149,7 +150,7 @@ def _signal_fixpeaks_neurokit(
     relative_interval_max=None,
     robust=False,
     iterations_max=100,
-    **kwargs,
+    interpolate_on_peaks=False,
 ):
     """Neurokit method."""
 
@@ -163,7 +164,7 @@ def _signal_fixpeaks_neurokit(
         relative_interval_max,
         robust,
         iterations_max=iterations_max,
-        **kwargs,
+        interpolate_on_peaks=interpolate_on_peaks,
     )
 
     valid_peaks = peaks_clean[peaks_clean >= 0]
