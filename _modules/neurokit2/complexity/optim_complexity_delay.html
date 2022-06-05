@@ -544,13 +544,8 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_closest</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">signal_autocor</span><span class="p">,</span>
-    <span class="n">signal_findpeaks</span><span class="p">,</span>
-    <span class="n">signal_psd</span><span class="p">,</span>
-    <span class="n">signal_surrogate</span><span class="p">,</span>
-    <span class="n">signal_zerocrossings</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_autocor</span><span class="p">,</span> <span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_psd</span><span class="p">,</span>
+                      <span class="n">signal_surrogate</span><span class="p">,</span> <span class="n">signal_zerocrossings</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.entropy_kl</span> <span class="kn">import</span> <span class="n">entropy_kl</span>
 <span class="kn">from</span> <span class="nn">.information_mutual</span> <span class="kn">import</span> <span class="n">mutual_information</span>
 <span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
@@ -578,13 +573,21 @@ title="Open an issue"
 <span class="sd">    some joint-estimation methods do exist, that attempt at finding the optimal delay and dimension</span>
 <span class="sd">    at the same time.</span>
 
+<span class="sd">    Note also that some authors (e.g., Rosenstein, 1994) suggest identifying the</span>
+<span class="sd">    optimal embedding dimension first, and that the optimal delay value should then be considered</span>
+<span class="sd">    as the optimal delay between the first and last delay coordinates (in other words, the actual</span>
+<span class="sd">    delay should be the optimal delay divided by the optimal embedding dimension minus 1).</span>
+
 <span class="sd">    Several authors suggested different methods to guide the choice of the delay:</span>
 
 <span class="sd">    * **Fraser and Swinney (1986)** suggest using the first local minimum of the mutual information</span>
 <span class="sd">      between the delayed and non-delayed time series, effectively identifying a value of Tau for</span>
-<span class="sd">      which they share the least information.</span>
+<span class="sd">      which they share the least information (and where the attractor is the least redundant).</span>
+<span class="sd">      Unlike autocorrelation, mutual information takes into account also nonlinear correlations.</span>
 <span class="sd">    * **Theiler (1990)** suggested to select Tau where the autocorrelation between the signal and</span>
-<span class="sd">      its lagged version at Tau first crosses the value :math:`1/e`.</span>
+<span class="sd">      its lagged version at Tau first crosses the value :math:`1/e`. The autocorrelation-based</span>
+<span class="sd">      methods have the advantage of short computation times when calculated via the fast Fourier</span>
+<span class="sd">      transform (FFT) algorithm.</span>
 <span class="sd">    * **Casdagli (1991)** suggests instead taking the first zero-crossing of the autocorrelation.</span>
 <span class="sd">    * **Rosenstein (1993)** suggests to approximate the point where the autocorrelation function</span>
 <span class="sd">      drops to :math:`(1 - 1/e)` of its maximum value.</span>
@@ -793,6 +796,10 @@ title="Open an issue"
         <span class="n">metric</span> <span class="o">=</span> <span class="s2">&quot;Mutual Information&quot;</span>
         <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;first local minimum&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mi2&quot;</span><span class="p">]:</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="s2">&quot;Mutual Information 2&quot;</span>
+        <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;first local minimum&quot;</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;theiler&quot;</span><span class="p">,</span> <span class="s2">&quot;theiler1990&quot;</span><span class="p">]:</span>
         <span class="n">metric</span> <span class="o">=</span> <span class="s2">&quot;Autocorrelation&quot;</span>
         <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -806,7 +813,7 @@ title="Open an issue"
         <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;closest to 40</span><span class="si">% o</span><span class="s2">f the slope&quot;</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rosenstein1993&quot;</span><span class="p">]:</span>
-        <span class="n">metric</span> <span class="o">=</span> <span class="s2">&quot;Autocorrelation (FFT)&quot;</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="s2">&quot;Autocorrelation&quot;</span>
         <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;first drop below 1-(1/e) of maximum&quot;</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kim1999&quot;</span><span class="p">,</span> <span class="s2">&quot;cc&quot;</span><span class="p">]:</span>
@@ -818,7 +825,7 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;gautama2003&quot;</span><span class="p">,</span> <span class="s2">&quot;gautama&quot;</span><span class="p">,</span> <span class="s2">&quot;entropyratio&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_complexity_delay_entropyratio</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="n">delay_max</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: complexity_delay(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;complexity_delay(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Get metric</span>
     <span class="n">metric_values</span> <span class="o">=</span> <span class="n">_embedding_delay_metric</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">tau_sequence</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span>
@@ -909,6 +916,7 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">optimal</span>
 
 
+<span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_embedding_delay_metric</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
     <span class="n">tau_sequence</span><span class="p">,</span>
@@ -925,10 +933,6 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Autocorrelation&quot;</span><span class="p">:</span>
         <span class="n">values</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
         <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau_sequence</span><span class="p">)]</span>  <span class="c1"># upper limit</span>
-
-    <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Autocorrelation (FFT)&quot;</span><span class="p">:</span>
-        <span class="n">values</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">demean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau_sequence</span><span class="p">)]</span>
 
     <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Correlation Integral&quot;</span><span class="p">:</span>
         <span class="n">r_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">r_vals</span><span class="p">]</span>
@@ -960,9 +964,13 @@ title="Open an issue"
             <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">current_tau</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Mutual Information&quot;</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span>
-                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;shannon&quot;</span>
+                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;shannon&quot;</span>
                 <span class="p">)</span>
-            <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Displacement&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Mutual Information 2&quot;</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutual_information</span><span class="p">(</span>
+                    <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">embedded</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;varoquaux&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Displacement&quot;</span><span class="p">:</span>
                 <span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>
 
                 <span class="c1"># Reconstruct with zero time delay.</span>
@@ -971,6 +979,8 @@ title="Open an issue"
                     <span class="p">[</span><span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">tau0</span><span class="p">)]</span>
                 <span class="p">)</span>
                 <span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;metric&#39; not recognized.&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">values</span>
 

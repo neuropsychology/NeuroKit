@@ -531,11 +531,12 @@ title="Open an issue"
                 
   <h1>Source code for neurokit2.signal.signal_autocor</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 
-<div class="viewcode-block" id="signal_autocor"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_autocor">[docs]</a><span class="k">def</span> <span class="nf">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">demean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="signal_autocor"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_autocor">[docs]</a><span class="k">def</span> <span class="nf">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">demean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Autocorrelation (ACF)**</span>
 
 <span class="sd">    Compute the autocorrelation of a signal.</span>
@@ -551,8 +552,9 @@ title="Open an issue"
 <span class="sd">        If ``True``, the mean of the signal will be subtracted from the signal before ACF</span>
 <span class="sd">        computation.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be ``&quot;correlation&quot;`` (using :func:`.np.correlate`) or ``&quot;fft&quot;`` (Fast Fourier Transform;</span>
-<span class="sd">        default).</span>
+<span class="sd">        Using ``&quot;auto&quot;`` runs ``scipy.signal.correlate`` to determine the faster algorithm. Other</span>
+<span class="sd">        methods are kept for legacy reasons, but are not recommended. Other methods include</span>
+<span class="sd">        ``&quot;correlation&quot;`` (using :func:`.np.correlate`) or ``&quot;fft&quot;`` (Fast Fourier Transform).</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, plot the autocorrelation at all values of lag.</span>
 
@@ -596,7 +598,9 @@ title="Open an issue"
 
     <span class="c1"># Run autocor</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cor&quot;</span><span class="p">,</span> <span class="s2">&quot;correlation&quot;</span><span class="p">,</span> <span class="s2">&quot;correlate&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">]:</span>
+        <span class="n">acov</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cor&quot;</span><span class="p">,</span> <span class="s2">&quot;correlation&quot;</span><span class="p">,</span> <span class="s2">&quot;correlate&quot;</span><span class="p">]:</span>
         <span class="n">acov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
         <span class="n">acov</span> <span class="o">=</span> <span class="n">acov</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span>  <span class="c1"># Min time lag is 0</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fft&quot;</span><span class="p">:</span>
@@ -606,10 +610,10 @@ title="Open an issue"
         <span class="n">c_fourier</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
         <span class="n">acov</span> <span class="o">=</span> <span class="n">c_fourier</span><span class="p">[:</span> <span class="p">(</span><span class="n">c_fourier</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Method must be &#39;correlation&#39; or &#39;fft&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Method must be &#39;auto&#39;, &#39;correlation&#39; or &#39;fft&#39;.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Normalize</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">acov</span> <span class="o">/</span> <span class="n">acov</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">acov</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">acov</span><span class="p">)</span>
 
     <span class="c1"># Confidence interval</span>
     <span class="n">varacf</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span>
