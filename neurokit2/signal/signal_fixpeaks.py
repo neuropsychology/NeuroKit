@@ -697,6 +697,7 @@ def _interpolate_missing(
             # Delete large interval and replace by N unknown intervals
             interval[loc] = np.nan
             interval = np.insert(interval, loc, [np.nan] * (n_nan - 1))
+        peaks_to_correct[loc] = np.nan
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
     if interpolate_on_peaks:
