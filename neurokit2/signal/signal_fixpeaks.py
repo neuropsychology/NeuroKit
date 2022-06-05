@@ -708,6 +708,6 @@ def _interpolate_missing(
 
 
 def _period_to_location(period, sampling_rate=1000, first_location=0):
-    location = np.cumsum(period * sampling_rate)
+    location = np.nancumsum(period * sampling_rate)
     location = location - (location[0] - first_location)
     return location.astype(int)
