@@ -1,17 +1,32 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import scipy.ndimage
 import scipy.special
+import scipy.stats
+import sklearn.metrics
 import sklearn.neighbors
 
 
-def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
+def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
     """Mutual Information (MI)
 
-    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram.
+    Computes the mutual information (MI) between two vectors from a joint histogram.
     The mutual information of two variables is a measure of the mutual dependence between them.
     More specifically, it quantifies the "amount of information" obtained about one variable by
     observing the other variable.
+
+    Different methods are available:
+    * **nolitsa**: Standard mutual information (a bit faster than the ``"sklearn"`` method).
+    * **varoquaux**: Applies a Gaussian filter on the joint-histogram. The smoothing amount can be
+      modulated via the ``sigma`` argument (by default, ``sigma=1``).
+    * **knn**: Non-parametric (i.e., not based on binning) estimation via nearest neighbors.
+      Additional parameters includes ``k`` (by default, ``k=3``), the number of nearest neighbors
+      to use.
+    * **max**: Maximum Mutual Information coefficient, i.e., the MI is maximal given a certain
+      combination of number of bins.
+
+
 
     Parameters
     ----------
@@ -20,13 +35,13 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     y : Union[list, np.array, pd.Series]
         A vector of values.
     method : str
-        Method to use. Can either be ``"varoquaux"`` or ``"nolitsa"``.
+        The method to use.
     bins : int
-        Number of bins to use while creating the histogram.
-    sigma : float
-        Sigma for Gaussian smoothing of the joint histogram. Only used if ``method=='varoquaux'``.
-    normalized : book
-        Compute normalised mutual information. Only used if ``method=='varoquaux'``.
+        Number of bins to use while creating the histogram. Only used for ``"nolitsa"`` and
+        ``"varoquaux"``. If ``"default"``, the number of bins is estimated following
+        Hacine-Gharbi (2018).
+    **kwargs
+        Additional keyword arguments to pass to the chosen method.
 
     Returns
     -------
@@ -39,31 +54,103 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 
     Examples
     ---------
+    **Example 1**: Simple case
     .. ipython:: python
 
       import neurokit2 as nk
 
-      x = [3, 3, 5, 1, 6, 3]
-      y = [5, 3, 1, 3, 4, 5]
+      x = [3, 3, 5, 1, 6, 3, 2, 8, 1, 2, 3, 5, 4, 0, 2]
+      y = [5, 3, 1, 3, 4, 5, 6, 4, 1, 3, 4, 6, 2, 1, 3]
 
       nk.mutual_information(x, y, method="varoquaux")
+      nk.mutual_information(x, y, method="nolitsa")
+      nk.mutual_information(x, y, method="knn")
+      nk.mutual_information(x, y, method="max")
 
-      nk.mutual_information(x, y, method="nolitsa") #doctest: +ELLIPSIS
+    **Example 2**: Method comparison
+
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+
+      x = np.random.normal(size=200)
+      y = x**2
+
+      data = pd.DataFrame()
+      for level in np.linspace(0.01, 4, 200):
+          noise = np.random.normal(scale=level, size=200)
+          rez = pd.DataFrame({"Noise": [level],
+              "MI1": [nk.mutual_information(x, y + noise, method="varoquaux", sigma=1)],
+              "MI2": [nk.mutual_information(x, y + noise, method="varoquaux", sigma=0)],
+              "MI3": [nk.mutual_information(x, y + noise, method="nolitsa")],
+              "MI4": [nk.mutual_information(x, y + noise, method="knn")],
+              "MI5": [nk.mutual_information(x, y + noise, method="max")]
+          })
+          data = pd.concat([data, rez], axis=0)
+      data["MI1"] = nk.rescale(data["MI1"])
+      data["MI2"] = nk.rescale(data["MI2"])
+      data["MI3"] = nk.rescale(data["MI3"])
+      data["MI4"] = nk.rescale(data["MI4"])
+      data["MI5"] = nk.rescale(data["MI5"])
+      data.plot(x="Noise", y=["MI1", "MI2", "MI3", "MI4", "MI5"], kind="line")
+
+      # Computation time
+      # x = np.random.normal(size=10000)
+      # %timeit nk.mutual_information(x, x**2, method="varoquaux")
+      # %timeit nk.mutual_information(x, x**2, method="nolitsa")
+      # %timeit nk.mutual_information(x, x**2, method="sklearn")
+      # %timeit nk.mutual_information(x, x**2, method="knn", k=2)
+      # %timeit nk.mutual_information(x, x**2, method="knn", k=5)
+      # %timeit nk.mutual_information(x, x**2, method="max")
 
 
     References
     ----------
-    * Studholme, jhill & jhawkes (1998). "A normalized entropy measure of 3-D medical image
-      alignment". in Proc. Medical Imaging 1998, vol. 3338, San Diego, CA, pp. 132-143.
+    * Studholme, C., Hawkes, D. J., & Hill, D. L. (1998, June). Normalized entropy measure for
+      multimodality image alignment. In Medical imaging 1998: image processing (Vol. 3338, pp.
+      132-143). SPIE.
+    * Hacine-Gharbi, A., & Ravier, P. (2018). A binning formula of bi-histogram for joint entropy
+      estimation using mean square error minimization. Pattern Recognition Letters, 101, 21-28.
 
     """
     method = method.lower()
-    if method in ["varoquaux"]:
-        mi = _mutual_information_varoquaux(x, y, bins=bins, sigma=sigma, normalized=normalized)
-    elif method in ["shannon", "nolitsa"]:
-        mi = _mutual_information_nolitsa(x, y, bins=bins)
+
+    if method in ["max"] or isinstance(bins, (list, np.ndarray)):
+        # https://www.freecodecamp.org/news/
+        # how-machines-make-predictions-finding-correlations-in-complex-data-dfd9f0d87889/
+        if isinstance(bins, str):
+            bins = np.arange(2, np.ceil(len(x) ** 0.6) + 1).astype(int)
+
+        mi = 0
+        for i in bins:
+            for j in bins:
+                if i * j > np.max(bins):
+                    continue
+                p_x = pd.cut(x, i, labels=False)
+                p_y = pd.cut(y, j, labels=False)
+                new_mi = _mutual_information_sklearn(p_x, p_y) / np.log2(np.min([i,j]))
+                if new_mi > mi:
+                    mi = new_mi
     else:
-        raise ValueError("NeuroKit error: mutual_information(): 'method' not recognized.")
+        if isinstance(bins, str):
+            # Hacine-Gharbi (2018)
+            # https://stats.stackexchange.com/questions/179674/
+            # number-of-bins-when-computing-mutual-information
+            bins = 1 + np.sqrt(1 + (24 * len(x) / (1 - np.corrcoef(x, y)[0, 1] ** 2)))
+            bins = np.round((1/np.sqrt(2)) * np.sqrt(bins)).astype(int)
+
+
+        if method in ["varoquaux"]:
+            mi = _mutual_information_varoquaux(x, y, bins=bins, **kwargs)
+        elif method in ["shannon", "nolitsa"]:
+            mi = _mutual_information_nolitsa(x, y, bins=bins)
+        elif method in ["sklearn"]:
+            mi = _mutual_information_sklearn(x, y, bins=bins)
+        elif method in ["knn"]:
+            mi = _mutual_information_knn(x, y, **kwargs)
+        else:
+            raise ValueError("NeuroKit error: mutual_information(): 'method' not recognized.")
 
     return mi
 
@@ -71,8 +158,17 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 # =============================================================================
 # Methods
 # =============================================================================
+def _mutual_information_sklearn(x, y, bins=None):
+    if bins is None:
+        _, p_xy = scipy.stats.contingency.crosstab(x, y)
+    else:
+        p_xy = np.histogram2d(x, y, bins)[0]
+    return sklearn.metrics.mutual_info_score(None, None, contingency=p_xy)
+
+
 def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
-    """Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429."""
+    """Based on Gael Varoquaux's implementation:
+    https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429."""
     jh = np.histogram2d(x, y, bins=bins)[0]
 
     # smooth the jh with a gaussian filter of given sigma
@@ -94,20 +190,17 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
 
 
 def _mutual_information_nolitsa(x, y, bins=256):
-    """Calculate the mutual information between two random variables.
-
-    Calculates mutual information, I = S(x) + S(y) - S(x,y), between two random variables x and y, where
-    S(x) is the Shannon entropy.
-
-    Based on the nolitsa package: https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72
+    """
+    Based on the nolitsa package:
+    https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72
 
     """
     p_x = np.histogram(x, bins)[0]
     p_y = np.histogram(y, bins)[0]
     p_xy = np.histogram2d(x, y, bins)[0].flatten()
 
-    # Convert frequencies into probabilities.  Also, in the limit
-    # p -> 0, p*log(p) is 0.  We need to take out those.
+    # Convert frequencies into probabilities.
+    # Also, in the limit p -> 0, p*log(p) is 0.  We need to take out those.
     p_x = p_x[p_x > 0] / np.sum(p_x)
     p_y = p_y[p_y > 0] / np.sum(p_y)
     p_xy = p_xy[p_xy > 0] / np.sum(p_xy)
@@ -120,59 +213,25 @@ def _mutual_information_nolitsa(x, y, bins=256):
     return h_xy - h_x - h_y
 
 
-# =============================================================================
-# JUNK
-# =============================================================================
-def _nearest_distances(X, k=1):
-    """From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
-    X = array(N,M)
-    N = number of points
-    M = number of dimensions
-    returns the distance to the kth nearest neighbor for every point in X
+def _mutual_information_knn(x, y, k=3):
     """
-    knn = sklearn.neighbors.NearestNeighbors(n_neighbors=k + 1)
-    knn.fit(X)
-    d, _ = knn.kneighbors(X)  # the first nearest neighbor is itself
-    return d[:, -1]  # returns the distance to the kth nearest neighbor
-
-
-def _entropy(X, k=1):
-    """Returns the entropy of X. From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
-
-    Parameters
-    -----------
-    X : array-like or shape (n_samples, n_features)
-        The data the entropy of which is computed
-    k : int (optional)
-        number of nearest neighbors for density estimation
-
-    Returns
-    -------
-    float
-        entropy of X.
-
-    Notes
-    ---------
-    - Kozachenko, L. F. & Leonenko, N. N. 1987 Sample estimate of entropy of a random vector. Probl. Inf. Transm.
-    23, 95-101.
-    - Evans, D. 2008 A computationally efficient estimator for mutual information, Proc. R. Soc. A 464 (2093),
-    1203-1215.
-    - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual information. Phys Rev E 69(6 Pt 2):066138.
+    Based on the NPEET package:
+    https://github.com/gregversteeg/NPEET
 
     """
+    points = np.array([x, y]).T
 
-    # Distance to kth nearest neighbor
-    r = _nearest_distances(X, k)  # squared distances
-    n, d = X.shape
-    volume_unit_ball = (np.pi ** (0.5 * d)) / scipy.special.gamma(0.5 * d + 1)
+    # Find nearest neighbors in joint space, p=inf means max-norm
+    dvec = sklearn.neighbors.KDTree(points, metric='chebyshev').query(points, k=k + 1)[0][:, k]
 
-    # Perez-Cruz et al. (2008). Estimation of Information Theoretic Measures for
-    # Continuous Random Variables, suggets returning:
-    # return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
+    a = np.array([x]).T
+    a = sklearn.neighbors.KDTree(a, metric='chebyshev').query_radius(a, dvec - 1e-15, count_only=True)
+    a = np.mean(scipy.special.digamma(a))
 
-    return (
-        d * np.mean(np.log(r + np.finfo(X.dtype).eps))
-        + np.log(volume_unit_ball)
-        + scipy.special.psi(n)
-        - scipy.special.psi(k)
-    )
+    b = np.array([y]).T
+    b = sklearn.neighbors.KDTree(b, metric='chebyshev').query_radius(b, dvec - 1e-15, count_only=True)
+    b = np.mean(scipy.special.digamma(b))
+
+    c = scipy.special.digamma(k)
+    d = scipy.special.digamma(len(x))
+    return (-a - b + c + d) / np.log(2)

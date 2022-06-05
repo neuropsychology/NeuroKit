@@ -38,10 +38,6 @@ def complexity_relativeroughness(signal, **kwargs):
       rr, _ = nk.complexity_relativeroughness(signal)
       rr
 
-      # Change autocorrelation method
-      rr, _ = nk.complexity_relativeroughness(signal, method="cor")
-      rr
-
     References
     ----------
     * Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness:
