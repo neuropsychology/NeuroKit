@@ -629,6 +629,7 @@ def _interpolate_big(
     robust=False,
     iterations_max=100,
     n_nan=None,
+    interpolate_on_peaks=False,
 ):
     if interval_max is None and relative_interval_max is None:
         return peaks
@@ -657,6 +658,7 @@ def _interpolate_big(
                 interval_max=relative_interval_max,
                 sampling_rate=sampling_rate,
                 n_nan=n_nan,
+                interpolate_on_peaks=interpolate_on_peaks,
             )
         count += 1
         if count > iterations_max:
