@@ -658,14 +658,14 @@ def _interpolate_big(
                 sampling_rate=sampling_rate,
                 n_nan=n_nan,
             )
-    count += 1
-    if count > iterations_max:
-        warn(
-            f" Maximum iterations ({iterations_max}) reached: terminating "
-            f" interpolation early.  ",
-            category=NeuroKitWarning,
-        )
-        continue_loop = False
+        count += 1
+        if count > iterations_max:
+            warn(
+                f" Maximum iterations ({iterations_max}) reached: terminating "
+                f" interpolation early.  ",
+                category=NeuroKitWarning,
+            )
+            continue_loop = False
     return peaks
 
 
