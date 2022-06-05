@@ -133,6 +133,7 @@ def signal_fixpeaks(
             relative_interval_max=relative_interval_max,
             robust=robust,
             iterations_max=iterations_max,
+            **kwargs,
         )
 
 
@@ -148,6 +149,7 @@ def _signal_fixpeaks_neurokit(
     relative_interval_max=None,
     robust=False,
     iterations_max=100,
+    **kwargs,
 ):
     """Neurokit method."""
 
@@ -161,6 +163,7 @@ def _signal_fixpeaks_neurokit(
         relative_interval_max,
         robust,
         iterations_max=iterations_max,
+        **kwargs,
     )
 
     valid_peaks = peaks_clean[peaks_clean >= 0]
@@ -666,7 +669,9 @@ def _interpolate_big(
     return peaks
 
 
-def _interpolate_missing(peaks, interval, interval_max, sampling_rate, n_nan=None, interpolate_on_peaks=False):
+def _interpolate_missing(
+    peaks, interval, interval_max, sampling_rate, n_nan=None, interpolate_on_peaks=False
+):
     outliers = interval > interval_max
     outliers_loc = np.where(outliers)[0]
     if np.sum(outliers) == 0:
@@ -686,7 +691,7 @@ def _interpolate_missing(peaks, interval, interval_max, sampling_rate, n_nan=Non
         if loc > 0:
             peaks_to_correct[loc] = np.nan
             peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
-    # Interpolate values    
+    # Interpolate values
     if interpolate_on_peaks:
         peaks = pd.Series(peaks_to_correct).interpolate().values().astype(int)
     else:
