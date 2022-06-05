@@ -14,7 +14,7 @@ import neurokit2 as nk
 on.download(
     dataset="ds003775",
     target_dir="eeg/raw",
-    include="sub-00*",
+    include="sub-*",
     exclude="derivatives/cleaned_data",
 )
 
@@ -33,10 +33,12 @@ for sub in os.listdir(path):
     raw.info["bads"], _ = nk.eeg_badchannels(
         raw, bad_threshold=0.33, distance_threshold=0.99, show=False
     )
-    print(f"Bad channels: {len(raw.info["bads"])}")
+    print("Bad channels: " + str(len(raw.info['bads'])))
     raw = raw.interpolate_bads()
 
     raw.save("eeg/" + sub + "_raw.fif", overwrite=True)
+
+print("FINISHED.")
 
 # Clean-up
 shutil.rmtree("eeg/raw/")

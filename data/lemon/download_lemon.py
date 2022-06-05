@@ -13,7 +13,6 @@ Credits:
     pycrostates package by Mathieu Scheltienne and Victor Férat
 """
 import os
-from urllib.error import HTTPError
 
 import mne
 import numpy as np
@@ -25,7 +24,7 @@ path = "https://ftp.gwdg.de/pub/misc/MPI-Leipzig_Mind-Brain-Body-LEMON/EEG_MPILM
 # Create a registry with the file names
 files = {
     f"sub-01{i:04d}_{j}.{k}": None
-    for i in range(2, 10)
+    for i in range(2, 319)
     for j in ["EC", "EO"]
     for k in ["fdt", "set"]
 }
@@ -62,7 +61,7 @@ standard_channels = [
 # fmt: on
 
 for sub in os.listdir("lemon/"):
-    if sub.endswith("fdt") is True or sub.endswith("fif"):
+    if sub.endswith("fdt") is True or sub.endswith("fif") or "sub" not in sub:
         continue
     raw = mne.io.read_raw_eeglab("lemon/" + sub, preload=True)
 
