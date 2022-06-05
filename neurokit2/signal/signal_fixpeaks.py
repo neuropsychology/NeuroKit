@@ -676,11 +676,11 @@ def _interpolate_missing(
 ):
     outliers = interval > interval_max
     outliers_loc = np.where(outliers)[0]
-    
+
     # interval returned by signal_period at index 0 is the mean of the intervals
     # so it does not actually correspond to whether the first peak is an outlier
-    outliers_loc = outliers_loc[outliers_loc!=0]
-    
+    outliers_loc = outliers_loc[outliers_loc != 0]
+
     if np.sum(outliers) == 0:
         return peaks, False
     peaks_to_correct = peaks.copy().astype(float)
@@ -698,9 +698,13 @@ def _interpolate_missing(
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
     if interpolate_on_peaks:
-        peaks = pd.Series(peaks_to_correct).interpolate().values.astype(peaks.dtype)
+        peaks = (
+            pd.Series(peaks_to_correct)
+            .interpolate(limit_direction="both")
+            .values.astype(peaks.dtype)
+        )
     else:
-        interval = pd.Series(interval).interpolate().values
+        interval = pd.Series(interval).interpolate(limit_direction="both").values
         peaks_corrected = _period_to_location(
             interval, sampling_rate, first_location=peaks[0]
         )
