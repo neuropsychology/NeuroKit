@@ -27,7 +27,6 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       combination of number of bins.
 
 
-
     Parameters
     ----------
     x : Union[list, np.array, pd.Series]
@@ -74,12 +73,12 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       import numpy as np
       import pandas as pd
 
-      x = np.random.normal(size=200)
+      x = np.random.normal(size=400)
       y = x**2
 
       data = pd.DataFrame()
-      for level in np.linspace(0.01, 4, 200):
-          noise = np.random.normal(scale=level, size=200)
+      for level in np.linspace(0.01, 3, 200):
+          noise = np.random.normal(scale=level, size=400)
           rez = pd.DataFrame({"Noise": [level],
               "MI1": [nk.mutual_information(x, y + noise, method="varoquaux", sigma=1)],
               "MI2": [nk.mutual_information(x, y + noise, method="varoquaux", sigma=0)],
@@ -129,7 +128,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
                     continue
                 p_x = pd.cut(x, i, labels=False)
                 p_y = pd.cut(y, j, labels=False)
-                new_mi = _mutual_information_sklearn(p_x, p_y) / np.log2(np.min([i,j]))
+                new_mi = _mutual_information_sklearn(p_x, p_y) / np.log2(np.min([i, j]))
                 if new_mi > mi:
                     mi = new_mi
     else:

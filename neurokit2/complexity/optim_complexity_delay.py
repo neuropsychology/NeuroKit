@@ -432,11 +432,11 @@ def _embedding_delay_metric(
             embedded = complexity_embedding(signal, delay=current_tau, dimension=2)
             if metric == "Mutual Information":
                 values[i] = mutual_information(
-                    embedded[:, 0], embedded[:, 1], method="shannon"
+                    embedded[:, 0], embedded[:, 1], method="varoquaux"
                 )
             elif metric == "Mutual Information 2":
                 values[i] = mutual_information(
-                    embedded[:, 0], embedded[:, 1], method="varoquaux"
+                    embedded[:, 0], embedded[:, 1], method="knn"
                 )
             elif metric == "Displacement":
                 dimension = 2
