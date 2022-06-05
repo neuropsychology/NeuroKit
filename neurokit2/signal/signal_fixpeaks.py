@@ -693,7 +693,7 @@ def _interpolate_missing(
             peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
     if interpolate_on_peaks:
-        peaks = pd.Series(peaks_to_correct).interpolate().values().astype(int)
+        peaks = pd.Series(peaks_to_correct).interpolate().values.astype(int)
     else:
         interval = pd.Series(interval).interpolate().values
         peaks_corrected = _period_to_location(
