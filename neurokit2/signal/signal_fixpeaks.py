@@ -646,6 +646,7 @@ def _interpolate_big(
                 interval_max=interval_max,
                 sampling_rate=sampling_rate,
                 n_nan=n_nan,
+                interpolate_on_peaks=interpolate_on_peaks,
             )
         if relative_interval_max is not None:
             interval = signal_period(
