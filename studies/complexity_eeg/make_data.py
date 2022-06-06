@@ -14,7 +14,6 @@ import neurokit2 as nk
 # channel = "Fp1"
 # method = "rosenstein1993"
 
-
 def optimize_delay(raw, channel="Fp1"):
     signal = raw.get_data(picks=channel)[0]
     vals = np.unique(np.round(nk.expspace(1, 80, 60) / (1000 / raw.info["sfreq"]), 0)).astype(int)
@@ -33,6 +32,16 @@ def optimize_delay(raw, channel="Fp1"):
         rez_delay = pd.concat([rez_delay, rez], axis=0)
     return rez_delay
 
+def optimize_dimension(raw, channel="Fp1"):
+    signal = raw.get_data(picks=channel)[0]
+    dim, out = nk.complexity_dimension(signal, dimension_max=5, delay=np.round(30 / (1000 / raw.info["sfreq"]), 0).astype(int), method="afn")
+
+    rez = pd.DataFrame({"Value": out["Values"], "Score": out["E1"]})
+    rez["Method"] = "AFN"
+    rez["Channel"] = channel
+    rez["Optimal"] = dim
+    rez["What"] = "Dimension"
+    return rez
 
 def read_raw(path, participant):
     if "texas" in path:
@@ -162,3 +171,37 @@ for path in datasets:
         data["Time"] = raw.times[0 : len(data)]
         attractors = pd.concat([attractors, data], axis=0)
 attractors.to_csv("data_attractor2Danim.csv", index=False)
+
+
+
+# =============================================================================
+# Dimension
+# =============================================================================
+rez_dim = pd.DataFrame()
+
+for path in datasets:
+    participants = os.listdir(path)
+
+    for i, participant in enumerate(participants):
+        if i < 0 or i > 1:
+            continue
+        print(f"Participant n°{i} (path: {path})")
+
+        raw, sub, cond, orig_filtering, dataset = read_raw(path, participant)
+        args = [{"raw": raw, "channel": ch} for ch in raw.pick_types(eeg=True).ch_names]
+        out = nk.parallel_run(optimize_dimension, args, n_jobs=8, verbose=10)
+        out = pd.concat(out)
+
+        out["Participant"] = sub
+        out["Condition"] = cond
+        out["Sampling_Rate"] = raw.info["sfreq"]
+        out["Lowpass"] = raw.info["lowpass"]
+        out["Original_Frequencies"] = orig_filtering
+        out["Duration"] = len(raw) / raw.info["sfreq"] / 60
+        out["Dataset"] = dataset
+
+        rez_dim = pd.concat([rez_dim, out], axis=0)
+        rez_dim.to_csv("data_dimension.csv", index=False)
+
+print("===================")
+print("FINISHED.")

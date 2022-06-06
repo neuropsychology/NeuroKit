@@ -65,10 +65,10 @@ data_delay <- read.csv("data_delay.csv") |>
 
 #### Per Channel
 
-```{r warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+```{r delay_perchannel, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
 delay_perchannel <- function(data_delay, dataset="Lemon") {
-  data <- filter(data_delay, Dataset == dataset)
-  
+  data <- filter(data_delay, Dataset == dataset) |> 
+    mutate(Score = 1 + Score)
   
   by_channel <- data |> 
     group_by(Condition, Metric, Area, Channel, Value) |> 
@@ -81,14 +81,14 @@ delay_perchannel <- function(data_delay, dataset="Lemon") {
     ggplot(aes(x = Value, y = Score, color = Area)) +
     geom_line(aes(group=Channel), alpha = 0.20) +
     geom_line(data=by_area, aes(group=Area), size=1) +
-    geom_vline(xintercept = c(5, 20), linetype = "dashed", size = 0.5) +
+    geom_vline(xintercept = c(25, 27, 30), linetype = "dashed", size = 0.5) +
     facet_wrap(~Condition*Metric, scales = "free_y") +
     see::scale_color_flat_d(palette = "rainbow") +
     scale_y_log10(expand = c(0, 0)) +
-    scale_x_continuous(expand = c(0, 0), 
-                       limits = c(0, NA), 
-                       breaks=c(5, seq(0, 80, 20)), 
-                       labels=c(5, seq(0, 80, 20))) +
+    # scale_x_continuous(expand = c(0, 0), 
+    #                    limits = c(0, NA), 
+    #                    breaks=c(5, seq(0, 80, 20)), 
+    #                    labels=c(5, seq(0, 80, 20))) +
     labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
     guides(colour = guide_legend(override.aes = list(alpha = 1))) +
     see::theme_modern() +
@@ -107,7 +107,7 @@ p1 / p3 / p4 +
 
 #### Per Subject
 
-```{r warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+```{r delay_persubject, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
 delay_persubject <- function(data_delay, dataset="Lemon") {
   data <- filter(data_delay, Dataset == dataset)
 
@@ -151,7 +151,7 @@ p1 / p3 / p4 +
 
 #### 2D Attractors
 
-```{r warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+```{r attractors2D, eval=FALSE, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
 data <- read.csv("data_attractor2D.csv")
 
 data |> 
@@ -208,3 +208,52 @@ anim_save("figures/attractor.gif")
 knitr::include_graphics("figures/attractor.gif")
 ```
 
+### Optimization of Dimension
+
+```{r warning=FALSE, message=FALSE}
+data_dim <- read.csv("data_dimension.csv") |> 
+  mutate(Area = str_remove_all(Channel, "[:digit:]|z"),
+         Area = substring(Channel, 1, 1),
+         Area = case_when(Area == "I" ~ "O",
+                          Area == "A" ~ "F",
+                          TRUE ~ Area),
+         Area = fct_relevel(Area, c("F", "C", "T", "P", "O")))
+```
+
+#### Per Channel
+
+```{r dim_perchannel, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+dim_perchannel <- function(data_dim, dataset="Lemon") {
+  data <- filter(data_dim, Dataset == dataset)
+  
+  by_channel <- data |> 
+    group_by(Condition, Area, Channel, Value) |> 
+    summarise_all(mean, na.rm=TRUE) 
+  by_area <- data |> 
+    group_by(Condition, Area, Value) |> 
+    summarise_all(mean, na.rm=TRUE) 
+  
+  by_channel |> 
+    ggplot(aes(x = Value, y = Score, color = Area)) +
+    geom_line(aes(group=Channel), alpha = 0.20) +
+    geom_line(data=by_area, aes(group=Area), size=1) +
+    # geom_vline(xintercept = c(25, 27, 30), linetype = "dashed", size = 0.5) +
+    facet_wrap(~Condition, ncol=1, scales = "free_y") +
+    see::scale_color_flat_d(palette = "rainbow") +
+    scale_y_log10(expand = c(0, 0)) +
+    scale_x_continuous(expand = c(0, 0)) +
+    labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
+    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+    see::theme_modern() +
+    theme(plot.title = element_text(face = "plain", hjust = 0))
+}
+
+p1 <- dim_perchannel(data_dim, dataset="Lemon")
+# p2 <- delay_perchannel(data_delay, dataset="Texas")
+p3 <- dim_perchannel(data_dim, dataset="SRM")
+p4 <- dim_perchannel(data_dim, dataset="Wang (2022)")
+
+p1 / p3 / p4 + 
+  plot_layout(heights = c(2, 1, 2)) + 
+  plot_annotation(title = "Optimization of Ebmedding Dimension", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
+```
