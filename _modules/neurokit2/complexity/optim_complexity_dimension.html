@@ -540,8 +540,8 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial</span>
 
-<span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
 <span class="kn">from</span> <span class="nn">.fractal_correlation</span> <span class="kn">import</span> <span class="n">fractal_correlation</span>
+<span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
 
 
 <div class="viewcode-block" id="complexity_dimension"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_dimension">[docs]</a><span class="k">def</span> <span class="nf">complexity_dimension</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;afnn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -574,10 +574,14 @@ title="Open an issue"
 <span class="sd">      increases).</span>
 <span class="sd">    * **AFN** (Average False Neighbors): This modification by Cao (1997) of the FNN method</span>
 <span class="sd">      addresses one of its main drawback, the need for a heuristic choice for the tolerance</span>
-<span class="sd">      thresholds ``R``. It uses the maximal Euclidian distance to represent nearest neighbors, and</span>
-<span class="sd">      averages all ratios of the distance in :math:`m+1` to :math:`m` dimension and defines E1 as a</span>
-<span class="sd">      parameter. The optimal dimension corresponds to when E1(d) stops changing (reaches a plateau).</span>
-
+<span class="sd">      thresholds *r*. It uses the maximal Euclidian distance to represent nearest neighbors, and</span>
+<span class="sd">      averages all ratios of the distance in :math:`m+1` to :math:`m` dimension and defines *E1* and</span>
+<span class="sd">      *E2* as parameters. The optimal dimension corresponds to when *E1* stops changing (reaches a</span>
+<span class="sd">      plateau). E1 reaches a plateau at a dimension *d0* if the signal comes from an attractor.</span>
+<span class="sd">      Then *d0*+1 is the optimal minimum embedding dimension. *E2* is a useful quantity to</span>
+<span class="sd">      distinguish deterministic signals from stochastic signals. A constant *E2* close to 1 for any</span>
+<span class="sd">      embedding dimension *d* suggests random data, since the future values are independent of the</span>
+<span class="sd">      past values.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -616,30 +620,42 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)</span>
-<span class="sd">      # Find optimal delay</span>
-<span class="sd">      delay, parameters = nk.complexity_delay(signal, delay_max=500)</span>
+<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 7, 8], noise=0.01)</span>
 
-<span class="sd">      # Find optimal dimension</span>
+<span class="sd">      # Correlation Dimension</span>
 <span class="sd">      @savefig p_complexity_dimension1.png scale=100%</span>
 <span class="sd">      optimal_dimension, info = nk.complexity_dimension(signal,</span>
-<span class="sd">                                                        delay=delay,</span>
-<span class="sd">                                                        dimension_max=20,</span>
-<span class="sd">                                                        method=&#39;afnn&#39;,</span>
+<span class="sd">                                                        delay=20,</span>
+<span class="sd">                                                        dimension_max=10,</span>
+<span class="sd">                                                        method=&#39;cd&#39;,</span>
 <span class="sd">                                                        show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    .. ipython:: python</span>
 
+<span class="sd">      # FNN</span>
 <span class="sd">      @savefig p_complexity_dimension2.png scale=100%</span>
 <span class="sd">      optimal_dimension, info = nk.complexity_dimension(signal,</span>
-<span class="sd">                                                        delay=delay,</span>
+<span class="sd">                                                        delay=20,</span>
 <span class="sd">                                                        dimension_max=20,</span>
 <span class="sd">                                                        method=&#39;fnn&#39;,</span>
 <span class="sd">                                                        show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      # AFNN</span>
+<span class="sd">      @savefig p_complexity_dimension3.png scale=100%</span>
+<span class="sd">      optimal_dimension, info = nk.complexity_dimension(signal,</span>
+<span class="sd">                                                        delay=20,</span>
+<span class="sd">                                                        dimension_max=20,</span>
+<span class="sd">                                                        method=&#39;afnn&#39;,</span>
+<span class="sd">                                                        show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 
 <span class="sd">    References</span>
 <span class="sd">    -----------</span>
@@ -748,18 +764,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_dimension_afn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return E(d) and E^*(d) for a all d in dimension_seq.</span>
-
-<span class="sd">    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).</span>
-
-<span class="sd">    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater than some value d0  if the time</span>
-<span class="sd">    series comes from an attractor. Then d0 + 1 is the minimum embedding dimension we look for.</span>
-
-<span class="sd">    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish deterministic signals from</span>
-<span class="sd">    stochastic signals. For random data, since the future values are independent of the past values,</span>
-<span class="sd">    E2(d) will be equal to 1 for any d. For deterministic data, E2(d) is certainly related to d, it</span>
-<span class="sd">    cannot be a constant for all d; there must exist somed&#39;s such that E2(d) is not 1.</span>
-
+    <span class="sd">&quot;&quot;&quot;AFN</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
         <span class="p">[</span>
@@ -775,10 +780,11 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_embedding_dimension_afn_d</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return E(d) and E^*(d) for a single d.</span>
-
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns E(d) and E^*(d) for the AFN method for a single d.</span>
-
+<span class="sd">     E(d) and E^*(d) will be used to calculate E1(d) and E2(d).</span>
+<span class="sd">     E1(d) = E(d + 1)/E(d).</span>
+<span class="sd">     E2(d) = E*(d + 1)/E*(d).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">d</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">_embedding_dimension_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">)</span>
 
@@ -968,7 +974,7 @@ title="Open an issue"
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$E_1(d)$ and $E_2(d)$&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;afnn&quot;</span><span class="p">]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">E1</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$E_1(d)$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF5722&quot;</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">E2</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$E_2(d)$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f44336&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">E2</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$E_2(d)$&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fnn&quot;</span><span class="p">]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">f1</span><span class="p">,</span> <span class="s2">&quot;o--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test I&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF5722&quot;</span><span class="p">)</span>
