@@ -14,92 +14,69 @@ from ..stats import mad
 
 
 def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True):
-    """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
+    """**Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis**
 
     Parameters
     ----------
     rsp_rate : array
-        Array containing the respiratory rate, produced by `signal_rate()`.
+        Array containing the respiratory rate, produced by :func:`.signal_rate`.
     troughs : dict
         The samples at which the inhalation onsets occur.
-        Dict returned by `rsp_peaks()` (Accessible with the key, "RSP_Troughs"). Defaults to None.
+        Dict returned by :func:`rsp_peaks` (Accessible with the key, ``"RSP_Troughs"``).
+        Defaults to ``None``.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
-        If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval
-        against the next successive one. The ellipse centers around the average breath-to-breath interval.
-        Defaults to False.
+        If ``True``, will return a Poincaré plot, a scattergram, which plots each breath-to-breath
+        interval against the next successive one. The ellipse centers around the average
+        breath-to-breath interval. Defaults to ``False``.
     silent : bool
-        If False, warnings will be printed. Default to True.
+        If ``False``, warnings will be printed. Default to ``True``.
 
     Returns
     -------
     DataFrame
         DataFrame consisting of the computed RRV metrics, which includes:
-        - "*RRV_SDBB*": the standard deviation of the breath-to-breath intervals.
 
-        - "*RRV_RMSSD*": the root mean square of successive differences of the breath-to-breath intervals.
+        * ``"RRV_SDBB"``: the standard deviation of the breath-to-breath intervals.
+        * ``"RRV_RMSSD"``: the root mean square of successive differences of the breath-to-breath
+          intervals.
+        * ``"RRV_SDSD"``: the standard deviation of the successive differences between adjacent
+          breath-to-breath intervals.
+        * ``"RRV_BBx"``: the number of successive interval differences that are greater than x
+          seconds.
+        * ``"RRV-pBBx"``: the proportion of breath-to-breath intervals that are greater than x
+          seconds,
+          out of the total number of intervals.
+        * ``"RRV_VLF"``: spectral power density pertaining to very low frequency band (i.e., 0 to .
+          04 Hz) by default.
+        * ``"RRV_LF"``: spectral power density pertaining to low frequency band (i.e., .04 to .15
+          Hz) by default.
+        * ``"RRV_HF"``: spectral power density pertaining to high frequency band (i.e., .15 to .4
+          Hz) by default.
+        * ``"RRV_LFHF"``: the ratio of low frequency power to high frequency power.
+        * ``"RRV_LFn"``: the normalized low frequency, obtained by dividing the low frequency
+          power by the total power.
+        * ``"RRV_HFn"``: the normalized high frequency, obtained by dividing the low frequency
+          power by total power.
+        * ``"RRV_SD1"``: SD1 is a measure of the spread of breath-to-breath intervals on the
+          Poincaré plot perpendicular to the line of identity. It is an index of short-term
+          variability.
+        * ``"RRV_SD2"``: SD2 is a measure of the spread of breath-to-breath intervals on the
+          Poincaré plot along the line of identity. It is an index of long-term variability.
+        * ``"RRV_SD2SD1"``: the ratio between short and long term fluctuations of the
+          breath-to-breath intervals (SD2 divided by SD1).
+        * ``"RRV_ApEn"``: the approximate entropy of RRV, calculated
+          by :func:`.entropy_approximate`.
+        * ``"RRV_SampEn"``: the sample entropy of RRV, calculated by :func:`.entropy_sample`.
+        * ``"RRV_DFA_alpha1"``: the "short-term" fluctuation value generated from Detrended
+          Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the
+          breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the
+          signal.
+        * ``"RRV_DFA_alpha2"``: the long-term fluctuation value. Will only be computed if mora
+          than 640 breath cycles in the signal.
+        * **MFDFA indices**: Indices related to the :func:`multifractal spectrum <.fractal_dfa()>`.
 
-        - "*RRV_SDSD*": the standard deviation of the successive differences between adjacent
-        breath-to-breath intervals.
-
-        - "*RRV_BBx*": the number of successive interval differences that are greater than x seconds.
-
-        - "*RRV-pBBx*": the proportion of breath-to-breath intervals that are greater than x seconds,
-        out of the total number of intervals.
-
-        - "*RRV_VLF*": spectral power density pertaining to very low frequency band i.e., 0 to .04 Hz by default.
-
-        - "*RRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
-
-        - "*RRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-
-        - "*RRV_LFHF*": the ratio of low frequency power to high frequency power.
-
-        - "*RRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
-
-        - "*RRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by total power.
-
-        - "*RRV_SD1*": SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré
-
-        plot perpendicular to the line of identity. It is an index of short-term variability.
-
-        - "*RRV_SD2*": SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré
-        plot along the line of identity. It is an index of long-term variability.
-
-        - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath
-        intervals (SD2 divided by SD1).
-
-        - "*RRV_ApEn*": the approximate entropy of RRV, calculated by `entropy_approximate()`.
-
-        - "*RRV_SampEn*": the sample entropy of RRV, calculated by `entropy_sample()`.
-
-        - "*RRV_DFA_alpha1*": the "short-term" fluctuation value generated from Detrended Fluctuation
-        Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath
-        intervals. Will only be computed if mora than 160 breath cycles in the signal.
-
-        - "*RRV_DFA_alpha2*": the long-term fluctuation value. Will only be computed if mora than 640 breath
-        cycles in the signal.
-
-        - **RRV_alpha1_ExpRange**: Multifractal DFA. ExpRange is the range of singularity exponents, correspoinding to the
-        width of the singularity spectrum.
-
-        - **RRV_alpha2_ExpRange**: Multifractal DFA. ExpRange is the range of singularity exponents, correspoinding to the
-        width of the singularity spectrum.
-
-        - **RRV_alpha1_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
-
-        - **RRV_alpha2_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
-
-        - **RRV_alpha1_DimRange**: Multifractal DFA. DimRange is the range of singularity dimensions, correspoinding to the
-        height of the singularity spectrum.
-
-        - **RRV_alpha2_DimRange**: Multifractal DFA. DimRange is the range of singularity dimensions, correspoinding to the
-        height of the singularity spectrum.
-
-        - **RRV_alpha1_DimMean**: Multifractal DFA. Dimmean is the mean of singularity dimensions.
-
-        - **RRV_alpha2_DimMean**: Multifractal DFA. Dimmean is the mean of singularity dimensions.
 
     See Also
     --------
@@ -107,16 +84,19 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-    >>> rsp, info = nk.rsp_process(rsp)
-    >>> rrv = nk.rsp_rrv(rsp, show=True) #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      rsp, info = nk.rsp_process(rsp)
+      nk.rsp_rrv(rsp, show=True)
+
 
     References
     ----------
-    - Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the meditation
-    effects. International Journal of Yoga, 12(1), 45.
+    * Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the
+      meditation effects. International Journal of Yoga, 12(1), 45.
 
     """
     # Sanitize input
@@ -152,7 +132,7 @@ def _rsp_rrv_time(bbi):
     out = {}  # Initialize empty dict
 
     # Mean based
-    out["RMSSD"] = np.sqrt(np.mean(diff_bbi ** 2))
+    out["RMSSD"] = np.sqrt(np.mean(diff_bbi**2))
 
     out["MeanBB"] = np.nanmean(bbi)
     out["SDBB"] = np.nanstd(bbi, ddof=1)
@@ -243,28 +223,22 @@ def _rsp_rrv_nonlinear(bbi):
 
     # DFA
     if len(bbi) / 10 > 16:
-        out["DFA_alpha1"] = fractal_dfa(bbi, windows=np.arange(4, 17), multifractal=False)[0]
+        out["DFA_alpha1"] = fractal_dfa(bbi, scale=np.arange(4, 17), multifractal=False)[0]
         # For multifractal
-        mdfa_alpha1 = fractal_dfa(
-            bbi, multifractal=True, q=np.arange(-5, 6), windows=np.arange(4, 17)
-        )[1]
+        mdfa_alpha1, _ = fractal_dfa(
+            bbi, multifractal=True, q=np.arange(-5, 6), scale=np.arange(4, 17)
+        )
+        for k in mdfa_alpha1.columns:
+            out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
-        out["DFA_alpha1_ExpRange"] = mdfa_alpha1["ExpRange"]
-        out["DFA_alpha1_ExpMean"] = mdfa_alpha1["ExpMean"]
-        out["DFA_alpha1_DimRange"] = mdfa_alpha1["DimRange"]
-        out["DFA_alpha1_DimMean"] = mdfa_alpha1["DimMean"]
     if len(bbi) > 65:
-        out["DFA_alpha2"] = fractal_dfa(bbi, windows=np.arange(16, 65), multifractal=False)[0]
+        out["DFA_alpha2"] = fractal_dfa(bbi, scale=np.arange(16, 65), multifractal=False)[0]
         # For multifractal
-        mdfa_alpha2 = fractal_dfa(
-            bbi, multifractal=True, q=np.arange(-5, 6), windows=np.arange(16, 65)
-        )[1]
-
-        out["DFA_alpha2_ExpRange"] = mdfa_alpha2["ExpRange"]
-        out["DFA_alpha2_ExpMean"] = mdfa_alpha2["ExpMean"]
-        out["DFA_alpha2_DimRange"] = mdfa_alpha2["DimRange"]
-        out["DFA_alpha2_DimMean"] = mdfa_alpha2["DimMean"]
-
+        mdfa_alpha2, _ = fractal_dfa(
+            bbi, multifractal=True, q=np.arange(-5, 6), scale=np.arange(16, 65)
+        )
+        for k in mdfa_alpha2.columns:
+            out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
     return out
 
 

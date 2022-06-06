@@ -8,20 +8,20 @@ from .ecg_peaks import ecg_peaks
 
 
 def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
-    """Segment an ECG signal into single heartbeats.
+    """**Segment an ECG signal into single heartbeats**
+
+    Segment an ECG signal into single heartbeats. Convenient for visualizing all the heart beats.
 
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned ECG channel as returned by `ecg_clean()`.
+        The cleaned ECG channel as returned by ``ecg_clean()``.
     rpeaks : dict
-        The samples at which the R-peaks occur. Dict returned by
-        `ecg_peaks()`. Defaults to None.
+        The samples at which the R-peaks occur. Dict returned by ``ecg_peaks()``. Defaults to ``None``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
-        Defaults to 1000.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     show : bool
-        If True, will return a plot of heartbeats. Defaults to False.
+        If ``True``, will return a plot of heartbeats. Defaults to ``False``.
 
     Returns
     -------
@@ -34,17 +34,13 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
-    >>> ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> nk.ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=True) #doctest: +ELLIPSIS
-    {'1':              Signal  Index Label
-     ...
-     '2':              Signal  Index Label
-     ...
-     '19':              Signal  Index Label
-     ...}
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80, noise = 0.05)
+      @savefig p_ecg_segment.png scale=100%
+      qrs_epochs = nk.ecg_segment(ecg, rpeaks=None, sampling_rate=1000, show=True)
 
     """
     # Sanitize inputs
@@ -56,7 +52,11 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
         rpeaks=rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned)
     )
     heartbeats = epochs_create(
-        ecg_cleaned, rpeaks, sampling_rate=sampling_rate, epochs_start=epochs_start, epochs_end=epochs_end
+        ecg_cleaned,
+        rpeaks,
+        sampling_rate=sampling_rate,
+        epochs_start=epochs_start,
+        epochs_end=epochs_end,
     )
 
     if show:
@@ -82,7 +82,9 @@ def _ecg_segment_window(heart_rate=None, rpeaks=None, sampling_rate=1000, desire
     if heart_rate is not None:
         heart_rate = np.mean(heart_rate)
     if rpeaks is not None:
-        heart_rate = np.mean(signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=desired_length))
+        heart_rate = np.mean(
+            signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=desired_length)
+        )
 
     # Modulator
     m = heart_rate / 60

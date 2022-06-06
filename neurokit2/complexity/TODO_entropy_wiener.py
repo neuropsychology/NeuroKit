@@ -7,11 +7,13 @@ from ..signal.signal_timefrequency import signal_timefrequency
 def entropy_wiener(signal, sampling_rate=1000, **kwargs):
     """Wiener Entropy (WE, also known as Spectral Flatness)
 
-    The Wiener entropy (also known as Spectral Flatness, or tonality coefficient in sound processing) is a measure to
-    quantify how noise-like a signal is and is typically applied to characterize an audio spectrum.
-    A high spectral flatness (closer to 1.0) indicates that the spectrum has a similar amount of power in all
-    spectral bands, and is similar to white noise. A low spectral flatness (approaching 0 for pure tone)
-    indicates that the spectral power is concentrated in a relatively small number of spectral bands.
+    The Wiener entropy (also known as Spectral Flatness, or tonality coefficient in sound
+    processing) is a measure to quantify how noise-like a signal is and is typically applied to
+    characterize an audio spectrum.
+    A high spectral flatness (closer to 1.0) indicates that the spectrum has a similar amount of
+    power in all spectral bands, and is similar to white noise. A low spectral flatness (approaching
+    0 for pure tone) indicates that the spectral power is concentrated in a relatively small number of spectral
+    bands.
 
     It is measured on a logarithmic scale from 0 (white noise: log(1): 0) to minus infinity (complete
     order such as pure tone, log(0): minus infinity).
@@ -41,17 +43,19 @@ def entropy_wiener(signal, sampling_rate=1000, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=[3, 10])
-    >>> we, info = nk.entropy_wiener(signal, sampling_rate=100)
-    >>> we #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(100, sampling_rate=100, frequency=[3, 10])
+      we, info = nk.entropy_wiener(signal, sampling_rate=100)
+      we
 
     References
     ----------
-    - Wiener, N. (1954). The Human Use of Human Beings: Cybernetics and Society (Boston). Houghton Mifflin, 1, 50.
+    * Wiener, N. (1954). The Human Use of Human Beings: Cybernetics and Society (Boston). Houghton Mifflin, 1, 50.
 
-    - Dubnov, S. (2004). Generalization of spectral flatness measure for non-gaussian linear processes.
+    * Dubnov, S. (2004). Generalization of spectral flatness measure for non-gaussian linear processes.
     IEEE Signal Processing Letters, 11(8), 698-701.
 
     """

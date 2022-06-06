@@ -5,18 +5,19 @@ import numpy as np
 import pandas as pd
 
 
-def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
-    """Plot events in signal.
+def events_plot(events, signal=None, color="red", linestyle="--"):
+    """**Visualize Events**
+
+    Plot events in signal.
 
     Parameters
     ----------
     events : list or ndarray or dict
         Events onset location. Can also be a list of lists, in which case it will mark them with
-        different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'onset' list.
+        different colors. If a dict is passed (e.g., from :func:`events_find`), it will only plot
+        the onsets.
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
-    show : bool
-        If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
     color : str
         Argument passed to matplotlib plotting.
     linestyle : str
@@ -33,36 +34,62 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
 
     Examples
     ----------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> fig = nk.events_plot([1, 3, 5])
-    >>> fig #doctest: +SKIP
-    >>>
-    >>> # With signal
-    >>> signal = nk.signal_simulate(duration=4)
-    >>> events = nk.events_find(signal)
-    >>> fig1 = nk.events_plot(events, signal)
-    >>> fig1 #doctest: +SKIP
-    >>>
-    >>> # Different events
-    >>> events1 = events["onset"]
-    >>> events2 = np.linspace(0, len(signal), 8)
-    >>> fig2 = nk.events_plot([events1, events2], signal)
-    >>> fig2 #doctest: +SKIP
-    >>>
-    >>> # Conditions
-    >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
-    >>> fig3 = nk.events_plot(events, signal)
-    >>> fig3 #doctest: +SKIP
-    >>>
-    >>> # Different colors for all events
-    >>> signal = nk.signal_simulate(duration=20)
-    >>> events = nk.events_find(signal)
-    >>> events = [[i] for i in events['onset']]
-    >>> fig4 = nk.events_plot(events, signal)
-    >>> fig4 #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      @savefig p_events_plot1.png scale=100%
+      nk.events_plot([1, 3, 5])
+      @suppress
+      plt.close()
+
+    * **Example 1**: With signal
+
+    .. ipython:: python
+
+      signal = nk.signal_simulate(duration=4)
+      events = nk.events_find(signal)
+
+      @savefig p_events_plot2.png scale=100%
+      nk.events_plot(events, signal)
+      @suppress
+      plt.close()
+
+    * **Example 2**: Different events
+
+    .. ipython:: python
+
+      events1 = events["onset"]
+      events2 = np.linspace(0, len(signal), 8)
+
+      @savefig p_events_plot3.png scale=100%
+      nk.events_plot([events1, events2], signal)
+      @suppress
+      plt.close()
+
+    * **Example 3**: Conditions
+
+    .. ipython:: python
+
+      events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
+
+      @savefig p_events_plot4.png scale=100%
+      nk.events_plot(events, signal)
+      @suppress
+      plt.close()
+
+    * **Example 4**: Different colors for all events
+
+    .. ipython:: python
+
+      signal = nk.signal_simulate(duration=10)
+      events = nk.events_find(signal)
+      events = [[i] for i in events['onset']]
+
+      @savefig p_events_plot5.png scale=100%
+      nk.events_plot(events, signal)
+      @suppress
+      plt.close()
 
     """
 
@@ -70,7 +97,9 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         if "condition" in events.keys():
             events_list = []
             for condition in set(events["condition"]):
-                events_list.append([x for x, y in zip(events["onset"], events["condition"]) if y == condition])
+                events_list.append(
+                    [x for x, y in zip(events["onset"], events["condition"]) if y == condition]
+                )
             events = events_list
         else:
             events = events["onset"]
@@ -80,18 +109,9 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     if isinstance(signal, pd.DataFrame) is False:
         signal = pd.DataFrame({"Signal": signal})
 
-    # Plot if necessary
-    if show:
-        fig = signal.plot().get_figure()
-        _events_plot(events, color=color, linestyle=linestyle)
-        return fig
-    else:
-        signal["Event_Onset"] = 0
-        signal.iloc[events] = 1
-        return signal
+    # Plot signal(s)
+    signal.plot()
 
-
-def _events_plot(events, color="red", linestyle="--"):
     # Check if events is list of lists
     try:
         len(events[0])

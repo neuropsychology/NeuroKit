@@ -2,17 +2,25 @@ import numpy as np
 
 
 def write_csv(data, filename, parts=None, **kwargs):
-    """Write data to multiple csv files.
+    """**Write data to multiple csv files**
 
     Split the data into multiple CSV files. You can then re-create them as follows:
 
-    .. highlight:: python
-    .. code-block:: python
-        # iterate through 6-parts and concatenate the pieces
-        pd.concat(
-                [pd.read_csv(f"data_part{i}.csv") for i in range(1, 7)],
-                axis=0,
-            )
+    Example
+    --------
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      # Split data into multiple files
+      # nk.write_csv(data, 'C:/Users/.../data.csv', parts=6)
+
+      # Iterate through 6-parts and concatenate the pieces
+      # data_all = pd.concat(
+      #                   [pd.read_csv(f"data_part{i}.csv") for i in range(1, 7)],
+      #                   axis=0,
+      #                      )
 
     Parameters
     ----------

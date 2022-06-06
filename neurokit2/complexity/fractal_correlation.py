@@ -5,19 +5,21 @@ import pandas as pd
 import sklearn.metrics.pairwise
 
 from ..misc import expspace
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **kwargs):
-    """Correlation Dimension.
+    """**Correlation Dimension (CD)**
 
-    The time series is first reconstructed using a delay-embedding method. In the reconstructed
-    phase space trajectory, distances between all points in the trajectory are calculated. The
-    'correlation sum' is the computed, which is the probability of finding two vectors which are
-    separated by a distance not larger than a specified radius. The final correlation dimension is
-    then approximated by a log-log graph of correlation sum vs. a sequence of radiuses.
+    The Correlation Dimension (CD, also denoted *D2*) is a lower bound estimate of the fractal
+    dimension of a signal.
 
-    Python implementation of the Correlation Dimension CD (sometimes referred to as D2) of a signal.
+    The time series is first :func:`time-delay embedded <complexity_embedding>`, and distances
+    between all points in the trajectory are calculated. The "correlation sum" is the computed,
+    which is the proportion of pairs of points which distance is smaller than a given radius. The
+    final correlation dimension is then approximated by a log-log graph of correlation sum vs. a
+    sequence of radiuses.
+
     This function can be called either via ``fractal_correlation()`` or ``complexity_cd()``.
 
     Parameters
@@ -25,62 +27,66 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
-        or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
-        returns an array with two columns corresponding to the original signal and its delayed (by
-        Tau) version.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     radius : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
-        other packages can be used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
+        other packages can be used via ``"nolds"``, ``"Corr_Dim"`` or ``"boon2008"``.
     show : bool
-        Plot of correlation dimension if True. Defaults to False.
+        Plot of correlation dimension if ``True``. Defaults to ``False``.
     **kwargs
-        Other arguments to be passed (unused for now).
+        Other arguments to be passed (not used for now).
 
     Returns
     ----------
     cd : float
-        The correlation dimension of the single time series.
+        The Correlation Dimension (CD) of the time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute the correlation dimension.
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> fractal1, info = nk.fractal_correlation(signal, radius=32, show=True)
-    >>> fractal1 # doctest: +ELLIPSIS
-    0.7888...
-    >>>
-    >>> fractal2, info = nk.fractal_correlation(signal, radius="nolds", show=True)
-    >>> fractal2 # doctest: +ELLIPSIS
-    0.8316...
-    >>>
-    >>> fractal3, info = nk.fractal_correlation(signal, radius='boon2008', show=True)
-    >>> fractal3 # doctest: +ELLIPSIS
-    0.7501...
+    For some completely unclear reasons, uncommenting the following examples messes up the figures
+    path of all the subsequent documented function. So, commenting it for now.
 
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=1, frequency=[10, 14], noise=0.1)
+
+      # @savefig p_fractal_correlation1.png scale=100%
+      # cd, info = nk.fractal_correlation(signal, radius=32, show=True)
+      # @suppress
+      # plt.close()
+
+    .. ipython:: python
+
+      # @savefig p_fractal_correlation2.png scale=100%
+      # cd, info = nk.fractal_correlation(signal, radius="nolds", show=True)
+      # @suppress
+      # plt.close()
+
+    .. ipython:: python
+
+      # @savefig p_fractal_correlation3.png scale=100%
+      # cd, info = nk.fractal_correlation(signal, radius='boon2008', show=True)
+      # @suppress
+      # plt.close()
 
     References
     -----------
-    - Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., & Bailón, R. (2014).
-      Methodological framework for estimating the correlation dimension in HRV signals. Computational
-      and mathematical methods in medicine, 2014.
-
-    - Boon, M. Y., Henry, B. I., Suttle, C. M., & Dain, S. J. (2008). The correlation dimension:
-      A useful objective measure of the transient visual evoked potential?. Journal of vision, 8(1), 6-6.
-
-    - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
-
-    - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
+    * Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., & Bailón, R. (2014).
+      Methodological framework for estimating the correlation dimension in HRV signals.
+      Computational and mathematical methods in medicine, 2014.
+    * Boon, M. Y., Henry, B. I., Suttle, C. M., & Dain, S. J. (2008). The correlation dimension:
+      A useful objective measure of the transient visual evoked potential?. Journal of vision,
+      8(1), 6-6.
 
     """
     # Sanity checks
@@ -89,81 +95,41 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Prepare parameters
-    info = {"Dimension": dimension, "Delay": delay}
-
-    out, info["Radiuses"] = _fractal_correlation(
-        signal, delay=delay, dimension=dimension, radius=radius, show=show
-    )
-
-    return out, info
-
-
-def _fractal_correlation(signal, delay=1, dimension=2, radius=64, show=True):
-
+    # Get embedded
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
     r_vals = _fractal_correlation_get_r(radius, signal, dist)
 
-    r_vals, corr = _fractal_correlation_nolds(signal, r_vals, dist)
-    # Corr_Dim method: https://github.com/jcvasquezc/Corr_Dim
-    # r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
+    # Store parameters
+    info = {"Dimension": dimension, "Delay": delay, "Radius": r_vals}
+
+    # Get only upper triang of the distance matrix to reduce computational load
+    upper = dist[np.triu_indices_from(dist, k=1)]
+    corr = np.array([np.sum(upper < r) for r in r_vals])
+    corr = corr / len(upper)
+
+    # filter zeros from correlation sums
+    r_vals = r_vals[np.nonzero(corr)[0]]
+    corr = corr[np.nonzero(corr)[0]]
 
     # Compute trend
     if len(corr) == 0:
-        return np.nan
+        return np.nan, info
     else:
-        cd = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
+        cd, intercept = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
 
     if show is True:
-        _fractal_correlation_plot(r_vals, corr, cd)
+        plt.figure()
+        plt.title("Correlation Dimension")
+        plt.xlabel(r"$\log_{2}$(radius)")
+        plt.ylabel(r"$\log_{2}$(correlation sum)")
 
-    return cd[0], r_vals
+        fit = 2 ** np.polyval((cd, intercept), np.log2(r_vals))
+        plt.loglog(r_vals, corr, "bo")
+        plt.loglog(r_vals, fit, "r", label=f"$CD$ = {np.round(cd, 2)}")
+        plt.legend(loc="lower right")
 
-
-# =============================================================================
-# Methods
-# =============================================================================
-def _fractal_correlation_nolds(signal, r_vals, dist):
-    """References
-    -----------
-    - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
-    """
-    n = len(signal)
-
-    corr = np.zeros(len(r_vals))
-    for i, r in enumerate(r_vals):
-        corr[i] = 1 / (n * (n - 1)) * np.sum(dist < r)
-
-    # filter zeros from csums
-    nonzero = np.nonzero(corr)[0]
-    r_vals = r_vals[nonzero]
-    corr = corr[nonzero]
-
-    return r_vals, corr
-
-
-def _fractal_correlation_Corr_Dim(embedded, r_vals, dist):
-    """References
-    -----------
-    - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
-    """
-    ED = dist[np.triu_indices_from(dist, k=1)]
-
-    Npairs = (len(embedded[1, :])) * ((len(embedded[1, :]) - 1))
-    corr = np.zeros(len(r_vals))
-
-    for i, r in enumerate(r_vals):
-        N = np.where(((ED < r) & (ED > 0)))
-        corr[i] = len(N[0]) / Npairs
-
-    omit_pts = 1
-    k1 = omit_pts
-    k2 = len(r_vals) - omit_pts
-    r_vals = r_vals[k1:k2]
-    corr = corr[k1:k2]
-
-    return r_vals, corr
+    return cd, info
 
 
 # =============================================================================
@@ -196,19 +162,3 @@ def _fractal_correlation_get_r(radius, signal, dist):
         r_vals = expspace(r_min, r_max, radius, base=2, out="float")
 
     return r_vals
-
-
-def _fractal_correlation_plot(r_vals, corr, d2):
-
-    # Initiate plot
-    fig = plt.figure(constrained_layout=False)
-    fig.suptitle("Correlation Dimension")
-    plt.xlabel(r"$\log_{2}$(r)")
-    plt.ylabel(r"$\log_{2}$(c)")
-
-    fit = 2 ** np.polyval(d2, np.log2(r_vals))
-    plt.loglog(r_vals, corr, "bo")
-    plt.loglog(r_vals, fit, "r", label=r"$D2$ = %0.3f" % d2[0])
-    plt.legend(loc="lower right")
-
-    return fig

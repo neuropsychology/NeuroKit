@@ -3,53 +3,60 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
-                                         _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 from ..misc import NeuroKitWarning
 
 
 def emg_eventrelated(epochs, silent=False):
-    """Performs event-related EMG analysis on epochs.
+    """**Event-related EMG Analysis**
+
+    Performs event-related EMG analysis on epochs.
 
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or
-        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained via ``epochs_create()``,
+        or a DataFrame containing all epochs, usually obtained via ``epochs_to_df()``.
     silent : bool
-        If True, silence possible warnings.
+        If ``True``, silence possible warnings.
 
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated by
-        the `Label` column (if not present, by the `Index` column). The analyzed features consist of
-        the following:
-            - *"EMG_Activation"*: indication of whether there is muscular activation following the onset
-            of the event (1 if present, 0 if absent) and if so, its corresponding amplitude features
-            and the number of activations in each epoch. If there is no activation, nans are displayed
-            for the below features.
-            - *"EMG_Amplitude_Mean"*: the mean amplitude of the activity.
-            - *"EMG_Amplitude_Max"*: the maximum amplitude of the activity.
-            - *"EMG_Amplitude_SD"*: the standard deviation of the activity amplitude.
-            - *"EMG_Amplitude_Max_Time"*: the time of maximum amplitude.
-            - *"EMG_Bursts"*: the number of activations, or bursts of activity, within each epoch.
+        A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated
+        by the `Label` column (if not present, by the `Index` column). The analyzed features consist
+        of the following:
+
+            * ``"EMG_Activation*``: indication of whether there is muscular activation following
+              the onset of the event (1 if present, 0 if absent) and if so, its corresponding
+              amplitude features and the number of activations in each epoch. If there is no
+              activation, nans are displayed for the below features.
+            * ``"EMG_Amplitude_Mean*``: the mean amplitude of the activity.
+            * ``"EMG_Amplitude_Max*``: the maximum amplitude of the activity.
+            * ``"EMG_Amplitude_SD*``: the standard deviation of the activity amplitude.
+            * ``"EMG_Amplitude_Max_Time*``: the time of maximum amplitude.
+            * ``"EMG_Bursts*``: the number of activations, or bursts of activity, within each epoch.
 
     See Also
     --------
-    emg_simulate, emg_process, events_find, epochs_create
+    emg_simulate, emg_process, .events_find, .epochs_create
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
-    >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
-    ...                           epochs_start=-0.1,epochs_end=1.9)
-    >>> nk.emg_eventrelated(epochs) #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Example with simulated data
+      emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
+      emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+      epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,
+                                epochs_start=-0.1,epochs_end=1.9)
+      nk.emg_eventrelated(epochs)
 
     """
     # Sanity checks
@@ -64,9 +71,8 @@ def emg_eventrelated(epochs, silent=False):
         # Activation following event
         if "EMG_Onsets" not in epochs[i]:
             warn(
-                "Input does not have an `EMG_Onsets` column."
-                " Unable to process EMG features.",
-                category=NeuroKitWarning
+                "Input does not have an `EMG_Onsets` column." " Unable to process EMG features.",
+                category=NeuroKitWarning,
             )
             data[i]["EMG_Activation"] = 0
         elif np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] != 0):
@@ -102,7 +108,7 @@ def _emg_eventrelated_features(epoch, output={}):
         warn(
             "Input does not have an `EMG_Activity` column or `EMG_Amplitude` column."
             " Will skip computation of EMG amplitudes.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -117,7 +123,9 @@ def _emg_eventrelated_features(epoch, output={}):
 
     output["EMG_Amplitude_Mean"] = mean
     output["EMG_Amplitude_Max"] = maximum
-    output["EMG_Amplitude_SD"] = np.std(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal])
+    output["EMG_Amplitude_SD"] = np.std(
+        epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]
+    )
     output["EMG_Amplitude_Max_Time"] = time
     output["EMG_Bursts"] = activations
 

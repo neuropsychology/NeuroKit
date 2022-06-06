@@ -3,72 +3,138 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
 
-from .complexity_embedding import complexity_embedding
 from .fractal_correlation import fractal_correlation
+from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
-    """Automated selection of the optimal Dimension (m) for time-delay embedding.
+    """**Automated selection of the optimal Embedding Dimension (m)**
 
-    From this
-    `thread <https://www.researchgate.net/post/How-can-we-find-out-which-value-of-embedding-dimensions-is-more-accurate>`_:
+    The Embedding Dimension (*m*, sometimes referred to as *d* or *order*) is the second
+    critical parameter (the first being the :func:`delay <complexity_delay>` :math:`\\tau`)
+    involved in the construction of the time-delay embedding of a signal. It corresponds to the
+    number of delayed states (versions of the signals lagged by :math:`\\tau`) that we include in
+    the embedding.
 
-    "In the early days, the method of choice was to calculate the correlation dimension in various embeddings and
-    look for a saturation in its value as the embedding dimension increases. However, a saturation will always occur
-    when you no longer have enough data to adequately fill your high-dimensional space. More recently the method of choice
-    has been false nearest neighbors, although that suffers from the same problem when the neighborhood does not contain
-    sufficiently many points. As a rule of thumb, you might demand that each dimension have at least ten points."
+    Though one can commonly find values of 2 or 3 used in practice, several authors suggested
+    different numerical methods to guide the choice of *m*:
+
+    * **Correlation Dimension** (CD): One of the earliest method to estimate the optimal *m*
+      was to calculate the :func:`correlation dimension <fractal_correlation>` for embeddings of
+      various sizes and look for a saturation (i.e., a plateau) in its value as the embedding
+      dimension increases. One of the limitation is that a saturation will also occur when there is
+      not enough data to adequately fill the high-dimensional space (note that, in general, having
+      such large embeddings that it significantly shortens the length of the signal is not
+      recommended).
+    * **FNN** (False Nearest Neighbour): The method, introduced by Kennel et al. (1992), is based
+      on the assumption that two points that are near to each other in the sufficient embedding
+      dimension should remain close as the dimension increases. The algorithm checks the neighbours
+      in increasing embedding dimensions until it finds only a negligible number of false
+      neighbours when going from dimension :math:`m` to :math:`m+1`. This corresponds to the lowest
+      embedding dimension, which is presumed to give an unfolded space-state reconstruction. This
+      method can fail in noisy signals due to the futile attempt of unfolding the noise (and in
+      purely random signals, the amount of false neighbors does not substantially drops as *m*
+      increases).
+    * **AFN** (Average False Neighbors): This modification by Cao (1997) of the FNN method
+      addresses one of its main drawback, the need for a heuristic choice for the tolerance
+      thresholds *r*. It uses the maximal Euclidian distance to represent nearest neighbors, and
+      averages all ratios of the distance in :math:`m+1` to :math:`m` dimension and defines *E1* and
+      *E2* as parameters. The optimal dimension corresponds to when *E1* stops changing (reaches a
+      plateau). E1 reaches a plateau at a dimension *d0* if the signal comes from an attractor.
+      Then *d0*+1 is the optimal minimum embedding dimension. *E2* is a useful quantity to
+      distinguish deterministic signals from stochastic signals. A constant *E2* close to 1 for any
+      embedding dimension *d* suggests random data, since the future values are independent of the
+      past values.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag').
-        In practice, it is common to have a fixed time lag (corresponding for instance to the
-        sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics
-        (see ``complexity_delay()``).
+        Time delay (often denoted Tau :math:`\\tau`, sometimes referred to as Lag) in samples.
+        See :func:`complexity_delay()` to choose the optimal value for this parameter.
     dimension_max : int
-        The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order')
-        to test.
+        The maximum embedding dimension to test.
     method : str
-        Method can either be 'afnn' (average false nearest neighbour), 'fnn' (false nearest neighbour),
-        or 'correlation' (correlation dimension).
+        Can be ``"afn"`` (Average False Neighbor), ``"fnn"`` (False Nearest Neighbour), or ``"cd"``
+        (Correlation Dimension).
     show : bool
         Visualize the result.
     **kwargs
-        Other arguments, such as ``R=10.0``, ``A=2.0`` (relative and absolute tolerance, only for 'fnn' method).
+        Other arguments, such as ``R=10.0`` or ``A=2.0`` (relative and absolute tolerance, only for
+        ``'fnn'`` method).
 
     Returns
     -------
     delay : int
-        Optimal dimension.
+        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
+        See :func:`complexity_delay` to choose the optimal value for this parameter.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
         to compute the optimal dimension.
 
     See Also
     ------------
-    complexity_delay, complexity_embedding
+    complexity, complexity_dimension, complexity_delay, complexity_tolerance
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Artifical example
-    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> # Find optimal delay
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=500)
-    >>>
-    >>> # Find optimal dimension
-    >>> optimal_dimension, info = nk.complexity_dimension(signal, delay=delay, dimension_max=20, method='afnn', show=True)
-    >>> optimal_dimension, info = nk.complexity_dimension(signal, delay=delay, dimension_max=20, method='fnn', show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=[5, 7, 8], noise=0.01)
+
+      # Correlation Dimension
+      @savefig p_complexity_dimension1.png scale=100%
+      optimal_dimension, info = nk.complexity_dimension(signal,
+                                                        delay=20,
+                                                        dimension_max=10,
+                                                        method='cd',
+                                                        show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # FNN
+      @savefig p_complexity_dimension2.png scale=100%
+      optimal_dimension, info = nk.complexity_dimension(signal,
+                                                        delay=20,
+                                                        dimension_max=20,
+                                                        method='fnn',
+                                                        show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # AFNN
+      @savefig p_complexity_dimension3.png scale=100%
+      optimal_dimension, info = nk.complexity_dimension(signal,
+                                                        delay=20,
+                                                        dimension_max=20,
+                                                        method='afnn',
+                                                        show=True)
+      @suppress
+      plt.close()
 
 
     References
     -----------
-    - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar
+    * Kennel, M. B., Brown, R., & Abarbanel, H. D. (1992). Determining embedding dimension for
+      phase-space reconstruction using a geometrical construction. Physical review A, 45(6), 3403.
+    * Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar
       time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
+    * Rhodes, C., & Morari, M. (1997). The false nearest neighbors algorithm: An overview.
+      Computers & Chemical Engineering, 21, S1149-S1154.
+    * Krakovská, A., Mezeiová, K., & Budáčová, H. (2015). Use of false nearest neighbours for
+      selecting variables and embedding parameters for state space reconstruction. Journal of
+      Complex Systems, 2015.
+    * Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based
+      method for determining the optimal embedding parameters of a signal. In 2003 IEEE
+      International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.
+      (ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
 
     """
     # Initialize vectors
@@ -79,7 +145,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
     # Method
     method = method.lower()
-    if method in ["afnn"]:
+    if method in ["afnn", "afn"]:
         # Append value (as it gets cropped afterwards anyway)
         dimension_seq = np.append(dimension_seq, [dimension_seq[-1] + 1])
         E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
@@ -161,18 +227,7 @@ def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
 
 
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
-    """Return E(d) and E^*(d) for a all d in dimension_seq.
-
-    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
-
-    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater than some value d0  if the time
-    series comes from an attractor. Then d0 + 1 is the minimum embedding dimension we look for.
-
-    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish deterministic signals from
-    stochastic signals. For random data, since the future values are independent of the past values,
-    E2(d) will be equal to 1 for any d. For deterministic data, E2(d) is certainly related to d, it
-    cannot be a constant for all d; there must exist somed's such that E2(d) is not 1.
-
+    """AFN
     """
     values = np.asarray(
         [
@@ -188,10 +243,11 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
 def _embedding_dimension_afn_d(
     signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs
 ):
-    """Return E(d) and E^*(d) for a single d.
-
+    """
     Returns E(d) and E^*(d) for the AFN method for a single d.
-
+     E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
+     E1(d) = E(d + 1)/E(d).
+     E2(d) = E*(d + 1)/E*(d).
     """
     d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
 
@@ -381,7 +437,7 @@ def _embedding_dimension_plot(
         ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
         if method in ["afnn"]:
             ax.plot(dimension_seq, E1, "o-", label="$E_1(d)$", color="#FF5722")
-            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#f44336")
+            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#FFC107")
 
         if method in ["fnn"]:
             ax.plot(dimension_seq, 100 * f1, "o--", label="Test I", color="#FF5722")

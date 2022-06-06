@@ -1,1 +1,2 @@
 scripts/* linguist-vendored
+*.ipynb linguist-language=Python

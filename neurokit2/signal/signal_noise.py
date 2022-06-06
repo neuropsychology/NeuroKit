@@ -2,15 +2,17 @@ import numpy as np
 
 
 def signal_noise(duration=10, sampling_rate=1000, beta=1):
-    """Simulate noise
+    """**Simulate noise**
 
-    This function generates pure Gaussian (1/f)**beta noise. The power-spectrum of the generated
-    noise is proportional to S(f) = (1 / f)**beta. The following categories of noise have been described:
-    - violet noise: beta = -2
-    - blue noise: beta = -1
-    - white noise: beta = 0
-    - flicker / pink noise: beta = 1
-    - brown noise: beta = 2
+    This function generates pure Gaussian ``(1/f)**beta`` noise. The power-spectrum of the generated
+    noise is proportional to ``S(f) = (1 / f)**beta``. The following categories of noise have been
+    described:
+
+    * violet noise: beta = -2
+    * blue noise: beta = -1
+    * white noise: beta = 0
+    * flicker / pink noise: beta = 1
+    * brown noise: beta = 2
 
     Parameters
     ----------
@@ -29,45 +31,55 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
 
     References
     ----------
-    - Timmer, J., & Koenig, M. (1995). On generating power law noise. Astronomy and Astrophysics, 300, 707.
-    - https://github.com/felixpatzelt/colorednoise
-    - https://en.wikipedia.org/wiki/Colors_of_noise
+    * Timmer, J., & Koenig, M. (1995). On generating power law noise. Astronomy and Astrophysics,
+      300, 707.
+    * https://github.com/felixpatzelt/colorednoise
+    * https://en.wikipedia.org/wiki/Colors_of_noise
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> # Generate pure noise
-    >>> violet = nk.signal_noise(beta=-2)
-    >>> blue = nk.signal_noise(beta=-1)
-    >>> white = nk.signal_noise(beta=0)
-    >>> pink = nk.signal_noise(beta=1)
-    >>> brown = nk.signal_noise(beta=2)
-    >>>
-    >>> # Visualize
-    >>> nk.signal_plot([violet, blue, white, pink, brown],
-    ...                standardize=True,
-    ...                labels=["Violet", "Blue", "White", "Pink", "Brown"])
-    >>>
-    >>> # Visualize spectrum
-    >>> psd_violet = nk.signal_psd(violet, sampling_rate=200, method="fft")
-    >>> psd_blue = nk.signal_psd(blue, sampling_rate=200, method="fft")
-    >>> psd_white = nk.signal_psd(white, sampling_rate=200, method="fft")
-    >>> psd_pink = nk.signal_psd(pink, sampling_rate=200, method="fft")
-    >>> psd_brown = nk.signal_psd(brown, sampling_rate=200, method="fft")
-    >>>
-    >>> plt.loglog(psd_violet["Frequency"], psd_violet["Power"], c="violet") #doctest: +SKIP
-    >>> plt.loglog(psd_blue["Frequency"], psd_blue["Power"], c="blue") #doctest: +SKIP
-    >>> plt.loglog(psd_white["Frequency"], psd_white["Power"], c="grey") #doctest: +SKIP
-    >>> plt.loglog(psd_pink["Frequency"], psd_pink["Power"], c="pink") #doctest: +SKIP
-    >>> plt.loglog(psd_brown["Frequency"], psd_brown["Power"], c="brown") #doctest: +SKIP
-    >>> plt.show() #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import matplotlib.pyplot as plt
+
+      # Generate pure noise
+      violet = nk.signal_noise(beta=-2)
+      blue = nk.signal_noise(beta=-1)
+      white = nk.signal_noise(beta=0)
+      pink = nk.signal_noise(beta=1)
+      brown = nk.signal_noise(beta=2)
+
+      # Visualize
+      @savefig p_signal_noise1.png scale=100%
+      nk.signal_plot([violet, blue, white, pink, brown],
+                      standardize=True,
+                      labels=["Violet", "Blue", "White", "Pink", "Brown"])
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Visualize spectrum
+      psd_violet = nk.signal_psd(violet, sampling_rate=200, method="fft")
+      psd_blue = nk.signal_psd(blue, sampling_rate=200, method="fft")
+      psd_white = nk.signal_psd(white, sampling_rate=200, method="fft")
+      psd_pink = nk.signal_psd(pink, sampling_rate=200, method="fft")
+      psd_brown = nk.signal_psd(brown, sampling_rate=200, method="fft")
+
+      @savefig p_signal_noise2.png scale=100%
+      plt.loglog(psd_violet["Frequency"], psd_violet["Power"], c="violet")
+      plt.loglog(psd_blue["Frequency"], psd_blue["Power"], c="blue")
+      plt.loglog(psd_white["Frequency"], psd_white["Power"], c="grey")
+      plt.loglog(psd_pink["Frequency"], psd_pink["Power"], c="pink")
+      plt.loglog(psd_brown["Frequency"], psd_brown["Power"], c="brown")
+      @suppress
+      plt.close()
 
     """
 
     # The number of samples in the time series
-    n = duration * sampling_rate
+    n = int(duration * sampling_rate)
 
     # Calculate Frequencies (we asume a sample rate of one)
     # Use fft functions for real output (-> hermitian spectrum)

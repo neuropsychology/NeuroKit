@@ -19,7 +19,7 @@ def ecg_simulate(
     random_state=None,
     **kwargs,
 ):
-    """Simulate an ECG/EKG signal.
+    """**Simulate an ECG/EKG signal**
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
     the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies
@@ -37,21 +37,22 @@ def ecg_simulate(
         Noise level (amplitude of the laplace noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70. Note that for the
-        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These
-        fluctuations can cause some slight discrepancies between the requested heart rate and the
-        empirical heart rate, especially for shorter signals.
+        ``"ECGSYN"`` method, random fluctuations are to be expected to mimick a real heart rate.
+        These fluctuations can cause some slight discrepancies between the requested heart rate and
+        the empirical heart rate, especially for shorter signals.
     heart_rate_std : int
         Desired heart rate standard deviation (beats per minute).
     method : str
-        The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
-        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use
-        the model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_. If
-        'multileads', will return a DataFrame containing 12-leads (see `12-leads ECG simulation
-        <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_).
+        The model used to generate the signal. Can be ``"simple"`` for a simulation based on
+        Daubechies wavelets that roughly approximates a single cardiac cycle. If ``"ecgsyn"``
+        (default), will use the model desbribed `McSharry et al. (2003)
+        <https://physionet.org/content/ecgsyn/>`_. If
+        ``"multileads"``, will return a DataFrame containing 12-leads (see `12-leads ECG simulation
+        <https://neuropsychology.github.io/NeuroKit/examples/ecg_generate_12leads/ecg_generate_12leads.html>`_).
     random_state : int
         Seed for the random number generator.
     **kwargs
-        Other keywords parameters for ECGSYN algorithm, such as `lfhfratio`, `ti`, `ai`, `bi`.
+        Other keywords parameters for ECGSYN algorithm, such as ``"lfhfratio"``, ``"ti"``, ``"ai"``, ``"bi"``.
 
     Returns
     -------
@@ -60,35 +61,43 @@ def ecg_simulate(
 
     Examples
     ----------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Simulate single lead ECG
-    >>> ecg1 = nk.ecg_simulate(duration=10, method="simple")
-    >>> ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
-    >>> pd.DataFrame({"ECG_Simple": ecg1,
-    ...               "ECG_Complex": ecg2}).plot(subplots=True) #doctest: +ELLIPSIS
-    array([<AxesSubplot:>, <AxesSubplot:>], dtype=object)
-    >>>
-    >>> # Simulate 12-leads ECG
-    >>> ecg12 = nk.ecg_simulate(duration=10, method="multileads")
-    >>> ecg12[0:10000].plot(subplots=True)
-    array([<AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>,
-           <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>,
-           <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>],
-          dtype=object)
+
+    * **Example 1:** Simulate single lead ECG
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg1 = nk.ecg_simulate(duration=10, method="simple")
+      ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
+
+      # Visualize result
+      @savefig p_ecg_simulate1.png scale=100%
+      nk.signal_plot([ecg1, ecg2], labels=["simple", "ecgsyn"], subplots=True)
+      @suppress
+      plt.close()
+
+    * **Example 2:** Simulate 12-leads ECG
+
+    .. ipython:: python
+
+      ecg12 = nk.ecg_simulate(duration=10, method="multileads")
+      # Visualize result
+      @savefig p_ecg_simulate2.png scale=100%
+      nk.signal_plot(ecg12, subplots=True)
+      @suppress
+      plt.close()
 
     See Also
     --------
-    rsp_simulate, eda_simulate, ppg_simulate, emg_simulate
+    .rsp_simulate, .eda_simulate, .ppg_simulate, .emg_simulate
 
 
     References
     -----------
-    - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
-    generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50
-    (3), 289-294.
-    - https://github.com/diarmaidocualain/ecg_simulation
+    * McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
+      generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering,
+      50 (3), 289-294.
 
     """
     # Seed the random generator for reproducible results

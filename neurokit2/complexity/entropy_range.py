@@ -1,38 +1,48 @@
-import numpy as np
-import pandas as pd
-
-from .utils import _get_tolerance, _phi, _phi_divide
+from .entropy_approximate import entropy_approximate
+from .entropy_sample import entropy_sample
 
 
-def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSampEn", **kwargs):
-    """Range Entropy (RangeEn)
+def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate=False, **kwargs):
+    """**Range Entropy (RangeEn)**
 
     Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_,
-    RangeEn refers to a modified forms of ApEn or SampEn.
+    RangeEn refers to a modified form of SampEn (or ApEn).
 
     Both ApEn and SampEn compute the logarithmic likelihood that runs of patterns that are close
     remain close on the next incremental comparisons, of which this closeness is estimated by the
-    Chebyshev distance. Range Entropy adapts the quantification of this closeness by using instead a
-    normalized distance, resulting in modified forms of ApEn and SampEn, 'mApEn' and 'mSampEn'
-    respectively.
+    Chebyshev distance. Range Entropy uses instead a normalized "range distance", resulting in
+    modified forms of ApEn and SampEn, **RangeEn (A)** (*mApEn*) and **RangeEn (B)** (*mSampEn*).
+
+    However, the RangeEn (A), based on ApEn, often yields undefined entropies (i.e., *NaN* or
+    *Inf*). As such, using RangeEn (B) is recommended instead.
+
+    RangeEn is described as more robust to nonstationary signal changes, and has a more linear
+    relationship with the Hurst exponent (compared to ApEn and SampEn), and has no need for signal
+    amplitude correction.
+
+    Note that the :func:`corrected <entropy_approximate>` version of ApEn (cApEn) can be computed
+    by setting ``corrected=True``.
+
+
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
-        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
-        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
-    method : str
-        The entropy measure to use, 'mSampEn' (sample entropy, default) or 'mApEn' (approximate entropy).
+        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
+    approximate : bool
+        The entropy algorithm to use. If ``False`` (default), will use sample entropy and return
+        *mSampEn* (**RangeEn B**). If ``True``, will use approximate entropy and return *mApEn*
+        (**RangeEn A**).
     **kwargs
         Other arguments.
 
@@ -51,74 +61,49 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSa
     info : dict
         A dictionary containing additional information regarding the parameters used.
 
-    References
-    ----------
-    - Omidvarnia, A., Mesbah, M., Pedersen, M., & Jackson, G. (2018). Range entropy: A bridge between
-    signal complexity and self-similarity. Entropy, 20(12), 962.
-
-
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
-    >>>
-    >>> # Range Entropy (mSampEn)
-    >>> rangeen_msapen, info = nk.entropy_range(signal, dimension=3, delay=1, method="mSampEn")
-    >>> rangeen_msapen  #doctest: +SKIP
-    >>>
-    >>> # Range Entropy (mApEn)
-    >>> rangeen_mapen, info = nk.entropy_range(signal, dimension=3, delay=1, method="mApEn")
-    >>> rangeen_mapen  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6])
+
+      # Range Entropy B (mSampEn)
+      RangeEnB, info = nk.entropy_range(signal, approximate=False)
+      RangeEnB
+
+      # Range Entropy A (mApEn)
+      RangeEnA, info = nk.entropy_range(signal, approximate=True)
+      RangeEnA
+
+      # Range Entropy A (corrected)
+      RangeEnAc, info = nk.entropy_range(signal, approximate=True, corrected=True)
+      RangeEnAc
+
+    References
+    ----------
+    * Omidvarnia, A., Mesbah, M., Pedersen, M., & Jackson, G. (2018). Range entropy: A bridge
+      between signal complexity and self-similarity. Entropy, 20(12), 962.
+
 
     """
-    # Sanity checks
-    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
-        )
-
-    # Prepare parameters
-    info = {"Dimension": dimension, "Delay": delay, "Method": method}
-
-    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
-    out = _entropy_range(
-        signal,
-        tolerance=info["Tolerance"],
-        delay=delay,
-        dimension=dimension,
-        method=method,
-        **kwargs
-    )
-
-    return out, info
-
-
-def _entropy_range(signal, tolerance, delay=1, dimension=2, method="mSampEn", fuzzy=False):
-
-    method = method.lower()
-    if method == "mapen":
-        phi = _phi(
+    if approximate is False:  # mSampEn - RangeEn (B)
+        out = entropy_sample(
             signal,
             delay=delay,
             dimension=dimension,
             tolerance=tolerance,
-            approximate=True,
             distance="range",
-            fuzzy=fuzzy,
+            **kwargs,
         )
-        rangeen = np.abs(np.subtract(phi[0], phi[1]))
-
-    elif method == "msampen":
-        phi = _phi(
+    else:  # mApEn - RangeEn (A)
+        out = entropy_approximate(
             signal,
             delay=delay,
             dimension=dimension,
             tolerance=tolerance,
-            approximate=False,
             distance="range",
-            fuzzy=fuzzy,
+            **kwargs,
         )
-        rangeen = _phi_divide(phi)
-
-    return rangeen
+    return out

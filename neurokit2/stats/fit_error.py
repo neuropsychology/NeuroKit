@@ -3,9 +3,10 @@ import numpy as np
 
 
 def fit_error(y, y_predicted, n_parameters=2):
-    """Calculate the fit error for a model.
+    """**Calculate the fit error for a model**
 
-    Also specific and direct access functions can be used, such as `fit_mse()`, `fit_rmse()` and `fit_r2()`.
+    Also specific and direct access functions can be used, such as :func:`.fit_mse`,
+    :func:`.fit_rmse` and :func:`.fit_r2`.
 
     Parameters
     ----------
@@ -28,27 +29,25 @@ def fit_error(y, y_predicted, n_parameters=2):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> y = np.array([-1.0, -0.5, 0, 0.5, 1])
-    >>> y_predicted = np.array([0.0, 0, 0, 0, 0])
-    >>>
-    >>> # Master function
-    >>> x = nk.fit_error(y, y_predicted)
-    >>> x #doctest: +SKIP
-    >>>
-    >>> # Direct access
-    >>> nk.fit_mse(y, y_predicted) #doctest: +ELLIPSIS
-    0.5
-    >>>
-    >>> nk.fit_rmse(y, y_predicted) #doctest: +ELLIPSIS
-    0.7071067811865476
-    >>>
-    >>> nk.fit_r2(y, y_predicted, adjusted=False) #doctest: +ELLIPSIS
-    0.7071067811865475
-    >>>
-    >>> nk.fit_r2(y, y_predicted, adjusted=True, n_parameters=2) #doctest: +ELLIPSIS
-    0.057190958417936755
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      y = np.array([-1.0, -0.5, 0, 0.5, 1])
+      y_predicted = np.array([0.0, 0, 0, 0, 0])
+
+      # Master function
+      x = nk.fit_error(y, y_predicted)
+      x
+
+      # Direct access
+      nk.fit_mse(y, y_predicted)
+
+      nk.fit_rmse(y, y_predicted)
+
+      nk.fit_r2(y, y_predicted, adjusted=False)
+
+      nk.fit_r2(y, y_predicted, adjusted=True, n_parameters=2)
 
     """
 

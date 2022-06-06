@@ -1,5 +1,5 @@
 def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", **kwargs):
-    """Source Reconstruction for EEG data
+    """**Source Reconstruction for EEG data**
 
     Currently only for mne.Raw objects.
 
@@ -8,18 +8,18 @@ def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", *
     raw : mne.io.Raw
         Raw EEG data.
     src : mne.SourceSpace
-        Source space. See ``mne_templateMRI()`` to obtain it from an MRI template.
+        Source space. See :func:`mne_templateMRI()` to obtain it from an MRI template.
     bem : mne.Bem
-        BEM model. See ``mne_templateMRI()`` to obtain it from an MRI template.
+        BEM model. See :func:`mne_templateMRI()` to obtain it from an MRI template.
     method : str
-        Can be 'sLORETA', 'MNE' or 'dSPM'. See ``mne.minimum_norm.apply_inverse_raw()``.
+        Can be ``"sLORETA"``, ``"MNE"`` or ``"dSPM"``. See :func:`.mne.minimum_norm.apply_inverse_raw()`.
     show : bool
-        If True, shows the location of the electrodes on the head. See ``mne.viz.plot_alignment()``.
+        If ``True``, shows the location of the electrodes on the head. See :func:`.mne.viz.plot_alignment()`.
     verbose : str
         Verbosity level for MNE.
     **kwargs
-        Other arguments to be passed to ``mne.make_forward_solution()`` and ``mne.minimum_norm.make_inverse_operator()``
-        and ``mne.minimum_norm.apply_inverse_raw()``.
+        Other arguments to be passed to ``mne.make_forward_solution()`` and
+        ``mne.minimum_norm.make_inverse_operator()`` and ``mne.minimum_norm.apply_inverse_raw()``.
 
     See Also
     --------

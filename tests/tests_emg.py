@@ -18,7 +18,7 @@ def test_emg_simulate():
     assert len(emg1) == 5000
 
     emg2 = nk.emg_simulate(duration=20, length=5000, burst_number=15)
-    assert scipy.stats.median_absolute_deviation(emg1) < scipy.stats.median_absolute_deviation(emg2)
+    assert scipy.stats.median_abs_deviation(emg1) < scipy.stats.median_abs_deviation(emg2)
 
     emg3 = nk.emg_simulate(duration=20, length=5000, burst_number=1, burst_duration=2.0)
     #    pd.DataFrame({"EMG1":emg1, "EMG3": emg3}).plot()
@@ -52,7 +52,12 @@ def test_emg_clean():
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/emg.py)
     original, _, _ = biosppy.tools.filter_signal(
-        signal=emg, ftype="butter", band="highpass", order=4, frequency=100, sampling_rate=sampling_rate
+        signal=emg,
+        ftype="butter",
+        band="highpass",
+        order=4,
+        frequency=100,
+        sampling_rate=sampling_rate,
     )
     emg_cleaned_biosppy = nk.signal_detrend(original, order=0)
     assert np.allclose((emg_cleaned - emg_cleaned_biosppy).mean(), 0, atol=1e-6)
@@ -89,7 +94,11 @@ def test_emg_eventrelated():
     emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
     emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     epochs = nk.epochs_create(
-        emg_signals, events=[3000, 6000, 9000], sampling_rate=1000, epochs_start=-0.1, epochs_end=1.9
+        emg_signals,
+        events=[3000, 6000, 9000],
+        sampling_rate=1000,
+        epochs_start=-0.1,
+        epochs_end=1.9,
     )
     emg_eventrelated = nk.emg_eventrelated(epochs)
 
@@ -137,7 +146,7 @@ def test_emg_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
-    columns.append('Label')
+    columns.append("Label")
     epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
     features_dict = nk.emg_intervalrelated(epochs)
 

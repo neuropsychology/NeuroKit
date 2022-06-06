@@ -23,7 +23,7 @@ def signal_distort(
     random_state=None,
     silent=False,
 ):
-    """Signal distortion.
+    """**Signal distortion**
 
     Add noise of a given frequency, amplitude and shape to a signal.
 
@@ -34,8 +34,8 @@ def signal_distort(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     noise_shape : str
-        The shape of the noise. Can be one of 'laplace' (default) or
-        'gaussian'.
+        The shape of the noise. Can be one of ``"laplace"`` (default) or
+        ``"gaussian"``.
     noise_amplitude : float
         The amplitude of the noise (the scale of the random function, relative
         to the standard deviation of the signal).
@@ -69,27 +69,37 @@ def signal_distort(
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=10, frequency=0.5)
-    >>>
-    >>> # Noise
-    >>> noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200),
-    ...                       "Freq50": nk.signal_distort(signal, noise_frequency=50),
-    ...                       "Freq10": nk.signal_distort(signal, noise_frequency=10),
-    ...                       "Freq5": nk.signal_distort(signal, noise_frequency=5),
-    ...                       "Raw": signal}).plot()
-    >>> noise #doctest: +SKIP
-    >>>
-    >>> # Artifacts
-    >>> artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0,
-    ...                                                    artifacts_frequency=1, artifacts_amplitude=0.5),
-    ...                           "5Hz": nk.signal_distort(signal, noise_amplitude=0,
-    ...                                                    artifacts_frequency=5, artifacts_amplitude=0.2),
-    ...                           "Raw": signal}).plot()
-    >>> artifacts #doctest: +SKIP
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=10, frequency=0.5)
+
+      # Noise
+      @savefig p_signal_distort1.png scale=100%
+      noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200),
+                           "Freq50": nk.signal_distort(signal, noise_frequency=50),
+                           "Freq10": nk.signal_distort(signal, noise_frequency=10),
+                           "Freq5": nk.signal_distort(signal, noise_frequency=5),
+                           "Raw": signal}).plot()
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Artifacts
+      @savefig p_signal_distort2.png scale=100%
+      artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0,
+                                                        artifacts_frequency=1,
+                                                        artifacts_amplitude=0.5),
+                               "5Hz": nk.signal_distort(signal, noise_amplitude=0,
+                                                        artifacts_frequency=5,
+                                                        artifacts_amplitude=0.2),
+                               "Raw": signal}).plot()
+      @suppress
+      plt.close()
 
     """
     # Seed the random generator for reproducible results.

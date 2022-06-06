@@ -1,0 +1,46 @@
+---
+output:
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, complexity]
+vignette: >
+  %\VignetteIndexEntry{README}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: utils/apa.csl
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# options and parameters
+options(digits = 3)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi = 450,
+  fig.path = "../../studies/complexity_structure/figures/"
+)
+```
+
+
+# The Structure of Chaos: An Empirical Comparison of Fractal Physiology Complexity Indices using NeuroKit2
+
+<!-- # Benchmarking and Analysis of Complexity Measures -->
+<!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
+<!-- # Measuring Chaos with NeuroKit2: An Empirical Comparison of Fractal Physiology Complexity Indices -->
+
+*This study can be referenced by* [*citing the preprint*](https://psyarxiv.com/v5tqw/).
+
+
+
+```{r, child=c('analysis.Rmd')}
+```
+
+
+
+
+## References

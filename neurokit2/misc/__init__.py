@@ -2,6 +2,7 @@
 
 from ._warnings import NeuroKitWarning
 from .check_type import check_type
+from .copyfunction import copyfunction
 from .expspace import expspace
 from .find_closest import find_closest
 from .find_consecutive import find_consecutive
@@ -28,4 +29,5 @@ __all__ = [
     "intervals_to_peaks",
     "parallel_run",
     "find_plateau",
+    "copyfunction",
 ]

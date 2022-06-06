@@ -9,19 +9,19 @@ from ..stats import standardize
 
 
 def eog_plot(eog_signals, peaks=None, sampling_rate=None):
-    """Visualize EOG data.
+    """**Visualize EOG data**
 
     Parameters
     ----------
     eog_signals : DataFrame
-        DataFrame obtained from `eog_process()`.
+        DataFrame obtained from :func:`.eog_process`.
     peaks : dict
         The samples at which the blink peaks occur. Dict returned by
-        `eog_process()`. Defaults to None. Must be specified to plot individual blinks.
+        :func:`.eog_process`. Defaults to ``None``. Must be specified to plot individual blinks.
     sampling_rate : int
-        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if the data
-        should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to None.
-        Must be specified to plot individual blinks.
+        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if
+        the data should be plotted over time in seconds. Otherwise the data is plotted over
+        samples. Defaults to ``None``. Must be specified to plot individual blinks.
 
     Returns
     -------
@@ -30,16 +30,20 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> eog_signal = nk.data('eog_100hz')
-    >>>
-    >>> # Process
-    >>> eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)
-    >>>
-    >>> nk.eog_plot(eog_signals, peaks, sampling_rate=100) #doctest: +ELLIPSIS
-    <Figure ...>
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      eog_signal = nk.data('eog_100hz')
+
+      # Process
+      eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)
+      @savefig p.eog_plot.png scale=100%
+      nk.eog_plot(eog_signals, peaks, sampling_rate=100)
+      @suppress
+      plt.close()
+
 
     See Also
     --------
@@ -77,12 +81,16 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
     # Plot cleaned and raw EOG
     ax0.set_title("Raw and Cleaned Signal")
     ax0.plot(x_axis, eog_signals["EOG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-    ax0.plot(x_axis, eog_signals["EOG_Clean"], color="#49A4FD", label="Cleaned", zorder=1, linewidth=1.5)
+    ax0.plot(
+        x_axis, eog_signals["EOG_Clean"], color="#49A4FD", label="Cleaned", zorder=1, linewidth=1.5
+    )
     ax0.set_ylabel("Amplitude (mV)")
 
     # Plot blinks
     blinks = np.where(eog_signals["EOG_Blinks"] == 1)[0]
-    ax0.scatter(x_axis[blinks], eog_signals["EOG_Clean"][blinks], color="#0146D7", label="Blinks", zorder=2)
+    ax0.scatter(
+        x_axis[blinks], eog_signals["EOG_Clean"][blinks], color="#0146D7", label="Blinks", zorder=2
+    )
     ax0.legend(loc="upper right")
 
     # Rate
@@ -106,7 +114,9 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
             epochs_end=0.7,
         )
         events_array = epochs_to_array(events)  # Convert to 2D array
-        events_array = standardize(events_array)  # Rescale so that all the blinks are on the same scale
+        events_array = standardize(
+            events_array
+        )  # Rescale so that all the blinks are on the same scale
 
         blinks_df = epochs_to_df(events)
         blinks_wide = blinks_df.pivot(index="Time", columns="Label", values="Signal")
@@ -126,5 +136,3 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
             label="Median",
         )
         ax2.legend(loc="upper right")
-
-    return fig

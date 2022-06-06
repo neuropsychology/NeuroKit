@@ -4,7 +4,7 @@ from .events_find import _events_find_label
 
 
 def events_create(event_onsets, event_durations=None, event_labels=None, event_conditions=None):
-    """Create events dictionnary from list of onsets.
+    """**Create events dictionnary from list of onsets**
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
         A list of durations. If none is passed, will take the duration
         between each onset (i.e., will assume that events are consecutive).
     event_labels : list
-        A list containing unique event identifiers. If `None`, will use the event index number.
+        A list containing unique event identifiers. If ``None``, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
@@ -22,8 +22,9 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, 'onset' for event onsets, 'duration' for event durations, 'label'
-        for the event identifiers and the optional 'conditions' passed to `event_conditions`.
+        Dict containing 3 or 4 arrays, ``"onset"`` for event onsets, ``"duration"`` for event
+        durations, ``"label"`` for the event identifiers and the optional ``"conditions"`` passed
+        to ``event_conditions``.
 
     See Also
     --------
@@ -31,21 +32,27 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> events = nk.events_create(event_onsets = [500, 1500, 2500, 5000])
-    >>> events #doctest: +ELLIPSIS
-    {'onset': [...],
-     'duration': array(...),
-     'label': array(...)}
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      events = nk.events_create(event_onsets = [500, 1500, 2500, 5000])
+      events
+
+      events = nk.events_create(event_onsets = [500, 1500, 2500, 5000],
+                                event_labels=["S1", "S2", "S3", "S4"],
+                                event_conditions=["A", "A", "B", "B"])
+      events
+
 
     """
     if event_durations is None:
         event_durations = np.diff(np.concatenate(([0], event_onsets)))
 
-    events = {"onset": event_onsets,
-              "duration": event_durations}
+    events = {"onset": event_onsets, "duration": event_durations}
 
-    events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
+    events = _events_find_label(
+        events, event_labels=event_labels, event_conditions=event_conditions
+    )
 
     return events

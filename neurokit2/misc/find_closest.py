@@ -4,8 +4,10 @@ import pandas as pd
 from .type_converters import as_vector
 
 
-def find_closest(closest_to, list_to_search_in, direction="both", strictly=False, return_index=False):
-    """Find the closest number in the array from a given number x.
+def find_closest(
+    closest_to, list_to_search_in, direction="both", strictly=False, return_index=False
+):
+    """**Find the closest number in the array from a given number x**
 
     Parameters
     ----------
@@ -14,11 +16,11 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
     list_to_search_in : list
         The list of values to look in.
     direction : str
-        "both" for smaller or greater, "greater" for only greater numbers and "smaller" for the closest smaller.
+        ``"both"`` for smaller or greater, ``"greater"`` for only greater numbers and ``"smaller"`` for the closest smaller.
     strictly : bool
-        False for stricly superior or inferior or True for including equal.
+        ``False`` for strictly superior or inferior or ``True`` for including equal.
     return_index : bool
-        If True, will return the index of the closest value in the list.
+        If ``True``, will return the index of the closest value in the list.
 
     Returns
     ----------
@@ -27,18 +29,20 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Single number
-    >>> x = nk.find_closest(1.8, [3, 5, 6, 1, 2])
-    >>> x  #doctest: +SKIP
-    >>>
-    >>> y = nk.find_closest(1.8, [3, 5, 6, 1, 2], return_index=True)
-    >>> y  #doctest: +SKIP
-    >>>
-    >>> # Vectorized version
-    >>> x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
-    >>> x  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Single number
+      x = nk.find_closest(1.8, [3, 5, 6, 1, 2])
+      x
+
+      y = nk.find_closest(1.8, [3, 5, 6, 1, 2], return_index=True)
+      y
+
+      # Vectorized version
+      x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
+      x
 
     """
 
@@ -46,7 +50,9 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
     closest_to = as_vector(closest_to)
     list_to_search_in = pd.Series(as_vector(list_to_search_in))
 
-    out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_to]
+    out = [
+        _find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_to
+    ]
 
     if len(out) == 1:
         return out[0]
@@ -57,10 +63,14 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
 # =============================================================================
 # Internal
 # =============================================================================
-def _find_closest(closest_to, list_to_search_in, direction="both", strictly=False, return_index=False):
+def _find_closest(
+    closest_to, list_to_search_in, direction="both", strictly=False, return_index=False
+):
 
     try:
-        index, closest = _find_closest_single_pandas(closest_to, list_to_search_in, direction, strictly)
+        index, closest = _find_closest_single_pandas(
+            closest_to, list_to_search_in, direction, strictly
+        )
     except ValueError:
         index, closest = np.nan, np.nan
 

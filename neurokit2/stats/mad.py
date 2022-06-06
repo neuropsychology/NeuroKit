@@ -3,7 +3,7 @@ import numpy as np
 
 
 def mad(x, constant=1.4826, **kwargs):
-    """Median Absolute Deviation: a "robust" version of standard deviation.
+    """**Median Absolute Deviation: a "robust" version of standard deviation**
 
     Parameters
     ----------
@@ -19,13 +19,15 @@ def mad(x, constant=1.4826, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> nk.mad([2, 8, 7, 5, 4, 12, 5, 1])
-    3.7064999999999997
+    .. ipython:: python
+
+      import neurokit2 as nk
+      nk.mad([2, 8, 7, 5, 4, 12, 5, 1])
+
 
     References
     -----------
-    - https://en.wikipedia.org/wiki/Median_absolute_deviation
+    * https://en.wikipedia.org/wiki/Median_absolute_deviation
 
     """
     median = np.nanmedian(np.ma.array(x).compressed(), **kwargs)

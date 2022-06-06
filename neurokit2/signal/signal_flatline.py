@@ -3,7 +3,7 @@ import numpy as np
 
 
 def signal_flatline(signal, threshold=0.01):
-    """Return the flatline percentage of the signal.
+    """**Return the Flatline Percentage of the Signal**
 
     Parameters
     ----------
@@ -21,11 +21,13 @@ def signal_flatline(signal, threshold=0.01):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=5)
-    >>> nk.signal_flatline(signal) #doctest: +ELLIPSIS
-    0.008
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=5)
+      nk.signal_flatline(signal)
+
 
     """
     diff = np.diff(signal)
@@ -33,4 +35,4 @@ def signal_flatline(signal, threshold=0.01):
 
     flatline = np.where(np.abs(diff) < threshold)[0]
 
-    return (len(flatline) / len(signal))
+    return len(flatline) / len(signal)

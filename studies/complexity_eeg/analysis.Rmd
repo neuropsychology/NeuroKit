@@ -1,0 +1,259 @@
+---
+output: html_document
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+The aim is to assess the optimal complexity parameters.
+
+
+## Methods
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(easystats)
+library(patchwork)
+```
+
+
+```{r warning=FALSE, message=FALSE}
+read.csv("data_delay.csv") |> 
+  group_by(Dataset) |>
+  summarise(Sampling_Rate = mean(Sampling_Rate),
+            Original_Frequencies = dplyr::first(Original_Frequencies),
+            Lowpass = mean(Lowpass),
+            n_Participants = n_distinct(Participant),
+            n_Channels = n_distinct(Channel))
+```
+
+## Results
+
+
+
+
+### Optimization of Delay
+
+
+```{r warning=FALSE, message=FALSE}
+data_delay <- read.csv("data_delay.csv") |> 
+  mutate(Metric = fct_relevel(Metric, "Mutual Information", "Mutual Information 2"),
+         Value = Value/Sampling_Rate*1000,
+         Optimal = Optimal/Sampling_Rate*1000,
+         Optimal = Optimal) |> 
+  mutate(Area = str_remove_all(Channel, "[:digit:]|z"),
+         Area = substring(Channel, 1, 1),
+         Area = case_when(Area == "I" ~ "O",
+                          Area == "A" ~ "F",
+                          TRUE ~ Area),
+         Area = fct_relevel(Area, c("F", "C", "T", "P", "O")))
+         
+
+# summarize(group_by(data_delay, Dataset), Value = max(Value, na.rm=TRUE))
+
+```
+```{r warning=FALSE, message=FALSE}
+# data_delay |> 
+#   mutate(group = paste0(Dataset, "_", Metric)) |> 
+#   estimate_density(method="kernel", select="Optimal", at = "group") |> 
+#   separate("group", into = c("Dataset", "Metric")) |> 
+#   ggplot(aes(x = x, y = y)) +
+#   geom_line(aes(color = Dataset)) +
+#   facet_wrap(~Metric, scales = "free_y")
+```
+
+#### Per Channel
+
+```{r delay_perchannel, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+delay_perchannel <- function(data_delay, dataset="Lemon") {
+  data <- filter(data_delay, Dataset == dataset) |> 
+    mutate(Score = 1 + Score)
+  
+  by_channel <- data |> 
+    group_by(Condition, Metric, Area, Channel, Value) |> 
+    summarise_all(mean, na.rm=TRUE) 
+  by_area <- data |> 
+    group_by(Condition, Metric, Area, Value) |> 
+    summarise_all(mean, na.rm=TRUE) 
+  
+  by_channel |> 
+    ggplot(aes(x = Value, y = Score, color = Area)) +
+    geom_line(aes(group=Channel), alpha = 0.20) +
+    geom_line(data=by_area, aes(group=Area), size=1) +
+    geom_vline(xintercept = c(25, 27, 30), linetype = "dashed", size = 0.5) +
+    facet_wrap(~Condition*Metric, scales = "free_y") +
+    see::scale_color_flat_d(palette = "rainbow") +
+    scale_y_log10(expand = c(0, 0)) +
+    # scale_x_continuous(expand = c(0, 0), 
+    #                    limits = c(0, NA), 
+    #                    breaks=c(5, seq(0, 80, 20)), 
+    #                    labels=c(5, seq(0, 80, 20))) +
+    labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
+    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+    see::theme_modern() +
+    theme(plot.title = element_text(face = "plain", hjust = 0))
+}
+
+p1 <- delay_perchannel(data_delay, dataset="Lemon")
+# p2 <- delay_perchannel(data_delay, dataset="Texas")
+p3 <- delay_perchannel(data_delay, dataset="SRM")
+p4 <- delay_perchannel(data_delay, dataset="Wang (2022)")
+
+p1 / p3 / p4 + 
+  plot_layout(heights = c(2, 1, 2)) + 
+  plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
+```
+
+#### Per Subject
+
+```{r delay_persubject, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+delay_persubject <- function(data_delay, dataset="Lemon") {
+  data <- filter(data_delay, Dataset == dataset)
+
+  by_subject <- data |>
+    group_by(Condition, Metric, Area, Participant, Value) |>
+    summarise_all(mean)
+  by_area <- data |>
+    group_by(Condition, Metric, Area, Value) |>
+    summarise_all(mean)
+
+  by_subject |>
+    mutate(group = paste0(Participant, Area)) |>
+    ggplot(aes(x = Value, y = Score, color = Area)) +
+    geom_line(aes(group=group), alpha = 0.20) +
+    geom_line(data=by_area, aes(group=Area), size=1) +
+    # geom_vline(xintercept = 10, linetype = "dashed", size = 0.5) +
+    facet_wrap(~Condition*Metric, scales = "free_y") +
+    see::scale_color_flat_d(palette = "rainbow") +
+    scale_y_log10(expand = c(0, 0)) +
+    scale_x_continuous(expand = c(0, 0), 
+                       limits = c(0, NA), 
+                       breaks=c(5, seq(0, 80, 20)), 
+                       labels=c(5, seq(0, 80, 20))) +
+    labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
+    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+    see::theme_modern() +
+    theme(plot.title = element_text(face = "plain", hjust = 0))
+}
+
+p1 <- delay_persubject(data_delay, dataset="Lemon")
+# p2 <- delay_persubject(data_delay, dataset="Texas")
+p3 <- delay_persubject(data_delay, dataset="SRM")
+p4 <- delay_persubject(data_delay, dataset="Wang (2022)")
+
+p1 / p3 / p4 +
+  plot_layout(heights = c(2, 1, 2)) +
+  plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
+```
+
+
+
+#### 2D Attractors
+
+```{r attractors2D, eval=FALSE, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+data <- read.csv("data_attractor2D.csv")
+
+data |> 
+  mutate(Delay = Delay/Sampling_Rate*1000) |> 
+  ggplot(aes(x = x, y = y)) +
+  geom_path(aes(alpha=Time), size=0.1) +
+  facet_grid(Channel~Dataset, scales="free", switch="y") +
+  guides(alpha="none") +
+  labs(x = expression("Voltage at"~italic(t[0])), y = expression("Voltage at"~italic(t[0]~+~"τ"))) +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_x_continuous(expand = c(0, 0)) +
+  coord_cartesian(xlim = c(-5, 5), ylim = c(-5, 5)) +
+  theme_minimal() +
+  theme(panel.background = element_rect(fill = "#FFFCF0"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+```
+
+
+```{r eval=FALSE, fig.height=16, fig.width=10, message=FALSE, warning=FALSE, include=FALSE}
+library(gganimate)
+
+data <- read.csv("data_attractor2Danim.csv")
+
+p <- data |> 
+  ggplot(aes(x = x, y = y)) +
+  geom_path(aes(alpha=Time), size=0.1) +
+  facet_wrap(~Dataset, scales="free") +
+  guides(alpha="none") +
+  labs(x = expression("Voltage at"~italic(t[0])), y = expression("Voltage at"~italic(t[0]~+~"τ"))) +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_x_continuous(expand = c(0, 0)) +
+  coord_cartesian(xlim = c(-5, 5), ylim = c(-5, 5)) +
+  theme_minimal() +
+  theme(panel.background = element_rect(fill = "#FFFCF0"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+
+animate(
+  p +
+  labs(title = "Delay τ = {closest_state} ms") +
+  transition_states(Period, transition_length = 0.5, state_length = 0),
+  width = 600, height = 200, fps=20
+)
+
+anim_save("figures/attractor.gif")
+```
+
+```{r eval=!knitr::is_latex_output(), fig.height=16, fig.width=10, message=FALSE, warning=FALSE, include=FALSE}
+knitr::include_graphics("figures/attractor.gif")
+```
+
+### Optimization of Dimension
+
+```{r warning=FALSE, message=FALSE}
+data_dim <- read.csv("data_dimension.csv") |> 
+  mutate(Area = str_remove_all(Channel, "[:digit:]|z"),
+         Area = substring(Channel, 1, 1),
+         Area = case_when(Area == "I" ~ "O",
+                          Area == "A" ~ "F",
+                          TRUE ~ Area),
+         Area = fct_relevel(Area, c("F", "C", "T", "P", "O")))
+```
+
+#### Per Channel
+
+```{r dim_perchannel, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
+dim_perchannel <- function(data_dim, dataset="Lemon") {
+  data <- filter(data_dim, Dataset == dataset)
+  
+  by_channel <- data |> 
+    group_by(Condition, Area, Channel, Value) |> 
+    summarise_all(mean, na.rm=TRUE) 
+  by_area <- data |> 
+    group_by(Condition, Area, Value) |> 
+    summarise_all(mean, na.rm=TRUE) 
+  
+  by_channel |> 
+    ggplot(aes(x = Value, y = Score, color = Area)) +
+    geom_line(aes(group=Channel), alpha = 0.20) +
+    geom_line(data=by_area, aes(group=Area), size=1) +
+    # geom_vline(xintercept = c(25, 27, 30), linetype = "dashed", size = 0.5) +
+    facet_wrap(~Condition, ncol=1, scales = "free_y") +
+    see::scale_color_flat_d(palette = "rainbow") +
+    scale_y_log10(expand = c(0, 0)) +
+    scale_x_continuous(expand = c(0, 0)) +
+    labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
+    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+    see::theme_modern() +
+    theme(plot.title = element_text(face = "plain", hjust = 0))
+}
+
+p1 <- dim_perchannel(data_dim, dataset="Lemon")
+# p2 <- delay_perchannel(data_delay, dataset="Texas")
+p3 <- dim_perchannel(data_dim, dataset="SRM")
+p4 <- dim_perchannel(data_dim, dataset="Wang (2022)")
+
+p1 / p3 / p4 + 
+  plot_layout(heights = c(2, 1, 2)) + 
+  plot_annotation(title = "Optimization of Ebmedding Dimension", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
+```

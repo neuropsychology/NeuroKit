@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
-    """EEG Rereferencing
+    """**EEG Rereferencing**
 
     This function can be used for arrays as well as MNE objects.
 
@@ -23,12 +23,12 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     reference : str
-        See ``mne.set_eeg_reference()``. Can be a string (e.g., 'average', 'lap' for Laplacian
+        See :func:`.mne.set_eeg_reference()`. Can be a string (e.g., 'average', 'lap' for Laplacian
         "reference-free" transformation, i.e., CSD), or a list (e.g., ['TP9', 'TP10'] for mastoid
         reference).
     robust : bool
-        Only applied if reference is 'average'. If True, will substract the median instead of
-        the mean.
+        Only applied if reference is ``average``. If ``True``, will substract the median instead
+        of the mean.
     **kwargs
         Optional arguments to be passed into ``mne.set_eeg_rereference()``.
 
@@ -39,32 +39,53 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> raw = nk.mne_data("filt-0-40_raw")
-    >>> eeg = raw.get_data()
-    >>>
-    >>> # Difference between robust average
-    >>> avg = nk.eeg_rereference(eeg, 'average', robust=False)
-    >>> avg_r = nk.eeg_rereference(eeg, 'average', robust=True)
-    >>>
-    >>> nk.signal_plot([avg[0, 0:1000], avg_r[0, 0:1000]])
-    >>>
-    >>> # Compare the rerefering of an array vs. the MNE object
-    >>> avg_mne = raw.copy().set_eeg_reference('average', verbose=False)
-    >>> nk.signal_plot([avg[0, 0:1000], avg_mne.get_data()[0, 0:1000]])
-    >>>
-    >>> # Difference between average and LAP
-    >>> lap = nk.eeg_rereference(raw, 'lap')
-    >>>
-    >>> nk.signal_plot([avg_mne.get_data()[0, 0:1000],
-    ...                 lap.get_data()[0, 0:1000]], standardize=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      raw = nk.mne_data("filt-0-40_raw")
+      eeg = raw.get_data()
+
+    * **Example 1:** Difference between robust average
+
+    .. ipython:: python
+
+      avg = nk.eeg_rereference(eeg, 'average', robust=False)
+      avg_r = nk.eeg_rereference(eeg, 'average', robust=True)
+
+      @savefig p_eeg_rereference1.png scale=100%
+      nk.signal_plot([avg[0, 0:1000], avg_r[0, 0:1000]], labels=["Normal", "Robust"])
+      @suppress
+      plt.close()
+
+    * **Example 2:** Compare the rereferencing of an array vs. the MNE object
+
+    .. ipython:: python
+
+      avg_mne = raw.copy().set_eeg_reference('average', verbose=False)
+      @savefig p_eeg_rereference2.png scale=100%
+      nk.signal_plot([avg[0, 0:1000], avg_mne.get_data()[0, 0:1000]])
+      @suppress
+      plt.close()
+
+    * **Example 3:** Difference between average and LAP
+
+    .. ipython:: python
+
+      lap = nk.eeg_rereference(raw, 'lap')
+      @savefig p_eeg_rereference3.png scale=100%
+      nk.signal_plot(
+          [avg_mne.get_data()[0, 0:1000], lap.get_data()[0, 0:1000]],
+          standardize=True
+      )
+      @suppress
+      plt.close()
 
     References
     -----------
-    - Trujillo, L. T., Stanfield, C. T., & Vela, R. D. (2017). The effect of electroencephalogram (EEG)
-    reference choice on information-theoretic measures of the complexity and integration of EEG signals.
-    Frontiers in Neuroscience, 11, 425.
+    * Trujillo, L. T., Stanfield, C. T., & Vela, R. D. (2017). The effect of electroencephalogram
+      (EEG) reference choice on information-theoretic measures of the complexity and integration of
+      EEG signals. Frontiers in Neuroscience, 11, 425.
 
     """
     # If MNE object

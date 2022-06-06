@@ -4,25 +4,28 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 def rsp_fixpeaks(peaks, troughs=None):
-    """Correct RSP peaks.
+    """**Correct RSP peaks**
 
-    Low-level function used by `rsp_peaks()` to correct the peaks found by `rsp_findpeaks()`.
-    Doesn't do anything for now for RSP. See `rsp_peaks()` for details.
+    Low-level function used by :func:`.rsp_peaks` to correct the peaks found
+    by :func:`.rsp_findpeaks`. Doesn't do anything for now for RSP.
+    See :func:`.rsp_peaks` for details.
 
     Parameters
     ----------
     peaks : list or array or DataFrame or Series or dict
-        The samples at which respiration peaks (exhalation onsets) occur. If a dict or a DataFrame is passed,
-        it is assumed that these containers were obtained with `rsp_findpeaks()`.
+        The samples at which respiration peaks (exhalation onsets) occur. If a dict or a DataFrame
+        is passed, it is assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     troughs : list or array or DataFrame or Series or dict
-        The samples at which respiration troughs (inhalation onsets) occur. If a dict or a DataFrame is passed,
-        it is assumed that these containers were obtained with `rsp_findpeaks()`.
+        The samples at which respiration troughs (inhalation onsets) occur. If a dict or a
+        DataFrame is passed, it is assumed that these containers were obtained
+        with :func:`.rsp_findpeaks`.
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the samples at which inhalation onsets
-        and exhalation onsets occur, accessible with the keys "RSP_Troughs" and "RSP_Peaks", respectively.
+        A dictionary containing additional information, in this case the samples at which
+        inhalation onsets and exhalation onsets occur, accessible with the keys ``"RSP_Troughs"``
+        and ``"RSP_Peaks"``, respectively.
 
     See Also
     --------
@@ -30,14 +33,18 @@ def rsp_fixpeaks(peaks, troughs=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info = nk.rsp_findpeaks(cleaned)
-    >>> info = nk.rsp_fixpeaks(info)
-    >>> fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
+      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+      info = nk.rsp_findpeaks(cleaned)
+      info = nk.rsp_fixpeaks(info)
+      @savefig p_rsp_fixpeaks1.png scale=100%
+      nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+      @suppress
+      plt.close()
 
     """
     # Format input.

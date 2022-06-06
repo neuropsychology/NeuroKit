@@ -12,7 +12,7 @@ import neurokit2 as nk
 def test_eeg_add_channel():
 
     raw = mne.io.read_raw_fif(
-        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True
     )
 
     # len(channel) > len(raw)
@@ -63,7 +63,7 @@ def test_eeg_add_channel():
 def test_mne_channel_extract():
 
     raw = mne.io.read_raw_fif(
-        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True
     )
 
     # Extract 1 channel
@@ -92,12 +92,12 @@ def test_mne_channel_extract():
 def test_mne_to_df():
 
     raw = mne.io.read_raw_fif(
-        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_filt-0-40_raw.fif"
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_filt-0-40_raw.fif"
     )
     assert len(nk.mne_to_df(raw)) == 41700
 
     events = mne.read_events(
-        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif"
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif"
     )
     event_id = {"audio/left": 1, "audio/right": 2, "visual/left": 3, "visual/right": 4}
 

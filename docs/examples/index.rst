@@ -1,24 +1,39 @@
 Examples
-#########
+############
 
-The notebooks in this repo are meant to illustrate what you can do with NeuroKit. It is supposed to reveal how easy it has become to use cutting-edge methods, and still retain the liberty to change a myriad of parameters. These notebooks are organized in different sections that correspond to NeuroKit's modules.
+
+Physiological
+=============
 
 .. toctree::
    :maxdepth: 1
-   
-   interactive
-   simulation
-   custom
-   eventrelated
-   intervalrelated
-   eda
-   rrv
-   edr
-   heartbeats
-   ecg_delineate
-   epochs_create
-   hrv
-   complexity
-   eog
-   fit_function
 
+   bio_eventrelated/bio_eventrelated
+   bio_intervalrelated/bio_intervalrelated
+   bio_custom/bio_custom
+   ecg_hrv/ecg_hrv
+   ecg_heartbeats/ecg_heartbeats
+   ecg_delineate/ecg_delineate
+   ecg_edr/ecg_edr
+   ecg_generate_12leads/ecg_generate_12leads
+   eda_peaks/eda_peaks
+   rsp_rrv/rsp_rrv
+   eog_analyze/eog_analyze
+   signal_simulation/signal_simulation
+
+EEG
+=============
+
+.. toctree::
+   :maxdepth: 1
+
+   eeg_power/eeg_power
+
+Misc
+=============
+
+.. toctree::
+   :maxdepth: 1
+
+   misc_fit_function/misc_fit_function
+   misc_epochs_create/misc_epochs_create

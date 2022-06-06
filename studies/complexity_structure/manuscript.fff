@@ -1,0 +1,54 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/signals-1.pdf}
+\caption{\label{fig:signals}Different types of simulated signals, to which was added 5 types of noise (violet, blue, white, pink, and brown) with different intensities. For each signal type, the first row shows the signal with a minimal amount of noise, and the last with a maximal amount of noise. We can see that adding Brown noise turns the signal into a Random-walk (i.e., a Brownian motion).}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[width=1\linewidth]{figures/computation_time-1} \caption{Median computation time difference between the different complexity indices algorithms.}\label{fig:computationtime2}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/correlation-1.pdf}
+\caption{\label{fig:correlation}Correlation matrix of complexity indices.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/loadings-1.pdf}
+\caption{\label{fig:loadings}Factor loadings and computation times of the complexity indices, colored by the factor they represent the most.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/ggm-1.pdf}
+\caption{\label{fig:ggm}Correlation network of the complexity indices. Only the links where \textbar r\textbar{} \textgreater{} 0.6 are displayed.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/clustering-1.pdf}
+\caption{\label{fig:clustering}Dendrogram representing the hierarchical clustering of the complexity indices.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/varexplained-1.pdf}
+\caption{\label{fig:varexplained}Variance of the whole dataset of indices explained by the subselection. Each line represents a random number of selected variables. The red line represents the optimal order (i.e., the relative importance) that maximizes the variance explained. The dotted blue line represents the cumulative relative average computation time of the selected indices, and shows that FuzzyMSEn and MFDFA indices are the most costly algorithms.}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{manuscript_files/figure-latex/models-1.pdf}
+\caption{\label{fig:models}Visualization of the expected value of a selection of indices depending on the signal type and of the amount of noise.}
+\end{figure*}

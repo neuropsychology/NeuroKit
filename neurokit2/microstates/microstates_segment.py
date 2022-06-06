@@ -22,11 +22,19 @@ def microstates_segment(
     optimize=False,
     **kwargs
 ):
-    """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
+    """**Segment M/EEG signal into Microstates**
 
-    Several runs of the clustering algorithm are performed, using different random initializations.
-    The run that resulted in the best segmentation, as measured by global explained variance
-    (GEV), is used.
+    This functions identifies and extracts the microstates from an M/EEG signal using different
+    clustering algorithms. Several runs of the clustering algorithm are performed, using different
+    random initializations.The run that resulted in the best segmentation, as measured by global
+    explained variance (GEV), is used.
+
+    * **kmod**: Modified k-means algorithm.
+    * **kmeans**: Normal k-means.
+    * **kmedoids**: k-medoids clustering, a more stable version of k-means.
+    * **pca**: Principal Component Analysis.
+    * **ica**: Independent Component Analysis.
+    * **aahc**: Atomize and Agglomerate Hierarchical Clustering. Computationally heavy.
 
     The microstates clustering is typically fitted on the EEG data at the global field power (GFP)
     peaks to maximize the signal to noise ratio and focus on moments of high global neuronal
@@ -41,93 +49,113 @@ def microstates_segment(
         The number of unique microstates to find. Defaults to 4.
     train : Union[str, int, float]
         Method for selecting the timepoints how which to train the clustering algorithm. Can be
-        'gfp' to use the peaks found in the Peaks in the global field power. Can be 'all', in which
-        case it will select all the datapoints. It can also be a number or a ratio, in which case
-        it will select the corresponding number of evenly spread data points. For instance,
-        ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will select
-        half the data. See ``microstates_peaks()``.
+        ``"gfp"`` to use the peaks found in the Peaks in the global field power. Can be ``"all"``,
+        in which case it will select all the datapoints. It can also be a number or a ratio, in
+        which case it will select the corresponding number of evenly spread data points. For
+        instance, ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will
+        select half the data. See :func:`.microstates_peaks`.
     method : str
-        The algorithm for clustering. Can be one of 'kmeans', the modified k-means algorithm 'kmod' (default),
-        'kmedoids' (k-centers or k-medoids clustering), 'pca' (Principal Component Analysis),
-        'ica' (Independent Component Analysis), or 'aahc' (Atomize and Agglomerate Hierarchical Clustering)
-        which is more computationally heavy.
+        The algorithm for clustering. Can be one of ``"kmod"`` (default), ``"kmeans"``,
+        ``"kmedoids"``, ``"pca"``, ``"ica"``, or ``"aahc"``.
     gfp_method : str
-        The GFP extraction method, can be either 'l1' (default) or 'l2' to use the L1 or L2 norm.
-        See ``nk.eeg_gfp()`` for more details.
+        The GFP extraction method, can be either ``"l1"`` (default) or ``"l2"`` to use the L1 or L2
+        norm. See :func:`nk.eeg_gfp` for more details.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     standardize_eeg : bool
         Standardized (z-score) the data across time prior to GFP extraction
-        using ``nk.standardize()``.
+        using :func:`.nk.standardize`.
     n_runs : int
-        The number of random initializations to use for the k-means algorithm.
-        The best fitting segmentation across all initializations is used.
-        Defaults to 10.
+        The number of random initializations to use for the k-means algorithm. The best fitting
+        segmentation across all initializations is used. Defaults to 10.
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
     criterion : str
         Which criterion to use to choose the best run for modified k-means algorithm,
-        can be 'gev' (default) which selects
-        the best run based on the highest global explained variance, or 'cv' which selects the best run
-        based on the lowest cross-validation criterion. See ``nk.microstates_gev()``
-        and ``nk.microstates_crossvalidation()`` for more details respectively.
+        can be ``"gev"`` (default) which selects the best run based on the highest global explained
+        variance, or ``"cv"`` which selects the best run based on the lowest cross-validation
+        criterion. See :func:`.nk.microstates_gev` and :func:`.nk.microstates_crossvalidation` for
+        more details respectively.
     random_state : Union[int, numpy.random.RandomState]
-        The seed or ``RandomState`` for the random number generator. Defaults
-        to ``None``, in which case a different seed is chosen each time this
-        function is called.
+        The seed or ``RandomState`` for the random number generator. Defaults to ``None``, in which
+        case a different seed is chosen each time this function is called.
     optimize : bool
-        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
-        For the k-means modified method. Default to False.
+        Optimized method in Poulsen et al. (2018) for the *k*-means modified method.
 
     Returns
     -------
     dict
         Contains information about the segmented microstates:
-        - **Microstates**: The topographic maps of the found unique microstates which has a shape of
-        n_channels x n_states
-        - **Sequence**: For each sample, the index of the microstate to which the sample has been assigned.
-        - **GEV**: The global explained variance of the microstates.
-        - **GFP**: The global field power of the data.
-        - **Cross-Validation Criterion**: The cross-validation value of the iteration.
-        - **Explained Variance**: The explained variance of each cluster map generated by PCA.
-        - **Total Explained Variance**: The total explained variance of the cluster maps generated by PCA.
+
+        * **Microstates**: The topographic maps of the found unique microstates which has a shape of
+          n_channels x n_states
+        * **Sequence**: For each sample, the index of the microstate to which the sample has been
+          assigned.
+        * **GEV**: The global explained variance of the microstates.
+        * **GFP**: The global field power of the data.
+        * **Cross-Validation Criterion**: The cross-validation value of the iteration.
+        * **Explained Variance**: The explained variance of each cluster map generated by PCA.
+        * **Total Explained Variance**: The total explained variance of the cluster maps generated
+          by PCA.
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
-    Filtering raw data ...
-    >>> eeg = nk.eeg_rereference(eeg, 'average')
-    >>>
-    >>> # Kmeans
-    >>> out_kmeans = nk.microstates_segment(eeg, method='kmeans')
-    >>> nk.microstates_plot(out_kmeans, gfp=out_kmeans["GFP"][0:500]) #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> # Modified kmeans (currently comment out due to memory error)
-    >>> #out_kmod = nk.microstates_segment(eeg, method='kmod')
-    >>> # nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500])
-    >>>
-    >>> # K-medoids (currently comment out due to memory error)
-    >>> #out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
-    >>> #nk.microstates_plot(out_kmedoids, gfp=out_kmedoids["GFP"][0:500])
-    >>>
-    >>> # PCA
-    >>> out_pca = nk.microstates_segment(eeg, method='pca', standardize_eeg=True)
-    >>> nk.microstates_plot(out_pca, gfp=out_pca["GFP"][0:500]) #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> # ICA
-    >>> out_ica = nk.microstates_segment(eeg, method='ica', standardize_eeg=True)
-    >>> nk.microstates_plot(out_ica, gfp=out_ica["GFP"][0:500]) #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> # AAHC
-    >>> out_aahc = nk.microstates_segment(eeg, method='aahc')
-    >>> nk.microstates_plot(out_aahc, gfp=out_aahc["GFP"][0:500]) #doctest: +ELLIPSIS
-    <Figure ...>
+    * **Example 1**: k-means Algorithm
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download data
+      eeg = nk.mne_data("filt-0-40_raw")
+      # Average rereference and band-pass filtering
+      eeg = nk.eeg_rereference(eeg, 'average').filter(1, 30, verbose=False)
+
+      # Cluster microstates
+      microstates = nk.microstates_segment(eeg, method="kmeans")
+      @savefig p_microstate_segment1.png scale=100%
+      nk.microstates_plot(microstates , epoch=(500, 750))
+      @suppress
+      plt.close()
+
+      # Modified kmeans (currently comment out due to memory error)
+      #out_kmod = nk.microstates_segment(eeg, method='kmod')
+      # nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500])
+
+      # K-medoids (currently comment out due to memory error)
+      #out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
+      #nk.microstates_plot(out_kmedoids, gfp=out_kmedoids["GFP"][0:500])
+
+    * **Example with PCA**
+
+    .. ipython:: python
+
+      out_pca = nk.microstates_segment(eeg, method='pca', standardize_eeg=True)
+      @savefig p_microstate_segment2.png scale=100%
+      nk.microstates_plot(out_pca, gfp=out_pca["GFP"][0:500])
+      @suppress
+      plt.close()
+
+    * **Example with ICA**
+
+    .. ipython:: python
+
+      out_ica = nk.microstates_segment(eeg, method='ica', standardize_eeg=True)
+      @savefig p_microstate_segment3.png scale=100%
+      nk.microstates_plot(out_ica, gfp=out_ica["GFP"][0:500])
+      @suppress
+      plt.close()
+
+    * **Example with AAHC**
+
+    .. ipython:: python
+
+      out_aahc = nk.microstates_segment(eeg, method='aahc')
+      @savefig p_microstate_segment4.png scale=100%
+      nk.microstates_plot(out_aahc, gfp=out_aahc["GFP"][0:500])
+      @suppress
+      plt.close()
 
 
     See Also
@@ -136,9 +164,11 @@ def microstates_segment(
 
     References
     ----------
-    - Pascual-Marqui, R. D., Michel, C. M., & Lehmann, D. (1995). Segmentation of brain
-    electrical activity into microstates: model estimation and validation. IEEE Transactions
-    on Biomedical Engineering.
+    * Poulsen, A. T., Pedroni, A., Langer, N., & Hansen, L. K. (2018). Microstate EEGlab toolbox:
+      an introductory guide. BioRxiv, (289850).
+    * Pascual-Marqui, R. D., Michel, C. M., & Lehmann, D. (1995). Segmentation of brain
+      electrical activity into microstates: model estimation and validation. IEEE Transactions
+      on Biomedical Engineering.
 
     """
     # Sanitize input
