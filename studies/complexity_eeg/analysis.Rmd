@@ -68,7 +68,7 @@ data_delay <- read.csv("data_delay.csv") |>
 ```{r delay_perchannel, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
 delay_perchannel <- function(data_delay, dataset="Lemon") {
   data <- filter(data_delay, Dataset == dataset) |> 
-    mutate(Score = 1 + Score)
+    mutate(Score = 1 + Score * 100)
   
   by_channel <- data |> 
     group_by(Condition, Metric, Area, Channel, Value) |> 
@@ -81,11 +81,11 @@ delay_perchannel <- function(data_delay, dataset="Lemon") {
     ggplot(aes(x = Value, y = Score, color = Area)) +
     geom_line(aes(group=Channel), alpha = 0.20) +
     geom_line(data=by_area, aes(group=Area), size=1) +
-    geom_vline(xintercept = c(25, 27, 30), linetype = "dashed", size = 0.5) +
+    geom_vline(xintercept = c(27), linetype = "dashed", size = 0.5) +
     facet_wrap(~Condition*Metric, scales = "free_y") +
     see::scale_color_flat_d(palette = "rainbow") +
     scale_y_log10(expand = c(0, 0)) +
-    # scale_x_continuous(expand = c(0, 0), 
+    scale_x_continuous(expand = c(0, 0)) +
     #                    limits = c(0, NA), 
     #                    breaks=c(5, seq(0, 80, 20)), 
     #                    labels=c(5, seq(0, 80, 20))) +
@@ -105,54 +105,55 @@ p1 / p3 / p4 +
   plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
 
-#### Per Subject
+<!-- #### Per Subject -->
 
-```{r delay_persubject, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
-delay_persubject <- function(data_delay, dataset="Lemon") {
-  data <- filter(data_delay, Dataset == dataset)
+<!-- ```{r delay_persubject, warning=FALSE, message=FALSE, fig.height=16, fig.width=10} -->
+<!-- delay_persubject <- function(data_delay, dataset="Lemon") { -->
+<!--   data <- filter(data_delay, Dataset == dataset) |>  -->
+<!--     mutate(Score = 1 + Score) -->
 
-  by_subject <- data |>
-    group_by(Condition, Metric, Area, Participant, Value) |>
-    summarise_all(mean)
-  by_area <- data |>
-    group_by(Condition, Metric, Area, Value) |>
-    summarise_all(mean)
+<!--   by_subject <- data |> -->
+<!--     group_by(Condition, Metric, Area, Participant, Value) |> -->
+<!--     summarise_all(mean) -->
+<!--   by_area <- data |> -->
+<!--     group_by(Condition, Metric, Area, Value) |> -->
+<!--     summarise_all(mean) -->
 
-  by_subject |>
-    mutate(group = paste0(Participant, Area)) |>
-    ggplot(aes(x = Value, y = Score, color = Area)) +
-    geom_line(aes(group=group), alpha = 0.20) +
-    geom_line(data=by_area, aes(group=Area), size=1) +
-    # geom_vline(xintercept = 10, linetype = "dashed", size = 0.5) +
-    facet_wrap(~Condition*Metric, scales = "free_y") +
-    see::scale_color_flat_d(palette = "rainbow") +
-    scale_y_log10(expand = c(0, 0)) +
-    scale_x_continuous(expand = c(0, 0), 
-                       limits = c(0, NA), 
-                       breaks=c(5, seq(0, 80, 20)), 
-                       labels=c(5, seq(0, 80, 20))) +
-    labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
-    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    see::theme_modern() +
-    theme(plot.title = element_text(face = "plain", hjust = 0))
-}
+<!--   by_subject |> -->
+<!--     mutate(group = paste0(Participant, Area)) |> -->
+<!--     ggplot(aes(x = Value, y = Score, color = Area)) + -->
+<!--     geom_line(aes(group=group), alpha = 0.20) + -->
+<!--     geom_line(data=by_area, aes(group=Area), size=1) + -->
+<!--     geom_vline(xintercept = c(27), linetype = "dashed", size = 0.5) + -->
+<!--     facet_wrap(~Condition*Metric, scales = "free_y") + -->
+<!--     see::scale_color_flat_d(palette = "rainbow") + -->
+<!--     scale_y_log10(expand = c(0, 0)) + -->
+<!--     scale_x_continuous(expand = c(0, 0),  -->
+<!--                        limits = c(0, NA),  -->
+<!--                        breaks=c(5, seq(0, 80, 20)),  -->
+<!--                        labels=c(5, seq(0, 80, 20))) + -->
+<!--     labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) + -->
+<!--     guides(colour = guide_legend(override.aes = list(alpha = 1))) + -->
+<!--     see::theme_modern() + -->
+<!--     theme(plot.title = element_text(face = "plain", hjust = 0)) -->
+<!-- } -->
 
-p1 <- delay_persubject(data_delay, dataset="Lemon")
-# p2 <- delay_persubject(data_delay, dataset="Texas")
-p3 <- delay_persubject(data_delay, dataset="SRM")
-p4 <- delay_persubject(data_delay, dataset="Wang (2022)")
+<!-- p1 <- delay_persubject(data_delay, dataset="Lemon") -->
+<!-- # p2 <- delay_persubject(data_delay, dataset="Texas") -->
+<!-- p3 <- delay_persubject(data_delay, dataset="SRM") -->
+<!-- p4 <- delay_persubject(data_delay, dataset="Wang (2022)") -->
 
-p1 / p3 / p4 +
-  plot_layout(heights = c(2, 1, 2)) +
-  plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
-```
+<!-- p1 / p3 / p4 + -->
+<!--   plot_layout(heights = c(2, 1, 2)) + -->
+<!--   plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))) -->
+<!-- ``` -->
 
 
 
 #### 2D Attractors
 
 ```{r attractors2D, eval=FALSE, warning=FALSE, message=FALSE, fig.height=16, fig.width=10}
-data <- read.csv("data_attractor2D.csv")
+data <- read.csv("data_attractor.csv")
 
 data |> 
   mutate(Delay = Delay/Sampling_Rate*1000) |> 
@@ -197,7 +198,7 @@ p <- data |>
 animate(
   p +
   labs(title = "Delay τ = {closest_state} ms") +
-  transition_states(Period, transition_length = 0.5, state_length = 0),
+  transition_states(Freq, transition_length = 0.5, state_length = 0),
   width = 600, height = 200, fps=20
 )
 
@@ -257,3 +258,28 @@ p1 / p3 / p4 +
   plot_layout(heights = c(2, 1, 2)) + 
   plot_annotation(title = "Optimization of Ebmedding Dimension", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
+
+
+
+<!-- #### 3D Attractors -->
+
+<!-- ```{r attractors3D, eval=FALSE, warning=FALSE, message=FALSE, fig.height=16, fig.width=10} -->
+<!-- library(plotly) -->
+
+<!-- data <- read.csv("data_attractor.csv") -->
+
+<!-- plots <- list() -->
+<!-- for(i in unique(data$Dataset)) { -->
+<!--   plots[[i]] <- plot_ly(data[data$Dataset == i, ],  -->
+<!--                x = ~x,  -->
+<!--                y = ~y,  -->
+<!--                z = ~z,  -->
+<!--                type = 'scatter3d',  -->
+<!--                mode = 'lines', -->
+<!--                opacity = 0.8,  -->
+<!--                line = list(width = 0.5,  -->
+<!--                            color = ~c,  -->
+<!--                            colorscale = 'Viridis')) -->
+<!-- } -->
+<!-- plots[["Lemon"]] -->
+<!-- ``` -->

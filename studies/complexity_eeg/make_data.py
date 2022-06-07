@@ -7,12 +7,26 @@ import pandas as pd
 import neurokit2 as nk
 
 # =============================================================================
+# Parameters
+# =============================================================================
+datasets = [
+    "../../data/lemon/lemon/",  # Path to local preprocessed LEMON dataset
+    # "../../data/rs_eeg_texas/data/",  # Path to local TEXAS dataset
+    "../../data/srm_restingstate_eeg/eeg/",  # Path to local SRM dataset
+    "../../data/testretest_restingstate_eeg/eeg/",  # Path to local testrestest dataset
+    "C:/Dropbox/RECHERCHE/Studies/RestingStateComplexity/data/eeg_sg/",
+    "C:/Dropbox/RECHERCHE/Studies/RestingStateComplexity/data/eeg_fr/",
+]
+
+
+# =============================================================================
 # Functions
 # =============================================================================
 # participant = "EEG_Cat_Study4_Resting_S1.bdf"
 # path = "../../data/rs_eeg_texas/data/"
 # channel = "Fp1"
 # method = "rosenstein1993"
+
 
 def optimize_delay(raw, channel="Fp1"):
     signal = raw.get_data(picks=channel)[0]
@@ -32,9 +46,15 @@ def optimize_delay(raw, channel="Fp1"):
         rez_delay = pd.concat([rez_delay, rez], axis=0)
     return rez_delay
 
+
 def optimize_dimension(raw, channel="Fp1"):
     signal = raw.get_data(picks=channel)[0]
-    dim, out = nk.complexity_dimension(signal, dimension_max=5, delay=np.round(30 / (1000 / raw.info["sfreq"]), 0).astype(int), method="afn")
+    dim, out = nk.complexity_dimension(
+        signal,
+        dimension_max=5,
+        delay=np.round(30 / (1000 / raw.info["sfreq"]), 0).astype(int),
+        method="afn",
+    )
 
     rez = pd.DataFrame({"Value": out["Values"], "Score": out["E1"]})
     rez["Method"] = "AFN"
@@ -42,6 +62,7 @@ def optimize_dimension(raw, channel="Fp1"):
     rez["Optimal"] = dim
     rez["What"] = "Dimension"
     return rez
+
 
 def read_raw(path, participant):
     if "texas" in path:
@@ -71,7 +92,13 @@ def read_raw(path, participant):
         else:
             cond = "Eyes-Closed"
         raw = mne.io.read_raw_fif(path + participant, verbose=False, preload=True)
-
+    elif "RestingStateComplexity" in path:
+        pass
+        # os.listdir(path)
+        # dataset = "SRM"
+        # cond = "Eyes-Closed"
+        # sub = participant.split("_")[0]
+        # raw = mne.io.read_raw_fif(path + participant, verbose=False, preload=True)
     else:
         dataset = "Lemon"
         sub = participant.split("_")[0]
@@ -90,13 +117,6 @@ def read_raw(path, participant):
 # =============================================================================
 # Delay
 # =============================================================================
-datasets = [
-    "../../data/lemon/lemon/",  # Path to local preprocessed LEMON dataset
-    # "../../data/rs_eeg_texas/data/",  # Path to local TEXAS dataset
-    "../../data/srm_restingstate_eeg/eeg/",  # Path to local SRM dataset
-    "../../data/testretest_restingstate_eeg/eeg/",  # Path to local testrestest dataset"
-]
-
 rez_delay = pd.DataFrame()
 # rez_delay = pd.read_csv("data_delay.csv")
 
@@ -128,7 +148,7 @@ print("===================")
 print("FINISHED.")
 
 # =============================================================================
-# 2D Attractor
+# Attractors
 # =============================================================================
 attractors = pd.DataFrame()
 for path in datasets:
@@ -137,13 +157,13 @@ for path in datasets:
     raw = raw.crop(tmin=30, tmax=90)
     for channel in ["Fz", "Pz"]:
         signal = nk.standardize(raw.get_data(picks=channel)[0])
-        nk.signal_psd(signal, sampling_rate=raw.info["sfreq"],max_frequency=100, show=True)
-        d = np.round(np.array([25]) / (1000 / raw.info["sfreq"]), 0).astype(int)
+        # nk.signal_psd(signal, sampling_rate=raw.info["sfreq"], max_frequency=100, show=True)
+        d = np.round(np.array([30]) / (1000 / raw.info["sfreq"]), 0).astype(int)
         for i, delay in enumerate(d):
             if delay == 0:
                 continue
-            data = nk.complexity_embedding(signal, delay=delay, dimension=2)
-            data = pd.DataFrame(data, columns=["x", "y"])
+            data = nk.complexity_embedding(signal, delay=delay, dimension=4)
+            data = pd.DataFrame(data, columns=["x", "y", "z", "c"])
             data["Dataset"] = dataset
             data["Sampling_Rate"] = raw.info["sfreq"]
             data["Delay"] = delay
@@ -151,7 +171,7 @@ for path in datasets:
             data["Channel"] = channel
             data["Time"] = raw.times[0 : len(data)]
             attractors = pd.concat([attractors, data], axis=0)
-attractors.to_csv("data_attractor2D.csv", index=False)
+attractors.to_csv("data_attractor.csv", index=False)
 
 attractors = pd.DataFrame()
 for path in datasets:
@@ -170,8 +190,7 @@ for path in datasets:
         data["Period"] = freq
         data["Time"] = raw.times[0 : len(data)]
         attractors = pd.concat([attractors, data], axis=0)
-attractors.to_csv("data_attractor2Danim.csv", index=False)
-
+attractors.to_csv("data_attractor_anim.csv", index=False)
 
 
 # =============================================================================
