@@ -750,11 +750,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.066869  -0.076560  69.977193  ...            0    0.012   7.968959</span>
-<span class="go">1  1.014637  -0.199121  69.977193  ...            0    0.012   7.968959</span>
-<span class="go">2  0.879089  -0.334711  69.977193  ...            0    0.012   7.968959</span>
-<span class="go">3  0.685752  -0.488053  69.977193  ...            0    0.012   7.968959</span>
-<span class="go">4  0.461906  -0.656287  69.977193  ...            0    0.012   7.968959</span>
+<span class="go">0  0.697981  -0.046995  70.013484  ...            0    0.044   7.937344</span>
+<span class="go">1  0.659299  -0.137290  70.013484  ...            0    0.044   7.937344</span>
+<span class="go">2  0.559118  -0.236859  70.013484  ...            0    0.044   7.937344</span>
+<span class="go">3  0.416859  -0.348881  70.013484  ...            0    0.044   7.937344</span>
+<span class="go">4  0.253210  -0.471007  70.013484  ...            0    0.044   7.937344</span>
 
 <span class="go">[5 rows x 46 columns]</span>
 </pre></div>
@@ -826,7 +826,7 @@ types of signals, e.g., <code class="docutils literal notranslate"><span class="
 <dd class="field-even"><p><em>DataFrame</em> – DataFrame of the analyzed bio features. See docstrings of <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_analyze" title="neurokit2.ecg.ecg_analyze"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_analyze()</span></code></a>,
 <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_analyze" title="neurokit2.rsp.rsp_analyze"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_analyze()</span></code></a>, <a class="reference internal" href="eda.html#neurokit2.eda.eda_analyze" title="neurokit2.eda.eda_analyze"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_analyze()</span></code></a>, <a class="reference internal" href="emg.html#neurokit2.emg.emg_analyze" title="neurokit2.emg.emg_analyze"><code class="xref py py-func docutils literal notranslate"><span class="pre">emg_analyze()</span></code></a> and
 <a class="reference internal" href="eog.html#neurokit2.eog.eog_analyze" title="neurokit2.eog.eog_analyze"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_analyze()</span></code></a> for more details. Also returns Respiratory Sinus Arrhythmia features
-produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" title="neurokit2.hrv.hrv_rsa"><code class="xref py py-func docutils literal notranslate"><span class="pre">hrv_rsa()</span></code></a> if interval-related analysis is carried out.</p>
+produced by <a class="reference internal" href="hrv.html#id0" title="neurokit2.hrv.hrv_rsa"><code class="xref py py-func docutils literal notranslate"><span class="pre">hrv_rsa()</span></code></a> if interval-related analysis is carried out.</p>
 </dd>
 </dl>
 <div class="admonition seealso">

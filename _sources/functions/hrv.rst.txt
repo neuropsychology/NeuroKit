@@ -22,6 +22,10 @@ Sub-domains
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_nonlinear
 
+*hrv_rsa()*
+""""""""""""""""""
+.. autofunction:: neurokit2.hrv.hrv_rsa
+
 *hrv_rqa()*
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_rqa
