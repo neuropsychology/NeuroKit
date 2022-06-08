@@ -772,14 +772,25 @@ title="Open an issue"
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r_range</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">r_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">r_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">apens</span> <span class="o">=</span> <span class="p">[</span><span class="n">_entropy_apen</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_range</span><span class="p">]</span>
+    <span class="n">apens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">r_range</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;kdtree1&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;kdtree2&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">r_range</span><span class="p">):</span>
+        <span class="n">apens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_entropy_apen</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+            <span class="n">kdtree1</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;kdtree1&quot;</span><span class="p">],</span>
+            <span class="n">kdtree2</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;kdtree2&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="c1"># apens = [_entropy_apen(signal, delay=delay, dimension=dimension, tolerance=r) for r in r_range]</span>
 
     <span class="k">return</span> <span class="n">r_range</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">apens</span><span class="p">)],</span> <span class="p">{</span><span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">r_range</span><span class="p">,</span> <span class="s2">&quot;Scores&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">apens</span><span class="p">)}</span>
 
 
 <span class="k">def</span> <span class="nf">_entropy_apen</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
-    <span class="n">phi</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_phi</span><span class="p">(</span>
+    <span class="n">phi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_phi</span><span class="p">(</span>
         <span class="n">signal</span><span class="p">,</span>
         <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
         <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
@@ -788,7 +799,7 @@ title="Open an issue"
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span> <span class="n">info</span>
 
 
 <span class="c1"># =============================================================================</span>
