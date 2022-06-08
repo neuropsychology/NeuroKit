@@ -413,7 +413,7 @@ def _entropy_multiscale(coarse, algorithm, dimension, tolerance, refined=False, 
                         dimension=dimension,
                         tolerance=tolerance,
                         approximate=False,
-                    )
+                    )[0]
                     for i in range(len(coarse))
                 ]
             )

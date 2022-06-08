@@ -5,8 +5,8 @@ import numpy as np
 import scipy.spatial
 
 from ..stats import density
-from .utils_complexity_embedding import complexity_embedding
 from .utils import _phi
+from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_tolerance(
@@ -242,7 +242,7 @@ def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None
 
 def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
 
-    phi = _phi(
+    phi, _ = _phi(
         signal,
         delay=delay,
         dimension=dimension,

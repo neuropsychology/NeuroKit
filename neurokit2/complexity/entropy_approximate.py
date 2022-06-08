@@ -111,7 +111,7 @@ def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=
 
 def _entropy_capen(signal, delay, dimension, tolerance, **kwargs):
 
-    __, count1 = _get_embedded(
+    __, count1, _ = _get_embedded(
         signal,
         delay=delay,
         dimension=dimension,
@@ -119,7 +119,7 @@ def _entropy_capen(signal, delay, dimension, tolerance, **kwargs):
         approximate=True,
         **kwargs,
     )
-    __, count2 = _get_embedded(
+    __, count2, _ = _get_embedded(
         signal,
         delay=delay,
         dimension=dimension + 1,

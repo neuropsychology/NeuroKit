@@ -88,6 +88,6 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
         tolerance=info["Tolerance"],
         approximate=False,
         **kwargs
-    )
+    )[0]
 
     return _phi_divide(phi), info
