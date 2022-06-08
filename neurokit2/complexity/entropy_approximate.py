@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from .optim_complexity_tolerance import _entropy_apen, complexity_tolerance
-from .utils import _get_embedded
+from .utils import _get_count
 
 
 def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=False, **kwargs):
@@ -111,7 +111,7 @@ def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=
 
 def _entropy_capen(signal, delay, dimension, tolerance, **kwargs):
 
-    __, count1, _ = _get_embedded(
+    __, count1, _ = _get_count(
         signal,
         delay=delay,
         dimension=dimension,
@@ -119,7 +119,7 @@ def _entropy_capen(signal, delay, dimension, tolerance, **kwargs):
         approximate=True,
         **kwargs,
     )
-    __, count2, _ = _get_embedded(
+    __, count2, _ = _get_count(
         signal,
         delay=delay,
         dimension=dimension + 1,

@@ -22,11 +22,12 @@ def _phi(
     kdtree2=None,
     **kwargs,
 ):
-    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`."""
+    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`.
+    """
     # Initialize phi
     phi = np.zeros(2)
 
-    embedded1, count1, kdtree1 = _get_embedded(
+    embedded1, count1, kdtree1 = _get_count(
         signal,
         delay,
         dimension,
@@ -37,7 +38,7 @@ def _phi(
         kdtree=kdtree1,
     )
 
-    embedded2, count2, kdtree2 = _get_embedded(
+    embedded2, count2, kdtree2 = _get_count(
         signal,
         delay,
         dimension + 1,
@@ -79,7 +80,7 @@ def _phi_divide(phi):
 # =============================================================================
 
 
-def _get_embedded(
+def _get_count(
     signal,
     delay=1,
     dimension=2,
@@ -88,54 +89,23 @@ def _get_embedded(
     approximate=True,
     fuzzy=False,
     kdtree=None,
+    n=1,
     **kwargs,
 ):
-    """Examples
-    -----------
-    .. ipython:: python
-
-      import neurokit2 as nk
-      import sklearn
-      complexity_embedding = nk.complexity_embedding
-
-      signal = nk.signal_simulate(duration=2, frequency=5)
-
-      embeded, count = _get_embedded(signal, delay=8, dimension=2, tolerance=0.07,
-                                      distance='chebyshev', approximate=False)
+    """
+    This is usually the bottleneck for several complexity methods, in particular in the counting.
+    That's why we allow the possibility of giving kdtrees as pre-computed (used in the optimization
+    of tolerance via MaxApEn which computes iteratively the value with multiple tolerances).
+    However, more improvements are welcome!
     """
     # Get embedded
+    # -------------------
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     if approximate is False:
         embedded = embedded[:-1]  # Removes the last line
 
     # Get neighbors count
-    count, embedded, kdtree = _get_count(
-        embedded, tolerance=tolerance, distance=distance, fuzzy=fuzzy, n=1, kdtree=kdtree
-    )
-
-    return embedded, count, kdtree
-
-
-# =============================================================================
-# Get Count
-# =============================================================================
-def _get_count(embedded, tolerance, distance="chebyshev", fuzzy=False, n=1, kdtree=None):
-    """Examples
-    -----------
-    .. ipython:: python
-
-      import neurokit2 as nk
-      import sklearn
-
-      signal = nk.signal_simulate(duration=1, frequency=[5, 6])
-      embedded = nk.complexity_embedding(signal, delay=8, dimension=3)
-      tolerance = 0.07
-      distance = "range"
-      fuzzy=False
-      x = embedded
-      y = embedded[0]
-
-    """
+    # -------------------
     # Sanity checks
     if distance not in sklearn.neighbors.KDTree.valid_metrics + ["range"]:
         raise ValueError(
@@ -183,4 +153,5 @@ def _get_count(embedded, tolerance, distance="chebyshev", fuzzy=False, n=1, kdtr
             kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
         count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
 
-    return count, embedded, kdtree
+    return embedded, count, kdtree
+
