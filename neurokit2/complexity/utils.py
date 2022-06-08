@@ -27,11 +27,25 @@ def _phi(
     phi = np.zeros(2)
 
     embedded1, count1, kdtree1 = _get_embedded(
-        signal, delay, dimension, tolerance, distance=distance, approximate=approximate, fuzzy=fuzzy, kdtree=kdtree1
+        signal,
+        delay,
+        dimension,
+        tolerance,
+        distance=distance,
+        approximate=approximate,
+        fuzzy=fuzzy,
+        kdtree=kdtree1,
     )
 
     embedded2, count2, kdtree2 = _get_embedded(
-        signal, delay, dimension + 1, tolerance, distance=distance, approximate=True, fuzzy=fuzzy, kdtree=kdtree2
+        signal,
+        delay,
+        dimension + 1,
+        tolerance,
+        distance=distance,
+        approximate=True,
+        fuzzy=fuzzy,
+        kdtree=kdtree2,
     )
 
     if approximate is True:
@@ -41,7 +55,14 @@ def _phi(
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
 
-    return phi, {"embedded1": embedded1, "count1": count1, "kdtree1": kdtree1, "embedded2": embedded2, "count2": count2, "kdtree2": kdtree2}
+    return phi, {
+        "embedded1": embedded1,
+        "count1": count1,
+        "kdtree1": kdtree1,
+        "embedded2": embedded2,
+        "count2": count2,
+        "kdtree2": kdtree2,
+    }
 
 
 def _phi_divide(phi):
@@ -67,7 +88,7 @@ def _get_embedded(
     approximate=True,
     fuzzy=False,
     kdtree=None,
-    **kwargs
+    **kwargs,
 ):
     """Examples
     -----------
@@ -88,7 +109,9 @@ def _get_embedded(
         embedded = embedded[:-1]  # Removes the last line
 
     # Get neighbors count
-    count, embedded, kdtree = _get_count(embedded, tolerance=tolerance, distance=distance, fuzzy=fuzzy, n=1, kdtree=kdtree)
+    count, embedded, kdtree = _get_count(
+        embedded, tolerance=tolerance, distance=distance, fuzzy=fuzzy, n=1, kdtree=kdtree
+    )
 
     return embedded, count, kdtree
 
@@ -161,5 +184,3 @@ def _get_count(embedded, tolerance, distance="chebyshev", fuzzy=False, n=1, kdtr
         count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
 
     return count, embedded, kdtree
-
-

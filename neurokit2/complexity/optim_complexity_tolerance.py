@@ -235,14 +235,25 @@ def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None
     if isinstance(r_range, int):
         r_range = np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)
 
-    apens = [_entropy_apen(signal, delay=delay, dimension=dimension, tolerance=r) for r in r_range]
+    apens = np.zeros_like(r_range)
+    info = {"kdtree1": None, "kdtree2": None}
+    for i, r in enumerate(r_range):
+        apens[i], info = _entropy_apen(
+            signal,
+            delay=delay,
+            dimension=dimension,
+            tolerance=r,
+            kdtree1=info["kdtree1"],
+            kdtree2=info["kdtree2"],
+        )
+    # apens = [_entropy_apen(signal, delay=delay, dimension=dimension, tolerance=r) for r in r_range]
 
     return r_range[np.argmax(apens)], {"Values": r_range, "Scores": np.array(apens)}
 
 
 def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
 
-    phi, _ = _phi(
+    phi, info = _phi(
         signal,
         delay=delay,
         dimension=dimension,
@@ -251,7 +262,7 @@ def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
         **kwargs,
     )
 
-    return np.abs(np.subtract(phi[0], phi[1]))
+    return np.abs(np.subtract(phi[0], phi[1])), info
 
 
 # =============================================================================

@@ -97,7 +97,7 @@ def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=
     if corrected is False:
         # ApEn is implemented in 'optim_complexity_tolerance()' to avoid circular imports
         # as one of the method for optimizing tolerance relies on ApEn
-        out = _entropy_apen(signal, delay, dimension, info["Tolerance"], **kwargs)
+        out, _ = _entropy_apen(signal, delay, dimension, info["Tolerance"], **kwargs)
     else:
         out = _entropy_capen(signal, delay, dimension, info["Tolerance"], **kwargs)
 
