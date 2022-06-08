@@ -540,7 +540,7 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">.optim_complexity_tolerance</span> <span class="kn">import</span> <span class="n">_entropy_apen</span><span class="p">,</span> <span class="n">complexity_tolerance</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_get_embedded</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_get_count</span>
 
 
 <div class="viewcode-block" id="entropy_approximate"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_approximate">[docs]</a><span class="k">def</span> <span class="nf">entropy_approximate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -648,7 +648,7 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_entropy_capen</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
-    <span class="n">__</span><span class="p">,</span> <span class="n">count1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_embedded</span><span class="p">(</span>
+    <span class="n">__</span><span class="p">,</span> <span class="n">count1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_count</span><span class="p">(</span>
         <span class="n">signal</span><span class="p">,</span>
         <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
         <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
@@ -656,7 +656,7 @@ title="Open an issue"
         <span class="n">approximate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">__</span><span class="p">,</span> <span class="n">count2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_embedded</span><span class="p">(</span>
+    <span class="n">__</span><span class="p">,</span> <span class="n">count2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_get_count</span><span class="p">(</span>
         <span class="n">signal</span><span class="p">,</span>
         <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
         <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
