@@ -540,6 +540,7 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">matplotlib.ticker</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial</span>
+<span class="kn">import</span> <span class="nn">sklearn.neighbors</span>
 
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">density</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_phi</span>
@@ -566,18 +567,22 @@ title="Open an issue"
 
 <span class="sd">    Different methods have been described to estimate the most appropriate tolerance value:</span>
 
-<span class="sd">    * ``&quot;sd&quot;`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be</span>
+<span class="sd">    * **sd** (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be</span>
 <span class="sd">      returned.</span>
-<span class="sd">    * ``&quot;adjusted_sd&quot;``: Adjusted value based on the SD and the dimension. The rationale is that</span>
+<span class="sd">    * **adjusted_sd**: Adjusted value based on the SD and the dimension. The rationale is that</span>
 <span class="sd">      the chebyshev distance (used in various metrics) rises logarithmically with increasing</span>
 <span class="sd">      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the</span>
 <span class="sd">      chebyshev distance of vectors sampled from a univariate normal distribution. A constant of</span>
 <span class="sd">      ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in</span>
 <span class="sd">      https://github.com/CSchoel/nolds).</span>
-<span class="sd">    * ``&quot;maxApEn&quot;``: Different values of tolerance will be tested and the one where the approximate</span>
+<span class="sd">    * **maxApEn**: Different values of tolerance will be tested and the one where the approximate</span>
 <span class="sd">      entropy (ApEn) is maximized will be selected and returned.</span>
-<span class="sd">    * ``&quot;recurrence&quot;``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will</span>
-<span class="sd">      be returned.</span>
+<span class="sd">    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 5% will</span>
+<span class="sd">      be returned. Note that this method is currently not suited for very long signals, as it is</span>
+<span class="sd">      based on a recurrence matrix, which size is close to n^2. Help is needed to address this</span>
+<span class="sd">      limitation.</span>
+<span class="sd">    * **neighbours**: Will compute the number of nearest neighbours. Help is needed to estimate a</span>
+<span class="sd">      good heuristic for a cut-off value.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -661,12 +666,22 @@ title="Open an issue"
 
 <span class="sd">      r</span>
 
+<span class="sd">    An alternative, better suited for long signals is to use nearest neighbours.</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_complexity_tolerance4.png scale=100%</span>
+<span class="sd">      r, info = nk.complexity_tolerance(signal, delay=1, dimension=10,</span>
+<span class="sd">                                        method = &#39;neighbours&#39;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 <span class="sd">    * **Example 3**: The default method selects the tolerance at which *ApEn* is maximized.</span>
 
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # Slow method</span>
-<span class="sd">      @savefig p_complexity_tolerance4.png scale=100%</span>
+<span class="sd">      @savefig p_complexity_tolerance5.png scale=100%</span>
 <span class="sd">      r, info = nk.complexity_tolerance(signal, delay=8, dimension=6,</span>
 <span class="sd">                                        method = &#39;maxApEn&#39;, show=True)</span>
 <span class="sd">      @suppress</span>
@@ -682,7 +697,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # Narrower range</span>
-<span class="sd">      @savefig p_complexity_tolerance5.png scale=100%</span>
+<span class="sd">      @savefig p_complexity_tolerance6.png scale=100%</span>
 <span class="sd">      r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = &#39;maxApEn&#39;,</span>
 <span class="sd">                                        r_range=np.linspace(0.002, 0.8, 30), show=True)</span>
 <span class="sd">      @suppress</span>
@@ -706,21 +721,31 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;traditional&quot;</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">]:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;20% SD&quot;</span><span class="p">}</span>
+
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;adjusted_sd&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;adjusted_sd&#39; method.&quot;</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.11604738531196232</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5627</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.3334</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Adjusted 20% SD&quot;</span><span class="p">}</span>
+
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;maxapen&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]:</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_maxapen</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="n">r_range</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span>
         <span class="p">)</span>
         <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Max ApEn&quot;</span><span class="p">})</span>
+
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;recurrence&quot;</span><span class="p">,</span> <span class="s2">&quot;rqa&quot;</span><span class="p">]:</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_recurrence</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="n">r_range</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span>
         <span class="p">)</span>
         <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;5% Recurrence Rate&quot;</span><span class="p">})</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neighbours&quot;</span><span class="p">,</span> <span class="s2">&quot;neighbors&quot;</span><span class="p">,</span> <span class="s2">&quot;nn&quot;</span><span class="p">]:</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_neighbours</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="n">r_range</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span>
+        <span class="p">)</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;5% Neighbours&quot;</span><span class="p">})</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: complexity_tolerance(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
 
@@ -802,6 +827,33 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span> <span class="n">info</span>
 
 
+<span class="k">def</span> <span class="nf">_optimize_tolerance_neighbours</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dimension</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">r_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">r_range</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r_range</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">r_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">r_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+
+    <span class="n">kdtree</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">)</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                <span class="n">kdtree</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+                <span class="o">/</span> <span class="n">embedded</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_range</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="c1"># Closest to 0.05 (5%)</span>
+    <span class="n">optimal</span> <span class="o">=</span> <span class="n">r_range</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">counts</span> <span class="o">-</span> <span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">r_range</span><span class="p">,</span> <span class="s2">&quot;Scores&quot;</span><span class="p">:</span> <span class="n">counts</span><span class="p">}</span>
+
+
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Plotting</span>
 <span class="c1"># =============================================================================</span>
@@ -853,11 +905,15 @@ title="Open an issue"
         <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Approximate Entropy $ApEn$&quot;</span>
         <span class="n">legend</span> <span class="o">=</span> <span class="s2">&quot;$ApEn$&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Recurrence Rate $RR$&quot;</span>
-        <span class="n">legend</span> <span class="o">=</span> <span class="s2">&quot;$RR$&quot;</span>
         <span class="n">y_values</span> <span class="o">*=</span> <span class="mi">100</span>  <span class="c1"># Convert to percentage</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">PercentFormatter</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neighbours&quot;</span><span class="p">,</span> <span class="s2">&quot;neighbors&quot;</span><span class="p">,</span> <span class="s2">&quot;nn&quot;</span><span class="p">]:</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Nearest Neighbours&quot;</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="s2">&quot;$NN$&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Recurrence Rate $RR$&quot;</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="s2">&quot;$RR$&quot;</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Tolerance Threshold (r)&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Tolerance threshold $r$&quot;</span><span class="p">)</span>
