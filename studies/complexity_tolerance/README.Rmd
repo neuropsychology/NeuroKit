@@ -1,0 +1,197 @@
+---
+title: "Optimal Selection of Tolerance *r* for Entropy Indices"
+output:
+  github_document:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+editor_options:
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: utils/apa.csl
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# options and parameters
+options(digits = 3)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi = 450,
+  fig.path = "../../studies/complexity_tolerance/figures/"
+)
+```
+
+
+
+*This study can be referenced by* [*citing the package and the documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
+
+**We'd like to improve this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+
+
+
+
+
+## Introduction
+
+The choice of the parameters required to compute complexity indices (such as entropy), such as the delay $\tau$, the embedding dimension *m*, and the tolerance *r* are critical to capture the space in which complexity becomes accurately quantifiable. Unfortunately, despite the existence of methods to estimate optimal values for these parameters depending on the signal at hand, their choice often relies on simple heuristics or cargo-cult conventions.
+
+Such is the case of the tolerance threshold *r*, which is often selected as a function of the standard deviation (SD) of the signal, with (in)famous magic values including $0.1$ or $0.2*SD$ [@pincus1992approximate]. One of the reason for the longevity of such approach is 1) past literature (as many past studies used it, it becomes easier to justify the choice of the same values) and 2) the fact that other approaches to estimate the optimal *r* are computationally costly.
+
+The aim is to investigate the relationship between different methods for tolerance *r* optimization. The ground-truth method is max. ApEn [@chen2008parameter] [@lu2008automatic]
+
+
+## Methods
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(easystats)
+library(patchwork)
+
+df <- read.csv("data_Tolerance.csv") |> 
+  mutate(Iter = paste0(Signal, Noise_Intensity, Noise_Type, Length)) |> 
+  group_by(Method, Dimension, Iter) |> 
+  mutate(Score_N = normalize(Score)) |> 
+  ungroup()
+```
+
+## Results
+
+### Relationship between Existing Optimization Methods
+
+We visualize the normalized values of the 3 methods as a function of the tolerance *r*.
+
+```{r warning=FALSE, message=FALSE}
+df |> 
+  mutate(group = paste0(Dimension, Method, Iter),
+         m = Dimension) |> 
+  filter(Method %in% c("ApEn", "Recurrence", "Neighbours")) |> 
+  ggplot(aes(x = Tolerance, y = Score_N, color = Method)) +
+  geom_line(aes(group=group), alpha=0.05, size=0.5) +
+  facet_wrap(~m, labeller=purrr::partial(label_both, sep = " = ")) +
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_y_continuous(expand=c(0, 0)) +
+  theme_modern() + 
+  theme(strip.text = element_text(face="italic")) +
+  labs(y = "Normalized Value", x = expression("Tolerance "~italic("r"))) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1)))
+```
+
+
+
+### Relationship between max. ApEn and SD 
+
+```{r warning=FALSE, message=FALSE}
+library(ggridges)
+
+data <- df |> 
+  group_by(Dimension, Length, Iter) |> 
+  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE)) 
+
+# data |> 
+#   mutate(Dimension = as.factor(Dimension)) |> 
+#   estimate_density(method="kernSmooth", at = "Dimension") |> 
+#   group_by(Dimension) |> 
+#   mutate(y = normalize(y)) |> 
+#   ggplot(aes(x=x, y=y)) +
+#   geom_line(aes(color = Dimension, group=Dimension)) +
+#   geom_vline(xintercept=0.4, linetype="dotted")
+
+
+m1 <- lm(maxApEn ~ Dimension * Length, data=data)
+m2 <- lm(maxApEn ~ log(Dimension) * Length, data=data)
+m3 <- lm(maxApEn ~ Dimension * log(Length), data=data)
+m4 <- lm(maxApEn ~ log(Dimension) * log(Length), data=data)
+test_performance(m1, m2, m3, m4)
+
+m1 <- lm(maxApEn ~ Dimension * log(Length), data=data)
+m2 <- lm(maxApEn ~ Dimension + log(Length), data=data)
+test_performance(m1, m2)
+
+m <- m1
+pred <- estimate_relation(m, at = list("Dimension"=unique(data$Dimension),
+                                        "Length" = unique(data$Length)))
+
+formula <- equatiomatic::extract_eq(m, 
+                                    raw_tex=T, 
+                                    swap_var_names=c("maxApEn" = "r"),
+                                    use_coefs = TRUE, 
+                                    ital_vars=TRUE, 
+                                    coef_digits=3)
+# formula <- paste0(
+#   format_value(coef(m1)[1], 2),
+#   " + ", 
+#   format_value(coef(m1)[2], 2),
+#   "m ",
+#   format_value(coef(m1)[3], 2),
+#   "log(N) ",
+#   format_value(coef(m1)[4], 2),
+#   "m * log(N)")
+  
+data |> 
+  mutate(Dimension = as.factor(Dimension),
+         Length = as.factor(Length)) |> 
+  ggplot(aes(x=maxApEn, y=Dimension)) +
+  geom_density_ridges(aes(fill=Dimension, alpha=Length), color = NA) + 
+  geom_line(data=pred, aes(x=Predicted, group=Length, alpha=as.factor(Length)), color="red", size=1, show.legend=FALSE) +
+  annotate(geom="text", x=2, y=1.2, label=latex2exp::TeX(formula), hjust=0, color="red") +
+  coord_flip() +
+  scale_fill_viridis_d(option="inferno") +
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_y_discrete(expand=c(0, 0)) +
+  theme_modern() +
+  guides(fill="none", group="none") +
+  labs(y = "Optimal Tolerance (based on max. ApEn)")
+```
+We can conclude that selecting the tolerance based as a function of SD does not make sense if the dimension is not taken into account. 
+
+`r formula`
+
+
+### Relationship between max. ApEn and the other methods
+
+```{r warning=FALSE, message=FALSE}
+library(ggside)
+
+data <- data.frame()
+for(m in unique(df$Dimension)) {
+  for (signal in unique(df$Iter)) {
+    dat <- df[df$Iter == signal & df$Dimension == m, ]
+    dat <- dat[dat$Tolerance == unique(dat$Optimal_maxApEn), ]
+    dat <- dat[dat$Method %in% c("Recurrence", "Neighbours"), ]
+    data <- rbind(data, dat)
+  }
+}
+
+m <- MASS::rlm(Score ~ Method / Dimension * Length, data=data) 
+parameters(m)
+m <- MASS::rlm(Score ~ Method / Dimension, data=data) 
+m <- MASS::rlm(Score ~ Method + Dimension, data=data) 
+
+means <- m |> 
+  estimate_means(at=list("Method" = unique(data$Method), 
+                         "Dimension" = unique(data$Dimension))) |> 
+  mutate(m = as.factor(Dimension))
+
+data |> 
+  mutate(m = fct_rev(as.factor(Dimension))) |>
+  ggplot(aes(y = Optimal_maxApEn, x = Score)) +
+  geom_point(aes(color=m)) +
+  # geom_density_ridges(aes(group = paste(Method, Optimal_maxApEn), fill=Method)) +
+  geom_vline(data=means, aes(xintercept=Mean, group=Dimension)) +
+  facet_grid(m ~ Method, labeller=purrr::partial(label_both, sep = " = ")) +
+  theme_modern() +
+  scale_color_viridis_d(option="inferno") +
+  guides(color="none")
+```
+
+`r equatiomatic::extract_eq(MASS::rlm(Score ~ Dimension, data=filter(data, Method=="Neighbours")), swap_var_names=c("Score" = "NN"), use_coefs = TRUE, ital_vars=TRUE, coef_digits=3)`
+`r equatiomatic::extract_eq(MASS::rlm(Score ~ Dimension, data=filter(data, Method=="Recurrence")), swap_var_names=c("Score" = "RR"),use_coefs = TRUE, ital_vars=TRUE, coef_digits=3)`
+
+## Discussion
+
+Number of neighbours and recurrence rate does not seem to be good proxies of the optimal tolerance *r* as estimated by max. ApEn. 
+
+
+
+## References

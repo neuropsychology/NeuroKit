@@ -39,13 +39,18 @@ def complexity_tolerance(
       ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in
       https://github.com/CSchoel/nolds).
     * **maxApEn**: Different values of tolerance will be tested and the one where the approximate
-      entropy (ApEn) is maximized will be selected and returned.
-    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
+      entropy (ApEn) is maximized will be selected and returned (Chen, 2008).
+    * **chon2009**: Acknowledging that computing multiple ApEns is computationally expensive, Chon
+      (2009) suggested an approximation based a heuristic algorithm that takes into account the
+      length of the signal, its short-term and long-term variability, and the embedding dimension
+      *m*. Initially defined only for *m* in [2-7], we expanded this to work with value of *m*
+      (though the accuracy is not guaranteed beyond *m* = 4).
+    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 2.5% will
       be returned. Note that this method is currently not suited for very long signals, as it is
       based on a recurrence matrix, which size is close to n^2. Help is needed to address this
       limitation.
-    * **neighbours**: Will compute the number of nearest neighbours. Help is needed to estimate a
-      good heuristic for a cut-off value.
+    * **neighbours**: The tolerance that yields a number of nearest neighbours (NN) close to 2% will
+      be returned.
 
     Parameters
     ----------
@@ -172,9 +177,14 @@ def complexity_tolerance(
 
     References
     -----------
+    * Chon, K. H., Scully, C. G., & Lu, S. (2009). Approximate entropy for all signals. IEEE
+      engineering in medicine and biology magazine, 28(6), 18-23.
     * Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of
       the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
       55(8), 1966-1972.
+    * Chen, X., Solomon, I. C., & Chon, K. H. (2008). Parameter selection criteria in approximate
+      entropy and sample entropy with application to neural respiratory signals. Am. J. Physiol.
+      Regul. Integr. Comp. Physiol.
     """
     if not isinstance(method, str):
         return method, {"Method": "None"}
@@ -185,11 +195,50 @@ def complexity_tolerance(
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": "20% SD"}
 
-    elif method in ["adjusted_sd"] and isinstance(dimension, int):
+    elif method in ["adjusted_sd"] and (isinstance(dimension, (int, float) or dimension is None)):
         if dimension is None:
             raise ValueError("'dimension' cannot be empty for the 'adjusted_sd' method.")
         r = 0.11604738531196232 * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
         info = {"Method": "Adjusted 20% SD"}
+
+    elif method in ["chon2009"] and (isinstance(dimension, (int, float) or dimension is None)):
+        if dimension is None:
+            raise ValueError("'dimension' cannot be empty for the 'chon2009' method.")
+        sd1 = np.std(np.diff(signal), ddof=1)  # short-term variability
+        sd2 = np.std(signal, ddof=1)  # long-term variability of the signal
+
+        # Here are the 3 formulas from Chon (2009):
+        # For m=2: r =(−0.036 + 0.26 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
+        # For m=3: r =(−0.08 + 0.46 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
+        # For m=4: r =(−0.12 + 0.62 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
+        # For m=5: r =(−0.16 + 0.78 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
+        # For m=6: r =(−0.19 + 0.91 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
+        # For m=7: r =(−0.2 + 1 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
+        if dimension <= 2 and dimension <= 7:
+            x = [-0.036, -0.08, -0.12, -0.16, -0.19, -0.2][dimension - 2]
+            y = [0.26, 0.46, 0.62, 0.78, 0.91, 1][dimension - 2]
+        else:
+            # We need to extrapolate the 2 first numbers, x and y
+            # np.polyfit(np.log([2,3,4, 5, 6, 7]), [-0.036, -0.08, -0.12, -0.16, -0.19, -0.2], 1)
+            # np.polyfit([2,3,4, 5, 6, 7], [0.26, 0.46, 0.62, 0.78, 0.91, 1], 1)
+            x = -0.034 * dimension + 0.022
+            y = 0.14885714 * dimension - 0.00180952
+
+        r = (x + y * np.sqrt(sd1 / sd2)) / (len(signal) / 1000) ** 1 / 4
+        info = {"Method": "Chon (2009)"}
+
+    elif method in ["neurokit", "makowski"] and (
+        isinstance(dimension, (int, float) or dimension is None)
+    ):
+        if dimension is None:
+            raise ValueError("'dimension' cannot be empty for the 'neurokit' method.")
+        r = (
+            0.219
+            + 0.248 * dimension
+            - 0.035 * np.log(len(signal))
+            - 0.017 * dimension * np.log(len(signal))
+        )
+        info = {"Method": "NeuroKit"}
 
     elif method in ["maxapen", "optimize"]:
         r, info = _optimize_tolerance_maxapen(
@@ -201,13 +250,13 @@ def complexity_tolerance(
         r, info = _optimize_tolerance_recurrence(
             signal, r_range=r_range, delay=delay, dimension=dimension
         )
-        info.update({"Method": "5% Recurrence Rate"})
+        info.update({"Method": "2.5% Recurrence Rate"})
 
     elif method in ["neighbours", "neighbors", "nn"]:
         r, info = _optimize_tolerance_neighbours(
             signal, r_range=r_range, delay=delay, dimension=dimension
         )
-        info.update({"Method": "5% Neighbours"})
+        info.update({"Method": "2% Neighbours"})
 
     else:
         raise ValueError("NeuroKit error: complexity_tolerance(): 'method' not recognized.")
@@ -243,8 +292,8 @@ def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=N
     n = len(d[idx])
     for i, r in enumerate(r_range):
         recurrence_rate[i] = (d[idx] <= r).sum() / n
-    # Closest to 0.05 (5%)
-    optimal = r_range[np.abs(recurrence_rate - 0.05).argmin()]
+    # Closest to 0.025 (2.5%)
+    optimal = r_range[np.abs(recurrence_rate - 0.025).argmin()]
 
     return optimal, {"Values": r_range, "Scores": recurrence_rate}
 
@@ -312,8 +361,8 @@ def _optimize_tolerance_neighbours(signal, r_range=None, delay=None, dimension=N
             for r in r_range
         ]
     )
-    # Closest to 0.05 (5%)
-    optimal = r_range[np.abs(counts - 0.05).argmin()]
+    # Closest to 0.02 (2%)
+    optimal = r_range[np.abs(counts - 0.02).argmin()]
     return optimal, {"Values": r_range, "Scores": counts}
 
 
@@ -327,7 +376,7 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
     else:
         fig = None
 
-    if method in ["traditional", "sd", "std", "default", "none", "adjusted_sd"]:
+    if method in ["traditional", "sd", "std", "default", "none", "adjusted_sd", "lu2008"]:
         x, y = density(signal)
         arrow_y = np.mean([np.max(y), np.min(y)])
         x_range = np.max(x) - np.min(x)
