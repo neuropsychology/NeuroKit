@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker
 import numpy as np
 import scipy.spatial
+import sklearn.neighbors
 
 from ..stats import density
 from .utils import _phi
@@ -29,18 +30,22 @@ def complexity_tolerance(
 
     Different methods have been described to estimate the most appropriate tolerance value:
 
-    * ``"sd"`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
+    * **sd** (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
       returned.
-    * ``"adjusted_sd"``: Adjusted value based on the SD and the dimension. The rationale is that
+    * **adjusted_sd**: Adjusted value based on the SD and the dimension. The rationale is that
       the chebyshev distance (used in various metrics) rises logarithmically with increasing
       dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the
       chebyshev distance of vectors sampled from a univariate normal distribution. A constant of
       ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in
       https://github.com/CSchoel/nolds).
-    * ``"maxApEn"``: Different values of tolerance will be tested and the one where the approximate
+    * **maxApEn**: Different values of tolerance will be tested and the one where the approximate
       entropy (ApEn) is maximized will be selected and returned.
-    * ``"recurrence"``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
-      be returned.
+    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
+      be returned. Note that this method is currently not suited for very long signals, as it is
+      based on a recurrence matrix, which size is close to n^2. Help is needed to address this
+      limitation.
+    * **neighbours**: Will compute the number of nearest neighbours. Help is needed to estimate a
+      good heuristic for a cut-off value.
 
     Parameters
     ----------
@@ -124,12 +129,22 @@ def complexity_tolerance(
 
       r
 
+    An alternative, better suited for long signals is to use nearest neighbours.
+
+    .. ipython:: python
+
+      @savefig p_complexity_tolerance4.png scale=100%
+      r, info = nk.complexity_tolerance(signal, delay=1, dimension=10,
+                                        method = 'neighbours', show=True)
+      @suppress
+      plt.close()
+
     * **Example 3**: The default method selects the tolerance at which *ApEn* is maximized.
 
     .. ipython:: python
 
       # Slow method
-      @savefig p_complexity_tolerance4.png scale=100%
+      @savefig p_complexity_tolerance5.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6,
                                         method = 'maxApEn', show=True)
       @suppress
@@ -145,7 +160,7 @@ def complexity_tolerance(
     .. ipython:: python
 
       # Narrower range
-      @savefig p_complexity_tolerance5.png scale=100%
+      @savefig p_complexity_tolerance6.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
                                         r_range=np.linspace(0.002, 0.8, 30), show=True)
       @suppress
@@ -169,21 +184,31 @@ def complexity_tolerance(
     if method in ["traditional", "sd", "std", "default"]:
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": "20% SD"}
+
     elif method in ["adjusted_sd"] and isinstance(dimension, int):
         if dimension is None:
             raise ValueError("'dimension' cannot be empty for the 'adjusted_sd' method.")
         r = 0.11604738531196232 * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
         info = {"Method": "Adjusted 20% SD"}
+
     elif method in ["maxapen", "optimize"]:
         r, info = _optimize_tolerance_maxapen(
             signal, r_range=r_range, delay=delay, dimension=dimension
         )
         info.update({"Method": "Max ApEn"})
+
     elif method in ["recurrence", "rqa"]:
         r, info = _optimize_tolerance_recurrence(
             signal, r_range=r_range, delay=delay, dimension=dimension
         )
         info.update({"Method": "5% Recurrence Rate"})
+
+    elif method in ["neighbours", "neighbors", "nn"]:
+        r, info = _optimize_tolerance_neighbours(
+            signal, r_range=r_range, delay=delay, dimension=dimension
+        )
+        info.update({"Method": "5% Neighbours"})
+
     else:
         raise ValueError("NeuroKit error: complexity_tolerance(): 'method' not recognized.")
 
@@ -265,6 +290,33 @@ def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
     return np.abs(np.subtract(phi[0], phi[1])), info
 
 
+def _optimize_tolerance_neighbours(signal, r_range=None, delay=None, dimension=None):
+    if delay is None:
+        delay = 1
+    if dimension is None:
+        dimension = 1
+    if r_range is None:
+        r_range = 50
+    if isinstance(r_range, int):
+        r_range = np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)
+
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
+
+    kdtree = sklearn.neighbors.KDTree(embedded, metric="chebyshev")
+    counts = np.array(
+        [
+            np.mean(
+                kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
+                / embedded.shape[0]
+            )
+            for r in r_range
+        ]
+    )
+    # Closest to 0.05 (5%)
+    optimal = r_range[np.abs(counts - 0.05).argmin()]
+    return optimal, {"Values": r_range, "Scores": counts}
+
+
 # =============================================================================
 # Plotting
 # =============================================================================
@@ -316,11 +368,15 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
         ylabel = "Approximate Entropy $ApEn$"
         legend = "$ApEn$"
     else:
-        ylabel = "Recurrence Rate $RR$"
-        legend = "$RR$"
         y_values *= 100  # Convert to percentage
         ax.axhline(y=0.5, color="grey")
         ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
+        if method in ["neighbours", "neighbors", "nn"]:
+            ylabel = "Nearest Neighbours"
+            legend = "$NN$"
+        else:
+            ylabel = "Recurrence Rate $RR$"
+            legend = "$RR$"
 
     ax.set_title("Optimization of Tolerance Threshold (r)")
     ax.set_xlabel("Tolerance threshold $r$")
