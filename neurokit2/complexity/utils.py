@@ -22,11 +22,9 @@ def _phi(
     kdtree2=None,
     **kwargs,
 ):
-    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`.
-    """
-    # Initialize phi
-    phi = np.zeros(2)
+    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`."""
 
+    # Embed signal at m and m+1
     embedded1, count1, kdtree1 = _get_count(
         signal,
         delay,
@@ -49,6 +47,8 @@ def _phi(
         kdtree=kdtree2,
     )
 
+    # Initialize phi
+    phi = np.zeros(2)
     if approximate is True:
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
         phi[1] = np.mean(np.log(count2 / embedded2.shape[0]))
@@ -72,6 +72,8 @@ def _phi_divide(phi):
     division = np.divide(phi[1], phi[0])
     if np.isclose(division, 0):
         return np.inf
+    if division < 0:
+        return np.nan
     return -np.log(division)
 
 
@@ -154,4 +156,3 @@ def _get_count(
         count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
 
     return embedded, count, kdtree
-

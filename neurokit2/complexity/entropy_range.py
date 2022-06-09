@@ -2,11 +2,10 @@ from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 
 
-def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate=False, **kwargs):
+def entropy_range(signal, dimension=3, delay=1, tolerance="sd", approximate=False, **kwargs):
     """**Range Entropy (RangeEn)**
 
-    Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_,
-    RangeEn refers to a modified form of SampEn (or ApEn).
+    Introduced by Omidvarnia et al. (2018), RangeEn refers to a modified form of SampEn (or ApEn).
 
     Both ApEn and SampEn compute the logarithmic likelihood that runs of patterns that are close
     remain close on the next incremental comparisons, of which this closeness is estimated by the
@@ -22,7 +21,6 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate
 
     Note that the :func:`corrected <entropy_approximate>` version of ApEn (cApEn) can be computed
     by setting ``corrected=True``.
-
 
 
     Parameters
@@ -85,7 +83,6 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate
     ----------
     * Omidvarnia, A., Mesbah, M., Pedersen, M., & Jackson, G. (2018). Range entropy: A bridge
       between signal complexity and self-similarity. Entropy, 20(12), 962.
-
 
     """
     if approximate is False:  # mSampEn - RangeEn (B)
