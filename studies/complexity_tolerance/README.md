@@ -4,12 +4,10 @@ Optimal Selection of Tolerance *r* for Entropy Indices
 -   [Introduction](#introduction)
 -   [Methods](#methods)
 -   [Results](#results)
-    -   [Relationship between Existing Optimization
-        Methods](#relationship-between-existing-optimization-methods)
-    -   [Relationship between max. ApEn and
-        SD](#relationship-between-max-apen-and-sd)
-    -   [Relationship between max. ApEn and the other
-        methods](#relationship-between-max-apen-and-the-other-methods)
+    -   [Cut-offs for RR and NN](#cut-offs-for-rr-and-nn)
+    -   [Development of NeuroKit
+        Approximation](#development-of-neurokit-approximation)
+    -   [Heuristics Test](#heuristics-test)
 -   [Discussion](#discussion)
 -   [References](#references)
 
@@ -43,10 +41,19 @@ easier to justify the choice of the same values) and 2) the fact that
 other approaches to estimate the optimal *r* are computationally costly.
 
 The aim is to investigate the relationship between different methods for
-tolerance *r* optimization. The ground-truth method is max. ApEn (Chen
-et al., 2008) (Lu et al., 2008)
+tolerance *r* optimization. The ground-truth method used was the
+tolerance value corresponding to a maximal value of Approximate Entropy
+*ApEn* (Chen et al., 2008; Chon et al., 2009; Lu et al., 2008). As this
+method is computationally expensive, the goal was to see whether any
+heuristic proxies can be used to approximate this value.
 
 ## Methods
+
+For a combination of different signals types, noise types and
+intensities and lengths, we computed 3 different scores as a function of
+difference tolerance values (expressed in SDs of the signal): *ApEn*,
+the recurrence rate *RR*, and the average number of nearest neighbours
+*NN*.
 
 ``` r
 library(tidyverse)
@@ -60,20 +67,13 @@ df <- read.csv("data_Tolerance.csv") |>
   ungroup()
 ```
 
-## Results
-
-### Relationship between Existing Optimization Methods
-
-We visualize the normalized values of the 3 methods as a function of the
-tolerance *r*.
-
 ``` r
 df |> 
   mutate(group = paste0(Dimension, Method, Iter),
          m = Dimension) |> 
   filter(Method %in% c("ApEn", "Recurrence", "Neighbours")) |> 
   ggplot(aes(x = Tolerance, y = Score_N, color = Method)) +
-  geom_line(aes(group=group), alpha=0.05, size=0.5) +
+  geom_line(aes(group=group), alpha=0.02, size=0.33) +
   facet_wrap(~m, labeller=purrr::partial(label_both, sep = " = ")) +
   scale_x_continuous(expand=c(0, 0)) +
   scale_y_continuous(expand=c(0, 0)) +
@@ -85,7 +85,77 @@ df |>
 
 ![](../../studies/complexity_tolerance/figures/unnamed-chunk-3-1.png)<!-- -->
 
-### Relationship between max. ApEn and SD
+As expected, the value of *ApEn* peaks at certain values of *r*, and the
+location of this peak seems strongly related to the embedding dimension
+*m*. The goal of the analysis is to 1) establish cut-offs for *RR* and
+*NN* that would approximate the location of the *ApEn* peak, 2)
+establish a new heuristic (called the *NeuroKit* method) based on SD and
+Dimension and 3) compare all of these approximations with the
+ground-truth optimal value and other existing heuristics such as *0.2
+SD*, *Chon* (Chon et al., 2009) and *nolds*.
+
+## Results
+
+### Cut-offs for RR and NN
+
+``` r
+library(ggside)
+
+data <- df |> 
+  group_by(Dimension, Length, Iter) |> 
+  filter(Method %in% c("Recurrence", "Neighbours")) |> 
+  filter(Tolerance == unique(Optimal_maxApEn)) |> 
+  ungroup()
+
+
+m_NN <- lm(Score ~ log(Dimension), data=filter(data, Method=="Neighbours"))
+
+# plot(estimate_relation(m_NN)) + coord_cartesian(ylim = c(0, 0.05))
+```
+
+``` r
+m_RR <- lm(Score ~ log(Dimension), data=filter(data, Method=="Recurrence", Dimension>1))
+
+# plot(estimate_relation(m_RR)) + coord_cartesian(ylim = c(0, 0.05))
+```
+
+``` r
+m <- lm(Score ~ Method / log(Dimension), data=data) 
+means <- m |> 
+  estimate_means(at=list("Method" = unique(data$Method), 
+                         "Dimension" = unique(data$Dimension))) |> 
+  mutate(m = as.factor(Dimension))
+
+data |> 
+  mutate(m = fct_rev(as.factor(Dimension))) |>
+  ggplot(aes(y = Optimal_maxApEn, x = Score)) +
+  geom_point2(aes(color=m), alpha=0.33) +
+  geom_vline(data=means, aes(xintercept=Mean, group=Dimension)) +
+  facet_grid(m ~ Method, labeller=purrr::partial(label_both, sep = " = ")) +
+  theme_modern() +
+  scale_color_viridis_d(option="inferno", direction=-1) +
+  guides(color="none")
+```
+
+![](../../studies/complexity_tolerance/figures/unnamed-chunk-6-1.png)<!-- -->
+
+In general, *NN* and *RR* doesn’t seem to be good indices to approximate
+![r\_{maxApEn}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r_%7BmaxApEn%7D "r_{maxApEn}").
+Cut-offs of 1% and 2% are a possible option.
+
+![
+\\widehat{RR} = 0.0117 - 0.0045(\\log(Dimension))
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BRR%7D%20%3D%200.0117%20-%200.0045%28%5Clog%28Dimension%29%29%0A "
+\widehat{RR} = 0.0117 - 0.0045(\log(Dimension))
+")
+
+![
+\\widehat{NN} = 0.0201 - 0.0025(\\log(Dimension))
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BNN%7D%20%3D%200.0201%20-%200.0025%28%5Clog%28Dimension%29%29%0A "
+\widehat{NN} = 0.0201 - 0.0025(\log(Dimension))
+")
+
+### Development of NeuroKit Approximation
 
 ``` r
 library(ggridges)
@@ -94,65 +164,32 @@ data <- df |>
   group_by(Dimension, Length, Iter) |> 
   summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE)) 
 
-# data |> 
-#   mutate(Dimension = as.factor(Dimension)) |> 
-#   estimate_density(method="kernSmooth", at = "Dimension") |> 
-#   group_by(Dimension) |> 
-#   mutate(y = normalize(y)) |> 
-#   ggplot(aes(x=x, y=y)) +
-#   geom_line(aes(color = Dimension, group=Dimension)) +
-#   geom_vline(xintercept=0.4, linetype="dotted")
-
-
-m1 <- lm(maxApEn ~ Dimension * Length, data=data)
-m2 <- lm(maxApEn ~ log(Dimension) * Length, data=data)
-m3 <- lm(maxApEn ~ Dimension * log(Length), data=data)
-m4 <- lm(maxApEn ~ log(Dimension) * log(Length), data=data)
-test_performance(m1, m2, m3, m4)
+m1 <- lm(maxApEn ~ Dimension, data=data)
+m2 <- lm(maxApEn ~ log(Dimension), data=data)
+test_performance(m1, m2)
 ## Name | Model |      BF
 ## ----------------------
 ## m1   |    lm |        
 ## m2   |    lm | < 0.001
-## m3   |    lm |  > 1000
-## m4   |    lm | < 0.001
 ## Each model is compared to m1.
 
-m1 <- lm(maxApEn ~ Dimension * log(Length), data=data)
-m2 <- lm(maxApEn ~ Dimension + log(Length), data=data)
-test_performance(m1, m2)
-## Name | Model |      BF | df | df_diff |   Chi2 |      p
-## -------------------------------------------------------
-## m1   |    lm |         |  5 |         |        |       
-## m2   |    lm | < 0.001 |  4 |   -1.00 | 130.59 | < .001
-## Models were detected as nested and are compared in sequential order.
-
 m <- m1
-pred <- estimate_relation(m, at = list("Dimension"=unique(data$Dimension),
-                                        "Length" = unique(data$Length)))
+pred <- estimate_relation(m, at = list("Dimension"=unique(data$Dimension)))
 
 formula <- equatiomatic::extract_eq(m, 
                                     raw_tex=T, 
                                     swap_var_names=c("maxApEn" = "r"),
                                     use_coefs = TRUE, 
                                     ital_vars=TRUE, 
-                                    coef_digits=3)
-# formula <- paste0(
-#   format_value(coef(m1)[1], 2),
-#   " + ", 
-#   format_value(coef(m1)[2], 2),
-#   "m ",
-#   format_value(coef(m1)[3], 2),
-#   "log(N) ",
-#   format_value(coef(m1)[4], 2),
-#   "m * log(N)")
+                                    coef_digits=4)
   
 data |> 
   mutate(Dimension = as.factor(Dimension),
          Length = as.factor(Length)) |> 
   ggplot(aes(x=maxApEn, y=Dimension)) +
-  geom_density_ridges(aes(fill=Dimension, alpha=Length), color = NA) + 
-  geom_line(data=pred, aes(x=Predicted, group=Length, alpha=as.factor(Length)), color="red", size=1, show.legend=FALSE) +
-  annotate(geom="text", x=2, y=1.2, label=latex2exp::TeX(formula), hjust=0, color="red") +
+  geom_density_ridges(aes(fill=Dimension), color = NA) + 
+  geom_line(data=pred, aes(x=Predicted), color="red", size=1, show.legend=FALSE) +
+  annotate(geom="text", x=1.8, y=1.2, label=latex2exp::TeX(formula), hjust=0, color="red") +
   coord_flip() +
   scale_fill_viridis_d(option="inferno") +
   scale_x_continuous(expand=c(0, 0)) +
@@ -162,81 +199,74 @@ data |>
   labs(y = "Optimal Tolerance (based on max. ApEn)")
 ```
 
-![](../../studies/complexity_tolerance/figures/unnamed-chunk-4-1.png)<!-- -->
-We can conclude that selecting the tolerance based as a function of SD
-does not make sense if the dimension is not taken into account.
+![](../../studies/complexity_tolerance/figures/unnamed-chunk-7-1.png)<!-- -->
+
+We can see that selecting the tolerance based as a function of SD alone
+does not make sense, as the dimension is strongly related to it. Based
+on a simple regression model, we can derive the following approximation:
 
 ![
-\\widehat{r} = 0.219 + 0.248(Dimension) - 0.035(\\log(Length)) - 0.017(Dimension \\times \\log(Length))
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7Br%7D%20%3D%200.219%20%2B%200.248%28Dimension%29%20-%200.035%28%5Clog%28Length%29%29%20-%200.017%28Dimension%20%5Ctimes%20%5Clog%28Length%29%29%0A "
-\widehat{r} = 0.219 + 0.248(Dimension) - 0.035(\log(Length)) - 0.017(Dimension \times \log(Length))
+\\widehat{r} = -0.0617 + 0.1245(Dimension)
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7Br%7D%20%3D%20-0.0617%20%2B%200.1245%28Dimension%29%0A "
+\widehat{r} = -0.0617 + 0.1245(Dimension)
 ")
 
-### Relationship between max. ApEn and the other methods
+Interestingly, for a dimension *m* of 2, this equation approximates *0.2
+SD* (which was derived initially under this condition).
+
+### Heuristics Test
 
 ``` r
-library(ggside)
+data <- df |> 
+  group_by(Dimension, Length, Iter) |> 
+  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE),
+            Recurrence = mean(Optimal_Recurrence, na.rm=TRUE),
+            Neighbours = mean(Optimal_Neighbours, na.rm=TRUE),
+            SD = mean(Optimal_SD, na.rm=TRUE),
+            SDadj = mean(Optimal_SDadj, na.rm=TRUE),
+            Chon = mean(Optimal_Chon, na.rm=TRUE),
+            NeuroKit = mean(Optimal_NeuroKit, na.rm=TRUE)) 
 
-data <- data.frame()
-for(m in unique(df$Dimension)) {
-  for (signal in unique(df$Iter)) {
-    dat <- df[df$Iter == signal & df$Dimension == m, ]
-    dat <- dat[dat$Tolerance == unique(dat$Optimal_maxApEn), ]
-    dat <- dat[dat$Method %in% c("Recurrence", "Neighbours"), ]
-    data <- rbind(data, dat)
-  }
-}
+m1 <- lm(maxApEn ~ SD, data=data)
+m2 <- lm(maxApEn ~ SDadj, data=data)
+m3 <- lm(maxApEn ~ Recurrence, data=data)
+m4 <- lm(maxApEn ~ Neighbours, data=data)
+m5 <- lm(maxApEn ~ Chon, data=data)
+m6 <- lm(maxApEn ~ NeuroKit, data=data)
 
-m <- MASS::rlm(Score ~ Method / Dimension * Length, data=data) 
-parameters(m)
-## Parameter                                | Coefficient |       SE |         95% CI | t(21592) |      p
+compare_performance(m1, m2, m3, m4, m5, m6)
+## # Comparison of Model Performance Indices
+## 
+## Name | Model |        AIC | AIC weights |        BIC | BIC weights |    R2 | R2 (adj.) |  RMSE | Sigma
 ## ------------------------------------------------------------------------------------------------------
-## (Intercept)                              |        0.04 | 5.26e-04 | [ 0.04,  0.04] |    77.56 | < .001
-## Method [Recurrence]                      |   -6.06e-03 | 7.44e-04 | [-0.01,  0.00] |    -8.14 | < .001
-## Length                                   |   -1.54e-05 | 4.87e-07 | [ 0.00,  0.00] |   -31.59 | < .001
-## Method [Neighbours] * Dimension          |   -9.77e-04 | 9.35e-05 | [ 0.00,  0.00] |   -10.45 | < .001
-## Method [Recurrence] * Dimension          |   -3.92e-03 | 9.35e-05 | [ 0.00,  0.00] |   -41.90 | < .001
-## Method [Recurrence] * Length             |    2.97e-06 | 6.89e-07 | [ 0.00,  0.00] |     4.32 | < .001
-## Method [Neighbours] * Dimension * Length |    1.47e-07 | 8.66e-08 | [ 0.00,  0.00] |     1.70 | 0.089 
-## Method [Recurrence] * Dimension * Length |    1.30e-06 | 8.66e-08 | [ 0.00,  0.00] |    14.98 | < .001
-m <- MASS::rlm(Score ~ Method / Dimension, data=data) 
-m <- MASS::rlm(Score ~ Method + Dimension, data=data) 
-
-means <- m |> 
-  estimate_means(at=list("Method" = unique(data$Method), 
-                         "Dimension" = unique(data$Dimension))) |> 
-  mutate(m = as.factor(Dimension))
-
-data |> 
-  mutate(m = fct_rev(as.factor(Dimension))) |>
-  ggplot(aes(y = Optimal_maxApEn, x = Score)) +
-  geom_point(aes(color=m)) +
-  # geom_density_ridges(aes(group = paste(Method, Optimal_maxApEn), fill=Method)) +
-  geom_vline(data=means, aes(xintercept=Mean, group=Dimension)) +
-  facet_grid(m ~ Method, labeller=purrr::partial(label_both, sep = " = ")) +
-  theme_modern() +
-  scale_color_viridis_d(option="inferno") +
-  guides(color="none")
+## m1   |    lm |  33585.953 |     < 0.001 |  33603.640 |     < 0.001 | 0.000 |     0.000 | 0.336 | 0.336
+## m2   |    lm | -25540.041 |     < 0.001 | -25513.511 |     < 0.001 | 0.685 |     0.685 | 0.189 | 0.189
+## m3   |    lm | -71728.578 |        1.00 | -71702.047 |        1.00 | 0.872 |     0.872 | 0.120 | 0.120
+## m4   |    lm | -62908.066 |     < 0.001 | -62881.536 |     < 0.001 | 0.848 |     0.848 | 0.131 | 0.131
+## m5   |    lm |  25019.618 |     < 0.001 |  25046.149 |     < 0.001 | 0.154 |     0.154 | 0.309 | 0.309
+## m6   |    lm | -41188.883 |     < 0.001 | -41162.352 |     < 0.001 | 0.768 |     0.768 | 0.162 | 0.162
 ```
 
-![](../../studies/complexity_tolerance/figures/unnamed-chunk-5-1.png)<!-- -->
+In order to approximate
+![r\_{maxApEn}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r_%7BmaxApEn%7D "r_{maxApEn}"),
+the best two methods were to use cut-offs points of recurrence rate *RR*
+and of the number of nearest neighbours *NN*. However, these two methods
+are very computationally expensive (*RR* even surpassing max. ApEn),
+casting doubt on their practical usefulness.
 
-![
-\\widehat{NN} = 0.026 - 0.001(Dimension)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BNN%7D%20%3D%200.026%20-%200.001%28Dimension%29%0A "
-\widehat{NN} = 0.026 - 0.001(Dimension)
-")
-
-![
-\\widehat{RR} = 0.021 - 0.002(Dimension)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BRR%7D%20%3D%200.021%20-%200.002%28Dimension%29%0A "
-\widehat{RR} = 0.021 - 0.002(Dimension)
-")
+From the fast methods that rely only on the signal’s SD and the
+embedding dimension *m*, the *NeuroKit* method was the best (R2 = 0.77),
+followed by the *nolds* adjustment, and the *0.2 SD* rule of thumb. The
+*Chon* method garnered the least evidence in our data.
 
 ## Discussion
 
 Number of neighbours and recurrence rate does not seem to be good
-proxies of the optimal tolerance *r* as estimated by max. ApEn.
+proxies of the optimal tolerance *r* as estimated by max. ApEn. We have
+developed an approximation based on the signal’s SD, its length and the
+embedding dimension, which can be used as an alternative to the *0.2 SD*
+rule of thumb. The new method is implemented in the *NeuroKit2* Python
+package (Makowski et al., 2021).
 
 ## References
 
@@ -252,6 +282,14 @@ Be Published*.
 
 </div>
 
+<div id="ref-chon2009approximate" class="csl-entry">
+
+Chon, K. H., Scully, C. G., & Lu, S. (2009). Approximate entropy for all
+signals. *IEEE Engineering in Medicine and Biology Magazine*, *28*(6),
+18–23.
+
+</div>
+
 <div id="ref-lu2008automatic" class="csl-entry">
 
 Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008).
@@ -259,6 +297,15 @@ Automatic selection of the threshold value
 ![r](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r "r")
 for approximate entropy. *IEEE Transactions on Biomedical Engineering*,
 *55*(8), 1966–1972.
+
+</div>
+
+<div id="ref-makowski2021neurokit2" class="csl-entry">
+
+Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F.,
+Pham, H., Schölzel, C., & Chen, S. (2021). NeuroKit2: A python toolbox
+for neurophysiological signal processing. *Behavior Research Methods*,
+*53*(4), 1689–1696.
 
 </div>
 

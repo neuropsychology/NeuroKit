@@ -46,7 +46,7 @@ def run_benchmark(noise_intensity=0.01):
     data_tolerance = []
 
     print("Noise intensity: {}".format(noise_intensity))
-    for duration in [0.5, 1]:
+    for duration in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]:
         for method in [
             "Random-Walk",
             "lorenz_10_2.5_28",
@@ -124,7 +124,7 @@ def run_benchmark(noise_intensity=0.01):
 
                 r_range = np.linspace(0.02, 2, 50)
 
-                for m in range(1, 3):
+                for m in range(1, 9):
                     r1, info = nk.complexity_tolerance(
                         signal_,
                         delay=delay,
@@ -176,6 +176,13 @@ def run_benchmark(noise_intensity=0.01):
                         delay=delay,
                         dimension=m,
                         r_range=r_range,
+                        method="chon2009",
+                    )
+                    r7, _ = nk.complexity_tolerance(
+                        signal_,
+                        delay=delay,
+                        dimension=m,
+                        r_range=r_range,
                         method="neurokit",
                     )
 
@@ -221,7 +228,8 @@ def run_benchmark(noise_intensity=0.01):
                     rez["Optimal_Neighbours"] = r3
                     rez["Optimal_SD"] = r4
                     rez["Optimal_SDadj"] = r5
-                    rez["Optimal_NeuroKit"] = r6
+                    rez["Optimal_Chon"] = r6
+                    rez["Optimal_NeuroKit"] = r7
                     rez["Length"] = len(signal_)
                     rez["Noise_Type"] = noise
                     rez["Noise_Intensity"] = noise_intensity
@@ -235,8 +243,8 @@ def run_benchmark(noise_intensity=0.01):
 # run_benchmark(noise_intensity=0.01)
 out = nk.parallel_run(
     run_benchmark,
-    [{"noise_intensity": i} for i in np.linspace(0.01, 2, 16)],
-    n_jobs=8,
+    [{"noise_intensity": i} for i in np.linspace(0.01, 2, 32)],
+    n_jobs=32,
     verbose=5,
 )
 

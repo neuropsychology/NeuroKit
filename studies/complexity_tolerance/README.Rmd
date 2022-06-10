@@ -38,10 +38,12 @@ The choice of the parameters required to compute complexity indices (such as ent
 
 Such is the case of the tolerance threshold *r*, which is often selected as a function of the standard deviation (SD) of the signal, with (in)famous magic values including $0.1$ or $0.2*SD$ [@pincus1992approximate]. One of the reason for the longevity of such approach is 1) past literature (as many past studies used it, it becomes easier to justify the choice of the same values) and 2) the fact that other approaches to estimate the optimal *r* are computationally costly.
 
-The aim is to investigate the relationship between different methods for tolerance *r* optimization. The ground-truth method is max. ApEn [@chen2008parameter] [@lu2008automatic]
+The aim is to investigate the relationship between different methods for tolerance *r* optimization. The ground-truth method used was the tolerance value corresponding to a maximal value of Approximate Entropy *ApEn* [@chen2008parameter; @lu2008automatic; @chon2009approximate]. As this method is computationally expensive, the goal was to see whether any heuristic proxies can be used to approximate this value.
 
 
 ## Methods
+
+For a combination of different signals types, noise types and intensities and lengths, we computed 3 different scores as a function of difference tolerance values (expressed in SDs of the signal): *ApEn*, the recurrence rate *RR*, and the average number of nearest neighbours *NN*.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -55,19 +57,13 @@ df <- read.csv("data_Tolerance.csv") |>
   ungroup()
 ```
 
-## Results
-
-### Relationship between Existing Optimization Methods
-
-We visualize the normalized values of the 3 methods as a function of the tolerance *r*.
-
 ```{r warning=FALSE, message=FALSE}
 df |> 
   mutate(group = paste0(Dimension, Method, Iter),
          m = Dimension) |> 
   filter(Method %in% c("ApEn", "Recurrence", "Neighbours")) |> 
   ggplot(aes(x = Tolerance, y = Score_N, color = Method)) +
-  geom_line(aes(group=group), alpha=0.05, size=0.5) +
+  geom_line(aes(group=group), alpha=0.02, size=0.33) +
   facet_wrap(~m, labeller=purrr::partial(label_both, sep = " = ")) +
   scale_x_continuous(expand=c(0, 0)) +
   scale_y_continuous(expand=c(0, 0)) +
@@ -77,97 +73,36 @@ df |>
   guides(colour = guide_legend(override.aes = list(alpha = 1)))
 ```
 
+As expected, the value of *ApEn* peaks at certain values of *r*, and the location of this peak seems strongly related to the embedding dimension *m*. The goal of the analysis is to 1) establish cut-offs for *RR* and *NN* that would approximate the location of the *ApEn* peak, 2) establish a new heuristic (called the *NeuroKit* method) based on SD and Dimension and 3) compare all of these approximations with the ground-truth optimal value and other existing heuristics such as *0.2 SD*, *Chon* [@chon2009approximate] and *nolds*.
 
 
-### Relationship between max. ApEn and SD 
+## Results
 
-```{r warning=FALSE, message=FALSE}
-library(ggridges)
-
-data <- df |> 
-  group_by(Dimension, Length, Iter) |> 
-  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE)) 
-
-# data |> 
-#   mutate(Dimension = as.factor(Dimension)) |> 
-#   estimate_density(method="kernSmooth", at = "Dimension") |> 
-#   group_by(Dimension) |> 
-#   mutate(y = normalize(y)) |> 
-#   ggplot(aes(x=x, y=y)) +
-#   geom_line(aes(color = Dimension, group=Dimension)) +
-#   geom_vline(xintercept=0.4, linetype="dotted")
-
-
-m1 <- lm(maxApEn ~ Dimension * Length, data=data)
-m2 <- lm(maxApEn ~ log(Dimension) * Length, data=data)
-m3 <- lm(maxApEn ~ Dimension * log(Length), data=data)
-m4 <- lm(maxApEn ~ log(Dimension) * log(Length), data=data)
-test_performance(m1, m2, m3, m4)
-
-m1 <- lm(maxApEn ~ Dimension * log(Length), data=data)
-m2 <- lm(maxApEn ~ Dimension + log(Length), data=data)
-test_performance(m1, m2)
-
-m <- m1
-pred <- estimate_relation(m, at = list("Dimension"=unique(data$Dimension),
-                                        "Length" = unique(data$Length)))
-
-formula <- equatiomatic::extract_eq(m, 
-                                    raw_tex=T, 
-                                    swap_var_names=c("maxApEn" = "r"),
-                                    use_coefs = TRUE, 
-                                    ital_vars=TRUE, 
-                                    coef_digits=3)
-# formula <- paste0(
-#   format_value(coef(m1)[1], 2),
-#   " + ", 
-#   format_value(coef(m1)[2], 2),
-#   "m ",
-#   format_value(coef(m1)[3], 2),
-#   "log(N) ",
-#   format_value(coef(m1)[4], 2),
-#   "m * log(N)")
-  
-data |> 
-  mutate(Dimension = as.factor(Dimension),
-         Length = as.factor(Length)) |> 
-  ggplot(aes(x=maxApEn, y=Dimension)) +
-  geom_density_ridges(aes(fill=Dimension, alpha=Length), color = NA) + 
-  geom_line(data=pred, aes(x=Predicted, group=Length, alpha=as.factor(Length)), color="red", size=1, show.legend=FALSE) +
-  annotate(geom="text", x=2, y=1.2, label=latex2exp::TeX(formula), hjust=0, color="red") +
-  coord_flip() +
-  scale_fill_viridis_d(option="inferno") +
-  scale_x_continuous(expand=c(0, 0)) +
-  scale_y_discrete(expand=c(0, 0)) +
-  theme_modern() +
-  guides(fill="none", group="none") +
-  labs(y = "Optimal Tolerance (based on max. ApEn)")
-```
-We can conclude that selecting the tolerance based as a function of SD does not make sense if the dimension is not taken into account. 
-
-`r formula`
-
-
-### Relationship between max. ApEn and the other methods
+### Cut-offs for RR and NN
 
 ```{r warning=FALSE, message=FALSE}
 library(ggside)
 
-data <- data.frame()
-for(m in unique(df$Dimension)) {
-  for (signal in unique(df$Iter)) {
-    dat <- df[df$Iter == signal & df$Dimension == m, ]
-    dat <- dat[dat$Tolerance == unique(dat$Optimal_maxApEn), ]
-    dat <- dat[dat$Method %in% c("Recurrence", "Neighbours"), ]
-    data <- rbind(data, dat)
-  }
-}
+data <- df |> 
+  group_by(Dimension, Length, Iter) |> 
+  filter(Method %in% c("Recurrence", "Neighbours")) |> 
+  filter(Tolerance == unique(Optimal_maxApEn)) |> 
+  ungroup()
 
-m <- MASS::rlm(Score ~ Method / Dimension * Length, data=data) 
-parameters(m)
-m <- MASS::rlm(Score ~ Method / Dimension, data=data) 
-m <- MASS::rlm(Score ~ Method + Dimension, data=data) 
 
+m_NN <- lm(Score ~ log(Dimension), data=filter(data, Method=="Neighbours"))
+
+# plot(estimate_relation(m_NN)) + coord_cartesian(ylim = c(0, 0.05))
+```
+
+```{r warning=FALSE, message=FALSE}
+m_RR <- lm(Score ~ log(Dimension), data=filter(data, Method=="Recurrence", Dimension>1))
+
+# plot(estimate_relation(m_RR)) + coord_cartesian(ylim = c(0, 0.05))
+```
+
+```{r warning=FALSE, message=FALSE}
+m <- lm(Score ~ Method / log(Dimension), data=data) 
 means <- m |> 
   estimate_means(at=list("Method" = unique(data$Method), 
                          "Dimension" = unique(data$Dimension))) |> 
@@ -176,21 +111,103 @@ means <- m |>
 data |> 
   mutate(m = fct_rev(as.factor(Dimension))) |>
   ggplot(aes(y = Optimal_maxApEn, x = Score)) +
-  geom_point(aes(color=m)) +
-  # geom_density_ridges(aes(group = paste(Method, Optimal_maxApEn), fill=Method)) +
+  geom_point2(aes(color=m), alpha=0.33) +
   geom_vline(data=means, aes(xintercept=Mean, group=Dimension)) +
   facet_grid(m ~ Method, labeller=purrr::partial(label_both, sep = " = ")) +
   theme_modern() +
-  scale_color_viridis_d(option="inferno") +
+  scale_color_viridis_d(option="inferno", direction=-1) +
   guides(color="none")
 ```
 
-`r equatiomatic::extract_eq(MASS::rlm(Score ~ Dimension, data=filter(data, Method=="Neighbours")), swap_var_names=c("Score" = "NN"), use_coefs = TRUE, ital_vars=TRUE, coef_digits=3)`
-`r equatiomatic::extract_eq(MASS::rlm(Score ~ Dimension, data=filter(data, Method=="Recurrence")), swap_var_names=c("Score" = "RR"),use_coefs = TRUE, ital_vars=TRUE, coef_digits=3)`
+In general, *NN* and *RR* doesn't seem to be good indices to approximate $r_{maxApEn}$. Cut-offs of 1% and 2% are a possible option.
+
+`r equatiomatic::extract_eq(m_RR, swap_var_names=c("Score" = "RR"),use_coefs = TRUE, ital_vars=TRUE, coef_digits=4)`
+
+`r equatiomatic::extract_eq(m_NN, swap_var_names=c("Score" = "NN"), use_coefs = TRUE, ital_vars=TRUE, coef_digits=4)`
+
+
+
+
+### Development of NeuroKit Approximation
+
+```{r warning=FALSE, message=FALSE}
+library(ggridges)
+
+data <- df |> 
+  group_by(Dimension, Length, Iter) |> 
+  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE)) 
+
+m1 <- lm(maxApEn ~ Dimension, data=data)
+m2 <- lm(maxApEn ~ log(Dimension), data=data)
+test_performance(m1, m2)
+
+m <- m1
+pred <- estimate_relation(m, at = list("Dimension"=unique(data$Dimension)))
+
+formula <- equatiomatic::extract_eq(m, 
+                                    raw_tex=T, 
+                                    swap_var_names=c("maxApEn" = "r"),
+                                    use_coefs = TRUE, 
+                                    ital_vars=TRUE, 
+                                    coef_digits=4)
+  
+data |> 
+  mutate(Dimension = as.factor(Dimension),
+         Length = as.factor(Length)) |> 
+  ggplot(aes(x=maxApEn, y=Dimension)) +
+  geom_density_ridges(aes(fill=Dimension), color = NA) + 
+  geom_line(data=pred, aes(x=Predicted), color="red", size=1, show.legend=FALSE) +
+  annotate(geom="text", x=1.8, y=1.2, label=latex2exp::TeX(formula), hjust=0, color="red") +
+  coord_flip() +
+  scale_fill_viridis_d(option="inferno") +
+  scale_x_continuous(expand=c(0, 0)) +
+  scale_y_discrete(expand=c(0, 0)) +
+  theme_modern() +
+  guides(fill="none", group="none") +
+  labs(y = "Optimal Tolerance (based on max. ApEn)")
+```
+
+
+We can see that selecting the tolerance based as a function of SD alone does not make sense, as the dimension is strongly related to it. Based on a simple regression model, we can derive the following approximation: 
+
+`r formula`
+
+
+Interestingly, for a dimension *m* of 2, this equation approximates *0.2 SD* (which was derived initially under this condition). 
+
+
+
+### Heuristics Test
+
+```{r warning=FALSE, message=FALSE}
+data <- df |> 
+  group_by(Dimension, Length, Iter) |> 
+  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE),
+            Recurrence = mean(Optimal_Recurrence, na.rm=TRUE),
+            Neighbours = mean(Optimal_Neighbours, na.rm=TRUE),
+            SD = mean(Optimal_SD, na.rm=TRUE),
+            SDadj = mean(Optimal_SDadj, na.rm=TRUE),
+            Chon = mean(Optimal_Chon, na.rm=TRUE),
+            NeuroKit = mean(Optimal_NeuroKit, na.rm=TRUE)) 
+
+m1 <- lm(maxApEn ~ SD, data=data)
+m2 <- lm(maxApEn ~ SDadj, data=data)
+m3 <- lm(maxApEn ~ Recurrence, data=data)
+m4 <- lm(maxApEn ~ Neighbours, data=data)
+m5 <- lm(maxApEn ~ Chon, data=data)
+m6 <- lm(maxApEn ~ NeuroKit, data=data)
+
+compare_performance(m1, m2, m3, m4, m5, m6)
+```
+
+In order to approximate $r_{maxApEn}$, the best two methods were to use cut-offs points of recurrence rate *RR* and of the number of nearest neighbours *NN*. However, these two methods are very computationally expensive (*RR* even surpassing max. ApEn), casting doubt on their practical usefulness.
+
+From the fast methods that rely only on the signal's SD and the embedding dimension *m*, the *NeuroKit* method was the best (R2 = `r format_value(r2(m6)$R2)`), followed by the *nolds* adjustment, and the *0.2 SD* rule of thumb. The *Chon* method garnered the least evidence in our data.
+
 
 ## Discussion
 
-Number of neighbours and recurrence rate does not seem to be good proxies of the optimal tolerance *r* as estimated by max. ApEn. 
+Number of neighbours and recurrence rate does not seem to be good proxies of the optimal tolerance *r* as estimated by max. ApEn. We have developed an approximation based on the signal's SD, its length and the embedding dimension, which can be used as an alternative to the *0.2 SD* rule of thumb. The new method is implemented in the *NeuroKit2* Python package [@makowski2021neurokit2]. 
 
 
 
