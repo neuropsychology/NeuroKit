@@ -379,7 +379,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../studies/complexity_tolerance.html">
-     Complexity Tolerance r
+     Complexity Tolerance Estimation
     </a>
    </li>
    <li class="toctree-l2">
@@ -990,20 +990,6 @@ rate, and the events annotation timings if <code class="docutils literal notrans
 <span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/write_csv.html#write_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.write_csv" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Write data to multiple csv files</strong></p>
 <p>Split the data into multiple CSV files. You can then re-create them as follows:</p>
-<p class="rubric">Example</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># Split data into multiple files</span>
-<span class="go"># nk.write_csv(data, &#39;C:/Users/.../data.csv&#39;, parts=6)</span>
-<span class="go"># Iterate through 6-parts and concatenate the pieces</span>
-<span class="go"># data_all = pd.concat(</span>
-<span class="go">#                   [pd.read_csv(f&quot;data_part{i}.csv&quot;) for i in range(1, 7)],</span>
-<span class="go">#                   axis=0,</span>
-<span class="go">#                      )</span>
-</pre></div>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1013,9 +999,27 @@ rate, and the events annotation timings if <code class="docutils literal notrans
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>None.</em></p>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<p>Save big file in parts</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Split data into multiple files</span>
+<span class="go"># nk.write_csv(data, &#39;C:/Users/.../data&#39;, parts=6)</span>
+</pre></div>
+</div>
+<p>Read the files back</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="c1"># Iterate through 6-parts and concatenate the pieces</span>
+<span class="c1"># data_all = pd.concat(</span>
+<span class="c1">#                   [pd.read_csv(f&quot;data_part{i}.csv&quot;) for i in range(1, 7)],</span>
+<span class="c1">#                   axis=0,</span>
+<span class="c1">#                      )</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

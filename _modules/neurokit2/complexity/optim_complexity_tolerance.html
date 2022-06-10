@@ -376,7 +376,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../studies/complexity_tolerance.html">
-     Complexity Tolerance r
+     Complexity Tolerance Estimation
     </a>
    </li>
    <li class="toctree-l2">
@@ -570,6 +570,11 @@ title="Open an issue"
 <span class="sd">    similar points that we &quot;tolerate&quot;). This parameter has a critical impact and is a major</span>
 <span class="sd">    source of inconsistencies in the literature.</span>
 
+<span class="sd">    .. tip::</span>
+
+<span class="sd">        To know more about the different methods and their parameters, please refer to our</span>
+<span class="sd">        `study &lt;https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html&gt;`_.</span>
+
 <span class="sd">    Different methods have been described to estimate the most appropriate tolerance value:</span>
 
 <span class="sd">    * **maxApEn**: Different values of tolerance will be tested and the one where the approximate</span>
@@ -603,7 +608,8 @@ title="Open an issue"
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be ``&quot;maxApEn&quot;`` (default), ``&quot;sd&quot;`` (or ``&quot;default&quot;``), or ``&quot;recurrence&quot;``.</span>
+<span class="sd">        Can be ``&quot;maxApEn&quot;`` (default), ``&quot;sd&quot;``, ``&quot;recurrence&quot;``, ``&quot;neighbours&quot;``, ``&quot;nolds&quot;``,</span>
+<span class="sd">        ``&quot;chon2009&quot;``, or ``&quot;neurokit&quot;``.</span>
 <span class="sd">    r_range : Union[list, int]</span>
 <span class="sd">        The range of tolerance values (or the number of values) to test. Only used if ``method`` is</span>
 <span class="sd">        ``&quot;maxApEn&quot;`` or ``&quot;recurrence&quot;``. If ``None`` (default), the default range will be used;</span>
@@ -626,7 +632,7 @@ title="Open an issue"
 <span class="sd">    float</span>
 <span class="sd">        The optimal tolerance value.</span>
 <span class="sd">    dict</span>
-<span class="sd">        A dictionary with the values of r and the corresponding ApEn values (when ``method=&quot;maxApEn&quot;``).</span>
+<span class="sd">        A dictionary containing additional information.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>
@@ -780,9 +786,11 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s2">&quot;makowski&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span>
         <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span>
     <span class="p">):</span>
+        <span class="c1"># Method described in</span>
+        <span class="c1"># https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;neurokit&#39; method.&quot;</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.06174</span> <span class="o">+</span> <span class="mf">0.12447</span> <span class="o">*</span> <span class="n">dimension</span><span class="p">)</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.06174</span> <span class="o">+</span> <span class="mf">0.12447</span> <span class="o">*</span> <span class="n">dimension</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;NeuroKit&quot;</span><span class="p">}</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;maxapen&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]:</span>

@@ -376,7 +376,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../studies/complexity_tolerance.html">
-     Complexity Tolerance r
+     Complexity Tolerance Estimation
     </a>
    </li>
    <li class="toctree-l2">
@@ -548,21 +548,6 @@ title="Open an issue"
 
 <span class="sd">    Split the data into multiple CSV files. You can then re-create them as follows:</span>
 
-<span class="sd">    Example</span>
-<span class="sd">    --------</span>
-<span class="sd">    .. ipython:: python</span>
-
-<span class="sd">      import pandas as pd</span>
-<span class="sd">      import neurokit2 as nk</span>
-
-<span class="sd">      # Split data into multiple files</span>
-<span class="sd">      # nk.write_csv(data, &#39;C:/Users/.../data.csv&#39;, parts=6)</span>
-
-<span class="sd">      # Iterate through 6-parts and concatenate the pieces</span>
-<span class="sd">      # data_all = pd.concat(</span>
-<span class="sd">      #                   [pd.read_csv(f&quot;data_part{i}.csv&quot;) for i in range(1, 7)],</span>
-<span class="sd">      #                   axis=0,</span>
-<span class="sd">      #                      )</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -575,7 +560,30 @@ title="Open an issue"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    None.</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    --------</span>
+<span class="sd">    Save big file in parts</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import pandas as pd</span>
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      # Split data into multiple files</span>
+<span class="sd">      # nk.write_csv(data, &#39;C:/Users/.../data&#39;, parts=6)</span>
+
+<span class="sd">    Read the files back</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      # Iterate through 6-parts and concatenate the pieces</span>
+<span class="sd">      # data_all = pd.concat(</span>
+<span class="sd">      #                   [pd.read_csv(f&quot;data_part{i}.csv&quot;) for i in range(1, 7)],</span>
+<span class="sd">      #                   axis=0,</span>
+<span class="sd">      #                      )</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>

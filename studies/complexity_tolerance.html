@@ -379,7 +379,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Complexity Tolerance r
+     Complexity Tolerance Estimation
     </a>
    </li>
    <li class="toctree-l2">
@@ -775,7 +775,12 @@ the recurrence rate <em>RR</em>, and the average number of nearest neighbours
 <span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">patchwork</span><span class="p">)</span>
 
-<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_Tolerance.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">()</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="m">8</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="nf">read.csv</span><span class="p">(</span><span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;data_Tolerance_part&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">&quot;.csv&quot;</span><span class="p">)))</span>
+<span class="p">}</span>
+
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Iter</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">Signal</span><span class="p">,</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">Noise_Type</span><span class="p">,</span> <span class="n">Length</span><span class="p">))</span> <span class="o">|&gt;</span>
   <span class="nf">group_by</span><span class="p">(</span><span class="n">Method</span><span class="p">,</span> <span class="n">Dimension</span><span class="p">,</span> <span class="n">Iter</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Score_N</span> <span class="o">=</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span> <span class="o">|&gt;</span>
@@ -851,8 +856,8 @@ SD</em>, <em>Chon</em> (Chon et al., 2009) and <em>nolds</em>.</p>
 <p>In general, <em>NN</em> and <em>RR</em> doesn’t seem to be good indices to approximate
 <img alt="r_{maxApEn}" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;r_%7BmaxApEn%7D" />.
 Cut-offs of 1% and 2% are a possible option.</p>
-<p><img alt="\widehat{RR} = 0.0117 - 0.0045(\log(Dimension))" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%0A%5Cwidehat%7BRR%7D%20%3D%200.0117%20-%200.0045%28%5Clog%28Dimension%29%29%0A" /></p>
-<p><img alt="\widehat{NN} = 0.0201 - 0.0025(\log(Dimension))" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%0A%5Cwidehat%7BNN%7D%20%3D%200.0201%20-%200.0025%28%5Clog%28Dimension%29%29%0A" /></p>
+<p><img alt="\widehat{RR} = 0.0118 - 0.0045(\log(Dimension))" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%0A%5Cwidehat%7BRR%7D%20%3D%200.0118%20-%200.0045%28%5Clog%28Dimension%29%29%0A" /></p>
+<p><img alt="\widehat{NN} = 0.0201 - 0.0027(\log(Dimension))" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%0A%5Cwidehat%7BNN%7D%20%3D%200.0201%20-%200.0027%28%5Clog%28Dimension%29%29%0A" /></p>
 </section>
 <section id="development-of-neurokit-approximation">
 <h3>Development of NeuroKit Approximation<a class="headerlink" href="#development-of-neurokit-approximation" title="Permalink to this headline">#</a></h3>
@@ -901,7 +906,7 @@ Cut-offs of 1% and 2% are a possible option.</p>
 <p>We can see that selecting the tolerance based as a function of SD alone
 does not make sense, as the dimension is strongly related to it. Based
 on a simple regression model, we can derive the following approximation:</p>
-<p><img alt="\widehat{r} = -0.0617 + 0.1245(Dimension)" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%0A%5Cwidehat%7Br%7D%20%3D%20-0.0617%20%2B%200.1245%28Dimension%29%0A" /></p>
+<p><img alt="\widehat{r} = -0.0614 + 0.1242(Dimension)" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%0A%5Cwidehat%7Br%7D%20%3D%20-0.0614%20%2B%200.1242%28Dimension%29%0A" /></p>
 <p>Interestingly, for a dimension <em>m</em> of 2, this equation approximates <em>0.2
 SD</em> (which was derived initially under this condition).</p>
 </section>
@@ -929,22 +934,22 @@ SD</em> (which was derived initially under this condition).</p>
 <span class="c1">##</span>
 <span class="c1">## Name | Model |        AIC | AIC weights |        BIC | BIC weights |    R2 | R2 (adj.) |  RMSE | Sigma</span>
 <span class="c1">## ------------------------------------------------------------------------------------------------------</span>
-<span class="c1">## m1   |    lm |  33585.953 |     &lt; 0.001 |  33603.640 |     &lt; 0.001 | 0.000 |     0.000 | 0.336 | 0.336</span>
-<span class="c1">## m2   |    lm | -25540.041 |     &lt; 0.001 | -25513.511 |     &lt; 0.001 | 0.685 |     0.685 | 0.189 | 0.189</span>
-<span class="c1">## m3   |    lm | -71728.578 |        1.00 | -71702.047 |        1.00 | 0.872 |     0.872 | 0.120 | 0.120</span>
-<span class="c1">## m4   |    lm | -62908.066 |     &lt; 0.001 | -62881.536 |     &lt; 0.001 | 0.848 |     0.848 | 0.131 | 0.131</span>
-<span class="c1">## m5   |    lm |  25019.618 |     &lt; 0.001 |  25046.149 |     &lt; 0.001 | 0.154 |     0.154 | 0.309 | 0.309</span>
-<span class="c1">## m6   |    lm | -41188.883 |     &lt; 0.001 | -41162.352 |     &lt; 0.001 | 0.768 |     0.768 | 0.162 | 0.162</span>
+<span class="c1">## m1   |    lm |  33613.471 |     &lt; 0.001 |  33631.158 |     &lt; 0.001 | 0.000 |     0.000 | 0.336 | 0.336</span>
+<span class="c1">## m2   |    lm | -24959.346 |     &lt; 0.001 | -24932.816 |     &lt; 0.001 | 0.681 |     0.681 | 0.190 | 0.190</span>
+<span class="c1">## m3   |    lm | -61079.172 |     &lt; 0.001 | -61052.642 |     &lt; 0.001 | 0.843 |     0.843 | 0.133 | 0.133</span>
+<span class="c1">## m4   |    lm | -63724.621 |        1.00 | -63698.091 |        1.00 | 0.851 |     0.851 | 0.130 | 0.130</span>
+<span class="c1">## m5   |    lm |  24952.343 |     &lt; 0.001 |  24978.874 |     &lt; 0.001 | 0.156 |     0.156 | 0.309 | 0.309</span>
+<span class="c1">## m6   |    lm | -31051.122 |     &lt; 0.001 | -31024.592 |     &lt; 0.001 | 0.717 |     0.717 | 0.179 | 0.179</span>
 </pre></div>
 </div>
 <p>In order to approximate
 <img alt="r_{maxApEn}" src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;r_%7BmaxApEn%7D" />,
-the best two methods were to use cut-offs points of recurrence rate <em>RR</em>
-and of the number of nearest neighbours <em>NN</em>. However, these two methods
-are very computationally expensive (<em>RR</em> even surpassing max. ApEn),
-casting doubt on their practical usefulness.</p>
+the best two methods were cut-offs points of recurrence rate <em>RR</em> and of
+the number of nearest neighbours <em>NN</em>. However, these two methods are
+very computationally expensive (<em>RR</em> even surpassing max. ApEn), casting
+doubt on their practical usefulness.</p>
 <p>From the fast methods that rely only on the signal’s SD and the
-embedding dimension <em>m</em>, the <em>NeuroKit</em> method was the best (R2 = 0.77),
+embedding dimension <em>m</em>, the <em>NeuroKit</em> method was the best (R2 = 0.72),
 followed by the <em>nolds</em> adjustment, and the <em>0.2 SD</em> rule of thumb. The
 <em>Chon</em> method garnered the least evidence in our data.</p>
 </section>
