@@ -375,18 +375,23 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_tolerance.html">
+     Complexity Tolerance r
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../studies/complexity_eeg.html">
      EEG Complexity: Parameters Selection
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
-     ECG Benchmark
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../studies/erp_gam.html">
-     EEG Analysis with GAMs
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
     </a>
    </li>
    <li class="toctree-l2">
@@ -580,13 +585,13 @@ title="Open an issue"
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    - Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint</span>
+<span class="sd">    * Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint</span>
 <span class="sd">      arXiv:1003.5266.</span>
-<span class="sd">    - Kumar, D. K., Arjunan, S. P., &amp; Aliahmad, B. (2017). Fractals: applications in biological</span>
+<span class="sd">    * Kumar, D. K., Arjunan, S. P., &amp; Aliahmad, B. (2017). Fractals: applications in biological</span>
 <span class="sd">      Signalling and image processing. CRC Press.</span>
-<span class="sd">    - Wang, H., Li, J., Guo, L., Dou, Z., Lin, Y., &amp; Zhou, R. (2017). Fractal complexity-based</span>
+<span class="sd">    * Wang, H., Li, J., Guo, L., Dou, Z., Lin, Y., &amp; Zhou, R. (2017). Fractal complexity-based</span>
 <span class="sd">      feature extraction algorithm of communication signals. Fractals, 25(04), 1740008.</span>
-<span class="sd">    - Goh, C., Hamadicharef, B., Henderson, G., &amp; Ifeachor, E. (2005, June). Comparison of fractal</span>
+<span class="sd">    * Goh, C., Hamadicharef, B., Henderson, G., &amp; Ifeachor, E. (2005, June). Comparison of fractal</span>
 <span class="sd">      dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International</span>
 <span class="sd">      Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).</span>
 
@@ -609,6 +614,7 @@ title="Open an issue"
 
     <span class="c1"># 4. Compute the fractal dimension (approximation)</span>
     <span class="n">sfd</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
     <span class="c1"># Some papers (e.g., Wang et al. 2017) suggest adding np.log(2) to the numerator:</span>
     <span class="c1"># sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))</span>
     <span class="c1"># But it&#39;s unclear why. Sticking to the original formula for now.</span>

@@ -375,18 +375,23 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../studies/complexity_tolerance.html">
+     Complexity Tolerance r
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../studies/complexity_eeg.html">
      EEG Complexity: Parameters Selection
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
-     ECG Benchmark
+    <a class="reference internal" href="../../../studies/erp_gam.html">
+     EEG Analysis with GAMs
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../studies/erp_gam.html">
-     EEG Analysis with GAMs
+    <a class="reference internal" href="../../../studies/ecg_benchmark.html">
+     ECG Benchmark
     </a>
    </li>
    <li class="toctree-l2">
@@ -567,27 +572,31 @@ title="Open an issue"
 
 <span class="sd">    Different methods have been described to estimate the most appropriate tolerance value:</span>
 
-<span class="sd">    * **sd** (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be</span>
-<span class="sd">      returned.</span>
-<span class="sd">    * **adjusted_sd**: Adjusted value based on the SD and the dimension. The rationale is that</span>
-<span class="sd">      the chebyshev distance (used in various metrics) rises logarithmically with increasing</span>
-<span class="sd">      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the</span>
-<span class="sd">      chebyshev distance of vectors sampled from a univariate normal distribution. A constant of</span>
-<span class="sd">      ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in</span>
-<span class="sd">      https://github.com/CSchoel/nolds).</span>
 <span class="sd">    * **maxApEn**: Different values of tolerance will be tested and the one where the approximate</span>
 <span class="sd">      entropy (ApEn) is maximized will be selected and returned (Chen, 2008).</span>
-<span class="sd">    * **chon2009**: Acknowledging that computing multiple ApEns is computationally expensive, Chon</span>
-<span class="sd">      (2009) suggested an approximation based a heuristic algorithm that takes into account the</span>
-<span class="sd">      length of the signal, its short-term and long-term variability, and the embedding dimension</span>
-<span class="sd">      *m*. Initially defined only for *m* in [2-7], we expanded this to work with value of *m*</span>
-<span class="sd">      (though the accuracy is not guaranteed beyond *m* = 4).</span>
-<span class="sd">    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 2.5% will</span>
+<span class="sd">    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 1% will</span>
 <span class="sd">      be returned. Note that this method is currently not suited for very long signals, as it is</span>
 <span class="sd">      based on a recurrence matrix, which size is close to n^2. Help is needed to address this</span>
 <span class="sd">      limitation.</span>
 <span class="sd">    * **neighbours**: The tolerance that yields a number of nearest neighbours (NN) close to 2% will</span>
 <span class="sd">      be returned.</span>
+
+<span class="sd">    As these methods are computationally expensive, other fast heuristics are available:</span>
+
+<span class="sd">    * **sd**: r = 0.2 * standard deviation (SD) of the signal will be returned. This is the most</span>
+<span class="sd">      commonly used value in the literature, though its appropriateness is questionable.</span>
+<span class="sd">    * **nolds**: Adjusted value based on the SD and the dimension. The rationale is that</span>
+<span class="sd">      the chebyshev distance (used in various metrics) rises logarithmically with increasing</span>
+<span class="sd">      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the</span>
+<span class="sd">      chebyshev distance of vectors sampled from a univariate normal distribution. A constant of</span>
+<span class="sd">      ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in</span>
+<span class="sd">      https://github.com/CSchoel/nolds).</span>
+<span class="sd">    * **chon2009**: Acknowledging that computing multiple ApEns is computationally expensive, Chon</span>
+<span class="sd">      (2009) suggested an approximation based a heuristic algorithm that takes into account the</span>
+<span class="sd">      length of the signal, its short-term and long-term variability, and the embedding dimension</span>
+<span class="sd">      *m*. Initially defined only for *m* in [2-7], we expanded this to work with value of *m*</span>
+<span class="sd">      (though the accuracy is not guaranteed beyond *m* = 4).</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -645,9 +654,9 @@ title="Open an issue"
 <span class="sd">    The dimension can be taken into account:</span>
 <span class="sd">    .. ipython:: python</span>
 
-<span class="sd">      # Adjusted SD</span>
+<span class="sd">      # nolds method</span>
 <span class="sd">      @savefig p_complexity_tolerance2.png scale=100%</span>
-<span class="sd">      r, info = nk.complexity_tolerance(signal, method = &quot;adjusted_sd&quot;, dimension=3, show=True)</span>
+<span class="sd">      r, info = nk.complexity_tolerance(signal, method = &quot;nolds&quot;, dimension=3, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -732,13 +741,17 @@ title="Open an issue"
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;20% SD&quot;</span><span class="p">}</span>
 
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;adjusted_sd&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)):</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;adjusted_sd&quot;</span><span class="p">,</span> <span class="s2">&quot;nolds&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="p">):</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;adjusted_sd&#39; method.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;nolds&#39; method.&quot;</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.11604738531196232</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5627</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.3334</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Adjusted 20% SD&quot;</span><span class="p">}</span>
 
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chon2009&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)):</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chon&quot;</span><span class="p">,</span> <span class="s2">&quot;chon2009&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="p">):</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;chon2009&#39; method.&quot;</span><span class="p">)</span>
         <span class="n">sd1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># short-term variability</span>
@@ -765,16 +778,11 @@ title="Open an issue"
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Chon (2009)&quot;</span><span class="p">}</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s2">&quot;makowski&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span>
-        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;neurokit&#39; method.&quot;</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="mf">0.219</span>
-            <span class="o">+</span> <span class="mf">0.248</span> <span class="o">*</span> <span class="n">dimension</span>
-            <span class="o">-</span> <span class="mf">0.035</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
-            <span class="o">-</span> <span class="mf">0.017</span> <span class="o">*</span> <span class="n">dimension</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
-        <span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.06174</span> <span class="o">+</span> <span class="mf">0.12447</span> <span class="o">*</span> <span class="n">dimension</span><span class="p">)</span>  <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;NeuroKit&quot;</span><span class="p">}</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;maxapen&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]:</span>
@@ -787,7 +795,7 @@ title="Open an issue"
         <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_recurrence</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="n">r_range</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span>
         <span class="p">)</span>
-        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;2.5% Recurrence Rate&quot;</span><span class="p">})</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;1% Recurrence Rate&quot;</span><span class="p">})</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neighbours&quot;</span><span class="p">,</span> <span class="s2">&quot;neighbors&quot;</span><span class="p">,</span> <span class="s2">&quot;nn&quot;</span><span class="p">]:</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_neighbours</span><span class="p">(</span>
@@ -829,8 +837,8 @@ title="Open an issue"
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">r_range</span><span class="p">):</span>
         <span class="n">recurrence_rate</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">n</span>
-    <span class="c1"># Closest to 0.025 (2.5%)</span>
-    <span class="n">optimal</span> <span class="o">=</span> <span class="n">r_range</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">recurrence_rate</span> <span class="o">-</span> <span class="mf">0.025</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
+    <span class="c1"># Closest to 0.01 (1%)</span>
+    <span class="n">optimal</span> <span class="o">=</span> <span class="n">r_range</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">recurrence_rate</span> <span class="o">-</span> <span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
 
     <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">r_range</span><span class="p">,</span> <span class="s2">&quot;Scores&quot;</span><span class="p">:</span> <span class="n">recurrence_rate</span><span class="p">}</span>
 
@@ -913,7 +921,17 @@ title="Open an issue"
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;traditional&quot;</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;adjusted_sd&quot;</span><span class="p">,</span> <span class="s2">&quot;lu2008&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="s2">&quot;traditional&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;std&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;adjusted_sd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nolds&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chon&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chon2009&quot;</span><span class="p">,</span>
+    <span class="p">]:</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
         <span class="n">arrow_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y</span><span class="p">)])</span>
         <span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
