@@ -60,7 +60,12 @@ library(tidyverse)
 library(easystats)
 library(patchwork)
 
-df <- read.csv("data_Tolerance.csv") |> 
+df <- data.frame()
+for(i in 1:8) {
+  df <- rbind(df, read.csv(paste0("data_Tolerance_part", i, ".csv")))
+}
+
+df <- df |> 
   mutate(Iter = paste0(Signal, Noise_Intensity, Noise_Type, Length)) |> 
   group_by(Method, Dimension, Iter) |> 
   mutate(Score_N = normalize(Score)) |> 
@@ -144,15 +149,15 @@ In general, *NN* and *RR* doesn’t seem to be good indices to approximate
 Cut-offs of 1% and 2% are a possible option.
 
 ![
-\\widehat{RR} = 0.0117 - 0.0045(\\log(Dimension))
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BRR%7D%20%3D%200.0117%20-%200.0045%28%5Clog%28Dimension%29%29%0A "
-\widehat{RR} = 0.0117 - 0.0045(\log(Dimension))
+\\widehat{RR} = 0.0118 - 0.0045(\\log(Dimension))
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BRR%7D%20%3D%200.0118%20-%200.0045%28%5Clog%28Dimension%29%29%0A "
+\widehat{RR} = 0.0118 - 0.0045(\log(Dimension))
 ")
 
 ![
-\\widehat{NN} = 0.0201 - 0.0025(\\log(Dimension))
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BNN%7D%20%3D%200.0201%20-%200.0025%28%5Clog%28Dimension%29%29%0A "
-\widehat{NN} = 0.0201 - 0.0025(\log(Dimension))
+\\widehat{NN} = 0.0201 - 0.0027(\\log(Dimension))
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7BNN%7D%20%3D%200.0201%20-%200.0027%28%5Clog%28Dimension%29%29%0A "
+\widehat{NN} = 0.0201 - 0.0027(\log(Dimension))
 ")
 
 ### Development of NeuroKit Approximation
@@ -206,9 +211,9 @@ does not make sense, as the dimension is strongly related to it. Based
 on a simple regression model, we can derive the following approximation:
 
 ![
-\\widehat{r} = -0.0617 + 0.1245(Dimension)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7Br%7D%20%3D%20-0.0617%20%2B%200.1245%28Dimension%29%0A "
-\widehat{r} = -0.0617 + 0.1245(Dimension)
+\\widehat{r} = -0.0614 + 0.1242(Dimension)
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cwidehat%7Br%7D%20%3D%20-0.0614%20%2B%200.1242%28Dimension%29%0A "
+\widehat{r} = -0.0614 + 0.1242(Dimension)
 ")
 
 Interestingly, for a dimension *m* of 2, this equation approximates *0.2
@@ -239,23 +244,23 @@ compare_performance(m1, m2, m3, m4, m5, m6)
 ## 
 ## Name | Model |        AIC | AIC weights |        BIC | BIC weights |    R2 | R2 (adj.) |  RMSE | Sigma
 ## ------------------------------------------------------------------------------------------------------
-## m1   |    lm |  33585.953 |     < 0.001 |  33603.640 |     < 0.001 | 0.000 |     0.000 | 0.336 | 0.336
-## m2   |    lm | -25540.041 |     < 0.001 | -25513.511 |     < 0.001 | 0.685 |     0.685 | 0.189 | 0.189
-## m3   |    lm | -71728.578 |        1.00 | -71702.047 |        1.00 | 0.872 |     0.872 | 0.120 | 0.120
-## m4   |    lm | -62908.066 |     < 0.001 | -62881.536 |     < 0.001 | 0.848 |     0.848 | 0.131 | 0.131
-## m5   |    lm |  25019.618 |     < 0.001 |  25046.149 |     < 0.001 | 0.154 |     0.154 | 0.309 | 0.309
-## m6   |    lm | -41188.883 |     < 0.001 | -41162.352 |     < 0.001 | 0.768 |     0.768 | 0.162 | 0.162
+## m1   |    lm |  33613.471 |     < 0.001 |  33631.158 |     < 0.001 | 0.000 |     0.000 | 0.336 | 0.336
+## m2   |    lm | -24959.346 |     < 0.001 | -24932.816 |     < 0.001 | 0.681 |     0.681 | 0.190 | 0.190
+## m3   |    lm | -61079.172 |     < 0.001 | -61052.642 |     < 0.001 | 0.843 |     0.843 | 0.133 | 0.133
+## m4   |    lm | -63724.621 |        1.00 | -63698.091 |        1.00 | 0.851 |     0.851 | 0.130 | 0.130
+## m5   |    lm |  24952.343 |     < 0.001 |  24978.874 |     < 0.001 | 0.156 |     0.156 | 0.309 | 0.309
+## m6   |    lm | -31051.122 |     < 0.001 | -31024.592 |     < 0.001 | 0.717 |     0.717 | 0.179 | 0.179
 ```
 
 In order to approximate
 ![r\_{maxApEn}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r_%7BmaxApEn%7D "r_{maxApEn}"),
-the best two methods were to use cut-offs points of recurrence rate *RR*
-and of the number of nearest neighbours *NN*. However, these two methods
-are very computationally expensive (*RR* even surpassing max. ApEn),
-casting doubt on their practical usefulness.
+the best two methods were cut-offs points of recurrence rate *RR* and of
+the number of nearest neighbours *NN*. However, these two methods are
+very computationally expensive (*RR* even surpassing max. ApEn), casting
+doubt on their practical usefulness.
 
 From the fast methods that rely only on the signal’s SD and the
-embedding dimension *m*, the *NeuroKit* method was the best (R2 = 0.77),
+embedding dimension *m*, the *NeuroKit* method was the best (R2 = 0.72),
 followed by the *nolds* adjustment, and the *0.2 SD* rule of thumb. The
 *Chon* method garnered the least evidence in our data.
 

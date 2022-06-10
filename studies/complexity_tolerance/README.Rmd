@@ -50,7 +50,12 @@ library(tidyverse)
 library(easystats)
 library(patchwork)
 
-df <- read.csv("data_Tolerance.csv") |> 
+df <- data.frame()
+for(i in 1:16) {
+  df <- rbind(df, read.csv(paste0("data_Tolerance_part", i, ".csv")))
+}
+
+df <- df |> 
   mutate(Iter = paste0(Signal, Noise_Intensity, Noise_Type, Length)) |> 
   group_by(Method, Dimension, Iter) |> 
   mutate(Score_N = normalize(Score)) |> 
@@ -200,7 +205,7 @@ m6 <- lm(maxApEn ~ NeuroKit, data=data)
 compare_performance(m1, m2, m3, m4, m5, m6)
 ```
 
-In order to approximate $r_{maxApEn}$, the best two methods were to use cut-offs points of recurrence rate *RR* and of the number of nearest neighbours *NN*. However, these two methods are very computationally expensive (*RR* even surpassing max. ApEn), casting doubt on their practical usefulness.
+In order to approximate $r_{maxApEn}$, the best two methods were cut-offs points of recurrence rate *RR* and of the number of nearest neighbours *NN*. However, these two methods are very computationally expensive (*RR* even surpassing max. ApEn), casting doubt on their practical usefulness.
 
 From the fast methods that rely only on the signal's SD and the embedding dimension *m*, the *NeuroKit* method was the best (R2 = `r format_value(r2(m6)$R2)`), followed by the *nolds* adjustment, and the *0.2 SD* rule of thumb. The *Chon* method garnered the least evidence in our data.
 

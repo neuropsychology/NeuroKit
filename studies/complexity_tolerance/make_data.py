@@ -169,7 +169,7 @@ def run_benchmark(noise_intensity=0.01):
                         delay=delay,
                         dimension=m,
                         r_range=r_range,
-                        method="adjusted_sd",
+                        method="nolds",
                     )
                     r6, _ = nk.complexity_tolerance(
                         signal_,
@@ -249,7 +249,7 @@ out = nk.parallel_run(
 )
 
 pd.concat([out[i][0] for i in range(len(out))]).to_csv("data_Signals.csv", index=False)
-pd.concat([out[i][1] for i in range(len(out))]).to_csv("data_Tolerance.csv", index=False)
-
+# pd.concat([out[i][1] for i in range(len(out))]).to_csv("data_Tolerance.csv", index=False)
+nk.write_csv(pd.concat([out[i][1] for i in range(len(out))]), "data_Tolerance", parts=6)
 
 print("FINISHED.")

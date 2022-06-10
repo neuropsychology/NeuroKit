@@ -28,6 +28,11 @@ def complexity_tolerance(
     similar points that we "tolerate"). This parameter has a critical impact and is a major
     source of inconsistencies in the literature.
 
+    .. tip::
+
+        To know more about the different methods and their parameters, please refer to our
+        `study <https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html>`_.
+
     Different methods have been described to estimate the most appropriate tolerance value:
 
     * **maxApEn**: Different values of tolerance will be tested and the one where the approximate
@@ -61,7 +66,8 @@ def complexity_tolerance(
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        Can be ``"maxApEn"`` (default), ``"sd"`` (or ``"default"``), or ``"recurrence"``.
+        Can be ``"maxApEn"`` (default), ``"sd"``, ``"recurrence"``, ``"neighbours"``, ``"nolds"``,
+        ``"chon2009"``, or ``"neurokit"``.
     r_range : Union[list, int]
         The range of tolerance values (or the number of values) to test. Only used if ``method`` is
         ``"maxApEn"`` or ``"recurrence"``. If ``None`` (default), the default range will be used;
@@ -84,7 +90,7 @@ def complexity_tolerance(
     float
         The optimal tolerance value.
     dict
-        A dictionary with the values of r and the corresponding ApEn values (when ``method="maxApEn"``).
+        A dictionary containing additional information.
 
     Examples
     ----------
@@ -238,9 +244,11 @@ def complexity_tolerance(
     elif method in ["neurokit", "makowski"] and (
         isinstance(dimension, (int, float)) or dimension is None
     ):
+        # Method described in
+        # https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html
         if dimension is None:
             raise ValueError("'dimension' cannot be empty for the 'neurokit' method.")
-        r = (-0.06174 + 0.12447 * dimension)  * np.std(signal, ddof=1)
+        r = (-0.06174 + 0.12447 * dimension) * np.std(signal, ddof=1)
         info = {"Method": "NeuroKit"}
 
     elif method in ["maxapen", "optimize"]:
