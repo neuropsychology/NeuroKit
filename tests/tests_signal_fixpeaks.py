@@ -241,7 +241,8 @@ def test_neurokit_method_returns_only_positive_indices(testpeaks_for_neurokit_me
     peaks_corrected = nk.signal_fixpeaks(peaks=testpeaks_for_neurokit_method, interval_min=0.5,
                                          interval_max=interval_max,
                                          interpolate_on_peaks=interpolate_on_peaks,
-                                         method="neurokit")
+                                         method="neurokit",
+                                         n_nan_large_interval=None)
     assert np.all(peaks_corrected >= 0)
 
 
@@ -251,7 +252,8 @@ def test_neurokit_method_returns_no_duplicates(testpeaks_for_neurokit_method, in
     peaks_corrected = nk.signal_fixpeaks(peaks=testpeaks_for_neurokit_method, interval_min=0.5,
                                          interval_max=interval_max,
                                          interpolate_on_peaks=interpolate_on_peaks,
-                                         method="neurokit")
+                                         method="neurokit",
+                                         n_nan_large_interval=None)
     assert np.unique(peaks_corrected).size == peaks_corrected.size
 
 
@@ -261,5 +263,6 @@ def test_neurokit_method_returns_strictly_increasing_indices(testpeaks_for_neuro
     peaks_corrected = nk.signal_fixpeaks(peaks=testpeaks_for_neurokit_method, interval_min=0.5,
                                          interval_max=interval_max,
                                          interpolate_on_peaks=interpolate_on_peaks,
-                                         method="neurokit")
+                                         method="neurokit",
+                                         n_nan_large_interval=None)
     assert np.all(np.diff(peaks_corrected) > 0)
