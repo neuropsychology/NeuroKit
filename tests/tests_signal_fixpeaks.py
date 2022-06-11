@@ -229,7 +229,7 @@ def test_missed_correction_wrapper(peaks_correct, peaks_missed, iterative, rmssd
 def testpeaks_for_neurokit_method():
     signal = nk.signal_simulate(duration=20, sampling_rate=1000, frequency=1)
     peaks_true = nk.signal_findpeaks(signal)["Peaks"]
-    peaks = np.delete(peaks_true, [5,6,7,8,9,10,15,16,17])  # create gaps
+    peaks = np.delete(peaks_true, [5,6,7,8,9,10,15,16,17,19])  # create gaps
     # (I added more than in the example in the function docstring)
     peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
     return peaks
