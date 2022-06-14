@@ -629,13 +629,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#per-subject">
-       Per Subject
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#d-attractors">
-       2D Attractors
+      <a class="reference internal nav-link" href="#attractors">
+       Attractors
       </a>
      </li>
     </ul>
@@ -644,8 +639,25 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#optimization-of-dimension">
      Optimization of Dimension
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       Per Channel
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#topological-clusters">
+     Topological Clusters
+    </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#discussion">
+   Discussion
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#references">
@@ -698,13 +710,8 @@ Complexity Analysis</h1>
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#per-subject">
-       Per Subject
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#d-attractors">
-       2D Attractors
+      <a class="reference internal nav-link" href="#attractors">
+       Attractors
       </a>
      </li>
     </ul>
@@ -713,8 +720,25 @@ Complexity Analysis</h1>
     <a class="reference internal nav-link" href="#optimization-of-dimension">
      Optimization of Dimension
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       Per Channel
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#topological-clusters">
+     Topological Clusters
+    </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#discussion">
+   Discussion
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#references">
@@ -741,8 +765,10 @@ Complexity Analysis<a class="headerlink" href="#optimal-selection-of-delay-embed
 <ul>
 <li><p><span class="xref myst">Optimization of Delay</span></p></li>
 <li><p><span class="xref myst">Optimization of Dimension</span></p></li>
+<li><p><span class="xref myst">Topological Clusters</span></p></li>
 </ul>
 </li>
+<li><p><span class="xref myst">Discussion</span></p></li>
 <li><p><span class="xref myst">References</span></p></li>
 </ul>
 <p><em>This study can be referenced by</em> <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html"><em>citing the package and the
@@ -752,7 +778,7 @@ have the time. If you want to help to make it happen, please contact
 us!</strong></p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
-<p>The aim is to assess the optimal complexity parameters.</p>
+<p>The aim is to assess the optimal complexity parameters for EEG signals.</p>
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">#</a></h2>
@@ -768,12 +794,14 @@ us!</strong></p>
             <span class="n">Lowpass</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">Lowpass</span><span class="p">),</span>
             <span class="n">n_Participants</span> <span class="o">=</span> <span class="nf">n_distinct</span><span class="p">(</span><span class="n">Participant</span><span class="p">),</span>
             <span class="n">n_Channels</span> <span class="o">=</span> <span class="nf">n_distinct</span><span class="p">(</span><span class="n">Channel</span><span class="p">))</span>
-<span class="c1">## # A tibble: 3 × 6</span>
-<span class="c1">##   Dataset     Sampling_Rate Original_Frequenc… Lowpass n_Participants n_Channels</span>
-<span class="c1">##   &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;          &lt;int&gt;      &lt;int&gt;</span>
-<span class="c1">## 1 Lemon                 250 0.0-125.0              120              2         61</span>
-<span class="c1">## 2 SRM                  1024 0.0-512.0              120              4         64</span>
-<span class="c1">## 3 Wang (2022)           500 0.0-250.0              120              2         61</span>
+<span class="c1">## # A tibble: 5 × 6</span>
+<span class="c1">##   Dataset       Sampling_Rate Original_Freque… Lowpass n_Participants n_Channels</span>
+<span class="c1">##   &lt;chr&gt;                 &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;          &lt;int&gt;      &lt;int&gt;</span>
+<span class="c1">## 1 Lemon                   250 0.0-125.0             50            108         61</span>
+<span class="c1">## 2 Resting-Stat…          1000 0.0-280.0             50             37         63</span>
+<span class="c1">## 3 Resting-Stat…          1000 0.0-500.0             50             44        126</span>
+<span class="c1">## 4 SRM                    1024 0.0-512.0             50            111         64</span>
+<span class="c1">## 5 Wang (2022)             500 0.0-250.0             50             59         62</span>
 </pre></div>
 </div>
 </section>
@@ -782,7 +810,7 @@ us!</strong></p>
 <section id="optimization-of-delay">
 <h3>Optimization of Delay<a class="headerlink" href="#optimization-of-delay" title="Permalink to this headline">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data_delay</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_delay.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
-  <span class="nf">mutate</span><span class="p">(</span><span class="n">Metric</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Metric</span><span class="p">,</span> <span class="s">&quot;Mutual Information&quot;</span><span class="p">,</span> <span class="s">&quot;Mutual Information 2&quot;</span><span class="p">),</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Metric</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Metric</span><span class="p">,</span> <span class="s">&quot;Mutual Information&quot;</span><span class="p">),</span>
          <span class="n">Value</span> <span class="o">=</span> <span class="n">Value</span><span class="o">/</span><span class="n">Sampling_Rate</span><span class="o">*</span><span class="m">1000</span><span class="p">,</span>
          <span class="n">Optimal</span> <span class="o">=</span> <span class="n">Optimal</span><span class="o">/</span><span class="n">Sampling_Rate</span><span class="o">*</span><span class="m">1000</span><span class="p">,</span>
          <span class="n">Optimal</span> <span class="o">=</span> <span class="n">Optimal</span><span class="p">)</span> <span class="o">|&gt;</span>
@@ -810,7 +838,9 @@ us!</strong></p>
 <h4>Per Channel<a class="headerlink" href="#per-channel" title="Permalink to this headline">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">delay_perchannel</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">Dataset</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">)</span> <span class="o">|&gt;</span>
-    <span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span> <span class="o">=</span> <span class="n">Score</span> <span class="o">+</span> <span class="m">1</span><span class="p">)</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">Metric</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span> <span class="o">=</span> <span class="m">1</span> <span class="o">+</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">)</span> <span class="o">*</span> <span class="m">100</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">ungroup</span><span class="p">()</span>
 
   <span class="n">by_channel</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
     <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
@@ -819,106 +849,395 @@ us!</strong></p>
     <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
     <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
-  <span class="n">by_channel</span> <span class="o">|&gt;</span>
+  <span class="n">p</span> <span class="o">&lt;-</span> <span class="n">by_channel</span> <span class="o">|&gt;</span>
     <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Value</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Score</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Area</span><span class="p">))</span> <span class="o">+</span>
     <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">Channel</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.20</span><span class="p">)</span> <span class="o">+</span>
     <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">by_area</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">Area</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
-    <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">25</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
-    <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="o">*</span><span class="n">Metric</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free_y&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">27</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">25</span><span class="p">,</span> <span class="m">30</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dotted&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
     <span class="n">see</span><span class="o">::</span><span class="nf">scale_color_flat_d</span><span class="p">(</span><span class="n">palette</span> <span class="o">=</span> <span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
     <span class="nf">scale_y_log10</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
-    <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span>
-                       <span class="n">limits</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span>
-                       <span class="n">breaks</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">80</span><span class="p">,</span> <span class="m">20</span><span class="p">)),</span>
-                       <span class="n">labels</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">80</span><span class="p">,</span> <span class="m">20</span><span class="p">)))</span> <span class="o">+</span>
+    <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+    <span class="c1">#                    limits = c(0, NA),</span>
+    <span class="c1">#                    breaks=c(5, seq(0, 80, 20)),</span>
+    <span class="c1">#                    labels=c(5, seq(0, 80, 20))) +</span>
     <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Dataset: &quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">),</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
     <span class="nf">guides</span><span class="p">(</span><span class="n">colour</span> <span class="o">=</span> <span class="nf">guide_legend</span><span class="p">(</span><span class="n">override.aes</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="m">1</span><span class="p">)))</span> <span class="o">+</span>
     <span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
     <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="s">&quot;plain&quot;</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0</span><span class="p">))</span>
+
+  <span class="nf">if</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Condition</span><span class="p">))</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">p</span> <span class="o">&lt;-</span> <span class="n">p</span> <span class="o">+</span> <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free_y&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+    <span class="n">p</span> <span class="o">&lt;-</span> <span class="n">p</span> <span class="o">+</span> <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free_y&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="n">p</span>
 <span class="p">}</span>
 
 <span class="n">p1</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span>
-<span class="c1"># p2 &lt;- delay_perchannel(data_delay, dataset=&quot;Texas&quot;)</span>
-<span class="n">p3</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;SRM&quot;</span><span class="p">)</span>
-<span class="n">p4</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Wang (2022)&quot;</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;SRM&quot;</span><span class="p">)</span>
+<span class="n">p3</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Wang (2022)&quot;</span><span class="p">)</span>
+<span class="n">p4</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Resting-State (SG)&quot;</span><span class="p">)</span>
+<span class="n">p5</span> <span class="o">&lt;-</span> <span class="nf">delay_perchannel</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Resting-State (FR)&quot;</span><span class="p">)</span>
 
-<span class="n">p1</span> <span class="o">/</span> <span class="n">p3</span> <span class="o">/</span> <span class="n">p4</span> <span class="o">+</span>
-  <span class="nf">plot_layout</span><span class="p">(</span><span class="n">heights</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">))</span> <span class="o">+</span>
+
+<span class="n">m</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">bam</span><span class="p">(</span><span class="n">Score</span> <span class="o">~</span> <span class="nf">s</span><span class="p">(</span><span class="n">Value</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">Area</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="m">-1</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;cs&quot;</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="nf">s</span><span class="p">(</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;re&quot;</span><span class="p">),</span>
+               <span class="n">data</span><span class="o">=</span><span class="n">data_delay</span> <span class="o">|&gt;</span>
+                 <span class="nf">mutate</span><span class="p">(</span><span class="n">Dataset</span><span class="o">=</span><span class="nf">as.factor</span><span class="p">(</span><span class="n">Dataset</span><span class="p">)))</span>
+
+<span class="n">p6</span> <span class="o">&lt;-</span> <span class="nf">estimate_relation</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Value&quot;</span><span class="p">,</span> <span class="s">&quot;Area&quot;</span><span class="p">),</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Predicted</span> <span class="o">=</span> <span class="m">1</span> <span class="o">+</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Predicted</span><span class="p">)</span> <span class="o">*</span> <span class="m">100</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Value</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Predicted</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Area</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">27</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">25</span><span class="p">,</span> <span class="m">30</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dotted&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">see</span><span class="o">::</span><span class="nf">scale_color_flat_d</span><span class="p">(</span><span class="n">palette</span> <span class="o">=</span> <span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_y_log10</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Average&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span>  <span class="o">+</span>
+  <span class="nf">guides</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span>
+
+<span class="c1"># p6 &lt;- data_delay |&gt;</span>
+<span class="c1">#   group_by(Area, Value) |&gt;</span>
+<span class="c1">#   summarise(Score = mean(Score)) |&gt;</span>
+<span class="c1">#   mutate(Score = 1 + normalize(Score) * 100) |&gt;</span>
+<span class="c1">#   ggplot(aes(x = Value, y = Score, color = Area))  +</span>
+<span class="c1">#   # geom_point2(size=3, alpha=0.3) +</span>
+<span class="c1">#   geom_line(size=0.5) +</span>
+<span class="c1">#   geom_smooth(size=1, se=FALSE, method = &#39;loess&#39;) +</span>
+<span class="c1">#   geom_vline(xintercept = c(27), linetype = &quot;dashed&quot;, size = 0.5) +</span>
+<span class="c1">#   see::scale_color_flat_d(palette = &quot;rainbow&quot;) +</span>
+<span class="c1">#   scale_y_log10(expand = c(0, 0)) +</span>
+<span class="c1">#   scale_x_continuous(expand = c(0, 0)) +</span>
+<span class="c1">#   labs(title = &quot;Average&quot;, x = NULL, y = NULL) +</span>
+<span class="c1">#   see::theme_modern()  +</span>
+<span class="c1">#   guides(color=&quot;none&quot;)</span>
+
+<span class="p">(</span><span class="n">p1</span> <span class="o">|</span> <span class="n">p3</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">p4</span> <span class="o">|</span> <span class="n">p5</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">p2</span> <span class="o">|</span> <span class="n">p6</span><span class="p">)</span> <span class="o">+</span> <span class="nf">plot_layout</span><span class="p">(</span><span class="n">heights</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">guides</span><span class="o">=</span><span class="s">&quot;collect&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Optimization of Delay&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/delay_perchannel-1.png" /><!-- --></p>
+<!-- #### Per Subject -->
+<!-- ```{r delay_persubject, warning=FALSE, message=FALSE, fig.height=16, fig.width=10} -->
+<!-- delay_persubject <- function(data_delay, dataset="Lemon") { -->
+<!--   data <- filter(data_delay, Dataset == dataset) |>  -->
+<!--     mutate(Score = 1 + Score) -->
+<!--   by_subject <- data |> -->
+<!--     group_by(Condition, Metric, Area, Participant, Value) |> -->
+<!--     summarise_all(mean) -->
+<!--   by_area <- data |> -->
+<!--     group_by(Condition, Metric, Area, Value) |> -->
+<!--     summarise_all(mean) -->
+<!--   by_subject |> -->
+<!--     mutate(group = paste0(Participant, Area)) |> -->
+<!--     ggplot(aes(x = Value, y = Score, color = Area)) + -->
+<!--     geom_line(aes(group=group), alpha = 0.20) + -->
+<!--     geom_line(data=by_area, aes(group=Area), size=1) + -->
+<!--     geom_vline(xintercept = c(27), linetype = "dashed", size = 0.5) + -->
+<!--     facet_wrap(~Condition*Metric, scales = "free_y") + -->
+<!--     see::scale_color_flat_d(palette = "rainbow") + -->
+<!--     scale_y_log10(expand = c(0, 0)) + -->
+<!--     scale_x_continuous(expand = c(0, 0),  -->
+<!--                        limits = c(0, NA),  -->
+<!--                        breaks=c(5, seq(0, 80, 20)),  -->
+<!--                        labels=c(5, seq(0, 80, 20))) + -->
+<!--     labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) + -->
+<!--     guides(colour = guide_legend(override.aes = list(alpha = 1))) + -->
+<!--     see::theme_modern() + -->
+<!--     theme(plot.title = element_text(face = "plain", hjust = 0)) -->
+<!-- } -->
+<!-- p1 <- delay_persubject(data_delay, dataset="Lemon") -->
+<!-- # p2 <- delay_persubject(data_delay, dataset="Texas") -->
+<!-- p3 <- delay_persubject(data_delay, dataset="SRM") -->
+<!-- p4 <- delay_persubject(data_delay, dataset="Wang (2022)") -->
+<!-- p1 / p3 / p4 + -->
+<!--   plot_layout(heights = c(2, 1, 2)) + -->
+<!--   plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))) -->
+<!-- ``` -->
 </section>
-<section id="per-subject">
-<h4>Per Subject<a class="headerlink" href="#per-subject" title="Permalink to this headline">#</a></h4>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">delay_persubject</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">Dataset</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">)</span>
+<section id="attractors">
+<h4>Attractors<a class="headerlink" href="#attractors" title="Permalink to this headline">#</a></h4>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_attractor.csv&quot;</span><span class="p">)</span>
 
-  <span class="n">by_subject</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
-    <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Participant</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
-    <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
-  <span class="n">by_area</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
-    <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
-    <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
-
-  <span class="n">by_subject</span> <span class="o">|&gt;</span>
-    <span class="nf">mutate</span><span class="p">(</span><span class="n">group</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">Participant</span><span class="p">,</span> <span class="n">Area</span><span class="p">))</span> <span class="o">|&gt;</span>
-    <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Value</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Score</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Area</span><span class="p">))</span> <span class="o">+</span>
-    <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.20</span><span class="p">)</span> <span class="o">+</span>
-    <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">by_area</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">Area</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
-    <span class="c1"># geom_vline(xintercept = 10, linetype = &quot;dashed&quot;, size = 0.5) +</span>
-    <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="o">*</span><span class="n">Metric</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free_y&quot;</span><span class="p">)</span> <span class="o">+</span>
-    <span class="n">see</span><span class="o">::</span><span class="nf">scale_color_flat_d</span><span class="p">(</span><span class="n">palette</span> <span class="o">=</span> <span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
-    <span class="nf">scale_y_log10</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
-    <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span>
-                       <span class="n">limits</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="kc">NA</span><span class="p">),</span>
-                       <span class="n">breaks</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">80</span><span class="p">,</span> <span class="m">20</span><span class="p">)),</span>
-                       <span class="n">labels</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">80</span><span class="p">,</span> <span class="m">20</span><span class="p">)))</span> <span class="o">+</span>
-    <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Dataset: &quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">),</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
-    <span class="nf">guides</span><span class="p">(</span><span class="n">colour</span> <span class="o">=</span> <span class="nf">guide_legend</span><span class="p">(</span><span class="n">override.aes</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="m">1</span><span class="p">)))</span> <span class="o">+</span>
-    <span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
-    <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="s">&quot;plain&quot;</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0</span><span class="p">))</span>
-<span class="p">}</span>
-
-<span class="n">p1</span> <span class="o">&lt;-</span> <span class="nf">delay_persubject</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span>
-<span class="c1"># p2 &lt;- delay_persubject(data_delay, dataset=&quot;Texas&quot;)</span>
-<span class="n">p3</span> <span class="o">&lt;-</span> <span class="nf">delay_persubject</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;SRM&quot;</span><span class="p">)</span>
-<span class="n">p4</span> <span class="o">&lt;-</span> <span class="nf">delay_persubject</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Wang (2022)&quot;</span><span class="p">)</span>
-
-<span class="n">p1</span> <span class="o">/</span> <span class="n">p3</span> <span class="o">/</span> <span class="n">p4</span> <span class="o">+</span>
-  <span class="nf">plot_layout</span><span class="p">(</span><span class="n">heights</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Optimization of Delay&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
-</pre></div>
-</div>
-<p><img alt="" src="../_images/delay_persubject-1.png" /><!-- --></p>
-</section>
-<section id="d-attractors">
-<h4>2D Attractors<a class="headerlink" href="#d-attractors" title="Permalink to this headline">#</a></h4>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_attractor2D.csv&quot;</span><span class="p">)</span>
-
-<span class="n">data</span> <span class="o">|&gt;</span>
-  <span class="nf">mutate</span><span class="p">(</span><span class="n">Delay</span> <span class="o">=</span> <span class="n">Delay</span><span class="o">/</span><span class="n">Sampling_Rate</span><span class="o">*</span><span class="m">1000</span><span class="p">)</span> <span class="o">|&gt;</span>
+<span class="n">p</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Delay</span> <span class="o">=</span> <span class="n">Delay</span><span class="o">/</span><span class="n">Sampling_Rate</span><span class="o">*</span><span class="m">1000</span><span class="p">,</span>
+         <span class="n">Channel</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Channel</span><span class="p">,</span> <span class="s">&quot;Fz&quot;</span><span class="p">,</span> <span class="s">&quot;Cz&quot;</span><span class="p">,</span> <span class="s">&quot;Pz&quot;</span><span class="p">,</span> <span class="s">&quot;Oz&quot;</span><span class="p">),</span>
+         <span class="n">z</span> <span class="o">=</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="o">|&gt;</span>
   <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">Time</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">0.1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">z</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">0.1</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">facet_grid</span><span class="p">(</span><span class="n">Channel</span><span class="o">~</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">scales</span><span class="o">=</span><span class="s">&quot;free&quot;</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">guides</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">expression</span><span class="p">(</span><span class="s">&quot;Voltage at&quot;</span><span class="o">~</span><span class="nf">italic</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">])),</span> <span class="n">y</span> <span class="o">=</span> <span class="nf">expression</span><span class="p">(</span><span class="s">&quot;Voltage at&quot;</span><span class="o">~</span><span class="nf">italic</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">~+~</span><span class="s">&quot;τ&quot;</span><span class="p">)))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;EEG Attractors&quot;</span><span class="p">,</span>
+       <span class="n">subtitle</span> <span class="o">=</span> <span class="s">&quot;(30 seconds of signal)&quot;</span><span class="p">,</span>
+       <span class="n">x</span> <span class="o">=</span> <span class="nf">expression</span><span class="p">(</span><span class="s">&quot;Voltage at&quot;</span><span class="o">~</span><span class="nf">italic</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">])),</span>
+       <span class="c1"># y = expression(&quot;Voltage at&quot;~italic(t[0]~+~&quot;τ&quot;)~&quot; (27 ms)&quot;),</span>
+       <span class="n">y</span> <span class="o">=</span> <span class="nf">expression</span><span class="p">(</span><span class="s">&quot;Voltage at&quot;</span><span class="o">~</span><span class="nf">italic</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="m">0</span><span class="p">])</span><span class="o">~</span><span class="s">&quot; + 27 ms&quot;</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="c1"># scale_color_manual(values=c(&quot;Fz&quot;=&quot;#4A148C&quot;, &quot;Cz&quot;=&quot;#1B5E20&quot;, &quot;Pz&quot;=&quot;#E65100&quot;, &quot;Oz&quot;=&quot;#F57F17&quot;)) +</span>
+  <span class="c1"># scale_color_manual(values=c(&quot;Fz&quot;=&quot;#18062E&quot;, &quot;Cz&quot;=&quot;#09200A&quot;, &quot;Pz&quot;=&quot;#4C1B00&quot;, &quot;Oz&quot;=&quot;#512B07&quot;)) +</span>
+  <span class="nf">scale_colour_gradientn</span><span class="p">(</span><span class="n">colours</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;#FF9800&quot;</span><span class="p">,</span> <span class="s">&quot;#F44336&quot;</span><span class="p">,</span> <span class="s">&quot;black&quot;</span><span class="p">,</span> <span class="s">&quot;#1E88E5&quot;</span><span class="p">,</span> <span class="s">&quot;#4CAF50&quot;</span><span class="p">),</span> <span class="n">guide</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">coord_cartesian</span><span class="p">(</span><span class="n">xlim</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-5</span><span class="p">,</span> <span class="m">5</span><span class="p">),</span> <span class="n">ylim</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-5</span><span class="p">,</span> <span class="m">5</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
   <span class="nf">theme</span><span class="p">(</span><span class="n">panel.background</span> <span class="o">=</span> <span class="nf">element_rect</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="s">&quot;#FFFCF0&quot;</span><span class="p">),</span>
         <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
         <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
         <span class="n">axis.text</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
-        <span class="n">axis.ticks</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span>
+        <span class="n">axis.ticks</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+        <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">),</span>
+        <span class="n">plot.subtitle</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;italic&quot;</span><span class="p">))</span>
+
+<span class="nf">ggsave</span><span class="p">(</span><span class="s">&quot;figures/attractors2D.png&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="m">15</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="m">15</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="m">300</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><img alt="" src="studies/figures/attractors2D.png" /><!-- --></p>
 </section>
 </section>
 <section id="optimization-of-dimension">
 <h3>Optimization of Dimension<a class="headerlink" href="#optimization-of-dimension" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data_dim</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_dimension.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Area</span> <span class="o">=</span> <span class="nf">str_remove_all</span><span class="p">(</span><span class="n">Channel</span><span class="p">,</span> <span class="s">&quot;[:digit:]|z&quot;</span><span class="p">),</span>
+         <span class="n">Area</span> <span class="o">=</span> <span class="nf">substring</span><span class="p">(</span><span class="n">Channel</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span>
+         <span class="n">Area</span> <span class="o">=</span> <span class="nf">case_when</span><span class="p">(</span><span class="n">Area</span> <span class="o">==</span> <span class="s">&quot;I&quot;</span> <span class="o">~</span> <span class="s">&quot;O&quot;</span><span class="p">,</span>
+                          <span class="n">Area</span> <span class="o">==</span> <span class="s">&quot;A&quot;</span> <span class="o">~</span> <span class="s">&quot;F&quot;</span><span class="p">,</span>
+                          <span class="kc">TRUE</span> <span class="o">~</span> <span class="n">Area</span><span class="p">),</span>
+         <span class="n">Area</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Area</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;F&quot;</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">,</span> <span class="s">&quot;T&quot;</span><span class="p">,</span> <span class="s">&quot;P&quot;</span><span class="p">,</span> <span class="s">&quot;O&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<section id="id1">
+<h4>Per Channel<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h4>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dim_perchannel</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">Dataset</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span> <span class="o">=</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span>
+
+  <span class="n">by_channel</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+  <span class="n">by_area</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Area</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+  <span class="n">deriv</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Value</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span> <span class="o">=</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span> <span class="o">-</span> <span class="nf">lag</span><span class="p">(</span><span class="n">Score</span><span class="p">)),</span>
+           <span class="n">Score2</span> <span class="o">=</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span> <span class="o">-</span> <span class="nf">lag</span><span class="p">(</span><span class="n">Score</span><span class="p">)))</span>
+
+  <span class="n">by_channel</span> <span class="o">|&gt;</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">Value</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Value</span><span class="p">))</span> <span class="o">|&gt;</span>
+    <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Value</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Score</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">deriv</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="s">&quot;1st order&quot;</span><span class="p">),</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dashed&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">deriv</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">Score2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="s">&quot;2nd order&quot;</span><span class="p">),</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">Channel</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Area</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.20</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">by_area</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">Area</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Area</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free_y&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="n">see</span><span class="o">::</span><span class="nf">scale_color_flat_d</span><span class="p">(</span><span class="n">palette</span> <span class="o">=</span> <span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_x_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_alpha_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;1st order&quot;</span><span class="o">=</span><span class="m">0.6</span><span class="p">,</span> <span class="s">&quot;2nd order&quot;</span><span class="o">=</span><span class="m">0.3</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&quot;Dataset: &quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">),</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="s">&quot;Derivatives&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">guides</span><span class="p">(</span><span class="n">colour</span> <span class="o">=</span> <span class="nf">guide_legend</span><span class="p">(</span><span class="n">override.aes</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="m">1</span><span class="p">)))</span> <span class="o">+</span>
+    <span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="s">&quot;plain&quot;</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="n">p1</span> <span class="o">&lt;-</span> <span class="nf">dim_perchannel</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="nf">dim_perchannel</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;SRM&quot;</span><span class="p">)</span>
+<span class="n">p3</span> <span class="o">&lt;-</span> <span class="nf">dim_perchannel</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Wang (2022)&quot;</span><span class="p">)</span>
+<span class="n">p4</span> <span class="o">&lt;-</span> <span class="nf">dim_perchannel</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Resting-State (SG)&quot;</span><span class="p">)</span>
+<span class="n">p5</span> <span class="o">&lt;-</span> <span class="nf">dim_perchannel</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Resting-State (FR)&quot;</span><span class="p">)</span>
+
+
+<span class="n">m</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">bam</span><span class="p">(</span><span class="n">Score</span> <span class="o">~</span> <span class="nf">s</span><span class="p">(</span><span class="n">Value</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">Area</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="m">-1</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;cs&quot;</span><span class="p">)</span> <span class="o">+</span>
+                 <span class="nf">s</span><span class="p">(</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;re&quot;</span><span class="p">),</span>
+               <span class="n">data</span><span class="o">=</span><span class="n">data_dim</span> <span class="o">|&gt;</span>
+                 <span class="nf">mutate</span><span class="p">(</span><span class="n">Dataset</span><span class="o">=</span><span class="nf">as.factor</span><span class="p">(</span><span class="n">Dataset</span><span class="p">)))</span>
+
+<span class="n">p6</span> <span class="o">&lt;-</span> <span class="nf">estimate_relation</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="s">&quot;Value&quot;</span> <span class="o">=</span> <span class="nf">unique</span><span class="p">(</span><span class="n">data_dim</span><span class="o">$</span><span class="n">Value</span><span class="p">),</span>
+                                   <span class="s">&quot;Area&quot;</span> <span class="o">=</span> <span class="nf">unique</span><span class="p">(</span><span class="n">data_dim</span><span class="o">$</span><span class="n">Area</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Predicted</span> <span class="o">=</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">Predicted</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Value</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Predicted</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Area</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">Area</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">see</span><span class="o">::</span><span class="nf">scale_color_flat_d</span><span class="p">(</span><span class="n">palette</span> <span class="o">=</span> <span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_x_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Average&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span>  <span class="o">+</span>
+  <span class="nf">guides</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">p1</span> <span class="o">|</span> <span class="n">p3</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">p4</span> <span class="o">|</span> <span class="n">p5</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">p2</span> <span class="o">|</span> <span class="n">p6</span><span class="p">)</span> <span class="o">+</span> <span class="nf">plot_layout</span><span class="p">(</span><span class="n">heights</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">guides</span><span class="o">=</span><span class="s">&quot;collect&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Optimization of Embedding Dimension&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/dim_perchannel-1.png" /><!-- --></p>
+<!-- #### 3D Attractors -->
+<!-- ```{r attractors3D, eval=FALSE, warning=FALSE, message=FALSE, fig.height=16, fig.width=10} -->
+<!-- library(plotly) -->
+<!-- data <- read.csv("data_attractor.csv") -->
+<!-- plots <- list() -->
+<!-- for(i in unique(data$Dataset)) { -->
+<!--   plots[[i]] <- plot_ly(data[data$Dataset == i, ],  -->
+<!--                x = ~x,  -->
+<!--                y = ~y,  -->
+<!--                z = ~z,  -->
+<!--                type = 'scatter3d',  -->
+<!--                mode = 'lines', -->
+<!--                opacity = 0.8,  -->
+<!--                line = list(width = 0.5,  -->
+<!--                            color = ~c,  -->
+<!--                            colorscale = 'Viridis')) -->
+<!-- } -->
+<!-- plots[["Lemon"]] -->
+<!-- ``` -->
 </section>
+</section>
+<section id="topological-clusters">
+<h3>Topological Clusters<a class="headerlink" href="#topological-clusters" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_complexity.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Channel</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="n">Channel</span><span class="o">==</span><span class="s">&quot;Cpz&quot;</span><span class="p">,</span> <span class="s">&quot;CPz&quot;</span><span class="p">,</span> <span class="n">Channel</span><span class="p">))</span>
+
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">pivot_longer</span><span class="p">(</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="n">Channel</span><span class="p">,</span> <span class="n">Participant</span><span class="p">,</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">),</span>
+               <span class="n">names_to</span> <span class="o">=</span> <span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="n">values_to</span> <span class="o">=</span> <span class="s">&quot;Value&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">Index</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Value</span> <span class="o">=</span> <span class="nf">standardize</span><span class="p">(</span><span class="n">Value</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">ungroup</span><span class="p">()</span>
+
+<span class="n">data_varex</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">()</span>
+<span class="n">data_clusters</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">()</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">dataset</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Dataset</span><span class="p">))</span> <span class="p">{</span>
+  <span class="n">dat1</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">$</span><span class="n">Dataset</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">]</span>
+
+  <span class="nf">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+  <span class="n">list_clusters</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">()</span>
+  <span class="nf">for</span><span class="p">(</span><span class="n">condition</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">dat1</span><span class="o">$</span><span class="n">Condition</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">dat2</span> <span class="o">&lt;-</span> <span class="n">dat1</span><span class="p">[</span><span class="n">dat1</span><span class="o">$</span><span class="n">Condition</span> <span class="o">==</span> <span class="n">condition</span><span class="p">,</span> <span class="p">]</span>
+
+    <span class="nf">for</span><span class="p">(</span><span class="n">index</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">dat2</span><span class="o">$</span><span class="n">Index</span><span class="p">))</span> <span class="p">{</span>
+
+      <span class="n">dat3</span> <span class="o">&lt;-</span> <span class="n">dat2</span><span class="p">[</span><span class="n">dat2</span><span class="o">$</span><span class="n">Index</span> <span class="o">==</span> <span class="n">index</span><span class="p">,</span> <span class="p">]</span> <span class="o">|&gt;</span>
+        <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">values_from</span> <span class="o">=</span> <span class="s">&quot;Value&quot;</span><span class="p">,</span> <span class="n">names_from</span> <span class="o">=</span> <span class="s">&quot;Channel&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+        <span class="nf">select_if</span><span class="p">(</span><span class="n">is.numeric</span><span class="p">)</span> <span class="o">|&gt;</span>
+        <span class="nf">data_transpose</span><span class="p">()</span>
+      <span class="n">dat3</span><span class="p">[</span><span class="nf">is.na</span><span class="p">(</span><span class="n">dat3</span><span class="p">)]</span> <span class="o">&lt;-</span> <span class="m">0</span>
+
+
+      <span class="nf">for</span><span class="p">(</span><span class="n">n</span> <span class="n">in</span> <span class="m">2</span><span class="o">:</span><span class="m">10</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">for</span><span class="p">(</span><span class="n">method</span> <span class="n">in</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;hkmeans&quot;</span><span class="p">,</span> <span class="s">&quot;pam&quot;</span><span class="p">,</span> <span class="s">&quot;hclust&quot;</span><span class="p">))</span> <span class="p">{</span>
+          <span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">cluster_analysis</span><span class="p">(</span><span class="n">dat3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+          <span class="n">perf</span> <span class="o">&lt;-</span> <span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">performance</span>
+          <span class="n">varex</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">Clusters</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+                              <span class="n">Variance</span><span class="o">=</span><span class="n">perf</span><span class="o">$</span><span class="n">R2</span><span class="p">,</span>
+                              <span class="n">Dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+                              <span class="n">Condition</span><span class="o">=</span><span class="n">condition</span><span class="p">,</span>
+                              <span class="n">Index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+                              <span class="n">Method</span> <span class="o">=</span> <span class="n">method</span><span class="p">)</span>
+          <span class="n">data_varex</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">data_varex</span><span class="p">,</span> <span class="n">varex</span><span class="p">)</span>
+          <span class="n">list_clusters</span><span class="p">[[</span><span class="nf">paste0</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">method</span><span class="p">)]]</span> <span class="o">&lt;-</span> <span class="nf">setNames</span><span class="p">(</span><span class="nf">predict</span><span class="p">(</span><span class="n">rez</span><span class="p">),</span> <span class="nf">row.names</span><span class="p">(</span><span class="n">dat3</span><span class="p">))</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">data_clusters</span><span class="p">[[</span><span class="n">dataset</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="nf">cluster_meta</span><span class="p">(</span><span class="n">list_clusters</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">## [1] &quot;Lemon&quot;</span>
+<span class="c1">## [1] &quot;SRM&quot;</span>
+<span class="c1">## [1] &quot;Wang (2022)&quot;</span>
+<span class="c1">## [1] &quot;Resting-State (SG)&quot;</span>
+<span class="c1">## [1] &quot;Resting-State (FR)&quot;</span>
+
+<span class="n">data_varex</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Method</span> <span class="o">==</span> <span class="s">&quot;hkmeans&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Clusters</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Variance</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">facet_grid</span><span class="p">(</span><span class="n">Dataset</span><span class="o">~</span><span class="n">Condition</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-11-1.png" /><!-- --></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">structures</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">()</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">n</span> <span class="n">in</span> <span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">for</span><span class="p">(</span><span class="n">dataset</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Dataset</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">structures</span><span class="p">[[</span><span class="nf">paste0</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)]]</span> <span class="o">&lt;-</span> <span class="nf">predict</span><span class="p">(</span><span class="n">data_clusters</span><span class="p">[[</span><span class="n">dataset</span><span class="p">]],</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="n">ch_names</span> <span class="o">&lt;-</span> <span class="nf">lapply</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">names</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">structures</span> <span class="o">&lt;-</span> <span class="nf">lapply</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">as.character</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># predict.cluster_meta(m, n=4)</span>
+<span class="c1"># heatmap(m)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">TruScanEEGpy</span>
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;Agg&quot;</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">plot_layout</span><span class="p">(</span><span class="n">closest</span><span class="p">,</span> <span class="n">closest_names</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+  <span class="k">if</span> <span class="s2">&quot;Iz&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">closest_names</span><span class="p">:</span>
+      <span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">(</span><span class="n">closest_names</span><span class="p">,</span> <span class="n">ch_types</span><span class="o">=</span><span class="s2">&quot;eeg&quot;</span><span class="p">,</span> <span class="n">sfreq</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+      <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">set_montage</span><span class="p">(</span><span class="n">montage</span><span class="o">=</span><span class="s2">&quot;easycap-M1&quot;</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">montage</span> <span class="o">=</span> <span class="n">TruScanEEGpy</span><span class="o">.</span><span class="n">montage_mne_128</span><span class="p">(</span><span class="n">TruScanEEGpy</span><span class="o">.</span><span class="n">layout_128</span><span class="p">(</span><span class="s1">&#39;10-5&#39;</span><span class="p">))</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">(</span><span class="n">montage</span><span class="o">.</span><span class="n">ch_names</span><span class="p">,</span> <span class="n">ch_types</span><span class="o">=</span><span class="s2">&quot;eeg&quot;</span><span class="p">,</span> <span class="n">sfreq</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">set_montage</span><span class="p">(</span><span class="n">montage</span><span class="p">)</span>
+
+  <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">closest</span><span class="p">):</span>
+      <span class="n">channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">closest_names</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">closest</span><span class="p">)</span> <span class="o">==</span> <span class="n">group</span><span class="p">]</span>
+      <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">],</span> <span class="n">include</span><span class="o">=</span><span class="n">channels</span><span class="p">))</span>
+
+  <span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">ch_groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Lemon&quot;</span><span class="p">):</span>
+  <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-components&quot;</span><span class="p">)</span>
+    <span class="n">plot_layout</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">dataset</span><span class="p">],</span> <span class="n">r</span><span class="o">.</span><span class="n">ch_names</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">dataset</span><span class="p">],</span> <span class="n">show_names</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;topomap&#39;</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+  <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">fig</span>
+
+<span class="n">fig1</span> <span class="o">=</span> <span class="n">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Lemon&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-12-1.png" /><!-- --></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig2</span> <span class="o">=</span> <span class="n">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;SRM&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-12-2.png" /><!-- --></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig3</span> <span class="o">=</span> <span class="n">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Wang (2022)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-12-3.png" /><!-- --></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig4</span> <span class="o">=</span> <span class="n">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Resting-State (SG)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-12-4.png" /><!-- --></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig5</span> <span class="o">=</span> <span class="n">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Resting-State (FR)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-12-5.png" /><!-- --></p>
+</section>
+</section>
+<section id="discussion">
+<h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">#</a></h2>
+<p>In conclusion, the optimal delay for resting state EEG, accross
+different datasets, was estimated to be between 25 and 30 ms. 27 ms,
+which corresponds to a frequency of 37.037 Hz, is a possible value.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>

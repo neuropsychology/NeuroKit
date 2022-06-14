@@ -1557,8 +1557,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1121.757855      4025.8  691.293722  ...    0.662918  0.018896         inf</span>
+<span class="go">    RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  926.053886  3990.952381  592.549363  ...    0.747018  0.051293        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1633,9 +1633,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.768797</span>
-<span class="go">2     2        10000  ...        0.0              0.280000</span>
-<span class="go">3     3        15000  ...        0.0              0.985019</span>
+<span class="go">1     1         5000  ...        1.0              0.770418</span>
+<span class="go">2     2        10000  ...        0.0              0.463203</span>
+<span class="go">3     3        15000  ...        1.0              0.045823</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
