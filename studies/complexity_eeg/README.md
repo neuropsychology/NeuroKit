@@ -1,5 +1,5 @@
-Optimal Selection of Delay, Embedding Dimension and Tolerance for EEG
-Complexity Analysis
+Optimal Selection of Delay and Embedding Dimension for EEG Complexity
+Analysis
 ================
 
 -   [Introduction](#introduction)

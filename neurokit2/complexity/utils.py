@@ -128,6 +128,7 @@ def _get_count(
         # https://github.com/HamedAzami/FuzzyEntropy_Matlab/blob/master/FuzEn_MFs.m
         dist = sklearn.metrics.DistanceMetric.get_metric(distance)
         dist = dist.pairwise(embedded)
+        # sklearn.metrics.pairwise_distances_chunked()
         if n > 1:
             sim = np.exp(-(dist ** n) / tolerance)
         else:
