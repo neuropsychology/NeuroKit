@@ -29,7 +29,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
     show : bool, optional
-        If True, returns the plots that are generates for each of the domains.
+        If True, returns the plots that are generated for each of the domains.
 
     Returns
     -------
