@@ -162,7 +162,9 @@ def signal_fixpeaks(
 
     # If method Kubios
     if method.lower() == "kubios":
-        return _signal_fixpeaks_kubios(peaks, sampling_rate=sampling_rate, iterative=iterative, show=show, **kwargs)
+        return _signal_fixpeaks_kubios(
+            peaks, sampling_rate=sampling_rate, iterative=iterative, show=show, **kwargs
+        )
     else:
         # Else method is NeuroKit
         return _signal_fixpeaks_neurokit(
@@ -196,7 +198,9 @@ def _signal_fixpeaks_neurokit(
 ):
     """NeuroKit method."""
 
-    peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
+    peaks_clean = _remove_small(
+        peaks, sampling_rate, interval_min, relative_interval_min, robust
+    )
     peaks_clean = _interpolate_big(
         peaks_clean,
         sampling_rate,
@@ -212,14 +216,17 @@ def _signal_fixpeaks_neurokit(
     n_invalid_idcs = len(peaks_clean) - len(valid_peaks)
     if n_invalid_idcs > 0:
         warn(
-            f" Negative peak indices detected in output. " f" Removing {n_invalid_idcs} invalid peaks. ",
+            f" Negative peak indices detected in output. "
+            f" Removing {n_invalid_idcs} invalid peaks. ",
             category=NeuroKitWarning,
         )
         peaks_clean = valid_peaks
     return peaks_clean
 
 
-def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False, **kwargs):
+def _signal_fixpeaks_kubios(
+    peaks, sampling_rate=1000, iterative=True, show=False, **kwargs
+):
     """kubios method."""
 
     # Get corrected peaks and normal-to-normal intervals.
@@ -234,7 +241,9 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 
         while True:
 
-            new_artifacts, new_subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate, **kwargs)
+            new_artifacts, new_subspaces = _find_artifacts(
+                peaks_clean, sampling_rate=sampling_rate, **kwargs
+            )
 
             n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in new_artifacts.values()])
@@ -326,8 +335,12 @@ def _find_artifacts(
         if np.abs(drrs[i]) <= 1:  # Figure 1
             i += 1
             continue
-        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # pylint: disable=E1111
-        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # pylint: disable=E1111
+        eq1 = np.logical_and(
+            drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2)
+        )  # pylint: disable=E1111
+        eq2 = np.logical_and(
+            drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2)
+        )  # pylint: disable=E1111
 
         if np.any([eq1, eq2]):
             # If any of the two equations is true.
@@ -400,8 +413,16 @@ def _find_artifacts(
 def _compute_threshold(signal, alpha, window_width):
 
     df = pd.DataFrame({"signal": np.abs(signal)})
-    q1 = df.rolling(window_width, center=True, min_periods=1).quantile(0.25).signal.values
-    q3 = df.rolling(window_width, center=True, min_periods=1).quantile(0.75).signal.values
+    q1 = (
+        df.rolling(window_width, center=True, min_periods=1)
+        .quantile(0.25)
+        .signal.values
+    )
+    q3 = (
+        df.rolling(window_width, center=True, min_periods=1)
+        .quantile(0.75)
+        .signal.values
+    )
     th = alpha * ((q3 - q1) / 2)
 
     return th
@@ -455,7 +476,9 @@ def _correct_missed(missed_idcs, peaks):
     # Calculate the position(s) of new beat(s). Make sure to not generate
     # negative indices. prev_peaks and next_peaks must have the same
     # number of elements.
-    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
+    valid_idcs = np.logical_and(
+        missed_idcs > 1, missed_idcs < len(corrected_peaks)
+    )  # pylint: disable=E1111
     missed_idcs = missed_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in missed_idcs]]
     next_peaks = corrected_peaks[missed_idcs]
@@ -591,7 +614,9 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax4.set_xlim(-10, 10)
     verts0 = [(-10, 5), (-10, -c1 * -10 + c2), (-1, -c1 * -1 + c2), (-1, 5)]
 
-    poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r", edgecolor=None, label="ectopic periods")
+    poly0 = matplotlib.patches.Polygon(
+        verts0, alpha=0.3, facecolor="r", edgecolor=None, label="ectopic periods"
+    )
     ax4.add_patch(poly0)
     verts1 = [(1, -c1 * 1 - c2), (1, -5), (10, -5), (10, -c1 * 10 - c2)]
     poly1 = matplotlib.patches.Polygon(verts1, alpha=0.3, facecolor="r", edgecolor=None)
@@ -605,10 +630,14 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax3.set_xlim(-10, 10)
     ax3.set_ylim(-10, 10)
     verts2 = [(-10, 10), (-10, 1), (-1, 1), (-1, 10)]
-    poly2 = matplotlib.patches.Polygon(verts2, alpha=0.3, facecolor="r", edgecolor=None, label="short periods")
+    poly2 = matplotlib.patches.Polygon(
+        verts2, alpha=0.3, facecolor="r", edgecolor=None, label="short periods"
+    )
     ax3.add_patch(poly2)
     verts3 = [(1, -1), (1, -10), (10, -10), (10, -1)]
-    poly3 = matplotlib.patches.Polygon(verts3, alpha=0.3, facecolor="y", edgecolor=None, label="long periods")
+    poly3 = matplotlib.patches.Polygon(
+        verts3, alpha=0.3, facecolor="y", edgecolor=None, label="long periods"
+    )
     ax3.add_patch(poly3)
     ax3.legend(loc="upper right")
 
@@ -626,10 +655,14 @@ def _remove_small(
     if interval_min is None and relative_interval_min is None:
         return peaks
     if interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
+        interval = signal_period(
+            peaks, sampling_rate=sampling_rate, desired_length=None
+        )
         peaks = peaks[interval > interval_min]
     if relative_interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
+        interval = signal_period(
+            peaks, sampling_rate=sampling_rate, desired_length=None
+        )
         peaks = peaks[standardize(interval, robust=robust) > relative_interval_min]
     return peaks
 
@@ -650,7 +683,9 @@ def _interpolate_big(
     count = 0
     while continue_loop is True:
         if interval_max is not None:
-            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
+            interval = signal_period(
+                peaks, sampling_rate=sampling_rate, desired_length=None
+            )
             peaks, continue_loop = _interpolate_missing(
                 peaks=peaks,
                 interval=interval,
@@ -660,7 +695,9 @@ def _interpolate_big(
                 interpolate_on_peaks=interpolate_on_peaks,
             )
         if relative_interval_max is not None:
-            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
+            interval = signal_period(
+                peaks, sampling_rate=sampling_rate, desired_length=None
+            )
             interval = standardize(interval, robust=robust)
             peaks, continue_loop = _interpolate_missing(
                 peaks=peaks,
@@ -673,7 +710,8 @@ def _interpolate_big(
         count += 1
         if count > iterations_max:
             warn(
-                f" Maximum iterations ({iterations_max}) reached: terminating " f" interpolation early.  ",
+                f" Maximum iterations ({iterations_max}) reached: terminating "
+                f" interpolation early.  ",
                 category=NeuroKitWarning,
             )
             continue_loop = False
@@ -681,7 +719,12 @@ def _interpolate_big(
 
 
 def _interpolate_missing(
-    peaks, interval, interval_max, sampling_rate, n_nan_large_interval=2, interpolate_on_peaks=False
+    peaks,
+    interval,
+    interval_max,
+    sampling_rate,
+    n_nan_large_interval=2,
+    interpolate_on_peaks=False,
 ):
     outliers = interval > interval_max
     outliers_loc = np.where(outliers)[0]
@@ -702,7 +745,7 @@ def _interpolate_missing(
         n_nan = n_nan_large_interval
     # go through the outliers starting with the highest indices
     # so that the indices of the other outliers are not moved when
-    # unknown intervas are inserted 
+    # unknown intervas are inserted
     for loc in np.flip(outliers_loc):
         if comp_n_nan:
             # use mean interval to compute N of unknown intervals to add
@@ -715,12 +758,18 @@ def _interpolate_missing(
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
     if interpolate_on_peaks:
-        peaks = signal_interpolate(peaks_to_correct).astype(peaks.dtype)
-        #peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)
+        peaks = signal_interpolate(
+            peaks_to_correct, fill_value="extrapolate"
+        ).astype(peaks.dtype)
+        # peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)
     else:
-        interval = signal_interpolate(interval)
-        #interval = pd.Series(interval).interpolate(limit_direction="both").values
-        peaks_corrected = _period_to_location(interval, sampling_rate, first_location=peaks[0])
+        interval = signal_interpolate(
+            interval, fill_value="extrapolate"
+        )
+        # interval = pd.Series(interval).interpolate(limit_direction="both").values
+        peaks_corrected = _period_to_location(
+            interval, sampling_rate, first_location=peaks[0]
+        )
         replace_loc = np.where(np.isnan(peaks_to_correct))[0]
         peaks_to_correct[replace_loc] = peaks_corrected[replace_loc]
         peaks = peaks_to_correct.astype(peaks.dtype)
