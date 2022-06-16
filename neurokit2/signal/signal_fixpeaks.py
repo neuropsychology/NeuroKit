@@ -10,6 +10,7 @@ from ..misc import NeuroKitWarning
 from ..stats import standardize
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_period import signal_period
+from .signal_interpolate import signal_interpolate
 
 
 def signal_fixpeaks(
@@ -701,7 +702,7 @@ def _interpolate_missing(
         n_nan = n_nan_large_interval
     # go through the outliers starting with the highest indices
     # so that the indices of the other outliers are not moved when
-    # unknown intervas are inserted
+    # unknown intervas are inserted 
     for loc in np.flip(outliers_loc):
         if comp_n_nan:
             # use mean interval to compute N of unknown intervals to add
@@ -714,9 +715,11 @@ def _interpolate_missing(
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
     if interpolate_on_peaks:
-        peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)
+        peaks = signal_interpolate(peaks_to_correct).astype(peaks.dtype)
+        #peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)
     else:
-        interval = pd.Series(interval).interpolate(limit_direction="both").values
+        interval = signal_interpolate(interval)
+        #interval = pd.Series(interval).interpolate(limit_direction="both").values
         peaks_corrected = _period_to_location(interval, sampling_rate, first_location=peaks[0])
         replace_loc = np.where(np.isnan(peaks_to_correct))[0]
         peaks_to_correct[replace_loc] = peaks_corrected[replace_loc]
