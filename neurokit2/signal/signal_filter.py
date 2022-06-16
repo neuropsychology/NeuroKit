@@ -19,7 +19,9 @@ def signal_filter(
     powerline=50,
     show=False,
 ):
-    """**Filter a signal using "butterworth", "fir" or "savgol" filters**
+    """**Signal filtering**
+
+    Filter a signal using different methods such as "butterworth", "fir" or "savgol" filters.
 
     Apply a lowpass (if "highcut" frequency is provided), highpass (if "lowcut" frequency is
     provided) or bandpass (if both are provided) filter to the signal.
