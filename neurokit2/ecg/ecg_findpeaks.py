@@ -5,13 +5,8 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (
-    signal_findpeaks,
-    signal_plot,
-    signal_sanitize,
-    signal_smooth,
-    signal_zerocrossings,
-)
+from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
+                      signal_smooth, signal_zerocrossings)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
@@ -440,8 +435,8 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
-    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial
-      blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
+    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of
+      arterial blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
 
     """
     # TODO: Doesn't really seems to work
