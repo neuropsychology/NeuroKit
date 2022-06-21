@@ -20,32 +20,38 @@ def signal_timefrequency(
     analytical_signal=True,
     show=True,
 ):
-    """Quantify changes of a nonstationary signal’s frequency over time. The objective of time-frequency analysis is to
-    offer a more informative description of the signal which reveals the temporal variation of its frequency contents.
+    """**Quantify changes of a nonstationary signal’s frequency over time**
+    The objective of time-frequency analysis is to offer a more informative description of the
+    signal which reveals the temporal variation of its frequency contents.
 
     There are many different Time-Frequency Representations (TFRs) available:
 
-    - Linear TFRs: efficient but create tradeoff between time and frequency resolution
-        - Short Time Fourier Transform (STFT): the time-domain signal is windowed into short segments
-        and FT is applied to each segment, mapping the signal into the TF plane. This method assumes
-        that the signal is quasi-stationary (stationary over the duration of the window). The width
-        of the window is the trade-off between good time (requires short duration window) versus good
-        frequency resolution (requires long duration windows)
-        - Wavelet Transform (WT): similar to STFT but instead of a fixed duration window functrion, a
-        varying window length by scaling the axis of the window is used. At low frequency, WT proves
-        high spectral resolution but poor temporal resolution. On the other hand, for high frequencies,
-        the WT provides high temporal resolution but poor spectral resolution.
+    * Linear TFRs: efficient but create tradeoff between time and frequency resolution
 
-    - Quadratic TFRs: better resolution but computationally expensive and suffers from having
-    cross terms between multiple signal components
-        - Wigner Ville Distribution (WVD): while providing very good resolution in time and frequency
-        of the underlying signal structure, because of its bilinear nature, existence of negative values,
-        the WVD has misleading TF results in the case of multi-component signals such as EEG due to the
-        presence of cross terms and inference terms. Cross WVD terms can be reduced by using moothing kernal
-        functions as well as analyzing the analytic signal (instead of the original signal)
-        - Smoothed Pseudo Wigner Ville Distribution (SPWVD): to address the problem of cross-terms
-        suppression, SPWVD allows two independent analysis windows, one in time and the other in frequency
-        domains.
+        * Short Time Fourier Transform (STFT): the time-domain signal is windowed into short
+          segments and FT is applied to each segment, mapping the signal into the TF plane. This
+          method assumes that the signal is quasi-stationary (stationary over the duration of the
+          window). The width of the window is the trade-off between good time (requires short
+          duration window) versus good frequency resolution (requires long duration windows)
+
+        * Wavelet Transform (WT): similar to STFT but instead of a fixed duration window function,
+          a varying window length by scaling the axis of the window is used. At low frequency, WT
+          proves high spectral resolution but poor temporal resolution. On the other hand, for high
+          frequencies, the WT provides high temporal resolution but poor spectral resolution.
+
+    * Quadratic TFRs: better resolution but computationally expensive and suffers from having
+      cross terms between multiple signal components
+
+        * Wigner Ville Distribution (WVD): while providing very good resolution in time and
+          frequency of the underlying signal structure, because of its bilinear nature, existence
+          of negative values, the WVD has misleading TF results in the case of multi-component
+          signals such as EEG due to the presence of cross terms and inference terms. Cross WVD
+          terms can be reduced by using smoothing kernel functions as well as analyzing the
+          analytic signal (instead of the original signal)
+
+        * Smoothed Pseudo Wigner Ville Distribution (SPWVD): to address the problem of cross-terms
+          suppression, SPWVD allows two independent analysis windows, one in time and the other in
+          frequency domains.
 
     Parameters
     ----------
@@ -60,23 +66,26 @@ def signal_timefrequency(
     max_frequency : float
         The maximum frequency.
     window : int
-        Length of each segment in seconds. If None (default), window will be automatically
-        calculated. For stft method
+        Length of each segment in seconds. If ``None`` (default), window will be automatically
+        calculated. For ``"STFT" method``.
     window_type : str
-        Type of window to create, defaults to 'hann'. See ``scipy.signal.get_window()`` to see full
-        options of windows. For stft method.
+        Type of window to create, defaults to ``"hann"``. See :func:`.scipy.signal.get_window` to
+        see full options of windows. For ``"STFT" method``.
     mode : str
-        Type of return values for stft method. Can be 'psd', 'complex' (default, equivalent to output of
-        stft with no padding or boundary extension), 'magnitude', 'angle', 'phase'. Default to 'psd'.
+        Type of return values for ``"STFT" method``. Can be ``"psd"``, ``"complex"`` (default,
+        equivalent to output of ``"STFT"`` with no padding or boundary extension), ``"magnitude"``,
+        ``"angle"``, ``"phase"``. Defaults to ``"psd"``.
     nfreqbin : int, float
-        Number of frequency bins. If None (default), nfreqbin will be set to 0.5*sampling_rate.
+        Number of frequency bins. If ``None`` (default), nfreqbin will be set to
+        ``0.5*sampling_rate``.
     overlap : int
-        Number of points to overlap between segments. If None, noverlap = nperseg // 8. Defaults to None.
+        Number of points to overlap between segments. If ``None``, ``noverlap = nperseg // 8``.
+        Defaults to ``None``.
     analytical_signal : bool
-        If True, analytical signal instead of actual signal is used in Wigner Ville Distrubution
-        methods.
+        If ``True``, analytical signal instead of actual signal is used in `Wigner Ville
+        Distribution` methods.
     show : bool
-        If True, will return two PSD plots.
+        If ``True``, will return two PSD plots.
 
     Returns
     -------
@@ -87,17 +96,61 @@ def signal_timefrequency(
     stft : np.array
         Short Term Fourier Transform. Time increases across its columns and frequency increases
         down the rows.
+
     Examples
     -------
-    >>> import neurokit2 as nk
-    >>>
-    >>> sampling_rate = 100
-    >>> signal = nk.signal_simulate(100, sampling_rate, frequency=[3, 10])
-    >>>
-    >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="stft", show=True)
-    >>> f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="cwt", show=True)
-    >>> f, t, wvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="wvd", show=True)
-    >>> f, t, pwvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="pwvd", show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      sampling_rate = 100
+      signal = nk.signal_simulate(100, sampling_rate, frequency=[3, 10])
+
+      # STFT Method
+      @savefig p_signal_timefrequency1.png scale=100%
+      f, t, stft = nk.signal_timefrequency(signal,
+                                           sampling_rate,
+                                           max_frequency=20,
+                                           method="stft",
+                                           show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # CWTM Method
+      @savefig p_signal_timefrequency2.png scale=100%
+      f, t, cwtm = nk.signal_timefrequency(signal,
+                                           sampling_rate,
+                                           max_frequency=20,
+                                           method="cwt",
+                                           show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # WVD Method
+      @savefig p_signal_timefrequency3.png scale=100%
+      f, t, wvd = nk.signal_timefrequency(signal,
+                                          sampling_rate,
+                                          max_frequency=20,
+                                          method="wvd",
+                                          show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # PWVD Method
+      @savefig p_signal_timefrequency4.png scale=100%
+      f, t, pwvd = nk.signal_timefrequency(signal,
+                                           sampling_rate,
+                                           max_frequency=20,
+                                           method="pwvd",
+                                           show=True)
+      @suppress
+      plt.close()
 
     """
     # Initialize empty container for results
@@ -208,18 +261,18 @@ def short_term_ft(
 def continuous_wt(
     signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, nfreqbin=None
 ):
-    """Continuous Wavelet Transform.
+    """**Continuous Wavelet Transform**
 
      References
      ----------
-     - Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L. A. (2016).
-     Morlet wavelet transforms of heart rate variability for autonomic nervous system activity.
-     Applied and Computational Harmonic Analysis, 40(1), 200-206.
+     * Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L.
+       A. (2016). Morlet wavelet transforms of heart rate variability for autonomic nervous system
+       activity. Applied and Computational Harmonic Analysis, 40(1), 200-206.
 
-    - Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
-    & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet transforms
-    of electrocardiography and electromyography. Philosophical Transactions of the Royal Society A:
-    Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
+    * Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
+      & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet
+      transforms of electrocardiography and electromyography. Philosophical Transactions of the
+      Royal Society A: Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
 
     """
 
@@ -333,7 +386,7 @@ def smooth_pseudo_wvd(
     nfreqbin=None,
     window_method="hamming",
 ):
-    """Smoothed Pseudo Wigner Ville Distribution.
+    """**Smoothed Pseudo Wigner Ville Distribution**
 
     Parameters
     ----------
@@ -346,7 +399,7 @@ def smooth_pseudo_wvd(
     time_length: np.array
         Lenght of time smoothing window
     segment_step : int
-        The step between samples in `time_array`. Default to 1.
+        The step between samples in ``time_array``. Default to 1.
     nfreqbin : int
         Number of Frequency bins.
     window_method : str
@@ -361,11 +414,11 @@ def smooth_pseudo_wvd(
     pwvd : np.ndarray
         SPWVD. Time increases across its columns and frequency increases
         down the rows.
+
     References
     ----------
-    J. M. O' Toole, M. Mesbah, and B. Boashash, (2008),
-    "A New Discrete Analytic Signal for Reducing Aliasing in the
-     Discrete Wigner-Ville Distribution", IEEE Trans.
+    * J. M. O' Toole, M. Mesbah, and B. Boashash, (2008), "A New Discrete Analytic Signal for
+      Reducing Aliasing in the Discrete Wigner-Ville Distribution", IEEE Trans.
 
     """
 

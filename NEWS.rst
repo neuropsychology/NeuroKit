@@ -15,6 +15,7 @@ New Features
 +++++++++++++
 
 * Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
+* Add argument `method` in `find_outliers()` calling `_find_outliers_standardize()` or `_find_outliers_percentile()`
 
 Fixes
 +++++++++++++

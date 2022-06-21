@@ -3,6 +3,10 @@
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 # build:
 #   image: stable
-# 
+#
+# Build documentation in the docs/ directory with Sphinx
+sphinx:
+   configuration: docs/conf.py
+
 conda:
-  file: docs/environment.yml
+  file: docs_readthedocs/environment.yml

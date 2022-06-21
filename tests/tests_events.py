@@ -39,8 +39,7 @@ def test_events_plot():
 
     signal = np.cos(np.linspace(start=0, stop=20, num=1000))
     events = nk.events_find(signal)
-    data = nk.events_plot(events, signal, show=False)
-    assert len(data["Event_Onset"]) == 1000
+    nk.events_plot(events, signal)
 
     # Different events
     events1 = events["onset"]

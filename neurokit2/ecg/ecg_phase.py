@@ -8,55 +8,56 @@ from .ecg_peaks import ecg_peaks
 
 
 def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None):
-    """Compute cardiac phase (for both atrial and ventricular).
+    """**Find the Cardiac Phase**
 
-    Finds the cardiac phase, labelled as 1 for systole and 0 for diastole.
+    Compute cardiac phase (for both atrial and ventricular), labelled as 1 for systole and 0 for diastole.
 
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned ECG channel as returned by `ecg_clean()`.
+        The cleaned ECG channel as returned by ``ecg_clean()``.
     rpeaks : list or array or DataFrame or Series or dict
-        The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with `ecg_findpeaks()` or `ecg_peaks()`.
+        The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it
+        is assumed that these containers were obtained with ``ecg_findpeaks()`` or ``ecg_peaks()``.
     delineate_info : dict
         A dictionary containing additional information of ecg delineation and can be obtained with
-        `ecg_delineate()`.
+        ``ecg_delineate()``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to None.
+        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to ``None``.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `ecg_signal` containing the following
-        columns:
+        A DataFrame of same length as ``ecg_signal`` containing the following columns:
 
-        - *"ECG_Phase_Atrial"*: cardiac phase, marked by "1" for systole and "0" for diastole.
-
-        - *"ECG_Phase_Completion_Atrial"*: cardiac phase (atrial) completion, expressed in percentage
-          (from 0 to 1), representing the stage of the current cardiac phase.
-
-        - *"ECG_Phase_Ventricular"*: cardiac phase, marked by "1" for systole and "0" for diastole.
-
-        - *"ECG_Phase_Completion_Ventricular"*: cardiac phase (ventricular) completion, expressed in
+        * ``"ECG_Phase_Atrial"``: cardiac phase, marked by "1" for systole and "0" for diastole.
+        * ``"ECG_Phase_Completion_Atrial"``: cardiac phase (atrial) completion, expressed in
           percentage (from 0 to 1), representing the stage of the current cardiac phase.
+        * ``"ECG_Phase_Ventricular"``: cardiac phase, marked by "1" for systole and "0" for
+          diastole.
+        * ``"ECG_Phase_Completion_Ventricular"``: cardiac phase (ventricular) completion, expressed
+          in percentage (from 0 to 1), representing the stage of the current cardiac phase.
 
     See Also
     --------
-    ecg_clean, ecg_peaks, ecg_process, ecg_plot
+    ecg_clean, ecg_peaks, ecg_delineate, ecg_process, ecg_plot
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> _, rpeaks = nk.ecg_peaks(cleaned)
-    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000)
-    >>>
-    >>> cardiac_phase = nk.ecg_phase(ecg_cleaned=cleaned, rpeaks=rpeaks,
-    ...                              delineate_info=waves, sampling_rate=1000)
-    >>> nk.signal_plot([cleaned, cardiac_phase], standardize=True) #doctest: +ELLIPSIS
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg = nk.ecg_simulate(duration=6, sampling_rate=1000)
+      _, rpeaks = nk.ecg_peaks(ecg)
+      signals, waves = nk.ecg_delineate(ecg, rpeaks, sampling_rate=1000)
+
+      cardiac_phase = nk.ecg_phase(ecg_cleaned=ecg, rpeaks=rpeaks,
+                                   delineate_info=waves, sampling_rate=1000)
+      @savefig p_ecg_phase.png scale=100%
+      nk.signal_plot([ecg, cardiac_phase], standardize=True)
+      @suppress
+      plt.close()
 
     """
     # Sanitize inputs
@@ -75,7 +76,9 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
         __, delineate_info = ecg_delineate(ecg_cleaned, sampling_rate=sampling_rate)
 
     # Try retrieving right column
-    if isinstance(delineate_info, dict):    # FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated
+    if isinstance(
+        delineate_info, dict
+    ):  # FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated
 
         toffsets = np.full(len(ecg_cleaned), False, dtype=bool)
         toffsets_idcs = [int(x) for x in delineate_info["ECG_T_Offsets"] if ~np.isnan(x)]
@@ -101,8 +104,12 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     ventricular[toffsets] = 0.0
     ventricular[rpeaks] = 1.0
 
-    last_element = np.where(~np.isnan(ventricular))[0][-1]  # Avoid filling beyond the last peak/trough
-    ventricular[0:last_element] = pd.Series(ventricular).fillna(method="ffill").values[0:last_element]
+    last_element = np.where(~np.isnan(ventricular))[0][
+        -1
+    ]  # Avoid filling beyond the last peak/trough
+    ventricular[0:last_element] = (
+        pd.Series(ventricular).fillna(method="ffill").values[0:last_element]
+    )
 
     # Ventricular Phase Completion
     ventricular_comletion = signal_phase(ventricular, method="percent")

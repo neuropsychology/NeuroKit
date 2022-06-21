@@ -3,7 +3,7 @@ import numpy as np
 
 
 def replace(data, replacement_dict):
-    """Replace values using a dictionary
+    """**Replace values using a dictionary**
 
     Parameters
     ----------
@@ -19,13 +19,12 @@ def replace(data, replacement_dict):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> data = [0, 1, 2, 3]
-    >>> replacement = {0: 99, 3: 42}
-    >>> replaced = nk.replace(data, replacement)
-    >>> replaced #doctest: +ELLIPSIS
-    array([99,  1,  2, 42])
+      import neurokit2 as nk
+
+      data = [0, 1, 2, 3]
+      replacement = {0: 99, 3: 42}
+      replaced = nk.replace(data, replacement)
+      replaced
 
     """
     # Extract out keys and values

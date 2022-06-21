@@ -8,7 +8,7 @@ from .standardize import standardize
 
 
 def distance(X=None, method="mahalanobis"):
-    """Distance.
+    """**Distance**
 
     Compute distance using different metrics.
 
@@ -17,7 +17,8 @@ def distance(X=None, method="mahalanobis"):
     X : array or DataFrame
         A dataframe of values.
     method : str
-        The method to use. One of 'mahalanobis' or 'mean' for the average distance from the mean.
+        The method to use. One of ``"mahalanobis"`` or ``"mean"`` for the average distance from the
+        mean.
 
     Returns
     -------
@@ -26,11 +27,27 @@ def distance(X=None, method="mahalanobis"):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> X = nk.data("iris")
-    >>> vector = nk.distance(X)
-    >>> vector #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Load the iris dataset
+      data = nk.data("iris").drop("Species", axis=1)
+      data["Distance"] = nk.distance(data, method="mahalanobis")
+
+      @savefig p_distance1.png scale=100%
+      fig = data.plot(x="Petal.Length", y="Petal.Width", s="Distance", c="Distance", kind="scatter")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      data["DistanceZ"] = np.abs(nk.distance(data.drop("Distance", axis=1), method="mean"))
+
+      @savefig p_distance2.png scale=100%
+      fig = data.plot(x="Petal.Length", y="Sepal.Length", s="DistanceZ", c="DistanceZ", kind="scatter")
+      @suppress
+      plt.close()
 
     """
     if not isinstance(X, pd.DataFrame):

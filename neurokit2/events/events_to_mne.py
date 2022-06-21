@@ -3,21 +3,24 @@ import numpy as np
 
 
 def events_to_mne(events, event_conditions=None):
-    """Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG.
+    """**Create MNE-compatible events**
+
+    Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/
+    EEG.
 
     Parameters
     ----------
     events : list or ndarray or dict
-        Events onset location. Can also be a dict obtained through 'events_find()'.
+        Events onset location. Can also be a dict obtained through :func:`.events_find'.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
-        experimental conditions. Defaults to None.
+        experimental conditions. Defaults to ``None``.
 
     Returns
     -------
     tuple
-        MNE-formatted events and the event id, that can be added via 'raw.add_events(events),
-        and a dictionary with event's names.
+        MNE-formatted events and the event id, that can be added
+        via :func:`.raw.add_events(events)`, and a dictionary with event's names.
 
     See Also
     --------
@@ -25,26 +28,21 @@ def events_to_mne(events, event_conditions=None):
 
     Examples
     ----------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=4)
-    >>> events = nk.events_find(signal)
-    >>> events, event_id = nk.events_to_mne(events)
-    >>> events #doctest: +ELLIPSIS
-    array([[   1,    0,    0],
-           [1001,    0,    0],
-           [2001,    0,    0],
-           [3001,    0,    0]])
-    >>> event_id #doctest: +ELLIPSIS
-    {'event': 0}
-    >>>
-    >>> # Conditions
-    >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
-    >>> events, event_id = nk.events_to_mne(events)
-    >>> event_id #doctest: +SKIP
-    {'B': 0, 'A': 1}
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=4)
+      events = nk.events_find(signal)
+      events, event_id = nk.events_to_mne(events)
+      events
+
+      event_id
+
+      # Conditions
+      events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
+      events, event_id = nk.events_to_mne(events)
+      event_id
 
     """
 

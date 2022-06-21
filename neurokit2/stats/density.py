@@ -3,8 +3,10 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
+from .density_bandwidth import density_bandwidth
 
-def density(x, desired_length=100, bandwith=1, show=False):
+
+def density(x, desired_length=100, bandwidth="Scott", show=False, **kwargs):
     """Density estimation.
 
     Computes kernel density estimates.
@@ -15,36 +17,59 @@ def density(x, desired_length=100, bandwith=1, show=False):
         A vector of values.
     desired_length : int
         The amount of values in the returned density estimation.
-    bandwith : float
-        The bandwith of the kernel. The smaller the values, the smoother the estimation.
+    bandwidth : float
+        Passed to the ``method`` argument from the :func:`.density_bandwidth` function.
     show : bool
         Display the density plot.
+    **kwargs
+        Additional arguments to be passed to :func:`.density_bandwidth`.
 
     Returns
     -------
-    x, y
+    x
         The x axis of the density estimation.
     y
         The y axis of the density estimation.
 
+    See Also
+    --------
+    density_bandwidth
+
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.ecg_simulate(duration=20)
-    >>> x, y = nk.density(signal, bandwith=0.5, show=True)
-    >>>
-    >>> # Bandwidth comparison
-    >>> x, y1 = nk.density(signal, bandwith=0.5)
-    >>> x, y2 = nk.density(signal, bandwith=1)
-    >>> x, y3 = nk.density(signal, bandwith=2)
-    >>> pd.DataFrame({"x": x, "y1": y1, "y2": y2, "y3": y3}).plot(x="x") #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.ecg_simulate(duration=20)
+
+      @savefig p_density1.png scale=100%
+      x, y = nk.density(signal, bandwidth=0.5, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Bandwidth comparison
+      _, y2 = nk.density(signal, bandwidth=1)
+      _, y3 = nk.density(signal, bandwidth=2)
+      _, y4 = nk.density(signal, bandwidth="scott")
+      _, y5 = nk.density(signal, bandwidth="silverman")
+      _, y6 = nk.density(signal, bandwidth="kernsmooth")
+
+      @savefig p_density2.png scale=100%
+      nk.signal_plot([y, y2, y3, y4, y5, y6],
+                     labels=["0.5", "1", "2", "Scott", "Silverman", "KernSmooth"])
+      @suppress
+      plt.close()
 
     """
-    density_function = scipy.stats.gaussian_kde(x, bw_method="scott")
-    density_function.set_bandwidth(bw_method=density_function.factor / bandwith)
+    if "method" in kwargs:
+        kwargs.pop("method")
+    bw = density_bandwidth(x, method=bandwidth, **kwargs)
+    density_function = scipy.stats.gaussian_kde(x, bw_method=bw)
 
-    x = np.linspace(np.min(x), np.max(x), num=desired_length)
+    x = np.linspace(np.nanmin(x), np.nanmax(x), num=desired_length)
     y = density_function(x)
 
     if show is True:

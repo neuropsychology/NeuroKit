@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sklearn.metrics.pairwise
 
 from ..misc import NeuroKitWarning
 from ..signal.signal_psd import signal_psd
-from .complexity_embedding import complexity_embedding
-from .optim_complexity_delay import complexity_delay
+from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_lyapunov(
@@ -21,80 +21,91 @@ def complexity_lyapunov(
     min_neighbors="default",
     **kwargs,
 ):
-    """(Largest) Lyapunov Exponent (LLE)
+    """**(Largest) Lyapunov Exponent (LLE)**
 
     Lyapunov exponents (LE) describe the rate of exponential separation (convergence or divergence)
-    of nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the
-    number of the dimensionality of the phase space, and the largest LE value, `LLE` is often used to
-    determine the overall predictability of the dynamical system.
+    of nearby trajectories of a dynamical system. It is a measure of sensitive dependence on
+    initial conditions, i.e. how quickly two nearby states diverge. A system can have multiple LEs,
+    equal to thenumber of the dimensionality of the phase space, and the largest LE value, "LLE" is
+    often used to determine the overall predictability of the dynamical system.
 
-    Different algorithms:
+    Different algorithms exist to estimate these indices:
 
-    - Rosenstein et al.'s (1993) algorithm was designed for calculating LLEs from small datasets.
-      The time series is first reconstructed using a delay-embedding method, and the closest neighbour
-      of each vector is computed using the euclidean distance. These two neighbouring points are then
-      tracked along their distance trajectories for a number of data points. The slope of the line
-      using a least-squares fit of the mean log trajectory of the distances gives the final LLE.
-
-    - Eckmann et al. (1996) computes LEs by first reconstructing the time series using a
+    * **Rosenstein et al.'s (1993)** algorithm was designed for calculating LLEs from small
+      datasets. The time series is first reconstructed using a delay-embedding method, and the
+      closest neighbour of each vector is computed using the euclidean distance. These two
+      neighbouring points are then tracked along their distance trajectories for a number of data
+      points. The slope of the line using a least-squares fit of the mean log trajectory of the
+      distances gives the final LLE.
+    * **Eckmann et al. (1996)** computes LEs by first reconstructing the time series using a
       delay-embedding method, and obtains the tangent that maps to the reconstructed dynamics using
       a least-squares fit, where the LEs are deduced from the tangent maps.
+
+    .. warning::
+
+      The **Eckman (1996)** method currently does not work. Please help us fixing it by double
+      checking the code, the paper and helping us figuring out what's wrong. Overall, we would like
+      to improve this function to return for instance all the exponents (Lyapunov spectrum),
+      implement newer and faster methods (e.g., Balcerzak, 2018, 2020), etc. If you're interested
+      in helping out with this, please get in touch!
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    delay : int, None
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
-        If None for 'rosenstein1993', the delay is set to distance where the
-        autocorrelation function drops below 1 - 1/e times its original value.
+    delay : int
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-        If method is 'eckmann1996', large values for dimension are recommended.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension` to estimate the optimal value for this parameter. If method
+        is ``"eckmann1996"``, larger values for dimension are recommended.
     method : str
-        The method that defines the algorithm for computing LE. Can be one of 'rosenstein1993' or
-        'eckmann1996'.
+        The method that defines the algorithm for computing LE. Can be one of ``"rosenstein1993"``
+        or ``"eckmann1996"``.
     len_trajectory : int
-        The number of data points in which neighbouring trajectories are followed. Only relevant if
-        method is 'rosenstein1993'.
+        Applies when method is ``"rosenstein1993"``. The number of data points in which
+        neighboring trajectories are followed.
     matrix_dim : int
-        Correponds to the number of LEs to return for 'eckmann1996'.
+        Applies when method is ``"eckmann1996"``. Corresponds to the number of LEs to return.
     min_neighbors : int, str
-        Minimum number of neighbors for 'eckmann1996'. If "default", min(2 * matrix_dim, matrix_dim + 4)
-        is used.
+        Applies when method is ``"eckmann1996"``. Minimum number of neighbors. If ``"default"``,
+        ``min(2 * matrix_dim, matrix_dim + 4)`` is used.
     **kwargs : optional
         Other arguments to be passed to ``signal_psd()`` for calculating the minimum temporal
-        separation of two neighbours.
+        separation of two neighbors.
 
     Returns
     --------
     lle : float
-        An estimate of the largest Lyapunov exponent (LLE) if method is 'rosenstein1993', and
-        an array of LEs if 'eckmann1996'.
+        An estimate of the largest Lyapunov exponent (LLE) if method is ``"rosenstein1993"``, and
+        an array of LEs if ``"eckmann1996"``.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute LLE.
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
-    >>> lle, info = nk.complexity_lyapunov(signal, delay=1, dimension=2)
-    >>> lle #doctest: +SKIP
+    .. ipython:: python
 
-    Reference
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
+
+      lle, info = nk.complexity_lyapunov(signal, method="rosenstein1993", show=True)
+      lle
+
+      # Eckman's method is broken. Please help us fix-it!
+      # lle, info = nk.complexity_lyapunov(signal, dimension=2, method="eckmann1996")
+
+    References
     ----------
-    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method
-    for calculating largest Lyapunov exponents from small data sets.
-    Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
+    * Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method
+      for calculating largest Lyapunov exponents from small data sets.
+      Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
+    * Eckmann, J. P., Kamphorst, S. O., Ruelle, D., & Ciliberto, S. (1986). Liapunov
+      exponents from time series. Physical Review A, 34(6), 4971.
 
-    - Eckmann, J. P., Kamphorst, S. O., Ruelle, D., & Ciliberto, S. (1986). Liapunov
-    exponents from time series. Physical Review A, 34(6), 4971.
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
@@ -102,25 +113,48 @@ def complexity_lyapunov(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # If default tolerance
-    tolerance = _complexity_lyapunov_tolerance(signal, **kwargs)  # rosenstein's method
+    # Compute Minimum temporal separation between two neighbors
+    # -----------------------------------------------------------
+    # Rosenstein (1993) finds a suitable value by calculating the mean period of the data,
+    # obtained by the reciprocal of the mean frequency of the power spectrum.
 
+    # "We impose the additional constraint that nearest neighbors have a temporal separation
+    # greater than the mean period of the time series: This allows us to consider each pair of
+    # neighbors as nearby initial conditions for different trajectories.""
+
+    # "We estimated the mean period as the reciprocal of the mean frequency of the power spectrum,
+    # although we expect any comparable estimate, e.g., using the median frequency of the magnitude
+    # spectrum, to yield equivalent results."
+
+    # Actual sampling rate does not matter
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", normalize=False, show=False)
+    mean_freq = np.sum(psd["Power"] * psd["Frequency"]) / np.sum(psd["Power"])
+
+    # 1 / mean_freq = seconds per cycle
+    separation = int(np.ceil(1 / mean_freq * 1000))
+
+    # Run algorithm
+    # ----------------
     # Method
     method = method.lower()
     if method in ["rosenstein", "rosenstein1993"]:
         le, parameters = _complexity_lyapunov_rosenstein(
-            signal, delay, dimension, tolerance, len_trajectory, **kwargs
+            signal, delay, dimension, separation, len_trajectory, **kwargs
         )
     elif method in ["eckmann", "eckmann1996"]:
         le, parameters = _complexity_lyapunov_eckmann(
-            signal, delay, dimension, tolerance, matrix_dim, min_neighbors
+            signal,
+            dimension=dimension,
+            separation=separation,
+            matrix_dim=matrix_dim,
+            min_neighbors=min_neighbors,
         )
 
     # Store params
     info = {
         "Dimension": dimension,
         "Delay": delay,
-        "Minimum Separation": tolerance,
+        "Separation": separation,
         "Method": method,
     }
     info.update(parameters)
@@ -134,30 +168,35 @@ def complexity_lyapunov(
 
 
 def _complexity_lyapunov_rosenstein(
-    signal, delay=1, dimension=2, tolerance=None, len_trajectory=20, **kwargs
+    signal, delay=1, dimension=2, separation=1, len_trajectory=20, show=False, **kwargs
 ):
 
-    # If default tolerance (kwargs: tolerance="default")
-    tolerance = _complexity_lyapunov_tolerance(signal, **kwargs)
+    # 1. Check that sufficient data points are available
+    # Minimum length required to find single orbit vector
+    min_len = (dimension - 1) * delay + 1
+    # We need len_trajectory orbit vectors to follow a complete trajectory
+    min_len += len_trajectory - 1
+    # we need tolerance * 2 + 1 orbit vectors to find neighbors for each
+    min_len += separation * 2 + 1
+    # Sanity check
+    if len(signal) < min_len:
+        warn(
+            f"for dimension={dimension}, delay={delay}, separation={separation} and "
+            f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your"
+            " time series.",
+            category=NeuroKitWarning,
+        )
 
-    # Delay embedding
-    if delay is None:
-        delay = complexity_delay(signal, method="rosenstein1993", show=False)
-
-    # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(
-        len(signal), delay, dimension, tolerance, len_trajectory, method="rosenstein1993"
-    )
-
-    # Embed
+    # Embedding
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     m = len(embedded)
 
-    # construct matrix with pairwise distances between vectors in orbit
+    # Construct matrix with pairwise distances between vectors in orbit
     dists = sklearn.metrics.pairwise.euclidean_distances(embedded)
+
     for i in range(m):
-        # Exclude indices within tolerance
-        dists[i, max(0, i - tolerance) : i + tolerance + 1] = np.inf
+        # Exclude indices within separation
+        dists[i, max(0, i - separation) : i + separation + 1] = np.inf
 
     # Find indices of nearest neighbours
     ntraj = m - len_trajectory + 1
@@ -178,15 +217,21 @@ def _complexity_lyapunov_rosenstein(
     divergence_rate = trajectories[np.isfinite(trajectories)]
 
     # LLE obtained by least-squares fit to average line
-    slope, _ = np.polyfit(np.arange(1, len(divergence_rate) + 1), divergence_rate, 1)
+    slope, intercept = np.polyfit(np.arange(1, len(divergence_rate) + 1), divergence_rate, 1)
 
-    parameters = {"Trajectory Length": len_trajectory}
+    if show is True:
+        plt.plot(np.arange(1, len(divergence_rate) + 1), divergence_rate)
+        plt.axline((0, intercept), slope=slope, color="orange", label="Least-squares Fit")
+        plt.ylabel("Divergence Rate")
+        plt.legend()
+
+    parameters = {"Trajectory_Length": len_trajectory}
 
     return slope, parameters
 
 
 def _complexity_lyapunov_eckmann(
-    signal, delay=1, dimension=2, tolerance=None, matrix_dim=4, min_neighbors="default"
+    signal, dimension=2, separation=None, matrix_dim=4, min_neighbors="default", tau=1
 ):
     """TODO: check implementation
 
@@ -197,29 +242,37 @@ def _complexity_lyapunov_eckmann(
         min_neighbors = min(2 * matrix_dim, matrix_dim + 4)
     m = (dimension - 1) // (matrix_dim - 1)
 
-    # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(
-        len(signal),
-        delay,
-        dimension,
-        tolerance,
-        method="eckmann1996",
-        matrix_dim=matrix_dim,
-        min_neighbors=min_neighbors,
-    )
+    # minimum length required to find single orbit vector
+    min_len = dimension
+    # we need to follow each starting point of an orbit vector for m more steps
+    min_len += m
+    # we need separation * 2 + 1 orbit vectors to find neighbors for each
+    min_len += separation * 2
+    # we need at least min_nb neighbors for each orbit vector
+    min_len += min_neighbors
+    # Sanity check
+    if len(signal) < min_len:
+        warn(
+            f"for dimension={dimension}, separation={separation}, "
+            f"matrix_dim={matrix_dim} and min_neighbors={min_neighbors}, "
+            f"you need at least {min_len} datapoints in your time series.",
+            category=NeuroKitWarning,
+        )
 
     # Storing of LEs
     lexp = np.zeros(matrix_dim)
     lexp_counts = np.zeros(matrix_dim)
     old_Q = np.identity(matrix_dim)
 
+    # We need to be able to step m points further for the beta vector
+    vec = signal if m == 0 else signal[:-m]  # If m==0, return full signal
     # Reconstruction using time-delay method
-    embedded = complexity_embedding(signal[:-m], delay=delay, dimension=dimension)
+    embedded = complexity_embedding(vec, delay=1, dimension=dimension)
     distances = sklearn.metrics.pairwise_distances(embedded, metric="chebyshev")
 
     for i in range(len(embedded)):
         # exclude difference of vector to itself and those too close in time
-        distances[i, max(0, i - tolerance) : i + tolerance + 1] = np.inf
+        distances[i, max(0, i - separation) : i + separation + 1] = np.inf
 
         # index of furthest nearest neighbour
         neighbour_furthest = np.argsort(distances[i])[min_neighbors - 1]
@@ -265,82 +318,10 @@ def _complexity_lyapunov_eckmann(
     lexp[idx] /= lexp_counts[idx]
     lexp[np.where(lexp_counts == 0)] = np.inf
     # normalize with respect to tau
-    lexp /= delay
+    lexp /= tau
     # take m into account
     lexp /= m
 
-    parameters = {"Minimum Neighbors": min_neighbors}
+    parameters = {"Minimum_Neighbors": min_neighbors}
 
     return lexp, parameters
-
-
-# =============================================================================
-# Utilities
-# =============================================================================
-
-
-def _complexity_lyapunov_tolerance(signal, tolerance="default", **kwargs):
-    """Minimum temporal separation (tolerance) between two neighbors.
-
-    If 'default', finds a suitable value by calculating the mean period of the data,
-    obtained by the reciprocal of the mean frequency of the power spectrum.
-
-    https://github.com/CSchoel/nolds
-    """
-    if isinstance(tolerance, (int, float)):
-        return tolerance
-
-    psd = signal_psd(signal, sampling_rate=1000, method="fft", normalize=False, **kwargs)
-    # actual sampling rate does not matter
-    mean_freq = np.sum(psd["Power"] * psd["Frequency"]) / np.sum(psd["Power"])
-    mean_period = 1 / mean_freq  # seconds per cycle
-    tolerance = int(np.ceil(mean_period * 1000))
-
-    return tolerance
-
-
-def _complexity_lyapunov_checklength(
-    n,
-    delay=1,
-    dimension=2,
-    tolerance="default",
-    len_trajectory=20,
-    method="rosenstein1993",
-    matrix_dim=4,
-    min_neighbors="default",
-):
-    """Helper function that calculates the minimum number of data points required.
-    """
-    if method in ["rosenstein", "rosenstein1993"]:
-        # minimum length required to find single orbit vector
-        min_len = (dimension - 1) * delay + 1
-        # we need len_trajectory orbit vectors to follow a complete trajectory
-        min_len += len_trajectory - 1
-        # we need tolerance * 2 + 1 orbit vectors to find neighbors for each
-        min_len += tolerance * 2 + 1
-        # Sanity check
-        if n < min_len:
-            warn(
-                f"for dimension={dimension}, delay={delay}, tolerance={tolerance} and "
-                + f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your time series.",
-                category=NeuroKitWarning,
-            )
-
-    elif method in ["eckmann", "eckmann1996"]:
-        m = (dimension - 1) // (matrix_dim - 1)
-        # minimum length required to find single orbit vector
-        min_len = dimension
-        # we need to follow each starting point of an orbit vector for m more steps
-        min_len += m
-        # we need tolerance * 2 + 1 orbit vectors to find neighbors for each
-        min_len += tolerance * 2
-        # we need at least min_nb neighbors for each orbit vector
-        min_len += min_neighbors
-        # Sanity check
-        if n < min_len:
-            warn(
-                f"for dimension={dimension}, delay={delay}, tolerance={tolerance}, "
-                + f"matrix_dim={matrix_dim} and min_neighbors={min_neighbors}, "
-                + f"you need at least {min_len} datapoints in your time series.",
-                category=NeuroKitWarning,
-            )

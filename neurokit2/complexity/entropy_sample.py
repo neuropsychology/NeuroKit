@@ -2,17 +2,17 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _get_tolerance, _phi, _phi_divide
+from .optim_complexity_tolerance import complexity_tolerance
+from .utils import _phi, _phi_divide
 
 
-def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
-    """Sample Entropy (SampEn)
+def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
+    """**Sample Entropy (SampEn)**
 
-    Python implementation of the sample entropy (SampEn) of a signal. SampEn is a modification
-    of ApEn used for assessing complexity of physiological time series signals. Mathematically,
-    it is the negative natural logarithm of the conditional probability that two subseries
-    similar for ``m`` points remain similar for ``m + 1``, where self-matches are
-    not included in calculating the probability.
+    Compute the sample entropy (SampEn) of a signal. SampEn is a modification
+    of ApEn used for assessing complexity of physiological time series signals. It corresponds to
+    the conditional probability that two vectors that are close to each other for *m* dimensions
+    will remain close at the next *m + 1* component.
 
     This function can be called either via ``entropy_sample()`` or ``complexity_sampen()``.
 
@@ -21,16 +21,15 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
     tolerance : float
-        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
-        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
+        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     **kwargs : optional
         Other arguments.
 
@@ -53,11 +52,14 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy, parameters = nk.entropy_sample(signal)
-    >>> entropy #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      sampen, parameters = nk.entropy_sample(signal)
+      sampen
 
     """
     # Sanity checks
@@ -66,28 +68,26 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Prepare parameters
-    info = {"Dimension": dimension, "Delay": delay}
+    # Store parameters
+    info = {
+        "Dimension": dimension,
+        "Delay": delay,
+        "Tolerance": complexity_tolerance(
+            signal,
+            method=tolerance,
+            dimension=dimension,
+            show=False,
+        )[0],
+    }
 
-    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
-    out = _entropy_sample(
-        signal, tolerance=info["Tolerance"], delay=delay, dimension=dimension, **kwargs
-    )
-
-    return out, info
-
-
-def _entropy_sample(signal, tolerance, delay=1, dimension=2, fuzzy=False, distance="chebyshev"):
-
+    # Compute phi
     phi = _phi(
         signal,
         delay=delay,
         dimension=dimension,
-        tolerance=tolerance,
+        tolerance=info["Tolerance"],
         approximate=False,
-        distance=distance,
-        fuzzy=fuzzy,
-    )
-    sampen = _phi_divide(phi)
+        **kwargs
+    )[0]
 
-    return sampen
+    return _phi_divide(phi), info

@@ -1,5 +1,5 @@
 def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
-    """Parallel processing utility function (requires the ```joblib`` package).
+    """**Parallel processing utility function** (requires the ```joblib`` package)
 
     Parameters
     -----------
@@ -9,9 +9,9 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
         A list of dictionaries. The function will iterate through this list and pass each dictionary
         inside as ``**kwargs`` to the main function.
     n_jobs : int
-        Number of cores to use. ``-2`` means all but 1. See ``joblib.Parallel()``.
+        Number of cores to use. ``-2`` means all but 1. See :func:`.joblib.Parallel`.
     **kwargs
-        Other arguments that can be passed to ``joblib.Parallel()``.
+        Other arguments that can be passed to :func:`.joblib.Parallel`, such as ``verbose``.
 
     Returns
     -------
@@ -20,17 +20,19 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>> import time
-    >>>
-    >>> # The function simply returns the input (but waits 3 seconds.)
-    >>> def my_function(x):
-    ...     time.sleep(3)
-    ...     return x
-    >>>
-    >>> arguments_list = [{"x": 1}, {"x": 2}, {"x": 3}]
-    >>>
-    >>> nk.parallel_run(my_function, arguments_list) #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import time
+
+      # The function simply returns the input (but waits 3 seconds.)
+      def my_function(x):
+           time.sleep(3)
+           return x
+
+      arguments_list = [{"x": 1}, {"x": 2}, {"x": 3}]
+
+      nk.parallel_run(my_function, arguments_list)
 
     """
     # Try loading mne

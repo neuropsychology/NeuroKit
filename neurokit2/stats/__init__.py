@@ -5,6 +5,7 @@ from .cluster_findnumber import cluster_findnumber
 from .cluster_quality import cluster_quality
 from .correlation import cor
 from .density import density
+from .density_bandwidth import density_bandwidth
 from .distance import distance
 from .fit_error import fit_error, fit_mse, fit_r2, fit_rmse
 from .fit_loess import fit_loess
@@ -22,6 +23,7 @@ __all__ = [
     "mad",
     "cor",
     "density",
+    "density_bandwidth",
     "distance",
     "rescale",
     "fit_loess",

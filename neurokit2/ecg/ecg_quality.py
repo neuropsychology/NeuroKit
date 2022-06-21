@@ -14,46 +14,49 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS", approach=None):
-    """Quality of ECG Signal.
+    """**ECG Signal Quality Assessment**
 
-    The **"averageQRS"** method computes a continuous index of quality of the ECG signal, by interpolating the distance
-    of each QRS segment from the average QRS segment present in the data. This index is
-    therefore relative: 1 corresponds to heartbeats that are the closest to the average
-    sample and 0 corresponds to the most distant heartbeat from that average sample. Note that 1 does not necessarily means
-    "good": if the majority of samples are bad, than being close to the average will likely mean bad as well. Use this index
-    with care and plot it alongside your ECG signal to see if it makes sense.
+    Assess the quality of the ECG Signal using various methods:
 
-    The **"zhao2018"** method (Zhao et la., 2018) extracts several signal quality indexes (SQIs):
-    QRS wave power spectrum distribution pSQI, kurtosis kSQI, and baseline relative power basSQI.
-    An additional R peak detection match qSQI was originally computed in the paper but left out
-    in this algorithm. The indices were originally weighted with a ratio of [0.4, 0.4, 0.1, 0.1] to
-    generate the final classification outcome, but because qSQI was dropped,
-    the weights have been rearranged to [0.6, 0.2, 0.2] for pSQI, kSQI and basSQI respectively.
+    * The ``"averageQRS"`` method computes a continuous index of quality of the ECG signal, by
+      interpolating the distance of each QRS segment from the average QRS segment present in the *
+      data. This index is therefore relative: 1 corresponds to heartbeats that are the closest to
+      the average sample and 0 corresponds to the most distant heartbeat from that average sample.
+      Note that 1 does not necessarily means "good": if the majority of samples are bad, than being
+      close to the average will likely mean bad as well. Use this index with care and plot it
+      alongside your ECG signal to see if it makes sense.
+
+    * The ``"zhao2018"`` method (Zhao et al., 2018) extracts several signal quality indexes (SQIs):
+      QRS wave power spectrum distribution pSQI, kurtosis kSQI, and baseline relative power basSQI.
+      An additional R peak detection match qSQI was originally computed in the paper but left out
+      in this algorithm. The indices were originally weighted with a ratio of [0.4, 0.4, 0.1, 0.1]
+      to generate the final classification outcome, but because qSQI was dropped, the weights have
+      been rearranged to [0.6, 0.2, 0.2] for pSQI, kSQI and basSQI respectively.
 
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG signal in the form of a vector of values.
     rpeaks : tuple or list
-        The list of R-peak samples returned by `ecg_peaks()`. If None, peaks is computed from
+        The list of R-peak samples returned by ``ecg_peaks()``. If None, peaks is computed from
         the signal input.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method : str
-        The method for computing ECG signal quality, can be "averageQRS" (default) or "zhao2018".
+        The method for computing ECG signal quality, can be ``"averageQRS"`` (default) or ``"zhao2018"``.
     approach : str
-        The data fusion approach as documented in Zhao et al. (2018). Can be "simple"
-        or "fuzzy". The former performs simple heuristic fusion of SQIs and the latter performs
-        fuzzy comprehensive evaluation. If None (default), simple heuristic fusion is used.
+        The data fusion approach as documented in Zhao et al. (2018). Can be ``"simple"``
+        or ``"fuzzy"``. The former performs simple heuristic fusion of SQIs and the latter performs
+        fuzzy comprehensive evaluation. If ``None`` (default), simple heuristic fusion is used.
     **kwargs
-        Keyword arguments to be passed to `signal_power()` in the computation of basSQI and pSQI.
+        Keyword arguments to be passed to ``signal_power()`` in the computation of basSQI and pSQI.
 
     Returns
     -------
     array or str
-        Vector containing the quality index ranging from 0 to 1 for "averageQRS" method,
-        returns string classification ("Unacceptable", "Barely Acceptable" or "Excellent")
-        of the signal for "zhao2018 method".
+        Vector containing the quality index ranging from 0 to 1 for ``"averageQRS"`` method,
+        returns string classification (``Unacceptable``, ``Barely Acceptable`` or ``Excellent``)
+        of the signal for ``"zhao2018 method"``.
 
     See Also
     --------
@@ -61,21 +64,33 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 
     References
     ----------
-    - Zhao, Z., & Zhang, Y. (2018). "SQI quality evaluation mechanism of single-lead ECG signal based
-      on simple heuristic fusion and fuzzy comprehensive evaluation". Frontiers in Physiology, 9, 727.
+    * Zhao, Z., & Zhang, Y. (2018). "SQI quality evaluation mechanism of single-lead ECG signal
+      based on simple heuristic fusion and fuzzy comprehensive evaluation". Frontiers in
+      Physiology, 9, 727.
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=30, sampling_rate=300, noise=0.2)
-    >>> ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=300)
-    >>> quality = nk.ecg_quality(ecg_cleaned, sampling_rate=300)
-    >>>
-    >>> nk.signal_plot([ecg_cleaned, quality], standardize=True)
-    >>>
-    >>> # Zhao et al. (2018) method
-    >>> quality = nk.ecg_quality(ecg_cleaned, sampling_rate=300, method="zhao2018", approach="fuzzy")
+    * **Example 1:** 'averageQRS' method
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg = nk.ecg_simulate(duration=30, sampling_rate=300, noise=0.2)
+      ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=300)
+      quality = nk.ecg_quality(ecg_cleaned, sampling_rate=300)
+
+      @savefig p_ecg_quality.png scale=100%
+      nk.signal_plot([ecg_cleaned, quality], standardize=True)
+
+    * **Example 2:** Zhao et al. (2018) method
+
+    .. ipython:: python
+
+      nk.ecg_quality(ecg_cleaned,
+                     sampling_rate=300,
+                     method="zhao2018",
+                     approach="fuzzy")
 
     """
 

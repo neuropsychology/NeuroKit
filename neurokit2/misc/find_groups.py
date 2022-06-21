@@ -2,7 +2,7 @@ import itertools
 
 
 def find_groups(x):
-    """Find and group repeating (identical) values in a list.
+    """**Find and group repeating (identical) values in a list**
 
     Parameters
     ----------
@@ -16,12 +16,13 @@ def find_groups(x):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> x = [2, 2, 2, 2, 1, 3, 3, 2, 2, 2, 1]
-    >>> groups = nk.find_groups(x)
-    >>> groups #doctest: +ELLIPSIS
-    [[2, 2, 2, 2], [1], [3, 3], [2, 2, 2], [1]]
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      x = [2, 2, 2, 2, 1, 3, 3, 2, 2, 2, 1]
+      groups = nk.find_groups(x)
+      groups
 
     """
 

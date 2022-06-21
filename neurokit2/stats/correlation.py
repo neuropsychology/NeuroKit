@@ -5,7 +5,7 @@ import scipy.stats
 
 
 def cor(x, y, method="pearson", show=False):
-    """Density estimation.
+    """**Density estimation**
 
     Computes kernel density estimates.
 
@@ -16,7 +16,7 @@ def cor(x, y, method="pearson", show=False):
     y : Union[list, np.array, pd.Series]
         Vectors of values.
     method : str
-        Correlation method. Can be one of 'pearson', 'spearman', 'kendall'.
+        Correlation method. Can be one of ``"pearson"``, ``"spearman"``, ``"kendall"``.
     show : bool
         Draw a scatterplot with a regression line.
 
@@ -27,12 +27,17 @@ def cor(x, y, method="pearson", show=False):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> x = [1, 2, 3, 4, 5]
-    >>> y = [3, 1, 5, 6, 6]
-    >>> corr = nk.cor(x, y, method="pearson", show=True)
-    >>> corr #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      x = [1, 2, 3, 4, 5]
+      y = [3, 1, 5, 6, 6]
+      @savefig p_cor1.png scale=100%
+      corr = nk.cor(x, y, method="pearson", show=True)
+      @suppress
+      plt.close()
+      corr
 
     """
     r, p = _cor_methods(x, y, method)  # pylint: disable=unused-variable

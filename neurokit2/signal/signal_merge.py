@@ -5,7 +5,7 @@ from .signal_resample import signal_resample
 
 
 def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
-    """Arbitrary addition of two signals with different time ranges.
+    """**Arbitrary addition of two signals with different time ranges**
 
     Parameters
     ----------
@@ -25,15 +25,20 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
-    >>> signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
-    >>>
-    >>> signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
-    >>> nk.signal_plot(signal)
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
+      signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
+
+      signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
+      @savefig p_signal_merge_1.png scale=100%
+      nk.signal_plot(signal)
+      @suppress
+      plt.close()
 
     """
 
@@ -41,9 +46,13 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
     sampling_rate1 = len(signal1) / np.diff(time1)[0]
     sampling_rate2 = len(signal2) / np.diff(time2)[0]
     if sampling_rate1 > sampling_rate2:
-        signal2 = signal_resample(signal2, sampling_rate=sampling_rate2, desired_sampling_rate=sampling_rate1)
+        signal2 = signal_resample(
+            signal2, sampling_rate=sampling_rate2, desired_sampling_rate=sampling_rate1
+        )
     elif sampling_rate2 > sampling_rate1:
-        signal1 = signal_resample(signal1, sampling_rate=sampling_rate1, desired_sampling_rate=sampling_rate2)
+        signal1 = signal_resample(
+            signal1, sampling_rate=sampling_rate1, desired_sampling_rate=sampling_rate2
+        )
     sampling_rate = np.max([sampling_rate1, sampling_rate2])
 
     # Fill beginning

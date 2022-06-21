@@ -7,7 +7,7 @@ from ..eeg import eeg_gfp
 
 
 def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, **kwargs):
-    """Find peaks of stability using the GFP
+    """**Find peaks of stability using the GFP**
 
     Peaks in the global field power (GFP) are often used to find microstates.
 
@@ -16,7 +16,7 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     gfp : list
-        The Global Field Power (GFP). If None, will be obtained via ``eeg_gfp()``.
+        The Global Field Power (GFP). If ``None``, will be obtained via :func:`.eeg_gfp`.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     distance_between : float
@@ -24,7 +24,7 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
         The default is 0.01, which corresponds to 10 ms (as suggested in the Microstate EEGlab
         toolbox).
     **kwargs
-        Additional arguments to be passed to ``eeg_gfp()``.
+        Additional arguments to be passed to :func:`.eeg_gfp`.
 
     Returns
     -------
@@ -33,18 +33,21 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>>
-    >>> gfp = nk.eeg_gfp(eeg)
-    >>> peaks1 = nk.microstates_peaks(eeg, distance_between=0.01)
-    >>> peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)
-    >>> peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
-    >>> nk.events_plot([peaks1[peaks1 < 500],
-    ...                 peaks2[peaks2 < 500],
-    ...                 peaks3[peaks3 < 500]], gfp[0:500]) #doctest: +ELLIPSIS
-    <Figure ...>
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw")
+
+      gfp = nk.eeg_gfp(eeg)
+      peaks1 = nk.microstates_peaks(eeg, distance_between=0.01)
+      peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)
+      peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
+      @savefig p_microstates_peaks_png scale=100%
+      nk.events_plot([peaks1[peaks1 < 500],
+                      peaks2[peaks2 < 500],
+                      peaks3[peaks3 < 500]], gfp[0:500])
+      @suppress
+      plt.close()
+
 
     See Also
     --------

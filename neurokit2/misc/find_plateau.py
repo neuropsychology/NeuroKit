@@ -8,14 +8,14 @@ from ..events.events_plot import events_plot
 
 
 def find_plateau(values, show=True):
-    """Find the point of plateau in an array of values.
+    """**Find the point of plateau in an array of values**
 
     Parameters
     ----------
     values : ndarray
         An array of values.
     show : bool
-        If True, will return the plot visualizing the trajectory and point of plateau.
+        If ``True``, will return the plot visualizing the trajectory and point of plateau.
 
     Returns
     ----------
@@ -24,16 +24,22 @@ def find_plateau(values, show=True):
 
     Example
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Generate values manually
-    >>> x = np.linspace(1, 5, 50)
-    >>> y = 2.5 * np.log(1.3 * x) + 0.5
-    >>> y = y + 0.05 * np.random.normal(size=len(x))
-    >>>
-    >>> # Find plateau
-    >>> plateau = nk.find_plateau(y, show=True)
-    >>> plateau  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Generate values manually
+      x = np.linspace(1, 5, 50)
+      y = 2.5 * np.log(1.3 * x) + 0.5
+      y = y + 0.05 * np.random.normal(size=len(x))
+
+      # Find plateau
+      @savefig p_find_plateau1.png scale=100%
+      plateau = nk.find_plateau(y, show=True)
+      @suppress
+      plt.close()
+      plateau
+
 
     """
 

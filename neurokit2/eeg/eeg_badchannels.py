@@ -9,7 +9,9 @@ from ..stats import hdi, mad, standardize
 
 
 def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False):
-    """Find bad channels.
+    """**Find bad channels**
+
+    Find bad channels among the EEG channels.
 
     Parameters
     ----------
@@ -32,15 +34,18 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
     list
         List of bad channel names
     DataFrame
-        Information of each channel, such as standard deviation (SD), mean, median absolute deviation (MAD),
-        skewness, kurtosis, amplitude, highest density intervals, number of zero crossings.
+        Information of each channel, such as standard deviation (SD), mean, median absolute
+        deviation (MAD), skewness, kurtosis, amplitude, highest density intervals, number of zero
+        crossings.
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> bads, info = nk.eeg_badchannels(eeg, distance_threshold=0.95, show=False)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw")
+      bads, info = nk.eeg_badchannels(eeg, distance_threshold=0.95, show=False)
 
     """
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:

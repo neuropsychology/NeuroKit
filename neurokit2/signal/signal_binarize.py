@@ -5,7 +5,7 @@ import sklearn.mixture
 
 
 def signal_binarize(signal, method="threshold", threshold="auto"):
-    """Binarize a continuous signal.
+    """**Binarize a continuous signal**
 
     Convert a continuous signal into zeros and ones depending on a given threshold.
 
@@ -14,13 +14,15 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        The algorithm used to discriminate between the two states. Can be one of 'mixture' (default) or
-        'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize between the two states.
-        If 'threshold', will consider as activated all points which value is superior to the threshold.
+        The algorithm used to discriminate between the two states. Can be one of ``"mixture"``
+        (default) or ``"threshold"``. If ``"mixture"``, will use a Gaussian Mixture Model to
+        categorize between the two states. If ``"threshold"``, will consider as activated all
+        points which value is superior to the threshold.
     threshold : float
-        If `method` is 'mixture', then it corresponds to the minimum probability required to be considered
-        as activated (if 'auto', then 0.5). If `method` is 'threshold', then it corresponds to the minimum
-        amplitude to detect as onset. If "auto", takes the value between the max and the min.
+        If ``method`` is ``"mixture"``, then it corresponds to the minimum probability required to
+        be considered as activated (if ``"auto"``, then 0.5). If ``method`` is ``"threshold"``,
+        then it corresponds to the minimum amplitude to detect as onset. If ``"auto"``, takes the
+        value between the max and the min.
 
     Returns
     -------
@@ -29,14 +31,18 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
-    >>> binary = nk.signal_binarize(signal)
-    >>> fig = pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import numpy as np
+      import pandas as pd
+
+      signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+      binary = nk.signal_binarize(signal)
+      @savefig p_signal_binarize.png scale=100%
+      pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
+      @suppress
+      plt.close()
 
     """
 

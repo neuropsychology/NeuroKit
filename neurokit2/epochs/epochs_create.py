@@ -16,7 +16,9 @@ def epochs_create(
     event_conditions=None,
     baseline_correction=False,
 ):
-    """Epoching a dataframe.
+    """**Create Epochs**
+
+    Create epochs of a signal or a dataframe.
 
     Parameters
     ----------
@@ -32,18 +34,17 @@ def epochs_create(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start : int, list
-        Epochs start relative to events_onsets (in seconds). The start can be negative to
-        start epochs before a given event (to have a baseline for instance).
-        An integer can be specified to have the same start for all epochs.
-        A list of equal length to the events can be specified to have a different start for each epoch.
+        Epochs start relative to events_onsets (in seconds). The start can be negative to start
+        epochs before a given event (to have a baseline for instance). An integer can be specified
+        to have the same start for all epochs. A list of equal length to the events can be
+        specified to have a different start for each epoch.
     epochs_end : int, list
-        Epochs end relative to events_onsets (in seconds).
-        An integer can be specified to have the same end for all epochs.
-        A list of equal length to the events can be specified to have a different end for each epoch.
-        If "from_events", events must be a dict (from ``events_find()`).
-        Duration from events will be used as epochs_end.
+        Epochs end relative to events_onsets (in seconds). An integer can be specified to have the
+        same end for all epochs. A list of equal length to the events can be specified to have a
+        different end for each epoch. If ``"from_events"``, events must be a dict (from
+        :func:`.events_find`). Duration from events will be used as ``epochs_end``.
     event_labels : list
-        A list containing unique event identifiers. If `None`, will use the event index number.
+        A list containing unique event identifiers. If ``None``, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
@@ -63,30 +64,54 @@ def epochs_create(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>>
-    >>> # Find events
-    >>> events = nk.events_find(data["Photosensor"],
-    ...                         threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> fig1 = nk.events_plot(events, data)
-    >>> fig1 #doctest: +SKIP
-    >>>
-    >>> # Create epochs
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
-    >>> fig2 = nk.epochs_plot(epochs)
-    >>> fig2 #doctest: +SKIP
-    >>>
-    >>> # Baseline correction
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
-    >>> fig3 = nk.epochs_plot(epochs)
-    >>> fig3 #doctest: +SKIP
-    >>>
-    >>> # Chunk into n blocks of 1 second
-    >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
+    * **Example 1**: Find events
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      data = nk.data("bio_eventrelated_100hz")
+
+      # Find events
+      events = nk.events_find(data["Photosensor"],
+                              threshold_keep='below',
+                              event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+
+      @savefig p_epochs_create1.png scale=100%
+      nk.events_plot(events, data)
+      @suppress
+      plt.close()
+
+    * **Example 2**: Create epochs
+
+    .. ipython:: python
+
+      epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
+
+      @savefig p_epochs_create2.png scale=100%
+      nk.epochs_plot(epochs)
+      @suppress
+      plt.close()
+
+    * **Example 3**: Baseline correction
+
+    .. ipython:: python
+
+      epochs = nk.epochs_create(data, events, sampling_rate=100,
+                                epochs_end=3, baseline_correction=True)
+
+      @savefig p_epochs_create3.png scale=100%
+      nk.epochs_plot(epochs)
+      @suppress
+      plt.close()
+
+    * **Example 4**: Arbitrary epoching
+
+    .. ipython:: python
+
+      # Chunk into n blocks of 1 second
+      epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
 
     """
 

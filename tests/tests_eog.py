@@ -16,7 +16,7 @@ def test_eog_clean():
 
     # test with mne.io.Raw
     raw = mne.io.read_raw_fif(
-        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True
     )
     sampling_rate = raw.info["sfreq"]
 
@@ -47,7 +47,7 @@ def test_eog_findpeaks():
     eog_signal = nk.data("eog_100hz")
     eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
 
-    # Test with Neurokit
+    # Test with NeuroKit
     nk_peaks = nk.eog_findpeaks(
         eog_cleaned, sampling_rate=100, method="neurokit", threshold=0.33, show=False
     )

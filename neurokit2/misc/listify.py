@@ -2,14 +2,15 @@
 
 
 def listify(**kwargs):
-    """Transforms arguments into lists of the same length.
+    """**Transforms arguments into lists of the same length**
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> nk.listify(a=3, b=[3, 5], c=[3]) #doctest: +ELLIPSIS
-    {'a': [3, 3], 'b': [3, 5], 'c': [3, 3]}
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      nk.listify(a=3, b=[3, 5], c=[3])
 
     """
     args = kwargs

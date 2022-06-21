@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def check_type(x, what="str"):
-    """Check type of input.
+    """**Check type of input**
 
     Creates a list of boolean values to check if the input is of the target type.
 
@@ -21,12 +21,15 @@ def check_type(x, what="str"):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>> check_type([1, 2, 3, "hello"], what="str")
-    array([False, False, False,  True])
-    >>> check_type(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
-    ...                          "B": [3, 1, 2, "hello", 6, 5]}), what="str")
-    array([False,  True])
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      nk.check_type([1, 2, 3, "hello"], what="str")
+
+      nk.check_type(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
+                                  "B": [3, 1, 2, "hello", 6, 5]}), what="str")
+
     """
 
     if what == "str":

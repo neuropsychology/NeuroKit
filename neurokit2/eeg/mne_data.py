@@ -2,14 +2,16 @@
 
 
 def mne_data(what="raw", path=None):
-    """Utility function to easily access MNE datasets
+    """**Access MNE Datasets**
+
+    Utility function to easily access MNE datasets.
 
     Parameters
     -----------
     what : str
-        Can be 'raw' or 'filt-0-40_raw' (a filtered version).
+        Can be ``"raw"`` or ``"filt-0-40_raw"`` (a filtered version).
     path : str
-        Defaults to None, assuming that the MNE data folder already exists. If not,
+        Defaults to ``None``, assuming that the MNE data folder already exists. If not,
         specify the directory to download the folder.
 
     Returns
@@ -19,10 +21,12 @@ def mne_data(what="raw", path=None):
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> raw = nk.mne_data(what="raw")
-    >>> raw = nk.mne_data(what="epochs")
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      raw = nk.mne_data(what="raw")
+      raw = nk.mne_data(what="epochs")
 
     """
     # Try loading mne

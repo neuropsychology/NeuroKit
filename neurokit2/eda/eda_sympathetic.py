@@ -12,11 +12,10 @@ from ..stats import standardize
 def eda_sympathetic(
     eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], method="posada", show=False
 ):
-    """Obtain electrodermal activity (EDA) indexes of sympathetic nervous system.
+    """**Sympathetic Nervous System Index from Electrodermal activity (EDA)**
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
     of EDA signal is represented in the frequency band of 0.045-0.25Hz.
-    See https://biosignal.uconn.edu/wp-content/uploads/sites/2503/2018/09/09_Posada_2016_AnnalsBME.pdf
 
     Parameters
     ----------
@@ -28,38 +27,41 @@ def eda_sympathetic(
         List indicating the frequency range to compute the the power spectral density in.
         Defaults to [0.045, 0.25].
     method : str
-        Can be one of 'ghiasi' or 'posada'.
+        Can be one of ``"ghiasi"`` or ``"posada"``.
     show : bool
-        If True, will return a plot.
+        If True, will return a plot of the power spectrum of the EDA signal within the specified
+        frequency band.
 
     See Also
     --------
-    signal_filter, signal_power, signal_psd
+    .signal_filter, .signal_power, .signal_psd
 
     Returns
     -------
     dict
-        A dictionary containing the EDA symptathetic indexes, accessible by keys 'EDA_Symp' and
-        'EDA_SympN' (normalized, obtained by dividing EDA_Symp by total power).
-        Plots power spectrum of the EDA signal within the specified frequency band if `show` is True.
+        A dictionary containing the EDA symptathetic indexes, accessible by keys ``"EDA_Symp"`` and
+        ``"EDA_SympN"`` (normalized, obtained by dividing EDA_Symp by total power).
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eda = nk.data('bio_resting_8min_100hz')['EDA']
-    >>> indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
-    >>> indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi', show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eda = nk.data('bio_resting_8min_100hz')['EDA']
+      indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
+      indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi', show=True)
 
     References
     ----------
-    - Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., & Valenza, G. (2018).
-    A New Sympathovagal Balance Index from Electrodermal Activity and Instantaneous Vagal Dynamics: A Preliminary
-    Cold Pressor Study. 2018 40th Annual International Conference of the IEEE Engineering in Medicine and Biology
-    Society (EMBC). doi:10.1109/embc.2018.8512932
-    - Posada-Quintero, H. F., Florian, J. P., Orjuela-Cañón, A. D., Aljama-Corrales, T.,
-    Charleston-Villalobos, S., & Chon, K. H. (2016). Power spectral density analysis of electrodermal
-    activity for sympathetic function assessment. Annals of biomedical engineering, 44(10), 3124-3135.
+    * Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., & Valenza,
+      G. (2018). A New Sympathovagal Balance Index from Electrodermal Activity and Instantaneous
+      Vagal Dynamics: A Preliminary Cold Pressor Study. 2018 40th Annual International Conference
+      of the IEEE Engineering in Medicine and Biology Society (EMBC). doi:10.1109/embc.2018.8512932
+    * Posada-Quintero, H. F., Florian, J. P., Orjuela-Cañón, A. D., Aljama-Corrales, T.,
+      Charleston-Villalobos, S., & Chon, K. H. (2016). Power spectral density analysis of
+      electrodermal activity for sympathetic function assessment. Annals of biomedical engineering,
+      44(10), 3124-3135.
 
     """
 
@@ -100,11 +102,7 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
 
     # Compute psd
     frequency, power = _signal_psd_welch(
-        eda_filtered,
-        sampling_rate=2,
-        nperseg=nperseg,
-        window_type="blackman",
-        noverlap=overlap
+        eda_filtered, sampling_rate=2, nperseg=nperseg, window_type="blackman", noverlap=overlap
     )
     psd = pd.DataFrame({"Frequency": frequency, "Power": power})
 
