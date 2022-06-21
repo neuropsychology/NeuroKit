@@ -477,6 +477,23 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
 
+## implement new method of finding peaks using curve length transform of QRS
+def wqrs_detector(signal, sampling_rate, **kwargs):
+        """
+        based on W Zong, GB Moody, D Jiang
+        A Robust Open-source Algorithm to Detect Onset and Duration of QRS
+        Complexes
+        In: 2003 IEEE
+        """
+        # Apply low-pass filter to detect qrs wave (5-15hz is ideal passband for qrs detection)
+
+        sig = scipy.signal.butter(order=2,
+                                  Wn=15/(0.5*sampling_rate),
+                                  btype='lowpass', analog=False,
+                                  output='sos')
+
+        sig = scipy.signal.sosfilt(sig, signal)
+
 
 # =============================================================================
 # Christov (2004)
