@@ -682,6 +682,9 @@ title="Open an issue"
                     <span class="s2">&quot;cleaned signal.&quot;</span>
                 <span class="p">)</span>
 
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="o">.</span><span class="n">values</span>
+
     <span class="c1"># Sanitize input for rpeaks</span>
     <span class="k">if</span> <span class="n">rpeaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
