@@ -5,6 +5,7 @@ editor_options:
 bibliography: references.bib
 ---
 
+
 ## Introduction
 
 Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify unpredictability, entropy, and/or randomness. Using these methods to characterize physiological signals [a subfield commonly referred to as "fractal physiology", @bassingthwaighte2013fractal] has shown promising results in the assessment and diagnostic of the state and health of living systems [@lau2021brain; @ehlers1995chaos; @goetz2007].
