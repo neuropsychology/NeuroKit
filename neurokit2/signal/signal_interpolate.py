@@ -4,7 +4,7 @@ import scipy.interpolate
 
 
 def signal_interpolate(
-    x_values, y_values, x_new=None, method="quadratic", fill_value=None
+    x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None
 ):
     """**Interpolate a signal**
     Interpolate a signal using different methods.
@@ -68,6 +68,20 @@ def signal_interpolate(
       plt.close()
     """
     # Sanity checks
+    if x_values is None and y_values is None:
+        raise ValueError(
+            "NeuroKit error: signal_interpolate(): x_values or y_values must be provided."
+        )
+    elif x_values is None or y_values is None:
+        # for interpolating NaNs
+        if y_values is None:
+            y_values = x_values
+        x_values = np.arange(0, len(y_values))
+        if x_new is None:
+            x_new = x_values
+        y_finite = np.where(np.invert(np.isnan(y_values)))[0]
+        x_values = x_values[y_finite]
+        y_values = y_values[y_finite]
     if len(x_values) != len(y_values):
         raise ValueError(
             "NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length."
