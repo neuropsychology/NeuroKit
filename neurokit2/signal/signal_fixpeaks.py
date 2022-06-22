@@ -24,9 +24,6 @@ def signal_fixpeaks(
     relative_interval_max=None,
     robust=False,
     method="Kubios",
-    n_nan_large_interval=2,
-    iterations_max=100,
-    interpolate_on_peaks=False,
     **kwargs,
 ):
     """**Correct Erroneous Peak Placements**
@@ -61,16 +58,6 @@ def signal_fixpeaks(
     robust : bool
         Only when ``method = "neurokit"``. Use a robust method of standardization (see
         :func:`.standardize`) for the relative thresholds.
-    n_nan_large_interval : int
-        Only when ``method = "neurokit"``. The number of unknown values to replace
-        large intervals. Set to None for the number to be determined based on
-        the size of each interval. The default is 2.
-    iterations_max : int
-        Only when ``method = "neurokit"``. The maximum number of iterations for
-        interpolating large intervals. The default is 100.
-    interpolate_on_peaks : bool
-        Only when ``method = "neurokit"``. Whether to interpolate the peak indices
-        directly rather than the intervals. The default is False.
     method : str
         Either ``"Kubios"`` or ``"neurokit"``. ``"Kubios"`` uses the artifact detection and
         correction described in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that ``"Kubios"``
@@ -175,9 +162,6 @@ def signal_fixpeaks(
             relative_interval_min=relative_interval_min,
             relative_interval_max=relative_interval_max,
             robust=robust,
-            n_nan_large_interval=n_nan_large_interval,
-            iterations_max=iterations_max,
-            interpolate_on_peaks=interpolate_on_peaks,
         )
 
 
@@ -192,9 +176,6 @@ def _signal_fixpeaks_neurokit(
     relative_interval_min=None,
     relative_interval_max=None,
     robust=False,
-    n_nan_large_interval=2,
-    iterations_max=100,
-    interpolate_on_peaks=False,
 ):
     """NeuroKit method."""
 
@@ -207,9 +188,6 @@ def _signal_fixpeaks_neurokit(
         interval_max,
         relative_interval_max,
         robust,
-        n_nan_large_interval=n_nan_large_interval,
-        iterations_max=iterations_max,
-        interpolate_on_peaks=interpolate_on_peaks,
     )
 
     valid_peaks = peaks_clean[peaks_clean >= 0]
@@ -673,48 +651,30 @@ def _interpolate_big(
     interval_max=None,
     relative_interval_max=None,
     robust=False,
-    iterations_max=100,
-    n_nan_large_interval=2,
-    interpolate_on_peaks=False,
 ):
     if interval_max is None and relative_interval_max is None:
         return peaks
-    continue_loop = True
-    count = 0
-    while continue_loop is True:
-        if interval_max is not None:
-            interval = signal_period(
-                peaks, sampling_rate=sampling_rate, desired_length=None
-            )
-            peaks, continue_loop = _interpolate_missing(
-                peaks=peaks,
-                interval=interval,
-                interval_max=interval_max,
-                sampling_rate=sampling_rate,
-                n_nan_large_interval=n_nan_large_interval,
-                interpolate_on_peaks=interpolate_on_peaks,
-            )
-        if relative_interval_max is not None:
-            interval = signal_period(
-                peaks, sampling_rate=sampling_rate, desired_length=None
-            )
-            interval = standardize(interval, robust=robust)
-            peaks, continue_loop = _interpolate_missing(
-                peaks=peaks,
-                interval=interval,
-                interval_max=relative_interval_max,
-                sampling_rate=sampling_rate,
-                n_nan_large_interval=n_nan_large_interval,
-                interpolate_on_peaks=interpolate_on_peaks,
-            )
-        count += 1
-        if count > iterations_max:
-            warn(
-                f" Maximum iterations ({iterations_max}) reached: terminating "
-                f" interpolation early.  ",
-                category=NeuroKitWarning,
-            )
-            continue_loop = False
+    if interval_max is not None:
+        interval = signal_period(
+            peaks, sampling_rate=sampling_rate, desired_length=None
+        )
+        peaks, continue_loop = _interpolate_missing(
+            peaks=peaks,
+            interval=interval,
+            interval_max=interval_max,
+            sampling_rate=sampling_rate,
+        )
+    if relative_interval_max is not None:
+        interval = signal_period(
+            peaks, sampling_rate=sampling_rate, desired_length=None
+        )
+        interval = standardize(interval, robust=robust)
+        peaks, continue_loop = _interpolate_missing(
+            peaks=peaks,
+            interval=interval,
+            interval_max=relative_interval_max,
+            sampling_rate=sampling_rate,
+        )
     return peaks
 
 
@@ -723,8 +683,6 @@ def _interpolate_missing(
     interval,
     interval_max,
     sampling_rate,
-    n_nan_large_interval=2,
-    interpolate_on_peaks=False,
 ):
     outliers = interval > interval_max
     outliers_loc = np.where(outliers)[0]
@@ -736,47 +694,22 @@ def _interpolate_missing(
     if np.sum(outliers) == 0:
         return peaks, False
     peaks_to_correct = peaks.copy().astype(float)
-    # if the number of unknown intervals is not specified
-    # compute the number to be inserted for each interval based on its size
-    comp_n_nan = n_nan_large_interval is None
-    if comp_n_nan:
-        interval_without_outliers = interval[np.invert(outliers)]
-    else:
-        n_nan = n_nan_large_interval
+    
+    interval_without_outliers = interval[np.invert(outliers)]
+
     # go through the outliers starting with the highest indices
     # so that the indices of the other outliers are not moved when
     # unknown intervas are inserted
     for loc in np.flip(outliers_loc):
-        if comp_n_nan:
-            # use mean interval to compute N of unknown intervals to add
-            n_nan = int(interval[loc] / np.nanmean(interval_without_outliers))
-        if not interpolate_on_peaks:
-            # Delete large interval and replace by N unknown intervals
-            interval[loc] = np.nan
-            interval = np.insert(interval, loc, [np.nan] * (n_nan - 1))
+        # compute number of NaNs to insert based on the mean interval
+        n_nan = int(interval[loc] / np.nanmean(interval_without_outliers))
+
+        # Delete peak corresponding to large interval and replace by N NaNs
         peaks_to_correct[loc] = np.nan
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
-    if interpolate_on_peaks:
-        peaks = signal_interpolate(
-            peaks_to_correct, fill_value="extrapolate"
-        ).astype(peaks.dtype)
-        # peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)
-    else:
-        interval = signal_interpolate(
-            interval, fill_value="extrapolate"
-        )
-        # interval = pd.Series(interval).interpolate(limit_direction="both").values
-        peaks_corrected = _period_to_location(
-            interval, sampling_rate, first_location=peaks[0]
-        )
-        replace_loc = np.where(np.isnan(peaks_to_correct))[0]
-        peaks_to_correct[replace_loc] = peaks_corrected[replace_loc]
-        peaks = peaks_to_correct.astype(peaks.dtype)
+    peaks = signal_interpolate(
+        peaks_to_correct, fill_value="extrapolate"
+    ).astype(peaks.dtype)
     return peaks, True
 
-
-def _period_to_location(period, sampling_rate=1000, first_location=0):
-    location = np.nancumsum(period * sampling_rate)
-    location = location - (location[0] - first_location)
-    return location.astype(int)
