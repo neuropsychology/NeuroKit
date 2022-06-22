@@ -3,9 +3,7 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(
-    x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None
-):
+def signal_interpolate(x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None):
     """**Interpolate a signal**
     Interpolate a signal using different methods.
     Parameters
@@ -29,11 +27,11 @@ def signal_interpolate(
         order of the spline interpolator to use.
         See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
-    fill_value : array-like or (array-like, array_like) or “extrapolate”
-        If a ndarray (or float), this value will be used to fill in for 
-        requested points outside of the data range.  
-        If a two-element tuple, then the first element is used as a fill value 
-        for x_new < x[0] and the second element is used for x_new > x[-1]. 
+    fill_value : float or tuple or str
+        If a ndarray (or float), this value will be used to fill in for
+        requested points outside of the data range.
+        If a two-element tuple, then the first element is used as a fill value
+        for x_new < x[0] and the second element is used for x_new > x[-1].
         If “extrapolate”, then points outside the data range will be extrapolated.
         If not provided, then the default is ([y_values[0]], [y_values[-1]]).
     Returns
@@ -69,9 +67,7 @@ def signal_interpolate(
     """
     # Sanity checks
     if x_values is None and y_values is None:
-        raise ValueError(
-            "NeuroKit error: signal_interpolate(): x_values or y_values must be provided."
-        )
+        raise ValueError("NeuroKit error: signal_interpolate(): x_values or y_values must be provided.")
     elif x_values is None or y_values is None:
         # for interpolating NaNs
         if y_values is None:
@@ -83,9 +79,7 @@ def signal_interpolate(
         x_values = x_values[y_finite]
         y_values = y_values[y_finite]
     if len(x_values) != len(y_values):
-        raise ValueError(
-            "NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length."
-        )
+        raise ValueError("NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length.")
     if isinstance(x_new, int):
         if len(x_values) == x_new:
             return y_values
@@ -93,9 +87,7 @@ def signal_interpolate(
         if len(x_values) == len(x_new):
             return y_values
     if method == "monotone_cubic":
-        interpolation_function = scipy.interpolate.PchipInterpolator(
-            x_values, y_values, extrapolate=True
-        )
+        interpolation_function = scipy.interpolate.PchipInterpolator(x_values, y_values, extrapolate=True)
     else:
         if fill_value is None:
             fill_value = ([y_values[0]], [y_values[-1]])
