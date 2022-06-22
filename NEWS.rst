@@ -1,11 +1,32 @@
 News
 =====
+
+
+
+
+
 0.2.1
 -------------------
 New Features
 +++++++++++++
 
 * Allow for input with NaNs and extrapolation in `signal_interpolate()`
+* Add argument `method` in `find_outliers()`
+
+
+
+
+
+0.2.0
+-------------------
+New Features
++++++++++++++
+
+* Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
+
+
+
+
 
 0.1.6
 -------------------
@@ -19,8 +40,6 @@ Breaking Changes
 New Features
 +++++++++++++
 
-* Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
-* Add argument `method` in `find_outliers()` calling `_find_outliers_standardize()` or `_find_outliers_percentile()`
 
 Fixes
 +++++++++++++
