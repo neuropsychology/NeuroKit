@@ -1,6 +1,11 @@
 News
 =====
+0.2.1
+-------------------
+New Features
++++++++++++++
 
+* Allow for input with NaNs and extrapolation in `signal_interpolate()`
 
 0.1.6
 -------------------
