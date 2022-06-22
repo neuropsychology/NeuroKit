@@ -3,11 +3,11 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
+def signal_interpolate(
+    x_values, y_values, x_new=None, method="quadratic", fill_value=None
+):
     """**Interpolate a signal**
-
     Interpolate a signal using different methods.
-
     Parameters
     ----------
     x_values : Union[list, np.array, pd.Series]
@@ -29,27 +29,28 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
         order of the spline interpolator to use.
         See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
-
+    fill_value : array-like or (array-like, array_like) or “extrapolate”
+        If a ndarray (or float), this value will be used to fill in for 
+        requested points outside of the data range.  
+        If a two-element tuple, then the first element is used as a fill value 
+        for x_new < x[0] and the second element is used for x_new > x[-1]. 
+        If “extrapolate”, then points outside the data range will be extrapolated.
+        If not provided, then the default is ([y_values[0]], [y_values[-1]]).
     Returns
     -------
     array
         Vector of interpolated samples.
-
     Examples
     --------
     .. ipython:: python
-
       import numpy as np
       import neurokit2 as nk
       import matplotlib.pyplot as plt
-
       # Generate Simulated Signal
       signal = nk.signal_simulate(duration=2, sampling_rate=10)
-
       # We want to interpolate to 2000 samples
       x_values = np.linspace(0, 2000, num=len(signal), endpoint=False)
       x_new = np.linspace(0, 2000, num=2000, endpoint=False)
-
       # Visualize all interpolation methods
       @savefig p_signal_interpolate1.png scale=100%
       nk.signal_plot([
@@ -65,37 +66,30 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
       plt.scatter(x_values, signal, label="original datapoints", zorder=3)
       @suppress
       plt.close()
-
     """
     # Sanity checks
     if len(x_values) != len(y_values):
         raise ValueError(
             "NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length."
         )
-
     if isinstance(x_new, int):
         if len(x_values) == x_new:
             return y_values
     else:
         if len(x_values) == len(x_new):
             return y_values
-
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
             x_values, y_values, extrapolate=True
         )
     else:
+        if fill_value is None:
+            fill_value = ([y_values[0]], [y_values[-1]])
         interpolation_function = scipy.interpolate.interp1d(
-            x_values,
-            y_values,
-            kind=method,
-            bounds_error=False,
-            fill_value=([y_values[0]], [y_values[-1]]),
+            x_values, y_values, kind=method, bounds_error=False, fill_value=fill_value,
         )
-
     if isinstance(x_new, int):
         x_new = np.linspace(x_values[0], x_values[-1], x_new)
-
     interpolated = interpolation_function(x_new)
 
     if method == "monotone_cubic":
@@ -104,5 +98,4 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
         # scipy.interpolate.interp1d with fill_value=([y_values[0]], [y_values[-1]].
         interpolated[: int(x_values[0])] = interpolated[int(x_values[0])]
         interpolated[int(x_values[-1]) :] = interpolated[int(x_values[-1])]
-
     return interpolated
