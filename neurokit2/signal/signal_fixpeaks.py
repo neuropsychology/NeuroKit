@@ -674,6 +674,6 @@ def _interpolate_missing(
         peaks_to_correct[loc] = np.nan
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
-        peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)    
+    peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)
     return peaks
 
