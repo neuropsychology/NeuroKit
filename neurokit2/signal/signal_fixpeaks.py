@@ -624,7 +624,7 @@ def _interpolate_big(
         interval = signal_period(
             peaks, sampling_rate=sampling_rate, desired_length=None
         )
-        peaks, continue_loop = _interpolate_missing(
+        peaks = _interpolate_missing(
             peaks=peaks,
             interval=interval,
             interval_max=interval_max,
@@ -635,7 +635,7 @@ def _interpolate_big(
             peaks, sampling_rate=sampling_rate, desired_length=None
         )
         interval = standardize(interval, robust=robust)
-        peaks, continue_loop = _interpolate_missing(
+        peaks = _interpolate_missing(
             peaks=peaks,
             interval=interval,
             interval_max=relative_interval_max,
@@ -658,7 +658,7 @@ def _interpolate_missing(
     outliers_loc = outliers_loc[outliers_loc != 0]
 
     if np.sum(outliers) == 0:
-        return peaks, False
+        return peaks
     peaks_to_correct = peaks.copy().astype(float)
 
     interval_without_outliers = interval[np.invert(outliers)]
@@ -675,5 +675,5 @@ def _interpolate_missing(
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
         peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)    
-    return peaks, True
+    return peaks
 
