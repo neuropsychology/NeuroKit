@@ -3,9 +3,7 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(
-    x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None
-):
+def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
     """**Interpolate a signal**
 
     Interpolate a signal using different methods.
@@ -31,12 +29,12 @@ def signal_interpolate(
         order of the spline interpolator to use.
         See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
-    fill_value : array-like or (array-like, array_like) or ‚Äúextrapolate‚Äù
+    fill_value : array-like or (array-like, array_like) or ìextrapolateî
         If a ndarray (or float), this value will be used to fill in for 
         requested points outside of the data range.  
         If a two-element tuple, then the first element is used as a fill value 
         for x_new < x[0] and the second element is used for x_new > x[-1]. 
-        If ‚Äúextrapolate‚Äù, then points outside the data range will be extrapolated.
+        If ìextrapolateî, then points outside the data range will be extrapolated.
         If not provided, then the default is ([y_values[0]], [y_values[-1]]).
 
     Returns
@@ -77,20 +75,6 @@ def signal_interpolate(
 
     """
     # Sanity checks
-    if x_values is None and y_values is None:
-        raise ValueError(
-            "NeuroKit error: signal_interpolate(): x_values or y_values must be provided."
-        )
-    elif x_values is None or y_values is None:
-        # for interpolating NaNs
-        if y_values is None:
-            y_values = x_values
-        x_values = np.arange(0, len(y_values))
-        if x_new is None:
-            x_new = x_values
-        y_finite = np.where(np.invert(np.isnan(y_values)))[0]
-        x_values = x_values[y_finite]
-        y_values = y_values[y_finite]
     if len(x_values) != len(y_values):
         raise ValueError(
             "NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length."

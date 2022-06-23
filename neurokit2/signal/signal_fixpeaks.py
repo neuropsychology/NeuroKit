@@ -10,7 +10,6 @@ from ..misc import NeuroKitWarning
 from ..stats import standardize
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_period import signal_period
-from .signal_interpolate import signal_interpolate
 
 
 def signal_fixpeaks(
@@ -694,7 +693,7 @@ def _interpolate_missing(
     if np.sum(outliers) == 0:
         return peaks, False
     peaks_to_correct = peaks.copy().astype(float)
-    
+
     interval_without_outliers = interval[np.invert(outliers)]
 
     # go through the outliers starting with the highest indices
@@ -708,8 +707,5 @@ def _interpolate_missing(
         peaks_to_correct[loc] = np.nan
         peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
     # Interpolate values
-    peaks = signal_interpolate(
-        peaks_to_correct, fill_value="extrapolate"
-    ).astype(peaks.dtype)
-    return peaks, True
+        peaks = pd.Series(peaks_to_correct).interpolate(limit_direction="both").values.astype(peaks.dtype)    return peaks, True
 
