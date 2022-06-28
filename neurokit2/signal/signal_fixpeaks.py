@@ -662,13 +662,14 @@ def _interpolate_missing(
     peaks_to_correct = peaks.copy().astype(float)
 
     interval_without_outliers = interval[np.invert(outliers)]
-
+    mean_interval = np.nanmean(interval_without_outliers)
+    
     # go through the outliers starting with the highest indices
     # so that the indices of the other outliers are not moved when
     # unknown intervas are inserted 
     for loc in np.flip(outliers_loc):
         # compute number of NaNs to insert based on the mean interval
-        n_nan = int(interval[loc] / np.nanmean(interval_without_outliers))
+        n_nan = int(interval[loc] / mean_interval)
 
         # Delete peak corresponding to large interval and replace by N NaNs
         peaks_to_correct[loc] = np.nan
