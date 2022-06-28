@@ -140,6 +140,9 @@ def epochs_create(
 
     # Create epochs
     if epochs_end == "from_events":
+        if "duration" not in events.keys():
+            events["duration"] = list(np.diff(events["onset"])) + [len(data) - 1]
+
         epochs_end = [i / sampling_rate for i in events["duration"]]
     parameters = listify(
         onset=event_onsets,
