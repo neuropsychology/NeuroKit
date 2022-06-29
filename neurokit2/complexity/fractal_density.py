@@ -11,7 +11,9 @@ from .utils_complexity_embedding import complexity_embedding
 def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
     """**Density Fractal Dimension (DFD)**
 
-    Work in progress. The idea is to find a way of, essentially, averaging attractors. Because one can not directly average the trajectories, one way is to convert the attractor to a 2D density matrix that we can use similarly to a time-frequency heatmap.
+    Work in progress. The idea is to find a way of, essentially, averaging attractors. Because one
+    can not directly average the trajectories, one way is to convert the attractor to a 2D density
+    matrix that we can use similarly to a time-frequency heatmap.
 
     Parameters
     ----------
