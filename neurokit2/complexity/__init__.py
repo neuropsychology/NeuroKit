@@ -40,6 +40,7 @@ from .entropy_svd import entropy_svd
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .entropy_tsallis import entropy_tsallis
 from .fractal_correlation import fractal_correlation
+from .fractal_density import fractal_density
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_hurst import fractal_hurst
@@ -187,6 +188,7 @@ __all__ = [
     "fishershannon_information",
     "fractal_dfa",
     "fractal_correlation",
+    "fractal_density",
     "fractal_higuchi",
     "fractal_katz",
     "fractal_petrosian",
