@@ -1,8 +1,8 @@
 Documentation
 ==============
 
-.. important::
+.. warning::
 
-    The new website is available at `https://neuropsychology.github.io/NeuroKit <https://neuropsychology.github.io/NeuroKit/>`_.
+   **NEW DOCUMENTATION** website is at `https://neuropsychology.github.io/NeuroKit <https://neuropsychology.github.io/NeuroKit/>`_.
 
 
