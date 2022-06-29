@@ -1,18 +1,13 @@
 Studies
 ##########
 
-Some of the work-in-progress studies.
+Contents:
 
 .. toctree::
    :maxdepth: 1
 
-   HRV Review <https://www.mdpi.com/1424-8220/21/12/3998>
-   HRV Structure <https://psyarxiv.com/mwa6x/>
-   Complexity Review <https://psyarxiv.com/f8k3x/>
-   Complexity Structure <https://psyarxiv.com/v5tqw/>
-   Complexity Tolerance Estimation <complexity_tolerance>
-   EEG Complexity: Parameters Selection <complexity_eeg>
-   EEG Analysis with GAMs <erp_gam>
-   ECG Benchmark <ecg_benchmark>
-   EOG blink template <eog_blinktemplate>
-
+   ecg_benchmark
+   eog_blinktemplate
+   hrv_structure
+   erp_gam
+   complexity_structure

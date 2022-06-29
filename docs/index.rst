@@ -1,50 +1,35 @@
-====================================================
-**Neurophysiological Data Analysis with NeuroKit2**
-====================================================
-
-
+Documentation
+==============
 
 .. important::
 
-    Like the software? Don't forget to support it by `starring <https://github.com/neuropsychology/NeuroKit>`_ |:star:|, sponsoring |:revolving_hearts:|, or spreading the word |:love_letter:|
-
-    And don't forget, we don't want NeuroKit2 to become a stale, static and outdated software. We
-    count on you to help us making it better by **contributing even the tiniest improvements**
-    (a typo, a rephrasing to make things clearer, a comment to the code, a new option, etc.).
-    **NeuroKit2 belongs to you.** Make yourself part of the team!
-
-Home
-====
+    A new website is under developpment. You can preview it `here <https://neuropsychology.github.io/NeuroKit/>`_.
 
 
-Welcome to **NeuroKit**'s documentation, where you can find information and learn about Python, NeuroKit, Physiological Signals and more.
+Welcome to **NeuroKit**'s documentation. Here you can find information and learn about Python, NeuroKit, Physiological Signals and more.
 
-.. seealso::
-
-   You can information on how to cite this documentation `here <https://neuropsychology.github.io/NeuroKit/cite_us.html>`_.
-
-
-You can navigate to the different sections using the left panel. We recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
+You can navigate to the different sections using the left panel. We would recommend checking out the **guides** and **examples**, where you can find walkthroughs and hands-on tutorials.
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Menu
-   :titlesonly:
+   :maxdepth: 2
 
    introduction
    authors
-   cite_us
    installation
+   start/index
    examples/index
-   functions/index
    resources/index
+   functions
    studies/index
-   Repository <https://github.com/neuropsychology/NeuroKit>
+   datasets
+   contributing/index
 
 
-.. include::  ../README.rst
-    :start-after: .. used_at_section
 
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
+
+.. only:: comment
+    Indices and tables
+    ==================
+    * :ref:`genindex`
+    * :ref:`modindex`
+    * :ref:`search`

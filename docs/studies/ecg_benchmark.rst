@@ -1,3 +1,1 @@
-.. include:: ../../studies/ecg_benchmark/README.md
-   :parser: myst_parser.sphinx_
-
+.. mdinclude:: ../../studies/ecg_benchmark/README.md
