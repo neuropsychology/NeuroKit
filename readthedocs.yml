@@ -9,4 +9,4 @@ sphinx:
    configuration: docs/conf.py
 
 conda:
-  file: docs_readthedocs/environment.yml
+  file: docs/environment.yml
