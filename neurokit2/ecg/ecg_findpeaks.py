@@ -5,8 +5,13 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import (
+    signal_findpeaks,
+    signal_plot,
+    signal_sanitize,
+    signal_smooth,
+    signal_zerocrossings,
+)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
@@ -493,7 +498,6 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
     order = 2
 
     normal_cutoff = cutoff / nyq
-
     b, a = scipy.signal.butter(order, normal_cutoff, btype="low", analog=False)
     y = scipy.signal.lfilter(b, a, signal)
 
@@ -501,11 +505,10 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
     tmp = []
     w = int(np.ceil(window * sampling_rate))
     for i in range(w, len(y)):
-        x = y[i-w:i]
+        x = y[i - w : i]
         dxd0 = np.diff(x)
-        T = 1/sampling_rate
-        clt = np.sum(
-              np.sqrt((T**2)*np.ones(w-1) + dxd0**2))
+        T = 1 / sampling_rate
+        clt = np.sum(np.sqrt((T**2) * np.ones(w - 1) + dxd0**2))
         tmp.append(clt)
     clt = [tmp[0]] * w
     clt = clt + tmp
@@ -524,11 +527,13 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
     u = ret
 
     for i in range(len(y)):
-        if (len(peaks) == 0 or i > peaks[-1] + (sampling_rate * 0.35)) and y[i] > u[i]:
+        z = sampling_rate * 0.35
+        if (len(peaks) == 0 or i > peaks[-1] + z) and y[i] > u[i]:
             peaks.append(i)
 
     rpeaks = np.array(peaks)
     return rpeaks
+
 
 # =============================================================================
 # Christov (2004)
