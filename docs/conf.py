@@ -22,55 +22,6 @@ import os
 import re
 import sys
 
-import mock
-from recommonmark.transform import AutoStructify
-
-sys.path.insert(0, os.path.abspath("../"))
-
-
-# -- Mock modules ---------------------------------------------
-MOCK_MODULES = [
-    "scipy",
-    "scipy.signal",
-    "scipy.ndimage",
-    "scipy.stats",
-    "scipy.misc",
-    "scipy.interpolate",
-    "scipy.sparse",
-    "scipy.linalg",
-    "scipy.spatial",
-    "scipy.special",
-    "scipy.integrate",
-    "scipy.cluster",
-    "scipy.optimize",
-    "scikit-learn",
-    "sklearn",
-    "sklearn.neighbors",
-    "sklearn.mixture",
-    "sklearn.datasets",
-    "sklearn.metrics",
-    "sklearn.metrics.pairwise",
-    "sklearn.decomposition",
-    "sklearn.cluster",
-    "sklearn.cross_validation",
-    "mne",
-    "bioread",
-    "cvxopt",
-    "pywt",
-    "pyrqa",
-    "pyrqa.analysis_type",
-    "pyrqa.computation",
-    "pyrqa.image_generator",
-    "pyrqa.metric",
-    "pyrqa.neighbourhood",
-    "pyrqa.settings",
-    "pyrqa.time_series",
-]
-
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
-
-
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -90,12 +41,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx_rtd_theme",
-    "nbsphinx",
-    "sphinx_nbexamples",
-    "matplotlib.sphinxext.plot_directive",
-    "sphinx_copybutton",
-    "recommonmark",
-    "sphinx.ext.autosectionlabel",
 ]
 
 # matplotlib plot directive
