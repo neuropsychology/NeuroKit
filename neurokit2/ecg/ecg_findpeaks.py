@@ -77,8 +77,10 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_nabian2018
     elif method in ["gamboa2008", "gamboa"]:
         return _ecg_findpeaks_gamboa
-    elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
+    elif method in ["ssf", "slopesumfunction"]:
         return _ecg_findpeaks_ssf
+    elif method in ["zong", "zong2003"]:
+        return _ecg_findpeaks_zong
     elif method in ["hamilton", "hamilton2002"]:
         return _ecg_findpeaks_hamilton
     elif method in ["christov", "christov2004"]:
@@ -451,7 +453,7 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     # diff
     dx = np.diff(signal)
     dx[dx >= 0] = 0
-    dx = dx ** 2
+    dx = dx**2
 
     # detection
     (idx,) = np.nonzero(dx > threshold)
@@ -477,23 +479,54 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
 
-## implement new method of finding peaks using curve length transform of QRS
-def wqrs_detector(signal, sampling_rate, **kwargs):
-        """
-        based on W Zong, GB Moody, D Jiang
-        A Robust Open-source Algorithm to Detect Onset and Duration of QRS
-        Complexes
-        In: 2003 IEEE
-        """
-        # Apply low-pass filter to detect qrs wave (5-15hz is ideal passband for qrs detection)
 
-        sig = scipy.signal.butter(order=2,
-                                  Wn=15/(0.5*sampling_rate),
-                                  btype='lowpass', analog=False,
-                                  output='sos')
+# =============================================================================
+# try re-implement zong
+# =============================================================================
+def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kwargs):
+    """From https://github.com/berndporr/py-ecg-detectors/
 
-        sig = scipy.signal.sosfilt(sig, signal)
+    - W Zong, GB Moody, and D Jiang. (2003). A Robust Open-source Algorithm to Detect Onset and Duration of QRS Complexes. In IEEE Computers in Cardiology, 30, pages 737-740, 2003.
+    """
+    # filter signal
+    nyq = 0.5 * sampling_rate
+    order = 2
 
+    normal_cutoff = cutoff / nyq
+
+    b, a = scipy.signal.butter(order, normal_cutoff, btype="low", analog=False)
+    y = scipy.signal.lfilter(b, a, signal)
+
+    # curve length transformation
+    tmp = []
+    w = int(np.ceil(window * sampling_rate))  # window is approx equal to width of widest QRS
+    for i in range(w, len(y)):
+        curr = 0
+        for k in range(i - w + 1, i):
+            curr += np.sqrt((1/sampling_rate)**2 + np.power(y[k] - y[k - 1], 2))
+        tmp.append(curr)
+    l = [tmp[0]] * w
+    l = l + tmp
+
+    # find adaptive threshold that readjusts based on max length transformed value of each QRS
+    peaks = []
+    win = 10 * sampling_rate
+
+    # Apply fast moving window average with 1D convolution
+    ret = np.pad(y, (win - 1, 0), "constant", constant_values=(0, 0))
+    ret = np.convolve(ret, np.ones(win), "valid")
+
+    for i in range(1, win):
+        ret[i - 1] = ret[i - 1] / i
+    ret[win - 1 :] = ret[win - 1 :] / win
+    u = ret
+
+    for i in range(len(y)):
+        if (len(peaks) == 0 or i > peaks[-1] + (sampling_rate * 0.35)) and y[i] > u[i]:
+            peaks.append(i)
+
+    rpeaks = np.array(peaks)
+    return rpeaks
 
 # =============================================================================
 # Christov (2004)
@@ -822,7 +855,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
     swt_level = 3
     padding = -1
     for i in range(1000):
-        if (len(signal) + i) % 2 ** swt_level == 0:
+        if (len(signal) + i) % 2**swt_level == 0:
             padding = i
             break
 
