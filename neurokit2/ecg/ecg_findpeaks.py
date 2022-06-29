@@ -499,16 +499,18 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
 
     # curve length transformation
     tmp = []
-    w = int(np.ceil(window * sampling_rate))  # window is approx equal to width of widest QRS
+    w = int(np.ceil(window * sampling_rate))
     for i in range(w, len(y)):
-        curr = 0
-        for k in range(i - w + 1, i):
-            curr += np.sqrt((1/sampling_rate)**2 + np.power(y[k] - y[k - 1], 2))
-        tmp.append(curr)
-    l = [tmp[0]] * w
-    l = l + tmp
+        x = y[i-w:i]
+        dxd0 = np.diff(x)
+        T = 1/sampling_rate
+        clt = np.sum(
+              np.sqrt((T**2)*np.ones(w-1) + dxd0**2))
+        tmp.append(clt)
+    clt = [tmp[0]] * w
+    clt = clt + tmp
 
-    # find adaptive threshold that readjusts based on max length transformed value of each QRS
+    # find adaptive threshold
     peaks = []
     win = 10 * sampling_rate
 
