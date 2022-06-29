@@ -498,7 +498,7 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
     order = 2
 
     normal_cutoff = cutoff / nyq
-    b, a = scipy.signal.butter(order, normal_cutoff, btype="low", analog=False)
+    b, a = scipy.signal.butter(order, normal_cutoff)
     y = scipy.signal.lfilter(b, a, signal)
 
     # curve length transformation
