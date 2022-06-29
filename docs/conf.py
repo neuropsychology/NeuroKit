@@ -233,7 +233,7 @@ add_function_parentheses = (
     True  # to ensure that parentheses are added to the end of all function names
 )
 
-
+#
 # -- Setup for recommonmark ---------------------------------------------
 # def setup(app):
 #     # Use m2r only for mdinclude and recommonmark for everything else
