@@ -22,22 +22,21 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
     delay : int
         Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
-
-    Returns
-    ---------
-    dfd : float
-        The density fractal dimension.
-    delay : int
-        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
-        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     show : bool
-        Plot of the density matrix. Defaults to ``False``.
+        Plot the density matrix. Defaults to ``False``.
     **kwargs
-        Other arguments to be passed.
+        Other arguments to be passe.
+
+    Returns
+    ---------
+    dfd : float
+        The density fractal dimension.
+    info : dict
+        A dictionary containing additional information.
 
     Examples
     ----------
