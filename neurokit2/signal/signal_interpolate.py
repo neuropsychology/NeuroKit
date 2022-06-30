@@ -3,7 +3,9 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None):
+def signal_interpolate(
+    x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None
+):
     """**Interpolate a signal**
     Interpolate a signal using different methods.
     Parameters
@@ -67,7 +69,9 @@ def signal_interpolate(x_values=None, y_values=None, x_new=None, method="quadrat
     """
     # Sanity checks
     if x_values is None and y_values is None:
-        raise ValueError("NeuroKit error: signal_interpolate(): x_values or y_values must be provided.")
+        raise ValueError(
+            "NeuroKit error: signal_interpolate(): x_values or y_values must be provided."
+        )
     elif x_values is None or y_values is None:
         # for interpolating NaNs
         if y_values is None:
@@ -79,7 +83,8 @@ def signal_interpolate(x_values=None, y_values=None, x_new=None, method="quadrat
         x_values = x_values[y_finite]
         y_values = y_values[y_finite]
     if len(x_values) != len(y_values):
-        raise ValueError("NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length.")
+        raise ValueError("x_values and y_values must be of the same length.")
+
     if isinstance(x_new, int):
         if len(x_values) == x_new:
             return y_values
@@ -87,12 +92,18 @@ def signal_interpolate(x_values=None, y_values=None, x_new=None, method="quadrat
         if len(x_values) == len(x_new):
             return y_values
     if method == "monotone_cubic":
-        interpolation_function = scipy.interpolate.PchipInterpolator(x_values, y_values, extrapolate=True)
+        interpolation_function = scipy.interpolate.PchipInterpolator(
+            x_values, y_values, extrapolate=True
+        )
     else:
         if fill_value is None:
             fill_value = ([y_values[0]], [y_values[-1]])
         interpolation_function = scipy.interpolate.interp1d(
-            x_values, y_values, kind=method, bounds_error=False, fill_value=fill_value,
+            x_values,
+            y_values,
+            kind=method,
+            bounds_error=False,
+            fill_value=fill_value,
         )
     if isinstance(x_new, int):
         x_new = np.linspace(x_values[0], x_values[-1], x_new)

@@ -2,14 +2,18 @@ Optimal Selection of Delay and Embedding Dimension for EEG Complexity
 Analysis
 ================
 
--   [Introduction](#introduction)
--   [Methods](#methods)
--   [Results](#results)
-    -   [Optimization of Delay](#optimization-of-delay)
-    -   [Optimization of Dimension](#optimization-of-dimension)
-    -   [Topological Clusters](#topological-clusters)
--   [Discussion](#discussion)
--   [References](#references)
+- [Analysis](#analysis)
+  - [Introduction](#introduction)
+  - [Methods](#methods)
+  - [Results](#results)
+    - [Optimization of Delay](#optimization-of-delay)
+      - [Per Channel](#per-channel)
+      - [Attractors](#attractors)
+    - [Optimization of Dimension](#optimization-of-dimension)
+      - [Per Channel](#per-channel-1)
+    - [Topological Clusters](#topological-clusters)
+  - [Discussion](#discussion)
+  - [References](#references)
 
 *This study can be referenced by* [*citing the package and the
 documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
@@ -31,7 +35,7 @@ library(patchwork)
 ```
 
 ``` r
-read.csv("data_delay.csv") |> 
+read.csv("data_delay.csv") |>
   group_by(Dataset) |>
   summarise(Sampling_Rate = mean(Sampling_Rate),
             Original_Frequencies = dplyr::first(Original_Frequencies),
@@ -53,27 +57,27 @@ read.csv("data_delay.csv") |>
 ### Optimization of Delay
 
 ``` r
-data_delay <- read.csv("data_delay.csv") |> 
+data_delay <- read.csv("data_delay.csv") |>
   mutate(Metric = fct_relevel(Metric, "Mutual Information"),
          Value = Value/Sampling_Rate*1000,
          Optimal = Optimal/Sampling_Rate*1000,
-         Optimal = Optimal) |> 
+         Optimal = Optimal) |>
   mutate(Area = str_remove_all(Channel, "[:digit:]|z"),
          Area = substring(Channel, 1, 1),
          Area = case_when(Area == "I" ~ "O",
                           Area == "A" ~ "F",
                           TRUE ~ Area),
          Area = fct_relevel(Area, c("F", "C", "T", "P", "O")))
-         
+
 
 # summarize(group_by(data_delay, Dataset), Value = max(Value, na.rm=TRUE))
 ```
 
 ``` r
-# data_delay |> 
-#   mutate(group = paste0(Dataset, "_", Metric)) |> 
-#   estimate_density(method="kernel", select="Optimal", at = "group") |> 
-#   separate("group", into = c("Dataset", "Metric")) |> 
+# data_delay |>
+#   mutate(group = paste0(Dataset, "_", Metric)) |>
+#   estimate_density(method="kernel", select="Optimal", at = "group") |>
+#   separate("group", into = c("Dataset", "Metric")) |>
 #   ggplot(aes(x = x, y = y)) +
 #   geom_line(aes(color = Dataset)) +
 #   facet_wrap(~Metric, scales = "free_y")
@@ -83,19 +87,19 @@ data_delay <- read.csv("data_delay.csv") |>
 
 ``` r
 delay_perchannel <- function(data_delay, dataset="Lemon") {
-  data <- filter(data_delay, Dataset == dataset) |> 
-    group_by(Metric) |> 
-    mutate(Score = 1 + normalize(Score) * 100) |> 
+  data <- filter(data_delay, Dataset == dataset) |>
+    group_by(Metric) |>
+    mutate(Score = 1 + normalize(Score) * 100) |>
     ungroup()
-  
-  by_channel <- data |> 
-    group_by(Condition, Metric, Area, Channel, Value) |> 
-    summarise_all(mean, na.rm=TRUE) 
-  by_area <- data |> 
-    group_by(Condition, Metric, Area, Value) |> 
-    summarise_all(mean, na.rm=TRUE) 
-  
-  p <- by_channel |> 
+
+  by_channel <- data |>
+    group_by(Condition, Metric, Area, Channel, Value) |>
+    summarise_all(mean, na.rm=TRUE)
+  by_area <- data |>
+    group_by(Condition, Metric, Area, Value) |>
+    summarise_all(mean, na.rm=TRUE)
+
+  p <- by_channel |>
     ggplot(aes(x = Value, y = Score, color = Area)) +
     geom_line(aes(group=Channel), alpha = 0.20) +
     geom_line(data=by_area, aes(group=Area), size=1) +
@@ -104,18 +108,18 @@ delay_perchannel <- function(data_delay, dataset="Lemon") {
     see::scale_color_flat_d(palette = "rainbow") +
     scale_y_log10(expand = c(0, 0)) +
     scale_x_continuous(expand = c(0, 0)) +
-    #                    limits = c(0, NA), 
-    #                    breaks=c(5, seq(0, 80, 20)), 
+    #                    limits = c(0, NA),
+    #                    breaks=c(5, seq(0, 80, 20)),
     #                    labels=c(5, seq(0, 80, 20))) +
     labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL) +
     guides(colour = guide_legend(override.aes = list(alpha = 1))) +
     see::theme_modern() +
     theme(plot.title = element_text(face = "plain", hjust = 0))
-  
+
   if(length(unique(data$Condition)) > 1) {
-    p <- p + facet_wrap(~Condition, scales = "free_y", nrow=2) 
+    p <- p + facet_wrap(~Condition, scales = "free_y", nrow=2)
   } else {
-    p <- p + facet_wrap(~Condition, scales = "free_y", nrow=1) 
+    p <- p + facet_wrap(~Condition, scales = "free_y", nrow=1)
   }
   p
 }
@@ -127,9 +131,9 @@ p4 <- delay_perchannel(data_delay, dataset="Resting-State (SG)")
 p5 <- delay_perchannel(data_delay, dataset="Resting-State (FR)")
 
 
-m <- mgcv::bam(Score ~ s(Value, by=Area, k=-1, bs="cs") + 
+m <- mgcv::bam(Score ~ s(Value, by=Area, k=-1, bs="cs") +
                  s(Dataset, bs="re"),
-               data=data_delay |> 
+               data=data_delay |>
                  mutate(Dataset=as.factor(Dataset)))
 
 p6 <- estimate_relation(m, at=c("Value", "Area"), show_data=FALSE) |>
@@ -144,11 +148,11 @@ p6 <- estimate_relation(m, at=c("Value", "Area"), show_data=FALSE) |>
   labs(title = "Average", x = NULL, y = NULL) +
   see::theme_modern()  +
   guides(color="none")
-  
-# p6 <- data_delay |> 
-#   group_by(Area, Value) |> 
-#   summarise(Score = mean(Score)) |> 
-#   mutate(Score = 1 + normalize(Score) * 100) |> 
+
+# p6 <- data_delay |>
+#   group_by(Area, Value) |>
+#   summarise(Score = mean(Score)) |>
+#   mutate(Score = 1 + normalize(Score) * 100) |>
 #   ggplot(aes(x = Value, y = Score, color = Area))  +
 #   # geom_point2(size=3, alpha=0.3) +
 #   geom_line(size=0.5) +
@@ -160,7 +164,7 @@ p6 <- estimate_relation(m, at=c("Value", "Area"), show_data=FALSE) |>
 #   labs(title = "Average", x = NULL, y = NULL) +
 #   see::theme_modern()  +
 #   guides(color="none")
-    
+
 (p1 | p3) / (p4 | p5) / (p2 | p6) + plot_layout(heights = c(2, 1, 1), guides="collect") +
   plot_annotation(title = "Optimization of Delay", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
@@ -210,17 +214,17 @@ p6 <- estimate_relation(m, at=c("Value", "Area"), show_data=FALSE) |>
 ``` r
 data <- read.csv("data_attractor.csv")
 
-p <- data |> 
+p <- data |>
   mutate(Delay = Delay/Sampling_Rate*1000,
          Channel = fct_relevel(Channel, "Fz", "Cz", "Pz", "Oz"),
-         z = normalize(z)) |> 
+         z = normalize(z)) |>
   ggplot(aes(x = x, y = y)) +
   geom_path(aes(alpha=Time, color=z), size=0.1) +
   facet_grid(Channel~Dataset, scales="free", switch="y") +
   guides(alpha="none") +
-  labs(title = "EEG Attractors", 
-       subtitle = "(30 seconds of signal)", 
-       x = expression("Voltage at"~italic(t[0])), 
+  labs(title = "EEG Attractors",
+       subtitle = "(30 seconds of signal)",
+       x = expression("Voltage at"~italic(t[0])),
        # y = expression("Voltage at"~italic(t[0]~+~"τ")~" (27 ms)"),
        y = expression("Voltage at"~italic(t[0])~" + 27 ms")) +
   scale_y_continuous(expand = c(0, 0)) +
@@ -241,12 +245,12 @@ p <- data |>
 ggsave("figures/attractors2D.png", width=15, height=15, dpi=300)
 ```
 
-![](figures/attractors2D.png)<!-- -->
+![](../../studies/complexity_eeg/figures/attractors2D.png)<!-- -->
 
 ### Optimization of Dimension
 
 ``` r
-data_dim <- read.csv("data_dimension.csv") |> 
+data_dim <- read.csv("data_dimension.csv") |>
   mutate(Area = str_remove_all(Channel, "[:digit:]|z"),
          Area = substring(Channel, 1, 1),
          Area = case_when(Area == "I" ~ "O",
@@ -259,23 +263,23 @@ data_dim <- read.csv("data_dimension.csv") |>
 
 ``` r
 dim_perchannel <- function(data_dim, dataset="Lemon") {
-  data <- filter(data_dim, Dataset == dataset) |> 
+  data <- filter(data_dim, Dataset == dataset) |>
     mutate(Score = normalize(Score))
-  
-  by_channel <- data |> 
-    group_by(Condition, Area, Channel, Value) |> 
-    summarise_all(mean, na.rm=TRUE) 
-  by_area <- data |> 
-    group_by(Condition, Area, Value) |> 
-    summarise_all(mean, na.rm=TRUE) 
-  deriv <- data |> 
-    group_by(Condition, Value) |> 
-    summarise_all(mean, na.rm=TRUE) |> 
+
+  by_channel <- data |>
+    group_by(Condition, Area, Channel, Value) |>
+    summarise_all(mean, na.rm=TRUE)
+  by_area <- data |>
+    group_by(Condition, Area, Value) |>
+    summarise_all(mean, na.rm=TRUE)
+  deriv <- data |>
+    group_by(Condition, Value) |>
+    summarise_all(mean, na.rm=TRUE) |>
     mutate(Score = normalize(Score - lag(Score)),
            Score2 = normalize(Score - lag(Score)))
-  
-  by_channel |> 
-    mutate(Value = as.factor(Value)) |> 
+
+  by_channel |>
+    mutate(Value = as.factor(Value)) |>
     ggplot(aes(x = Value, y = Score)) +
     geom_line(data=deriv, aes(alpha = "1st order"), linetype="dashed") +
     geom_line(data=deriv, aes(y=Score2, alpha="2nd order"), linetype="dotted") +
@@ -290,7 +294,7 @@ dim_perchannel <- function(data_dim, dataset="Lemon") {
     labs(title = paste0("Dataset: ", dataset), x = NULL, y = NULL, alpha="Derivatives") +
     guides(colour = guide_legend(override.aes = list(alpha = 1))) +
     see::theme_modern() +
-    theme(plot.title = element_text(face = "plain", hjust = 0)) 
+    theme(plot.title = element_text(face = "plain", hjust = 0))
 }
 
 p1 <- dim_perchannel(data_dim, dataset="Lemon")
@@ -300,12 +304,12 @@ p4 <- dim_perchannel(data_dim, dataset="Resting-State (SG)")
 p5 <- dim_perchannel(data_dim, dataset="Resting-State (FR)")
 
 
-m <- mgcv::bam(Score ~ s(Value, by=Area, k=-1, bs="cs") + 
+m <- mgcv::bam(Score ~ s(Value, by=Area, k=-1, bs="cs") +
                  s(Dataset, bs="re"),
-               data=data_dim |> 
+               data=data_dim |>
                  mutate(Dataset=as.factor(Dataset)))
 
-p6 <- estimate_relation(m, at=list("Value" = unique(data_dim$Value), 
+p6 <- estimate_relation(m, at=list("Value" = unique(data_dim$Value),
                                    "Area" = unique(data_dim$Area))) |>
   mutate(Predicted = normalize(Predicted)) |>
   ggplot(aes(x = as.factor(Value), y = Predicted, color = Area)) +
@@ -347,41 +351,41 @@ p6 <- estimate_relation(m, at=list("Value" = unique(data_dim$Value),
 ### Topological Clusters
 
 ``` r
-df <- read.csv("data_complexity.csv") |> 
+df <- read.csv("data_complexity.csv") |>
   mutate(Channel = ifelse(Channel=="Cpz", "CPz", Channel))
-  
-data <- df |> 
-  pivot_longer(-c(Channel, Participant, Condition, Dataset), 
-               names_to = "Index", values_to = "Value") |> 
-  group_by(Dataset, Condition, Index) |> 
-  mutate(Value = standardize(Value)) |> 
+
+data <- df |>
+  pivot_longer(-c(Channel, Participant, Condition, Dataset),
+               names_to = "Index", values_to = "Value") |>
+  group_by(Dataset, Condition, Index) |>
+  mutate(Value = standardize(Value)) |>
   ungroup()
 
 data_varex <- data.frame()
 data_clusters <- list()
 for(dataset in unique(df$Dataset)) {
   dat1 <- data[data$Dataset == dataset, ]
-  
+
   print(dataset)
   list_clusters <- list()
   for(condition in unique(dat1$Condition)) {
     dat2 <- dat1[dat1$Condition == condition, ]
-    
+
     for(index in unique(dat2$Index)) {
-      
-      dat3 <- dat2[dat2$Index == index, ] |> 
-        pivot_wider(values_from = "Value", names_from = "Channel") |> 
-        select_if(is.numeric) |> 
+
+      dat3 <- dat2[dat2$Index == index, ] |>
+        pivot_wider(values_from = "Value", names_from = "Channel") |>
+        select_if(is.numeric) |>
         data_transpose()
       dat3[is.na(dat3)] <- 0
-      
-      
+
+
       for(n in 2:10) {
         for(method in c("hkmeans", "pam", "hclust")) {
           rez <- parameters::cluster_analysis(dat3, n=n, method=method)
           perf <- attributes(rez)$performance
-          varex <- data.frame(Clusters=n, 
-                              Variance=perf$R2, 
+          varex <- data.frame(Clusters=n,
+                              Variance=perf$R2,
                               Dataset=dataset,
                               Condition=condition,
                               Index=index,
@@ -400,8 +404,8 @@ for(dataset in unique(df$Dataset)) {
 ## [1] "Resting-State (SG)"
 ## [1] "Resting-State (FR)"
 
-data_varex |> 
-  filter(Method == "hkmeans") |> 
+data_varex |>
+  filter(Method == "hkmeans") |>
   ggplot(aes(x=Clusters, y=Variance)) +
   geom_line(aes(color=Index)) +
   facet_grid(Dataset~Condition)
@@ -443,12 +447,12 @@ def plot_layout(closest, closest_names, **kwargs):
     montage = TruScanEEGpy.montage_mne_128(TruScanEEGpy.layout_128('10-5'))
     info = mne.create_info(montage.ch_names, ch_types="eeg", sfreq=3000)
     info = info.set_montage(montage)
-  
+
   groups = []
   for group in np.unique(closest):
       channels = np.array(closest_names)[np.array(closest) == group]
       groups.append(mne.pick_channels(info['ch_names'], include=channels))
-  
+
   mne.viz.plot_sensors(info, ch_groups=groups, **kwargs)
 
 def make_plot(dataset="Lemon"):

@@ -131,7 +131,7 @@ def _signal_recompose_get_wcorr(components, show=False):
 
     # Calculated weighted norms, ||F_i||_w, then invert.
     F_wnorms = np.array([w_inner(components[:, i], components[:, i]) for i in range(L)])
-    F_wnorms = F_wnorms**-0.5
+    F_wnorms = F_wnorms ** -0.5
 
     # Calculate Wcorr.
     Wcorr = np.identity(L)

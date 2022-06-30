@@ -35,5 +35,5 @@ Sub-domains
 
 .. automodule:: neurokit2.hrv
    :members:
-   :exclude-members: hrv, hrv_time, hrv_frequency, hrv_nonlinear, hrv_rqa
+   :exclude-members: hrv, hrv_time, hrv_frequency, hrv_nonlinear, hrv_rqa, hrv_rsa
 

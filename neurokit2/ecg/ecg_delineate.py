@@ -140,6 +140,9 @@ def ecg_delineate(
                     "cleaned signal."
                 )
 
+    elif isinstance(ecg_cleaned, pd.Series):
+        ecg_cleaned = ecg_cleaned.values
+
     # Sanitize input for rpeaks
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
