@@ -47,6 +47,7 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     * **Example 2:** Methods comparison
 
     .. ipython:: python
+      :okwarning:
 
       data["vangent2019"] = nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019")
       data["sarkar2015"] = nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015")

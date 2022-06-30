@@ -54,6 +54,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
     Examples
     ---------
     **Example 1**: Simple case
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -137,8 +138,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
             # https://stats.stackexchange.com/questions/179674/
             # number-of-bins-when-computing-mutual-information
             bins = 1 + np.sqrt(1 + (24 * len(x) / (1 - np.corrcoef(x, y)[0, 1] ** 2)))
-            bins = np.round((1/np.sqrt(2)) * np.sqrt(bins)).astype(int)
-
+            bins = np.round((1 / np.sqrt(2)) * np.sqrt(bins)).astype(int)
 
         if method in ["varoquaux"]:
             mi = _mutual_information_varoquaux(x, y, bins=bins, **kwargs)
@@ -221,14 +221,18 @@ def _mutual_information_knn(x, y, k=3):
     points = np.array([x, y]).T
 
     # Find nearest neighbors in joint space, p=inf means max-norm
-    dvec = sklearn.neighbors.KDTree(points, metric='chebyshev').query(points, k=k + 1)[0][:, k]
+    dvec = sklearn.neighbors.KDTree(points, metric="chebyshev").query(points, k=k + 1)[0][:, k]
 
     a = np.array([x]).T
-    a = sklearn.neighbors.KDTree(a, metric='chebyshev').query_radius(a, dvec - 1e-15, count_only=True)
+    a = sklearn.neighbors.KDTree(a, metric="chebyshev").query_radius(
+        a, dvec - 1e-15, count_only=True
+    )
     a = np.mean(scipy.special.digamma(a))
 
     b = np.array([y]).T
-    b = sklearn.neighbors.KDTree(b, metric='chebyshev').query_radius(b, dvec - 1e-15, count_only=True)
+    b = sklearn.neighbors.KDTree(b, metric="chebyshev").query_radius(
+        b, dvec - 1e-15, count_only=True
+    )
     b = np.mean(scipy.special.digamma(b))
 
     c = scipy.special.digamma(k)
