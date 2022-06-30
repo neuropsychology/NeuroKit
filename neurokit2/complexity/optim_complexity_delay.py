@@ -256,7 +256,7 @@ def complexity_delay(
     if isinstance(delay_max, int):
         tau_sequence = np.arange(1, delay_max + 1)
     else:
-        tau_sequence = np.array(delay_max)
+        tau_sequence = np.array(delay_max).astype(int)
 
     # Method
     method = method.lower()
