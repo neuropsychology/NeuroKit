@@ -119,7 +119,7 @@ def read_bitalino(
                 annot = metadata[k]["Annotations"]
                 annot = annot[annot["CHANNEL"].isin(metadata[k]["label"])]
                 annot = annot.drop_duplicates(["START", "END"])
-                for index, row in annot.iterrows():
+                for _, row in annot.iterrows():
                     data[k]["Events"][int(row["START"] * sr) : int(row["END"] * sr) + 1] = 1
 
     return data, metadata
@@ -302,18 +302,6 @@ def _read_bitalino_events_annotation(events_annotation_directory=None, channel_n
     """Read events that are annotated during BITalino signal acquisition.
     Returns a dictionary containing the start and stop times (in seconds) in each channel detected per unique event
     (label) within each device."""
-
-    annot = filename.replace(".txt", "_EventsAnnotation.txt")
-    if os.path.isfile(annot) is False:
-        return None
-
-    with open(annot, "r") as f:
-        lines = f.readlines()
-        if "OpenSignals" not in lines[0]:
-            raise ValueError("Text file is not in OpenSignals format.")
-        metadata = json.loads(lines[1][1:])  # read second line + skip '#'
-        data = pd.read_csv(annot, sep="\t", header=None, comment="#")
-        df.columns = annotations["columns"]["labels"]
 
     # Get working directory of data file (assume events stored together in same folder)
     folder = os.listdir(events_annotation_directory)
