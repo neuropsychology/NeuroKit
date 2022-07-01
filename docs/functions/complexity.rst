@@ -53,6 +53,10 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_higuchi
 
+*fractal_density()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_density
+
 *fractal_hurst()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_hurst

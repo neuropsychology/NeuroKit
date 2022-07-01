@@ -11,9 +11,15 @@ from .utils_complexity_embedding import complexity_embedding
 def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
     """**Density Fractal Dimension (DFD)**
 
-    Work in progress. The idea is to find a way of, essentially, averaging attractors. Because one
-    can not directly average the trajectories, one way is to convert the attractor to a 2D density
-    matrix that we can use similarly to a time-frequency heatmap.
+    This is a **Work in Progress (WIP)**. The idea is to find a way of, essentially, averaging
+    attractors. Because one can not directly average the trajectories, one way is to convert the
+    attractor to a 2D density matrix that we can use similarly to a time-frequency heatmap. However,
+    it is very unclear how to then derive meaningful indices from this density plot. Also, how many
+    bins, or smoothing, should one use?
+
+    Basically, this index is exploratory and should not be used in its state. However, if you're
+    interested in the problem of "average" attractors (e.g., from multiple epochs / trials), and
+    you want to think about it with us, feel free to let us know!
 
     Parameters
     ----------
@@ -77,6 +83,7 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
       epochs2 = nk.epochs_create(sig2, events=20)
       dfd, info2 = nk.fractal_density(epochs2, delay=20, show=True)
 
+      # Difference between two density maps
       D = info1["Average"] - info2["Average"]
       plt.imshow(D)
 
