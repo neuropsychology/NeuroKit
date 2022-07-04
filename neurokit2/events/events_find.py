@@ -75,18 +75,37 @@ def events_find(
 
     Example
     ----------
+    Simulate a trigger signal (e.g., from photosensor)
+
     .. ipython:: python
 
       import neurokit2 as nk
+      import numpy as np
 
-      signal = nk.signal_simulate(duration=4)
+      signal = np.zeros(200)
+      signal[20:60] = 1
+      signal[100:105] = 1
+      signal[130:170] = 1
+
       events = nk.events_find(signal)
       events
 
-      @savefig p_events_find.png scale=100%
+      @savefig p_events_find1.png scale=100%
       nk.events_plot(events, signal)
       @suppress
       plt.close()
+
+    The second event is an artifact (too short), we can skip it
+
+    .. ipython:: python
+
+      events = nk.events_find(signal, duration_min= 10)
+
+      @savefig p_events_find2.png scale=100%
+      nk.events_plot(events, signal)
+      @suppress
+      plt.close()
+
 
 
     """
