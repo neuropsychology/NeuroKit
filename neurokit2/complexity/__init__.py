@@ -52,6 +52,7 @@ from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_fishershannon import fishershannon_information
+from .information_gain import information_gain
 from .information_mutual import mutual_information
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
@@ -199,4 +200,5 @@ __all__ = [
     "fractal_psdslope",
     "fractal_sda",
     "mutual_information",
+    "information_gain",
 ]
