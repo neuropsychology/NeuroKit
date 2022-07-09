@@ -34,7 +34,7 @@ def signal_interpolate(
         requested points outside of the data range.
         If a two-element tuple, then the first element is used as a fill value
         for x_new < x[0] and the second element is used for x_new > x[-1].
-        If “extrapolate”, then points outside the data range will be extrapolated.
+        If "extrapolate", then points outside the data range will be extrapolated.
         If not provided, then the default is ([y_values[0]], [y_values[-1]]).
     Returns
     -------
