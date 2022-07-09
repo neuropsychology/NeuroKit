@@ -50,7 +50,7 @@ def information_gain(signal, width=4):
     embedded = complexity_embedding(binary, dimension=width, delay=1).astype(int)
 
     # Convert into strings
-    states = ["".join(list(l)) for l in embedded.astype(str)]
+    states = ["".join(list(state)) for state in embedded.astype(str)]
     transitions = [tuple(states[i : i + 2]) for i in range(len(states) - 1)]
 
     # Get unique and format
