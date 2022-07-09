@@ -133,8 +133,8 @@ def _ecg_findpeaks_promac(
     ProMAC combines the result of several R-peak detectors in a probabilistic way. For a given peak
     detector, the binary signal representing the peak locations is convolved with a Gaussian
     distribution, resulting in a propabilistic representation of each peak location. This procedure
-    is repeated for all selected 'promac_methods' and the resulting signals are accumulated. Finally,
-    a threshold is used to accept or reject the peak locations.
+    is repeated for all selected 'promac_methods' and the resulting signals are accumulated.
+    Finally, a threshold is used to accept or reject the peak locations.
 
     See this discussion for more information on the origins of the method:
     https://github.com/neuropsychology/NeuroKit/issues/222
@@ -489,7 +489,8 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
 def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
-    - W Zong, GB Moody, and D Jiang. (2003). A Robust Open-source Algorithm to Detect Onset and Duration of QRS Complexes. In IEEE Computers in Cardiology, 30, pages 737-740, 2003.
+    - W Zong, GB Moody, and D Jiang. (2003). A Robust Open-source Algorithm to Detect Onset and
+      Duration of QRS Complexes. In IEEE Computers in Cardiology, 30, pages 737-740, 2003.
     """
 
     # 1. Filter signal
