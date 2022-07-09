@@ -21,7 +21,7 @@ def complexity_symbolize(signal, method="mean", c=3, show=False, **kwargs):
     developped to that end.
 
     * **Method 'A'** binarizes the signal by higher vs. lower values as compated to the signal's
-      mean.
+      mean. Equivalent tp ``method="mean"`` (``method="median"`` is also valid).
     * **Method 'B'** uses values that are within the mean +/- 1 SD band vs. values that are outside
       this band.
     * **Method 'C'** computes the difference between consecutive samples and binarizes depending on
