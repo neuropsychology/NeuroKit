@@ -81,6 +81,9 @@ def ecg_peaks(
       # martinez2003
       _, martinez2003 = nk.ecg_peaks(ecg, method="martinez2003")
 
+      # zong2003
+      _, zong2003 = nk.ecg_peaks(ecg, method="zong2003")
+
       # christov2004
       _, christov2004 = nk.ecg_peaks(cleaned, method="christov2004")
 
@@ -134,7 +137,7 @@ def ecg_peaks(
                               noise_amplitude=0.05, noise_frequency=[25, 50],
                               artifacts_amplitude=0.05, artifacts_frequency=50)
       @savefig p_ecg_peaks3.png scale=100%
-      info = nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True)
+      info = nk.ecg_findpeaks(ecg, sampling_rate=500, method="promac", show=True)
 
     References
     ----------

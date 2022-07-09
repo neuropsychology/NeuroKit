@@ -84,7 +84,7 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_gamboa
     elif method in ["ssf", "slopesumfunction"]:
         return _ecg_findpeaks_ssf
-    elif method in ["zong", "zong2003"]:
+    elif method in ["zong", "zong2003", "wqrs"]:
         return _ecg_findpeaks_zong
     elif method in ["hamilton", "hamilton2002"]:
         return _ecg_findpeaks_hamilton
@@ -117,6 +117,7 @@ def _ecg_findpeaks_promac(
         "neurokit",
         "gamboa",
         "ssf",
+        "zong",
         "engzee",
         "elgendi",
         "kalidas",
@@ -442,9 +443,6 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
-    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of
-      arterial blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
-
     """
     # TODO: Doesn't really seems to work
 
@@ -486,53 +484,52 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
 
 
 # =============================================================================
-# try re-implement zong
+# Zong (2003) - WQRS
 # =============================================================================
 def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - W Zong, GB Moody, and D Jiang. (2003). A Robust Open-source Algorithm to Detect Onset and Duration of QRS Complexes. In IEEE Computers in Cardiology, 30, pages 737-740, 2003.
     """
-    # filter signal
-    nyq = 0.5 * sampling_rate
-    order = 2
 
-    normal_cutoff = cutoff / nyq
-    b, a = scipy.signal.butter(order, normal_cutoff)
+    # 1. Filter signal
+    # TODO: Should remove this step? It's technically part of cleaning,
+    # Not sure it is integral to the peak-detection per se. Opinions are welcome.
+    order = 2
+    # Cutoff normalized by nyquist frequency
+    b, a = scipy.signal.butter(order, cutoff / (0.5 * sampling_rate))
     y = scipy.signal.lfilter(b, a, signal)
 
-    # curve length transformation
-    tmp = []
+    # Curve length transformation
     w = int(np.ceil(window * sampling_rate))
-    for i in range(w, len(y)):
-        x = y[i - w : i]
-        dxd0 = np.diff(x)
-        T = 1 / sampling_rate
-        clt = np.sum(np.sqrt((T**2) * np.ones(w - 1) + dxd0**2))
-        tmp.append(clt)
-    clt = [tmp[0]] * w
-    clt = clt + tmp
+    tmp = np.zeros(len(y) - w)
+    for i, j in enumerate(np.arange(w, len(y))):
+        s = y[j - w : j]
+        tmp[i] = np.sum(
+            np.sqrt(np.power(1 / sampling_rate, 2) * np.ones(w - 1) + np.power(np.diff(s), 2))
+        )
+    # Pad with the first value
+    clt = np.concatenate([[tmp[0]] * w, tmp])
 
-    # find adaptive threshold
-    peaks = []
-    win = 10 * sampling_rate
+    # Find adaptive threshold
+    window_size = 10 * sampling_rate
 
     # Apply fast moving window average with 1D convolution
-    ret = np.pad(y, (win - 1, 0), "constant", constant_values=(0, 0))
-    ret = np.convolve(ret, np.ones(win), "valid")
+    ret = np.pad(clt, (window_size - 1, 0), "constant", constant_values=(0, 0))
+    ret = np.convolve(ret, np.ones(window_size), "valid")
 
-    for i in range(1, win):
+    for i in range(1, window_size):
         ret[i - 1] = ret[i - 1] / i
-    ret[win - 1 :] = ret[win - 1 :] / win
-    u = ret
+    ret[window_size - 1 :] = ret[window_size - 1 :] / window_size
 
-    for i in range(len(y)):
+    # Find peaks
+    peaks = []
+    for i in range(len(clt)):
         z = sampling_rate * 0.35
-        if (len(peaks) == 0 or i > peaks[-1] + z) and y[i] > u[i]:
+        if (len(peaks) == 0 or i > peaks[-1] + z) and clt[i] > ret[i]:
             peaks.append(i)
 
-    rpeaks = np.array(peaks)
-    return rpeaks
+    return np.array(peaks)
 
 
 # =============================================================================
