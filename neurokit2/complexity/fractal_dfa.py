@@ -34,6 +34,9 @@ def fractal_dfa(
     :math:`h_{(2)} < 0.5`suggests short range correlations. If :math:`h_{(2)} = 0.5`, it indicates
     uncorrelated indiscriminative fluctuations, i.e. a Brownian motion.
 
+    .. figure:: ../img/douglas2022a.png
+       :alt: Illustration of DFA (Douglas et al., 2022).
+
     Multifractal DFA returns the generalised Hurst exponents *h* for different values of *q*. It is
     converted to the multifractal **scaling exponent** *Tau* :math:`\\tau_{(q)}`, which non-linear
     relationship with *q* can indicate multifractility. From there, we derive the singularity
@@ -71,8 +74,7 @@ def fractal_dfa(
     .. note ::
 
       Help is needed to implement the modified formula to compute the slope when
-      *q* = 0. See for instance `Faini (2021)
-      <https://royalsocietypublishing.org/doi/abs/10.1098/rsta.2020.0254>`_.
+      *q* = 0. See for instance Faini et al. (2021).
 
     Parameters
     ----------
@@ -493,7 +495,7 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 
     else:
         # Compute Root Mean Square (RMS)
-        fluctuation = np.sum(detrended ** 2, axis=1) / detrended.shape[1]
+        fluctuation = np.sum(detrended**2, axis=1) / detrended.shape[1]
         fluctuation = np.sqrt(np.sum(fluctuation) / len(fluctuation))
 
     return fluctuation

@@ -69,9 +69,7 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
     """
     # Sanity checks
     if len(x_values) != len(y_values):
-        raise ValueError(
-            "NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length."
-        )
+        raise ValueError("x_values and y_values must be of the same length.")
 
     if isinstance(x_new, int):
         if len(x_values) == x_new:

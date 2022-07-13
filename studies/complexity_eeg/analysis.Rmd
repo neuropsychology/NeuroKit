@@ -229,7 +229,7 @@ ggsave("figures/attractors2D.png", width=15, height=15, dpi=300)
 ```
 
 ```{r echo=FALSE, fig.height=10, fig.width=10, message=FALSE, warning=FALSE}
-knitr::include_graphics("figures/attractors2D.png")
+knitr::include_graphics("../../studies/complexity_eeg/figures/attractors2D.png")
 ```
 
 

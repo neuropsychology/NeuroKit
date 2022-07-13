@@ -54,6 +54,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
     Examples
     ---------
     **Example 1**: Simple case
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -79,20 +80,24 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       data = pd.DataFrame()
       for level in np.linspace(0.01, 3, 200):
           noise = np.random.normal(scale=level, size=400)
-          rez = pd.DataFrame({"Noise": [level],
-              "MI1": [nk.mutual_information(x, y + noise, method="varoquaux", sigma=1)],
-              "MI2": [nk.mutual_information(x, y + noise, method="varoquaux", sigma=0)],
-              "MI3": [nk.mutual_information(x, y + noise, method="nolitsa")],
-              "MI4": [nk.mutual_information(x, y + noise, method="knn")],
-              "MI5": [nk.mutual_information(x, y + noise, method="max")]
-          })
+          rez = pd.DataFrame({"Noise": [level]})
+          rez["MI1"] = nk.mutual_information(x, y + noise, method="varoquaux", sigma=1)
+          rez["MI2"] = nk.mutual_information(x, y + noise, method="varoquaux", sigma=0)
+          rez["MI3"] = nk.mutual_information(x, y + noise, method="nolitsa")
+          rez["MI4"] = nk.mutual_information(x, y + noise, method="knn")
+          rez["MI5"] = nk.mutual_information(x, y + noise, method="max")
           data = pd.concat([data, rez], axis=0)
+
       data["MI1"] = nk.rescale(data["MI1"])
       data["MI2"] = nk.rescale(data["MI2"])
       data["MI3"] = nk.rescale(data["MI3"])
       data["MI4"] = nk.rescale(data["MI4"])
       data["MI5"] = nk.rescale(data["MI5"])
+
+      @savefig p_information_mutual1.png scale=100%
       data.plot(x="Noise", y=["MI1", "MI2", "MI3", "MI4", "MI5"], kind="line")
+      @suppress
+      plt.close()
 
       # Computation time
       # x = np.random.normal(size=10000)
@@ -137,8 +142,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
             # https://stats.stackexchange.com/questions/179674/
             # number-of-bins-when-computing-mutual-information
             bins = 1 + np.sqrt(1 + (24 * len(x) / (1 - np.corrcoef(x, y)[0, 1] ** 2)))
-            bins = np.round((1/np.sqrt(2)) * np.sqrt(bins)).astype(int)
-
+            bins = np.round((1 / np.sqrt(2)) * np.sqrt(bins)).astype(int)
 
         if method in ["varoquaux"]:
             mi = _mutual_information_varoquaux(x, y, bins=bins, **kwargs)
@@ -221,14 +225,18 @@ def _mutual_information_knn(x, y, k=3):
     points = np.array([x, y]).T
 
     # Find nearest neighbors in joint space, p=inf means max-norm
-    dvec = sklearn.neighbors.KDTree(points, metric='chebyshev').query(points, k=k + 1)[0][:, k]
+    dvec = sklearn.neighbors.KDTree(points, metric="chebyshev").query(points, k=k + 1)[0][:, k]
 
     a = np.array([x]).T
-    a = sklearn.neighbors.KDTree(a, metric='chebyshev').query_radius(a, dvec - 1e-15, count_only=True)
+    a = sklearn.neighbors.KDTree(a, metric="chebyshev").query_radius(
+        a, dvec - 1e-15, count_only=True
+    )
     a = np.mean(scipy.special.digamma(a))
 
     b = np.array([y]).T
-    b = sklearn.neighbors.KDTree(b, metric='chebyshev').query_radius(b, dvec - 1e-15, count_only=True)
+    b = sklearn.neighbors.KDTree(b, metric="chebyshev").query_radius(
+        b, dvec - 1e-15, count_only=True
+    )
     b = np.mean(scipy.special.digamma(b))
 
     c = scipy.special.digamma(k)
