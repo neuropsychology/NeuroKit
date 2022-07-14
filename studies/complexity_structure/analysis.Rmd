@@ -14,7 +14,7 @@ There has been an exponential increase in the number of complexity indices in th
 
 Additionally, the lack of a comprehensive open-source and user-friendly software for computing various complexity indices likely contributes to the limited availability of empirical comparison [@flood2021]. Indeed, most complexity indices are only described mathematically in journal articles, with reusable code seldom made available, therefore limiting their further application and validation [@yang2013; @flood2021]. Furthermore, although there exists open-source software that allows comparison of various types of time series analyses functions, such as *HCTSA* [@fulcher2017], such software usually by default administers all its features relevant to the inputted data, before returning a set of the top performing features. While this may be well-suited for exploratory data-driven analyses, it may be computationally redundant and lead to results that are difficult to interpret. To address such research gaps, we added a comprehensive set of complexity-related features to *NeuroKit2*, a Python package for physiological signal processing [@Makowski2021neurokit], to provide users with a software to compute a vast amount of complexity indices. The code is designed to be as fast as possible, while still written in pure Python [though with the help of dependencies such as Numpy or Pandas, @harris2020array; @mckinney2010data] to maximize the re-usability, transparency, and correctness.
 
-Leveraging this tool, the goal of this study is to empirically compare a large number of complexity indices, inspect how they relate to one another, and derive recommendations for indices selection. More specifically, we will quantify the complexity of various types of signals with varying degrees of noise using 128 of the predominantly used indices that are available for computation using *NeuroKit2*. Note that, even though it is one of the largest comparison to date to our knowledge (and covers the most commonly used metrics), this list is by no means exhaustive: new indices are being developed such as for example *symmetropy* [@girault2022]. We will then project the results on a latent space through factor analysis, and review the various indices that we find the most relevant and interesting in regards to their representation of the latent dimensions. This analysis will be complemented by hierarchical clustering. To this end, it should be duly noted that the list of 128 indices used for comparison are by no means exhaustive; more recent tools, such as the aforementioned palindromic analyses were not included in the scope of this study.
+Leveraging this tool, the goal of this study is to empirically compare a large number of complexity indices, inspect how they relate to one another, and derive recommendations for indices selection. More specifically, we will quantify the complexity of various types of signals with varying degrees of noise using 128 of the predominantly used indices that are available for computation using *NeuroKit2*. Note that, even though it is one of the largest comparison to date to our knowledge (and covers the most commonly used metrics), this list is by no means exhaustive: new indices are being developed, such as for instance *symmetropy* [@girault2022]. We will then project the results on a latent space through factor analysis, and review the various indices that we find the most relevant and interesting in regards to their representation of the latent dimensions. This analysis will be complemented by hierarchical clustering. To this end, it should be duly noted that the list of 128 indices used for comparison are by no means exhaustive; more recent tools, such as the aforementioned palindromic analyses were not included in the scope of this study.
 
 ## Methods
 
@@ -71,9 +71,9 @@ The Python script to generate the data can be found at
 **github.com/neuropsychology/NeuroKit/studies/complexity_structure**.
 
 
-We started by generating 5 types of signals, one random-walk, two oscillatory signals made (with one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at 4 different lengths of 500, 1000, 1500 and 2000 sampling points. The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
+We started by generating 5 types of signals, one random-walk, two oscillatory signals made (with one made of harmonic frequencies that results in a self-repeating - fractal-like - signal), and two complex signals derived from Lorenz systems (with parameters ($\sigma = 10, \beta = 2.5, \rho = 28$); and ($\sigma = 20, \beta = 2, \rho = 30$), respectively). Each of this signal was iteratively generated at 6 different lengths (ranging from 500 to 3000 by 500 samples). The resulting vectors were standardized and each were added 5 types of $(1/f)^\beta$ noise (namely violet $\beta=-2$, blue $\beta=-1$, white $\beta=0$, pink $\beta=1$, and brown $\beta=2$ noise). Each noise type was added at 48 different intensities (linearly ranging from 0.1 to 4). Examples of generated signals are presented in **Figure 1**.
 
-The combination of these parameters resulted in a total of `r 48*4*5*5` signal iterations. For each of them, we computed 128 complexity indices, and additional basic metrics such as the standard deviation (*SD*), the *length* of the signal and its dominant *frequency*. We also included a *random* number to make sure that our our dimensionality analyses accurately discriminate this unrelated feature. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices included, please refer to NeuroKit's documentation at **https://neuropsychology.github.io/NeuroKit**.
+The combination of these parameters resulted in a total of `r 48*6*5*5` signal iterations. For each of them, we computed 128 complexity indices, and additional basic metrics such as the standard deviation (*SD*), the *length* of the signal and its dominant *frequency*. We also included a *random* number to make sure that our our dimensionality analyses accurately discriminate this unrelated feature. The parameters used (such as the time-delay $\tau$ or the embedding dimension) are documented in the data generation script. For a complete description of the various indices included, please refer to NeuroKit's documentation at **https://neuropsychology.github.io/NeuroKit**.
 
 ## Results
 
@@ -391,12 +391,6 @@ cor |>
   select(Parameter1, Parameter2, r)
 ```
 
-
-For the subsequent analyses, we removed statistically redundant indices (which correlation was equal to 1.0), such as *PowEn* - identical to *SD*, *CREn (100)*  - identical to *CREn (10)*, and *FuzzyRCMSEn* - identical to *RCMSEn*.
-
-
-
-
 ```{r eval=FALSE, message=FALSE, warning=FALSE, cache=FALSE, include=FALSE}
 # Duplicates
 # ===========
@@ -417,6 +411,9 @@ filter(averagetime, Index %in% c("SVDEn", "FuzzycApEn"))
 filter(averagetime, Index %in% c("CPEn", "CRPEn"))
 filter(averagetime, Index %in% c("NLDFD", "RR"))
 ```
+
+For the subsequent analyses, we removed statistically redundant indices (which correlation was equal to 1.0), such as *PowEn* - identical to *SD*, *CREn (100)* - identical to *CREn (10)*, and *FuzzyRCMSEn* - identical to *RCMSEn*.
+
 
 ### Correlation
 
