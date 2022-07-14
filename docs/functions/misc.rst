@@ -29,6 +29,10 @@ Misc
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.find_plateau
 
+*find_knee()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.misc.find_knee
+
 *intervals_to_peaks()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.intervals_to_peaks

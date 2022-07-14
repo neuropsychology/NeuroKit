@@ -7,6 +7,7 @@ from .expspace import expspace
 from .find_closest import find_closest
 from .find_consecutive import find_consecutive
 from .find_groups import find_groups
+from .find_knee import find_knee
 from .find_outliers import find_outliers
 from .find_plateau import find_plateau
 from .intervals_to_peaks import intervals_to_peaks
@@ -20,6 +21,7 @@ __all__ = [
     "find_closest",
     "find_consecutive",
     "find_groups",
+    "find_knee",
     "as_vector",
     "expspace",
     "replace",
