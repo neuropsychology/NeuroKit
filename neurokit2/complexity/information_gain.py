@@ -4,18 +4,32 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def information_gain(signal, width=4):
-    """**Mean Information Gain (MIG)**
+def information_gain(signal, delay=1, dimension=4):
+    """**Mean Information Gain (MIG)** and **Fluctuation Complexity (FC)**
 
-    Mean Information Gain (MIG) is ...
+    Mean Information Gain (MIG) is a measure of diversity, as it exhibits maximum values for random
+    signals. (Bates & Shepard, 1993; Wackerbauer et al., 1994).
+
+    Unlike MIG, fluctuation complexity (FC) does not consider a random signal to be complex. The
+    fluctuation complexity is the mean square deviation of the net information gain (i.e. the
+    differences between information gain and loss). The more this balance of information gain and
+    loss is fluctuating, the more complex the signal is considered.
+
+    It is to note that the original formulations discuss the length of the "words" (the number of
+    samples) the signal is partitioned into, this length parameter corresponds to the embedding
+    dimension (i.e., the amount of past states to consider, by default 4). We additionally modified
+    the original algorithm to the possibility of modulating the delay between each past state.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    width : int
-        The length of the verbs created (default to 4 samples) that will correspond to discrete
-        states.
+    delay : int
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
+    dimension : int
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension` to estimate the optimal value for this parameter.
 
     Returns
     -------
@@ -32,8 +46,14 @@ def information_gain(signal, width=4):
 
       signal = nk.signal_simulate(duration=2, frequency=[5, 12, 85])
 
-      mig, info = nk.information_gain(signal, width=4)
-      mig
+      mig, info = nk.information_gain(signal)
+
+      # MIG
+      Mean Information Gain (MIG)
+
+      # Fluctuation Complexity
+      info['FC']
+
 
     References
     ----------
@@ -43,11 +63,11 @@ def information_gain(signal, width=4):
       comparative classification of complexity measures. Chaos, Solitons & Fractals, 4(1), 133-173.
 
     """
-
+    # Discretize the signal into zeros and ones
     binary = complexity_symbolize(signal, method="median")
 
     # Get overlapping windows of a given width
-    embedded = complexity_embedding(binary, dimension=width, delay=1).astype(int)
+    embedded = complexity_embedding(binary, dimension=dimension, delay=delay).astype(int)
 
     # Convert into strings
     states = ["".join(list(state)) for state in embedded.astype(str)]
@@ -63,19 +83,19 @@ def information_gain(signal, width=4):
     t_prob = {tuple(k): transitions_prob[i] for i, k in enumerate(transitions_unique)}
 
     mig = 0
+    fc = 0
     for i in states_unique:
         for j in states_unique:
-            mig += t_prob.get((i, j), 0.0) * _information_gain(i, j, t_prob, s_prob)
-    return mig, {"width": width}
 
+            if (i, j) not in t_prob.keys():
+                continue
+            i_j_prob = t_prob.get((i, j), 0)
+            if i_j_prob == 0:
+                continue
 
-# -------------------------------------------------------------------------------------------------
-# Utility
-# -------------------------------------------------------------------------------------------------
-def _information_gain(i, j, t_prob, s_prob):
-    if (i, j) not in t_prob.keys():
-        return 0
-    i_j_prob = t_prob.get((i, j), 0.0) / s_prob.get(i)
-    if i_j_prob == 0:
-        return 0
-    return np.log2(1 / i_j_prob)
+            # Information gain
+            mig += i_j_prob * np.log2(1 / (i_j_prob / s_prob.get(i)))
+
+            # Net information gain
+            fc += i_j_prob * (np.log2(s_prob[i] / s_prob[j]) ** 2)
+    return mig, {"width": width, "FC": fc}
