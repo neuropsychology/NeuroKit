@@ -48,8 +48,8 @@ def information_gain(signal, delay=1, dimension=4):
 
       mig, info = nk.information_gain(signal)
 
-      # MIG
-      Mean Information Gain (MIG)
+      # Mean Information Gain (MIG)
+      mig
 
       # Fluctuation Complexity
       info['FC']
@@ -98,4 +98,4 @@ def information_gain(signal, delay=1, dimension=4):
 
             # Net information gain
             fc += i_j_prob * (np.log2(s_prob[i] / s_prob[j]) ** 2)
-    return mig, {"width": width, "FC": fc}
+    return mig, {"Dimension": dimension, "Delay": delay, "FC": fc}
