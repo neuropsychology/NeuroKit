@@ -134,7 +134,6 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
 
 def _selfentropy(x, k=3):
     """Shannon's Self joint entropy with k as the length of k-history"""
-    n = len(x)
     z = complexity_embedding(x, dimension=k, delay=1)
     _, freq = np.unique(z, return_counts=True, axis=0)
     freq = freq / freq.sum()

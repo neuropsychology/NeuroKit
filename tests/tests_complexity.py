@@ -185,7 +185,7 @@ def test_complexity_vs_Python():
     binary = np.zeros(len(signal))
     binary[signal > threshold] = 1
     assert np.allclose(
-        nk.complexity_lempelziv(signal, method="median", normalize=True)[0]
+        nk.complexity_lempelziv(signal, symbolize="median", normalize=True)[0]
         - antropy.lziv_complexity(binary, normalize=True),
         0,
     )

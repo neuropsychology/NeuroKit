@@ -182,7 +182,7 @@ def run_benchmark(noise_intensity=0.01):
 
                 # Methods that rely on discretization
                 # -------------------------------------
-                for x in ["A", "B", "C", "D", "r", 3, 10, 100]:
+                for x in ["A", "B", "C", "D", 3, 10, 100]:
                     rez = pd.concat(
                         [
                             rez,
@@ -191,11 +191,36 @@ def run_benchmark(noise_intensity=0.01):
                                 nk.fractal_petrosian,
                                 index=f"PFD ({x})",
                                 name="nk_fractal_petrosian",
+                                symbolize=x,
+                            ),
+                        ]
+                    )
+                    rez = pd.concat(
+                        [
+                            rez,
+                            time_function(
+                                signal_,
+                                nk.entropy_shannon,
                                 method=x,
+                                index=f"ShanEn ({x})",
+                                name="nk_entropy_shannon",
+                            ),
+                        ]
+                    )
+                    rez = pd.concat(
+                        [
+                            rez,
+                            time_function(
+                                signal_,
+                                nk.entropy_cumulativeresidual,
+                                method=x,
+                                index=f"CREn ({x})",
+                                name="entropy_cumulativeresidual",
                             ),
                         ]
                     )
 
+                # This method also relies on discretization, but is too long to loop over
                 rez = pd.concat(
                     [
                         rez,
@@ -344,31 +369,6 @@ def run_benchmark(noise_intensity=0.01):
 
                 # Entropy
                 # ----------
-                for x in ["A", "B", "C", "D", "r", 3, 10, 100]:
-                    rez = pd.concat(
-                        [
-                            rez,
-                            time_function(
-                                signal_,
-                                nk.entropy_shannon,
-                                method=x,
-                                index=f"ShanEn ({x})",
-                                name="nk_entropy_shannon",
-                            ),
-                        ]
-                    )
-                    rez = pd.concat(
-                        [
-                            rez,
-                            time_function(
-                                signal_,
-                                nk.entropy_cumulativeresidual,
-                                method=x,
-                                index=f"CREn ({x})",
-                                name="entropy_cumulativeresidual",
-                            ),
-                        ]
-                    )
                 for bins in [3, 5, 9]:
                     rez = pd.concat(
                         [

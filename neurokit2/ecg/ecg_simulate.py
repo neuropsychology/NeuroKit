@@ -196,7 +196,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, heart
 
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
-    cardiac = scipy.signal.wavelets.daub(10)
+    cardiac = scipy.signal.daub(10)
 
     # Add the gap after the pqrst when the heart is resting.
     cardiac = np.concatenate([cardiac, np.zeros(10)])

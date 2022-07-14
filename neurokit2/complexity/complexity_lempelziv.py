@@ -74,7 +74,7 @@ def complexity_lempelziv(
       signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
 
       # LZC
-      lzc, info = nk.complexity_lempelziv(signal, symbolize="median")
+      lzc, info = nk.complexity_lempelziv(signal)
       lzc
 
       # PLZC
