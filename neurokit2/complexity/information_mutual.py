@@ -321,8 +321,7 @@ def _mutual_information_gc(x, y, biascorrect=False, demeaned=True):
         HXY = HXY - Nvarxy * dterm - psiterms[:Nvarxy].sum()
 
     # MI in bits
-    I = (HX + HY - HXY) / ln2
-    return I
+    return (HX + HY - HXY) / ln2
 
 
 def copnorm(x):
