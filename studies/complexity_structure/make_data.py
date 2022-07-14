@@ -180,8 +180,8 @@ def run_benchmark(noise_intensity=0.01):
                     }
                 )
 
-                # Fractals
-                # ----------
+                # Methods that rely on discretization
+                # -------------------------------------
                 for x in ["A", "B", "C", "D", "r", 3, 10, 100]:
                     rez = pd.concat(
                         [
@@ -195,6 +195,22 @@ def run_benchmark(noise_intensity=0.01):
                             ),
                         ]
                     )
+
+                rez = pd.concat(
+                    [
+                        rez,
+                        time_function(
+                            signal_,
+                            nk.complexity_lempelziv,
+                            index="LZC",
+                            name="nk_complexity_lempelziv",
+                        ),
+                    ]
+                )
+
+                # Fractals
+                # ----------
+
                 rez = pd.concat(
                     [
                         rez,
@@ -1156,18 +1172,6 @@ def run_benchmark(noise_intensity=0.01):
                             nk.complexity_relativeroughness,
                             index="RR",
                             name="nk_complexity_relativeroughness",
-                        ),
-                    ]
-                )
-
-                rez = pd.concat(
-                    [
-                        rez,
-                        time_function(
-                            signal_,
-                            nk.complexity_lempelziv,
-                            index="LZC",
-                            name="nk_complexity_lempelziv",
                         ),
                     ]
                 )

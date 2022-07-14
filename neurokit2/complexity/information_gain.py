@@ -4,7 +4,7 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def information_gain(signal, delay=1, dimension=4):
+def information_gain(signal, delay=1, dimension=4, symbolize="mean"):
     """**Mean Information Gain (MIG)** and **Fluctuation Complexity (FC)**
 
     Mean Information Gain (MIG) is a measure of diversity, as it exhibits maximum values for random
@@ -30,6 +30,10 @@ def information_gain(signal, delay=1, dimension=4):
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. By default,
+        assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in
+        case the input is already discrete). See :func:`complexity_symbolize` for details.
 
     Returns
     -------
@@ -64,7 +68,7 @@ def information_gain(signal, delay=1, dimension=4):
 
     """
     # Discretize the signal into zeros and ones
-    binary = complexity_symbolize(signal, method="median")
+    binary = complexity_symbolize(signal, method=symbolize)
 
     # Get overlapping windows of a given width
     embedded = complexity_embedding(binary, dimension=dimension, delay=delay).astype(int)

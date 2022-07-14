@@ -11,7 +11,7 @@ def complexity_lempelziv(
     delay=1,
     dimension=2,
     permutation=False,
-    scale=False,
+    symbolize="mean",
     **kwargs,
 ):
     """**Lempel-Ziv Complexity (LZC, PLZC and MSLZC)**
@@ -41,7 +41,14 @@ def complexity_lempelziv(
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter. Only used
-        when ``permutation=True``.
+        when ``permutation=True``
+    permutation : bool
+        If ``True``, will return PLZC.
+    symbolize : str
+        Only used when ``permutation=False``. Method to convert a continuous signal input into a
+        symbolic (discrete) signal. By default, assigns 0 and 1 to values below and above the mean.
+        Can be ``None`` to skip the process (in case the input is already discrete). See
+        :func:`complexity_symbolize` for details.
     **kwargs
         Other arguments to be passed to :func:`complexity_ordinalpatterns` (if
         ``permutation=True``) or :func:`complexity_symbolize`.
@@ -67,7 +74,7 @@ def complexity_lempelziv(
       signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
 
       # LZC
-      lzc, info = nk.complexity_lempelziv(signal, method="median")
+      lzc, info = nk.complexity_lempelziv(signal, symbolize="median")
       lzc
 
       # PLZC
@@ -125,7 +132,7 @@ def complexity_lempelziv(
         symbolic = info["Uniques"]
     else:
         # Binarize the signal
-        symbolic = complexity_symbolize(signal, **kwargs)
+        symbolic = complexity_symbolize(signal, method=symbolize, **kwargs)
 
     # Count using the lempelziv algorithm
     info["Complexity_Kolmogorov"], n = _complexity_lempelziv_count(symbolic)

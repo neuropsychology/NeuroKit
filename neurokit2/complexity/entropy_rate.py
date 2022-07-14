@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from .entropy_shannon import entropy_shannon
+from .utils_complexity_embedding import complexity_embedding
+from .utils_complexity_symbolize import complexity_symbolize
 
 
-def entropy_rate(signal, kmax=6, show=False):
+def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
     """**Entropy Rate (RatEn)**
 
     The Entropy Rate (RatEn or ER) quantifies the amount of information needed to describe the
@@ -22,6 +25,10 @@ def entropy_rate(signal, kmax=6, show=False):
         A :func:`symbolic <complexity_symbolize>` sequence in the form of a vector of values.
     kmax : int
         The max history length to consider.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. By default,
+        assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in
+        case the input is already discrete). See :func:`complexity_symbolize` for details.
     show : bool
         Plot the Entropy Rate line.
 
@@ -31,6 +38,9 @@ def entropy_rate(signal, kmax=6, show=False):
 
     Examples
     ----------
+    **Example 1**: A simple discrete signal. We have to specify ``symbolize=None`` as the signal is
+    already discrete.
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -38,7 +48,7 @@ def entropy_rate(signal, kmax=6, show=False):
       signal = [1, 1, 2, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 3, 2, 2, 1, 3, 2]
 
       @savefig p_entropy_rate1.png scale=100%
-      raten, info = nk.entropy_rate(signal, kmax=8, show=True)
+      raten, info = nk.entropy_rate(signal, kmax=8, symbolize=None, show=True)
       @suppress
       plt.close()
 
@@ -46,8 +56,8 @@ def entropy_rate(signal, kmax=6, show=False):
 
     .. ipython:: python
 
-      @savefig p_entropy_rate1.png scale=100%
-      raten, info = nk.entropy_rate(signal, kmax=3, show=True)
+      @savefig p_entropy_rate2.png scale=100%
+      raten, info = nk.entropy_rate(signal, kmax=3, symbolize=None, show=True)
       @suppress
       plt.close()
 
@@ -56,6 +66,17 @@ def entropy_rate(signal, kmax=6, show=False):
       raten
       info["Excess_Entropy"]
 
+    Example on a continuous signal
+
+    .. ipython:: python
+
+      signal = nk.signal_simulate(duration=2, frequency=[5, 12, 40, 60], sampling_rate=1000)
+
+      @savefig p_entropy_rate3.png scale=100%
+      raten, info = nk.entropy_rate(signal, kmax=60, show=True)
+      @suppress
+      plt.close()
+
     References
     ----------
     * Mediano, P. A., Rosas, F. E., Timmermann, C., Roseman, L., Nutt, D. J., Feilding, A., ... &
@@ -63,6 +84,21 @@ def entropy_rate(signal, kmax=6, show=False):
       neurodynamics. Biorxiv.
 
     """
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Force to array
+    if not isinstance(signal, np.ndarray):
+        signal = np.array(signal)
+
+    # Make discrete
+    if np.isscalar(signal) is False:
+        signal = complexity_symbolize(signal, method=symbolize)
+
+    # Compute self-entropy
     info = {
         "Entropy": [_selfentropy(signal, k + 1) for k in range(kmax)],
         "k": np.arange(1, kmax + 1),
@@ -72,7 +108,7 @@ def entropy_rate(signal, kmax=6, show=False):
 
     if show:
         plt.figure(figsize=(6, 6))
-        plt.plot(info["k"], info["Entropy"], "-sk")
+        plt.plot(info["k"], info["Entropy"], "o-", color="black")
         plt.plot(
             info["k"],
             raten * info["k"] + info["Excess_Entropy"],
@@ -87,7 +123,7 @@ def entropy_rate(signal, kmax=6, show=False):
             label=f"Excess Entropy = {info['Excess_Entropy']:.2f}",
         )
         plt.legend(loc="lower right")
-        plt.xticks(info["k"])
+        # plt.xticks(info["k"])
         plt.xlabel("History Length $k$")
         plt.ylabel("Entropy")
         plt.title("Entropy Rate")
@@ -99,7 +135,7 @@ def entropy_rate(signal, kmax=6, show=False):
 def _selfentropy(x, k=3):
     """Shannon's Self joint entropy with k as the length of k-history"""
     n = len(x)
-    z = [np.array(x)[i : i + k] for i in range(n - k)]
+    z = complexity_embedding(x, dimension=k, delay=1)
     _, freq = np.unique(z, return_counts=True, axis=0)
-    freq = freq / (n - k)
+    freq = freq / freq.sum()
     return entropy_shannon(freq=freq, base=2)[0]
