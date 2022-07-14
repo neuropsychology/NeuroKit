@@ -28,6 +28,8 @@ def time_function(
         out["Index"] = out["Index"].str.replace("_", " (") + ")"
     elif index == "DispEn":
         out = pd.DataFrame({"Result": [rez, info["RDEn"]], "Index": [index, "RDEn"]})
+    elif index == "MIG":
+        out = pd.DataFrame({"Result": [rez, info["FC"]], "Index": [index, "FC"]})
     else:
         out = pd.DataFrame({"Result": [rez], "Index": [index]})
     out["Duration"] = t1
@@ -1245,6 +1247,17 @@ def run_benchmark(noise_intensity=0.01):
                             nk.fishershannon_information,
                             index="FSI",
                             name="nk_fishershannon_information",
+                        ),
+                    ]
+                )
+                rez = pd.concat(
+                    [
+                        rez,
+                        time_function(
+                            signal_,
+                            nk.information_gain,
+                            index="MIG",
+                            name="nk_information_gain",
                         ),
                     ]
                 )

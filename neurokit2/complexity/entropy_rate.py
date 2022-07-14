@@ -12,8 +12,8 @@ def entropy_rate(signal, kmax=6, show=False):
     conditioned on the *k*-histories.
 
     It quantifies how much uncertainty or randomness the process produces at each new time step,
-    given knowledge about the past states of the process. The entropy rate is estimated as the s
-    lope of the linear fit between the history length *k* and the joint Shannon entropies. The
+    given knowledge about the past states of the process. The entropy rate is estimated as the
+    slope of the linear fit between the history length *k* and the joint Shannon entropies. The
     intercept is called **excess entropy**.
 
     Parameters
@@ -56,6 +56,11 @@ def entropy_rate(signal, kmax=6, show=False):
       raten
       info["Excess_Entropy"]
 
+    References
+    ----------
+    * Mediano, P. A., Rosas, F. E., Timmermann, C., Roseman, L., Nutt, D. J., Feilding, A., ... &
+      Carhart-Harris, R. L. (2020). Effects of external stimulation on psychedelic state
+      neurodynamics. Biorxiv.
 
     """
     info = {
