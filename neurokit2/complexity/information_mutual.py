@@ -55,6 +55,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
     ---------
     **Example 1**: Simple case
 
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -66,6 +67,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       nk.mutual_information(x, y, method="nolitsa")
       nk.mutual_information(x, y, method="knn")
       nk.mutual_information(x, y, method="max")
+
 
     **Example 2**: Method comparison
 
