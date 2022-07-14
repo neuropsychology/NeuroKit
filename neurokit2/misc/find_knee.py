@@ -92,5 +92,3 @@ def _locate(Y_d, T_lm, maxima_ids):
                 continue
             if Y_d[j] <= T_lm[index]:
                 return index
-
-

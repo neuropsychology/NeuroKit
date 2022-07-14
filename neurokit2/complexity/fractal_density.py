@@ -8,7 +8,7 @@ from .optim_complexity_tolerance import complexity_tolerance
 from .utils_complexity_embedding import complexity_embedding
 
 
-def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
+def fractal_density(signal, delay=1, tolerance="sd", bins=None, show=False, **kwargs):
     """**Density Fractal Dimension (DFD)**
 
     This is a **Work in Progress (WIP)**. The idea is to find a way of, essentially, averaging
@@ -32,6 +32,9 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
+    bins : int
+        If not ``None`` but an integer, will use this value for the number of bins instead of a
+        value based on the ``tolerance`` parameter.
     show : bool
         Plot the density matrix. Defaults to ``False``.
     **kwargs
@@ -53,8 +56,7 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
       signal = nk.signal_simulate(duration=2, frequency=[5, 9], noise=0.01)
 
       @savefig p_fractal_density1.png scale=100%
-      dfd, _ = nk.fractal_density(signal, delay=20, show=True, method="histogram")
-      dfd, _ = nk.fractal_density(signal, delay=20, show=True, method="density")
+      dfd, _ = nk.fractal_density(signal, delay=20, show=True)
       @suppress
       plt.close()
 
@@ -63,7 +65,7 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
       signal = nk.signal_simulate(duration=4, frequency=[5, 10, 11], noise=0.01)
       epochs = nk.epochs_create(signal, events=20)
       @savefig p_fractal_density2.png scale=100%
-      dfd, info1 = nk.fractal_density(epochs, delay=20, show=True)
+      dfd, info1 = nk.fractal_density(epochs, delay=20, bins=20, show=True)
       @suppress
       plt.close()
 
@@ -81,11 +83,15 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
 
       sig2 = nk.signal_simulate(duration=4, frequency=[4, 12, 14], noise=0.01)
       epochs2 = nk.epochs_create(sig2, events=20)
-      dfd, info2 = nk.fractal_density(epochs2, delay=20, show=True)
+      dfd, info2 = nk.fractal_density(epochs2, delay=20, bins=20)
 
       # Difference between two density maps
       D = info1["Average"] - info2["Average"]
-      plt.imshow(D)
+
+      @savefig p_fractal_density3.png scale=100%
+      plt.imshow(nk.standardize(D), cmap='RdBu')
+      @suppress
+      plt.close()
 
     """
     # Sanity checks
@@ -100,10 +106,13 @@ def fractal_density(signal, delay=1, tolerance="sd", show=False, **kwargs):
 
     # Get edges and tolerance from first epoch. Imperfect but what to do?
     edges = np.percentile(signal["1"]["Signal"].values, [1, 99])
-    tolerance, _ = complexity_tolerance(signal["1"]["Signal"].values, method="sd")
 
-    # Compute number of "bins"
-    bins = int((edges[1] - edges[0]) / tolerance)
+    if bins is None:
+        tolerance, _ = complexity_tolerance(signal["1"]["Signal"].values, method="sd")
+
+        # Compute number of "bins"
+        bins = int((edges[1] - edges[0]) / tolerance)
+
 
     # Prepare the container for the 2D density matrix
     X = np.empty((bins, bins, len(signal)))
