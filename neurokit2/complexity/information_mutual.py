@@ -66,6 +66,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       nk.mutual_information(x, y, method="nolitsa")
       nk.mutual_information(x, y, method="knn")
       nk.mutual_information(x, y, method="max")
+      nk.mutual_information(x, y, method="gc")
 
     **Example 2**: Method comparison
 
@@ -86,16 +87,19 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
           rez["MI3"] = nk.mutual_information(x, y + noise, method="nolitsa")
           rez["MI4"] = nk.mutual_information(x, y + noise, method="knn")
           rez["MI5"] = nk.mutual_information(x, y + noise, method="max")
+          rez["MI6"] = nk.mutual_information(x, y + noise, method="gc")
           data = pd.concat([data, rez], axis=0)
 
+      # Rescale on the same range for visualization purposes
       data["MI1"] = nk.rescale(data["MI1"])
       data["MI2"] = nk.rescale(data["MI2"])
       data["MI3"] = nk.rescale(data["MI3"])
       data["MI4"] = nk.rescale(data["MI4"])
       data["MI5"] = nk.rescale(data["MI5"])
+      data["MI6"] = nk.rescale(data["MI6"])
 
       @savefig p_information_mutual1.png scale=100%
-      data.plot(x="Noise", y=["MI1", "MI2", "MI3", "MI4", "MI5"], kind="line")
+      data.plot(x="Noise", y=["MI1", "MI2", "MI3", "MI4", "MI5", "MI6"], kind="line")
       @suppress
       plt.close()
 
@@ -152,6 +156,8 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
             mi = _mutual_information_sklearn(x, y, bins=bins)
         elif method in ["knn"]:
             mi = _mutual_information_knn(x, y, **kwargs)
+        elif method in ["gc"]:
+            mi = _mutual_information_gc(x, y)
         else:
             raise ValueError("NeuroKit error: mutual_information(): 'method' not recognized.")
 
@@ -161,6 +167,8 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
 # =============================================================================
 # Methods
 # =============================================================================
+
+# SCIKIT-LEARN ----------------------------------------------------------------
 def _mutual_information_sklearn(x, y, bins=None):
     if bins is None:
         _, p_xy = scipy.stats.contingency.crosstab(x, y)
@@ -169,6 +177,7 @@ def _mutual_information_sklearn(x, y, bins=None):
     return sklearn.metrics.mutual_info_score(None, None, contingency=p_xy)
 
 
+# Varoquaux -------------------------------------------------------------------
 def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
     """Based on Gael Varoquaux's implementation:
     https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429."""
@@ -192,6 +201,7 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
     return mi
 
 
+# nolitsa ---------------------------------------------------------------------
 def _mutual_information_nolitsa(x, y, bins=256):
     """
     Based on the nolitsa package:
@@ -216,6 +226,7 @@ def _mutual_information_nolitsa(x, y, bins=256):
     return h_xy - h_x - h_y
 
 
+# NPEET -----------------------------------------------------------------------
 def _mutual_information_knn(x, y, k=3):
     """
     Based on the NPEET package:
@@ -242,3 +253,91 @@ def _mutual_information_knn(x, y, k=3):
     c = scipy.special.digamma(k)
     d = scipy.special.digamma(len(x))
     return (-a - b + c + d) / np.log(2)
+
+
+# Copula --------------------------------------------------------------------
+
+# TODO: Add Gaussian-Copula Mutual Information
+# A package implements Gaussian-Copula Mutual Information
+# But it gives somewhat unexpected results
+# https://github.com/robince/gcmi
+
+
+def _mutual_information_gc(x, y, biascorrect=False, demeaned=True):
+    """Gaussian-Copula Mutual Information between two continuous variables.
+    I = gcmi_cc(x,y) returns the MI between two (possibly multidimensional)
+    continuous variables, x and y, estimated via a Gaussian copula.
+    If x and/or y are multivariate columns must correspond to samples, rows
+    to dimensions/variables. (Samples first axis)
+    This provides a lower bound to the true MI value.
+
+
+    Mutual information (MI) between two Gaussian variables in bits
+
+    I = mi_gg(x,y) returns the MI between two (possibly multidimensional)
+    Gassian variables, x and y, with bias correction.
+    If x and/or y are multivariate columns must correspond to samples, rows
+    to dimensions/variables. (Samples last axis)
+
+    biascorrect : true / false option (default true) which specifies whether
+    bias correction should be applied to the esimtated MI.
+    demeaned : false / true option (default false) which specifies whether th
+    input data already has zero mean (true if it has been copula-normalized)
+    """
+
+    x = copnorm(np.atleast_2d(x))
+    y = copnorm(np.atleast_2d(y))
+
+    Ntrl = x.shape[1]
+    Nvarx = x.shape[0]
+    Nvary = y.shape[0]
+    Nvarxy = Nvarx + Nvary
+
+    # joint variable
+    xy = np.vstack((x, y))
+    if not demeaned:
+        xy = xy - xy.mean(axis=1)[:, np.newaxis]
+    Cxy = np.dot(xy, xy.T) / float(Ntrl - 1)
+    # submatrices of joint covariance
+    Cx = Cxy[:Nvarx, :Nvarx]
+    Cy = Cxy[Nvarx:, Nvarx:]
+
+    chCxy = np.linalg.cholesky(Cxy)
+    chCx = np.linalg.cholesky(Cx)
+    chCy = np.linalg.cholesky(Cy)
+
+    # entropies in nats
+    # normalizations cancel for mutual information
+    HX = np.sum(np.log(np.diagonal(chCx)))  # + 0.5*Nvarx*(np.log(2*np.pi)+1.0)
+    HY = np.sum(np.log(np.diagonal(chCy)))  # + 0.5*Nvary*(np.log(2*np.pi)+1.0)
+    HXY = np.sum(np.log(np.diagonal(chCxy)))  # + 0.5*Nvarxy*(np.log(2*np.pi)+1.0)
+
+    ln2 = np.log(2)
+    if biascorrect:
+        psiterms = scipy.special.psi((Ntrl - np.arange(1, Nvarxy + 1)).astype(float) / 2.0) / 2.0
+        dterm = (ln2 - np.log(Ntrl - 1.0)) / 2.0
+        HX = HX - Nvarx * dterm - psiterms[:Nvarx].sum()
+        HY = HY - Nvary * dterm - psiterms[:Nvary].sum()
+        HXY = HXY - Nvarxy * dterm - psiterms[:Nvarxy].sum()
+
+    # MI in bits
+    I = (HX + HY - HXY) / ln2
+    return I
+
+
+def copnorm(x):
+    """Copula normalization
+
+    cx = copnorm(x) returns standard normal samples with the same empirical
+    CDF value as the input. Operates along the last axis.
+
+    Copula transformation (empirical CDF)
+    cx = ctransform(x) returns the empirical CDF value along the first
+    axis of x. Data is ranked and scaled within [0 1] (open interval).
+    """
+
+    xi = np.argsort(np.atleast_2d(x))
+    xr = np.argsort(xi)
+    cx = (xr + 1).astype(float) / (xr.shape[-1] + 1)
+    # cx = scipy.stats.norm.ppf(ctransform(x))
+    return scipy.special.ndtri(cx)
