@@ -1,15 +1,6 @@
 Optimal Selection of Tolerance *r* for Entropy Indices
 ================
 
--   [Introduction](#introduction)
--   [Methods](#methods)
--   [Results](#results)
-    -   [Cut-offs for RR and NN](#cut-offs-for-rr-and-nn)
-    -   [Development of NeuroKit
-        Approximation](#development-of-neurokit-approximation)
-    -   [Heuristics Test](#heuristics-test)
--   [Discussion](#discussion)
--   [References](#references)
 
 *This study can be referenced by* [*citing the package and the
 documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
@@ -65,24 +56,24 @@ for(i in 1:8) {
   df <- rbind(df, read.csv(paste0("data_Tolerance_part", i, ".csv")))
 }
 
-df <- df |> 
-  mutate(Iter = paste0(Signal, Noise_Intensity, Noise_Type, Length)) |> 
-  group_by(Method, Dimension, Iter) |> 
-  mutate(Score_N = normalize(Score)) |> 
+df <- df |>
+  mutate(Iter = paste0(Signal, Noise_Intensity, Noise_Type, Length)) |>
+  group_by(Method, Dimension, Iter) |>
+  mutate(Score_N = normalize(Score)) |>
   ungroup()
 ```
 
 ``` r
-df |> 
+df |>
   mutate(group = paste0(Dimension, Method, Iter),
-         m = Dimension) |> 
-  filter(Method %in% c("ApEn", "Recurrence", "Neighbours")) |> 
+         m = Dimension) |>
+  filter(Method %in% c("ApEn", "Recurrence", "Neighbours")) |>
   ggplot(aes(x = Tolerance, y = Score_N, color = Method)) +
   geom_line(aes(group=group), alpha=0.02, size=0.33) +
   facet_wrap(~m, labeller=purrr::partial(label_both, sep = " = ")) +
   scale_x_continuous(expand=c(0, 0)) +
   scale_y_continuous(expand=c(0, 0)) +
-  theme_modern() + 
+  theme_modern() +
   theme(strip.text = element_text(face="italic")) +
   labs(y = "Normalized Value", x = expression("Tolerance "~italic("r"))) +
   guides(colour = guide_legend(override.aes = list(alpha = 1)))
@@ -106,10 +97,10 @@ SD*, *Chon* (Chon et al., 2009) and *nolds*.
 ``` r
 library(ggside)
 
-data <- df |> 
-  group_by(Dimension, Length, Iter) |> 
-  filter(Method %in% c("Recurrence", "Neighbours")) |> 
-  filter(Tolerance == unique(Optimal_maxApEn)) |> 
+data <- df |>
+  group_by(Dimension, Length, Iter) |>
+  filter(Method %in% c("Recurrence", "Neighbours")) |>
+  filter(Tolerance == unique(Optimal_maxApEn)) |>
   ungroup()
 
 
@@ -125,13 +116,13 @@ m_RR <- lm(Score ~ log(Dimension), data=filter(data, Method=="Recurrence", Dimen
 ```
 
 ``` r
-m <- lm(Score ~ Method / log(Dimension), data=data) 
-means <- m |> 
-  estimate_means(at=list("Method" = unique(data$Method), 
-                         "Dimension" = unique(data$Dimension))) |> 
+m <- lm(Score ~ Method / log(Dimension), data=data)
+means <- m |>
+  estimate_means(at=list("Method" = unique(data$Method),
+                         "Dimension" = unique(data$Dimension))) |>
   mutate(m = as.factor(Dimension))
 
-data |> 
+data |>
   mutate(m = fct_rev(as.factor(Dimension))) |>
   ggplot(aes(y = Optimal_maxApEn, x = Score)) +
   geom_point2(aes(color=m), alpha=0.33) +
@@ -165,34 +156,34 @@ Cut-offs of 1% and 2% are a possible option.
 ``` r
 library(ggridges)
 
-data <- df |> 
-  group_by(Dimension, Length, Iter) |> 
-  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE)) 
+data <- df |>
+  group_by(Dimension, Length, Iter) |>
+  summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE))
 
 m1 <- lm(maxApEn ~ Dimension, data=data)
 m2 <- lm(maxApEn ~ log(Dimension), data=data)
 test_performance(m1, m2)
 ## Name | Model |      BF
 ## ----------------------
-## m1   |    lm |        
+## m1   |    lm |
 ## m2   |    lm | < 0.001
 ## Each model is compared to m1.
 
 m <- m1
 pred <- estimate_relation(m, at = list("Dimension"=unique(data$Dimension)))
 
-formula <- equatiomatic::extract_eq(m, 
-                                    raw_tex=T, 
+formula <- equatiomatic::extract_eq(m,
+                                    raw_tex=T,
                                     swap_var_names=c("maxApEn" = "r"),
-                                    use_coefs = TRUE, 
-                                    ital_vars=TRUE, 
+                                    use_coefs = TRUE,
+                                    ital_vars=TRUE,
                                     coef_digits=4)
-  
-data |> 
+
+data |>
   mutate(Dimension = as.factor(Dimension),
-         Length = as.factor(Length)) |> 
+         Length = as.factor(Length)) |>
   ggplot(aes(x=maxApEn, y=Dimension)) +
-  geom_density_ridges(aes(fill=Dimension), color = NA) + 
+  geom_density_ridges(aes(fill=Dimension), color = NA) +
   geom_line(data=pred, aes(x=Predicted), color="red", size=1, show.legend=FALSE) +
   annotate(geom="text", x=1.8, y=1.2, label=latex2exp::TeX(formula), hjust=0, color="red") +
   coord_flip() +
@@ -222,15 +213,15 @@ SD* (which was derived initially under this condition).
 ### Heuristics Test
 
 ``` r
-data <- df |> 
-  group_by(Dimension, Length, Iter) |> 
+data <- df |>
+  group_by(Dimension, Length, Iter) |>
   summarise(maxApEn = mean(Optimal_maxApEn, na.rm=TRUE),
             Recurrence = mean(Optimal_Recurrence, na.rm=TRUE),
             Neighbours = mean(Optimal_Neighbours, na.rm=TRUE),
             SD = mean(Optimal_SD, na.rm=TRUE),
             SDadj = mean(Optimal_SDadj, na.rm=TRUE),
             Chon = mean(Optimal_Chon, na.rm=TRUE),
-            NeuroKit = mean(Optimal_NeuroKit, na.rm=TRUE)) 
+            NeuroKit = mean(Optimal_NeuroKit, na.rm=TRUE))
 
 m1 <- lm(maxApEn ~ SD, data=data)
 m2 <- lm(maxApEn ~ SDadj, data=data)
@@ -241,7 +232,7 @@ m6 <- lm(maxApEn ~ NeuroKit, data=data)
 
 compare_performance(m1, m2, m3, m4, m5, m6)
 ## # Comparison of Model Performance Indices
-## 
+##
 ## Name | Model |        AIC | AIC weights |        BIC | BIC weights |    R2 | R2 (adj.) |  RMSE | Sigma
 ## ------------------------------------------------------------------------------------------------------
 ## m1   |    lm |  33613.471 |     < 0.001 |  33631.158 |     < 0.001 | 0.000 |     0.000 | 0.336 | 0.336

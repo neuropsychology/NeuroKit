@@ -2,7 +2,7 @@
 title: "Optimal Selection of Tolerance *r* for Entropy Indices"
 output:
   github_document:
-    toc: true
+    toc: false
     fig_width: 10.08
     fig_height: 6
 editor_options:

@@ -11,7 +11,7 @@ def events_to_mne(events, event_conditions=None):
     Parameters
     ----------
     events : list or ndarray or dict
-        Events onset location. Can also be a dict obtained through :func:`.events_find'.
+        Events onset location. Can also be a dict obtained through :func:`.events_find`.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions. Defaults to ``None``.
