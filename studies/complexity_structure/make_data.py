@@ -30,6 +30,8 @@ def time_function(
         out = pd.DataFrame({"Result": [rez, info["RDEn"]], "Index": [index, "RDEn"]})
     elif index == "MIG":
         out = pd.DataFrame({"Result": [rez, info["FC"]], "Index": [index, "FC"]})
+    elif name == "nk_entropy_rate":
+        out = pd.DataFrame({"Result": [info["MaxRatEn"]], "Index": [index]})
     else:
         out = pd.DataFrame({"Result": [rez], "Index": [index]})
     out["Duration"] = t1
@@ -46,6 +48,7 @@ def time_function(
 # _, _ = nk.complexity_dimension(signal, delay=10, show=True)
 # nk.complexity_attractor(nk.complexity_embedding(signal, delay=10, dimension=3), color="red", show=True)
 # _, _ = nk.complexity_k(signal, k_max=100, show=True)
+# _, _ = nk.entropy_rate(signal, kmax=np.arange(1, 71, 2), show=True)
 
 # signal = df[df["Noise_Intensity"] == 0.01][df["Method"] == "lorenz_10_2.5_28"]["Signal"].values
 # _, _ = nk.complexity_delay(signal, show=True)
@@ -182,7 +185,7 @@ def run_benchmark(noise_intensity=0.01):
 
                 # Methods that rely on discretization
                 # -------------------------------------
-                for x in ["A", "B", "C", "D", 3, 10, 100]:
+                for x in ["Mean", "Sign", 3, 10, 100]:
                     rez = pd.concat(
                         [
                             rez,
@@ -201,7 +204,7 @@ def run_benchmark(noise_intensity=0.01):
                             time_function(
                                 signal_,
                                 nk.entropy_shannon,
-                                method=x,
+                                symbolize=x,
                                 index=f"ShanEn ({x})",
                                 name="nk_entropy_shannon",
                             ),
@@ -213,9 +216,21 @@ def run_benchmark(noise_intensity=0.01):
                             time_function(
                                 signal_,
                                 nk.entropy_cumulativeresidual,
-                                method=x,
+                                symbolize=x,
                                 index=f"CREn ({x})",
-                                name="entropy_cumulativeresidual",
+                                name="nk_entropy_cumulativeresidual",
+                            ),
+                        ]
+                    )
+                    rez = pd.concat(
+                        [
+                            rez,
+                            time_function(
+                                signal_,
+                                nk.entropy_rate,
+                                symbolize=x,
+                                index=f"MaxRatEn ({x})",
+                                name="nk_entropy_rate",
                             ),
                         ]
                     )

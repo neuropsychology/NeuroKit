@@ -34,7 +34,44 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     array
         A Numpy array containing the derived respiratory rate.
 
+    Examples
+    --------
+    * **Example 1:** Compare to real RSP signal
 
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get heart rate
+      data = nk.data("bio_eventrelated_100hz")
+      rpeaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+      ecg_rate = nk.signal_rate(rpeaks, sampling_rate=100, desired_length=len(rpeaks))
+
+      # Get ECG Derived Respiration (EDR) and add to the data
+      data["EDR"] = nk.ecg_rsp(ecg_rate, sampling_rate=100)
+
+      # Visualize result
+      @savefig p_ecg_rsp1.png scale=100%
+      nk.signal_plot([data["RSP"], data["EDR"]], standardize = True)
+      @suppress
+      plt.close()
+
+
+    * **Example 2:** Methods comparison
+
+    .. ipython:: python
+
+      data["vangent2019"] = nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019")
+      data["sarkar2015"] = nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015")
+      data["charlton2016"] = nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016")
+      data["soni2019"] = nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019")
+
+      # Visualize results
+      @savefig p_ecg_rsp2.png scale=100%
+      nk.signal_plot([data["RSP"], data["vangent2019"], data["sarkar2015"],
+                      data["charlton2016"], data["soni2019"]], standardize = True)
+      @suppress
+      plt.close()
 
     References
     ----------

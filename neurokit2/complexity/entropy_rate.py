@@ -29,7 +29,8 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
     signal : Union[list, np.array, pd.Series]
         A :func:`symbolic <complexity_symbolize>` sequence in the form of a vector of values.
     kmax : int
-        The max history length to consider.
+        The max history length to consider. If an integer is passed, will generate a range from 1
+        to kmax.
     symbolize : str
         Method to convert a continuous signal input into a symbolic (discrete) signal. By default,
         assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in
@@ -104,10 +105,14 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
     if np.isscalar(signal) is False:
         signal = complexity_symbolize(signal, method=symbolize)
 
+    # Convert into range if integer
+    if np.isscalar(kmax) is True:
+        kmax = np.arange(1, kmax+1)
+
     # Compute self-entropy
     info = {
-        "Entropy": [_selfentropy(signal, k + 1) for k in range(kmax)],
-        "k": np.arange(1, kmax + 1),
+        "Entropy": [_selfentropy(signal, k) for k in kmax],
+        "k": kmax,
     }
 
     # Traditional Entropy Rate (on all the values)
@@ -156,7 +161,7 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
                 (0, info["Entropy"][knee]),
                 "--",
                 color="purple",
-                label=f"Knee  = {knee}",
+                label=f"Knee  = {info['k'][knee]}",
             )
         plt.legend(loc="lower right")
         plt.xlabel("History Length $k$")
@@ -168,7 +173,7 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
 
 def _selfentropy(x, k=3):
     """Shannon's Self joint entropy with k as the length of k-history"""
-    z = complexity_embedding(x, dimension=k, delay=1)
+    z = complexity_embedding(x, dimension=int(k), delay=1)
     _, freq = np.unique(z, return_counts=True, axis=0)
     freq = freq / freq.sum()
     return entropy_shannon(freq=freq, base=2)[0]
