@@ -4,7 +4,8 @@ import numpy as np
 def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1):
     """**EEG Signal Simulation**
 
-    Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw simulation example. Help is needed to improve this function.
+    Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw
+    simulation example. Help is needed to improve this function.
 
     Parameters
     ----------
@@ -92,5 +93,5 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1):
     # mne.simulation.add_ecg(raw_sim, verbose=False)
     # mne.simulation.add_eog(raw_sim, verbose=False)
 
-    eeg = raw_sim.pick_types(eeg=True, verbose=False).get_data()[0, 0 : (duration * sampling_rate)]
-    return eeg
+    eeg = raw_sim.pick_types(eeg=True, verbose=False).get_data()
+    return eeg[0, 0 : int(duration * sampling_rate)]
