@@ -551,7 +551,8 @@ title="Open an issue"
 <div class="viewcode-block" id="eeg_simulate"><a class="viewcode-back" href="../../../functions/eeg.html#neurokit2.eeg.eeg_simulate">[docs]</a><span class="k">def</span> <span class="nf">eeg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**EEG Signal Simulation**</span>
 
-<span class="sd">    Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw simulation example. Help is needed to improve this function.</span>
+<span class="sd">    Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw</span>
+<span class="sd">    simulation example. Help is needed to improve this function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -639,8 +640,8 @@ title="Open an issue"
     <span class="c1"># mne.simulation.add_ecg(raw_sim, verbose=False)</span>
     <span class="c1"># mne.simulation.add_eog(raw_sim, verbose=False)</span>
 
-    <span class="n">eeg</span> <span class="o">=</span> <span class="n">raw_sim</span><span class="o">.</span><span class="n">pick_types</span><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span>
-    <span class="k">return</span> <span class="n">eeg</span></div>
+    <span class="n">eeg</span> <span class="o">=</span> <span class="n">raw_sim</span><span class="o">.</span><span class="n">pick_types</span><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">eeg</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span></div>
 </pre></div>
 
               </div>
