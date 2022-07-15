@@ -69,7 +69,13 @@ def signal_plot(
         if isinstance(signal, list) or len(np.array(signal).shape) > 1:
             out = pd.DataFrame()
             for i, content in enumerate(signal):
-                if isinstance(content, (pd.DataFrame, pd.Series)):
+                if isinstance(content, pd.Series):
+                    out = pd.concat(
+                        [out, pd.DataFrame({content.name: content.values})],
+                        axis=1,
+                        sort=True,
+                    )
+                elif isinstance(content, pd.DataFrame):
                     out = pd.concat([out, content], axis=1, sort=True)
                 else:
                     out = pd.concat(
