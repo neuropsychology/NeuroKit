@@ -39,6 +39,9 @@ def find_knee(x, S=1, show=False, verbose=True):
 
     """
     n = len(x)
+    if n <= 5:
+        raise ValueError("Input vector must have at least six values.")
+
     idx = np.linspace(0, 1, n)
 
     # Smooth using spline
