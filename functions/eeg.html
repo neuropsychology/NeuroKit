@@ -1540,6 +1540,32 @@ templates can be used for EEG source reconstruction when no individual MRI is av
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
 <span class="target" id="module-neurokit2.eeg"></span><p>Submodule for NeuroKit.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eeg.eeg_simulate">
+<span class="sig-name descname"><span class="pre">eeg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_simulate.html#eeg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_simulate" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EEG Signal Simulation</strong></p>
+<p>Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw simulation example. Help is needed to improve this function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<em>int</em>) – Desired recording length in seconds.</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – The desired length of the signal (in samples).</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>noise</strong> (<em>float</em>) – Noise level.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eeg_simulate1.png"><img alt="../_images/p_eeg_simulate1.png" src="../_images/p_eeg_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_to_dict">
 <span class="sig-name descname"><span class="pre">mne_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_dict" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Convert MNE Raw or Epochs object to a dictionary</strong></p>
