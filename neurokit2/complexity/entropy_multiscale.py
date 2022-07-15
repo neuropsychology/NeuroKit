@@ -14,8 +14,7 @@ from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
-from .utils_complexity_coarsegraining import (_get_scales,
-                                              complexity_coarsegraining)
+from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
 
 
 def entropy_multiscale(
@@ -57,6 +56,11 @@ def entropy_multiscale(
     * **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
       coarse-grained series. We implement a generalization of this via interpolation that can be
       referred to as **Interpolated Multiscale Entropy**.
+
+    .. warning::
+
+        Interpolated Multiscale variants don't work as expected. Help is needed to fix this
+        procedure.
 
     Their :func:`Fuzzy <entropy_fuzzy>` version can be obtained by setting ``fuzzy=True``.
 
