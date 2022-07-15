@@ -104,6 +104,11 @@
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../../../authors.html">
    Authors
   </a>
@@ -111,11 +116,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../../../cite_us.html">
    Cite us
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../installation.html">
-   Installation
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -553,9 +553,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_interpolate</span>
 
 
-<div class="viewcode-block" id="complexity_coarsegraining"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_coarsegraining">[docs]</a><span class="k">def</span> <span class="nf">complexity_coarsegraining</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nonoverlapping&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="complexity_coarsegraining"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_coarsegraining">[docs]</a><span class="k">def</span> <span class="nf">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nonoverlapping&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Coarse-graining of a signal**</span>
 
 <span class="sd">    The goal of coarse-graining is to represent the signal at a different &quot;scale&quot;. The</span>
@@ -604,8 +602,6 @@ title="Open an issue"
 <span class="sd">        the amount of coarsegraining.</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Can be ``&quot;nonoverlapping&quot;``, ``&quot;rolling&quot;``, ``&quot;interpolate&quot;``, or ``&quot;timeshift&quot;``.</span>
-<span class="sd">    force : bool</span>
-<span class="sd">        If ``True``, will include all the samples (even if the last segment is too short).</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, will show the coarse-grained signal.</span>
 <span class="sd">    **kwargs</span>
@@ -633,8 +629,6 @@ title="Open an issue"
 
 <span class="sd">      signal = [0, 1, 2, 0, 1]</span>
 <span class="sd">      nk.complexity_coarsegraining(signal, scale=3)</span>
-<span class="sd">      # Forcing uses all the samples even if the last segment is too short</span>
-<span class="sd">      nk.complexity_coarsegraining(signal, scale=3, force=True)</span>
 
 <span class="sd">      nk.complexity_coarsegraining(signal=range(10), method=&quot;interpolate&quot;)</span>
 <span class="sd">      nk.complexity_coarsegraining(signal=range(10), method=&quot;rolling&quot;)</span>
