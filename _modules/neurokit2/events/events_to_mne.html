@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -547,13 +552,13 @@ title="Open an issue"
 <div class="viewcode-block" id="events_to_mne"><a class="viewcode-back" href="../../../functions/events.html#neurokit2.events.events_to_mne">[docs]</a><span class="k">def</span> <span class="nf">events_to_mne</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">event_conditions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Create MNE-compatible events**</span>
 
-<span class="sd">    Create `MNE &lt;https://mne.tools/stable/index.html&gt;`_ compatible events for integration with M/</span>
-<span class="sd">    EEG.</span>
+<span class="sd">    Create `MNE &lt;https://mne.tools/stable/index.html&gt;`_ compatible events for integration with</span>
+<span class="sd">    M/EEG.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    events : list or ndarray or dict</span>
-<span class="sd">        Events onset location. Can also be a dict obtained through :func:`.events_find&#39;.</span>
+<span class="sd">        Events onset location. Can also be a dict obtained through :func:`.events_find`.</span>
 <span class="sd">    event_conditions : list</span>
 <span class="sd">        An optional list containing, for each event, for example the trial category, group or</span>
 <span class="sd">        experimental conditions. Defaults to ``None``.</span>
@@ -562,7 +567,7 @@ title="Open an issue"
 <span class="sd">    -------</span>
 <span class="sd">    tuple</span>
 <span class="sd">        MNE-formatted events and the event id, that can be added</span>
-<span class="sd">        via :func:`.raw.add_events(events)`, and a dictionary with event&#39;s names.</span>
+<span class="sd">        via ``raw.add_events(events)``, and a dictionary with event&#39;s names.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

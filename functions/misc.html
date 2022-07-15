@@ -197,6 +197,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -653,6 +658,13 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#find-knee">
+   <em>
+    find_knee()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#intervals-to-peaks">
    <em>
     intervals_to_peaks()
@@ -752,6 +764,13 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#find-plateau">
    <em>
     find_plateau()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#find-knee">
+   <em>
+    find_knee()
    </em>
   </a>
  </li>
@@ -1072,10 +1091,47 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">46</span>
+<span class="gh">Out[6]: </span><span class="go">37</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="find-knee">
+<h2><em>find_knee()</em><a class="headerlink" href="#find-knee" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.misc.find_knee">
+<span class="sig-name descname"><span class="pre">find_knee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/misc/find_knee.html#find_knee"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.misc.find_knee" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Find Knee / Elbow</strong></p>
+<p>Find the knee / elbow in a curve using a basic adaptation of the <em>kneedle</em> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em>) – A vector of values for which to detect the knee / elbow.</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – The sensitivity parameter allows us to adjust how aggressive we want to be when
+detecting knees. Smaller values detect knees quicker, while larger values are more
+conservative.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+
+<span class="gp">In [3]: </span><span class="n">x</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">find_knee</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">21</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Satopaa, V., Albrecht, J., Irwin, D., &amp; Raghavan, B. (2011, June). Finding a” kneedle” in a
+haystack: Detecting knee points in system behavior. In 2011 31st international conference on
+distributed computing systems workshops (pp. 166-171). IEEE.</p></li>
+</ul>
 </dd></dl>
 
 </section>

@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Create epochs" href="../misc_epochs_create/misc_epochs_create.html" />
-    <link rel="prev" title="EEG Power in Frequency Bands" href="../eeg_power/eeg_power.html" />
+    <link rel="prev" title="EEG Complexity Analysis" href="../eeg_complexity/eeg_complexity.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -194,6 +194,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../eeg_power/eeg_power.html">
      EEG Power in Frequency Bands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -691,7 +696,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a8a4d00226e3891c2757f7d6ea99516439e6f3fe6bd00297c96857966a760166.png" src="../../_images/a8a4d00226e3891c2757f7d6ea99516439e6f3fe6bd00297c96857966a760166.png" />
+<img alt="../../_images/3f26ba7f72b233392dba614a0f0b3ae811b7951b334bd389a8fe0527f86a2b32.png" src="../../_images/3f26ba7f72b233392dba614a0f0b3ae811b7951b334bd389a8fe0527f86a2b32.png" />
 </div>
 </div>
 <p>In this case we <strong>know</strong> that the best fitting line will be a linear function (i.e., a straight line), and we want to find its parameters. A linear function has two parameters, the <strong>intercept</strong> and the <strong>slope</strong>.</p>
@@ -714,7 +719,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1.17968639, 3.29473475])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([2.62033952, 2.895877  ])
 </pre></div>
 </div>
 </div>
@@ -731,7 +736,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b9d739957ecc90971db6d1bfc4d892b351e746a49d1ae48edc9b1da267c735fc.png" src="../../_images/b9d739957ecc90971db6d1bfc4d892b351e746a49d1ae48edc9b1da267c735fc.png" />
+<img alt="../../_images/b41b3b1ae01e29d2acd0523d8ce39ae5b837b30a254cc23f574df2424f1c9e84.png" src="../../_images/b41b3b1ae01e29d2acd0523d8ce39ae5b837b30a254cc23f574df2424f1c9e84.png" />
 </div>
 </div>
 </section>
@@ -746,10 +751,10 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e680430d40916a5be9cef94ba468c946b4013b9119e31241c79cb508931f986b.png" src="../../_images/e680430d40916a5be9cef94ba468c946b4013b9119e31241c79cb508931f986b.png" />
+<img alt="../../_images/7fe2002b53ca9154a60109434e406c72a0a1dcbeeb44d2c320a51e04d55ff0b7.png" src="../../_images/7fe2002b53ca9154a60109434e406c72a0a1dcbeeb44d2c320a51e04d55ff0b7.png" />
 </div>
 </div>
-<p>In this example, we will try to approximate this Skin Conductance Response (SCR) using a <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/pull/269">gamma distribution</a>, which is quite a flexible distribution defined by 3 parameters (<strong>a</strong>, <strong>loc</strong> and <strong>scale</strong>).</p>
+<p>In this example, we will try to approximate this Skin Conductance Response (SCR) using a <a class="reference external" href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma distribution</a>, which is quite a flexible distribution defined by 3 parameters (<strong>a</strong>, <strong>loc</strong> and <strong>scale</strong>).</p>
 <p>On top of these 3 parameters, we will add 2 more, the <strong>intercept</strong> and a <strong>size</strong> parameter to give it more flexibility.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -784,7 +789,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94758138, 2.28248711, 1.0605444 , 1.48296385, 2.03215391])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94583194, 2.32103553, 1.0347315 , 0.88176352, 2.12336724])
 </pre></div>
 </div>
 </div>
@@ -800,7 +805,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f09d44f07d2bff26bb2d141a30d107d33e26a708de4a227de26d111e611a9820.png" src="../../_images/f09d44f07d2bff26bb2d141a30d107d33e26a708de4a227de26d111e611a9820.png" />
+<img alt="../../_images/9f7e793d635e080910eafa0710637b0c2061aa4f95faceff5a6b9712260b66c0.png" src="../../_images/9f7e793d635e080910eafa0710637b0c2061aa4f95faceff5a6b9712260b66c0.png" />
 </div>
 </div>
 </section>
@@ -814,11 +819,11 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../eeg_power/eeg_power.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../eeg_complexity/eeg_complexity.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">EEG Power in Frequency Bands</p>
+            <p class="prev-next-title">EEG Complexity Analysis</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../misc_epochs_create/misc_epochs_create.html" title="next page">

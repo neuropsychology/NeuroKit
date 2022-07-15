@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -547,7 +552,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.utils_complexity_symbolize</span> <span class="kn">import</span> <span class="n">complexity_symbolize</span>
 
 
-<div class="viewcode-block" id="entropy_symbolicdynamic"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_symbolicdynamic">[docs]</a><span class="k">def</span> <span class="nf">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MEP&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_symbolicdynamic"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_symbolicdynamic">[docs]</a><span class="k">def</span> <span class="nf">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;MEP&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Symbolic Dynamic Entropy (SyDyEn) and its Multiscale variants (MSSyDyEn)**</span>
 
 <span class="sd">    Symbolic Dynamic Entropy (SyDyEn) combines the merits of symbolic dynamic and information</span>
@@ -560,12 +565,12 @@ title="Open an issue"
 <span class="sd">    dimension : int</span>
 <span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
 <span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter.</span>
+<span class="sd">    symbolize : str</span>
+<span class="sd">        Method to convert a continuous signal input into a symbolic (discrete) signal. Can be one</span>
+<span class="sd">        of ``&quot;MEP&quot;`` (default), ``&quot;NCDF&quot;``, ``&quot;linear&quot;``, ``&quot;uniform&quot;``, ``&quot;kmeans&quot;``, ``&quot;equal&quot;``,</span>
+<span class="sd">        or others. See :func:`complexity_symbolize` for details.</span>
 <span class="sd">    c : int</span>
 <span class="sd">        Number of symbols *c*.</span>
-<span class="sd">    method : str</span>
-<span class="sd">        Method of symbolization. Can be one of ``&quot;MEP&quot;`` (default), ``&quot;NCDF&quot;``, ``&quot;linear&quot;``,</span>
-<span class="sd">        ``&quot;uniform&quot;``, ``&quot;kmeans&quot;``, ``&quot;equal&quot;``, or others. See :func:`complexity_symbolize` for</span>
-<span class="sd">        details.</span>
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Other keyword arguments (currently not used).</span>
 
@@ -592,10 +597,10 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)</span>
 
 <span class="sd">      # Compute Symbolic Dynamic Entropy</span>
-<span class="sd">      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, method=&quot;MEP&quot;)</span>
+<span class="sd">      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, symbolize=&quot;MEP&quot;)</span>
 <span class="sd">      sydyen</span>
 
-<span class="sd">      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, method=&quot;kmeans&quot;)</span>
+<span class="sd">      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, symbolize=&quot;kmeans&quot;)</span>
 <span class="sd">      sydyen</span>
 
 <span class="sd">      # Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)</span>
@@ -629,7 +634,7 @@ title="Open an issue"
         <span class="p">)</span>
 
     <span class="c1"># Store parameters</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">dimension</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">}</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">dimension</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;Symbolization&quot;</span><span class="p">:</span> <span class="n">symbolize</span><span class="p">}</span>
 
     <span class="c1"># We could technically expose the Delay, but the paper is about consecutive differences so...</span>
     <span class="k">if</span> <span class="s2">&quot;delay&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -642,7 +647,7 @@ title="Open an issue"
 
     <span class="c1"># There are four main steps of SDE algorithm</span>
     <span class="c1"># 1. Convert the time series into the symbol time series (called symbolization).</span>
-    <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">symbolize</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
 
     <span class="c1"># 2. Construct the embedding vectors based on the symbol time series and compute the potential</span>
     <span class="c1"># state patterns probability</span>

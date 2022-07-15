@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -584,12 +589,9 @@ title="Open an issue"
 <span class="sd">      peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)</span>
 <span class="sd">      peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)</span>
 <span class="sd">      @savefig p_microstates_peaks_png scale=100%</span>
-<span class="sd">      nk.events_plot([peaks1[peaks1 &lt; 500],</span>
-<span class="sd">                      peaks2[peaks2 &lt; 500],</span>
-<span class="sd">                      peaks3[peaks3 &lt; 500]], gfp[0:500])</span>
+<span class="sd">      nk.events_plot([peaks1[peaks1 &lt; 500], peaks2[peaks2 &lt; 500], peaks3[peaks3 &lt; 500]], gfp[0:500])</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -601,8 +603,10 @@ title="Open an issue"
         <span class="n">eeg</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: microstates_peaks(): The sampling_rate is requested &quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;for this function to run. Please provide it as an argument.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: microstates_peaks(): The sampling_rate is requested &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;for this function to run. Please provide it as an argument.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="c1"># If we want ALL the indices</span>
     <span class="k">if</span> <span class="n">gfp</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -620,7 +624,9 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">gfp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">gfp</span> <span class="o">=</span> <span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_microstates_peaks_gfp</span><span class="p">(</span><span class="n">gfp</span><span class="o">=</span><span class="n">gfp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">distance_between</span><span class="o">=</span><span class="n">distance_between</span><span class="p">)</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_microstates_peaks_gfp</span><span class="p">(</span>
+        <span class="n">gfp</span><span class="o">=</span><span class="n">gfp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">distance_between</span><span class="o">=</span><span class="n">distance_between</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">peaks</span></div>
 
@@ -637,12 +643,12 @@ title="Open an issue"
     <span class="n">peaks_gfp</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">gfp</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">minimum_separation</span><span class="p">)</span>
 
     <span class="c1"># Alternative methods: (doesn&#39;t work best IMO)</span>
-<span class="c1">#    peaks_gfp = scipy.signal.find_peaks_cwt(gfp, np.arange(minimum_separation, int(0.2 * sampling_rate)))</span>
-<span class="c1">#    peaks_gfp = scipy.signal.argrelmax(gfp)[0]</span>
+    <span class="c1">#    peaks_gfp = scipy.signal.find_peaks_cwt(gfp, np.arange(minimum_separation, int(0.2 * sampling_rate)))</span>
+    <span class="c1">#    peaks_gfp = scipy.signal.argrelmax(gfp)[0]</span>
 
     <span class="c1"># Use DISS</span>
-<span class="c1">#    diss = nk.eeg_diss(eeg, gfp)</span>
-<span class="c1">#    peaks_diss, _ = scipy.signal.find_peaks(diss, distance=minimum_separation)</span>
+    <span class="c1">#    diss = nk.eeg_diss(eeg, gfp)</span>
+    <span class="c1">#    peaks_diss, _ = scipy.signal.find_peaks(diss, distance=minimum_separation)</span>
 
     <span class="k">return</span> <span class="n">peaks_gfp</span>
 </pre></div>

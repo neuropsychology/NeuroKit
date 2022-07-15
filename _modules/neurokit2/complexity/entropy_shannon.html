@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -547,7 +552,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.utils_complexity_symbolize</span> <span class="kn">import</span> <span class="n">complexity_symbolize</span>
 
 
-<div class="viewcode-block" id="entropy_shannon"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_shannon">[docs]</a><span class="k">def</span> <span class="nf">entropy_shannon</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_shannon"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_shannon">[docs]</a><span class="k">def</span> <span class="nf">entropy_shannon</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Shannon entropy (SE or ShanEn)**</span>
 
 <span class="sd">    Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the</span>
@@ -578,11 +583,10 @@ title="Open an issue"
 <span class="sd">        The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.</span>
 <span class="sd">        stats.entropy()`` uses Euler&#39;s number (``np.e``) as default (the natural logarithm), giving</span>
 <span class="sd">        a measure of information expressed in *nats*.</span>
-<span class="sd">    method : str or int</span>
-<span class="sd">        Method of symbolization. Can be one of ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;``, ``&quot;D&quot;``, ``&quot;r&quot;``, an</span>
-<span class="sd">        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in</span>
-<span class="sd">        cases when the binarization has already been done before). See :func:`complexity_symbolize`</span>
-<span class="sd">        for details.</span>
+<span class="sd">    symbolize : str</span>
+<span class="sd">        Method to convert a continuous signal input into a symbolic (discrete) signal. ``None`` by</span>
+<span class="sd">        default, which skips the process (and assumes the input is already discrete). See</span>
+<span class="sd">        :func:`complexity_symbolize` for details.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, will show the discrete the signal.</span>
 <span class="sd">    freq : np.array</span>
@@ -622,7 +626,7 @@ title="Open an issue"
 
 <span class="sd">      # Compute Shannon&#39;s Entropy</span>
 <span class="sd">      @savefig p_entropy_shannon1.png scale=100%</span>
-<span class="sd">      shanen, info = nk.entropy_shannon(signal, method=3, show=True)</span>
+<span class="sd">      shanen, info = nk.entropy_shannon(signal, symbolize=3, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -650,15 +654,15 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">_entropy_freq</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">_entropy_freq</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="n">symbolize</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">),</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s2">&quot;Base&quot;</span><span class="p">:</span> <span class="n">base</span><span class="p">}</span></div>
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">),</span> <span class="p">{</span><span class="s2">&quot;Symbolization&quot;</span><span class="p">:</span> <span class="n">symbolize</span><span class="p">,</span> <span class="s2">&quot;Base&quot;</span><span class="p">:</span> <span class="n">base</span><span class="p">}</span></div>
 
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Compute frequencies (common to Shannon and Tsallis)</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_entropy_freq</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_entropy_freq</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="c1"># Sanity checks</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">))</span> <span class="ow">and</span> <span class="n">signal</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -675,7 +679,7 @@ title="Open an issue"
 
     <span class="c1"># Make discrete</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">signal</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">symbolize</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>

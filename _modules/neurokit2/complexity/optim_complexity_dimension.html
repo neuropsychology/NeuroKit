@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -576,7 +581,13 @@ title="Open an issue"
 <span class="sd">      embedding dimension, which is presumed to give an unfolded space-state reconstruction. This</span>
 <span class="sd">      method can fail in noisy signals due to the futile attempt of unfolding the noise (and in</span>
 <span class="sd">      purely random signals, the amount of false neighbors does not substantially drops as *m*</span>
-<span class="sd">      increases).</span>
+<span class="sd">      increases). The **figure** below show how projections to higher-dimensional spaces can be</span>
+<span class="sd">      used to detect false nearest neighbours. For instance, the red and the yellow points are</span>
+<span class="sd">      neighbours in the 1D space, but not in the 2D space.</span>
+
+<span class="sd">    .. figure:: ../img/douglas2022b.png</span>
+<span class="sd">       :alt: Illustration of FNN (Douglas et al., 2022).</span>
+
 <span class="sd">    * **AFN** (Average False Neighbors): This modification by Cao (1997) of the FNN method</span>
 <span class="sd">      addresses one of its main drawback, the need for a heuristic choice for the tolerance</span>
 <span class="sd">      thresholds *r*. It uses the maximal Euclidian distance to represent nearest neighbors, and</span>
@@ -769,8 +780,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_dimension_afn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;AFN</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;AFN&quot;&quot;&quot;</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">_embedding_dimension_afn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

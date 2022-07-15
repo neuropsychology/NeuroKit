@@ -197,6 +197,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -772,7 +777,7 @@ automatically with the package (to avoid increasing its weight), but can be down
 <code class="docutils literal notranslate"><span class="pre">PhotoSensor</span></code>.</p>
 <ul>
 <li><p>Single subject</p></li>
-<li><p>Resting-state of 8 min when the Photosensor is low (need to crop the data)</p></li>
+<li><p>Resting-state of 8 min when the photosensor is low (need to crop the data)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sampling_rate=100</span></code></p></li>
 </ul>
 </li>
@@ -942,8 +947,9 @@ signal interruptions using padding.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_bitalino">
 <span class="sig-name descname"><span class="pre">read_bitalino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation_directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_bitalino.html#read_bitalino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_bitalino" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Read and format a  OpenSignals file (e.g., from BITalino) into a pandas’ dataframe</strong></p>
-<p>The function outputs both the dataframe and the sampling rate (retrieved from the
+<dd><p><strong>Read an OpenSignals file (from BITalino)</strong></p>
+<p>Reads and loads a BITalino file into a Pandas DataFrame.
+The function outputs both the dataframe and the sampling rate (retrieved from the
 OpenSignals file).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

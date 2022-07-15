@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -549,28 +554,40 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 
-<span class="kn">from</span> <span class="nn">..complexity</span> <span class="kn">import</span> <span class="p">(</span><span class="n">complexity_lempelziv</span><span class="p">,</span> <span class="n">entropy_approximate</span><span class="p">,</span>
-                          <span class="n">entropy_fuzzy</span><span class="p">,</span> <span class="n">entropy_multiscale</span><span class="p">,</span> <span class="n">entropy_sample</span><span class="p">,</span>
-                          <span class="n">entropy_shannon</span><span class="p">,</span> <span class="n">fractal_correlation</span><span class="p">,</span> <span class="n">fractal_dfa</span><span class="p">,</span>
-                          <span class="n">fractal_higuchi</span><span class="p">,</span> <span class="n">fractal_katz</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..complexity</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">complexity_lempelziv</span><span class="p">,</span>
+    <span class="n">entropy_approximate</span><span class="p">,</span>
+    <span class="n">entropy_fuzzy</span><span class="p">,</span>
+    <span class="n">entropy_multiscale</span><span class="p">,</span>
+    <span class="n">entropy_sample</span><span class="p">,</span>
+    <span class="n">entropy_shannon</span><span class="p">,</span>
+    <span class="n">fractal_correlation</span><span class="p">,</span>
+    <span class="n">fractal_dfa</span><span class="p">,</span>
+    <span class="n">fractal_higuchi</span><span class="p">,</span>
+    <span class="n">fractal_katz</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_consecutive</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_zerocrossings</span>
 <span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
 
 
 <div class="viewcode-block" id="hrv_nonlinear"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_nonlinear">[docs]</a><span class="k">def</span> <span class="nf">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Computes nonlinear indices of Heart Rate Variability (HRV)**</span>
+    <span class="sd">&quot;&quot;&quot;**Nonlinear indices of Heart Rate Variability (HRV)**</span>
 
-<span class="sd">    Non-linear indices include features derived from the *Poincaré plot*, as well as other</span>
-<span class="sd">    :func:`.complexity` indices. Note that there exist many more complexity indices that are</span>
-<span class="sd">    available in NeuroKit2 and that could be applied to HRV. The :func:`.hrv_nonlinear` function</span>
-<span class="sd">    only includes the most commonly used indices.</span>
+<span class="sd">    This function computes non-linear indices, which include features derived from the *Poincaré</span>
+<span class="sd">    plot*, as well as other :func:`.complexity` indices corresponding to entropy or fractal</span>
+<span class="sd">    dimension.</span>
+
+<span class="sd">    .. hint::</span>
+<span class="sd">        There exist many more complexity indices available in NeuroKit2, that could be applied to</span>
+<span class="sd">        HRV. The :func:`.hrv_nonlinear` function only includes the most commonly used indices.</span>
+<span class="sd">        Please see the documentation page for all the func:`.complexity` features.</span>
 
 <span class="sd">    The **Poincaré plot** is a graphical representation of each NN interval plotted against its</span>
 <span class="sd">    preceding NN interval. The ellipse that emerges is a visual quantification of the correlation</span>
 <span class="sd">    between successive NN intervals.</span>
 
-<span class="sd">    Indices derived from the Poincaré plot analysis are:</span>
+<span class="sd">    Basic indices derived from the Poincaré plot analysis include:</span>
 
 <span class="sd">    * **SD1**: Standard deviation perpendicular to the line of identity. It is an index of</span>
 <span class="sd">      short-term RR interval fluctuations, i.e., beat-to-beat variability. It is equivalent</span>
@@ -783,8 +800,8 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_hrv_nonlinear_poincare</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute SD1 and SD2.</span>
 
-<span class="sd">    - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate</span>
-<span class="sd">    variability? - Brennan (2001)</span>
+<span class="sd">    - Brennan (2001). Do existing measures of Poincare plot geometry reflect nonlinear features of</span>
+<span class="sd">      heart rate variability?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -810,7 +827,7 @@ title="Open an issue"
     <span class="n">L</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD2&quot;</span><span class="p">]</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CSI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">T</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CVI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">L</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CSI_Modified&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">T</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CSI_Modified&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">T</span>
 
     <span class="k">return</span> <span class="n">out</span>
 
@@ -843,9 +860,9 @@ title="Open an issue"
     <span class="c1"># Calculate the angles</span>
     <span class="n">theta_all</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">x</span><span class="p">))</span>  <span class="c1"># phase angle LI - phase angle of i-th point</span>
     <span class="c1"># Calculate the radius</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="c1"># Sector areas</span>
-    <span class="n">S_all</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">theta_all</span> <span class="o">*</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">S_all</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">theta_all</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># Guzik&#39;s Index (GI)</span>
     <span class="n">den_GI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_all</span><span class="p">)</span>
@@ -871,7 +888,7 @@ title="Open an issue"
     <span class="n">sd1d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_all</span><span class="p">[</span><span class="n">decelerate_indices</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">sd1a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_all</span><span class="p">[</span><span class="n">accelerate_indices</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
-    <span class="n">sd1I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd1d</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd1a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sd1I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd1d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd1a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C1d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd1d</span> <span class="o">/</span> <span class="n">sd1I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C1a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd1a</span> <span class="o">/</span> <span class="n">sd1I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD1d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sd1d</span>  <span class="c1"># SD1 deceleration</span>
@@ -886,7 +903,7 @@ title="Open an issue"
     <span class="n">sd2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">longterm_dec</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">longterm_nodiff</span><span class="p">)</span>
     <span class="n">sd2a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">longterm_acc</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">longterm_nodiff</span><span class="p">)</span>
 
-    <span class="n">sd2I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd2d</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sd2I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C2d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd2d</span> <span class="o">/</span> <span class="n">sd2I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C2a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd2a</span> <span class="o">/</span> <span class="n">sd2I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD2d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sd2d</span>  <span class="c1"># SD2 deceleration</span>
@@ -894,9 +911,9 @@ title="Open an issue"
     <span class="c1"># out[&quot;SD2I&quot;] = sd2I  # identical with SD2</span>
 
     <span class="c1"># Total asymmerty (SDNN)</span>
-    <span class="n">sdnnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1d</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd2d</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN deceleration</span>
-    <span class="n">sdnna</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1a</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN acceleration</span>
-    <span class="n">sdnn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sdnnd</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sdnna</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># should be similar to sdnn in hrv_time</span>
+    <span class="n">sdnnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd2d</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN deceleration</span>
+    <span class="n">sdnna</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN acceleration</span>
+    <span class="n">sdnn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sdnnd</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sdnna</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># should be similar to sdnn in hrv_time</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Cd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sdnnd</span> <span class="o">/</span> <span class="n">sdnn</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Ca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sdnna</span> <span class="o">/</span> <span class="n">sdnn</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDNNd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sdnnd</span>
@@ -1101,7 +1118,7 @@ title="Open an issue"
     <span class="n">yc</span> <span class="o">=</span> <span class="n">ax2</span> <span class="o">-</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">xct</span> <span class="o">=</span> <span class="n">xc</span> <span class="o">*</span> <span class="n">cos_angle</span> <span class="o">-</span> <span class="n">yc</span> <span class="o">*</span> <span class="n">sin_angle</span>
     <span class="n">yct</span> <span class="o">=</span> <span class="n">xc</span> <span class="o">*</span> <span class="n">sin_angle</span> <span class="o">+</span> <span class="n">yc</span> <span class="o">*</span> <span class="n">cos_angle</span>
-    <span class="n">rad_cc</span> <span class="o">=</span> <span class="p">(</span><span class="n">xct</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">yct</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">rad_cc</span> <span class="o">=</span> <span class="p">(</span><span class="n">xct</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">yct</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rad_cc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax1</span><span class="p">[</span><span class="n">points</span><span class="p">],</span> <span class="n">ax2</span><span class="p">[</span><span class="n">points</span><span class="p">],</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>

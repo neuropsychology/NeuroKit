@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -617,18 +622,37 @@ title="Open an issue"
 
 <span class="sd">    Example</span>
 <span class="sd">    ----------</span>
+<span class="sd">    Simulate a trigger signal (e.g., from photosensor)</span>
+
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
+<span class="sd">      import numpy as np</span>
 
-<span class="sd">      signal = nk.signal_simulate(duration=4)</span>
+<span class="sd">      signal = np.zeros(200)</span>
+<span class="sd">      signal[20:60] = 1</span>
+<span class="sd">      signal[100:105] = 1</span>
+<span class="sd">      signal[130:170] = 1</span>
+
 <span class="sd">      events = nk.events_find(signal)</span>
 <span class="sd">      events</span>
 
-<span class="sd">      @savefig p_events_find.png scale=100%</span>
+<span class="sd">      @savefig p_events_find1.png scale=100%</span>
 <span class="sd">      nk.events_plot(events, signal)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
+<span class="sd">    The second event is an artifact (too short), we can skip it</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      events = nk.events_find(signal, duration_min= 10)</span>
+
+<span class="sd">      @savefig p_events_find2.png scale=100%</span>
+<span class="sd">      nk.events_plot(events, signal)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 
 
 <span class="sd">    &quot;&quot;&quot;</span>

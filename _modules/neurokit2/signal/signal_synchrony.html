@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -547,10 +552,16 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="signal_synchrony"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_synchrony">[docs]</a><span class="k">def</span> <span class="nf">signal_synchrony</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hilbert&quot;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute the synchrony (coupling) between two signals.</span>
+    <span class="sd">&quot;&quot;&quot;**Synchrony (coupling) between two signals**</span>
 
-<span class="sd">    Compute a continuous index of coupling between two signals either using the ``&quot;hilbert&quot;``</span>
-<span class="sd">    method to get the instantaneous phase synchrony, or using rolling window correlation.</span>
+<span class="sd">    Signal coherence refers to the strength of the mutual relationship (i.e., the amount of shared</span>
+<span class="sd">    information) between two signals. Synchrony is coherence &quot;in phase&quot; (two waveforms are &quot;in</span>
+<span class="sd">    phase&quot; when the peaks and troughs occur at the same time). Synchrony will always be coherent,</span>
+<span class="sd">    but coherence need not always be synchronous.</span>
+
+<span class="sd">    This function computes a continuous index of coupling between two signals either using the</span>
+<span class="sd">    ``&quot;hilbert&quot;`` method to get the instantaneous phase synchrony, or using a rolling window</span>
+<span class="sd">    correlation.</span>
 
 <span class="sd">    The instantaneous phase synchrony measures the phase similarities between signals at each</span>
 <span class="sd">    timepoint. The phase refers to the angle of the signal, calculated through the hilbert</span>
@@ -559,8 +570,7 @@ title="Open an issue"
 
 <span class="sd">    For less clean signals, windowed correlations are widely used because of their simplicity, and</span>
 <span class="sd">    can be a good a robust approximation of synchrony between two signals. The limitation is the</span>
-<span class="sd">    need to select a window.</span>
-
+<span class="sd">    need to select a window size.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -575,7 +585,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    signal_filter, signal_zerocrossings, signal_findpeaks</span>
+<span class="sd">    scipy.signal.hilbert, mutual_information</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -588,14 +598,14 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal1 = nk.signal_simulate(duration=10, frequency=1)</span>
-<span class="sd">      signal2 = nk.signal_simulate(duration=10, frequency=1.5)</span>
+<span class="sd">      s1 = nk.signal_simulate(duration=10, frequency=1)</span>
+<span class="sd">      s2 = nk.signal_simulate(duration=10, frequency=1.5)</span>
 
-<span class="sd">      coupling_h = nk.signal_synchrony(signal1, signal2, method=&quot;hilbert&quot;)</span>
-<span class="sd">      coupling_c = nk.signal_synchrony(signal1, signal2, method=&quot;correlation&quot;, window_size=1000/2)</span>
+<span class="sd">      coupling1 = nk.signal_synchrony(s1, s2, method=&quot;hilbert&quot;)</span>
+<span class="sd">      coupling2 = nk.signal_synchrony(s1, s2, method=&quot;correlation&quot;, window_size=1000/2)</span>
 
 <span class="sd">      @savefig p_signal_synchrony1.png scale=100%</span>
-<span class="sd">      nk.signal_plot([signal1, signal2, coupling_h, coupling_c])</span>
+<span class="sd">      nk.signal_plot([s1, s2, coupling1, coupling2], labels=[&quot;s1&quot;, &quot;s2&quot;, &quot;hilbert&quot;, &quot;correlation&quot;])</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 

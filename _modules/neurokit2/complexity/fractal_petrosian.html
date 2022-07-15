@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -546,14 +551,15 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.utils_complexity_symbolize</span> <span class="kn">import</span> <span class="n">complexity_symbolize</span>
 
 
-<div class="viewcode-block" id="fractal_petrosian"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.fractal_petrosian">[docs]</a><span class="k">def</span> <span class="nf">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="fractal_petrosian"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.fractal_petrosian">[docs]</a><span class="k">def</span> <span class="nf">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Petrosian fractal dimension (PFD)**</span>
 
 <span class="sd">    Petrosian (1995) proposed a fast method to estimate the fractal dimension by converting the</span>
 <span class="sd">    signal into a binary sequence from which the fractal dimension is estimated. Several variations</span>
-<span class="sd">    of the algorithm exist (e.g., ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;`` or ``&quot;D&quot;``), primarily differing in the way the discrete</span>
-<span class="sd">    (symbolic) sequence is created (see func:`complexity_symbolize` for details). The most common</span>
-<span class="sd">    method (``&quot;C&quot;``, by default) binarizes the signal by the sign of consecutive differences.</span>
+<span class="sd">    of the algorithm exist (e.g., ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;`` or ``&quot;D&quot;``), primarily differing in the</span>
+<span class="sd">    way the discrete (symbolic) sequence is created (see func:`complexity_symbolize` for details).</span>
+<span class="sd">    The most common method (``&quot;C&quot;``, by default) binarizes the signal by the sign of consecutive</span>
+<span class="sd">    differences.</span>
 
 <span class="sd">    .. math::</span>
 
@@ -570,11 +576,10 @@ title="Open an issue"
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
-<span class="sd">    method : str or int</span>
-<span class="sd">        Method of symbolization. Can be one of ``&quot;A&quot;``, ``&quot;B&quot;``, ``&quot;C&quot;``, ``&quot;D&quot;``, ``&quot;r&quot;``, and</span>
-<span class="sd">        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in</span>
-<span class="sd">        cases when the binarization has already been done before). See :func:`complexity_symbolize`</span>
-<span class="sd">        for details.</span>
+<span class="sd">    symbolize : str</span>
+<span class="sd">        Method to convert a continuous signal input into a symbolic (discrete) signal. By default,</span>
+<span class="sd">        assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in</span>
+<span class="sd">        case the input is already discrete). See :func:`complexity_symbolize` for details.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, will show the discrete the signal.</span>
 
@@ -595,7 +600,7 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 12])</span>
 
 <span class="sd">      @savefig p_fractal_petrosian1.png scale=100%</span>
-<span class="sd">      pfd, info = nk.fractal_petrosian(signal, method = &quot;C&quot;, show=True)</span>
+<span class="sd">      pfd, info = nk.fractal_petrosian(signal, symbolize = &quot;C&quot;, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -627,7 +632,7 @@ title="Open an issue"
         <span class="p">)</span>
 
     <span class="c1"># Binarize the sequence</span>
-    <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
+    <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">symbolize</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
 
     <span class="c1"># if isinstance(method, str) and method.lower() in [&quot;d&quot;, &quot;r&quot;]:</span>
     <span class="c1">#     # These methods are already based on the consecutive differences</span>
@@ -639,7 +644,7 @@ title="Open an issue"
 
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">symbolic</span><span class="p">)</span>
     <span class="n">pfd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">n_inversions</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">pfd</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">}</span></div>
+    <span class="k">return</span> <span class="n">pfd</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Symbolization&quot;</span><span class="p">:</span> <span class="n">symbolize</span><span class="p">}</span></div>
 </pre></div>
 
               </div>

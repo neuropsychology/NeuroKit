@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -546,10 +551,19 @@ title="Open an issue"
 <div class="viewcode-block" id="ecg_rsp"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_rsp">[docs]</a><span class="k">def</span> <span class="nf">ecg_rsp</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;vangent2019&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**ECG-Derived Respiration (EDR)**</span>
 
-<span class="sd">    Extract ECG-Derived Respiration (EDR), a proxy of a respiratory signal based on heart rate. *</span>
-<span class="sd">    Note that this implementation is far from being complete, as the information in the related</span>
-<span class="sd">    papers prevents me from getting a full understanding of the procedure. **Help is required to</span>
-<span class="sd">    document, test and validate the function!**</span>
+<span class="sd">    Extract ECG-Derived Respiration (EDR), a proxy of a respiratory signal based on heart rate.</span>
+
+<span class="sd">    Different methods include:</span>
+
+<span class="sd">    * **vangent2019**: 0.1-0.4 Hz filter.</span>
+<span class="sd">    * **soni2019**: 0-0.5 Hz filter.</span>
+<span class="sd">    * **charlton2016**: 0.066-1 Hz filter.</span>
+<span class="sd">    * **sarkar2015**: 0.1-0.7 Hz filter.</span>
+
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        Help is required to double-check whether the implementation match the papers.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -582,9 +596,13 @@ title="Open an issue"
 
 <span class="sd">      # Get ECG Derived Respiration (EDR) and add to the data</span>
 <span class="sd">      data[&quot;EDR&quot;] = nk.ecg_rsp(ecg_rate, sampling_rate=100)</span>
+
 <span class="sd">      # Visualize result</span>
 <span class="sd">      @savefig p_ecg_rsp1.png scale=100%</span>
 <span class="sd">      nk.signal_plot([data[&quot;RSP&quot;], data[&quot;EDR&quot;]], standardize = True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 
 <span class="sd">    * **Example 2:** Methods comparison</span>
 
@@ -599,6 +617,8 @@ title="Open an issue"
 <span class="sd">      @savefig p_ecg_rsp2.png scale=100%</span>
 <span class="sd">      nk.signal_plot([data[&quot;RSP&quot;], data[&quot;vangent2019&quot;], data[&quot;sarkar2015&quot;],</span>
 <span class="sd">                      data[&quot;charlton2016&quot;], data[&quot;soni2019&quot;]], standardize = True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -614,25 +634,26 @@ title="Open an issue"
 <span class="sd">      meditation effects. International Journal of Yoga, 12(1), 45.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: It would be interesting to run a study in which we modulate the different filtering</span>
+    <span class="c1"># parameters and compute the difference with the real RSP signal, and then suggest the optimal</span>
+    <span class="c1"># filtering parameters. If you&#39;re interested in helping out let us know!</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="s2">&quot;sarkar2015&quot;</span>
-    <span class="p">]:</span>  <span class="c1"># https://www.researchgate.net/publication/304221962_Extraction_of_respiration_signal_from_ECG_for_respiratory_rate_estimation # noqa: E501</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sarkar2015&quot;</span><span class="p">]:</span>
+        <span class="c1"># https://www.researchgate.net/publication/304221962_Extraction_of_respiration_signal_from_ECG_for_respiratory_rate_estimation # noqa: E501</span>
         <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="s2">&quot;charlton2016&quot;</span>
-    <span class="p">]:</span>  <span class="c1"># https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5390977/#__ffn_sectitle</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;charlton2016&quot;</span><span class="p">]:</span>
+        <span class="c1"># https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5390977/#__ffn_sectitle</span>
         <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">4</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;soni2019&quot;</span><span class="p">]:</span>  <span class="c1"># https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6329220/</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;soni2019&quot;</span><span class="p">]:</span>
+        <span class="c1"># https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6329220/</span>
         <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="s2">&quot;vangent2019&quot;</span>
-    <span class="p">]:</span>  <span class="c1"># https://github.com/paulvangentcom/heartrate_analysis_python/blob/1597e8c0b2602829428b22d8be88420cd335e939/heartpy/analysis.py#L541 # noqa: E501</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;vangent2019&quot;</span><span class="p">]:</span>
+        <span class="c1"># https://github.com/paulvangentcom/heartrate_analysis_python/blob/1597e8c0b2602829428b22d8be88420cd335e939/heartpy/analysis.py#L541 # noqa: E501</span>
         <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_rsp(): &#39;method&#39; should be &quot;</span>
-            <span class="s2">&quot;one of &#39;sarkar2015&#39;, &#39;charlton2016&#39;, &#39;soni2019&#39; or &quot;</span>
+            <span class="s2">&quot;`method` should be one of &#39;sarkar2015&#39;, &#39;charlton2016&#39;, &#39;soni2019&#39; or &quot;</span>
             <span class="s2">&quot;&#39;vangent2019&#39;.&quot;</span>
         <span class="p">)</span>
 

@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -540,8 +545,7 @@ title="Open an issue"
               <div>
                 
   <h1>Source code for neurokit2.ecg.ecg_findpeaks</h1><div class="highlight"><pre>
-<span></span><span class="c1"># - * - coding: utf-8 - * -</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
@@ -619,8 +623,10 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">_ecg_findpeaks_nabian2018</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">,</span> <span class="s2">&quot;gamboa&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_gamboa</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ssf&quot;</span><span class="p">,</span> <span class="s2">&quot;slopesumfunction&quot;</span><span class="p">,</span> <span class="s2">&quot;zong&quot;</span><span class="p">,</span> <span class="s2">&quot;zong2003&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ssf&quot;</span><span class="p">,</span> <span class="s2">&quot;slopesumfunction&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_ssf</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;zong&quot;</span><span class="p">,</span> <span class="s2">&quot;zong2003&quot;</span><span class="p">,</span> <span class="s2">&quot;wqrs&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_zong</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hamilton&quot;</span><span class="p">,</span> <span class="s2">&quot;hamilton2002&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_hamilton</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;christov&quot;</span><span class="p">,</span> <span class="s2">&quot;christov2004&quot;</span><span class="p">]:</span>
@@ -652,6 +658,7 @@ title="Open an issue"
         <span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
         <span class="s2">&quot;gamboa&quot;</span><span class="p">,</span>
         <span class="s2">&quot;ssf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;zong&quot;</span><span class="p">,</span>
         <span class="s2">&quot;engzee&quot;</span><span class="p">,</span>
         <span class="s2">&quot;elgendi&quot;</span><span class="p">,</span>
         <span class="s2">&quot;kalidas&quot;</span><span class="p">,</span>
@@ -663,15 +670,6 @@ title="Open an issue"
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Probabilistic Methods-Agreement via Convolution (ProMAC).</span>
-
-<span class="sd">    ProMAC combines the result of several R-peak detectors in a probabilistic way. For a given peak</span>
-<span class="sd">    detector, the binary signal representing the peak locations is convolved with a Gaussian</span>
-<span class="sd">    distribution, resulting in a propabilistic representation of each peak location. This procedure</span>
-<span class="sd">    is repeated for all selected &#39;promac_methods&#39; and the resulting signals are accumulated. Finally,</span>
-<span class="sd">    a threshold is used to accept or reject the peak locations.</span>
-
-<span class="sd">    See this discussion for more information on the origins of the method:</span>
-<span class="sd">    https://github.com/neuropsychology/NeuroKit/issues/222</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -693,11 +691,6 @@ title="Open an issue"
 <span class="sd">        The standard deviation of the Gaussian distribution used to represent the peak location</span>
 <span class="sd">        probability. This value should be in millisencods and is usually taken as the size of</span>
 <span class="sd">        QRS complexes.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    rpeaks : list of int</span>
-<span class="sd">        A list of array positions at which R-peaks occur.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
@@ -841,8 +834,8 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_pantompkins</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
-<span class="sd">    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.</span>
-<span class="sd">    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.</span>
+<span class="sd">    - Pan, J., &amp; Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions</span>
+<span class="sd">      on biomedical engineering, (3), 230-236.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
@@ -865,10 +858,9 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_nabian2018</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.</span>
 
-<span class="sd">    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp;amp; Ostadabbas, S. (2018).</span>
-<span class="sd">    An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.</span>
-<span class="sd">    IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
-<span class="sd">    doi:10.1109/jtehm.2018.2878000</span>
+<span class="sd">    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).</span>
+<span class="sd">      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.</span>
+<span class="sd">      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -977,9 +969,6 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
 <span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.</span>
 
-<span class="sd">    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of</span>
-<span class="sd">      arterial blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Doesn&#39;t really seems to work</span>
 
@@ -993,7 +982,7 @@ title="Open an issue"
     <span class="c1"># diff</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
     <span class="n">dx</span><span class="p">[</span><span class="n">dx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># detection</span>
     <span class="p">(</span><span class="n">idx</span><span class="p">,)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">dx</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span>
@@ -1021,13 +1010,65 @@ title="Open an issue"
 
 
 <span class="c1"># =============================================================================</span>
+<span class="c1"># Zong (2003) - WQRS</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_zong</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+
+<span class="sd">    - Zong, W., Moody, G. B., &amp; Jiang, D. (2003, September). A robust open-source algorithm to</span>
+<span class="sd">      detect onset and duration of QRS complexes. In Computers in Cardiology, 2003 (pp. 737-740).</span>
+<span class="sd">      IEEE.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># 1. Filter signal</span>
+    <span class="c1"># TODO: Should remove this step? It&#39;s technically part of cleaning,</span>
+    <span class="c1"># Not sure it is integral to the peak-detection per se. Opinions are welcome.</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1"># Cutoff normalized by nyquist frequency</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+
+    <span class="c1"># Curve length transformation</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">w</span> <span class="p">:</span> <span class="n">j</span><span class="p">]</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="c1"># Pad with the first value</span>
+    <span class="n">clt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">tmp</span><span class="p">])</span>
+
+    <span class="c1"># Find adaptive threshold</span>
+    <span class="n">window_size</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+
+    <span class="c1"># Apply fast moving window average with 1D convolution</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">clt</span><span class="p">,</span> <span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">window_size</span><span class="p">),</span> <span class="s2">&quot;valid&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
+        <span class="n">ret</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">i</span>
+    <span class="n">ret</span><span class="p">[</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">window_size</span>
+
+    <span class="c1"># Find peaks</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">clt</span><span class="p">)):</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mf">0.35</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="ow">and</span> <span class="n">clt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
 <span class="c1"># Christov (2004)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_christov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
-<span class="sd">    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,</span>
-<span class="sd">      BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</span>
+<span class="sd">    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive</span>
+<span class="sd">      threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">total_taps</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1159,8 +1200,8 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
 <span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.</span>
 
-<span class="sd">    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.</span>
-<span class="sd">      PhD ThesisUniversidade.</span>
+<span class="sd">    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on HCI and electrophysiology</span>
+<span class="sd">      (Doctoral dissertation, Universidade Técnica de Lisboa).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1205,8 +1246,8 @@ title="Open an issue"
 
 <span class="sd">    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.</span>
 <span class="sd">      in Cardiology, vol. 6, pp. 37-42, 1979</span>
-<span class="sd">    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, &quot;Real Time Electrocardiogram Segmentation</span>
-<span class="sd">      for Finger Based ECG Biometrics&quot;, BIOSIGNALS 2012, pp. 49-54, 2012.</span>
+<span class="sd">    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, &quot;Real Time Electrocardiogram</span>
+<span class="sd">      Segmentation for Finger Based ECG Biometrics&quot;, BIOSIGNALS 2012, pp. 49-54, 2012.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">engzee_fake_delay</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1347,7 +1388,7 @@ title="Open an issue"
     <span class="n">swt_level</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">padding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">swt_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="n">swt_level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">padding</span> <span class="o">=</span> <span class="n">i</span>
             <span class="k">break</span>
 
@@ -1383,9 +1424,9 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_elgendi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
-<span class="sd">    - Elgendi, Mohamed &amp; Jonkman, Mirjam &amp; De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.</span>
-<span class="sd">      The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010).</span>
-<span class="sd">      428-431.</span>
+<span class="sd">    - Elgendi, Mohamed &amp; Jonkman, Mirjam &amp; De Boer, Friso. (2010). Frequency Bands Effects on QRS</span>
+<span class="sd">      Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing</span>
+<span class="sd">      (BIOSIGNALS2010). 428-431.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

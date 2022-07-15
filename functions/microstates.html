@@ -197,6 +197,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -1148,12 +1153,8 @@ peaks1 = nk.microstates_peaks(eeg, distance_between=0.01)
 peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)
 peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
 &#64;savefig p_microstates_peaks_png scale=100%
-nk.events_plot([peaks1[peaks1 &lt; 500],</p>
-<blockquote>
-<div><p>peaks2[peaks2 &lt; 500],
-peaks3[peaks3 &lt; 500]], gfp[0:500])</p>
-</div></blockquote>
-<p>&#64;suppress
+nk.events_plot([peaks1[peaks1 &lt; 500], peaks2[peaks2 &lt; 500], peaks3[peaks3 &lt; 500]], gfp[0:500])
+&#64;suppress
 plt.close()</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>

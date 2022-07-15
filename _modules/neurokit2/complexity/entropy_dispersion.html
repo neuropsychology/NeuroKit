@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -549,7 +554,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="entropy_dispersion"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_dispersion">[docs]</a><span class="k">def</span> <span class="nf">entropy_dispersion</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;NCDF&quot;</span><span class="p">,</span> <span class="n">fluctuation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;NCDF&quot;</span><span class="p">,</span> <span class="n">fluctuation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Dispersion Entropy (DispEn)**</span>
 
@@ -567,9 +572,10 @@ title="Open an issue"
 <span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter.</span>
 <span class="sd">    c : int</span>
 <span class="sd">        Number of symbols *c*. Rostaghi (2016) recommend in practice a *c* between 4 and 8.</span>
-<span class="sd">    method : str</span>
-<span class="sd">        Method of symbolization. Can be one of ``&quot;NCDF&quot;`` (default), ``&quot;finesort&quot;``, or others. See</span>
-<span class="sd">        :func:`complexity_symbolize` for details.</span>
+<span class="sd">    symbolize : str</span>
+<span class="sd">        Method to convert a continuous signal input into a symbolic (discrete) signal. Can be one</span>
+<span class="sd">        of ``&quot;NCDF&quot;`` (default), ``&quot;finesort&quot;``, or others. See :func:`complexity_symbolize` for</span>
+<span class="sd">        details.</span>
 <span class="sd">    fluctuation : bool</span>
 <span class="sd">        Fluctuation-based Dispersion entropy.</span>
 <span class="sd">    rho : float</span>
@@ -605,7 +611,7 @@ title="Open an issue"
 <span class="sd">      info[&quot;RDEn&quot;]</span>
 
 <span class="sd">      # Fluctuation-based DispEn with &quot;finesort&quot;</span>
-<span class="sd">      dispen, info = nk.entropy_dispersion(signal, c=3, method=&quot;finesort&quot;, fluctuation=True)</span>
+<span class="sd">      dispen, info = nk.entropy_dispersion(signal, c=3, symbolize=&quot;finesort&quot;, fluctuation=True)</span>
 <span class="sd">      dispen</span>
 
 <span class="sd">    References</span>
@@ -621,10 +627,10 @@ title="Open an issue"
         <span class="p">)</span>
 
     <span class="c1"># Store parameters</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">dimension</span><span class="p">,</span> <span class="s2">&quot;Delay&quot;</span><span class="p">:</span> <span class="n">delay</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">}</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">dimension</span><span class="p">,</span> <span class="s2">&quot;Delay&quot;</span><span class="p">:</span> <span class="n">delay</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;Symbolization&quot;</span><span class="p">:</span> <span class="n">symbolize</span><span class="p">}</span>
 
     <span class="c1"># Symbolization and embedding</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;finesort&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">symbolize</span> <span class="o">==</span> <span class="s2">&quot;finesort&quot;</span><span class="p">:</span>
         <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;NCDF&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
         <span class="n">Ym</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">):</span>
@@ -634,7 +640,7 @@ title="Open an issue"
         <span class="n">Yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">Yi</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">embedded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">embedded</span><span class="p">,</span> <span class="n">Yi</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">symbolize</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
         <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">symbolic</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
 
     <span class="c1"># Fluctuation</span>

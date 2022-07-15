@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -550,13 +555,8 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..ecg.ecg_rsp</span> <span class="kn">import</span> <span class="n">ecg_rsp</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..rsp</span> <span class="kn">import</span> <span class="n">rsp_process</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">signal_filter</span><span class="p">,</span>
-    <span class="n">signal_interpolate</span><span class="p">,</span>
-    <span class="n">signal_rate</span><span class="p">,</span>
-    <span class="n">signal_resample</span><span class="p">,</span>
-    <span class="n">signal_timefrequency</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span>
+                      <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_timefrequency</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_formatpeaks_sanitize</span>
 <span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
 

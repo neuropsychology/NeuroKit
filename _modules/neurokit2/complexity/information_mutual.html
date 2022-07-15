@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -551,7 +556,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="mutual_information"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.mutual_information">[docs]</a><span class="k">def</span> <span class="nf">mutual_information</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;varoquaux&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Mutual Information (MI)</span>
+    <span class="sd">&quot;&quot;&quot;**Mutual Information (MI)**</span>
 
 <span class="sd">    Computes the mutual information (MI) between two vectors from a joint histogram.</span>
 <span class="sd">    The mutual information of two variables is a measure of the mutual dependence between them.</span>
@@ -559,6 +564,7 @@ title="Open an issue"
 <span class="sd">    observing the other variable.</span>
 
 <span class="sd">    Different methods are available:</span>
+
 <span class="sd">    * **nolitsa**: Standard mutual information (a bit faster than the ``&quot;sklearn&quot;`` method).</span>
 <span class="sd">    * **varoquaux**: Applies a Gaussian filter on the joint-histogram. The smoothing amount can be</span>
 <span class="sd">      modulated via the ``sigma`` argument (by default, ``sigma=1``).</span>
@@ -596,6 +602,8 @@ title="Open an issue"
 <span class="sd">    Examples</span>
 <span class="sd">    ---------</span>
 <span class="sd">    **Example 1**: Simple case</span>
+
+
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
@@ -607,6 +615,7 @@ title="Open an issue"
 <span class="sd">      nk.mutual_information(x, y, method=&quot;nolitsa&quot;)</span>
 <span class="sd">      nk.mutual_information(x, y, method=&quot;knn&quot;)</span>
 <span class="sd">      nk.mutual_information(x, y, method=&quot;max&quot;)</span>
+
 
 <span class="sd">    **Example 2**: Method comparison</span>
 
@@ -621,20 +630,26 @@ title="Open an issue"
 <span class="sd">      data = pd.DataFrame()</span>
 <span class="sd">      for level in np.linspace(0.01, 3, 200):</span>
 <span class="sd">          noise = np.random.normal(scale=level, size=400)</span>
-<span class="sd">          rez = pd.DataFrame({&quot;Noise&quot;: [level],</span>
-<span class="sd">              &quot;MI1&quot;: [nk.mutual_information(x, y + noise, method=&quot;varoquaux&quot;, sigma=1)],</span>
-<span class="sd">              &quot;MI2&quot;: [nk.mutual_information(x, y + noise, method=&quot;varoquaux&quot;, sigma=0)],</span>
-<span class="sd">              &quot;MI3&quot;: [nk.mutual_information(x, y + noise, method=&quot;nolitsa&quot;)],</span>
-<span class="sd">              &quot;MI4&quot;: [nk.mutual_information(x, y + noise, method=&quot;knn&quot;)],</span>
-<span class="sd">              &quot;MI5&quot;: [nk.mutual_information(x, y + noise, method=&quot;max&quot;)]</span>
-<span class="sd">          })</span>
+<span class="sd">          rez = pd.DataFrame({&quot;Noise&quot;: [level]})</span>
+<span class="sd">          rez[&quot;MI1&quot;] = nk.mutual_information(x, y + noise, method=&quot;varoquaux&quot;, sigma=1)</span>
+<span class="sd">          rez[&quot;MI2&quot;] = nk.mutual_information(x, y + noise, method=&quot;varoquaux&quot;, sigma=0)</span>
+<span class="sd">          rez[&quot;MI3&quot;] = nk.mutual_information(x, y + noise, method=&quot;nolitsa&quot;)</span>
+<span class="sd">          rez[&quot;MI4&quot;] = nk.mutual_information(x, y + noise, method=&quot;knn&quot;)</span>
+<span class="sd">          rez[&quot;MI5&quot;] = nk.mutual_information(x, y + noise, method=&quot;max&quot;)</span>
 <span class="sd">          data = pd.concat([data, rez], axis=0)</span>
+
 <span class="sd">      data[&quot;MI1&quot;] = nk.rescale(data[&quot;MI1&quot;])</span>
 <span class="sd">      data[&quot;MI2&quot;] = nk.rescale(data[&quot;MI2&quot;])</span>
 <span class="sd">      data[&quot;MI3&quot;] = nk.rescale(data[&quot;MI3&quot;])</span>
 <span class="sd">      data[&quot;MI4&quot;] = nk.rescale(data[&quot;MI4&quot;])</span>
 <span class="sd">      data[&quot;MI5&quot;] = nk.rescale(data[&quot;MI5&quot;])</span>
+
+<span class="sd">      @savefig p_information_mutual1.png scale=100%</span>
 <span class="sd">      data.plot(x=&quot;Noise&quot;, y=[&quot;MI1&quot;, &quot;MI2&quot;, &quot;MI3&quot;, &quot;MI4&quot;, &quot;MI5&quot;], kind=&quot;line&quot;)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # Computation time</span>
 <span class="sd">      # x = np.random.normal(size=10000)</span>
@@ -679,8 +694,7 @@ title="Open an issue"
             <span class="c1"># https://stats.stackexchange.com/questions/179674/</span>
             <span class="c1"># number-of-bins-when-computing-mutual-information</span>
             <span class="n">bins</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span>
-            <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bins</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-
+            <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bins</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;varoquaux&quot;</span><span class="p">]:</span>
             <span class="n">mi</span> <span class="o">=</span> <span class="n">_mutual_information_varoquaux</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -763,14 +777,18 @@ title="Open an issue"
     <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 
     <span class="c1"># Find nearest neighbors in joint space, p=inf means max-norm</span>
-    <span class="n">dvec</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;chebyshev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">k</span><span class="p">]</span>
+    <span class="n">dvec</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">k</span><span class="p">]</span>
 
     <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;chebyshev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dvec</span> <span class="o">-</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">dvec</span> <span class="o">-</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
 
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;chebyshev&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">dvec</span> <span class="o">-</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">dvec</span> <span class="o">-</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
 
     <span class="n">c</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">digamma</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>

@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -553,7 +558,7 @@ title="Open an issue"
     <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">permutation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Lempel-Ziv Complexity (LZC, PLZC and MSLZC)**</span>
@@ -583,7 +588,14 @@ title="Open an issue"
 <span class="sd">    dimension : int</span>
 <span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
 <span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter. Only used</span>
-<span class="sd">        when ``permutation=True``.</span>
+<span class="sd">        when ``permutation=True``</span>
+<span class="sd">    permutation : bool</span>
+<span class="sd">        If ``True``, will return PLZC.</span>
+<span class="sd">    symbolize : str</span>
+<span class="sd">        Only used when ``permutation=False``. Method to convert a continuous signal input into a</span>
+<span class="sd">        symbolic (discrete) signal. By default, assigns 0 and 1 to values below and above the mean.</span>
+<span class="sd">        Can be ``None`` to skip the process (in case the input is already discrete). See</span>
+<span class="sd">        :func:`complexity_symbolize` for details.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed to :func:`complexity_ordinalpatterns` (if</span>
 <span class="sd">        ``permutation=True``) or :func:`complexity_symbolize`.</span>
@@ -609,7 +621,7 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)</span>
 
 <span class="sd">      # LZC</span>
-<span class="sd">      lzc, info = nk.complexity_lempelziv(signal, method=&quot;median&quot;)</span>
+<span class="sd">      lzc, info = nk.complexity_lempelziv(signal)</span>
 <span class="sd">      lzc</span>
 
 <span class="sd">      # PLZC</span>
@@ -667,7 +679,7 @@ title="Open an issue"
         <span class="n">symbolic</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Uniques&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Binarize the signal</span>
-        <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">symbolic</span> <span class="o">=</span> <span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">symbolize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Count using the lempelziv algorithm</span>
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Complexity_Kolmogorov&quot;</span><span class="p">],</span> <span class="n">n</span> <span class="o">=</span> <span class="n">_complexity_lempelziv_count</span><span class="p">(</span><span class="n">symbolic</span><span class="p">)</span>

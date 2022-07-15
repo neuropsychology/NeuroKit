@@ -197,6 +197,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -1176,7 +1181,7 @@ conductance responses. International Journal of Psychophysiology, 75(3), 349-356
 algorithms.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>cvxEDA algorithm seems broken. Must investigate.</p>
+<p>cvxEDA algorithm seems broken. Help is needed to investigate.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1196,36 +1201,37 @@ algorithms.</p>
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<p><strong>Example 1</strong>: Methods comparison.
-.. ipython:: python</p>
-<blockquote>
-<div><p>import neurokit2 as nk</p>
-<p># Simulate EDA signal
-eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)</p>
-<p># Decompose using different algorithms
-# cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=’cvxeda’)
-smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method=’smoothmedian’)
-highpass = nk.eda_phasic(nk.standardize(eda_signal), method=’highpass’)</p>
-<dl class="simple">
-<dt>data = pd.concat([</dt><dd><p># cvxEDA.add_suffix(‘_cvxEDA’),
-smoothMedian.add_suffix(‘_SmoothMedian’),
-highpass.add_suffix(‘_Highpass’)], axis=1)</p>
-</dd>
-</dl>
-<p>data[“EDA_Raw”] = eda_signal</p>
-<p>&#64;savefig p_eda_phasic1.png scale=100%
-fig = data.plot()
-&#64;suppress
-plt.close()</p>
-</div></blockquote>
+<p><strong>Example 1</strong>: Methods comparison.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate EDA signal</span>
+<span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="go"># Decompose using different algorithms</span>
+<span class="go"># cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;cvxeda&#39;)</span>
+<span class="gp">In [3]: </span><span class="n">smoothMedian</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;smoothmedian&#39;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">highpass</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;highpass&#39;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span>
+<span class="gp">   ...: </span>    <span class="n">smoothMedian</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_SmoothMedian&#39;</span><span class="p">),</span>
+<span class="gp">   ...: </span>    <span class="n">highpass</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_Highpass&#39;</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [6]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span>
+
+<span class="gp">In [7]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eda_phasic1.png"><img alt="../_images/p_eda_phasic1.png" src="../_images/p_eda_phasic1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p><strong>Example 2</strong>: Real data.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)[</span><span class="s2">&quot;EDA&quot;</span><span class="p">]</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)[</span><span class="s2">&quot;EDA&quot;</span><span class="p">]</span>
 
-<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">In [9]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_phasic</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">),</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<span class="gp">In [3]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span>
+<span class="gp">In [10]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span>
 
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_phasic2.png"><img alt="../_images/p_eda_phasic2.png" src="../_images/p_eda_phasic2.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1277,7 +1283,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.1215272128822415</span>
+<span class="gh">Out[5]: </span><span class="go">-0.2610362543311067</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1328,7 +1334,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">14</span>
+<span class="gh">Out[4]: </span><span class="go">8</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1595,8 +1601,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.359             992.0</span>
-<span class="go">2     2        10000  ...         0.366            1687.0</span>
+<span class="go">1     1         5000  ...         0.363            1034.0</span>
+<span class="go">2     2        10000  ...         0.365            1729.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>

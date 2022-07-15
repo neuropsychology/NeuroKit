@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -543,10 +548,12 @@ title="Open an issue"
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_resample</span>
 
 
@@ -557,8 +564,9 @@ title="Open an issue"
     <span class="n">events_annotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Read and format a  OpenSignals file (e.g., from BITalino) into a pandas&#39; dataframe**</span>
+    <span class="sd">&quot;&quot;&quot;**Read an OpenSignals file (from BITalino)**</span>
 
+<span class="sd">    Reads and loads a BITalino file into a Pandas DataFrame.</span>
 <span class="sd">    The function outputs both the dataframe and the sampling rate (retrieved from the</span>
 <span class="sd">    OpenSignals file).</span>
 
@@ -602,17 +610,32 @@ title="Open an issue"
 <span class="sd">      # data, sampling_rate = nk.read_bitalino(&quot;data.txt&quot;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># read metadata</span>
+    <span class="c1"># Read metadata</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;OpenSignals&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Text file is not in OpenSignals format.&quot;</span><span class="p">)</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1"># read second line + skip &#39;#&#39;</span>
 
-        <span class="k">if</span> <span class="s2">&quot;OpenSignals&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">():</span>  <span class="c1"># read first line</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;NeuroKit error: read_bitalino(): Text file is not in OpenSignals format.&quot;</span>
+    <span class="c1"># Remove &quot;:&quot;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+    <span class="c1"># Try find events annotations</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">_read_bitalino_annotations</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Device </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> not found in metadata (</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">) Something might be wrong.&quot;</span><span class="p">,</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1"># read second line</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="c1"># Read data</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_read_bitalino_onedevice</span><span class="p">(</span>
             <span class="n">filename</span><span class="p">,</span>
             <span class="n">metadata</span><span class="p">,</span>
@@ -623,14 +646,30 @@ title="Open an issue"
         <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_read_bitalino_multipledevice</span><span class="p">(</span>
-            <span class="n">filename</span><span class="p">,</span>
-            <span class="n">metadata</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">resample_method</span><span class="p">,</span>
-            <span class="n">events_annotation</span><span class="p">,</span>
-            <span class="n">events_annotation_directory</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Read file for each device</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="c1"># Select right columns</span>
+            <span class="n">ch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;column&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)]</span>
+
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]):</span>
+                <span class="n">ch</span><span class="p">[</span><span class="n">ch</span> <span class="o">==</span> <span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;sensor&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">ch</span>
+
+            <span class="c1"># Add annotations</span>
+            <span class="k">if</span> <span class="s2">&quot;Annotations&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">sr</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Events&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">annot</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span>
+                <span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span><span class="p">[</span><span class="n">annot</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">])]</span>
+                <span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">&quot;START&quot;</span><span class="p">,</span> <span class="s2">&quot;END&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">annot</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Events&quot;</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;START&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sr</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;END&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sr</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span></div>
 
 
 <span class="c1"># =============================================================================</span>
@@ -704,6 +743,7 @@ title="Open an issue"
     <span class="n">events_annotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
+
     <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty dict for storing</span>
 
     <span class="c1"># Read from multiple devices</span>
@@ -781,6 +821,28 @@ title="Open an issue"
     <span class="n">data</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">resampling_rate</span>
+
+
+<span class="k">def</span> <span class="nf">_read_bitalino_annotations</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read events that are annotated during BITalino signal acquisition.</span>
+
+<span class="sd">    Returns a dictionary containing the start and stop times (in seconds) in each channel detected</span>
+<span class="sd">    per unique event (label) within each device.&quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;_EventsAnnotation.txt&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;OpenSignals&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Text file is not in OpenSignals format.&quot;</span><span class="p">)</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1"># read second line + skip &#39;#&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">][</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;MAC&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;MAC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()}</span>
 
 
 <span class="k">def</span> <span class="nf">_read_bitalino_events_annotation</span><span class="p">(</span><span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -738,7 +743,7 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># The &quot;Daubechies&quot; wavelet is a rough approximation to a real, single, cardiac cycle</span>
-    <span class="n">cardiac</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">wavelets</span><span class="o">.</span><span class="n">daub</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">cardiac</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">daub</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
     <span class="c1"># Add the gap after the pqrst when the heart is resting.</span>
     <span class="n">cardiac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">cardiac</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>

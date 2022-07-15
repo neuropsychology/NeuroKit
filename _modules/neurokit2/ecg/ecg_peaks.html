@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -540,9 +545,7 @@ title="Open an issue"
               <div>
                 
   <h1>Source code for neurokit2.ecg.ecg_peaks</h1><div class="highlight"><pre>
-<span></span><span class="c1"># - * - coding: utf-8 - * -</span>
-
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
+<span></span><span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
 <span class="kn">from</span> <span class="nn">.ecg_findpeaks</span> <span class="kn">import</span> <span class="n">ecg_findpeaks</span>
 
 
@@ -555,6 +558,38 @@ title="Open an issue"
 <span class="sd">    signals as input, although it is expected that a filtered (cleaned) ECG will result in better</span>
 <span class="sd">    results.</span>
 
+<span class="sd">    Different algorithms for peak-detection include:</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">      Please help us improve the methods&#39; documentation by adding a small description.</span>
+
+
+<span class="sd">    * **neurokit** (default): QRS complexes are detected based on the steepness of the absolute</span>
+<span class="sd">      gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in</span>
+<span class="sd">      the QRS complexes. Unpublished, but see https://github.com/neuropsychology/NeuroKit/issues/476</span>
+<span class="sd">    * **pantompkins1985**: Algorithm by Pan &amp; Tompkins (1985).</span>
+<span class="sd">    * **hamilton2002**: Algorithm by Hamilton (2002).</span>
+<span class="sd">    * **martinez2003**: *Source unknown!* Please help us retrieve the original paper.</span>
+<span class="sd">    * **zong2003**: Algorithm by Zong et al. (2003).</span>
+<span class="sd">    * **christov2004**: Algorithm by Christov (2004).</span>
+<span class="sd">    * **gamboa2008**: Algorithm by Gamboa (2008).</span>
+<span class="sd">    * **elgendi2010**: Algorithm by Elgendi et al. (2010).</span>
+<span class="sd">    * **engzeemod2012**: Original algorithm by Engelse &amp; Zeelenberg (1979) modified by Lourenço et</span>
+<span class="sd">      al. (2012).</span>
+<span class="sd">    * **kalidas2017**: Algorithm by Kalidas et al. (2017).</span>
+<span class="sd">    * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.</span>
+<span class="sd">    * **rodrigues2021**: Adaptation of the work by Sadhukhan &amp; Mitra (2012) and Gutiérrez-Rivas et</span>
+<span class="sd">      al. (2015) by Rodrigues et al. (2021).</span>
+<span class="sd">    * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.</span>
+<span class="sd">      For a given peak detector, the binary signal representing the peak locations is convolved</span>
+<span class="sd">      with a Gaussian distribution, resulting in a propabilistic representation of each peak</span>
+<span class="sd">      location. This procedure is repeated for all selected methods and the resulting</span>
+<span class="sd">      signals are accumulated. Finally, a threshold is used to accept or reject the peak locations.</span>
+<span class="sd">      See this discussion for more information on the origins of the method:</span>
+<span class="sd">      https://github.com/neuropsychology/NeuroKit/issues/222</span>
+
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ecg_cleaned : Union[list, np.array, pd.Series]</span>
@@ -562,12 +597,9 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : string</span>
-<span class="sd">        The algorithm to be used for R-peak detection. Can be one of ``&quot;neurokit&quot;`` (default),</span>
-<span class="sd">        ``&quot;pantompkins1985&quot;``, ``&quot;nabian2018&quot;``, ``&quot;gamboa2008&quot;``, ``&quot;zong2003&quot;``,</span>
-<span class="sd">        ``&quot;hamilton2002&quot;``, ``&quot;christov2004&quot;``, ``&quot;engzeemod2012&quot;``, ``&quot;elgendi2010&quot;``,</span>
-<span class="sd">        ``&quot;kalidas2017&quot;``, ``&quot;martinez2003&quot;``, ``&quot;rodrigues2021&quot;`` or ``&quot;promac&quot;``.</span>
+<span class="sd">        The algorithm to be used for R-peak detection.</span>
 <span class="sd">    correct_artifacts : bool</span>
-<span class="sd">        Whether or not to first identify and fix artifacts as defined by</span>
+<span class="sd">        Whether or not to first identify and fix artifacts, using the method by</span>
 <span class="sd">        Lipponen &amp; Tarvainen (2019).</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Additional keyword arguments, usually specific for each method.</span>
@@ -623,6 +655,9 @@ title="Open an issue"
 <span class="sd">      # martinez2003</span>
 <span class="sd">      _, martinez2003 = nk.ecg_peaks(ecg, method=&quot;martinez2003&quot;)</span>
 
+<span class="sd">      # zong2003</span>
+<span class="sd">      _, zong2003 = nk.ecg_peaks(ecg, method=&quot;zong2003&quot;)</span>
+
 <span class="sd">      # christov2004</span>
 <span class="sd">      _, christov2004 = nk.ecg_peaks(cleaned, method=&quot;christov2004&quot;)</span>
 
@@ -676,59 +711,65 @@ title="Open an issue"
 <span class="sd">                              noise_amplitude=0.05, noise_frequency=[25, 50],</span>
 <span class="sd">                              artifacts_amplitude=0.05, artifacts_frequency=50)</span>
 <span class="sd">      @savefig p_ecg_peaks3.png scale=100%</span>
-<span class="sd">      info = nk.ecg_findpeaks(ecg, sampling_rate=1000, method=&quot;promac&quot;, show=True)</span>
+<span class="sd">      info = nk.ecg_findpeaks(ecg, sampling_rate=500, method=&quot;promac&quot;, show=True)</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    * ``neurokit``</span>
-<span class="sd">        * **Unpublished.** See this discussion for more information on the method:</span>
-<span class="sd">          https://github.com/neuropsychology/NeuroKit/issues/476</span>
-<span class="sd">    * ``pantompkins1985``</span>
-<span class="sd">        * Pan, J., &amp; Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions</span>
-<span class="sd">          on biomedical engineering, (3), 230-236.</span>
+<span class="sd">    * Pan, J., &amp; Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions</span>
+<span class="sd">      on biomedical engineering, (3), 230-236.</span>
+<span class="sd">    * Hamilton, P. (2002). Open source ECG analysis. In Computers in cardiology (pp. 101-104).</span>
+<span class="sd">      IEEE.</span>
+<span class="sd">    * Zong, W., Heldt, T., Moody, G. B., &amp; Mark, R. G. (2003). An open-source algorithm to</span>
+<span class="sd">      detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp.</span>
+<span class="sd">      259-262). IEEE.</span>
+<span class="sd">    * Zong, W., Moody, G. B., &amp; Jiang, D. (2003, September). A robust open-source algorithm to</span>
+<span class="sd">      detect onset and duration of QRS complexes. In Computers in Cardiology, 2003 (pp.</span>
+<span class="sd">      737-740). IEEE.</span>
+<span class="sd">    * Christov, I. I. (2004). Real time electrocardiogram QRS detection using combined adaptive</span>
+<span class="sd">      threshold. Biomedical engineering online, 3(1), 1-9.</span>
+<span class="sd">    * Gamboa, H. (2008). Multi-modal behavioral biometrics based on HCI and electrophysiology</span>
+<span class="sd">      (Doctoral dissertation, Universidade Técnica de Lisboa).</span>
+<span class="sd">    * Elgendi, M., Jonkman, M., &amp; De Boer, F. (2010). Frequency Bands Effects on QRS Detection.</span>
+<span class="sd">      Biosignals, Proceedings of the Third International Conference on Bio-inspired Systems and</span>
+<span class="sd">      Signal Processing, 428-431.</span>
+<span class="sd">    * Engelse, W. A., &amp; Zeelenberg, C. (1979). A single scan algorithm for QRS-detection and</span>
+<span class="sd">      feature extraction. Computers in cardiology, 6(1979), 37-42.</span>
+<span class="sd">    * Lourenço, A., Silva, H., Leite, P., Lourenço, R., &amp; Fred, A. L. (2012, February). Real</span>
+<span class="sd">      Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.</span>
+<span class="sd">      49-54).</span>
+<span class="sd">    * Kalidas, V., &amp; Tamil, L. (2017, October). Real-time QRS detector using stationary wavelet</span>
+<span class="sd">      transform for automated ECG analysis. In 2017 IEEE 17th International Conference on</span>
+<span class="sd">      Bioinformatics and Bioengineering (BIBE) (pp. 457-461). IEEE.</span>
+<span class="sd">    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).</span>
+<span class="sd">      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.</span>
+<span class="sd">      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
+<span class="sd">    * Sadhukhan, D., &amp; Mitra, M. (2012). R-peak detection algorithm for ECG using double</span>
+<span class="sd">      difference and RR interval processing. Procedia Technology, 4, 873-877.</span>
+<span class="sd">    * Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., &amp; Hernández, A. (2015). Novel</span>
+<span class="sd">      real-time low-complexity QRS complex detector based on adaptive thresholding. IEEE</span>
+<span class="sd">      Sensors Journal, 15(10), 6036-6043.</span>
+<span class="sd">    * Rodrigues, T., Samoutphonh, S., Silva, H., &amp; Fred, A. (2021, January). A Low-Complexity</span>
+<span class="sd">      R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices. In 2020 25th</span>
+<span class="sd">      International Conference on Pattern Recognition (ICPR) (pp. 1-8). IEEE.</span>
+
 <span class="sd">    * ``nabian2018``</span>
-<span class="sd">        * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).</span>
-<span class="sd">          An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.</span>
-<span class="sd">          IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
-<span class="sd">          doi:10.1109/jtehm.2018.2878000</span>
+
 <span class="sd">    * ``gamboa2008``</span>
-<span class="sd">        * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.</span>
-<span class="sd">          PhD ThesisUniversidade.</span>
-<span class="sd">    * ``zong2003``</span>
-<span class="sd">        * Zong, W., Heldt, T., Moody, G. B., &amp; Mark, R. G. (2003). An open-source algorithm to</span>
-<span class="sd">          detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp.</span>
-<span class="sd">          259-262). IEEE.</span>
+
+
 <span class="sd">    * ``hamilton2002``</span>
-<span class="sd">        * Hamilton, P. (2002). Open source ECG analysis. In Computers in cardiology (pp. 101-104).</span>
-<span class="sd">          IEEE.</span>
+
 <span class="sd">    * ``christov2004``</span>
-<span class="sd">        * Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive</span>
-<span class="sd">          threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</span>
+
 <span class="sd">    * ``engzeemod2012``</span>
-<span class="sd">        * Engelse, W. A., &amp; Zeelenberg, C. (1979). A single scan algorithm for QRS-detection and</span>
-<span class="sd">          feature extraction. Computers in cardiology, 6(1979), 37-42.</span>
-<span class="sd">        * Lourenço, A., Silva, H., Leite, P., Lourenço, R., &amp; Fred, A. L. (2012, February). Real</span>
-<span class="sd">          Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.</span>
-<span class="sd">          49-54).</span>
+
 <span class="sd">    * ``elgendi2010``</span>
-<span class="sd">        * Elgendi, M., Jonkman, M., &amp; De Boer, F. (2010). Frequency Bands Effects on QRS Detection.</span>
-<span class="sd">          Biosignals, Proceedings of the Third International Conference on Bio-inspired Systems and</span>
-<span class="sd">          Signal Processing, 428-431.</span>
+
 <span class="sd">    * ``kalidas2017``</span>
-<span class="sd">        * Kalidas, V., &amp; Tamil, L. (2017, October). Real-time QRS detector using stationary wavelet</span>
-<span class="sd">          transform for automated ECG analysis. In 2017 IEEE 17th International Conference on</span>
-<span class="sd">          Bioinformatics and Bioengineering (BIBE) (pp. 457-461). IEEE.</span>
-<span class="sd">    * ``martinez2003``</span>
-<span class="sd">        **Unknown.** Please help us retrieve the correct source!</span>
+
+
 <span class="sd">    * ``rodrigues2021``</span>
-<span class="sd">        * Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., &amp; Hernández, A. (2015). Novel</span>
-<span class="sd">          real-time low-complexity QRS complex detector based on adaptive thresholding. IEEE</span>
-<span class="sd">          Sensors Journal, 15(10), 6036-6043.</span>
-<span class="sd">        * Sadhukhan, D., &amp; Mitra, M. (2012). R-peak detection algorithm for ECG using double</span>
-<span class="sd">          difference and RR interval processing. Procedia Technology, 4, 873-877.</span>
-<span class="sd">        * Rodrigues, Tiago &amp; Samoutphonh, Sirisack &amp; Plácido da Silva, Hugo &amp; Fred, Ana. (2021).</span>
-<span class="sd">          A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable</span>
-<span class="sd">          Devices.</span>
+
 <span class="sd">    * ``promac``</span>
 <span class="sd">        * **Unpublished.** It runs different methods and derives a probability index using</span>
 <span class="sd">          convolution. See this discussion for more information on the method:</span>

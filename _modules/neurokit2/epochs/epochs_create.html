@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -682,6 +687,9 @@ title="Open an issue"
 
     <span class="c1"># Create epochs</span>
     <span class="k">if</span> <span class="n">epochs_end</span> <span class="o">==</span> <span class="s2">&quot;from_events&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;duration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]))</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
         <span class="n">epochs_end</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]]</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span>
         <span class="n">onset</span><span class="o">=</span><span class="n">event_onsets</span><span class="p">,</span>

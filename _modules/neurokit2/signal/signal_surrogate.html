@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -548,12 +553,13 @@ title="Open an issue"
 
 <span class="sd">    Generate a surrogate version of a signal. Different methods are available, such as:</span>
 
-<span class="sd">    * ``&quot;random&quot;``: Performs a random permutation of the signal value. This way, the signal</span>
+<span class="sd">    * **random**: Performs a random permutation of the signal value. This way, the signal</span>
 <span class="sd">      distribution is unaffected and the serial correlations are cancelled, yielding a whitened</span>
 <span class="sd">      signal with an distribution identical to that of the original.</span>
-<span class="sd">    * ``&quot;IAAFT&quot;``: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate.</span>
-<span class="sd">      It is a phase randomized, amplitude adjusted surrogates with the same power spectrum (to a</span>
-<span class="sd">      very high accuracy) and distribution as the original data, using an iterative scheme.</span>
+<span class="sd">    * **IAAFT**: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate.</span>
+<span class="sd">      It is a phase randomized, amplitude adjusted surrogates that have the same power spectrum</span>
+<span class="sd">      (to a very high accuracy) and distribution as the original data, using an iterative scheme.</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -562,7 +568,7 @@ title="Open an issue"
 <span class="sd">    method : str</span>
 <span class="sd">        Can be ``&quot;random&quot;`` or ``&quot;IAAFT&quot;``.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Other keywords arguments, such as ``max_iter``(by default 1000).</span>
+<span class="sd">        Other keywords arguments, such as ``max_iter`` (by default 1000).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -588,7 +594,6 @@ title="Open an issue"
 <span class="sd">      plt.plot(signal, label = &quot;Original&quot;)</span>
 <span class="sd">      plt.legend()</span>
 <span class="sd">      @suppress</span>
-<span class="sd">      plt.show()</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.</span>
@@ -638,7 +643,6 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_signal_surrogate_iaaft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;IAAFT</span>
-
 <span class="sd">    max_iter : int</span>
 <span class="sd">        Maximum iterations to be performed while checking for convergence. Convergence can be</span>
 <span class="sd">        achieved before maximum interation.</span>
@@ -678,7 +682,7 @@ title="Open an issue"
         <span class="n">surrogate</span> <span class="o">=</span> <span class="n">sort</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">s</span><span class="p">))]</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">surrogate</span><span class="p">)</span>
-        <span class="n">current_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">amplitudes</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">current_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">amplitudes</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
         <span class="c1"># Check convergence</span>
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_error</span> <span class="o">-</span> <span class="n">previous_error</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">atol</span> <span class="o">+</span> <span class="n">rtol</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">previous_error</span><span class="p">):</span>
@@ -686,7 +690,7 @@ title="Open an issue"
         <span class="n">previous_error</span> <span class="o">=</span> <span class="n">current_error</span>
 
     <span class="c1"># Normalize error w.r.t. mean of the &quot;true&quot; power spectrum.</span>
-    <span class="n">rmsd</span> <span class="o">=</span> <span class="n">current_error</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitudes</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">rmsd</span> <span class="o">=</span> <span class="n">current_error</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitudes</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">surrogate</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">rmsd</span>
 </pre></div>
 

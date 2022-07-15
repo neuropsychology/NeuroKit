@@ -194,6 +194,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">
+     EEG Complexity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -577,7 +582,7 @@ title="Open an issue"
 <span class="sd">      events = nk.events_find(data[&quot;Photosensor&quot;],</span>
 <span class="sd">                              threshold_keep=&#39;below&#39;,</span>
 <span class="sd">                              event_conditions=[&quot;Negative&quot;, &quot;Neutral&quot;, &quot;Neutral&quot;, &quot;Negative&quot;])</span>
-<span class="sd">      epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)</span>
+<span class="sd">      epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=1)</span>
 
 <span class="sd">      @savefig p_epochs_plot1.png scale=100%</span>
 <span class="sd">      nk.epochs_plot(epochs)</span>
