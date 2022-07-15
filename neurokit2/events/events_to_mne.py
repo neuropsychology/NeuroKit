@@ -20,7 +20,7 @@ def events_to_mne(events, event_conditions=None):
     -------
     tuple
         MNE-formatted events and the event id, that can be added
-        via :func:`.raw.add_events(events)`, and a dictionary with event's names.
+        via ``raw.add_events(events)``, and a dictionary with event's names.
 
     See Also
     --------

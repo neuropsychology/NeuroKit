@@ -17,12 +17,13 @@ def ecg_peaks(
 
       Please help us improve the methods' documentation by adding a small description.
 
+
     * **neurokit** (default): QRS complexes are detected based on the steepness of the absolute
       gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in
       the QRS complexes. Unpublished, but see https://github.com/neuropsychology/NeuroKit/issues/476
     * **pantompkins1985**: Algorithm by Pan & Tompkins (1985).
     * **hamilton2002**: Algorithm by Hamilton (2002).
-    * **martinez2003**: Source unknown! Please help us retrieve the original paper.
+    * **martinez2003**: *Source unknown!* Please help us retrieve the original paper.
     * **zong2003**: Algorithm by Zong et al. (2003).
     * **christov2004**: Algorithm by Christov (2004).
     * **gamboa2008**: Algorithm by Gamboa (2008).
@@ -49,9 +50,7 @@ def ecg_peaks(
     sampling_rate : int
         The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection. Can be one of,
-         ``"nabian2018"``,
-        ``"kalidas2017"``,  ``"rodrigues2021"`` or ``"promac"``.
+        The algorithm to be used for R-peak detection.
     correct_artifacts : bool
         Whether or not to first identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).

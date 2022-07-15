@@ -8,13 +8,8 @@ import scipy.linalg
 from ..ecg.ecg_rsp import ecg_rsp
 from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
-from ..signal import (
-    signal_filter,
-    signal_interpolate,
-    signal_rate,
-    signal_resample,
-    signal_timefrequency,
-)
+from ..signal import (signal_filter, signal_interpolate, signal_rate,
+                      signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 

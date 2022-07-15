@@ -46,7 +46,7 @@ def fractal_dfa(
     range correlation property of a signal. From these elements, different features are extracted:
 
     * **Width**: The width of the singularity spectrum and quantifies the degree of the
-      multifractality. In the case of monofractal signals, the MSP width is zero, since *h*(q) is
+      multifractality. In the case of monofractal signals, the MSP width is zero, since *h*\(q) is
       independent of *q*.
     * **Peak**: The value of the singularity exponent *H* corresponding to peak of
       singularity dimension *D*. It is a measure of the self-affinity of the signal, and a high
@@ -63,7 +63,7 @@ def fractal_dfa(
       spectrum. AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et
       al., 2015).
     * **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second
-      derivative of *h*(q). See Orozco-Duque et al. (2015).
+      derivative of *h*\(q). See Orozco-Duque et al. (2015).
     * **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the
       generalized Hurst's exponents between consecutive moment orders is a more robust index of the
       distribution of the generalized Hurst's exponents (Faini et al., 2021).
