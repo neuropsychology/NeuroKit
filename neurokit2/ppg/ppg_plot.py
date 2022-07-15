@@ -89,3 +89,5 @@ def ppg_plot(ppg_signals, sampling_rate=None):
     ax1.plot(x_axis, ppg_signals["PPG_Rate"], color="#FB661C", label="Rate", linewidth=1.5)
     ax1.axhline(y=ppg_rate_mean, label="Mean", linestyle="--", color="#FBB41C")
     ax1.legend(loc="upper right")
+
+    return fig
