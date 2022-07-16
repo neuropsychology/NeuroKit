@@ -552,13 +552,13 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.entropy_shannon</span> <span class="kn">import</span> <span class="n">entropy_shannon</span>
 
 
-<div class="viewcode-block" id="entropy_phase"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_phase">[docs]</a><span class="k">def</span> <span class="nf">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_phase"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_phase">[docs]</a><span class="k">def</span> <span class="nf">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Phase Entropy (PhasEn)**</span>
 
 <span class="sd">    Phase entropy (PhasEn or PhEn) has been developed by quantifying the distribution of the signal</span>
-<span class="sd">    in accross *n* parts (a parameter also denoted *k*) of a two-dimensional phase space</span>
-<span class="sd">    referred to as a second order difference plot (SODP). It build on the concept of</span>
-<span class="sd">    :func:`Grid Entropy &lt;entropy_grid&gt;`, that uses :func:`Poincaré plot &lt;.hrv_nonlinear&gt;` as its basis.</span>
+<span class="sd">    in accross *k* parts (of a two-dimensional phase space referred to as a second order difference</span>
+<span class="sd">    plot (SODP). It build on the concept of :func:`Grid Entropy &lt;entropy_grid&gt;`, that uses</span>
+<span class="sd">    :func:`Poincaré plot &lt;.hrv_nonlinear&gt;` as its basis.</span>
 
 <span class="sd">    .. figure:: ../img/rohila2019.png</span>
 <span class="sd">       :alt: Figure from Rohila et al. (2019).</span>
@@ -571,10 +571,10 @@ title="Open an issue"
 <span class="sd">    delay : int</span>
 <span class="sd">        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.</span>
 <span class="sd">        See :func:`complexity_delay` to estimate the optimal value for this parameter.</span>
-<span class="sd">    n : int</span>
-<span class="sd">        The number of sections that the SODP is divided into, often denoted *k*. It is a coarse</span>
-<span class="sd">        graining parameter that defines how fine the grid is. It is recommended to use even-numbered</span>
-<span class="sd">        (preferably multiples of 4) partitions for sake of symmetry.</span>
+<span class="sd">    k : int</span>
+<span class="sd">        The number of sections that the SODP is divided into. It is a coarse graining parameter</span>
+<span class="sd">        that defines how fine the grid is. It is recommended to use even-numbered (preferably</span>
+<span class="sd">        multiples of 4) partitions for sake of symmetry.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        Plot the Second Order Difference Plot (SODP).</span>
 <span class="sd">    **kwargs : optional</span>
@@ -603,7 +603,7 @@ title="Open an issue"
 
 <span class="sd">      # Compute Phase Entropy</span>
 <span class="sd">      @savefig p_entropy_phase1.png scale=100%</span>
-<span class="sd">      phasen, info = nk.entropy_phase(signal, n=4, show=True)</span>
+<span class="sd">      phasen, info = nk.entropy_phase(signal, k=4, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -614,7 +614,7 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_entropy_phase2.png scale=100%</span>
-<span class="sd">      phasen, info = nk.entropy_phase(signal, n=8, show=True)</span>
+<span class="sd">      phasen, info = nk.entropy_phase(signal, k=8, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -630,7 +630,7 @@ title="Open an issue"
             <span class="s2">&quot;Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.&quot;</span>
         <span class="p">)</span>
 
-    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span> <span class="s2">&quot;Delay&quot;</span><span class="p">:</span> <span class="n">delay</span><span class="p">}</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;Delay&quot;</span><span class="p">:</span> <span class="n">delay</span><span class="p">}</span>
 
     <span class="c1"># 1. Compute SODP axes</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">delay</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">signal</span><span class="p">[</span><span class="n">delay</span><span class="p">:</span><span class="o">-</span><span class="n">delay</span><span class="p">]</span>
@@ -644,13 +644,13 @@ title="Open an issue"
         <span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">))]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
     <span class="c1"># 3. The entire plot is divided into k sections having an angle span of 2pi*k radians each</span>
-    <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># 4. The cumulative slope of each sector is obtained by adding the slope of each scatter point # within that sector</span>
     <span class="c1"># 5. The probability distribution of the slopes in each sector is computed</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="p">(</span><span class="n">theta</span> <span class="o">&lt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))])</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="p">(</span><span class="n">theta</span> <span class="o">&lt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
     <span class="p">]</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
 
@@ -658,25 +658,25 @@ title="Open an issue"
     <span class="n">phasen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Normalize</span>
-    <span class="n">phasen</span> <span class="o">=</span> <span class="n">phasen</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">phasen</span> <span class="o">=</span> <span class="n">phasen</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">Tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-            <span class="n">Temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="p">(</span><span class="n">theta</span> <span class="o">&lt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
-            <span class="n">Tx</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">Temp</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">Tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">Temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="p">(</span><span class="n">theta</span> <span class="o">&lt;</span> <span class="n">angles</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">Tx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">Temp</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="n">limx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">])))</span>
         <span class="n">Tx</span> <span class="o">=</span> <span class="n">Tx</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
         <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span> <span class="o">*</span> <span class="n">limx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">Xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span> <span class="o">*</span> <span class="n">limx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;jet&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;jet&quot;</span><span class="p">)(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">Tx</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]],</span> <span class="n">y</span><span class="p">[</span><span class="n">Tx</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">Tx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]],</span> <span class="n">y</span><span class="p">[</span><span class="n">Tx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Xs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Ys</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Xs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Ys</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span>
             <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="n">limx</span><span class="p">,</span> <span class="n">limx</span><span class="p">,</span> <span class="o">-</span><span class="n">limx</span><span class="p">,</span> <span class="n">limx</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="s2">&quot;box&quot;</span><span class="p">)</span>
