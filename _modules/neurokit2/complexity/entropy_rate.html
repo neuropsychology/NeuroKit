@@ -676,9 +676,12 @@ title="Open an issue"
         <span class="n">knee</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">knee</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;MaxRatEn&quot;</span><span class="p">],</span> <span class="n">intercept2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;MaxRatEn&quot;</span><span class="p">],</span> <span class="n">intercept2</span> <span class="o">=</span> <span class="n">raten</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;MaxRatEn&quot;</span><span class="p">],</span> <span class="n">intercept2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">knee</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Entropy&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">knee</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Store knee</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Knee&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">knee</span>
 
     <span class="c1"># Plot</span>
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
