@@ -106,7 +106,7 @@ def entropy_spectral(signal, bins=None, show=False, **kwargs):
         plt.ylabel("Normalized Power")
 
     # Compute Shannon entropy
-    se, _ = entropy_shannon(freq=psd)
+    se, _ = entropy_shannon(freq=psd["Power"].values)
 
     # Normalize
     se /= np.log2(len(psd))  # between 0 and 1
