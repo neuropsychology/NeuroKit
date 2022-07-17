@@ -545,29 +545,35 @@ title="Open an issue"
               <div>
                 
   <h1>Source code for neurokit2.complexity.entropy_spectral</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..signal.signal_psd</span> <span class="kn">import</span> <span class="n">signal_psd</span>
 <span class="kn">from</span> <span class="nn">.entropy_shannon</span> <span class="kn">import</span> <span class="n">entropy_shannon</span>
 
 
-<div class="viewcode-block" id="entropy_spectral"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_spectral">[docs]</a><span class="k">def</span> <span class="nf">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_spectral"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_spectral">[docs]</a><span class="k">def</span> <span class="nf">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Spectral Entropy (SpEn)**</span>
 
-<span class="sd">    Spectral entropy (SE or SpEn) treats the signal&#39;s normalized power distribution in the</span>
+<span class="sd">    Spectral entropy (SE or SpEn) treats the signal&#39;s normalized power spectrum density (PSD) in the</span>
 <span class="sd">    frequency domain as a probability distribution, and calculates the Shannon entropy of it.</span>
+
+<span class="sd">    .. math:: H(x, sf) =  -\\sum P(f) \\log_2[P(f)]</span>
 
 <span class="sd">    A signal with a single frequency component (i.e., pure sinusoid) produces the smallest entropy.</span>
 <span class="sd">    On the other hand, a signal with all frequency components of equal power value (white</span>
 <span class="sd">    noise) produces the greatest entropy.</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    bins : int</span>
-<span class="sd">        Number of bins of frequency.</span>
+<span class="sd">        If an integer is passed, will cut the PSD into a number of bins of frequency.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Display the power spectrum.</span>
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Keyword arguments to be passed to ``signal_psd()``.</span>
 
@@ -592,8 +598,25 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6, 10], noise=0.1)</span>
 
 <span class="sd">      # Compute Spectral Entropy</span>
-<span class="sd">      SpEn, info = nk.entropy_spectral(signal, bins=8)</span>
+<span class="sd">      @savefig p_entropy_spectral1.png scale=100%</span>
+<span class="sd">      SpEn, info = nk.entropy_spectral(signal, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+
+<span class="sd">    .. ipython:: python</span>
+
 <span class="sd">      SpEn</span>
+
+
+<span class="sd">    Bin the frequency spectrum.</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">        @savefig p_entropy_spectral2.png scale=100%</span>
+<span class="sd">        SpEn, info = nk.entropy_spectral(signal, bins=10, show=True)</span>
+<span class="sd">        @suppress</span>
+<span class="sd">        plt.close()</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -609,8 +632,25 @@ title="Open an issue"
         <span class="p">)</span>
 
     <span class="c1"># Power-spectrum density (PSD) (actual sampling rate does not matter)</span>
-    <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span>
-    <span class="n">psd</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">psd</span><span class="p">)</span>  <span class="c1"># area under normalized spectrum should sum to 1 (np.sum(psd[&quot;Power&quot;]))</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Cut into bins</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">psd</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">))</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="c1"># Area under normalized spectrum should sum to 1 (np.sum(psd[&quot;Power&quot;]))</span>
+    <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">idx</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Normalized Power Spectrum&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized Power&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute Shannon entropy</span>
     <span class="n">se</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="n">psd</span><span class="p">)</span>
