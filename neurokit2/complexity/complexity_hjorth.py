@@ -59,7 +59,7 @@ def complexity_hjorth(signal):
     Returns
     -------
     hjorth : float
-         Hjorth's Complexity.
+        Hjorth's Complexity.
     info : dict
         A dictionary containing the additional Hjorth parameters, such as ``"Mobility"`` and
         ``"Activity"``.

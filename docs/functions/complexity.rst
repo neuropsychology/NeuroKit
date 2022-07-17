@@ -33,6 +33,10 @@ Fractal Dimension
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_katz
 
+*fractal_linelength()*
+"""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_linelength
+
 *fractal_petrosian()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_petrosian
@@ -198,6 +202,10 @@ Other indices
 *complexity_hjorth()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
+
+*complexity_decorrelation()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_decorrelation
 
 *complexity_lempelziv()*
 """"""""""""""""""""""""""

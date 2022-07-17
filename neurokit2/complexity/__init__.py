@@ -2,6 +2,7 @@
 import functools
 
 from .complexity import complexity
+from .complexity_decorrelation import complexity_decorrelation
 from .complexity_hjorth import complexity_hjorth
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
@@ -115,6 +116,7 @@ __all__ = [
     "complexity_coarsegraining",
     "complexity_ordinalpatterns",
     "complexity_symbolize",
+    "complexity_decorrelation",
     "recurrence_matrix",
     "complexity_delay",
     "complexity_dimension",
