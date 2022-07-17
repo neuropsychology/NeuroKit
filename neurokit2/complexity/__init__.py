@@ -45,6 +45,7 @@ from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_hurst import fractal_hurst
 from .fractal_katz import fractal_katz
+from .fractal_linelength import fractal_linelength
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
 from .fractal_psdslope import fractal_psdslope
@@ -192,6 +193,7 @@ __all__ = [
     "fractal_density",
     "fractal_higuchi",
     "fractal_katz",
+    "fractal_linelength",
     "fractal_petrosian",
     "fractal_sevcik",
     "fractal_mandelbrot",
