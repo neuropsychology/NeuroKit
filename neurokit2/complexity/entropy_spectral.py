@@ -5,7 +5,7 @@ from ..signal.signal_psd import signal_psd
 from .entropy_shannon import entropy_shannon
 
 
-def entropy_spectral(signal, c=None, **kwargs):
+def entropy_spectral(signal, bins=None, **kwargs):
     """**Spectral Entropy (SpEn)**
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the
@@ -19,7 +19,7 @@ def entropy_spectral(signal, c=None, **kwargs):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    c : int
+    bins : int
         Number of bins of frequency.
     **kwargs : optional
         Keyword arguments to be passed to ``signal_psd()``.
@@ -45,7 +45,7 @@ def entropy_spectral(signal, c=None, **kwargs):
       signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6, 10], noise=0.1)
 
       # Compute Spectral Entropy
-      SpEn, info = nk.entropy_spectral(signal, c=20)
+      SpEn, info = nk.entropy_spectral(signal, bins=8)
       SpEn
 
     References
@@ -62,7 +62,7 @@ def entropy_spectral(signal, c=None, **kwargs):
         )
 
     # Power-spectrum density (PSD) (actual sampling rate does not matter)
-    psd = signal_psd(signal, sampling_rate=1000, method="fft", n=c, **kwargs)["Power"]
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", n=bins, **kwargs)["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
 
     # Compute Shannon entropy
