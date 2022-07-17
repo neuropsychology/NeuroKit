@@ -8,15 +8,10 @@ def complexity_decorrelation(signal):
     """**Decorrelation Time (DT)**
 
     The decorrelation time (DT) is defined as the time (in samples) of the first zero crossing of
-    the autocorrelation sequence (Mormann et al., 2005). A shorter decorrelation time corresponds
-    to a less correlated signal. For instance, a drop in the decorrelation time of EEG has been
-    observed prior to seizures, related to a decrease in the low frequency power (Mormann et al.,
-    2005).
+    the autocorrelation sequence. A shorter decorrelation time corresponds to a less correlated
+    signal. For instance, a drop in the decorrelation time of EEG has been observed prior to
+    seizures, related to a decrease in the low frequency power (Mormann et al., 2005).
 
-
-    See Also
-    --------
-    .signal_autocor
 
     Parameters
     ----------
@@ -30,6 +25,10 @@ def complexity_decorrelation(signal):
     dict
         A dictionary containing additional information (currently empty, but returned nonetheless
         for consistency with other functions).
+
+    See Also
+    --------
+    .signal_autocor
 
     Examples
     ----------
