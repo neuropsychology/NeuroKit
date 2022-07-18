@@ -550,19 +550,20 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="entropy_range"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_range">[docs]</a><span class="k">def</span> <span class="nf">entropy_range</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">approximate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Range Entropy (RangeEn)**</span>
+    <span class="sd">&quot;&quot;&quot;**Range Entropy (RangEn)**</span>
 
-<span class="sd">    Introduced by Omidvarnia et al. (2018), RangeEn refers to a modified form of SampEn (or ApEn).</span>
+<span class="sd">    Introduced by Omidvarnia et al. (2018), Range Entropy (RangEn or RangeEn) refers to a modified</span>
+<span class="sd">    form of SampEn (or ApEn).</span>
 
 <span class="sd">    Both ApEn and SampEn compute the logarithmic likelihood that runs of patterns that are close</span>
 <span class="sd">    remain close on the next incremental comparisons, of which this closeness is estimated by the</span>
 <span class="sd">    Chebyshev distance. Range Entropy uses instead a normalized &quot;range distance&quot;, resulting in</span>
-<span class="sd">    modified forms of ApEn and SampEn, **RangeEn (A)** (*mApEn*) and **RangeEn (B)** (*mSampEn*).</span>
+<span class="sd">    modified forms of ApEn and SampEn, **RangEn (A)** (*mApEn*) and **RangEn (B)** (*mSampEn*).</span>
 
-<span class="sd">    However, the RangeEn (A), based on ApEn, often yields undefined entropies (i.e., *NaN* or</span>
-<span class="sd">    *Inf*). As such, using RangeEn (B) is recommended instead.</span>
+<span class="sd">    However, the RangEn (A), based on ApEn, often yields undefined entropies (i.e., *NaN* or</span>
+<span class="sd">    *Inf*). As such, using RangEn (B) is recommended instead.</span>
 
-<span class="sd">    RangeEn is described as more robust to nonstationary signal changes, and has a more linear</span>
+<span class="sd">    RangEn is described as more robust to nonstationary signal changes, and has a more linear</span>
 <span class="sd">    relationship with the Hurst exponent (compared to ApEn and SampEn), and has no need for signal</span>
 <span class="sd">    amplitude correction.</span>
 
@@ -586,8 +587,8 @@ title="Open an issue"
 <span class="sd">        :func:`complexity_tolerance` to estimate the optimal value for this parameter.</span>
 <span class="sd">    approximate : bool</span>
 <span class="sd">        The entropy algorithm to use. If ``False`` (default), will use sample entropy and return</span>
-<span class="sd">        *mSampEn* (**RangeEn B**). If ``True``, will use approximate entropy and return *mApEn*</span>
-<span class="sd">        (**RangeEn A**).</span>
+<span class="sd">        *mSampEn* (**RangEn B**). If ``True``, will use approximate entropy and return *mApEn*</span>
+<span class="sd">        (**RangEn A**).</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments.</span>
 
@@ -597,7 +598,7 @@ title="Open an issue"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    RangeEn : float</span>
+<span class="sd">    RangEn : float</span>
 <span class="sd">        Range Entropy. If undefined conditional probabilities are detected (logarithm</span>
 <span class="sd">        of sum of conditional probabilities is ``ln(0)``), ``np.inf`` will</span>
 <span class="sd">        be returned, meaning it fails to retrieve &#39;accurate&#39; regularity information.</span>
@@ -615,16 +616,16 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6])</span>
 
 <span class="sd">      # Range Entropy B (mSampEn)</span>
-<span class="sd">      RangeEnB, info = nk.entropy_range(signal, approximate=False)</span>
-<span class="sd">      RangeEnB</span>
+<span class="sd">      RangEnB, info = nk.entropy_range(signal, approximate=False)</span>
+<span class="sd">      RangEnB</span>
 
 <span class="sd">      # Range Entropy A (mApEn)</span>
-<span class="sd">      RangeEnA, info = nk.entropy_range(signal, approximate=True)</span>
-<span class="sd">      RangeEnA</span>
+<span class="sd">      RangEnA, info = nk.entropy_range(signal, approximate=True)</span>
+<span class="sd">      RangEnA</span>
 
 <span class="sd">      # Range Entropy A (corrected)</span>
-<span class="sd">      RangeEnAc, info = nk.entropy_range(signal, approximate=True, corrected=True)</span>
-<span class="sd">      RangeEnAc</span>
+<span class="sd">      RangEnAc, info = nk.entropy_range(signal, approximate=True, corrected=True)</span>
+<span class="sd">      RangEnAc</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>

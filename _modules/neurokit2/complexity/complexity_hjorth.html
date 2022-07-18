@@ -558,13 +558,20 @@ title="Open an issue"
 <span class="sd">    NeuroKit returns complexity directly in the output tuple, but the other parameters can be found</span>
 <span class="sd">    in the dictionary.</span>
 
-
 <span class="sd">    * The **activity** parameter is simply the variance of the signal, which corresponds to the</span>
 <span class="sd">      mean power of a signal (if its mean is 0).</span>
 
 <span class="sd">      .. math::</span>
 
 <span class="sd">        Activity = \\sigma_{signal}^2</span>
+
+<span class="sd">    * The **mobility** parameter represents the mean frequency or the proportion of standard</span>
+<span class="sd">      deviation of the power spectrum. This is defined as the square root of variance of the</span>
+<span class="sd">      first derivative of the signal divided by the variance of the signal.</span>
+
+<span class="sd">      .. math::</span>
+
+<span class="sd">        Mobility = \\frac{\\sigma_{dd}/ \\sigma_{d}}{Complexity}</span>
 
 <span class="sd">    * The **complexity** parameter gives an estimate of the bandwidth of the signal, which</span>
 <span class="sd">      indicates the similarity of the shape of the signal to a pure sine wave (for which the</span>
@@ -575,14 +582,6 @@ title="Open an issue"
 <span class="sd">      .. math::</span>
 
 <span class="sd">        Complexity = \\sigma_{d}/ \\sigma_{signal}</span>
-
-<span class="sd">    * The **mobility** parameter represents the mean frequency or the proportion of standard</span>
-<span class="sd">      deviation of the power spectrum. This is defined as the square root of variance of the</span>
-<span class="sd">      first derivative of the signal divided by the variance of the signal.</span>
-
-<span class="sd">      .. math::</span>
-
-<span class="sd">        Mobility = \\frac{\\sigma_{dd}/ \\sigma_{d}}{Complexity}</span>
 
 <span class="sd">    :math:`d` and :math:`dd` represent the first and second derivatives of the signal, respectively.</span>
 
