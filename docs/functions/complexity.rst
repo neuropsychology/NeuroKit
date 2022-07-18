@@ -73,6 +73,9 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_dfa
 
+*fractal_tmf()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_tmf
 
 Entropy
 ^^^^^^^^^^^^^^^^^

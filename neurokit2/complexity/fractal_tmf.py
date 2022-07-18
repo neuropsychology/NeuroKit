@@ -36,7 +36,6 @@ def fractal_tmf(signal, n=40, show=False, **kwargs):
     less than for the sample of linear surrogates, that is no less evidence of a failure of
     linearity than if the degree of heterogeneity is significantly greater.
 
-
     .. note::
 
         Help us review the implementation of this index by checking-it out and letting us know
@@ -106,8 +105,8 @@ def fractal_tmf(signal, n=40, show=False, **kwargs):
 
     w0 = fractal_dfa(signal, multifractal=True, show=False)[0]["Width"]
 
-    w = np.zeros(20)
-    for i in range(20):
+    w = np.zeros(n)
+    for i in range(n):
         surro = signal_surrogate(signal, method="IAAFT")
         w[i] = fractal_dfa(surro, multifractal=True, show=False)[0]["Width"]
 
