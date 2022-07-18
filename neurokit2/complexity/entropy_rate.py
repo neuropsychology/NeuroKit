@@ -8,7 +8,7 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
+def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     """**Entropy Rate (RatEn)**
 
     The Entropy Rate (RatEn or ER) quantifies the amount of information needed to describe the
@@ -18,7 +18,7 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
     It quantifies how much uncertainty or randomness the process produces at each new time step,
     given knowledge about the past states of the process. The entropy rate is estimated as the
     slope of the linear fit between the history length *k* and the joint Shannon entropies. The
-    intercept is called **Excess Entropy** (ExEn).
+    entropy at k = 1 is called **Excess Entropy** (ExEn).
 
     We adapted the algorithm to include a knee-point detection (beyond which the self-Entropy
     reaches a plateau), and if it exists, we additionally re-compute the Entropy Rate up until that
@@ -54,7 +54,7 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
       signal = [1, 1, 2, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 3, 2, 2, 1, 3, 2]
 
       @savefig p_entropy_rate1.png scale=100%
-      raten, info = nk.entropy_rate(signal, kmax=8, symbolize=None, show=True)
+      raten, info = nk.entropy_rate(signal, kmax=10, symbolize=None, show=True)
       @suppress
       plt.close()
 
@@ -107,7 +107,7 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
 
     # Convert into range if integer
     if np.isscalar(kmax) is True:
-        kmax = np.arange(1, kmax+1)
+        kmax = np.arange(1, kmax + 1)
 
     # Compute self-entropy
     info = {
@@ -116,7 +116,10 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
     }
 
     # Traditional Entropy Rate (on all the values)
-    raten, info["Excess_Entropy"] = np.polyfit(info["k"], info["Entropy"], 1)
+    raten, intercept1 = np.polyfit(info["k"], info["Entropy"], 1)
+
+    # Excess Entropy
+    info["Excess_Entropy"] = info["Entropy"][0]
 
     # Max Entropy Rate
     # Detect knee
@@ -126,15 +129,18 @@ def entropy_rate(signal, kmax=6, symbolize="mean", show=False):
         knee = len(info["k"]) - 1
 
     if knee == len(info["k"]) - 1:
-        info["MaxRatEn"], intercept2 = np.nan, np.nan
+        info["MaxRatEn"], intercept2 = raten, np.nan
     else:
         info["MaxRatEn"], intercept2 = np.polyfit(info["k"][0:knee], info["Entropy"][0:knee], 1)
+
+    # Store knee
+    info["Knee"] = knee
 
     # Plot
     if show:
         plt.figure(figsize=(6, 6))
         plt.plot(info["k"], info["Entropy"], "o-", color="black")
-        y = raten * info["k"] + info["Excess_Entropy"]
+        y = raten * info["k"] + intercept1
         plt.plot(
             info["k"],
             y,

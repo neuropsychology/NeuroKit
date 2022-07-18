@@ -128,7 +128,7 @@ def fractal_dfa(
 
     See Also
     --------
-    fractal_hurst
+    fractal_hurst, fractal_tmf
 
     Examples
     ----------

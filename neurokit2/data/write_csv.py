@@ -38,10 +38,9 @@ def write_csv(data, filename, parts=None, **kwargs):
 
       # Iterate through 6-parts and concatenate the pieces
       # data_all = pd.concat(
-      #                   [pd.read_csv(f"data_part{i}.csv") for i in range(1, 7)],
-      #                   axis=0,
-      #                      )
-
+      #     [pd.read_csv(f"data_part{i}.csv") for i in range(1, 7)],
+      #     axis=0,
+      # )
 
     """
     if isinstance(parts, int):

@@ -2,6 +2,7 @@
 import functools
 
 from .complexity import complexity
+from .complexity_decorrelation import complexity_decorrelation
 from .complexity_hjorth import complexity_hjorth
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
@@ -45,11 +46,13 @@ from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_hurst import fractal_hurst
 from .fractal_katz import fractal_katz
+from .fractal_linelength import fractal_linelength
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
 from .fractal_psdslope import fractal_psdslope
 from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
+from .fractal_tmf import fractal_tmf
 from .information_fisher import fisher_information
 from .information_fishershannon import fishershannon_information
 from .information_gain import information_gain
@@ -114,6 +117,7 @@ __all__ = [
     "complexity_coarsegraining",
     "complexity_ordinalpatterns",
     "complexity_symbolize",
+    "complexity_decorrelation",
     "recurrence_matrix",
     "complexity_delay",
     "complexity_dimension",
@@ -192,10 +196,12 @@ __all__ = [
     "fractal_density",
     "fractal_higuchi",
     "fractal_katz",
+    "fractal_linelength",
     "fractal_petrosian",
     "fractal_sevcik",
     "fractal_mandelbrot",
     "fractal_mfdfa",
+    "fractal_tmf",
     "fractal_nld",
     "fractal_psdslope",
     "fractal_sda",
