@@ -20,18 +20,20 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
       import neurokit2 as nk
 
+      # Simulate data
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+
+      # Process signal
       rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
 
+      # Plot
       @savefig p_rsp_plot1.png scale=100%
       fig = nk.rsp_plot(rsp_signals)
       @suppress
-      plt.close()
 
-    Returns
-    -------
-    fig
-        Figure representing a plot of the processed rsp signals.
+      # Save plot
+      plt.savefig("rsp.png", dpi=300)
+      plt.close()
 
     See Also
     --------
@@ -65,9 +67,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     fig.suptitle("Respiration (RSP)", fontweight="bold")
 
     ax0.plot(x_axis, rsp_signals["RSP_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-    ax0.plot(
-        x_axis, rsp_signals["RSP_Clean"], color="#2196F3", label="Cleaned", zorder=2, linewidth=1.5
-    )
+    ax0.plot(x_axis, rsp_signals["RSP_Clean"], color="#2196F3", label="Cleaned", zorder=2, linewidth=1.5)
 
     ax0.scatter(
         x_axis[peaks],
@@ -118,9 +118,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     if "RSP_Amplitude" in list(rsp_signals.columns):
         ax2.set_title("Breathing Amplitude")
 
-        ax2.plot(
-            x_axis, rsp_signals["RSP_Amplitude"], color="#009688", label="Amplitude", linewidth=1.5
-        )
+        ax2.plot(x_axis, rsp_signals["RSP_Amplitude"], color="#009688", label="Amplitude", linewidth=1.5)
         amplitude_mean = np.mean(rsp_signals["RSP_Amplitude"])
         ax2.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#009688")
         ax2.legend(loc="upper right")
