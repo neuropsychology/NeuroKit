@@ -26,7 +26,7 @@ def fractal_tmf(signal, n=40, show=False, **kwargs):
     As such, it cannot alone be used to assess the specific presence of cascade-like interactivity
     in the time series, but must be compared to the spectrum of a sample of its surrogates.
 
-    .. figure:: ../img/bell2019.png
+    .. figure:: ../img/bell2019.jpg
        :alt: Figure from Bell et al. (2019).
        :target: https://doi.org/10.3389/fphys.2019.00998
 
