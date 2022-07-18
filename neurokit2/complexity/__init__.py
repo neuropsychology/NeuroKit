@@ -52,6 +52,7 @@ from .fractal_petrosian import fractal_petrosian
 from .fractal_psdslope import fractal_psdslope
 from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
+from .fractal_tmf import fractal_tmf
 from .information_fisher import fisher_information
 from .information_fishershannon import fishershannon_information
 from .information_gain import information_gain
@@ -200,6 +201,7 @@ __all__ = [
     "fractal_sevcik",
     "fractal_mandelbrot",
     "fractal_mfdfa",
+    "fractal_tmf",
     "fractal_nld",
     "fractal_psdslope",
     "fractal_sda",
