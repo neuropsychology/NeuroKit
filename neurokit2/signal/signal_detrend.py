@@ -16,7 +16,7 @@ def signal_detrend(
     stepsize=0.02,
     components=[-1],
 ):
-    """**Polynomial detrending of signal**
+    """**Signal Detrending**
 
     Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the
     signal (i.e., removing a general trend). One can also use other methods, such as smoothness
@@ -62,7 +62,7 @@ def signal_detrend(
 
     See Also
     --------
-    signal_filter, fit_loess
+    signal_filter, fit_loess, signal_decompose
 
     Examples
     --------
@@ -143,7 +143,8 @@ def signal_detrend(
         detrended = _signal_detrend_emd(signal, components=components)
     else:
         raise ValueError(
-            "NeuroKit error: signal_detrend(): 'method' should be one of 'polynomial', 'loess', 'locreg', 'EMD' or 'tarvainen2002'."
+            "NeuroKit error: signal_detrend(): 'method' should be one of 'polynomial', 'loess'"
+            + "'locreg', 'EMD' or 'tarvainen2002'."
         )
 
     return detrended
