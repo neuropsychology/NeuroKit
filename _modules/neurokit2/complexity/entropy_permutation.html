@@ -565,8 +565,8 @@ title="Open an issue"
 <span class="sd">    EEG, ECG, and stock market time series.</span>
 
 <span class="sd">    Mathematically, it corresponds to the :func:`Shannon entropy &lt;entropy_shannon&gt;` after the</span>
-<span class="sd">    signal has been made discrete (symbolic) by analyzing the permutations in the time-embedded</span>
-<span class="sd">    space.</span>
+<span class="sd">    signal has been made :func:`discrete &lt;complexity_symbolize&gt;` by analyzing the permutations in</span>
+<span class="sd">    the time-embedded space.</span>
 
 <span class="sd">    However, the main shortcoming of traditional PEn is that no information besides the order</span>
 <span class="sd">    structure is retained when extracting the ordinal patterns, which leads to several possible</span>
@@ -574,10 +574,10 @@ title="Open an issue"
 <span class="sd">    limitations by incorporating significant information (regarding the amplitude) from the</span>
 <span class="sd">    original time series into the ordinal patterns.</span>
 
-<span class="sd">    The **Conditional Entropy (CPEn)** was originally defined by Bandt &amp; Pompe as *Sorting</span>
-<span class="sd">    Entropy*, but recently gained in popularity as conditional through the work of Unakafov et al.</span>
-<span class="sd">    (2014). It describes the average diversity of the ordinal patterns succeeding a given ordinal</span>
-<span class="sd">    pattern (dimension+1 vs. dimension).</span>
+<span class="sd">    The **Conditional Permutation Entropy (CPEn)** was originally defined by Bandt &amp; Pompe as</span>
+<span class="sd">    *Sorting Entropy*, but recently gained in popularity as conditional through the work of</span>
+<span class="sd">    Unakafov et al. (2014). It describes the average diversity of the ordinal patterns succeeding a</span>
+<span class="sd">    given ordinal pattern (dimension+1 vs. dimension).</span>
 
 <span class="sd">    This function can be called either via ``entropy_permutation()`` or ``complexity_pe()``.</span>
 <span class="sd">    Moreover, variants can be directly accessed via ``complexity_wpe()`` and ``complexity_mspe()``.</span>

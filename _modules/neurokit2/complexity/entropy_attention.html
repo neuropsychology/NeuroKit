@@ -555,7 +555,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 
 
-<div class="viewcode-block" id="entropy_attention"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_attention">[docs]</a><span class="k">def</span> <span class="nf">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_attention"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_attention">[docs]</a><span class="k">def</span> <span class="nf">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Attention Entropy (AttEn)**</span>
 
 <span class="sd">    Yang et al. (2020) propose a conceptually new approach called **Attention Entropy (AttEn)**,</span>
@@ -564,6 +564,17 @@ title="Open an issue"
 <span class="sd">    of the intervals between the key observations in a time-series. The advantages of the attention</span>
 <span class="sd">    entropy are that it does not need any parameter to tune, is robust to the time-series length,</span>
 <span class="sd">    and requires only linear time to compute.</span>
+
+<span class="sd">    Because this index relies on peak-detection, it is not suited for noisy signals. Signal</span>
+<span class="sd">    cleaning (in particular filtering), and eventually more tuning for the peak detection</span>
+<span class="sd">    algorithm, can help.</span>
+
+<span class="sd">    **AttEn** is computed as the average of various subindices, such as:</span>
+
+<span class="sd">    * **MaxMax**: The entropy of local-maxima intervals.</span>
+<span class="sd">    * **MinMin**: The entropy of local-minima intervals.</span>
+<span class="sd">    * **MaxMin**: The entropy of intervals between local maxima and subsequent minima.</span>
+<span class="sd">    * **MinMax**: The entropy of intervals between local minima and subsequent maxima.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -577,11 +588,10 @@ title="Open an issue"
 <span class="sd">    atten : float</span>
 <span class="sd">        The attention entropy of the signal.</span>
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing values of sub-entropies that are averaged to give the general</span>
-<span class="sd">        AttEn, such as ``MaxMax`` (entropy of local-maxima intervals), ``MinMin`` (entropy of</span>
-<span class="sd">        local-minima intervals), ``MaxMin`` (entropy of intervals between local maxima and</span>
-<span class="sd">        subsequent minima), and ``MinMax`` (entropy of intervals between local minima and</span>
-<span class="sd">        subsequent maxima ).</span>
+<span class="sd">        A dictionary containing values of sub-entropies, such as ``MaxMax``, ``MinMin``,</span>
+<span class="sd">        ``MaxMin``, and ``MinMax``.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to be passed to ``scipy.signal.find_peaks()``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -621,8 +631,8 @@ title="Open an issue"
         <span class="p">)</span>
 
     <span class="c1"># Identify key patterns</span>
-    <span class="n">Xmax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-    <span class="n">Xmin</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">Xmax</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">Xmin</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Xmax</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">Xmin</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>

@@ -708,25 +708,13 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Empirical Mode Decomposition (EMD)</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_signal_decompose_emd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_decompose_emd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;References</span>
 <span class="sd">    ------------</span>
 <span class="sd">    - http://perso.ens-lyon.fr/patrick.flandrin/CSDATrendfiltering.pdf</span>
 <span class="sd">    - https://github.com/laszukdawid/PyEMD</span>
 <span class="sd">    - https://towardsdatascience.com/decomposing-signal-using-empirical-mode-decomposition-algorithm-explanation-for-dummy-93a93304c541 # noqa: E501</span>
 
-<span class="sd">    &gt;&gt;&gt; # import PyEMD</span>
-<span class="sd">    &gt;&gt;&gt; # import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; # signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq</span>
-<span class="sd">    &gt;&gt;&gt; # signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq</span>
-<span class="sd">    &gt;&gt;&gt; # signal += 3  # Add baseline</span>
-<span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; # emd = PyEMD.EMD()</span>
-<span class="sd">    &gt;&gt;&gt; # components = emd.emd(signal)</span>
-<span class="sd">    &gt;&gt;&gt; # imfs, residue = emd.get_imfs_and_residue()</span>
-<span class="sd">    &gt;&gt;&gt; # nk.signal_plot(imfs)</span>
-<span class="sd">    &gt;&gt;&gt; # nk.signal_plot([signal, np.sum(imfs, axis=0), residue])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">PyEMD</span>
@@ -737,11 +725,11 @@ title="Open an issue"
         <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
 
     <span class="k">if</span> <span class="n">ensemble</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">emd</span> <span class="o">=</span> <span class="n">PyEMD</span><span class="o">.</span><span class="n">EMD</span><span class="p">(</span><span class="n">extrema_detection</span><span class="o">=</span><span class="s2">&quot;parabol&quot;</span><span class="p">)</span>
-        <span class="n">imfs</span> <span class="o">=</span> <span class="n">emd</span><span class="o">.</span><span class="n">emd</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">emd</span> <span class="o">=</span> <span class="n">PyEMD</span><span class="o">.</span><span class="n">EMD</span><span class="p">(</span><span class="n">extrema_detection</span><span class="o">=</span><span class="s2">&quot;parabol&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">imfs</span> <span class="o">=</span> <span class="n">emd</span><span class="o">.</span><span class="n">emd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">emd</span> <span class="o">=</span> <span class="n">PyEMD</span><span class="o">.</span><span class="n">EEMD</span><span class="p">(</span><span class="n">extrema_detection</span><span class="o">=</span><span class="s2">&quot;parabol&quot;</span><span class="p">)</span>
-        <span class="n">imfs</span> <span class="o">=</span> <span class="n">emd</span><span class="o">.</span><span class="n">eemd</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">emd</span> <span class="o">=</span> <span class="n">PyEMD</span><span class="o">.</span><span class="n">EEMD</span><span class="p">(</span><span class="n">extrema_detection</span><span class="o">=</span><span class="s2">&quot;parabol&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">imfs</span> <span class="o">=</span> <span class="n">emd</span><span class="o">.</span><span class="n">eemd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1">#    _, residue = emd.get_imfs_and_residue()</span>
     <span class="k">return</span> <span class="n">imfs</span>
