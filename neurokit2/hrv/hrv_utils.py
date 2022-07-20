@@ -14,9 +14,6 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolatio
 
     else:
 
-        # Sanitize minimum interpolation rate for interpolation to 10 Hz
-        interpolation_rate = max(interpolation_rate, 10)
-
         # Compute x-values of interpolated heart period signal at requested sampling rate.
         x_new = np.arange(
             start=peaks[1], stop=peaks[-1] + 1 / interpolation_rate, step=1 / interpolation_rate
