@@ -678,7 +678,7 @@ def _interpolate_missing(
     # unknown intervas are inserted
     for loc in np.flip(outliers_loc):
         # compute number of NaNs to insert based on the mean interval
-        n_nan = int(interval[loc] / mean_interval)
+        n_nan = round(interval[loc] / mean_interval)
 
         # Delete peak corresponding to large interval and replace by N NaNs
         peaks_to_correct[loc] = np.nan
