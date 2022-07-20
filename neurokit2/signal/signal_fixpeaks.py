@@ -148,9 +148,7 @@ def signal_fixpeaks(
 
     # If method Kubios
     if method.lower() == "kubios":
-        return _signal_fixpeaks_kubios(
-            peaks, sampling_rate=sampling_rate, iterative=iterative, show=show, **kwargs
-        )
+        return _signal_fixpeaks_kubios(peaks, sampling_rate=sampling_rate, iterative=iterative, show=show, **kwargs)
     else:
         # Else method is NeuroKit
         return _signal_fixpeaks_neurokit(
@@ -179,20 +177,13 @@ def _signal_fixpeaks_neurokit(
     """NeuroKit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
-    peaks_clean = _interpolate_big(
-        peaks_clean,
-        sampling_rate,
-        interval_max,
-        relative_interval_max,
-        robust,
-    )
+    peaks_clean = _interpolate_big(peaks_clean, sampling_rate, interval_max, relative_interval_max, robust,)
 
     valid_peaks = peaks_clean[peaks_clean >= 0]
     n_invalid_idcs = len(peaks_clean) - len(valid_peaks)
     if n_invalid_idcs > 0:
         warn(
-            f" Negative peak indices detected in output. "
-            f" Removing {n_invalid_idcs} invalid peaks. ",
+            f" Negative peak indices detected in output. " f" Removing {n_invalid_idcs} invalid peaks. ",
             category=NeuroKitWarning,
         )
         peaks_clean = valid_peaks
@@ -214,9 +205,7 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 
         while True:
 
-            new_artifacts, new_subspaces = _find_artifacts(
-                peaks_clean, sampling_rate=sampling_rate, **kwargs
-            )
+            new_artifacts, new_subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate, **kwargs)
 
             n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in new_artifacts.values()])
@@ -234,13 +223,7 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 # Kubios: Lipponen & Tarvainen (2019).
 # =============================================================================
 def _find_artifacts(
-    peaks,
-    c1=0.13,
-    c2=0.17,
-    alpha=5.2,
-    window_width=91,
-    medfilt_order=11,
-    sampling_rate=1000,
+    peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt_order=11, sampling_rate=1000,
 ):
 
     # Compute period series (make sure it has same numer of elements as peaks);
@@ -437,9 +420,7 @@ def _correct_missed(missed_idcs, peaks):
     # Calculate the position(s) of new beat(s). Make sure to not generate
     # negative indices. prev_peaks and next_peaks must have the same
     # number of elements.
-    valid_idcs = np.logical_and(
-        missed_idcs > 1, missed_idcs < len(corrected_peaks)
-    )  # pylint: disable=E1111
+    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
     missed_idcs = missed_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in missed_idcs]]
     next_peaks = corrected_peaks[missed_idcs]
@@ -458,8 +439,7 @@ def _correct_misaligned(misaligned_idcs, peaks):
     # the total number of peaks. prev_peaks and next_peaks must have the
     # same number of elements.
     valid_idcs = np.logical_and(
-        misaligned_idcs > 1,
-        misaligned_idcs < len(corrected_peaks) - 1,  # pylint: disable=E1111
+        misaligned_idcs > 1, misaligned_idcs < len(corrected_peaks) - 1,  # pylint: disable=E1111
     )
     misaligned_idcs = misaligned_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs]]
@@ -515,40 +495,16 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax0.set_title("Artifact types", fontweight="bold")
     ax0.plot(rr, label="heart period")
     ax0.scatter(
-        longshort_idcs,
-        rr[longshort_idcs],
-        marker="x",
-        c="m",
-        s=100,
-        zorder=3,
-        label="long/short",
+        longshort_idcs, rr[longshort_idcs], marker="x", c="m", s=100, zorder=3, label="long/short",
     )
     ax0.scatter(
-        ectopic_idcs,
-        rr[ectopic_idcs],
-        marker="x",
-        c="g",
-        s=100,
-        zorder=3,
-        label="ectopic",
+        ectopic_idcs, rr[ectopic_idcs], marker="x", c="g", s=100, zorder=3, label="ectopic",
     )
     ax0.scatter(
-        extra_idcs,
-        rr[extra_idcs],
-        marker="x",
-        c="y",
-        s=100,
-        zorder=3,
-        label="false positive",
+        extra_idcs, rr[extra_idcs], marker="x", c="y", s=100, zorder=3, label="false positive",
     )
     ax0.scatter(
-        missed_idcs,
-        rr[missed_idcs],
-        marker="x",
-        c="r",
-        s=100,
-        zorder=3,
-        label="false negative",
+        missed_idcs, rr[missed_idcs], marker="x", c="r", s=100, zorder=3, label="false negative",
     )
     ax0.legend(loc="upper right")
 
@@ -575,9 +531,7 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax4.set_xlim(-10, 10)
     verts0 = [(-10, 5), (-10, -c1 * -10 + c2), (-1, -c1 * -1 + c2), (-1, 5)]
 
-    poly0 = matplotlib.patches.Polygon(
-        verts0, alpha=0.3, facecolor="r", edgecolor=None, label="ectopic periods"
-    )
+    poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r", edgecolor=None, label="ectopic periods")
     ax4.add_patch(poly0)
     verts1 = [(1, -c1 * 1 - c2), (1, -5), (10, -5), (10, -c1 * 10 - c2)]
     poly1 = matplotlib.patches.Polygon(verts1, alpha=0.3, facecolor="r", edgecolor=None)
@@ -591,14 +545,10 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax3.set_xlim(-10, 10)
     ax3.set_ylim(-10, 10)
     verts2 = [(-10, 10), (-10, 1), (-1, 1), (-1, 10)]
-    poly2 = matplotlib.patches.Polygon(
-        verts2, alpha=0.3, facecolor="r", edgecolor=None, label="short periods"
-    )
+    poly2 = matplotlib.patches.Polygon(verts2, alpha=0.3, facecolor="r", edgecolor=None, label="short periods")
     ax3.add_patch(poly2)
     verts3 = [(1, -1), (1, -10), (10, -10), (10, -1)]
-    poly3 = matplotlib.patches.Polygon(
-        verts3, alpha=0.3, facecolor="y", edgecolor=None, label="long periods"
-    )
+    poly3 = matplotlib.patches.Polygon(verts3, alpha=0.3, facecolor="y", edgecolor=None, label="long periods")
     ax3.add_patch(poly3)
     ax3.legend(loc="upper right")
 
@@ -607,11 +557,7 @@ def _plot_artifacts_lipponen2019(artifacts, info):
 # NeuroKit
 # =============================================================================
 def _remove_small(
-    peaks,
-    sampling_rate=1000,
-    interval_min=None,
-    relative_interval_min=None,
-    robust=False,
+    peaks, sampling_rate=1000, interval_min=None, relative_interval_min=None, robust=False,
 ):
     if interval_min is None and relative_interval_min is None:
         return peaks
@@ -625,11 +571,7 @@ def _remove_small(
 
 
 def _interpolate_big(
-    peaks,
-    sampling_rate=1000,
-    interval_max=None,
-    relative_interval_max=None,
-    robust=False,
+    peaks, sampling_rate=1000, interval_max=None, relative_interval_max=None, robust=False,
 ):
     if interval_max is None and relative_interval_max is None:
         return peaks
@@ -640,7 +582,7 @@ def _interpolate_big(
         else:
             outliers = interval > interval_max
         outliers_loc = np.where(outliers)[0]
-        
+
         # interval returned by signal_period at index 0 is the mean of the intervals
         # so it does not actually correspond to whether the first peak is an outlier
         outliers_loc = outliers_loc[outliers_loc != 0]
