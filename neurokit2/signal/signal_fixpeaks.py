@@ -633,58 +633,37 @@ def _interpolate_big(
 ):
     if interval_max is None and relative_interval_max is None:
         return peaks
-    if interval_max is not None:
+    else:
         interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
-        peaks = _interpolate_missing(
-            peaks=peaks,
-            interval=interval,
-            interval_max=interval_max,
-            sampling_rate=sampling_rate,
-        )
-    if relative_interval_max is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
-        interval = standardize(interval, robust=robust)
-        peaks = _interpolate_missing(
-            peaks=peaks,
-            interval=interval,
-            interval_max=relative_interval_max,
-            sampling_rate=sampling_rate,
-        )
-    return peaks
+        if relative_interval_max is not None:
+            outliers = standardize(interval, robust=robust) > relative_interval_max
+        else:
+            outliers = interval > interval_max
+        outliers_loc = np.where(outliers)[0]
+        
+        # interval returned by signal_period at index 0 is the mean of the intervals
+        # so it does not actually correspond to whether the first peak is an outlier
+        outliers_loc = outliers_loc[outliers_loc != 0]
 
+        if np.sum(outliers) == 0:
+            return peaks
+        peaks_to_correct = peaks.copy().astype(float)
 
-def _interpolate_missing(
-    peaks,
-    interval,
-    interval_max,
-    sampling_rate,
-):
-    outliers = interval > interval_max
-    outliers_loc = np.where(outliers)[0]
+        interval_without_outliers = interval[np.invert(outliers)]
+        mean_interval = np.nanmean(interval_without_outliers)
 
-    # interval returned by signal_period at index 0 is the mean of the intervals
-    # so it does not actually correspond to whether the first peak is an outlier
-    outliers_loc = outliers_loc[outliers_loc != 0]
+        # go through the outliers starting with the highest indices
+        # so that the indices of the other outliers are not moved when
+        # unknown intervas are inserted
+        for loc in np.flip(outliers_loc):
+            # compute number of NaNs to insert based on the mean interval
+            n_nan = round(interval[loc] / mean_interval)
 
-    if np.sum(outliers) == 0:
+            # Delete peak corresponding to large interval and replace by N NaNs
+            peaks_to_correct[loc] = np.nan
+            peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
+        # Interpolate values
+        interpolated_peaks = pd.Series(peaks_to_correct).interpolate(limit_area="inside").values
+        # If there are missing values remaining, remove
+        peaks = interpolated_peaks[np.invert(np.isnan(interpolated_peaks))].astype(peaks.dtype)
         return peaks
-    peaks_to_correct = peaks.copy().astype(float)
-
-    interval_without_outliers = interval[np.invert(outliers)]
-    mean_interval = np.nanmean(interval_without_outliers)
-
-    # go through the outliers starting with the highest indices
-    # so that the indices of the other outliers are not moved when
-    # unknown intervas are inserted
-    for loc in np.flip(outliers_loc):
-        # compute number of NaNs to insert based on the mean interval
-        n_nan = round(interval[loc] / mean_interval)
-
-        # Delete peak corresponding to large interval and replace by N NaNs
-        peaks_to_correct[loc] = np.nan
-        peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
-    # Interpolate values
-    interpolated_peaks = pd.Series(peaks_to_correct).interpolate(limit_area="inside").values
-    # If there are missing values remaining, remove
-    peaks = interpolated_peaks[np.invert(np.isnan(interpolated_peaks))].astype(peaks.dtype)
-    return peaks
