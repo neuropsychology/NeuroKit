@@ -5,28 +5,30 @@ import pandas as pd
 from ..signal import signal_interpolate
 
 
-def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
+def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=1000, **kwargs):
 
     rri = np.diff(peaks) / sampling_rate * 1000
 
     if interpolate is False:
-        sampling_rate = None
+        interpolation_rate = None
 
     else:
 
-        # Sanitize minimum sampling rate for interpolation to 10 Hz
-        sampling_rate = max(sampling_rate, 10)
+        # Sanitize minimum interpolation rate for interpolation to 10 Hz
+        interpolation_rate = max(interpolation_rate, 10)
 
-        # Compute length of interpolated heart period signal at requested sampling rate.
-        desired_length = int(np.rint(peaks[-1]))
+        # Compute x-values of interpolated heart period signal at requested sampling rate.
+        x_new = np.arange(
+            start=peaks[1], stop=peaks[-1] + 1 / interpolation_rate, step=1 / interpolation_rate
+        )
 
         rri = signal_interpolate(
             peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
             rri,
-            x_new=np.arange(desired_length),
+            x_new=x_new,
             **kwargs
         )
-    return rri, sampling_rate
+    return rri, interpolation_rate
 
 
 def _hrv_sanitize_input(peaks=None):
