@@ -74,7 +74,7 @@ def fractal_dfa(
     .. note ::
 
       Help is needed to implement the modified formula to compute the slope when
-      *q* = 0. See for instance Faini et al. (2021).
+      *q* = 0. See for instance Faini et al. (2021). See https://github.com/LRydin/MFDFA/issues/33
 
     Parameters
     ----------
@@ -396,6 +396,7 @@ def _sanitize_q(q=2, multifractal=False):
     q = np.asarray_chkfinite(q, dtype=float)
 
     # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
+    # See https://github.com/LRydin/MFDFA/issues/33
     q = q[(q < -0.1) + (q > 0.1)]
 
     # Reshape q to perform np.float_power

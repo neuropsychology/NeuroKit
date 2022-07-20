@@ -4,6 +4,8 @@ Authors
 .. hint::
    Want to be a part of the project? Read how to `contribute and join us <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
+The full log of contributors is available `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
+
 Current maintainers
 -------------------
 
@@ -21,11 +23,12 @@ Core contributors
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
 .. note::
-   We might sometimes update the authors page categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
+   We might sometimes update the categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
 
 
 Contributors
 -------------
+
 
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
