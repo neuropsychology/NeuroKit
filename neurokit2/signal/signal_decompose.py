@@ -161,25 +161,13 @@ def _signal_decompose_ssa(signal, n_components=None):
 # =============================================================================
 # Empirical Mode Decomposition (EMD)
 # =============================================================================
-def _signal_decompose_emd(signal, ensemble=False):
+def _signal_decompose_emd(signal, ensemble=False, **kwargs):
     """References
     ------------
     - http://perso.ens-lyon.fr/patrick.flandrin/CSDATrendfiltering.pdf
     - https://github.com/laszukdawid/PyEMD
     - https://towardsdatascience.com/decomposing-signal-using-empirical-mode-decomposition-algorithm-explanation-for-dummy-93a93304c541 # noqa: E501
 
-    >>> # import PyEMD
-    >>> # import numpy as np
-    >>>
-    >>> # signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
-    >>> # signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
-    >>> # signal += 3  # Add baseline
-    >>>
-    >>> # emd = PyEMD.EMD()
-    >>> # components = emd.emd(signal)
-    >>> # imfs, residue = emd.get_imfs_and_residue()
-    >>> # nk.signal_plot(imfs)
-    >>> # nk.signal_plot([signal, np.sum(imfs, axis=0), residue])
     """
     try:
         import PyEMD
@@ -190,11 +178,11 @@ def _signal_decompose_emd(signal, ensemble=False):
         ) from e
 
     if ensemble is False:
-        emd = PyEMD.EMD(extrema_detection="parabol")
-        imfs = emd.emd(signal)
+        emd = PyEMD.EMD(extrema_detection="parabol", **kwargs)
+        imfs = emd.emd(signal, **kwargs)
     else:
-        emd = PyEMD.EEMD(extrema_detection="parabol")
-        imfs = emd.eemd(signal)
+        emd = PyEMD.EEMD(extrema_detection="parabol", **kwargs)
+        imfs = emd.eemd(signal, **kwargs)
 
     #    _, residue = emd.get_imfs_and_residue()
     return imfs

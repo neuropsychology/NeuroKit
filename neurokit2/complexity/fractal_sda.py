@@ -22,7 +22,7 @@ def fractal_sda(signal, scales=None, show=False):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     scales : list
-        The scales at which the signal is binned for evaluating the dispersions. If ``not None``, it
+        The scales at which the signal is binned for evaluating the dispersions. If not ``None``, it
         should be a list of integer powers of 2 (e.g., scales = [1, 2, 4, 8, 16...]) including 1
         (meaning that the data points are treated individually).
     show : bool

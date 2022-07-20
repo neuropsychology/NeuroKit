@@ -3,10 +3,18 @@ import numpy as np
 import scipy.sparse
 
 from ..stats import fit_loess, fit_polynomial
+from .signal_decompose import signal_decompose
 
 
 def signal_detrend(
-    signal, method="polynomial", order=1, regularization=500, alpha=0.75, window=1.5, stepsize=0.02
+    signal,
+    method="polynomial",
+    order=1,
+    regularization=500,
+    alpha=0.75,
+    window=1.5,
+    stepsize=0.02,
+    components=[-1],
 ):
     """**Polynomial detrending of signal**
 
@@ -42,6 +50,9 @@ def signal_detrend(
     stepsize : float
         Only used if ``method`` is ``"locreg"``. Similarly to ``window``, ``stepsize`` should also
         be multiplied by the sampling rate.
+    components : list
+        Only used if ``method`` is ``"EMD"``. What Intrinsic Mode Functions (IMFs) from EMD to
+        remove. By default, the last one.
 
 
     Returns
@@ -89,6 +100,9 @@ def signal_detrend(
       locreg = nk.signal_detrend(signal, method="locreg",
                                  window=1.5*100, stepsize=0.02*100)
 
+      # Method 5: EMD
+      emd = nk.signal_detrend(signal, method="EMD", components=[-2, -1])
+
       # Visualize different methods
       @savefig signal_detrend1.png scale=100%
       axes = pd.DataFrame({"Original signal": signal,
@@ -99,7 +113,8 @@ def signal_detrend(
                            "Polynomial (10th)": poly10,
                            "Tarvainen": tarvainen,
                            "LOESS": loess,
-                           "Local Regression": locreg}).plot(subplots=True)
+                           "Local Regression": locreg,
+                           "EMD": emd}).plot(subplots=True)
       # Plot horizontal lines to better visualize the detrending
       for subplot in axes:
           subplot.axhline(y=0, color="k", linestyle="--")
@@ -124,9 +139,11 @@ def signal_detrend(
         detrended = signal - fit_loess(signal, alpha=alpha)[0]
     elif method in ["locdetrend", "runline", "locreg", "locregression"]:
         detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize)
+    elif method in ["emd"]:
+        detrended = _signal_detrend_emd(signal, components=components)
     else:
         raise ValueError(
-            "NeuroKit error: signal_detrend(): 'method' should be one of 'polynomial', 'loess', 'locreg' or 'tarvainen2002'."
+            "NeuroKit error: signal_detrend(): 'method' should be one of 'polynomial', 'loess', 'locreg', 'EMD' or 'tarvainen2002'."
         )
 
     return detrended
@@ -146,7 +163,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     identity = np.eye(N)
     B = np.dot(np.ones((N - 2, 1)), np.array([[1, -2, 1]]))
     D_2 = scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N - 2, N))  # pylint: disable=E1101
-    inv = np.linalg.inv(identity + regularization ** 2 * D_2.T @ D_2)
+    inv = np.linalg.inv(identity + regularization**2 * D_2.T @ D_2)
     z_stat = ((identity - inv)) @ signal
 
     trend = np.squeeze(np.asarray(signal - z_stat))
@@ -209,3 +226,13 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
 
     detrended = signal - y_line[:, 0]
     return detrended
+
+
+def _signal_detrend_emd(signal, components=-1):
+    """The function calculates the Intrinsic Mode Functions (IMFs) of a given
+    timeseries, subtracts the user-chosen IMFs for detrending, and returns the
+    detrended timeseries."""
+    # Calculate the IMFs
+    imfs = signal_decompose(signal, method="emd")
+
+    return signal - np.sum(imfs[components, :], axis=0)
