@@ -621,7 +621,7 @@ title="Open an issue"
 <span class="sd">    .. note ::</span>
 
 <span class="sd">      Help is needed to implement the modified formula to compute the slope when</span>
-<span class="sd">      *q* = 0. See for instance Faini et al. (2021).</span>
+<span class="sd">      *q* = 0. See for instance Faini et al. (2021). See https://github.com/LRydin/MFDFA/issues/33</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -943,6 +943,7 @@ title="Open an issue"
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray_chkfinite</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="c1"># Ensure q≈0 is removed, since it does not converge. Limit set at |q| &lt; 0.1</span>
+    <span class="c1"># See https://github.com/LRydin/MFDFA/issues/33</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[(</span><span class="n">q</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">q</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">)]</span>
 
     <span class="c1"># Reshape q to perform np.float_power</span>

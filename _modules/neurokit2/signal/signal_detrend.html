@@ -563,7 +563,7 @@ title="Open an issue"
     <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
     <span class="n">components</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Polynomial detrending of signal**</span>
+    <span class="sd">&quot;&quot;&quot;**Signal Detrending**</span>
 
 <span class="sd">    Apply a baseline (order = 0), linear (order = 1), or polynomial (order &gt; 1) detrending to the</span>
 <span class="sd">    signal (i.e., removing a general trend). One can also use other methods, such as smoothness</span>
@@ -609,7 +609,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    signal_filter, fit_loess</span>
+<span class="sd">    signal_filter, fit_loess, signal_decompose</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -690,7 +690,8 @@ title="Open an issue"
         <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_emd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: signal_detrend(): &#39;method&#39; should be one of &#39;polynomial&#39;, &#39;loess&#39;, &#39;locreg&#39;, &#39;EMD&#39; or &#39;tarvainen2002&#39;.&quot;</span>
+            <span class="s2">&quot;NeuroKit error: signal_detrend(): &#39;method&#39; should be one of &#39;polynomial&#39;, &#39;loess&#39;&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39;locreg&#39;, &#39;EMD&#39; or &#39;tarvainen2002&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">detrended</span></div>
