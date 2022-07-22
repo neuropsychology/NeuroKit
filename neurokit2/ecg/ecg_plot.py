@@ -31,6 +31,20 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         Visualize the ECG data with ``"default"`` or visualize artifacts thresholds with
         ``"artifacts"`` produced by ``ecg_fixpeaks()``, or ``"full"`` to visualize both.
 
+    See Also
+    --------
+    ecg_process
+
+    Returns
+    -------
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after ecg_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
+
     Examples
     --------
     .. ipython:: python
@@ -47,14 +61,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
       @savefig p_ecg_plot.png scale=100%
       nk.ecg_plot(signals, sampling_rate=1000, show_type='default')
       @suppress
-
-      # Save plot
-      plt.savefig("ecg.png", dpi=300)
       plt.close()
-
-    See Also
-    --------
-    ecg_process
 
     """
     # Sanity-check input.
@@ -130,7 +137,9 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         # Optimize legend
         handles, labels = ax0.get_legend_handles_labels()
         order = [2, 0, 1, 3]
-        ax0.legend([handles[idx] for idx in order], [labels[idx] for idx in order], loc="upper right")
+        ax0.legend(
+            [handles[idx] for idx in order], [labels[idx] for idx in order], loc="upper right"
+        )
 
         # Plot heart rate.
         ax1.set_title("Heart Rate")
@@ -154,7 +163,9 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
             ax2.plot(heartbeats_pivoted)
 
             cmap = iter(
-                plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats["Label"].nunique())))  # pylint: disable=E1101
+                plt.cm.YlOrRd(
+                    np.linspace(0, 1, num=int(heartbeats["Label"].nunique()))
+                )  # pylint: disable=E1101
             )  # Aesthetics of heart beats
 
             lines = []
@@ -166,10 +177,13 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
     if show_type in ["artifacts", "full"]:
         if sampling_rate is None:
             raise ValueError(
-                "NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts" " to be plotted."
+                "NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts"
+                " to be plotted."
             )
 
         if rpeaks is None:
             _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"], sampling_rate=sampling_rate)
 
-        fig = signal_fixpeaks(rpeaks, sampling_rate=sampling_rate, iterative=True, show=True, method="Kubios")
+        fig = signal_fixpeaks(
+            rpeaks, sampling_rate=sampling_rate, iterative=True, show=True, method="Kubios"
+        )

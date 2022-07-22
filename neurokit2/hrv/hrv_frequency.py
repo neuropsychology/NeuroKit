@@ -161,7 +161,9 @@ def hrv_frequency(
         peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
-    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
+    rri, sampling_rate = _hrv_get_rri(
+        peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs
+    )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
 

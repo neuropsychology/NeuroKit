@@ -7,7 +7,9 @@ from ..events import events_plot
 from ..stats import standardize as nk_standardize
 
 
-def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs):
+def signal_plot(
+    signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs
+):
     """**Plot signal with events as vertical lines**
 
     Parameters
@@ -26,6 +28,20 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
         Defaults to ``None``.
     **kwargs : optional
         Arguments passed to matplotlib plotting.
+
+    See Also
+    --------
+    ecg_plot, rsp_plot, ppg_plot, emg_plot, eog_plot
+
+    Returns
+    -------
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after signal_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
 
     Examples
     ----------
@@ -53,9 +69,6 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
       nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
       nk.signal_plot([signal, data], standardize=True)
       @suppress
-
-      # Save plot
-      plt.savefig("signal.png", dpi=300)
       plt.close()
 
     """

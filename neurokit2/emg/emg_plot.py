@@ -18,10 +18,19 @@ def emg_plot(emg_signals, sampling_rate=None):
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
         Defaults to ``None``.
 
+    See Also
+    --------
+    emg_process
+
     Returns
     -------
-    fig
-        Figure representing a plot of the processed emg signals.
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after emg_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
 
     Examples
     --------
@@ -29,17 +38,19 @@ def emg_plot(emg_signals, sampling_rate=None):
 
       import neurokit2 as nk
 
+      # Simulate data
       emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
+
+      # Process signal
       emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
 
+      # Plot
       @savefig p_emg_plot.png scale=100%
       nk.emg_plot(emg_signals)
       @suppress
       plt.close()
 
-    See Also
-    --------
-    ecg_process
+
 
     """
     # Mark onsets, offsets, activity
