@@ -535,16 +535,29 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
     ax_hq = fig.add_subplot(spec[1, 1])
 
     n = len(q)
-    colors = plt.cm.plasma(np.linspace(0, 1, n))
+    colors = plt.cm.viridis(np.linspace(0, 1, n))
 
-    # Plot the points
     for i in range(n):
+        # Plot the points
+        ax_fluctuation.loglog(
+            scale,
+            fluctuations[:, i],
+            "o",
+            fillstyle="full",
+            markeredgewidth=0.0,
+            c=colors[i],
+            alpha=0.2,
+            markersize=6,
+            base=2,
+            zorder=1,
+        )
+
+        # Plot the polyfit line
         polyfit = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)
-        ax_fluctuation.loglog(scale, fluctuations, "o", c="#d2dade", markersize=5, base=2)
-    # Plot the polyfit line
-    for i in range(n):
-        polyfit = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)
-        # Label max and min
+        fluctfit = 2 ** np.polyval(polyfit, np.log2(scale))
+        ax_fluctuation.loglog(scale, fluctfit, c=colors[i], base=2, label="_no_legend_", zorder=2)
+
+        # Add labels for max and min
         if i == 0:
             ax_fluctuation.plot(
                 [],
@@ -557,8 +570,6 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
                 label=f"$h$ = {polyfit[0]:.3f}, $q$ = {q[-1]:.1f}",
                 c=colors[-1],
             )
-        fluctfit = 2 ** np.polyval(polyfit, np.log2(scale))
-        ax_fluctuation.loglog(scale, fluctfit, c=colors[i], base=2, label="_no_legend_")
 
     ax_fluctuation.set_xlabel(r"$\log_{2}$(Scale)")
     ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuations)")
