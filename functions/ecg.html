@@ -1168,25 +1168,36 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">None</s
 <code class="docutils literal notranslate"><span class="pre">&quot;artifacts&quot;</span></code> produced by <code class="docutils literal notranslate"><span class="pre">ecg_fixpeaks()</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code> to visualize both.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed ecg signals (and peak artifacts).</p>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>Though the function returns nothing, the figure can be retrieved and saved as follows</em></p></li>
+<li><p><em>.. code-block:: console</em> – # To be run after ecg_plot()
+fig = plt.gcf()
+fig.savefig(“myfig.png”)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
+<span class="go"># Simulate data</span>
 <span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 
+<span class="go"># Process signal</span>
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
+<span class="go"># Plot</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_plot.png"><img alt="../_images/p_ecg_plot.png" src="../_images/p_ecg_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a></p>
-</div>
 </dd></dl>
 
 </section>
@@ -2003,9 +2014,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.593186          0.939252</span>
-<span class="go">2     2        10000  ...                          0.375000          0.968567</span>
-<span class="go">3     3        15000  ...                          0.038855          0.941213</span>
+<span class="go">1     1         5000  ...                          0.687885          0.969488</span>
+<span class="go">2     2        10000  ...                          0.358300          0.946287</span>
+<span class="go">3     3        15000  ...                          0.125773          0.947100</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>

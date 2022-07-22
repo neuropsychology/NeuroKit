@@ -565,10 +565,19 @@ title="Open an issue"
 <span class="sd">        data should be plotted over time in seconds. Otherwise the data is plotted over samples.</span>
 <span class="sd">        Defaults to ``None``.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    emg_process</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    fig</span>
-<span class="sd">        Figure representing a plot of the processed emg signals.</span>
+<span class="sd">    Though the function returns nothing, the figure can be retrieved and saved as follows:</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        # To be run after emg_plot()</span>
+<span class="sd">        fig = plt.gcf()</span>
+<span class="sd">        fig.savefig(&quot;myfig.png&quot;)</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -576,17 +585,19 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
+<span class="sd">      # Simulate data</span>
 <span class="sd">      emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)</span>
+
+<span class="sd">      # Process signal</span>
 <span class="sd">      emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)</span>
 
+<span class="sd">      # Plot</span>
 <span class="sd">      @savefig p_emg_plot.png scale=100%</span>
 <span class="sd">      nk.emg_plot(emg_signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    ecg_process</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Mark onsets, offsets, activity</span>

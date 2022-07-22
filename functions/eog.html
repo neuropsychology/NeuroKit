@@ -963,27 +963,36 @@ the data should be plotted over time in seconds. Otherwise the data is plotted o
 samples. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. Must be specified to plot individual blinks.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed EOG signals.</p>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.eog.eog_process" title="neurokit2.eog.eog_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_process</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>Though the function returns nothing, the figure can be retrieved and saved as follows</em></p></li>
+<li><p><em>.. code-block:: console</em> – # To be run after eog_plot()
+fig = plt.gcf()
+fig.savefig(“myfig.png”)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="go"># Get data</span>
+<span class="go"># Simulate data</span>
 <span class="gp">In [2]: </span><span class="n">eog_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
 
-<span class="go"># Process</span>
+<span class="go"># Process signal</span>
 <span class="gp">In [3]: </span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_process</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
+<span class="go"># Plot</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eog_plot</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p.eog_plot.png"><img alt="../_images/p.eog_plot.png" src="../_images/p.eog_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.eog.eog_process" title="neurokit2.eog.eog_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_process</span></code></a></p>
-</div>
 </dd></dl>
 
 </section>

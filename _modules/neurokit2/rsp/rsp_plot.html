@@ -561,28 +561,37 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The desired sampling rate (in Hz, i.e., samples/second).</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    rsp_process</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Though the function returns nothing, the figure can be retrieved and saved as follows:</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        # To be run after rsp_plot()</span>
+<span class="sd">        fig = plt.gcf()</span>
+<span class="sd">        fig.savefig(&quot;myfig.png&quot;)</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
 
+<span class="sd">      # Simulate data</span>
 <span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
+
+<span class="sd">      # Process signal</span>
 <span class="sd">      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)</span>
 
+<span class="sd">      # Plot</span>
 <span class="sd">      @savefig p_rsp_plot1.png scale=100%</span>
 <span class="sd">      fig = nk.rsp_plot(rsp_signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    fig</span>
-<span class="sd">        Figure representing a plot of the processed rsp signals.</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    rsp_process</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Mark peaks, troughs and phases.</span>

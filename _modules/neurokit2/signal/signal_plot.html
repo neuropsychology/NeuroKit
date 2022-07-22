@@ -576,6 +576,20 @@ title="Open an issue"
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Arguments passed to matplotlib plotting.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ecg_plot, rsp_plot, ppg_plot, emg_plot, eog_plot</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Though the function returns nothing, the figure can be retrieved and saved as follows:</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        # To be run after signal_plot()</span>
+<span class="sd">        fig = plt.gcf()</span>
+<span class="sd">        fig.savefig(&quot;myfig.png&quot;)</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. ipython:: python</span>
@@ -592,9 +606,12 @@ title="Open an issue"
 
 <span class="sd">    .. ipython:: python</span>
 
+<span class="sd">       # Simulate data</span>
 <span class="sd">      data = pd.DataFrame({&quot;Signal2&quot;: np.cos(np.linspace(start=0, stop=20, num=1000)),</span>
 <span class="sd">                           &quot;Signal3&quot;: np.sin(np.linspace(start=0, stop=20, num=1000)),</span>
 <span class="sd">                           &quot;Signal4&quot;: nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})</span>
+
+<span class="sd">      # Process signal</span>
 <span class="sd">      @savefig p_signal_plot2.png scale=100%</span>
 <span class="sd">      nk.signal_plot(data, labels=[&#39;signal_1&#39;, &#39;signal_2&#39;, &#39;signal_3&#39;], subplots=True)</span>
 <span class="sd">      nk.signal_plot([signal, data], standardize=True)</span>

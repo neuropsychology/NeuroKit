@@ -570,10 +570,19 @@ title="Open an issue"
 <span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over</span>
 <span class="sd">        samples. Defaults to ``None``. Must be specified to plot individual blinks.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    eog_process</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    fig</span>
-<span class="sd">        Figure representing a plot of the processed EOG signals.</span>
+<span class="sd">    Though the function returns nothing, the figure can be retrieved and saved as follows:</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        # To be run after eog_plot()</span>
+<span class="sd">        fig = plt.gcf()</span>
+<span class="sd">        fig.savefig(&quot;myfig.png&quot;)</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -581,20 +590,17 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # Get data</span>
+<span class="sd">      # Simulate data</span>
 <span class="sd">      eog_signal = nk.data(&#39;eog_100hz&#39;)</span>
 
-<span class="sd">      # Process</span>
+<span class="sd">      # Process signal</span>
 <span class="sd">      eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)</span>
+
+<span class="sd">      # Plot</span>
 <span class="sd">      @savefig p.eog_plot.png scale=100%</span>
 <span class="sd">      nk.eog_plot(eog_signals, peaks, sampling_rate=100)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    eog_process</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

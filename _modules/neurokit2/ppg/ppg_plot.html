@@ -562,10 +562,19 @@ title="Open an issue"
 <span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if</span>
 <span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to ``None``.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ppg_process</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    fig</span>
-<span class="sd">        Figure representing a plot of the processed PPG signals.</span>
+<span class="sd">    Though the function returns nothing, the figure can be retrieved and saved as follows:</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        # To be run after ppg_plot()</span>
+<span class="sd">        fig = plt.gcf()</span>
+<span class="sd">        fig.savefig(&quot;myfig.png&quot;)</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -584,10 +593,6 @@ title="Open an issue"
 <span class="sd">      nk.ppg_plot(signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    ppg_process</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

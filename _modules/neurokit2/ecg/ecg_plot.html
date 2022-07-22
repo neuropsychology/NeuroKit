@@ -578,10 +578,19 @@ title="Open an issue"
 <span class="sd">        Visualize the ECG data with ``&quot;default&quot;`` or visualize artifacts thresholds with</span>
 <span class="sd">        ``&quot;artifacts&quot;`` produced by ``ecg_fixpeaks()``, or ``&quot;full&quot;`` to visualize both.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ecg_process</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    fig</span>
-<span class="sd">        Figure representing a plot of the processed ecg signals (and peak artifacts).</span>
+<span class="sd">    Though the function returns nothing, the figure can be retrieved and saved as follows:</span>
+
+<span class="sd">    .. code-block:: console</span>
+
+<span class="sd">        # To be run after ecg_plot()</span>
+<span class="sd">        fig = plt.gcf()</span>
+<span class="sd">        fig.savefig(&quot;myfig.png&quot;)</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -589,16 +598,17 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
+<span class="sd">      # Simulate data</span>
 <span class="sd">      ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)</span>
+
+<span class="sd">      # Process signal</span>
 <span class="sd">      signals, info = nk.ecg_process(ecg, sampling_rate=1000)</span>
+
+<span class="sd">      # Plot</span>
 <span class="sd">      @savefig p_ecg_plot.png scale=100%</span>
 <span class="sd">      nk.ecg_plot(signals, sampling_rate=1000, show_type=&#39;default&#39;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    ecg_process</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanity-check input.</span>
