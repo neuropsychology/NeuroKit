@@ -61,8 +61,7 @@ def hrv_frequency(
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
-        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default 1000.
+        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.
     ulf : tuple, optional
         Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).
     vlf : tuple, optional
