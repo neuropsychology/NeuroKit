@@ -208,7 +208,7 @@ def fractal_dfa(
     q = _sanitize_q(q, multifractal=multifractal)
 
     # Store parameters
-    info = {"scale": scale, "q": q[:, 0]}
+    info = {"scale": scale, "q": q}
 
     # Preprocessing
     if integrate is True:
@@ -229,7 +229,7 @@ def fractal_dfa(
         trends = _fractal_dfa_trends(segments, window, order=order)
 
         # Get local fluctuation
-        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, multifractal, q)
+        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, q)
 
     # I would not advise the next part part. I understand the need to remove zeros, but I
     # would instead suggest masking it with numpy.ma masked arrays. Note that
@@ -254,7 +254,7 @@ def fractal_dfa(
 
     # Extract features
     if multifractal is True:
-        info.update(_singularity_spectrum(q=q[:, 0], slopes=slopes))
+        info.update(_singularity_spectrum(q=q, slopes=slopes))
         out = pd.DataFrame(
             {
                 k: v
@@ -289,6 +289,138 @@ def fractal_dfa(
             _fractal_dfa_plot(info=info, scale=scale, fluctuations=fluctuations)
 
     return out, info
+
+
+# =============================================================================
+#  Utils
+# =============================================================================
+def _fractal_dfa_findscales(n, scale="default"):
+    # Convert to array
+    if isinstance(scale, list):
+        scale = np.asarray(scale)
+
+    # Default scale number
+    if scale is None or isinstance(scale, str):
+        scale = int(n / 10)
+
+    # See https://github.com/neuropsychology/NeuroKit/issues/206
+    if isinstance(scale, int):
+        scale = expspace(10, int(n / 10), scale, base=2)
+        scale = np.unique(scale)  # keep only unique
+
+    # Sanity checks (return warning for too short scale)
+    if len(scale) < 2:
+        raise ValueError("NeuroKit error: more than one window is needed. Increase 'scale'.")
+
+    if np.min(scale) < 2:
+        raise ValueError(
+            "NeuroKit error: there must be at least 2 data points in each window. Decrease 'scale'."
+        )
+    if np.max(scale) >= n:
+        raise ValueError(
+            "NeuroKit error: the window cannot contain more data points than the time series. Decrease 'scale'."
+        )
+
+    return scale
+
+
+def _sanitize_q(q=2, multifractal=False):
+    # TODO: Add log calculator for q ≈ 0
+
+    # Enforce DFA in case 'multifractal = False' but 'q' is not 2
+    if isinstance(q, str):
+        if multifractal is False:
+            q = [2]
+        else:
+            q = [-5, -3, -1, 0, 1, 3, 5]
+
+    # Fractal powers as floats
+    q = np.asarray_chkfinite(q, dtype=float)
+
+    # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
+    # See https://github.com/LRydin/MFDFA/issues/33
+    # q = q[(q < -0.1) + (q > 0.1)]
+
+    # Reshape q to perform np.float_power
+    # q = q.reshape(-1, 1)
+
+    return q
+
+
+def _slopes(scale, fluctuations, q):
+    # Extract the slopes of each `q` power obtained with MFDFA to later produce
+    # either the singularity spectrum or the multifractal exponents.
+    # Note: added by Leonardo Rydin (see https://github.com/LRydin/MFDFA/)
+
+    # Ensure mfdfa has the same q-power entries as q
+    if fluctuations.shape[1] != q.shape[0]:
+        raise ValueError("Fluctuation function and q powers don't match in dimension.")
+
+    # Allocated array for slopes
+    slopes = np.zeros(len(q))
+    # Find slopes of each q-power
+    for i in range(len(q)):
+        # if fluctiations is zero, log2 wil encounter zero division
+        old_setting = np.seterr(divide="ignore", invalid="ignore")
+        slopes[i] = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)[0]
+        np.seterr(**old_setting)
+
+    return slopes
+
+
+def _fractal_dfa_getwindow(signal, n, window, overlap=True):
+    # This function reshapes the segments from a one-dimensional array to a
+    # matrix for faster polynomail fittings. 'Overlap' reshapes into several
+    # overlapping partitions of the data
+
+    # TODO: see whether this step could be integrated within complexity_coarsegraining
+
+    if overlap:
+        segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
+    else:
+        segments = signal[: n - (n % window)]
+        segments = segments.reshape((signal.shape[0] // window, window))
+
+    return segments
+
+
+def _fractal_dfa_trends(segments, window, order=1):
+    x = np.arange(window)
+
+    coefs = np.polyfit(x[:window], segments.T, order).T
+
+    # TODO: Could this be optimized? Something like np.polyval(x[:window], coefs)
+    trends = np.array([np.polyval(coefs[j], x) for j in np.arange(len(segments))])
+
+    return trends
+
+
+def _fractal_dfa_fluctuation(segments, trends, q=2):
+
+    # Detrend
+    detrended = segments - trends
+
+    # Compute variance
+    var = np.var(detrended, axis=1)
+
+    # Find where q is close to zero. Limit set at |q| < 0.1
+    # See https://github.com/LRydin/MFDFA/issues/33
+    is0 = np.abs(q) < 0.1
+
+    # Reshape q to perform np.float_power
+    q_non0 = q[~is0].reshape(-1, 1)
+
+    # Get the fluctuation function, which is a function of the windows and of q
+    # When q = 2 (i.e., multifractal = False)
+    # The formula is equivalent to np.sqrt(np.mean(var))
+    # And corresponds to the Root Mean Square (RMS)
+    fluctuation = np.float_power(np.mean(np.float_power(var, q_non0 / 2), axis=1), 1 / q_non0.T)
+
+    if np.sum(is0) > 0:
+        fluc0 = np.exp(np.mean(np.log(var)))
+        fluctuation = np.insert(fluctuation, np.where(is0)[0], [fluc0])
+
+    return fluctuation
 
 
 # =============================================================================
@@ -380,129 +512,6 @@ def _singularity_spectrum(q, slopes):
 
 
 # =============================================================================
-#  Utils
-# =============================================================================
-def _sanitize_q(q=2, multifractal=False):
-    # TODO: Add log calculator for q ≈ 0
-
-    # Enforce DFA in case 'multifractal = False' but 'q' is not 2
-    if isinstance(q, str):
-        if multifractal is False:
-            q = 2
-        else:
-            q = [-5, -3, -1, 0, 1, 3, 5]
-
-    # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype=float)
-
-    # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
-    # See https://github.com/LRydin/MFDFA/issues/33
-    q = q[(q < -0.1) + (q > 0.1)]
-
-    # Reshape q to perform np.float_power
-    q = q.reshape(-1, 1)
-
-    return q
-
-
-def _slopes(scale, fluctuations, q):
-    # Extract the slopes of each `q` power obtained with MFDFA to later produce
-    # either the singularity spectrum or the multifractal exponents.
-    # Note: added by Leonardo Rydin (see https://github.com/LRydin/MFDFA/)
-
-    # Ensure mfdfa has the same q-power entries as q
-    if fluctuations.shape[1] != q.shape[0]:
-        raise ValueError("Fluctuation function and q powers don't match in dimension.")
-
-    # Allocated array for slopes
-    slopes = np.zeros(len(q))
-    # Find slopes of each q-power
-    for i in range(len(q)):
-        # if fluctiations is zero, log2 wil encounter zero division
-        old_setting = np.seterr(divide="ignore", invalid="ignore")
-        slopes[i] = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)[0]
-        np.seterr(**old_setting)
-
-    return slopes
-
-
-def _fractal_dfa_findscales(n, scale="default"):
-    # Convert to array
-    if isinstance(scale, list):
-        scale = np.asarray(scale)
-
-    # Default scale number
-    if scale is None or isinstance(scale, str):
-        scale = int(n / 10)
-
-    # See https://github.com/neuropsychology/NeuroKit/issues/206
-    if isinstance(scale, int):
-        scale = expspace(10, int(n / 10), scale, base=2)
-        scale = np.unique(scale)  # keep only unique
-
-    # Sanity checks (return warning for too short scale)
-    if len(scale) < 2:
-        raise ValueError("NeuroKit error: more than one window is needed. Increase 'scale'.")
-
-    if np.min(scale) < 2:
-        raise ValueError(
-            "NeuroKit error: there must be at least 2 data points in each window. Decrease 'scale'."
-        )
-    if np.max(scale) >= n:
-        raise ValueError(
-            "NeuroKit error: the window cannot contain more data points than the time series. Decrease 'scale'."
-        )
-
-    return scale
-
-
-def _fractal_dfa_getwindow(signal, n, window, overlap=True):
-    # This function reshapes the segments from a one-dimensional array to a
-    # matrix for faster polynomail fittings. 'Overlap' reshapes into several
-    # overlapping partitions of the data
-
-    if overlap:
-        segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
-    else:
-        segments = signal[: n - (n % window)]
-        segments = segments.reshape((signal.shape[0] // window, window))
-
-    return segments
-
-
-def _fractal_dfa_trends(segments, window, order=1):
-    x = np.arange(window)
-
-    coefs = np.polyfit(x[:window], segments.T, order).T
-
-    # TODO: Could this be optimized? Something like np.polyval(x[:window], coefs)
-    trends = np.array([np.polyval(coefs[j], x) for j in np.arange(len(segments))])
-
-    return trends
-
-
-def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
-
-    detrended = segments - trends
-
-    if multifractal is True:
-        var = np.var(detrended, axis=1)
-        # obtain the fluctuation function, which is a function of the windows
-        # and of q
-        # ignore division by 0 warning
-        old_setting = np.seterr(divide="ignore", invalid="ignore")
-        fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis=1), 1 / q.T)
-        np.seterr(**old_setting)
-
-    else:
-        # Compute Root Mean Square (RMS)
-        fluctuation = np.sum(detrended**2, axis=1) / detrended.shape[1]
-        fluctuation = np.sqrt(np.sum(fluctuation) / len(fluctuation))
-
-    return fluctuation
-
-
-# =============================================================================
 #  Plots
 # =============================================================================
 def _fractal_dfa_plot(info, scale, fluctuations):
@@ -535,23 +544,23 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
     colors = plt.cm.plasma(np.linspace(0, 1, n))
 
     # Plot the points
-    for i in range(len(q)):
+    for i in range(n):
         polyfit = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)
         ax_fluctuation.loglog(scale, fluctuations, "o", c="#d2dade", markersize=5, base=2)
     # Plot the polyfit line
-    for i in range(len(q)):
+    for i in range(n):
         polyfit = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)
         # Label max and min
         if i == 0:
             ax_fluctuation.plot(
                 [],
-                label=(r"$h$ = {:.3f}, $q$ = {:.1f}").format(polyfit[0], q[0][0]),
+                label=f"$h$ = {polyfit[0]:.3f}, $q$ = {q[0]:.1f}",
                 c=colors[0],
             )
-        elif i == (len(q) - 1):
+        elif i == (n - 1):
             ax_fluctuation.plot(
                 [],
-                label=(r"$h$ = {:.3f}, $q$ = {:.1f}").format(polyfit[0], q[-1][0]),
+                label=f"$h$ = {polyfit[0]:.3f}, $q$ = {q[-1]:.1f}",
                 c=colors[-1],
             )
         fluctfit = 2 ** np.polyval(polyfit, np.log2(scale))
