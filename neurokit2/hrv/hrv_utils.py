@@ -5,7 +5,7 @@ import pandas as pd
 from ..signal import signal_interpolate
 
 
-def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=1000, **kwargs):
+def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=4, **kwargs):
 
     rri = np.diff(peaks) / sampling_rate * 1000
 
