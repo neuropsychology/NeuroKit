@@ -325,24 +325,17 @@ def _fractal_dfa_findscales(n, scale="default"):
 
 
 def _sanitize_q(q=2, multifractal=False):
-    # TODO: Add log calculator for q ≈ 0
-
-    # Enforce DFA in case 'multifractal = False' but 'q' is not 2
+    # Turn to list
     if isinstance(q, str):
         if multifractal is False:
             q = [2]
         else:
             q = [-5, -3, -1, 0, 1, 3, 5]
+    elif isinstance(q, (int, float)):
+        q = [q]
 
     # Fractal powers as floats
     q = np.asarray_chkfinite(q, dtype=float)
-
-    # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
-    # See https://github.com/LRydin/MFDFA/issues/33
-    # q = q[(q < -0.1) + (q > 0.1)]
-
-    # Reshape q to perform np.float_power
-    # q = q.reshape(-1, 1)
 
     return q
 
@@ -385,6 +378,7 @@ def _fractal_dfa_getwindow(signal, n, window, overlap=True):
 
 
 def _fractal_dfa_trends(segments, window, order=1):
+    # TODO: can we rely on signal_detrend?
     x = np.arange(window)
 
     coefs = np.polyfit(x[:window], segments.T, order).T
