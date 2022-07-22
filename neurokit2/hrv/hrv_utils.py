@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
 from ..signal import signal_interpolate
+from ..misc import NeuroKitWarning
 
 
 def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=4, **kwargs):
@@ -13,7 +16,15 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolatio
         interpolation_rate = None
 
     else:
-
+        # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
+        if interpolation_rate < 1:
+                warn(
+                    "The interpolation rate of the R-R intervals is too low for "
+                    " computing the frequency-domain features."
+                    " Consider increasing the interpolation rate to at least 1 Hz.",
+                    category=NeuroKitWarning,
+                )
+        
         # Compute x-values of interpolated heart period signal at requested sampling rate.
         x_new = np.arange(start=peaks[1], stop=peaks[-1] + 1 / interpolation_rate, step=1 / interpolation_rate)
 
