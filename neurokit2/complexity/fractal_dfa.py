@@ -411,7 +411,7 @@ def _fractal_dfa_fluctuation(segments, trends, q=2):
     fluctuation = np.float_power(np.mean(np.float_power(var, q_non0 / 2), axis=1), 1 / q_non0.T)
 
     if np.sum(is0) > 0:
-        fluc0 = np.exp(np.mean(np.log(var)))
+        fluc0 = np.exp(0.5 * np.mean(np.log(var)))
         fluctuation = np.insert(fluctuation, np.where(is0)[0], [fluc0])
 
     return fluctuation
