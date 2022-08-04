@@ -221,3 +221,15 @@ def test_rsp_intervalrelated():
     features_dict = nk.rsp_intervalrelated(epochs)
 
     assert features_dict.shape[0] == 2  # Number of rows
+
+
+def test_rsp_rvt():
+    rsp90 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=10, random_state=42)
+    rsp110 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=20, random_state=42)
+
+    rvt90 = nk.rsp_rvt(rsp90)
+    rvt110 = nk.rsp_rvt(rsp110)
+    assert len(rsp90) == len(rvt90)
+    assert len(rsp110) == len(rvt110)
+    assert min(rsp90) >= 0
+    assert min(rsp110) >= 0
