@@ -3,16 +3,25 @@ from warnings import warn
 
 import matplotlib.pyplot as plt
 import numpy as np
-
-from scipy.signal import hilbert, iirfilter, sosfiltfilt
+import scipy.signal
 
 from ..misc import NeuroKitWarning
+from ..stats import rescale
 
 
 def rsp_rvt(
-    rsp_signal, sampling_rate=1000, lower_limit=2.0, upper_limit=1 / 30, iterations=10, show=False, silent=True
+    rsp_signal,
+    sampling_rate=1000,
+    lower_limit=2.0,
+    upper_limit=1 / 30,
+    iterations=10,
+    show=False,
+    silent=True,
 ):
-    """**Computes time domain and frequency domain features for Respiratory Volume per Time (RVT) analysis**
+    """**Respiratory Volume per Time (RVT)**
+
+    Computes Respiratory Volume per Time (RVT). It can be used to improve physiological noise
+    correction in functional magnetic resonance imaging (fMRI).
 
     Parameters
     ----------
@@ -35,7 +44,7 @@ def rsp_rvt(
     Returns
     -------
     array
-        Array containing the current rvt at every timestep
+        Array containing the current RVT at every timestep.
 
     See Also
     --------
@@ -54,23 +63,25 @@ def rsp_rvt(
 
     References
     ----------
-    * Samuel J. Harrison, Samuel Bianchi, Jakob Heinzle, Klaas Enno Stephan, Sandra Iglesias, Lars Kasper, (2021).
-    A Hilbert-based method for processing respiratory timeseries. NeuroImage, Volume 230, 117787.
+    * Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., & Kasper, L. (2021).
+      A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.
     """
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
 
-    d = iirfilter(N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
-    fr_lp = sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
+    d = scipy.signal.iirfilter(
+        N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate
+    )
+    fr_lp = scipy.signal.sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
     fr_lp = fr_lp[n_pad : (len(fr_lp) - n_pad)]
 
     # derive Hilbert-transform
     fr_filt = fr_lp
-    fr_mag = abs(hilbert(fr_filt))
+    fr_mag = abs(scipy.signal.hilbert(fr_filt))
 
     for _ in range(iterations):
         # analytic signal to phase
-        fr_phase = np.unwrap(np.angle(hilbert(fr_filt)))
+        fr_phase = np.unwrap(np.angle(scipy.signal.hilbert(fr_filt)))
         # Remove any phase decreases that may occur
         # Find places where the gradient changes sign
         # maybe can be changed with signal.signal_zerocrossings
@@ -100,7 +111,7 @@ def rsp_rvt(
             # Linearly interpolate from n_start to n_end
             fr_phase[n_start:n_end] = np.linspace(fr_min, fr_max, num=n_end - n_start).squeeze()
         # Filter out any high frequencies from phase-only signal
-        fr_filt = sosfiltfilt(d, np.pad(np.cos(fr_phase), n_pad, "symmetric"))
+        fr_filt = scipy.signal.sosfiltfilt(d, np.pad(np.cos(fr_phase), n_pad, "symmetric"))
         fr_filt = fr_filt[n_pad : (len(fr_filt) - n_pad)]
     # Keep phase only signal as reference
     fr_filt = np.cos(fr_phase)
@@ -110,25 +121,27 @@ def rsp_rvt(
     # Low-pass filter to remove within_cycle changes
     # Note factor of two is for compatability with the common definition of RV
     # as the difference between max and min inhalation (i.e. twice the amplitude)
-    d = iirfilter(N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
-    fr_rv = 2 * sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
+    d = scipy.signal.iirfilter(
+        N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate
+    )
+    fr_rv = 2 * scipy.signal.sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
     fr_rv = fr_rv[n_pad : (len(fr_rv) - n_pad)]
     fr_rv[fr_rv < 0] = 0
 
     # Breathing rate is instantaneous frequency
     fr_if = sampling_rate * np.gradient(fr_phase) / (2 * np.pi)
-    fr_if = sosfiltfilt(d, np.pad(fr_if, n_pad, "symmetric"))
+    fr_if = scipy.signal.sosfiltfilt(d, np.pad(fr_if, n_pad, "symmetric"))
     fr_if = fr_if[n_pad : (len(fr_if) - n_pad)]
     # remove in-human patterns, since both limits are in Hertz, the upper_limit is lower
     fr_if = np.clip(fr_if, upper_limit, lower_limit)
 
     # RVT = magnitude * breathing rate
-    fr_rvt = np.multiply(fr_rv, fr_if)
+    rvt = np.multiply(fr_rv, fr_if)
 
     # Downsampling is not needed as we assume always the same sampling rate and operate always in the same sampling rate
     if show:
-        _rsp_rvt_plot(fr_rvt, sampling_rate)
-    return fr_rvt
+        _rsp_rvt_plot(rvt, rsp_signal, sampling_rate)
+    return rvt
 
 
 def _rsp_rvt_find_min(increase_inds, fr_phase, smaller_index, silent):
@@ -157,11 +170,12 @@ def _rsp_rvt_find_min(increase_inds, fr_phase, smaller_index, silent):
     return n_min, fr_min
 
 
-def _rsp_rvt_plot(fr_rvt, sampling_rate):
+def _rsp_rvt_plot(rvt, rsp_signal, sampling_rate):
     fig = plt.figure(figsize=(12, 12))
-    plt.title("RVT")
+    plt.title("Respiratory Volume per Time (RVT)")
     plt.xlabel("Time [s]")
-    plt.plot(fr_rvt)
+    plt.plot(rescale(rsp_signal, to=[np.nanmin(rvt), np.nanmax(rvt)]), label="RSP", color="#CFD8DC")
+    plt.plot(rvt, label="RVT", color="#00BCD4")
+    plt.legend()
     tickpositions = plt.gca().get_xticks()[1:-1]
     plt.xticks(tickpositions, [tickposition / sampling_rate for tickposition in tickpositions])
-    return fig
