@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import find_knee
+
 
 def fractal_dfa(
     signal,
@@ -13,6 +15,7 @@ def fractal_dfa(
     order=1,
     multifractal=False,
     q="default",
+    maxdfa=False,
     show=False,
     **kwargs,
 ):
@@ -95,7 +98,7 @@ def fractal_dfa(
         signals, this transformation should be applied  two times (i.e., provide
         ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
     order : int
-       The order of the polynomial trend for detrending, 1 for the linear trend.
+       The order of the polynomial trend for detrending. 1 corresponds to a linear detrending.
     multifractal : bool
         If ``True``, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the
         argument ``q`` is taken into account.
@@ -107,6 +110,10 @@ def fractal_dfa(
         positive q moments amplify the contribution of fractal components with larger amplitude and
         negative q moments amplify the contribution of fractal with smaller amplitude (Kantelhardt
         et al., 2002).
+    maxdfa : bool
+        If ``True``, it will locate the knee of the fluctuations (using :func:`.find_knee`) and use
+        that as a maximum scale value. It computes max. DFA (a similar method exists in
+        :func:`entropy_rate`).
     show : bool
         Visualise the trend between the window size and the fluctuations.
     **kwargs : optional
@@ -126,7 +133,7 @@ def fractal_dfa(
 
     See Also
     --------
-    fractal_hurst, fractal_tmf
+    fractal_hurst, fractal_tmf, entropy_rate
 
     Examples
     ----------
@@ -229,17 +236,22 @@ def fractal_dfa(
         # Get local fluctuation
         fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, q)
 
-    # I would not advise the next part part. I understand the need to remove zeros, but I
-    # would instead suggest masking it with numpy.ma masked arrays. Note that
-    # when 'q' is a list,  scale[nonzero] increases in size.
-
-    # Filter zeros
-    # nonzero = np.nonzero(fluctuations)[0]
-    # scale = scale[nonzero]
-    # fluctuations = fluctuations[nonzero]
-
     if len(fluctuations) == 0:
         return np.nan, info
+
+    # Max. DFA ---------------------
+    if maxdfa is True:
+        # Find knees of fluctuations
+        knee = np.repeat(len(scale), fluctuations.shape[1])
+        for i in range(fluctuations.shape[1]):
+            knee[i] = find_knee(
+                y=np.log2(fluctuations[:, i]), x=np.log2(scale), show=False, verbose=False
+            )
+        knee = np.exp2(np.nanmax(knee))
+        # Cut fluctuations
+        fluctuations = fluctuations[scale <= knee, :]
+        scale = scale[scale <= knee]
+    # ------------------------------
 
     # Get slopes
     slopes = _slopes(scale, fluctuations, q)
