@@ -171,7 +171,7 @@ def _rsp_rvt_find_min(increase_inds, fr_phase, smaller_index, silent):
 
 
 def _rsp_rvt_plot(rvt, rsp_signal, sampling_rate):
-    fig = plt.figure(figsize=(12, 12))
+    plt.figure(figsize=(12, 12))
     plt.title("Respiratory Volume per Time (RVT)")
     plt.xlabel("Time [s]")
     plt.plot(rescale(rsp_signal, to=[np.nanmin(rvt), np.nanmax(rvt)]), label="RSP", color="#CFD8DC")
