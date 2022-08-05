@@ -12,11 +12,10 @@ from ..stats import rescale
 def rsp_rvt(
     rsp_signal,
     sampling_rate=1000,
-    lower_limit=2.0,
-    upper_limit=1 / 30,
+    boundaries=[2.0, 1 / 30],
     iterations=10,
     show=False,
-    silent=True,
+    silent=False,
 ):
     """**Respiratory Volume per Time (RVT)**
 
@@ -29,17 +28,15 @@ def rsp_rvt(
         Array containing the respiratory rate, produced by :func:`.signal_rate`.
     sampling_rate : int, optional
         The sampling frequency of the signal (in Hz, i.e., samples/second).
-    lower_limit : float, optional
-        Lower limit of (humanly possible) breath frequency in Hertz, by default 2.0
-    upper_limit : float, optional
-        Higher limit of (humanly possible) breath frequency in Hertz, by default 1/30
-    iterations : int, optional
-        Amount of phase refinement estimates to remove high frequencies, synthetic samples often take less than 3,
-        by default 10
-    show : bool, optional
-        If ``True``, will return a simple plot of the rvt, by default False
+    boundaries : list
+        Lower and upper limit of (humanly possible) breath frequency in Hertz.
+    iterations : int
+        Amount of phase refinement estimates to remove high frequencies. Synthetic samples often
+        take less than 3.
+    show : bool
+        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).
     silent : bool
-        If ``False``, warnings will be printed. Default to ``True``.
+        If ``True``, warnings will not be printed.
 
     Returns
     -------
@@ -133,7 +130,7 @@ def rsp_rvt(
     fr_if = scipy.signal.sosfiltfilt(d, np.pad(fr_if, n_pad, "symmetric"))
     fr_if = fr_if[n_pad : (len(fr_if) - n_pad)]
     # remove in-human patterns, since both limits are in Hertz, the upper_limit is lower
-    fr_if = np.clip(fr_if, upper_limit, lower_limit)
+    fr_if = np.clip(fr_if, boundaries[1], boundaries[0])
 
     # RVT = magnitude * breathing rate
     rvt = np.multiply(fr_rv, fr_if)
