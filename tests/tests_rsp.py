@@ -224,12 +224,12 @@ def test_rsp_intervalrelated():
 
 
 def test_rsp_rvt():
-    rsp90 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=10, random_state=42)
-    rsp110 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=20, random_state=42)
+    rsp10 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=10, random_state=42)
+    rsp20 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=20, random_state=42)
 
-    rvt90 = nk.rsp_rvt(rsp90)
-    rvt110 = nk.rsp_rvt(rsp110)
-    assert len(rsp90) == len(rvt90)
-    assert len(rsp110) == len(rvt110)
-    assert min(rsp90) >= 0
-    assert min(rsp110) >= 0
+    rvt10 = nk.rsp_rvt(rsp10)
+    rvt20 = nk.rsp_rvt(rsp20)
+    assert len(rsp10) == len(rvt10)
+    assert len(rsp20) == len(rvt20)
+    assert min(rvt10) >= 0
+    assert min(rvt20) >= 0

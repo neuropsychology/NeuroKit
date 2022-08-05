@@ -19,8 +19,8 @@ def rsp_rvt(
 ):
     """**Respiratory Volume per Time (RVT)**
 
-    Computes Respiratory Volume per Time (RVT). It can be used to improve physiological noise
-    correction in functional magnetic resonance imaging (fMRI).
+    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and breathing rate.
+    RVT can be used to identify the global fMRI confounds of breathing, which is often considered noise.
 
     Parameters
     ----------
@@ -66,9 +66,7 @@ def rsp_rvt(
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
 
-    d = scipy.signal.iirfilter(
-        N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate
-    )
+    d = scipy.signal.iirfilter(N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
     fr_lp = scipy.signal.sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
     fr_lp = fr_lp[n_pad : (len(fr_lp) - n_pad)]
 
@@ -118,9 +116,7 @@ def rsp_rvt(
     # Low-pass filter to remove within_cycle changes
     # Note factor of two is for compatability with the common definition of RV
     # as the difference between max and min inhalation (i.e. twice the amplitude)
-    d = scipy.signal.iirfilter(
-        N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate
-    )
+    d = scipy.signal.iirfilter(N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
     fr_rv = 2 * scipy.signal.sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
     fr_rv = fr_rv[n_pad : (len(fr_rv) - n_pad)]
     fr_rv[fr_rv < 0] = 0
