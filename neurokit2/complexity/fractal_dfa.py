@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import expspace
-
 
 def fractal_dfa(
     signal,
