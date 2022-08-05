@@ -15,10 +15,19 @@ def ppg_plot(ppg_signals, sampling_rate=None):
         The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if
         the data should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to ``None``.
 
+    See Also
+    --------
+    ppg_process
+
     Returns
     -------
-    fig
-        Figure representing a plot of the processed PPG signals.
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after ppg_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
 
     Examples
     --------
@@ -37,10 +46,6 @@ def ppg_plot(ppg_signals, sampling_rate=None):
       nk.ppg_plot(signals)
       @suppress
       plt.close()
-
-    See Also
-    --------
-    ppg_process
 
     """
 
