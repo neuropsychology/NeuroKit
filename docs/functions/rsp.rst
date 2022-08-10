@@ -55,6 +55,10 @@ Preprocessing
 """""""""""
 .. autofunction:: neurokit2.rsp.rsp_rrv
 
+*rsp_rvt()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_rvt
+
 
 Analysis
 ^^^^^^^^^
