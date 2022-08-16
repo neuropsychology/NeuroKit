@@ -1,18 +1,23 @@
+import math
+
+from collections.abc import Iterable
+
 import antropy
 import nolds
 import numpy as np
 import pandas as pd
+
 from pyentrp import entropy as pyentrp
+from sklearn.neighbors import KDTree
 
 # import EntropyHub
 import neurokit2 as nk
 
-"""
-For the testing of complexity, we test our implementations against existing and established ones.
-However, some of these other implementations are not really packaged in a way
-SO THAT we can easily import them. Thus, we directly copied their content in this file
-(below the tests).
-"""
+
+# For the testing of complexity, we test our implementations against existing and established ones.
+# However, some of these other implementations are not really packaged in a way
+# SO THAT we can easily import them. Thus, we directly copied their content in this file
+# (below the tests).
 
 
 # =============================================================================
@@ -24,56 +29,51 @@ def test_complexity_sanity():
     mdfa_q = [-5, -3, -1, 1, 3, 5]
 
     # Entropy
-    assert np.allclose(
-        nk.entropy_fuzzy(signal)[0], nk.entropy_sample(signal, fuzzy=True)[0], atol=0.000001
-    )
+    assert np.allclose(nk.entropy_fuzzy(signal)[0], nk.entropy_sample(signal, fuzzy=True)[0], atol=0.000001)
 
     # Fractal
     fractal_dfa, parameters = nk.fractal_dfa(signal, scale=np.array([4, 8, 12, 20]))
     assert parameters["Fluctuations"].shape == (4, 1)
     assert np.allclose(fractal_dfa, 2.10090484, atol=0.000001)
 
-    fractal_mdfa, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
-    assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
+    _, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
+    assert parameters["Fluctuations"].shape == (45, len(mdfa_q))
 
-    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7930504156910694, atol=0.000001)
-    assert np.allclose(
-        nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.01
-    )
+    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7382138350901658, atol=0.000001)
+    assert np.allclose(nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.01)
 
 
 # =============================================================================
 # Comparison against R
 # =============================================================================
-"""
-R code:
 
-library(TSEntropies)
-library(pracma)
-
-signal <- read.csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv")$RSP
-r <- 0.2 * sd(signal)
+# R code:
+#
+# library(TSEntropies)
+# library(pracma)
+#
+# signal <- read.csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv")$RSP
+# r <- 0.2 * sd(signal)
 
 # ApEn --------------------------------------------------------------------
 
-TSEntropies::ApEn(signal, dim=2, lag=1, r=r)
-0.04383386
-TSEntropies::ApEn(signal, dim=3, lag=2, r=1)
-0.0004269369
-pracma::approx_entropy(signal[1:200], edim=2, r=r, elag=1)
-0.03632554
+# TSEntropies::ApEn(signal, dim=2, lag=1, r=r)
+# 0.04383386
+# TSEntropies::ApEn(signal, dim=3, lag=2, r=1)
+# 0.0004269369
+# pracma::approx_entropy(signal[1:200], edim=2, r=r, elag=1)
+# 0.03632554
 
 # SampEn ------------------------------------------------------------------
 
-TSEntropies::SampEn(signal[1:300], dim=2, lag=1, r=r)
-0.04777648
-TSEntropies::FastSampEn(signal[1:300], dim=2, lag=1, r=r)
-0.003490405
-pracma::sample_entropy(signal[1:300], edim=2, tau=1, r=r)
-0.03784376
-pracma::sample_entropy(signal[1:300], edim=3, tau=2, r=r)
-0.09185509
-"""
+# TSEntropies::SampEn(signal[1:300], dim=2, lag=1, r=r)
+# 0.04777648
+# TSEntropies::FastSampEn(signal[1:300], dim=2, lag=1, r=r)
+# 0.003490405
+# pracma::sample_entropy(signal[1:300], edim=2, tau=1, r=r)
+# 0.03784376
+# pracma::sample_entropy(signal[1:300], edim=3, tau=2, r=r)
+# 0.09185509
 
 
 def test_complexity_vs_R():
@@ -131,9 +131,7 @@ def test_complexity_vs_Python():
         entropy_app_entropy(signal, 2),
     )
 
-    assert nk.entropy_approximate(signal, dimension=2, tolerance=tolerance)[0] != pyeeg_ap_entropy(
-        signal, 2, tolerance
-    )
+    assert nk.entropy_approximate(signal, dimension=2, tolerance=tolerance)[0] != pyeeg_ap_entropy(signal, 2, tolerance)
 
     # Sample
     assert np.allclose(
@@ -160,18 +158,17 @@ def test_complexity_vs_Python():
     #    import sampen
     #    sampen.sampen2(signal[0:300], mm=2, r=r)
 
-    assert (
-        nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0]
-        != pyentrp.sample_entropy(signal, 2, 0.2)[1]
-    )
+    assert nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0] != pyentrp.sample_entropy(signal, 2, 0.2)[1]
     assert (
         nk.entropy_sample(signal, dimension=2, tolerance=0.2 * np.sqrt(np.var(signal)))[0]
         != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
     )
 
     # MSE
-    #    assert nk.entropy_multiscale(signal, 2, 0.2*np.sqrt(np.var(signal))) != np.trapz(MultiscaleEntropy_mse(signal, [i+1 for i in range(10)], 2, 0.2, return_type="list"))
-    #    assert nk.entropy_multiscale(signal, 2, 0.2*np.std(signal, ddof=1)) != np.trapz(pyentrp.multiscale_entropy(signal, 2, 0.2, 10))
+    #    assert nk.entropy_multiscale(signal, 2, 0.2*np.sqrt(np.var(signal)))
+    #           != np.trapz(MultiscaleEntropy_mse(signal, [i+1 for i in range(10)], 2, 0.2, return_type="list"))
+    #    assert nk.entropy_multiscale(signal, 2, 0.2*np.std(signal, ddof=1))
+    #           != np.trapz(pyentrp.multiscale_entropy(signal, 2, 0.2, 10))
 
     # Fuzzy
     assert np.allclose(
@@ -229,16 +226,15 @@ def wikipedia_sampen(signal, m=2, r=1):
 # entropy_estimators (https://github.com/paulbrodersen/entropy_estimators)
 # =============================================================================
 
-"""
-import numpy as np
-from entropy_estimators import continuous
+# import numpy as np
+# from entropy_estimators import continuous
+#
+# x = np.random.randn(10000)
+#
+# # I don't know what this compute though
+# continuous.get_h_mvn(x)
+# continuous.get_h(x, k=5)
 
-x = np.random.randn(10000)
-
-# I don't know what this compute though
-continuous.get_h_mvn(x)
-continuous.get_h(x, k=5)
-"""
 
 # =============================================================================
 # Pyeeg
@@ -246,7 +242,7 @@ continuous.get_h(x, k=5)
 
 
 def pyeeg_embed_seq(time_series, tau, embedding_dimension):
-    if not type(time_series) == np.ndarray:
+    if not isinstance(time_series, np.ndarray):
         typed_time_series = np.asarray(time_series)
     else:
         typed_time_series = time_series
@@ -265,9 +261,7 @@ def pyeeg_bin_power(X, Band, Fs):
     for Freq_Index in range(0, len(Band) - 1):
         Freq = float(Band[Freq_Index])
         Next_Freq = float(Band[Freq_Index + 1])
-        Power[Freq_Index] = sum(
-            C[int(np.floor(Freq / Fs * len(X))) : int(np.floor(Next_Freq / Fs * len(X)))]
-        )
+        Power[Freq_Index] = sum(C[int(np.floor(Freq / Fs * len(X))) : int(np.floor(Next_Freq / Fs * len(X)))])
     Power_Ratio = Power / sum(Power)
     return Power, Power_Ratio
 
@@ -306,7 +300,8 @@ def pyeeg_samp_entropy(X, M, R):
     InRange = np.max(D, axis=2) <= R
     np.fill_diagonal(InRange, 0)  # Don't count self-matches
 
-    Cm = InRange.sum(axis=0)  # Probability that random M-sequences are in range
+    # Probability that random M-sequences are in range
+    Cm = InRange.sum(axis=0)
     Dp = np.abs(np.tile(X[M:], (N - M, 1)) - np.tile(X[M:], (N - M, 1)).T)
 
     Cmp = np.logical_and(Dp <= R, InRange).sum(axis=0)
@@ -320,9 +315,6 @@ def pyeeg_samp_entropy(X, M, R):
 # =============================================================================
 # Entropy
 # =============================================================================
-
-
-from sklearn.neighbors import KDTree
 
 
 def entropy_embed(x, order=3, delay=1):
@@ -343,7 +335,7 @@ def entropy_app_samp_entropy(x, order, metric="chebyshev", approximate=True):
     _all_metrics = KDTree.valid_metrics
     if metric not in _all_metrics:
         raise ValueError(
-            "The given metric (%s) is not valid. The valid "
+            "The given metric (%s) is not valid. The valid "  # pylint: disable=consider-using-f-string
             "metric names are: %s" % (metric, _all_metrics)
         )
     phi = np.zeros(2)
@@ -355,18 +347,10 @@ def entropy_app_samp_entropy(x, order, metric="chebyshev", approximate=True):
         emb_data1 = _emb_data1
     else:
         emb_data1 = _emb_data1[:-1]
-    count1 = (
-        KDTree(emb_data1, metric=metric)
-        .query_radius(emb_data1, r, count_only=True)
-        .astype(np.float64)
-    )
+    count1 = KDTree(emb_data1, metric=metric).query_radius(emb_data1, r, count_only=True).astype(np.float64)
     # compute phi(order + 1, r)
     emb_data2 = entropy_embed(x, order + 1, 1)
-    count2 = (
-        KDTree(emb_data2, metric=metric)
-        .query_radius(emb_data2, r, count_only=True)
-        .astype(np.float64)
-    )
+    count2 = KDTree(emb_data2, metric=metric).query_radius(emb_data2, r, count_only=True).astype(np.float64)
     if approximate:
         phi[0] = np.mean(np.log(count1 / emb_data1.shape[0]))
         phi[1] = np.mean(np.log(count2 / emb_data2.shape[0]))
@@ -421,8 +405,8 @@ def entro_py_pattern_mat(x, m):
 
 
 def entro_py_entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
-    fuzzy = True if remove_baseline else False
-    cross = True if type(x) == list else False
+    fuzzy = remove_baseline
+    cross = isinstance(x, list)
     N = len(x[0]) if cross else len(x)
 
     if scale:
@@ -477,7 +461,8 @@ def entro_py_entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
             count[i] = np.sum(sim) - 1
 
         #        phi[j] = np.mean(count) / (N-m-1)
-        phi[j] = np.mean(count) / (N - dim - 1)  # https://github.com/ixjlyons/entro-py/pull/2/files
+        # https://github.com/ixjlyons/entro-py/pull/2/files
+        phi[j] = np.mean(count) / (N - dim - 1)
 
     return np.log(phi[0] / phi[1])
 
@@ -497,9 +482,6 @@ def entro_py_remove_baseline(x, axis=None):
 # MultiscaleEntropy https://github.com/reatank/MultiscaleEntropy/blob/master/MultiscaleEntropy/mse.py
 # =============================================================================
 
-import math
-from collections.abc import Iterable
-
 
 def MultiscaleEntropy_init_return_type(return_type):
     if return_type == "dict":
@@ -512,21 +494,13 @@ def MultiscaleEntropy_check_type(x, num_type, name):
     if isinstance(x, num_type):
         tmp = [x]
     elif not isinstance(x, Iterable):
-        raise ValueError(
-            name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__
-        )
+        raise ValueError(name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__)
     else:
         tmp = []
         for i in x:
             tmp.append(i)
             if not isinstance(i, num_type):
-                raise ValueError(
-                    name
-                    + " should be a "
-                    + num_type.__name__
-                    + " or an iterator of "
-                    + num_type.__name__
-                )
+                raise ValueError(name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__)
     return tmp
 
 
@@ -546,9 +520,7 @@ def MultiscaleEntropy_coarse_grain(x, scale_factor):
     return ans
 
 
-def MultiscaleEntropy_sample_entropy(
-    x, m=[2], r=[0.15], sd=None, return_type="dict", safe_mode=False
-):
+def MultiscaleEntropy_sample_entropy(x, m=[2], r=[0.15], sd=None, return_type="dict", safe_mode=False):
     """[Sample Entropy, the threshold will be r*sd]
 
     Arguments:
@@ -565,24 +537,26 @@ def MultiscaleEntropy_sample_entropy(
         ValueError -- [some values too big]
 
     Returns:
-        [dict or list as return_type indicates] -- [if dict, nest as [scale_factor][m][r] for each value of m, r; if list, nest as [i][j] for lengths of m, r]
+        [dict or list as return_type indicates] -- [if dict, nest as [scale_factor][m][r] for each value of m, r;
+                                                    if list, nest as [i][j] for lengths of m, r]
+
     """
     # type checking
     if not safe_mode:
         m = MultiscaleEntropy_check_type(m, int, "m")
         r = MultiscaleEntropy_check_type(r, float, "r")
-        if not (sd == None) and not (isinstance(sd, float) or isinstance(sd, int)):
+        if not (sd is None) and not isinstance(sd, (float, int)):
             raise ValueError("sd should be a number")
     try:
         x = np.array(x)
-    except:
-        raise ValueError("x should be a sequence of numbers")
+    except Exception as exc:
+        raise ValueError("x should be a sequence of numbers") from exc
     # value checking
     if len(x) < max(m):
         raise ValueError("the max m is bigger than x's length")
 
     # initialization
-    if sd == None:
+    if sd is None:
         sd = np.sqrt(np.var(x))
     ans = MultiscaleEntropy_init_return_type(return_type)
 
@@ -629,9 +603,7 @@ def MultiscaleEntropy_sample_entropy(
     return ans
 
 
-def MultiscaleEntropy_mse(
-    x, scale_factor=[i for i in range(1, 21)], m=[2], r=[0.15], return_type="dict", safe_mode=False
-):
+def MultiscaleEntropy_mse(x, scale_factor=list(range(1, 21)), m=[2], r=[0.15], return_type="dict", safe_mode=False):
     """[Multiscale Entropy]
 
     Arguments:
@@ -648,7 +620,9 @@ def MultiscaleEntropy_mse(
         ValueError -- [some values too big]
 
     Returns:
-        [dict or list as return_type indicates] -- [if dict, nest as [scale_factor][m][r] for each value of scale_factor, m, r; if list nest as [i][j][k] for lengths of scale_factor, m, r]
+        [dict or list as return_type indicates] -- [if dict, nest as [scale_factor][m][r] for each value of scale_factor, m, r;
+                                                    if list nest as [i][j][k] for lengths of scale_factor, m, r]
+
     """
     # type checking
     if not safe_mode:
@@ -657,8 +631,8 @@ def MultiscaleEntropy_mse(
         scale_factor = MultiscaleEntropy_check_type(scale_factor, int, "scale_factor")
     try:
         x = np.array(x)
-    except:
-        print("x should be a sequence of numbers")
+    except Exception as exc:
+        raise ValueError("x should be a sequence of numbers") from exc
     # value checking
     if max(scale_factor) > len(x):
         raise ValueError("the max scale_factor is bigger than x's length")
