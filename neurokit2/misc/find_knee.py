@@ -7,7 +7,7 @@ import scipy.interpolate
 from ..stats import rescale
 
 
-def find_knee(x, S=1, show=False, verbose=True):
+def find_knee(y, x=None, S=1, show=False, verbose=True):
     """**Find Knee / Elbow**
 
     Find the knee / elbow in a curve using a basic adaptation of the *kneedle* algorithm.
@@ -27,9 +27,9 @@ def find_knee(x, S=1, show=False, verbose=True):
 
       import neurokit2 as nk
 
-      x = np.log(np.arange(1, 100))
-      x += np.random.normal(0, 0.2, len(x))
-      nk.find_knee(x, show=True)
+      y = np.log(np.arange(1, 100))
+      y += np.random.normal(0, 0.2, len(y))
+      nk.find_knee(y, show=True)
 
     References
     -----------
@@ -38,14 +38,16 @@ def find_knee(x, S=1, show=False, verbose=True):
       distributed computing systems workshops (pp. 166-171). IEEE.
 
     """
-    n = len(x)
+    n = len(y)
     if n <= 5:
         raise ValueError("Input vector must have at least six values.")
 
-    idx = np.linspace(0, 1, n)
+    if x is None:
+        x = np.arange(n)
+    idx = rescale(x, to=[0, 1])
 
     # Smooth using spline
-    spline = scipy.interpolate.UnivariateSpline(x=idx, y=x, k=5)
+    spline = scipy.interpolate.UnivariateSpline(x=idx, y=y, k=5)
     smoothed = spline(idx)
 
     # Normalize to the unit square (0 - 1)
@@ -58,33 +60,30 @@ def find_knee(x, S=1, show=False, verbose=True):
 
     maxima_ids = []
     for i in range(1, n - 1):
-        if (Y_d[i] > Y_d[i - 1] and Y_d[i] > Y_d[i + 1]):
+        if Y_d[i] > Y_d[i - 1] and Y_d[i] > Y_d[i + 1]:
             X_lm.append(idx[i])
             Y_lm.append(Y_d[i])
             maxima_ids.append(i)
     T_lm = Y_lm - S * np.sum(np.diff(idx)) / (n - 1)
-
 
     knee_point_index = _locate(Y_d, T_lm, maxima_ids)
     # If no knee point was found, return the last point
     if knee_point_index is None:
         if verbose is True:
             warnings.warn("No knee point found, retuning last.")
-        knee = n-1
+        knee = n - 1
     else:
         knee_point = X_lm[knee_point_index]
         # Which index
         knee = np.where(idx == knee_point)[0][0]
 
     if show is True:
-        plt.plot(np.arange(n), x, label="Original")
-        plt.plot(np.arange(n), rescale(smoothed, to=[np.nanmin(x), np.nanmax(x)]), label="Smoothed")
-        plt.plot(np.arange(n), rescale(Y_d, to=[np.nanmin(x), np.nanmax(x)]), label="Difference")
-        plt.axvline(x=knee, color='red', linestyle='--')
+        plt.plot(x, y, label="Original")
+        plt.plot(x, rescale(smoothed, to=[np.nanmin(y), np.nanmax(y)]), label="Smoothed")
+        plt.plot(x, rescale(Y_d, to=[np.nanmin(y), np.nanmax(y)]), label="Difference")
+        plt.axvline(x=x[knee], color="red", linestyle="--")
         plt.legend()
-    return knee
-
-
+    return x[knee]
 
 
 def _locate(Y_d, T_lm, maxima_ids):
