@@ -55,12 +55,12 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         depending on what the literature suggests. We recommend using this function only for quick
         exploratory analyses, but then replacing it by the calls to the individual functions.
 
-    The categorization by "computation time" is based on our preliminary `benchmarking study
-    <https://neuropsychology.github.io/NeuroKit/studies/complexity_structure.html>`_ results:
+    The categorization by "computation time" is based on our `study
+    <https://www.mdpi.com/1099-4300/24/8/1036>`_ results:
 
-    .. figure:: ../../studies/complexity_structure/figures/computation_time-1.png
+    .. figure:: https://raw.githubusercontent.com/DominiqueMakowski/ComplexityStructure/main/figures/time1-1.png
        :alt: Complexity Benchmark (Makowski).
-       :target: https://neuropsychology.github.io/NeuroKit/studies/complexity_structure.html
+       :target: https://www.mdpi.com/1099-4300/24/8/1036
 
     Parameters
     ----------

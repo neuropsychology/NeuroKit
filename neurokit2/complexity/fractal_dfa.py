@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -170,7 +172,6 @@ def fractal_dfa(
     **Example 2:** Multifractal DFA (MFDFA)
 
     .. ipython:: python
-       :okwarning:
 
       @savefig p_fractal_dfa3.png scale=100%
       mfdfa, info = nk.fractal_mfdfa(signal, q=[-5, -3, -1, 0, 1, 3, 5], show=True)
@@ -407,6 +408,12 @@ def _fractal_dfa_fluctuation(segments, trends, q=2):
 
     # Compute variance
     var = np.var(detrended, axis=1)
+
+    # Remove where var is zero
+    var = var[var > 1e-08]
+    if len(var) == 0:
+        warn("All detrended segments have no variance. Retuning NaN.")
+        return np.nan
 
     # Find where q is close to zero. Limit set at |q| < 0.1
     # See https://github.com/LRydin/MFDFA/issues/33
