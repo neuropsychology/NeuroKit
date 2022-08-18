@@ -170,6 +170,7 @@ def fractal_dfa(
     **Example 2:** Multifractal DFA (MFDFA)
 
     .. ipython:: python
+       :okwarning:
 
       @savefig p_fractal_dfa3.png scale=100%
       mfdfa, info = nk.fractal_mfdfa(signal, q=[-5, -3, -1, 0, 1, 3, 5], show=True)
