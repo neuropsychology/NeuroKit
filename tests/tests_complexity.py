@@ -1,18 +1,14 @@
-import math
-
 from collections.abc import Iterable
 
 import antropy
 import nolds
 import numpy as np
 import pandas as pd
-
 from pyentrp import entropy as pyentrp
 from sklearn.neighbors import KDTree
 
 # import EntropyHub
 import neurokit2 as nk
-
 
 # For the testing of complexity, we test our implementations against existing and established ones.
 # However, some of these other implementations are not really packaged in a way
@@ -29,7 +25,9 @@ def test_complexity_sanity():
     mdfa_q = [-5, -3, -1, 1, 3, 5]
 
     # Entropy
-    assert np.allclose(nk.entropy_fuzzy(signal)[0], nk.entropy_sample(signal, fuzzy=True)[0], atol=0.000001)
+    assert np.allclose(
+        nk.entropy_fuzzy(signal)[0], nk.entropy_sample(signal, fuzzy=True)[0], atol=0.000001
+    )
 
     # Fractal
     fractal_dfa, parameters = nk.fractal_dfa(signal, scale=np.array([4, 8, 12, 20]))
@@ -37,10 +35,12 @@ def test_complexity_sanity():
     assert np.allclose(fractal_dfa, 2.10090484, atol=0.0001)
 
     _, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
-    assert parameters["Fluctuations"].shape == (45, len(mdfa_q))
+    assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
 
     assert np.allclose(nk.fractal_correlation(signal)[0], 0.7382138350901658, atol=0.000001)
-    assert np.allclose(nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.01)
+    assert np.allclose(
+        nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.01
+    )
 
 
 # =============================================================================
@@ -131,7 +131,9 @@ def test_complexity_vs_Python():
         entropy_app_entropy(signal, 2),
     )
 
-    assert nk.entropy_approximate(signal, dimension=2, tolerance=tolerance)[0] != pyeeg_ap_entropy(signal, 2, tolerance)
+    assert nk.entropy_approximate(signal, dimension=2, tolerance=tolerance)[0] != pyeeg_ap_entropy(
+        signal, 2, tolerance
+    )
 
     # Sample
     assert np.allclose(
@@ -158,7 +160,10 @@ def test_complexity_vs_Python():
     #    import sampen
     #    sampen.sampen2(signal[0:300], mm=2, r=r)
 
-    assert nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0] != pyentrp.sample_entropy(signal, 2, 0.2)[1]
+    assert (
+        nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0]
+        != pyentrp.sample_entropy(signal, 2, 0.2)[1]
+    )
     assert (
         nk.entropy_sample(signal, dimension=2, tolerance=0.2 * np.sqrt(np.var(signal)))[0]
         != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
@@ -261,7 +266,9 @@ def pyeeg_bin_power(X, Band, Fs):
     for Freq_Index in range(0, len(Band) - 1):
         Freq = float(Band[Freq_Index])
         Next_Freq = float(Band[Freq_Index + 1])
-        Power[Freq_Index] = sum(C[int(np.floor(Freq / Fs * len(X))) : int(np.floor(Next_Freq / Fs * len(X)))])
+        Power[Freq_Index] = sum(
+            C[int(np.floor(Freq / Fs * len(X))) : int(np.floor(Next_Freq / Fs * len(X)))]
+        )
     Power_Ratio = Power / sum(Power)
     return Power, Power_Ratio
 
@@ -347,10 +354,18 @@ def entropy_app_samp_entropy(x, order, metric="chebyshev", approximate=True):
         emb_data1 = _emb_data1
     else:
         emb_data1 = _emb_data1[:-1]
-    count1 = KDTree(emb_data1, metric=metric).query_radius(emb_data1, r, count_only=True).astype(np.float64)
+    count1 = (
+        KDTree(emb_data1, metric=metric)
+        .query_radius(emb_data1, r, count_only=True)
+        .astype(np.float64)
+    )
     # compute phi(order + 1, r)
     emb_data2 = entropy_embed(x, order + 1, 1)
-    count2 = KDTree(emb_data2, metric=metric).query_radius(emb_data2, r, count_only=True).astype(np.float64)
+    count2 = (
+        KDTree(emb_data2, metric=metric)
+        .query_radius(emb_data2, r, count_only=True)
+        .astype(np.float64)
+    )
     if approximate:
         phi[0] = np.mean(np.log(count1 / emb_data1.shape[0]))
         phi[1] = np.mean(np.log(count2 / emb_data2.shape[0]))
@@ -494,13 +509,21 @@ def MultiscaleEntropy_check_type(x, num_type, name):
     if isinstance(x, num_type):
         tmp = [x]
     elif not isinstance(x, Iterable):
-        raise ValueError(name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__)
+        raise ValueError(
+            name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__
+        )
     else:
         tmp = []
         for i in x:
             tmp.append(i)
             if not isinstance(i, num_type):
-                raise ValueError(name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__)
+                raise ValueError(
+                    name
+                    + " should be a "
+                    + num_type.__name__
+                    + " or an iterator of "
+                    + num_type.__name__
+                )
     return tmp
 
 
@@ -520,7 +543,9 @@ def MultiscaleEntropy_coarse_grain(x, scale_factor):
     return ans
 
 
-def MultiscaleEntropy_sample_entropy(x, m=[2], r=[0.15], sd=None, return_type="dict", safe_mode=False):
+def MultiscaleEntropy_sample_entropy(
+    x, m=[2], r=[0.15], sd=None, return_type="dict", safe_mode=False
+):
     """[Sample Entropy, the threshold will be r*sd]
 
     Arguments:
@@ -593,9 +618,9 @@ def MultiscaleEntropy_sample_entropy(x, m=[2], r=[0.15], sd=None, return_type="d
         for mm in m:
             if count[mm + 1] == 0 or count[mm] == 0:
                 t = len(x) - mm + 1
-                tmp = -math.log(1 / (t * (t - 1)))
+                tmp = -np.log(1 / (t * (t - 1)))
             else:
-                tmp = -math.log(count[mm + 1] / count[mm])
+                tmp = -np.log(count[mm + 1] / count[mm])
             if return_type == "dict":
                 ans[rr][mm] = tmp
             else:
@@ -603,7 +628,9 @@ def MultiscaleEntropy_sample_entropy(x, m=[2], r=[0.15], sd=None, return_type="d
     return ans
 
 
-def MultiscaleEntropy_mse(x, scale_factor=list(range(1, 21)), m=[2], r=[0.15], return_type="dict", safe_mode=False):
+def MultiscaleEntropy_mse(
+    x, scale_factor=list(range(1, 21)), m=[2], r=[0.15], return_type="dict", safe_mode=False
+):
     """[Multiscale Entropy]
 
     Arguments:
