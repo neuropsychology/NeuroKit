@@ -29,6 +29,20 @@ def signal_plot(
     **kwargs : optional
         Arguments passed to matplotlib plotting.
 
+    See Also
+    --------
+    ecg_plot, rsp_plot, ppg_plot, emg_plot, eog_plot
+
+    Returns
+    -------
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after signal_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
+
     Examples
     ----------
     .. ipython:: python
@@ -45,9 +59,12 @@ def signal_plot(
 
     .. ipython:: python
 
+       # Simulate data
       data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
                            "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
                            "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+
+      # Process signal
       @savefig p_signal_plot2.png scale=100%
       nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
       nk.signal_plot([signal, data], standardize=True)

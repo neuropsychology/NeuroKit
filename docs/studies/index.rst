@@ -10,7 +10,7 @@ Some of the work-in-progress studies.
    HRV Structure <https://psyarxiv.com/mwa6x/>
    Complexity Review <https://psyarxiv.com/f8k3x/>
    Complexity Structure <https://psyarxiv.com/v5tqw/>
-   Complexity Tolerance Estimation <complexity_tolerance>
+   Complexity Tolerance Estimation <https://github.com/DominiqueMakowski/ComplexityTolerance>
    EEG Complexity: Parameters Selection <complexity_eeg>
    EEG Analysis with GAMs <erp_gam>
    ECG Benchmark <ecg_benchmark>
