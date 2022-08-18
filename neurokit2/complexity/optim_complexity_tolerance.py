@@ -43,7 +43,8 @@ def complexity_tolerance(
 
     * **sd**: r = 0.2 * standard deviation (SD) of the signal will be returned. This is the most
       commonly used value in the literature, though its appropriateness is questionable.
-    * **makowski**: See our `study <https://github.com/DominiqueMakowski/ComplexityTolerance>`_.
+    * **makowski**: Adjusted value based on the SD, the embedding dimension and the signal's
+      length. See our `study <https://github.com/DominiqueMakowski/ComplexityTolerance>`_.
     * **nolds**: Adjusted value based on the SD and the dimension. The rationale is that
       the chebyshev distance (used in various metrics) rises logarithmically with increasing
       dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the
@@ -241,11 +242,15 @@ def complexity_tolerance(
         isinstance(dimension, (int, float)) or dimension is None
     ):
         # Method described in
-        # https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html
+        # https://github.com/DominiqueMakowski/ComplexityTolerance
         if dimension is None:
-            raise ValueError("'dimension' cannot be empty for the 'neurokit' method.")
-        r = (-0.06174 + 0.12447 * dimension) * np.std(signal, ddof=1)
-        info = {"Method": "NeuroKit"}
+            raise ValueError("'dimension' cannot be empty for the 'makowski' method.")
+        n = len(signal)
+        r = np.std(signal, ddof=1) * (
+            0.2811 * (dimension - 1) + 0.0049 * np.log(n) - 0.02 * ((dimension - 1) * np.log(n))
+        )
+
+        info = {"Method": "Makowski"}
 
     elif method in ["maxapen", "optimize"]:
         r, info = _optimize_tolerance_maxapen(
