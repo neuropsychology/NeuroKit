@@ -1024,7 +1024,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[9]: </span><span class="go"></span>
 <span class="go">   RSP_Rate_Mean  ...  RRV_MFDFA_alpha2_Increment</span>
-<span class="go">0      15.860331  ...                    0.093556</span>
+<span class="go">0      15.860331  ...                    0.093669</span>
 
 <span class="go">[1 rows x 34 columns]</span>
 </pre></div>
@@ -1585,8 +1585,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">    RRV_RMSSD   RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  946.100761  3825.428571  668.28172  ...    0.947128  0.051293        -inf</span>
+<span class="go">     RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1119.776416  4171.421053  698.460316  ...    0.685937  0.096874         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1636,8 +1636,8 @@ take less than 3.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.13940263, 0.13940172, 0.1394008 , ..., 0.09501905, 0.0950167 ,</span>
-<span class="go">       0.09501439])</span>
+<span class="go">array([0.12967219, 0.12967256, 0.12967295, ..., 0.17060077, 0.17059263,</span>
+<span class="go">       0.17058448])</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1710,9 +1710,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.928236</span>
-<span class="go">2     2        10000  ...        0.0              0.424658</span>
-<span class="go">3     3        15000  ...        0.0              0.617593</span>
+<span class="go">1     1         5000  ...        1.0              0.859375</span>
+<span class="go">2     2        10000  ...        0.0              0.119388</span>
+<span class="go">3     3        15000  ...        0.0              0.633594</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1790,7 +1790,7 @@ See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">   RSP_Rate_Mean  ...  RRV_MFDFA_alpha2_Increment</span>
-<span class="go">0      15.860331  ...                    0.093556</span>
+<span class="go">0      15.860331  ...                    0.093669</span>
 
 <span class="go">[1 rows x 34 columns]</span>
 
@@ -1844,8 +1844,8 @@ take less than 3.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.12580986, 0.12580901, 0.12580822, ..., 0.0912766 , 0.09127662,</span>
-<span class="go">       0.0912767 ])</span>
+<span class="go">array([0.06223149, 0.06222956, 0.0622277 , ..., 0.07784475, 0.07784792,</span>
+<span class="go">       0.07785113])</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>

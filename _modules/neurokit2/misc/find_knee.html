@@ -554,7 +554,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">rescale</span>
 
 
-<div class="viewcode-block" id="find_knee"><a class="viewcode-back" href="../../../functions/misc.html#neurokit2.misc.find_knee">[docs]</a><span class="k">def</span> <span class="nf">find_knee</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="find_knee"><a class="viewcode-back" href="../../../functions/misc.html#neurokit2.misc.find_knee">[docs]</a><span class="k">def</span> <span class="nf">find_knee</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Find Knee / Elbow**</span>
 
 <span class="sd">    Find the knee / elbow in a curve using a basic adaptation of the *kneedle* algorithm.</span>
@@ -574,9 +574,9 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      x = np.log(np.arange(1, 100))</span>
-<span class="sd">      x += np.random.normal(0, 0.2, len(x))</span>
-<span class="sd">      nk.find_knee(x, show=True)</span>
+<span class="sd">      y = np.log(np.arange(1, 100))</span>
+<span class="sd">      y += np.random.normal(0, 0.2, len(y))</span>
+<span class="sd">      nk.find_knee(y, show=True)</span>
 
 <span class="sd">    References</span>
 <span class="sd">    -----------</span>
@@ -585,14 +585,16 @@ title="Open an issue"
 <span class="sd">      distributed computing systems workshops (pp. 166-171). IEEE.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input vector must have at least six values.&quot;</span><span class="p">)</span>
 
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Smooth using spline</span>
-    <span class="n">spline</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">spline</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
     <span class="n">smoothed</span> <span class="o">=</span> <span class="n">spline</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
     <span class="c1"># Normalize to the unit square (0 - 1)</span>
@@ -605,33 +607,30 @@ title="Open an issue"
 
     <span class="n">maxima_ids</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Y_d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">Y_d</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
             <span class="n">X_lm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="n">Y_lm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y_d</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="n">maxima_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
     <span class="n">T_lm</span> <span class="o">=</span> <span class="n">Y_lm</span> <span class="o">-</span> <span class="n">S</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
 
     <span class="n">knee_point_index</span> <span class="o">=</span> <span class="n">_locate</span><span class="p">(</span><span class="n">Y_d</span><span class="p">,</span> <span class="n">T_lm</span><span class="p">,</span> <span class="n">maxima_ids</span><span class="p">)</span>
     <span class="c1"># If no knee point was found, return the last point</span>
     <span class="k">if</span> <span class="n">knee_point_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No knee point found, retuning last.&quot;</span><span class="p">)</span>
-        <span class="n">knee</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">knee</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">knee_point</span> <span class="o">=</span> <span class="n">X_lm</span><span class="p">[</span><span class="n">knee_point_index</span><span class="p">]</span>
         <span class="c1"># Which index</span>
         <span class="n">knee</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="n">knee_point</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">rescale</span><span class="p">(</span><span class="n">smoothed</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Smoothed&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">rescale</span><span class="p">(</span><span class="n">Y_d</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Difference&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">knee</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Original&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rescale</span><span class="p">(</span><span class="n">smoothed</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">y</span><span class="p">)]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Smoothed&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rescale</span><span class="p">(</span><span class="n">Y_d</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">y</span><span class="p">)]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Difference&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">knee</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">knee</span></div>
-
-
+    <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="n">knee</span><span class="p">]</span></div>
 
 
 <span class="k">def</span> <span class="nf">_locate</span><span class="p">(</span><span class="n">Y_d</span><span class="p">,</span> <span class="n">T_lm</span><span class="p">,</span> <span class="n">maxima_ids</span><span class="p">):</span>

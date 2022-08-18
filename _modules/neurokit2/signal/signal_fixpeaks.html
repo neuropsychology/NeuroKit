@@ -695,9 +695,7 @@ title="Open an issue"
 
     <span class="c1"># If method Kubios</span>
     <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;kubios&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_signal_fixpeaks_kubios</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="n">iterative</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">_signal_fixpeaks_kubios</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="n">iterative</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Else method is NeuroKit</span>
         <span class="k">return</span> <span class="n">_signal_fixpeaks_neurokit</span><span class="p">(</span>
@@ -726,20 +724,13 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
 
     <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_remove_small</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="p">,</span> <span class="n">robust</span><span class="p">)</span>
-    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_interpolate_big</span><span class="p">(</span>
-        <span class="n">peaks_clean</span><span class="p">,</span>
-        <span class="n">sampling_rate</span><span class="p">,</span>
-        <span class="n">interval_max</span><span class="p">,</span>
-        <span class="n">relative_interval_max</span><span class="p">,</span>
-        <span class="n">robust</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_interpolate_big</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">,</span> <span class="n">relative_interval_max</span><span class="p">,</span> <span class="n">robust</span><span class="p">,)</span>
 
     <span class="n">valid_peaks</span> <span class="o">=</span> <span class="n">peaks_clean</span><span class="p">[</span><span class="n">peaks_clean</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">n_invalid_idcs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_peaks</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n_invalid_idcs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot; Negative peak indices detected in output. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot; Removing </span><span class="si">{</span><span class="n">n_invalid_idcs</span><span class="si">}</span><span class="s2"> invalid peaks. &quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot; Negative peak indices detected in output. &quot;</span> <span class="sa">f</span><span class="s2">&quot; Removing </span><span class="si">{</span><span class="n">n_invalid_idcs</span><span class="si">}</span><span class="s2"> invalid peaks. &quot;</span><span class="p">,</span>
             <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">valid_peaks</span>
@@ -761,9 +752,7 @@ title="Open an issue"
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 
-            <span class="n">new_artifacts</span><span class="p">,</span> <span class="n">new_subspaces</span> <span class="o">=</span> <span class="n">_find_artifacts</span><span class="p">(</span>
-                <span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
+            <span class="n">new_artifacts</span><span class="p">,</span> <span class="n">new_subspaces</span> <span class="o">=</span> <span class="n">_find_artifacts</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="n">n_artifacts_previous</span> <span class="o">=</span> <span class="n">n_artifacts_current</span>
             <span class="n">n_artifacts_current</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">new_artifacts</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
@@ -781,13 +770,7 @@ title="Open an issue"
 <span class="c1"># Kubios: Lipponen &amp; Tarvainen (2019).</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_find_artifacts</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span>
-    <span class="n">c1</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span>
-    <span class="n">c2</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">5.2</span><span class="p">,</span>
-    <span class="n">window_width</span><span class="o">=</span><span class="mi">91</span><span class="p">,</span>
-    <span class="n">medfilt_order</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">5.2</span><span class="p">,</span> <span class="n">window_width</span><span class="o">=</span><span class="mi">91</span><span class="p">,</span> <span class="n">medfilt_order</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="c1"># Compute period series (make sure it has same numer of elements as peaks);</span>
@@ -984,9 +967,7 @@ title="Open an issue"
     <span class="c1"># Calculate the position(s) of new beat(s). Make sure to not generate</span>
     <span class="c1"># negative indices. prev_peaks and next_peaks must have the same</span>
     <span class="c1"># number of elements.</span>
-    <span class="n">valid_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-        <span class="n">missed_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">missed_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">)</span>
-    <span class="p">)</span>  <span class="c1"># pylint: disable=E1111</span>
+    <span class="n">valid_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">missed_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">missed_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">))</span>  <span class="c1"># pylint: disable=E1111</span>
     <span class="n">missed_idcs</span> <span class="o">=</span> <span class="n">missed_idcs</span><span class="p">[</span><span class="n">valid_idcs</span><span class="p">]</span>
     <span class="n">prev_peaks</span> <span class="o">=</span> <span class="n">corrected_peaks</span><span class="p">[[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">missed_idcs</span><span class="p">]]</span>
     <span class="n">next_peaks</span> <span class="o">=</span> <span class="n">corrected_peaks</span><span class="p">[</span><span class="n">missed_idcs</span><span class="p">]</span>
@@ -1005,8 +986,7 @@ title="Open an issue"
     <span class="c1"># the total number of peaks. prev_peaks and next_peaks must have the</span>
     <span class="c1"># same number of elements.</span>
     <span class="n">valid_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-        <span class="n">misaligned_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="n">misaligned_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># pylint: disable=E1111</span>
+        <span class="n">misaligned_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">misaligned_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># pylint: disable=E1111</span>
     <span class="p">)</span>
     <span class="n">misaligned_idcs</span> <span class="o">=</span> <span class="n">misaligned_idcs</span><span class="p">[</span><span class="n">valid_idcs</span><span class="p">]</span>
     <span class="n">prev_peaks</span> <span class="o">=</span> <span class="n">corrected_peaks</span><span class="p">[[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">misaligned_idcs</span><span class="p">]]</span>
@@ -1062,40 +1042,16 @@ title="Open an issue"
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Artifact types&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;heart period&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">longshort_idcs</span><span class="p">,</span>
-        <span class="n">rr</span><span class="p">[</span><span class="n">longshort_idcs</span><span class="p">],</span>
-        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long/short&quot;</span><span class="p">,</span>
+        <span class="n">longshort_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">longshort_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long/short&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">ectopic_idcs</span><span class="p">,</span>
-        <span class="n">rr</span><span class="p">[</span><span class="n">ectopic_idcs</span><span class="p">],</span>
-        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic&quot;</span><span class="p">,</span>
+        <span class="n">ectopic_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">ectopic_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">extra_idcs</span><span class="p">,</span>
-        <span class="n">rr</span><span class="p">[</span><span class="n">extra_idcs</span><span class="p">],</span>
-        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false positive&quot;</span><span class="p">,</span>
+        <span class="n">extra_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">extra_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false positive&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">missed_idcs</span><span class="p">,</span>
-        <span class="n">rr</span><span class="p">[</span><span class="n">missed_idcs</span><span class="p">],</span>
-        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false negative&quot;</span><span class="p">,</span>
+        <span class="n">missed_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">missed_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false negative&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
@@ -1122,9 +1078,7 @@ title="Open an issue"
     <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">verts0</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="o">-</span><span class="mi">10</span> <span class="o">+</span> <span class="n">c2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">c2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)]</span>
 
-    <span class="n">poly0</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
-        <span class="n">verts0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic periods&quot;</span>
-    <span class="p">)</span>
+    <span class="n">poly0</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic periods&quot;</span><span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly0</span><span class="p">)</span>
     <span class="n">verts1</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">c2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">c2</span><span class="p">)]</span>
     <span class="n">poly1</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -1138,14 +1092,10 @@ title="Open an issue"
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">verts2</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
-    <span class="n">poly2</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
-        <span class="n">verts2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;short periods&quot;</span>
-    <span class="p">)</span>
+    <span class="n">poly2</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;short periods&quot;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>
     <span class="n">verts3</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="n">poly3</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
-        <span class="n">verts3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long periods&quot;</span>
-    <span class="p">)</span>
+    <span class="n">poly3</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long periods&quot;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly3</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
@@ -1154,11 +1104,7 @@ title="Open an issue"
 <span class="c1"># NeuroKit</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_remove_small</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">relative_interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">interval_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">relative_interval_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">peaks</span>
@@ -1172,69 +1118,44 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_interpolate_big</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">relative_interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relative_interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">interval_max</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">relative_interval_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">peaks</span>
-    <span class="k">if</span> <span class="n">interval_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="n">_interpolate_missing</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span>
-            <span class="n">interval</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
-            <span class="n">interval_max</span><span class="o">=</span><span class="n">interval_max</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">relative_interval_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="n">_interpolate_missing</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span>
-            <span class="n">interval</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
-            <span class="n">interval_max</span><span class="o">=</span><span class="n">relative_interval_max</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">peaks</span>
+        <span class="k">if</span> <span class="n">relative_interval_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">outliers</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">relative_interval_max</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outliers</span> <span class="o">=</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="n">interval_max</span>
+        <span class="n">outliers_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="c1"># interval returned by signal_period at index 0 is the mean of the intervals</span>
+        <span class="c1"># so it does not actually correspond to whether the first peak is an outlier</span>
+        <span class="n">outliers_loc</span> <span class="o">=</span> <span class="n">outliers_loc</span><span class="p">[</span><span class="n">outliers_loc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">_interpolate_missing</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span>
-    <span class="n">interval</span><span class="p">,</span>
-    <span class="n">interval_max</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="n">outliers</span> <span class="o">=</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="n">interval_max</span>
-    <span class="n">outliers_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">outliers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">peaks</span>
+        <span class="n">peaks_to_correct</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
-    <span class="c1"># interval returned by signal_period at index 0 is the mean of the intervals</span>
-    <span class="c1"># so it does not actually correspond to whether the first peak is an outlier</span>
-    <span class="n">outliers_loc</span> <span class="o">=</span> <span class="n">outliers_loc</span><span class="p">[</span><span class="n">outliers_loc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">interval_without_outliers</span> <span class="o">=</span> <span class="n">interval</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">outliers</span><span class="p">)]</span>
+        <span class="n">mean_interval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">interval_without_outliers</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">outliers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># go through the outliers starting with the highest indices</span>
+        <span class="c1"># so that the indices of the other outliers are not moved when</span>
+        <span class="c1"># unknown intervas are inserted</span>
+        <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">outliers_loc</span><span class="p">):</span>
+            <span class="c1"># compute number of NaNs to insert based on the mean interval</span>
+            <span class="n">n_nan</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">interval</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">/</span> <span class="n">mean_interval</span><span class="p">)</span>
+
+            <span class="c1"># Delete peak corresponding to large interval and replace by N NaNs</span>
+            <span class="n">peaks_to_correct</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">peaks_to_correct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_nan</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Interpolate values</span>
+        <span class="n">interpolated_peaks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">)</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">limit_area</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="c1"># If there are missing values remaining, remove</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">interpolated_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">interpolated_peaks</span><span class="p">))]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">peaks</span>
-    <span class="n">peaks_to_correct</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-
-    <span class="n">interval_without_outliers</span> <span class="o">=</span> <span class="n">interval</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">outliers</span><span class="p">)]</span>
-    <span class="n">mean_interval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">interval_without_outliers</span><span class="p">)</span>
-
-    <span class="c1"># go through the outliers starting with the highest indices</span>
-    <span class="c1"># so that the indices of the other outliers are not moved when</span>
-    <span class="c1"># unknown intervas are inserted</span>
-    <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">outliers_loc</span><span class="p">):</span>
-        <span class="c1"># compute number of NaNs to insert based on the mean interval</span>
-        <span class="n">n_nan</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">interval</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">/</span> <span class="n">mean_interval</span><span class="p">)</span>
-
-        <span class="c1"># Delete peak corresponding to large interval and replace by N NaNs</span>
-        <span class="n">peaks_to_correct</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="n">peaks_to_correct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_nan</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># Interpolate values</span>
-    <span class="n">interpolated_peaks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">)</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">limit_area</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-    <span class="c1"># If there are missing values remaining, remove</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">interpolated_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">interpolated_peaks</span><span class="p">))]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">peaks</span>
 </pre></div>
 
               </div>
