@@ -28,11 +28,6 @@ def complexity_tolerance(
     similar points that we "tolerate"). This parameter has a critical impact and is a major
     source of inconsistencies in the literature.
 
-    .. tip::
-
-        To know more about the different methods and their parameters, please refer to our
-        `study <https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html>`_.
-
     Different methods have been described to estimate the most appropriate tolerance value:
 
     * **maxApEn**: Different values of tolerance will be tested and the one where the approximate
@@ -48,6 +43,7 @@ def complexity_tolerance(
 
     * **sd**: r = 0.2 * standard deviation (SD) of the signal will be returned. This is the most
       commonly used value in the literature, though its appropriateness is questionable.
+    * **makowski**: See our `study <https://github.com/DominiqueMakowski/ComplexityTolerance>`_.
     * **nolds**: Adjusted value based on the SD and the dimension. The rationale is that
       the chebyshev distance (used in various metrics) rises logarithmically with increasing
       dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the

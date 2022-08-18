@@ -51,11 +51,11 @@ def rsp_rvt(
     --------
     .. ipython:: python
 
-        import neurokit2 as nk
+      import neurokit2 as nk
 
-        rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-        rsp = nk.rsp_clean(rsp)
-        nk.rsp_rvt(rsp, show=True)
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      rsp = nk.rsp_clean(rsp)
+      nk.rsp_rvt(rsp, show=True)
 
 
     References
@@ -66,7 +66,9 @@ def rsp_rvt(
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
 
-    d = scipy.signal.iirfilter(N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
+    d = scipy.signal.iirfilter(
+        N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate
+    )
     fr_lp = scipy.signal.sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
     fr_lp = fr_lp[n_pad : (len(fr_lp) - n_pad)]
 
@@ -116,7 +118,9 @@ def rsp_rvt(
     # Low-pass filter to remove within_cycle changes
     # Note factor of two is for compatability with the common definition of RV
     # as the difference between max and min inhalation (i.e. twice the amplitude)
-    d = scipy.signal.iirfilter(N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
+    d = scipy.signal.iirfilter(
+        N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate
+    )
     fr_rv = 2 * scipy.signal.sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
     fr_rv = fr_rv[n_pad : (len(fr_rv) - n_pad)]
     fr_rv[fr_rv < 0] = 0
@@ -164,7 +168,7 @@ def _rsp_rvt_find_min(increase_inds, fr_phase, smaller_index, silent):
 
 
 def _rsp_rvt_plot(rvt, rsp_signal, sampling_rate):
-    plt.figure(figsize=(12, 12))
+    plt.figure()
     plt.title("Respiratory Volume per Time (RVT)")
     plt.xlabel("Time [s]")
     plt.plot(rescale(rsp_signal, to=[np.nanmin(rvt), np.nanmax(rvt)]), label="RSP", color="#CFD8DC")

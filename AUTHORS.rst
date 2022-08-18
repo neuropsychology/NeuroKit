@@ -4,7 +4,7 @@ Authors
 .. hint::
    Want to be a part of the project? Read how to `contribute and join us <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
-The full log of contributors is available `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
+The full log of contributors is available on `GitHub <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
 
 Current maintainers
 -------------------
@@ -48,7 +48,7 @@ Contributors
 * `Celal Savur <https://github.com/csavur>`_ *(Rochester Institute of Technology, USA)*
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 * `Patryk Wielopolski <https://github.com/pfilo8>`_ *(Wrocław University of Science and Technology, Poland)*
-* `Jannik Gut <https://github.com/rostro36>`_ 
+* `Jannik Gut <https://github.com/rostro36>`_
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
