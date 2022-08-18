@@ -14,28 +14,37 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second).
 
+    See Also
+    --------
+    rsp_process
+
+    Returns
+    -------
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after rsp_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
+
     Examples
     --------
     .. ipython:: python
 
       import neurokit2 as nk
 
+      # Simulate data
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+
+      # Process signal
       rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
 
+      # Plot
       @savefig p_rsp_plot1.png scale=100%
       fig = nk.rsp_plot(rsp_signals)
       @suppress
       plt.close()
-
-    Returns
-    -------
-    fig
-        Figure representing a plot of the processed rsp signals.
-
-    See Also
-    --------
-    rsp_process
 
     """
     # Mark peaks, troughs and phases.

@@ -34,7 +34,7 @@ Fractal Dimension
 .. autofunction:: neurokit2.complexity.fractal_katz
 
 *fractal_linelength()*
-"""""""""""""""""
+"""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_linelength
 
 *fractal_petrosian()*
@@ -207,7 +207,7 @@ Other indices
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
 *complexity_decorrelation()*
-"""""""""""""""""""""""
+"""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_decorrelation
 
 *complexity_lempelziv()*

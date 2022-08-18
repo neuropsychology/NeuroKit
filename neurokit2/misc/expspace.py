@@ -31,13 +31,14 @@ def expspace(start, stop, num=50, out=int, base=1):
 
       import neurokit2 as nk
       nk.expspace(start=4, stop=100, num=10)
+      nk.expspace(start=0, stop=1, num=10, out=float)
 
     """
     if base == 1:
-        seq = np.exp(np.linspace(np.log(start), np.log(stop), num, endpoint=True))
+        seq = np.exp(np.linspace(np.log(1 + start), np.log(1 + stop), num, endpoint=True)) - 1
     else:
         seq = np.exp2(
-            np.linspace(np.log2(start), np.log2(stop), num, endpoint=True)
+            np.linspace(np.log2(1 + start), np.log2(1 + stop), num, endpoint=True) - 1
         )  # pylint: disable=E1111
 
     # Round and convert to int
