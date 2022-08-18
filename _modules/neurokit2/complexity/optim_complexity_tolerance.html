@@ -370,6 +370,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">
+     HRV Tutorial
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference external" href="https://psyarxiv.com/f8k3x/">
      Complexity Review
     </a>
@@ -377,11 +382,6 @@
    <li class="toctree-l2">
     <a class="reference external" href="https://psyarxiv.com/v5tqw/">
      Complexity Structure
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://github.com/DominiqueMakowski/ComplexityTolerance">
-     Complexity Tolerance Estimation
     </a>
    </li>
    <li class="toctree-l2">
@@ -575,11 +575,6 @@ title="Open an issue"
 <span class="sd">    similar points that we &quot;tolerate&quot;). This parameter has a critical impact and is a major</span>
 <span class="sd">    source of inconsistencies in the literature.</span>
 
-<span class="sd">    .. tip::</span>
-
-<span class="sd">        To know more about the different methods and their parameters, please refer to our</span>
-<span class="sd">        `study &lt;https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html&gt;`_.</span>
-
 <span class="sd">    Different methods have been described to estimate the most appropriate tolerance value:</span>
 
 <span class="sd">    * **maxApEn**: Different values of tolerance will be tested and the one where the approximate</span>
@@ -595,6 +590,7 @@ title="Open an issue"
 
 <span class="sd">    * **sd**: r = 0.2 * standard deviation (SD) of the signal will be returned. This is the most</span>
 <span class="sd">      commonly used value in the literature, though its appropriateness is questionable.</span>
+<span class="sd">    * **makowski**: See our `study &lt;https://github.com/DominiqueMakowski/ComplexityTolerance&gt;`_.</span>
 <span class="sd">    * **nolds**: Adjusted value based on the SD and the dimension. The rationale is that</span>
 <span class="sd">      the chebyshev distance (used in various metrics) rises logarithmically with increasing</span>
 <span class="sd">      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the</span>

@@ -370,6 +370,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">
+     HRV Tutorial
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference external" href="https://psyarxiv.com/f8k3x/">
      Complexity Review
     </a>
@@ -377,11 +382,6 @@
    <li class="toctree-l2">
     <a class="reference external" href="https://psyarxiv.com/v5tqw/">
      Complexity Structure
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://github.com/DominiqueMakowski/ComplexityTolerance">
-     Complexity Tolerance Estimation
     </a>
    </li>
    <li class="toctree-l2">
@@ -598,11 +598,11 @@ title="Open an issue"
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
 
-<span class="sd">        import neurokit2 as nk</span>
+<span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">        rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
-<span class="sd">        rsp = nk.rsp_clean(rsp)</span>
-<span class="sd">        nk.rsp_rvt(rsp, show=True)</span>
+<span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
+<span class="sd">      rsp = nk.rsp_clean(rsp)</span>
+<span class="sd">      nk.rsp_rvt(rsp, show=True)</span>
 
 
 <span class="sd">    References</span>
@@ -613,7 +613,9 @@ title="Open an issue"
     <span class="c1"># low-pass filter at not too far above breathing-rate to remove high-frequency noise</span>
     <span class="n">n_pad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
 
-    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span>
+        <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
     <span class="n">fr_lp</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">n_pad</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">))</span>
     <span class="n">fr_lp</span> <span class="o">=</span> <span class="n">fr_lp</span><span class="p">[</span><span class="n">n_pad</span> <span class="p">:</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fr_lp</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_pad</span><span class="p">)]</span>
 
@@ -663,7 +665,9 @@ title="Open an issue"
     <span class="c1"># Low-pass filter to remove within_cycle changes</span>
     <span class="c1"># Note factor of two is for compatability with the common definition of RV</span>
     <span class="c1"># as the difference between max and min inhalation (i.e. twice the amplitude)</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span>
+        <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
     <span class="n">fr_rv</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">fr_mag</span><span class="p">,</span> <span class="n">n_pad</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">))</span>
     <span class="n">fr_rv</span> <span class="o">=</span> <span class="n">fr_rv</span><span class="p">[</span><span class="n">n_pad</span> <span class="p">:</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fr_rv</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_pad</span><span class="p">)]</span>
     <span class="n">fr_rv</span><span class="p">[</span><span class="n">fr_rv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -711,7 +715,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_rsp_rvt_plot</span><span class="p">(</span><span class="n">rvt</span><span class="p">,</span> <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Respiratory Volume per Time (RVT)&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rescale</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">rvt</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">rvt</span><span class="p">)]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;RSP&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#CFD8DC&quot;</span><span class="p">)</span>
