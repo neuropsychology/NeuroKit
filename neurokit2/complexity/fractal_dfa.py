@@ -315,7 +315,7 @@ def _fractal_dfa_findscales(n, scale="default"):
 
     # See https://github.com/neuropsychology/NeuroKit/issues/206
     if isinstance(scale, int):
-        scale = np.exp2(np.linspace(np.log2(10), np.log2(int(n / 10)), scale)).astype(int)
+        scale = np.exp(np.linspace(np.log(10), np.log(int(n / 10)), scale)).astype(int)
         scale = np.unique(scale)  # keep only unique
 
     # Sanity checks (return warning for too short scale)
