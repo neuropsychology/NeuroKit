@@ -760,11 +760,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  0.726377  -0.055053  70.093458  ...            0    0.016   7.930843</span>
-<span class="go">1  0.692969  -0.133866  70.093458  ...            0    0.016   7.930843</span>
-<span class="go">2  0.606082  -0.221390  70.093458  ...            0    0.016   7.930843</span>
-<span class="go">3  0.481517  -0.320973  70.093458  ...            0    0.016   7.930843</span>
-<span class="go">4  0.336239  -0.431027  70.093458  ...            0    0.016   7.930843</span>
+<span class="go">0  1.055467  -0.072303  69.998963  ...            0    0.008   7.930591</span>
+<span class="go">1  1.002612  -0.195925  69.998963  ...            0    0.008   7.930591</span>
+<span class="go">2  0.865642  -0.332371  69.998963  ...            0    0.008   7.930591</span>
+<span class="go">3  0.670882  -0.486113  69.998963  ...            0    0.008   7.930591</span>
+<span class="go">4  0.446408  -0.654034  69.998963  ...            0    0.008   7.930591</span>
 
 <span class="go">[5 rows x 46 columns]</span>
 </pre></div>
@@ -844,25 +844,25 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <p><a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_analyze" title="neurokit2.ecg.ecg_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_analyze</span></code></a>, <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_analyze" title="neurokit2.rsp.rsp_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_analyze</span></code></a>, <a class="reference internal" href="eda.html#neurokit2.eda.eda_analyze" title="neurokit2.eda.eda_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_analyze</span></code></a>, <a class="reference internal" href="emg.html#neurokit2.emg.emg_analyze" title="neurokit2.emg.emg_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_analyze</span></code></a>, <a class="reference internal" href="eog.html#neurokit2.eog.eog_analyze" title="neurokit2.eog.eog_analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eog_analyze</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
+<p><strong>Example 1</strong>: Event-related analysis</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="go"># Example 1: Event-related analysis ==================================================</span>
 <span class="go"># Download data</span>
 <span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
 
 <span class="go"># Process the data</span>
 <span class="gp">In [3]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">eda</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA&quot;</span><span class="p">],</span>
-<span class="gp">   ...: </span>                         <span class="n">keep</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">   ...: </span>                          <span class="n">keep</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 
 <span class="go"># Build epochs around photosensor-marked events</span>
 <span class="gp">In [4]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span> <span class="n">threshold_keep</span><span class="o">=</span><span class="s2">&quot;below&quot;</span><span class="p">,</span>
-<span class="gp">   ...: </span>                       <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span>
-<span class="gp">   ...: </span>                                         <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
+<span class="gp">   ...: </span>                        <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                          <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
-<span class="gp">   ...: </span>                         <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">   ...: </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
 <span class="gp">   ...: </span>
 
 <span class="go"># Analyze</span>
@@ -875,9 +875,10 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="go">4     4  Negative        12984  ...               NaN  0.002043  -0.056213</span>
 
 <span class="go">[4 rows x 43 columns]</span>
-
-<span class="go"># Example 2: Interval-related analysis =================================================</span>
-<span class="go"># Download data</span>
+</pre></div>
+</div>
+<p><strong>Example 2</strong>: Interval-related analysis</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download data</span>
 <span class="gp">In [7]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
 
 <span class="go"># Process the data</span>

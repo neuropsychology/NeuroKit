@@ -599,30 +599,34 @@ title="Open an issue"
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>
+<span class="sd">    **Example 1**: Event-related analysis</span>
+
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # Example 1: Event-related analysis ==================================================</span>
 <span class="sd">      # Download data</span>
 <span class="sd">      data = nk.data(&quot;bio_eventrelated_100hz&quot;)</span>
 
 <span class="sd">      # Process the data</span>
 <span class="sd">      df, info = nk.bio_process(ecg=data[&quot;ECG&quot;], rsp=data[&quot;RSP&quot;], eda=data[&quot;EDA&quot;],</span>
-<span class="sd">                               keep=data[&quot;Photosensor&quot;], sampling_rate=100)</span>
+<span class="sd">                                keep=data[&quot;Photosensor&quot;], sampling_rate=100)</span>
 
 <span class="sd">      # Build epochs around photosensor-marked events</span>
 <span class="sd">      events = nk.events_find(data[&quot;Photosensor&quot;], threshold_keep=&quot;below&quot;,</span>
-<span class="sd">                             event_conditions=[&quot;Negative&quot;, &quot;Neutral&quot;,</span>
-<span class="sd">                                               &quot;Neutral&quot;, &quot;Negative&quot;])</span>
+<span class="sd">                              event_conditions=[&quot;Negative&quot;, &quot;Neutral&quot;,</span>
+<span class="sd">                                                &quot;Neutral&quot;, &quot;Negative&quot;])</span>
 <span class="sd">      epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1,</span>
-<span class="sd">                               epochs_end=1.9)</span>
+<span class="sd">                                epochs_end=1.9)</span>
 
 <span class="sd">      # Analyze</span>
 <span class="sd">      nk.bio_analyze(epochs, sampling_rate=100)</span>
 
 
-<span class="sd">      # Example 2: Interval-related analysis =================================================</span>
+<span class="sd">    **Example 2**: Interval-related analysis</span>
+
+<span class="sd">    .. ipython:: python</span>
+
 <span class="sd">      # Download data</span>
 <span class="sd">      data = nk.data(&quot;bio_resting_5min_100hz&quot;)</span>
 

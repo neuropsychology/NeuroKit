@@ -590,7 +590,8 @@ title="Open an issue"
 
 <span class="sd">    * **sd**: r = 0.2 * standard deviation (SD) of the signal will be returned. This is the most</span>
 <span class="sd">      commonly used value in the literature, though its appropriateness is questionable.</span>
-<span class="sd">    * **makowski**: See our `study &lt;https://github.com/DominiqueMakowski/ComplexityTolerance&gt;`_.</span>
+<span class="sd">    * **makowski**: Adjusted value based on the SD, the embedding dimension and the signal&#39;s</span>
+<span class="sd">      length. See our `study &lt;https://github.com/DominiqueMakowski/ComplexityTolerance&gt;`_.</span>
 <span class="sd">    * **nolds**: Adjusted value based on the SD and the dimension. The rationale is that</span>
 <span class="sd">      the chebyshev distance (used in various metrics) rises logarithmically with increasing</span>
 <span class="sd">      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the</span>
@@ -788,11 +789,15 @@ title="Open an issue"
         <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="c1"># Method described in</span>
-        <span class="c1"># https://neuropsychology.github.io/NeuroKit/studies/complexity_tolerance.html</span>
+        <span class="c1"># https://github.com/DominiqueMakowski/ComplexityTolerance</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;neurokit&#39; method.&quot;</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.06174</span> <span class="o">+</span> <span class="mf">0.12447</span> <span class="o">*</span> <span class="n">dimension</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;NeuroKit&quot;</span><span class="p">}</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;makowski&#39; method.&quot;</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="mf">0.2811</span> <span class="o">*</span> <span class="p">(</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.0049</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="p">((</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Makowski&quot;</span><span class="p">}</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;maxapen&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]:</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_maxapen</span><span class="p">(</span>
