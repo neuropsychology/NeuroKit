@@ -77,7 +77,7 @@ def test_rsp_clean():
     distorted_sample = copy.copy(hampel_sample)
     distorted_sample[distort_locations] = 100
     assert np.allclose(
-        nk.rsp_clean(distorted_sample, sampling_rate=sampling_rate, method="hampel", window_length=100),
+        nk.rsp_clean(distorted_sample, sampling_rate=sampling_rate, method="hampel", window_length=99),
         hampel_sample,
         atol=1,
     )

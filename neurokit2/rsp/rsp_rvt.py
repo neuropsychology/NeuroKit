@@ -88,7 +88,7 @@ def rsp_rvt(
     elif method in ["birn", "birn2006"]:
         rvt = _rsp_rvt_birn(rsp_signal, sampling_rate, peak_distance=peak_distance, peak_prominence=peak_prominence)
     elif method in ["power", "power2020"]:
-        rvt = _rsp_rvt_power(rsp_signal, sampling_rate, peak_distance=peak_distance, peak_prominence=peak_prominence)
+        rvt = _rsp_rvt_power(rsp_signal, peak_distance=peak_distance, peak_prominence=peak_prominence)
     else:
         raise ValueError("NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'.")
     if show:
