@@ -7,9 +7,12 @@ import scipy.signal
 
 from ..misc import NeuroKitWarning, as_vector
 from ..signal import signal_detrend, signal_filter
+from ..stats import mad
 
 
-def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
+def rsp_clean(
+    rsp_signal, sampling_rate=1000, method="khodadad2018", window_length=100, mad_constant=1.4826, deviation_threshold=3
+):
     """**Preprocess a respiration (RSP) signal**
 
     Clean a respiration signal using different sets of parameters, such as:
@@ -18,16 +21,25 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
       filter)
     * ``"BioSPPy"``: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
       detrending).
+    * ``"hampel"``: Find outliers which are 3 thresholds away from the running median.
+      Fill outliers with rolling median.
 
     Parameters
     ----------
     rsp_signal : Union[list, np.array, pd.Series]
         The raw respiration channel (as measured, for instance, by a respiration belt).
-    sampling_rate : int
+    sampling_rate : int, optional
         The sampling frequency of :func:`.rsp_signal` (in Hz, i.e., samples/second).
-    method : str
-        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default) or
-        ``"biosppy"``.
+    method : str, optional
+        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default),
+        ``"biosppy"`` or ``"hampel"``.
+    window_length : int, optional
+        Only applies if method is ``"hampel"``. Window to be considered when cleaning, by default 100
+    mad_constant : float, optional
+        Only applies if method is ``"scipy"``. Scaling factor for median absolute deviaton, by default 1.4826
+    deviation_threshold : float, optional
+        Only applies if method is ``"scipy"``. Threshold of deviations after which a point is considered
+        an outlier, by default 3
 
     Returns
     -------
@@ -50,6 +62,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
           "RSP_Raw": rsp,
           "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
           "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")
+          "RSP_Hampel": nk.rsp_clean(rsp, sampling_rate=50, method="hampel")
       })
       @savefig p_rsp_clean1.png scale=100%
       signals.plot()
@@ -61,6 +74,10 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     * Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... & Bayford,
       R. (2018). Optimized breath detection algorithm in electrical impedance tomography.
       Physiological measurement, 39(9), 094001.
+    * Power, J., Lynch, C., Dubin, M., Silver, B., Martin, A., Jones, R.,(2020)
+      Characteristics of respiratory measures in young adults scanned at rest,
+      including systematic changes and “missed” deep breaths.
+      NeuroImage, Volume 204, 116234
 
     """
     rsp_signal = as_vector(rsp_signal)
@@ -80,9 +97,13 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         clean = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)
     elif method == "biosppy":
         clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
+    elif method in ["power", "power2020", "hampel"]:
+        clean = _rsp_clean_hampel(
+            rsp_signal, window_length=window_length, mad_constant=mad_constant, deviation_threshold=deviation_threshold
+        )
     else:
         raise ValueError(
-            "NeuroKit error: rsp_clean(): 'method' should be one of 'khodadad2018' or 'biosppy'."
+            "NeuroKit error: rsp_clean(): 'method' should be one of 'khodadad2018', 'biosppy' or 'hampel'."
         )
 
     return clean
@@ -140,9 +161,8 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     # Parameters
     order = 2
     frequency = [0.1, 0.35]
-    frequency = (
-        2 * np.array(frequency) / sampling_rate
-    )  # Normalize frequency to Nyquist Frequency (Fs/2).
+    # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate
 
     # Filtering
     b, a = scipy.signal.butter(N=order, Wn=frequency, btype="bandpass", analog=False)
@@ -152,3 +172,38 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     clean = signal_detrend(filtered, order=0)
 
     return clean
+
+
+# =============================================================================
+# Hampel filter
+# =============================================================================
+def _rsp_clean_hampel(rsp_signal, window_length=100, mad_constant=1.4826, deviation_threshold=3):
+    """Explanation MatLabs' https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From
+    https://stackoverflow.com/a/51731332.
+
+    Parameters
+    ----------
+    rsp_signal : Union[list, np.array, pd.Series]
+        The raw respiration channel (as measured, for instance, by a respiration belt).
+    window_length : int, optional
+        Window to be considered when cleaning, by default 100
+    mad_constant : float, optional
+        Scaling factor for median absolute deviaton, by default 1.4826
+    deviation_threshold : float, optional
+        Threshold of deviations after which a point is considered an outlier, by default 3
+
+    """
+    rsp_signal = pd.Series(rsp_signal)
+    rolling_median = rsp_signal.rolling(window=window_length, center=True).median()
+
+    def mad_func(x):
+        return mad(x, mad_constant)
+
+    rolling_MAD = rsp_signal.rolling(window=window_length, center=True).apply(mad_func)
+    threshold = deviation_threshold * rolling_MAD
+    difference = np.abs(rsp_signal - rolling_median)
+    # Find outliers
+    outlier_idx = difference > threshold
+    # Substitute outliers with rolling median
+    rsp_signal[outlier_idx] = rolling_median[outlier_idx]
+    return as_vector(rsp_signal)
