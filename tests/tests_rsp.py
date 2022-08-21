@@ -10,7 +10,7 @@ import pytest
 import neurokit2 as nk
 
 
-random.seed(a=12, version=2)
+random.seed(a=13, version=2)
 
 
 def test_rsp_simulate():
