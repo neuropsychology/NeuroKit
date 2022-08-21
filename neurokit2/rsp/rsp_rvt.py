@@ -96,7 +96,7 @@ def rsp_rvt(
     return rvt
 
 
-def _rsp_rvt_birn(rsp_signal, sampling_rate=1000, window_length=400, peak_distance=800, peak_prominence=0.5):
+def _rsp_rvt_birn(rsp_signal, sampling_rate=1000, window_length=399, peak_distance=800, peak_prominence=0.5):
     zsmooth_signal = _smooth_rsp_data(rsp_signal, window_length=window_length)
     info = rsp_findpeaks(zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence)
     peak_coords = info["RSP_Peaks"]
@@ -122,7 +122,7 @@ def _rsp_rvt_birn(rsp_signal, sampling_rate=1000, window_length=400, peak_distan
     return rvt
 
 
-def _rsp_rvt_power(rsp_signal, window_length=400, peak_distance=800, peak_prominence=0.5):
+def _rsp_rvt_power(rsp_signal, window_length=399, peak_distance=800, peak_prominence=0.5):
     # preprocess signal
     zsmooth_signal = _smooth_rsp_data(rsp_signal, window_length=window_length)
     # find peaks and troughs
@@ -152,7 +152,7 @@ def _rsp_rvt_power(rsp_signal, window_length=400, peak_distance=800, peak_promin
     return np.interp(range(len(rsp_signal)), peak_coords, peak_heights)
 
 
-def _smooth_rsp_data(signal, window_length=400):
+def _smooth_rsp_data(signal, window_length=399):
     signal = rsp_clean(signal, method="hampel")
     smooth_signal = scipy.signal.savgol_filter(signal, window_length=window_length, polyorder=2)
     zsmooth_signal = scipy.stats.zscore(smooth_signal)
