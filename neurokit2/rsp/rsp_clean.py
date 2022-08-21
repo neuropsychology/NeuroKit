@@ -61,7 +61,7 @@ def rsp_clean(
       signals = pd.DataFrame({
           "RSP_Raw": rsp,
           "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
-          "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")
+          "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy"),
           "RSP_Hampel": nk.rsp_clean(rsp, sampling_rate=50, method="hampel")
       })
       @savefig p_rsp_clean1.png scale=100%
