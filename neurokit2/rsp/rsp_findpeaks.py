@@ -99,6 +99,7 @@ def rsp_findpeaks(
 # Methods
 # =============================================================================
 def _rsp_findpeaks_biosppy(rsp_cleaned, sampling_rate):
+    """https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py"""
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
     extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0)
@@ -117,6 +118,7 @@ def _rsp_findpeaks_biosppy(rsp_cleaned, sampling_rate):
 
 
 def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
+    """https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta"""
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
     extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=amplitude_min)
@@ -127,6 +129,7 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
 
 
 def _rsp_findpeaks_scipy(rsp_cleaned, sampling_rate, peak_distance=0.8, peak_prominence=0.5):
+    """https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html"""
     peak_distance = sampling_rate * peak_distance
     peaks, _ = scipy.signal.find_peaks(
         rsp_cleaned, distance=peak_distance, prominence=peak_prominence
