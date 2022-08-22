@@ -19,8 +19,8 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
       filter)
     * **BioSPPy**: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
       detrending).
-    * **hampel**: Replaces values which are 3 (can be changed via ``threshold``) `
-      :func:`.mad` away from the rolling median.
+    * **hampel**: Applies a median-based Hampel filter by replacing values which are 3 (can be
+      changed via ``threshold``) :func:`.mad` away from the rolling median.
 
     Parameters
     ----------
