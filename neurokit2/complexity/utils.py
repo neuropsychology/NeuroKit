@@ -130,7 +130,7 @@ def _get_count(
         dist = dist.pairwise(embedded)
         # sklearn.metrics.pairwise_distances_chunked()
         if n > 1:
-            sim = np.exp(-(dist ** n) / tolerance)
+            sim = np.exp(-(dist**n) / tolerance)
         else:
             sim = np.exp(-dist / tolerance)
         # Return the count
@@ -155,5 +155,4 @@ def _get_count(
         if kdtree is None:
             kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
         count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
-
     return embedded, count, kdtree
