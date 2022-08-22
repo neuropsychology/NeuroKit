@@ -9,7 +9,7 @@ def rsp_findpeaks(
     sampling_rate=1000,
     method="khodadad2018",
     amplitude_min=0.3,
-    peak_distance=800,
+    peak_distance=0.8,
     peak_prominence=0.5,
 ):
     """**Extract extrema in a respiration (RSP) signal**
@@ -22,20 +22,21 @@ def rsp_findpeaks(
     ----------
     rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by :func:`.rsp_clean`.
-    sampling_rate : int, optional
+    sampling_rate : int
         The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).
-    method : str, optional
+    method : str
         The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default), ``"scipy"`` or
         ``"biosppy"``.
-    amplitude_min : float, optional
+    amplitude_min : float
         Only applies if method is ``"khodadad2018"``. Extrema that have a vertical distance smaller
         than(outlier_threshold * average vertical distance) to any direct neighbour are removed as
         false positive outliers. I.e., outlier_threshold should be a float with positive sign (the
         default is 0.3). Larger values of outlier_threshold correspond to more conservative
         thresholds (i.e., more extrema removed as outliers).
-    peak_distance: float, optional
-        Only applies if method is ``"scipy"``. Minimal distance between peaks. Default is 800.
-    peak_prominence: float, optional
+    peak_distance: float
+        Only applies if method is ``"scipy"``. Minimal distance between peaks. Default is 0.8
+        seconds.
+    peak_prominence: float
         Only applies if method is ``"scipy"``. Minimal prominence between peaks. Default is 0.5.
 
     Returns
@@ -83,7 +84,9 @@ def rsp_findpeaks(
     elif method == "biosppy":
         info = _rsp_findpeaks_biosppy(cleaned, sampling_rate=sampling_rate)
     elif method == "scipy":
-        info = _rsp_findpeaks_scipy(cleaned, peak_distance=peak_distance, peak_prominence=peak_prominence)
+        info = _rsp_findpeaks_scipy(
+            cleaned, peak_distance=peak_distance, peak_prominence=peak_prominence
+        )
     else:
         raise ValueError(
             "NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018', 'scipy' or 'biosppy'."
@@ -123,9 +126,14 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
     return info
 
 
-def _rsp_findpeaks_scipy(rsp_cleaned, peak_distance=800, peak_prominence=0.5):
-    peaks, _ = scipy.signal.find_peaks(rsp_cleaned, distance=peak_distance, prominence=peak_prominence)
-    troughs, _ = scipy.signal.find_peaks(-rsp_cleaned, distance=peak_distance, prominence=peak_prominence)
+def _rsp_findpeaks_scipy(rsp_cleaned, sampling_rate, peak_distance=0.8, peak_prominence=0.5):
+    peak_distance = sampling_rate * peak_distance
+    peaks, _ = scipy.signal.find_peaks(
+        rsp_cleaned, distance=peak_distance, prominence=peak_prominence
+    )
+    troughs, _ = scipy.signal.find_peaks(
+        -rsp_cleaned, distance=peak_distance, prominence=peak_prominence
+    )
 
     info = {"RSP_Peaks": peaks, "RSP_Troughs": troughs}
     return info
