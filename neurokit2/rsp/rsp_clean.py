@@ -10,19 +10,17 @@ from ..signal import signal_detrend, signal_filter
 from ..stats import mad
 
 
-def rsp_clean(
-    rsp_signal, sampling_rate=1000, method="khodadad2018", window_length=100, mad_constant=1.4826, deviation_threshold=3
-):
+def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
     """**Preprocess a respiration (RSP) signal**
 
     Clean a respiration signal using different sets of parameters, such as:
 
-    * ``"khodadad2018"``: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
+    * **khodadad2018**: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
       filter)
-    * ``"BioSPPy"``: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
+    * **BioSPPy**: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
       detrending).
-    * ``"hampel"``: Find outliers which are 3 thresholds away from the running median.
-      Fill outliers with rolling median.
+    * **hampel**: Replaces values which are 3 (can be changed via ``threshold``) `
+      :func:`.mad` away from the rolling median.
 
     Parameters
     ----------
@@ -33,13 +31,8 @@ def rsp_clean(
     method : str, optional
         The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default),
         ``"biosppy"`` or ``"hampel"``.
-    window_length : int, optional
-        Only applies if method is ``"hampel"``. Window to be considered when cleaning, by default 100
-    mad_constant : float, optional
-        Only applies if method is ``"scipy"``. Scaling factor for median absolute deviaton, by default 1.4826
-    deviation_threshold : float, optional
-        Only applies if method is ``"scipy"``. Threshold of deviations after which a point is considered
-        an outlier, by default 3
+    **kwargs
+        Other arguments to pass to the cleaning method.
 
     Returns
     -------
@@ -57,12 +50,12 @@ def rsp_clean(
       import pandas as pd
       import neurokit2 as nk
 
-      rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
+      rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.1)
       signals = pd.DataFrame({
           "RSP_Raw": rsp,
           "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
           "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy"),
-          "RSP_Hampel": nk.rsp_clean(rsp, sampling_rate=50, method="hampel")
+          "RSP_Hampel": nk.rsp_clean(rsp, sampling_rate=50, method="hampel", threshold=1)
       })
       @savefig p_rsp_clean1.png scale=100%
       signals.plot()
@@ -99,7 +92,8 @@ def rsp_clean(
         clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     elif method in ["power", "power2020", "hampel"]:
         clean = _rsp_clean_hampel(
-            rsp_signal, window_length=window_length, mad_constant=mad_constant, deviation_threshold=deviation_threshold
+            rsp_signal,
+            **kwargs,
         )
     else:
         raise ValueError(
@@ -177,30 +171,30 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
 # =============================================================================
 # Hampel filter
 # =============================================================================
-def _rsp_clean_hampel(rsp_signal, window_length=100, mad_constant=1.4826, deviation_threshold=3):
-    """Explanation MatLabs' https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From
-    https://stackoverflow.com/a/51731332.
+def _rsp_clean_hampel(rsp_signal, sampling_rate=1000, window_length=0.1, threshold=3, **kwargs):
+    """Explanation MatLabs' https://www.mathworks.com/help/dsp/ref/hampelfilter.html.
+    From https://stackoverflow.com/a/51731332.
 
     Parameters
     ----------
     rsp_signal : Union[list, np.array, pd.Series]
         The raw respiration channel (as measured, for instance, by a respiration belt).
     window_length : int, optional
-        Window to be considered when cleaning, by default 100
-    mad_constant : float, optional
-        Scaling factor for median absolute deviaton, by default 1.4826
-    deviation_threshold : float, optional
-        Threshold of deviations after which a point is considered an outlier, by default 3
+        Window to be considered when cleaning, by default 0.1. In seconds.
+    threshold : float, optional
+        Threshold of deviations after which a point is considered an outlier, by default 3.
 
     """
+    # Get window length in samples
+    window_length = int(window_length * sampling_rate)
+
+    # Convert to Series to use its rolling methods
     rsp_signal = pd.Series(rsp_signal)
+
     rolling_median = rsp_signal.rolling(window=window_length, center=True).median()
+    rolling_MAD = rsp_signal.rolling(window=window_length, center=True).apply(mad)
 
-    def mad_func(x):
-        return mad(x, mad_constant)
-
-    rolling_MAD = rsp_signal.rolling(window=window_length, center=True).apply(mad_func)
-    threshold = deviation_threshold * rolling_MAD
+    threshold = threshold * rolling_MAD
     difference = np.abs(rsp_signal - rolling_median)
     # Find outliers
     outlier_idx = difference > threshold
