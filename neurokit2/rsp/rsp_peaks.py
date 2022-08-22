@@ -13,7 +13,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", **kwargs):
     using different sets of parameters, such as:
 
     * **khodad2018**: Uses the parameters in Khodadad et al. (2018).
-    * **biosppy**: Uses the parameters in the `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
+    * **biosppy**: Uses the parameters in the
+    `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
     * **scipy** Uses the `scipy <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html>`_
       peak-detection function.
 
@@ -71,9 +72,7 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", **kwargs):
     """
     info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
     info = rsp_fixpeaks(info)
-    peak_signal = signal_formatpeaks(
-        info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"]
-    )
+    peak_signal = signal_formatpeaks(info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"])
 
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 

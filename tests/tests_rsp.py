@@ -69,15 +69,16 @@ def test_rsp_clean():
     assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
 
     # Check if outlier was corrected
+    hampel_sampling_rate = 1000
     hampel_sample = nk.rsp_simulate(
-        duration=duration, sampling_rate=sampling_rate, respiratory_rate=15, noise=0.1, random_state=42
+        duration=duration, sampling_rate=hampel_sampling_rate, respiratory_rate=15, noise=0.1, random_state=42
     )
     # Random numbers
     distort_locations = random.sample(range(len(hampel_sample)), 20)
     distorted_sample = copy.copy(hampel_sample)
     distorted_sample[distort_locations] = 100
     assert np.allclose(
-        nk.rsp_clean(distorted_sample, sampling_rate=sampling_rate, method="hampel", window_length=0.99),
+        nk.rsp_clean(distorted_sample, sampling_rate=hampel_sampling_rate, method="hampel", window_length=1),
         hampel_sample,
         atol=1,
     )

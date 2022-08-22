@@ -55,7 +55,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
           "RSP_Raw": rsp,
           "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
           "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy"),
-          "RSP_Hampel": nk.rsp_clean(rsp, sampling_rate=50, method="hampel", threshold=1)
+          "RSP_Hampel": nk.rsp_clean(rsp, sampling_rate=50, method="hampel", threshold=3)
       })
       @savefig p_rsp_clean1.png scale=100%
       signals.plot()
@@ -172,8 +172,8 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
 # Hampel filter
 # =============================================================================
 def _rsp_clean_hampel(rsp_signal, sampling_rate=1000, window_length=0.1, threshold=3, **kwargs):
-    """Explanation MatLabs' https://www.mathworks.com/help/dsp/ref/hampelfilter.html.
-    From https://stackoverflow.com/a/51731332.
+    """Explanation MatLabs' https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From
+    https://stackoverflow.com/a/51731332.
 
     Parameters
     ----------
