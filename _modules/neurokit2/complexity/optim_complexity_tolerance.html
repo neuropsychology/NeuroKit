@@ -598,6 +598,8 @@ title="Open an issue"
 <span class="sd">      chebyshev distance of vectors sampled from a univariate normal distribution. A constant of</span>
 <span class="sd">      ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in</span>
 <span class="sd">      https://github.com/CSchoel/nolds).</span>
+<span class="sd">    * **singh2016**: Makes a histogram of the Chebyshev distance matrix and returns the upper bound</span>
+<span class="sd">      of the modal bin.</span>
 <span class="sd">    * **chon2009**: Acknowledging that computing multiple ApEns is computationally expensive, Chon</span>
 <span class="sd">      (2009) suggested an approximation based a heuristic algorithm that takes into account the</span>
 <span class="sd">      length of the signal, its short-term and long-term variability, and the embedding dimension</span>
@@ -647,7 +649,7 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      # Simulate signal</span>
-<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=5)</span>
+<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 7, 9, 12, 15])</span>
 
 <span class="sd">      # Fast method (based on the standard deviation)</span>
 <span class="sd">      @savefig p_complexity_tolerance1.png scale=100%</span>
@@ -698,6 +700,16 @@ title="Open an issue"
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    Another option is to use the density of distances.</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      @savefig p_complexity_tolerance4.png scale=100%</span>
+<span class="sd">      r, info = nk.complexity_tolerance(signal, delay=1, dimension=3,</span>
+<span class="sd">                                        method = &#39;bin&#39;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 <span class="sd">    * **Example 3**: The default method selects the tolerance at which *ApEn* is maximized.</span>
 
 <span class="sd">    .. ipython:: python</span>
@@ -739,6 +751,11 @@ title="Open an issue"
 <span class="sd">    * Chen, X., Solomon, I. C., &amp; Chon, K. H. (2008). Parameter selection criteria in approximate</span>
 <span class="sd">      entropy and sample entropy with application to neural respiratory signals. Am. J. Physiol.</span>
 <span class="sd">      Regul. Integr. Comp. Physiol.</span>
+<span class="sd">    * Singh, A., Saini, B. S., &amp; Singh, D. (2016). An alternative approach to approximate entropy</span>
+<span class="sd">      threshold value (r) selection: application to heart rate variability and systolic blood</span>
+<span class="sd">      pressure variability under postural challenge. Medical &amp; biological engineering &amp; computing,</span>
+<span class="sd">      54(5), 723-732.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">method</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">}</span>
@@ -817,6 +834,10 @@ title="Open an issue"
         <span class="p">)</span>
         <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;2% Neighbours&quot;</span><span class="p">})</span>
 
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bin&quot;</span><span class="p">,</span> <span class="s2">&quot;bins&quot;</span><span class="p">,</span> <span class="s2">&quot;singh&quot;</span><span class="p">,</span> <span class="s2">&quot;singh2016&quot;</span><span class="p">]:</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_optimize_tolerance_bin</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;bin&quot;</span><span class="p">})</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: complexity_tolerance(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
 
@@ -834,7 +855,7 @@ title="Open an issue"
 
     <span class="c1"># Optimize missing parameters</span>
     <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If method=&#39;RQA&#39;, both delay and dimension must be specified.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If method=&#39;recurrence&#39;, both delay and dimension must be specified.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute distance matrix</span>
     <span class="n">emb</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
@@ -925,6 +946,27 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">r_range</span><span class="p">,</span> <span class="s2">&quot;Scores&quot;</span><span class="p">:</span> <span class="n">counts</span><span class="p">}</span>
 
 
+<span class="k">def</span> <span class="nf">_optimize_tolerance_bin</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="c1"># Optimize missing parameters</span>
+    <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If method=&#39;bin&#39;, both delay and dimension must be specified.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compute distance matrix</span>
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">emb</span><span class="p">,</span> <span class="n">emb</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Histogram of the lower triangular (without the diagonal)</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Most common distance</span>
+    <span class="c1"># Divide by two because r corresponds to the radius of the circle (NOTE: this is</span>
+    <span class="c1"># NOT in the paper and thus, opinion is required!)</span>
+    <span class="n">optimal</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="k">return</span> <span class="n">optimal</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">::]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Scores&quot;</span><span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+
+
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Plotting</span>
 <span class="c1"># =============================================================================</span>
@@ -976,6 +1018,16 @@ title="Open an issue"
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Signal values&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Distribution&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bin&quot;</span><span class="p">,</span> <span class="s2">&quot;bins&quot;</span><span class="p">,</span> <span class="s2">&quot;singh&quot;</span><span class="p">,</span> <span class="s2">&quot;singh2016&quot;</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Optimization of Tolerance Threshold (r)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Chebyshev Distance&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Values&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Scores&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4CAF50&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Optimal r: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">fig</span>
 
     <span class="n">r_range</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Values&quot;</span><span class="p">]</span>
