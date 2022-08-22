@@ -77,7 +77,7 @@ def test_rsp_clean():
     distorted_sample = copy.copy(hampel_sample)
     distorted_sample[distort_locations] = 100
     assert np.allclose(
-        nk.rsp_clean(distorted_sample, sampling_rate=sampling_rate, method="hampel", window_length=99),
+        nk.rsp_clean(distorted_sample, sampling_rate=sampling_rate, method="hampel", window_length=0.99),
         hampel_sample,
         atol=1,
     )
@@ -245,12 +245,12 @@ def test_rsp_intervalrelated():
 
 
 def test_rsp_rvt():
-    rsp10 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=10, random_state=42)
-    rsp20 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=20, random_state=42)
-    # Harrison's rvt
+    sampling_rate = 1000
+    rsp10 = nk.rsp_simulate(duration=60, sampling_rate=sampling_rate, respiratory_rate=10, random_state=42)
+    rsp20 = nk.rsp_simulate(duration=60, sampling_rate=sampling_rate, respiratory_rate=20, random_state=42)
     for method in ["harrison", "birn", "power"]:
-        rvt10 = nk.rsp_rvt(rsp10, method=method)
-        rvt20 = nk.rsp_rvt(rsp20, method=method)
+        rvt10 = nk.rsp_rvt(rsp10, method=method, sampling_rate=sampling_rate)
+        rvt20 = nk.rsp_rvt(rsp20, method=method, sampling_rate=sampling_rate)
         assert len(rsp10) == len(rvt10)
         assert len(rsp20) == len(rvt20)
         assert min(rvt10[~np.isnan(rvt10)]) >= 0
