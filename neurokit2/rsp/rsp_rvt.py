@@ -19,13 +19,13 @@ def rsp_rvt(
     silent=False,
     boundaries=[2.0, 1 / 30],
     iterations=10,
-    peak_distance=800,
-    peak_prominence=0.5,
+    **kwargs
 ):
     """**Respiratory Volume per Time (RVT)**
 
-    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and breathing rate.
-    RVT can be used to identify the global fMRI confounds of breathing, which is often considered noise.
+    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and
+    breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is
+    often considered noise.
 
     Parameters
     ----------
@@ -46,10 +46,8 @@ def rsp_rvt(
     iterations : int, optional
         Only applies if method is ``"harrison"``. Amount of phase refinement estimates
         to remove high frequencies. Synthetic samples often take less than 3.
-    peak_distance: float, optional
-        Only applies if method is ``"birn"`` or ``"power"``. Minimal distance between peaks. Default is 800.
-    peak_prominence: float, optional
-        Only applies if method is ``"birn"`` or ``"power"``. Minimal prominence between peaks. Default is 0.5.
+    **kwargs
+        Arguments to be passed to the underlying peak detection algorithm.
 
     Returns
     -------
@@ -67,38 +65,58 @@ def rsp_rvt(
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-      rsp = nk.rsp_clean(rsp)
-      nk.rsp_rvt(rsp, show=True)
 
+      @savefig p_rsp_rvt1.png scale=100%
+      nk.rsp_rvt(rsp, method="power2020", show=True)
+      @suppress
+      plt.close()
+
+      @savefig p_rsp_rvt2.png scale=100%
+      nk.rsp_rvt(rsp, method="harrison2020", show=True)
+      @suppress
+      plt.close()
+
+      @savefig p_rsp_rvt3.png scale=100%
+      nk.rsp_rvt(rsp, method="birn2006", show=True)
+      @suppress
+      plt.close()
 
     References
     ----------
-    * Birn, R. M., Diamond, J. B., Smith, M. A., & Bandettini, P. A. (2006).
-      Separating respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in fMRI.
-      Neuroimage, 31(4), 1536-1548.
+    * Birn, R. M., Diamond, J. B., Smith, M. A., & Bandettini, P. A. (2006). Separating
+      respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in
+      fMRI. Neuroimage, 31(4), 1536-1548.
     * Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., & Jones, R. M. (2020).
-      Characteristics of respiratory measures in young adults scanned at rest, including systematic changes and
-      “missed” deep breaths. Neuroimage, 204, 116234.
+      Characteristics of respiratory measures in young adults scanned at rest, including systematic
+      changes and "missed" deep breaths. Neuroimage, 204, 116234.
     * Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., & Kasper, L. (2021).
       A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.
     """
     method = method.lower()  # remove capitalised letters
     if method in ["harrison", "harrison2020"]:
-        rvt = _rsp_rvt_harrison(rsp_signal, sampling_rate, silent=silent, boundaries=boundaries, iterations=iterations)
+        rvt = _rsp_rvt_harrison(
+            rsp_signal, sampling_rate, silent=silent, boundaries=boundaries, iterations=iterations
+        )
     elif method in ["birn", "birn2006"]:
-        rvt = _rsp_rvt_birn(rsp_signal, sampling_rate, peak_distance=peak_distance, peak_prominence=peak_prominence)
+        rvt = _rsp_rvt_birn(rsp_signal, sampling_rate, **kwargs)
     elif method in ["power", "power2020"]:
-        rvt = _rsp_rvt_power(rsp_signal, peak_distance=peak_distance, peak_prominence=peak_prominence)
+        rvt = _rsp_rvt_power(rsp_signal, sampling_rate, **kwargs)
     else:
-        raise ValueError("NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'.")
+        raise ValueError(
+            "NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'."
+        )
     if show:
         _rsp_rvt_plot(rvt, rsp_signal, sampling_rate)
     return rvt
 
 
-def _rsp_rvt_birn(rsp_signal, sampling_rate=1000, window_length=399, peak_distance=800, peak_prominence=0.5):
+def _rsp_rvt_birn(
+    rsp_signal, sampling_rate=1000, window_length=399, peak_distance=800, peak_prominence=0.5
+):
     zsmooth_signal = _smooth_rsp_data(rsp_signal, window_length=window_length)
-    info = rsp_findpeaks(zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence)
+    info = rsp_findpeaks(
+        zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence
+    )
     peak_coords = info["RSP_Peaks"]
     trough_coords = info["RSP_Troughs"]
     # prepare for loop
@@ -122,12 +140,16 @@ def _rsp_rvt_birn(rsp_signal, sampling_rate=1000, window_length=399, peak_distan
     return rvt
 
 
-def _rsp_rvt_power(rsp_signal, window_length=399, peak_distance=800, peak_prominence=0.5):
+def _rsp_rvt_power(
+    rsp_signal, sampling_rate=1000, window_length=399, peak_distance=800, peak_prominence=0.5
+):
     # preprocess signal
-    zsmooth_signal = _smooth_rsp_data(rsp_signal, window_length=window_length)
+    zsmooth_signal = _smooth_rsp_data(rsp_signal, sampling_rate, window_length=window_length)
     # find peaks and troughs
 
-    info = rsp_findpeaks(zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence)
+    info = rsp_findpeaks(
+        zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence
+    )
     peak_coords = info["RSP_Peaks"]
     trough_coords = info["RSP_Troughs"]
     # initialize for loop
@@ -148,22 +170,28 @@ def _rsp_rvt_power(rsp_signal, window_length=399, peak_distance=800, peak_promin
 
         trough_loc = sorted(list(trough_locs))[-1]
         # calculate peak_height for peak at peak_index
-        peak_heights.append((zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]) / (peak_loc - prev_peak_loc))
+        peak_heights.append(
+            (zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]) / (peak_loc - prev_peak_loc)
+        )
     return np.interp(range(len(rsp_signal)), peak_coords, peak_heights)
 
 
-def _smooth_rsp_data(signal, window_length=399):
-    signal = rsp_clean(signal, method="hampel")
+def _smooth_rsp_data(signal, sampling_rate=1000, window_length=399):
+    signal = rsp_clean(signal, sampling_rate=sampling_rate, method="hampel")
     smooth_signal = scipy.signal.savgol_filter(signal, window_length=window_length, polyorder=2)
     zsmooth_signal = scipy.stats.zscore(smooth_signal)
     return zsmooth_signal
 
 
-def _rsp_rvt_harrison(rsp_signal, sampling_rate=1000, boundaries=[2.0, 1 / 30], iterations=10, silent=False):
+def _rsp_rvt_harrison(
+    rsp_signal, sampling_rate=1000, boundaries=[2.0, 1 / 30], iterations=10, silent=False
+):
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
 
-    d = scipy.signal.iirfilter(N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
+    d = scipy.signal.iirfilter(
+        N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate
+    )
     fr_lp = scipy.signal.sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
     fr_lp = fr_lp[n_pad : (len(fr_lp) - n_pad)]
 
@@ -213,7 +241,9 @@ def _rsp_rvt_harrison(rsp_signal, sampling_rate=1000, boundaries=[2.0, 1 / 30], 
     # Low-pass filter to remove within_cycle changes
     # Note factor of two is for compatability with the common definition of RV
     # as the difference between max and min inhalation (i.e. twice the amplitude)
-    d = scipy.signal.iirfilter(N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
+    d = scipy.signal.iirfilter(
+        N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate
+    )
     fr_rv = 2 * scipy.signal.sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
     fr_rv = fr_rv[n_pad : (len(fr_rv) - n_pad)]
     fr_rv[fr_rv < 0] = 0

@@ -85,7 +85,10 @@ def rsp_findpeaks(
         info = _rsp_findpeaks_biosppy(cleaned, sampling_rate=sampling_rate)
     elif method == "scipy":
         info = _rsp_findpeaks_scipy(
-            cleaned, peak_distance=peak_distance, peak_prominence=peak_prominence
+            cleaned,
+            sampling_rate=sampling_rate,
+            peak_distance=peak_distance,
+            peak_prominence=peak_prominence,
         )
     else:
         raise ValueError(
