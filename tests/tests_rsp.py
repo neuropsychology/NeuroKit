@@ -103,7 +103,9 @@ def test_rsp_peaks():
 
 def test_rsp_amplitude():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, method="sinusoidal", noise=0)
+    rsp = nk.rsp_simulate(
+        duration=120, sampling_rate=1000, respiratory_rate=15, method="sinusoidal", noise=0, random_state=1
+    )
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
 
@@ -120,7 +122,7 @@ def test_rsp_amplitude():
 
 def test_rsp_process():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15)
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, random_state=2)
     signals, _ = nk.rsp_process(rsp, sampling_rate=1000)
 
     # Only check array dimensions since functions called by rsp_process have
@@ -145,7 +147,7 @@ def test_rsp_process():
 
 def test_rsp_plot():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15)
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, random_state=3)
     rsp_summary, _ = nk.rsp_process(rsp, sampling_rate=1000)
     nk.rsp_plot(rsp_summary)
     # This will identify the latest figure.
