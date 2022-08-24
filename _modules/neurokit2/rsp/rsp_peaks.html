@@ -552,15 +552,18 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.rsp_fixpeaks</span> <span class="kn">import</span> <span class="n">rsp_fixpeaks</span>
 
 
-<div class="viewcode-block" id="rsp_peaks"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_peaks">[docs]</a><span class="k">def</span> <span class="nf">rsp_peaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+<div class="viewcode-block" id="rsp_peaks"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_peaks">[docs]</a><span class="k">def</span> <span class="nf">rsp_peaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Identify extrema in a respiration (RSP) signal**</span>
 
-<span class="sd">    This function :func:`.rsp_findpeaks` and :func:`.rsp_fixpeaks` to identify and process peaks</span>
-<span class="sd">    (exhalation onsets) and troughs (inhalation onsets) in a preprocessed respiration signal using</span>
-<span class="sd">    different sets of parameters, such as:</span>
+<span class="sd">    This function runs :func:`.rsp_findpeaks` and :func:`.rsp_fixpeaks` to identify and process</span>
+<span class="sd">    peaks (exhalation onsets) and troughs (inhalation onsets) in a preprocessed respiration signal</span>
+<span class="sd">    using different sets of parameters, such as:</span>
 
-<span class="sd">    * `Khodadad et al. (2018) &lt;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&gt;`_</span>
-<span class="sd">    * `BioSPPy &lt;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&gt;`_</span>
+<span class="sd">    * **khodad2018**: Uses the parameters in Khodadad et al. (2018).</span>
+<span class="sd">    * **biosppy**: Uses the parameters in the</span>
+<span class="sd">    `BioSPPy &lt;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&gt;`_.</span>
+<span class="sd">    * **scipy** Uses the `scipy &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html&gt;`_</span>
+<span class="sd">      peak-detection function.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -569,14 +572,9 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default)</span>
-<span class="sd">        or ``&quot;biosppy&quot;``.</span>
-<span class="sd">    amplitude_min : float</span>
-<span class="sd">        Only applies if method is ``&quot;khodadad2018&quot;``. Extrema that have a vertical distance smaller</span>
-<span class="sd">        than (outlier_threshold * average vertical distance) to any direct neighbour are removed as</span>
-<span class="sd">        false positive outliers. i.e., outlier_threshold should be a float with positive sign (the</span>
-<span class="sd">        default is 0.3). Larger values of outlier_threshold correspond to more conservative</span>
-<span class="sd">        thresholds (i.e., more extrema removed as outliers).</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;biosppy&quot;`` or ``&quot;scipy&quot;``.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to be passed to the different peak finding methods. See :func:`.rsp_findpeaks`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -612,14 +610,16 @@ title="Open an issue"
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford,</span>
+<span class="sd">      R. (2018). Optimized breath detection algorithm in electrical impedance tomography.</span>
+<span class="sd">      Physiological measurement, 39(9), 094001.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span>
-        <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="n">amplitude_min</span>
-    <span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-    <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
-        <span class="n">info</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
+    <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">])</span>
 
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 

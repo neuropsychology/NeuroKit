@@ -554,27 +554,32 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">as_vector</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_detrend</span><span class="p">,</span> <span class="n">signal_filter</span>
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">mad</span>
 
 
-<div class="viewcode-block" id="rsp_clean"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_clean">[docs]</a><span class="k">def</span> <span class="nf">rsp_clean</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="rsp_clean"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_clean">[docs]</a><span class="k">def</span> <span class="nf">rsp_clean</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Preprocess a respiration (RSP) signal**</span>
 
 <span class="sd">    Clean a respiration signal using different sets of parameters, such as:</span>
 
-<span class="sd">    * ``&quot;khodadad2018&quot;``: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth</span>
+<span class="sd">    * **khodadad2018**: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth</span>
 <span class="sd">      filter)</span>
-<span class="sd">    * ``&quot;BioSPPy&quot;``: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant</span>
+<span class="sd">    * **BioSPPy**: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant</span>
 <span class="sd">      detrending).</span>
+<span class="sd">    * **hampel**: Applies a median-based Hampel filter by replacing values which are 3 (can be</span>
+<span class="sd">      changed via ``threshold``) :func:`.mad` away from the rolling median.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rsp_signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The raw respiration channel (as measured, for instance, by a respiration belt).</span>
-<span class="sd">    sampling_rate : int</span>
+<span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        The sampling frequency of :func:`.rsp_signal` (in Hz, i.e., samples/second).</span>
-<span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default) or</span>
-<span class="sd">        ``&quot;biosppy&quot;``.</span>
+<span class="sd">    method : str, optional</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default),</span>
+<span class="sd">        ``&quot;biosppy&quot;`` or ``&quot;hampel&quot;``.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to pass to the cleaning method.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -592,11 +597,12 @@ title="Open an issue"
 <span class="sd">      import pandas as pd</span>
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)</span>
+<span class="sd">      rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.1)</span>
 <span class="sd">      signals = pd.DataFrame({</span>
 <span class="sd">          &quot;RSP_Raw&quot;: rsp,</span>
 <span class="sd">          &quot;RSP_Khodadad2018&quot;: nk.rsp_clean(rsp, sampling_rate=50, method=&quot;khodadad2018&quot;),</span>
-<span class="sd">          &quot;RSP_BioSPPy&quot;: nk.rsp_clean(rsp, sampling_rate=50, method=&quot;biosppy&quot;)</span>
+<span class="sd">          &quot;RSP_BioSPPy&quot;: nk.rsp_clean(rsp, sampling_rate=50, method=&quot;biosppy&quot;),</span>
+<span class="sd">          &quot;RSP_Hampel&quot;: nk.rsp_clean(rsp, sampling_rate=50, method=&quot;hampel&quot;, threshold=3)</span>
 <span class="sd">      })</span>
 <span class="sd">      @savefig p_rsp_clean1.png scale=100%</span>
 <span class="sd">      signals.plot()</span>
@@ -608,6 +614,10 @@ title="Open an issue"
 <span class="sd">    * Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford,</span>
 <span class="sd">      R. (2018). Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="sd">      Physiological measurement, 39(9), 094001.</span>
+<span class="sd">    * Power, J., Lynch, C., Dubin, M., Silver, B., Martin, A., Jones, R.,(2020)</span>
+<span class="sd">      Characteristics of respiratory measures in young adults scanned at rest,</span>
+<span class="sd">      including systematic changes and “missed” deep breaths.</span>
+<span class="sd">      NeuroImage, Volume 204, 116234</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
@@ -627,9 +637,14 @@ title="Open an issue"
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_khodadad2018</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;biosppy&quot;</span><span class="p">:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_biosppy</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="s2">&quot;hampel&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_hampel</span><span class="p">(</span>
+            <span class="n">rsp_signal</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: rsp_clean(): &#39;method&#39; should be one of &#39;khodadad2018&#39; or &#39;biosppy&#39;.&quot;</span>
+            <span class="s2">&quot;NeuroKit error: rsp_clean(): &#39;method&#39; should be one of &#39;khodadad2018&#39;, &#39;biosppy&#39; or &#39;hampel&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span></div>
@@ -687,9 +702,8 @@ title="Open an issue"
     <span class="c1"># Parameters</span>
     <span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">]</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-    <span class="p">)</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
+    <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
 
     <span class="c1"># Filtering</span>
     <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="n">frequency</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -699,6 +713,41 @@ title="Open an issue"
     <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Hampel filter</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_rsp_clean_hampel</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Explanation MatLabs&#39; https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From</span>
+<span class="sd">    https://stackoverflow.com/a/51731332.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rsp_signal : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The raw respiration channel (as measured, for instance, by a respiration belt).</span>
+<span class="sd">    window_length : int, optional</span>
+<span class="sd">        Window to be considered when cleaning, by default 0.1. In seconds.</span>
+<span class="sd">    threshold : float, optional</span>
+<span class="sd">        Threshold of deviations after which a point is considered an outlier, by default 3.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get window length in samples</span>
+    <span class="n">window_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window_length</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># Convert to Series to use its rolling methods</span>
+    <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
+
+    <span class="n">rolling_median</span> <span class="o">=</span> <span class="n">rsp_signal</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+    <span class="n">rolling_MAD</span> <span class="o">=</span> <span class="n">rsp_signal</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">mad</span><span class="p">)</span>
+
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span> <span class="o">*</span> <span class="n">rolling_MAD</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rsp_signal</span> <span class="o">-</span> <span class="n">rolling_median</span><span class="p">)</span>
+    <span class="c1"># Find outliers</span>
+    <span class="n">outlier_idx</span> <span class="o">=</span> <span class="n">difference</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+    <span class="c1"># Substitute outliers with rolling median</span>
+    <span class="n">rsp_signal</span><span class="p">[</span><span class="n">outlier_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">rolling_median</span><span class="p">[</span><span class="n">outlier_idx</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
 </pre></div>
 
               </div>

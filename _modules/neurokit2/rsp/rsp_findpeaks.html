@@ -548,9 +548,17 @@ title="Open an issue"
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
 
 
-<div class="viewcode-block" id="rsp_findpeaks"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">rsp_findpeaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+<div class="viewcode-block" id="rsp_findpeaks"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">rsp_findpeaks</span><span class="p">(</span>
+    <span class="n">rsp_cleaned</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span>
+    <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Extract extrema in a respiration (RSP) signal**</span>
 
 <span class="sd">    Low-level function used by :func:`.rsp_peaks` to identify inhalation and exhalation onsets</span>
@@ -564,7 +572,7 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default) or</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;scipy&quot;`` or</span>
 <span class="sd">        ``&quot;biosppy&quot;``.</span>
 <span class="sd">    amplitude_min : float</span>
 <span class="sd">        Only applies if method is ``&quot;khodadad2018&quot;``. Extrema that have a vertical distance smaller</span>
@@ -572,6 +580,11 @@ title="Open an issue"
 <span class="sd">        false positive outliers. I.e., outlier_threshold should be a float with positive sign (the</span>
 <span class="sd">        default is 0.3). Larger values of outlier_threshold correspond to more conservative</span>
 <span class="sd">        thresholds (i.e., more extrema removed as outliers).</span>
+<span class="sd">    peak_distance: float</span>
+<span class="sd">        Only applies if method is ``&quot;scipy&quot;``. Minimal distance between peaks. Default is 0.8</span>
+<span class="sd">        seconds.</span>
+<span class="sd">    peak_prominence: float</span>
+<span class="sd">        Only applies if method is ``&quot;scipy&quot;``. Minimal prominence between peaks. Default is 0.5.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -614,12 +627,19 @@ title="Open an issue"
     <span class="c1"># Find peaks</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;khodadad&quot;</span><span class="p">,</span> <span class="s2">&quot;khodadad2018&quot;</span><span class="p">]:</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_khodadad</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_khodadad</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="n">amplitude_min</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;biosppy&quot;</span><span class="p">:</span>
         <span class="n">info</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_biosppy</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_scipy</span><span class="p">(</span>
+            <span class="n">cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span>
+            <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: rsp_findpeaks(): &#39;method&#39; should be one of &#39;khodadad2018&#39; or &#39;biosppy&#39;.&quot;</span>
+            <span class="s2">&quot;NeuroKit error: rsp_findpeaks(): &#39;method&#39; should be one of &#39;khodadad2018&#39;, &#39;scipy&#39; or &#39;biosppy&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">info</span></div>
@@ -629,6 +649,7 @@ title="Open an issue"
 <span class="c1"># Methods</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_rsp_findpeaks_biosppy</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&quot;&quot;&quot;</span>
 
     <span class="n">extrema</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_extrema</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
     <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_outliers</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -647,6 +668,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_rsp_findpeaks_khodadad</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&quot;&quot;&quot;</span>
 
     <span class="n">extrema</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_extrema</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
     <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_outliers</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="n">amplitude_min</span><span class="p">)</span>
@@ -656,9 +678,25 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">info</span>
 
 
+<span class="k">def</span> <span class="nf">_rsp_findpeaks_scipy</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html&quot;&quot;&quot;</span>
+    <span class="n">peak_distance</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="n">peak_distance</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+        <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">peak_prominence</span>
+    <span class="p">)</span>
+    <span class="n">troughs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+        <span class="o">-</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">peak_prominence</span>
+    <span class="p">)</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">,</span> <span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">:</span> <span class="n">troughs</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internals</span>
 <span class="c1"># =============================================================================</span>
+
+
 <span class="k">def</span> <span class="nf">_rsp_findpeaks_extrema</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">):</span>
     <span class="c1"># Detect zero crossings (note that these are zero crossings in the raw</span>
     <span class="c1"># signal, not in its gradient).</span>

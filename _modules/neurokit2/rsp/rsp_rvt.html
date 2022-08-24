@@ -554,20 +554,25 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">rescale</span>
+<span class="kn">from</span> <span class="nn">.rsp_clean</span> <span class="kn">import</span> <span class="n">rsp_clean</span>
+<span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_findpeaks</span>
 
 
 <div class="viewcode-block" id="rsp_rvt"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_rvt">[docs]</a><span class="k">def</span> <span class="nf">rsp_rvt</span><span class="p">(</span>
     <span class="n">rsp_signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span><span class="p">],</span>
-    <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span><span class="p">],</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Respiratory Volume per Time (RVT)**</span>
 
-<span class="sd">    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and breathing rate.</span>
-<span class="sd">    RVT can be used to identify the global fMRI confounds of breathing, which is often considered noise.</span>
+<span class="sd">    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and</span>
+<span class="sd">    breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is</span>
+<span class="sd">    often considered noise.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -575,15 +580,21 @@ title="Open an issue"
 <span class="sd">        Array containing the respiratory rate, produced by :func:`.signal_rate`.</span>
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
-<span class="sd">    boundaries : list</span>
-<span class="sd">        Lower and upper limit of (humanly possible) breath frequency in Hertz.</span>
-<span class="sd">    iterations : int</span>
-<span class="sd">        Amount of phase refinement estimates to remove high frequencies. Synthetic samples often</span>
-<span class="sd">        take less than 3.</span>
-<span class="sd">    show : bool</span>
+<span class="sd">    method: str, optional</span>
+<span class="sd">        The rvt method to apply. Can be one of ``&quot;power&quot;`` (default), ``&quot;harrison&quot;`` or</span>
+<span class="sd">        ``&quot;birn&quot;``.</span>
+<span class="sd">    show : bool, optional</span>
 <span class="sd">        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).</span>
-<span class="sd">    silent : bool</span>
+<span class="sd">    silent : bool, optional</span>
 <span class="sd">        If ``True``, warnings will not be printed.</span>
+<span class="sd">    boundaries : list, optional</span>
+<span class="sd">        Only applies if method is ``&quot;harrison&quot;``. Lower and upper limit of (humanly possible)</span>
+<span class="sd">        breath frequency in Hertz.</span>
+<span class="sd">    iterations : int, optional</span>
+<span class="sd">        Only applies if method is ``&quot;harrison&quot;``. Amount of phase refinement estimates</span>
+<span class="sd">        to remove high frequencies. Synthetic samples often take less than 3.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Arguments to be passed to the underlying peak detection algorithm.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -601,21 +612,127 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
-<span class="sd">      rsp = nk.rsp_clean(rsp)</span>
-<span class="sd">      nk.rsp_rvt(rsp, show=True)</span>
 
+<span class="sd">      @savefig p_rsp_rvt1.png scale=100%</span>
+<span class="sd">      nk.rsp_rvt(rsp, method=&quot;power2020&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      @savefig p_rsp_rvt2.png scale=100%</span>
+<span class="sd">      nk.rsp_rvt(rsp, method=&quot;harrison2020&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      @savefig p_rsp_rvt3.png scale=100%</span>
+<span class="sd">      nk.rsp_rvt(rsp, method=&quot;birn2006&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
+<span class="sd">    * Birn, R. M., Diamond, J. B., Smith, M. A., &amp; Bandettini, P. A. (2006). Separating</span>
+<span class="sd">      respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in</span>
+<span class="sd">      fMRI. Neuroimage, 31(4), 1536-1548.</span>
+<span class="sd">    * Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., &amp; Jones, R. M. (2020).</span>
+<span class="sd">      Characteristics of respiratory measures in young adults scanned at rest, including systematic</span>
+<span class="sd">      changes and &quot;missed&quot; deep breaths. Neuroimage, 204, 116234.</span>
 <span class="sd">    * Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
 <span class="sd">      A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;harrison&quot;</span><span class="p">,</span> <span class="s2">&quot;harrison2020&quot;</span><span class="p">]:</span>
+        <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_harrison</span><span class="p">(</span>
+            <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">boundaries</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;birn&quot;</span><span class="p">,</span> <span class="s2">&quot;birn2006&quot;</span><span class="p">]:</span>
+        <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_birn</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;power2020&quot;</span><span class="p">]:</span>
+        <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_power</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: rsp_rvt(): &#39;method&#39; should be one of &#39;birn&#39;, &#39;power&#39; or &#39;harrison&#39;.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">_rsp_rvt_plot</span><span class="p">(</span><span class="n">rvt</span><span class="p">,</span> <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rvt</span></div>
+
+
+<span class="k">def</span> <span class="nf">_rsp_rvt_birn</span><span class="p">(</span>
+    <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">):</span>
+    <span class="n">zsmooth_signal</span> <span class="o">=</span> <span class="n">_smooth_rsp_data</span><span class="p">(</span>
+        <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span>
+    <span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">zsmooth_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span><span class="p">)</span>
+    <span class="n">peak_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
+    <span class="n">trough_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">]</span>
+    <span class="c1"># prepare for loop</span>
+    <span class="n">seconds_delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+    <span class="n">mid_peak</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+    <span class="c1"># loop over peaks</span>
+    <span class="k">for</span> <span class="n">ending_peak_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">peak_coords</span><span class="p">)):</span>
+        <span class="n">starting_peak</span> <span class="o">=</span> <span class="n">peak_coords</span><span class="p">[</span><span class="n">ending_peak_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">ending_peak</span> <span class="o">=</span> <span class="n">peak_coords</span><span class="p">[</span><span class="n">ending_peak_index</span><span class="p">]</span>
+        <span class="n">mid_peak</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">starting_peak</span> <span class="o">+</span> <span class="n">ending_peak</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">seconds_delta</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ending_peak</span> <span class="o">-</span> <span class="n">starting_peak</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">output_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zsmooth_signal</span><span class="p">))</span>
+    <span class="n">rvt_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">output_range</span><span class="p">,</span> <span class="n">mid_peak</span><span class="p">,</span> <span class="n">seconds_delta</span><span class="p">)</span>
+    <span class="n">rvt_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">output_range</span><span class="p">,</span> <span class="n">peak_coords</span><span class="p">,</span> <span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">peak_coords</span><span class="p">])</span>
+    <span class="n">rvt_troughs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">output_range</span><span class="p">,</span> <span class="n">trough_coords</span><span class="p">,</span> <span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">trough_coords</span><span class="p">])</span>
+
+    <span class="c1"># what is trigvec?</span>
+    <span class="c1"># trigvec = (TR * signal_rate):len(zsmoothresp)</span>
+    <span class="n">rvt</span> <span class="o">=</span> <span class="p">(</span><span class="n">rvt_peaks</span> <span class="o">-</span> <span class="n">rvt_troughs</span><span class="p">)</span> <span class="o">/</span> <span class="n">rvt_time</span>
+    <span class="n">rvt</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">rvt</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">rvt</span>
+
+
+<span class="k">def</span> <span class="nf">_rsp_rvt_power</span><span class="p">(</span>
+    <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">):</span>
+    <span class="c1"># preprocess signal</span>
+    <span class="n">zsmooth_signal</span> <span class="o">=</span> <span class="n">_smooth_rsp_data</span><span class="p">(</span>
+        <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span>
+    <span class="p">)</span>
+    <span class="c1"># find peaks and troughs</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">zsmooth_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span><span class="p">)</span>
+    <span class="n">peak_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
+    <span class="n">trough_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">]</span>
+    <span class="c1"># initialize for loop</span>
+    <span class="n">peak_heights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+
+    <span class="c1"># go over loop</span>
+    <span class="k">for</span> <span class="n">peak_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">peak_coords</span><span class="p">)):</span>
+        <span class="c1"># find peak and trough</span>
+        <span class="n">peak_loc</span> <span class="o">=</span> <span class="n">peak_coords</span><span class="p">[</span><span class="n">peak_index</span><span class="p">]</span>
+        <span class="n">prev_peak_loc</span> <span class="o">=</span> <span class="n">peak_coords</span><span class="p">[</span><span class="n">peak_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># find troughs between prev_peak_loc and peak_loc</span>
+        <span class="n">trough_locs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">prev_peak_loc</span><span class="p">,</span> <span class="n">peak_loc</span><span class="p">))</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">trough_coords</span><span class="p">)</span>
+
+        <span class="c1"># safety catch if there is no trough found</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trough_locs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">peak_heights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">trough_loc</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">trough_locs</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># calculate peak_height for peak at peak_index</span>
+        <span class="n">peak_heights</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">peak_loc</span><span class="p">]</span> <span class="o">-</span> <span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">trough_loc</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">peak_loc</span> <span class="o">-</span> <span class="n">prev_peak_loc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)),</span> <span class="n">peak_coords</span><span class="p">,</span> <span class="n">peak_heights</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_smooth_rsp_data</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">rsp_clean</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hampel&quot;</span><span class="p">)</span>
+    <span class="n">smooth_signal</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">savgol_filter</span><span class="p">(</span>
+        <span class="n">signal</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">_make_uneven_filter_size</span><span class="p">(</span><span class="n">window_length</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="p">),</span> <span class="n">polyorder</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span>
+    <span class="n">zsmooth_signal</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">smooth_signal</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zsmooth_signal</span>
+
+
+<span class="k">def</span> <span class="nf">_rsp_rvt_harrison</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span><span class="p">],</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="c1"># low-pass filter at not too far above breathing-rate to remove high-frequency noise</span>
     <span class="n">n_pad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
 
-    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span>
-        <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span>
-    <span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">fr_lp</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">n_pad</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">))</span>
     <span class="n">fr_lp</span> <span class="o">=</span> <span class="n">fr_lp</span><span class="p">[</span><span class="n">n_pad</span> <span class="p">:</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fr_lp</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_pad</span><span class="p">)]</span>
 
@@ -665,9 +782,7 @@ title="Open an issue"
     <span class="c1"># Low-pass filter to remove within_cycle changes</span>
     <span class="c1"># Note factor of two is for compatability with the common definition of RV</span>
     <span class="c1"># as the difference between max and min inhalation (i.e. twice the amplitude)</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span>
-        <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span>
-    <span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">fr_rv</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">fr_mag</span><span class="p">,</span> <span class="n">n_pad</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">))</span>
     <span class="n">fr_rv</span> <span class="o">=</span> <span class="n">fr_rv</span><span class="p">[</span><span class="n">n_pad</span> <span class="p">:</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fr_rv</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_pad</span><span class="p">)]</span>
     <span class="n">fr_rv</span><span class="p">[</span><span class="n">fr_rv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -683,9 +798,7 @@ title="Open an issue"
     <span class="n">rvt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">fr_rv</span><span class="p">,</span> <span class="n">fr_if</span><span class="p">)</span>
 
     <span class="c1"># Downsampling is not needed as we assume always the same sampling rate and operate always in the same sampling rate</span>
-    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-        <span class="n">_rsp_rvt_plot</span><span class="p">(</span><span class="n">rvt</span><span class="p">,</span> <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">rvt</span></div>
+    <span class="k">return</span> <span class="n">rvt</span>
 
 
 <span class="k">def</span> <span class="nf">_rsp_rvt_find_min</span><span class="p">(</span><span class="n">increase_inds</span><span class="p">,</span> <span class="n">fr_phase</span><span class="p">,</span> <span class="n">smaller_index</span><span class="p">,</span> <span class="n">silent</span><span class="p">):</span>
@@ -723,6 +836,21 @@ title="Open an issue"
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">tickpositions</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">tickpositions</span><span class="p">,</span> <span class="p">[</span><span class="n">tickposition</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="k">for</span> <span class="n">tickposition</span> <span class="ow">in</span> <span class="n">tickpositions</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_make_uneven_filter_size</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Received a negative filter size, progressed with filter size 1.&quot;</span><span class="p">,</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">number</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">1</span>
 </pre></div>
 
               </div>
