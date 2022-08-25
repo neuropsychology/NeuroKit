@@ -4,7 +4,7 @@ import scipy.interpolate
 
 
 def signal_interpolate(
-    x_values=None, y_values=None, x_new=None, method="quadratic", fill_value=None
+    x_values, y_values=None, x_new=None, method="quadratic", fill_value=None
 ):
     """**Interpolate a signal**
     Interpolate a signal using different methods.
@@ -13,7 +13,9 @@ def signal_interpolate(
     x_values : Union[list, np.array, pd.Series]
         The samples corresponding to the values to be interpolated.
     y_values : Union[list, np.array, pd.Series]
-        The values to be interpolated.
+        The values to be interpolated. If not provided, any NaNs in the x_values
+        will be interpolated with :func:`_signal_interpolate_nan`,
+        considering the x_values as equally spaced.
     x_new : Union[list, np.array, pd.Series] or int
         The samples at which to interpolate the y_values. Samples before the first value in x_values
         or after the last value in x_values will be extrapolated. If an integer is passed, nex_x
@@ -68,20 +70,14 @@ def signal_interpolate(
       plt.close()
     """
     # Sanity checks
-    if x_values is None and y_values is None:
+    if x_values is None:
         raise ValueError(
-            "NeuroKit error: signal_interpolate(): x_values or y_values must be provided."
+            "NeuroKit error: signal_interpolate(): x_values must be provided."
         )
-    elif x_values is None or y_values is None:
+    elif y_values is None:
         # for interpolating NaNs
-        if y_values is None:
-            y_values = x_values
-        x_values = np.arange(0, len(y_values))
-        if x_new is None:
-            x_new = x_values
-        y_finite = np.where(np.invert(np.isnan(y_values)))[0]
-        x_values = x_values[y_finite]
-        y_values = y_values[y_finite]
+        return _signal_interpolate_nan(x_values, method=method, fill_value=fill_value)
+
     if len(x_values) != len(y_values):
         raise ValueError("x_values and y_values must be of the same length.")
 
@@ -128,3 +124,27 @@ def signal_interpolate(
         interpolated[last_index + 1:] = fill_value[1]
             
     return interpolated
+
+
+def _signal_interpolate_nan(values, method="quadratic", fill_value=None):
+    if np.any(np.isnan(values)):
+        # assume that values are evenly spaced
+        # x_new corresponds to the indices of all values, including missing
+        x_new = np.arange(len(values))
+        not_missing = np.where(np.invert(np.isnan(values)))[0]
+
+        # remove the missing values
+        y_values = values[not_missing]
+
+        # x_values corresponds to the indices of only non-missing values
+        x_values = x_new[not_missing]
+
+        # interpolate to get the values at the indices where they are missing
+        return signal_interpolate(x_values=x_values,
+                                  y_values=y_values,
+                                  x_new=x_new,
+                                  method=method,
+                                  fill_value=fill_value)
+    else:
+        # if there are no missing values, return original values
+        return values
