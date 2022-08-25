@@ -8,7 +8,7 @@ from ..signal import signal_interpolate
 from ..misc import NeuroKitWarning
 
 
-def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=4, **kwargs):
+def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=100, **kwargs):
 
     rri = np.diff(peaks) / sampling_rate * 1000
 
@@ -17,6 +17,10 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolatio
 
     else:
         # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
+        # We considered an interpolation rate 4 Hz by default to match Kubios
+        # but in case of some applications with high heart rates we decided to make it 100 Hz
+        # See https://github.com/neuropsychology/NeuroKit/pull/680 for more information 
+        # and if you have any thoughts to contribute, please let us know!
         if interpolation_rate < 1:
                 warn(
                     "The interpolation rate of the R-R intervals is too low for "
