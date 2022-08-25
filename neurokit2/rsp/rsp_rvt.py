@@ -7,20 +7,25 @@ import scipy.signal
 
 from ..misc import NeuroKitWarning
 from ..stats import rescale
+from .rsp_clean import rsp_clean
+from .rsp_peaks import rsp_findpeaks
 
 
 def rsp_rvt(
     rsp_signal,
     sampling_rate=1000,
-    boundaries=[2.0, 1 / 30],
-    iterations=10,
+    method="power",
     show=False,
     silent=False,
+    boundaries=[2.0, 1 / 30],
+    iterations=10,
+    **kwargs
 ):
     """**Respiratory Volume per Time (RVT)**
 
-    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and breathing rate.
-    RVT can be used to identify the global fMRI confounds of breathing, which is often considered noise.
+    Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and
+    breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is
+    often considered noise.
 
     Parameters
     ----------
@@ -28,15 +33,21 @@ def rsp_rvt(
         Array containing the respiratory rate, produced by :func:`.signal_rate`.
     sampling_rate : int, optional
         The sampling frequency of the signal (in Hz, i.e., samples/second).
-    boundaries : list
-        Lower and upper limit of (humanly possible) breath frequency in Hertz.
-    iterations : int
-        Amount of phase refinement estimates to remove high frequencies. Synthetic samples often
-        take less than 3.
-    show : bool
+    method: str, optional
+        The rvt method to apply. Can be one of ``"power"`` (default), ``"harrison"`` or
+        ``"birn"``.
+    show : bool, optional
         If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).
-    silent : bool
+    silent : bool, optional
         If ``True``, warnings will not be printed.
+    boundaries : list, optional
+        Only applies if method is ``"harrison"``. Lower and upper limit of (humanly possible)
+        breath frequency in Hertz.
+    iterations : int, optional
+        Only applies if method is ``"harrison"``. Amount of phase refinement estimates
+        to remove high frequencies. Synthetic samples often take less than 3.
+    **kwargs
+        Arguments to be passed to the underlying peak detection algorithm.
 
     Returns
     -------
@@ -54,21 +65,127 @@ def rsp_rvt(
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-      rsp = nk.rsp_clean(rsp)
-      nk.rsp_rvt(rsp, show=True)
 
+      @savefig p_rsp_rvt1.png scale=100%
+      nk.rsp_rvt(rsp, method="power2020", show=True)
+      @suppress
+      plt.close()
+
+      @savefig p_rsp_rvt2.png scale=100%
+      nk.rsp_rvt(rsp, method="harrison2020", show=True)
+      @suppress
+      plt.close()
+
+      @savefig p_rsp_rvt3.png scale=100%
+      nk.rsp_rvt(rsp, method="birn2006", show=True)
+      @suppress
+      plt.close()
 
     References
     ----------
+    * Birn, R. M., Diamond, J. B., Smith, M. A., & Bandettini, P. A. (2006). Separating
+      respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in
+      fMRI. Neuroimage, 31(4), 1536-1548.
+    * Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., & Jones, R. M. (2020).
+      Characteristics of respiratory measures in young adults scanned at rest, including systematic
+      changes and "missed" deep breaths. Neuroimage, 204, 116234.
     * Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., & Kasper, L. (2021).
       A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.
     """
+    method = method.lower()  # remove capitalised letters
+    if method in ["harrison", "harrison2020"]:
+        rvt = _rsp_rvt_harrison(
+            rsp_signal, sampling_rate=sampling_rate, silent=silent, boundaries=boundaries, iterations=iterations
+        )
+    elif method in ["birn", "birn2006"]:
+        rvt = _rsp_rvt_birn(rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs)
+    elif method in ["power", "power2020"]:
+        rvt = _rsp_rvt_power(rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs)
+    else:
+        raise ValueError("NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'.")
+    if show:
+        _rsp_rvt_plot(rvt, rsp_signal, sampling_rate)
+    return rvt
+
+
+def _rsp_rvt_birn(
+    rsp_signal, sampling_rate=1000, silent=False, window_length=0.4, peak_distance=0.8, peak_prominence=0.5
+):
+    zsmooth_signal = _smooth_rsp_data(
+        rsp_signal, sampling_rate=sampling_rate, window_length=window_length, silent=silent
+    )
+    info = rsp_findpeaks(zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence)
+    peak_coords = info["RSP_Peaks"]
+    trough_coords = info["RSP_Troughs"]
+    # prepare for loop
+    seconds_delta = [np.nan]
+    mid_peak = [np.nan]
+    # loop over peaks
+    for ending_peak_index in range(1, len(peak_coords)):
+        starting_peak = peak_coords[ending_peak_index - 1]
+        ending_peak = peak_coords[ending_peak_index]
+        mid_peak.append(round((starting_peak + ending_peak) / 2))
+        seconds_delta.append((ending_peak - starting_peak) / sampling_rate)
+    output_range = range(len(zsmooth_signal))
+    rvt_time = np.interp(output_range, mid_peak, seconds_delta)
+    rvt_peaks = np.interp(output_range, peak_coords, zsmooth_signal[peak_coords])
+    rvt_troughs = np.interp(output_range, trough_coords, zsmooth_signal[trough_coords])
+
+    # what is trigvec?
+    # trigvec = (TR * signal_rate):len(zsmoothresp)
+    rvt = (rvt_peaks - rvt_troughs) / rvt_time
+    rvt[np.isinf(rvt)] = np.nan
+    return rvt
+
+
+def _rsp_rvt_power(
+    rsp_signal, sampling_rate=1000, silent=False, window_length=0.4, peak_distance=0.8, peak_prominence=0.5
+):
+    # preprocess signal
+    zsmooth_signal = _smooth_rsp_data(
+        rsp_signal, sampling_rate=sampling_rate, silent=silent, window_length=window_length
+    )
+    # find peaks and troughs
+
+    info = rsp_findpeaks(zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence)
+    peak_coords = info["RSP_Peaks"]
+    trough_coords = info["RSP_Troughs"]
+    # initialize for loop
+    peak_heights = [np.nan]
+
+    # go over loop
+    for peak_index in range(1, len(peak_coords)):
+        # find peak and trough
+        peak_loc = peak_coords[peak_index]
+        prev_peak_loc = peak_coords[peak_index - 1]
+        # find troughs between prev_peak_loc and peak_loc
+        trough_locs = set(range(prev_peak_loc, peak_loc)).intersection(trough_coords)
+
+        # safety catch if there is no trough found
+        if len(trough_locs) == 0:
+            peak_heights.append(np.nan)
+            continue
+
+        trough_loc = sorted(list(trough_locs))[-1]
+        # calculate peak_height for peak at peak_index
+        peak_heights.append((zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]) / (peak_loc - prev_peak_loc))
+    return np.interp(range(len(rsp_signal)), peak_coords, peak_heights)
+
+
+def _smooth_rsp_data(signal, sampling_rate=1000, window_length=0.4, silent=False):
+    signal = rsp_clean(signal, sampling_rate=sampling_rate, window_length=window_length, method="hampel")
+    smooth_signal = scipy.signal.savgol_filter(
+        signal, window_length=_make_uneven_filter_size(window_length * sampling_rate, silent), polyorder=2
+    )
+    zsmooth_signal = scipy.stats.zscore(smooth_signal)
+    return zsmooth_signal
+
+
+def _rsp_rvt_harrison(rsp_signal, sampling_rate=1000, boundaries=[2.0, 1 / 30], iterations=10, silent=False):
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
 
-    d = scipy.signal.iirfilter(
-        N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate
-    )
+    d = scipy.signal.iirfilter(N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
     fr_lp = scipy.signal.sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
     fr_lp = fr_lp[n_pad : (len(fr_lp) - n_pad)]
 
@@ -118,9 +235,7 @@ def rsp_rvt(
     # Low-pass filter to remove within_cycle changes
     # Note factor of two is for compatability with the common definition of RV
     # as the difference between max and min inhalation (i.e. twice the amplitude)
-    d = scipy.signal.iirfilter(
-        N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate
-    )
+    d = scipy.signal.iirfilter(N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
     fr_rv = 2 * scipy.signal.sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
     fr_rv = fr_rv[n_pad : (len(fr_rv) - n_pad)]
     fr_rv[fr_rv < 0] = 0
@@ -136,8 +251,6 @@ def rsp_rvt(
     rvt = np.multiply(fr_rv, fr_if)
 
     # Downsampling is not needed as we assume always the same sampling rate and operate always in the same sampling rate
-    if show:
-        _rsp_rvt_plot(rvt, rsp_signal, sampling_rate)
     return rvt
 
 
@@ -176,3 +289,18 @@ def _rsp_rvt_plot(rvt, rsp_signal, sampling_rate):
     plt.legend()
     tickpositions = plt.gca().get_xticks()[1:-1]
     plt.xticks(tickpositions, [tickposition / sampling_rate for tickposition in tickpositions])
+
+
+def _make_uneven_filter_size(number, silent=False):
+    if number < 0:
+        if not silent:
+            warn(
+                "Received a negative filter size, progressed with filter size 1.",
+                category=NeuroKitWarning,
+            )
+        return 1
+    if number % 2 == 1:
+        return int(number)
+    if number > 0:
+        return int(number - 1)
+    return 1

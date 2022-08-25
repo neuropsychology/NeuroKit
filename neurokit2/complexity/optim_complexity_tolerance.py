@@ -51,6 +51,8 @@ def complexity_tolerance(
       chebyshev distance of vectors sampled from a univariate normal distribution. A constant of
       ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in
       https://github.com/CSchoel/nolds).
+    * **singh2016**: Makes a histogram of the Chebyshev distance matrix and returns the upper bound
+      of the modal bin.
     * **chon2009**: Acknowledging that computing multiple ApEns is computationally expensive, Chon
       (2009) suggested an approximation based a heuristic algorithm that takes into account the
       length of the signal, its short-term and long-term variability, and the embedding dimension
@@ -100,7 +102,7 @@ def complexity_tolerance(
       import neurokit2 as nk
 
       # Simulate signal
-      signal = nk.signal_simulate(duration=2, frequency=5)
+      signal = nk.signal_simulate(duration=2, frequency=[5, 7, 9, 12, 15])
 
       # Fast method (based on the standard deviation)
       @savefig p_complexity_tolerance1.png scale=100%
@@ -151,6 +153,16 @@ def complexity_tolerance(
       @suppress
       plt.close()
 
+    Another option is to use the density of distances.
+
+    .. ipython:: python
+
+      @savefig p_complexity_tolerance4.png scale=100%
+      r, info = nk.complexity_tolerance(signal, delay=1, dimension=3,
+                                        method = 'bin', show=True)
+      @suppress
+      plt.close()
+
     * **Example 3**: The default method selects the tolerance at which *ApEn* is maximized.
 
     .. ipython:: python
@@ -192,6 +204,11 @@ def complexity_tolerance(
     * Chen, X., Solomon, I. C., & Chon, K. H. (2008). Parameter selection criteria in approximate
       entropy and sample entropy with application to neural respiratory signals. Am. J. Physiol.
       Regul. Integr. Comp. Physiol.
+    * Singh, A., Saini, B. S., & Singh, D. (2016). An alternative approach to approximate entropy
+      threshold value (r) selection: application to heart rate variability and systolic blood
+      pressure variability under postural challenge. Medical & biological engineering & computing,
+      54(5), 723-732.
+
     """
     if not isinstance(method, str):
         return method, {"Method": "None"}
@@ -270,6 +287,10 @@ def complexity_tolerance(
         )
         info.update({"Method": "2% Neighbours"})
 
+    elif method in ["bin", "bins", "singh", "singh2016"]:
+        r, info = _optimize_tolerance_bin(signal, delay=delay, dimension=dimension)
+        info.update({"Method": "bin"})
+
     else:
         raise ValueError("NeuroKit error: complexity_tolerance(): 'method' not recognized.")
 
@@ -287,7 +308,7 @@ def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=N
 
     # Optimize missing parameters
     if delay is None or dimension is None:
-        raise ValueError("If method='RQA', both delay and dimension must be specified.")
+        raise ValueError("If method='recurrence', both delay and dimension must be specified.")
 
     # Compute distance matrix
     emb = complexity_embedding(signal, delay=delay, dimension=dimension)
@@ -378,6 +399,27 @@ def _optimize_tolerance_neighbours(signal, r_range=None, delay=None, dimension=N
     return optimal, {"Values": r_range, "Scores": counts}
 
 
+def _optimize_tolerance_bin(signal, delay=None, dimension=None):
+
+    # Optimize missing parameters
+    if delay is None or dimension is None:
+        raise ValueError("If method='bin', both delay and dimension must be specified.")
+
+    # Compute distance matrix
+    emb = complexity_embedding(signal, delay=delay, dimension=dimension)
+    d = scipy.spatial.distance.cdist(emb, emb, metric="chebyshev")
+
+    # Histogram of the lower triangular (without the diagonal)
+    y, x = np.histogram(d[np.tril_indices(len(d), k=-1)], bins=200, density=True)
+
+    # Most common distance
+    # Divide by two because r corresponds to the radius of the circle (NOTE: this is
+    # NOT in the paper and thus, opinion is required!)
+    optimal = x[np.argmax(y) + 1] / 2
+
+    return optimal, {"Values": x[1::] / 2, "Scores": y}
+
+
 # =============================================================================
 # Plotting
 # =============================================================================
@@ -429,6 +471,16 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
         ax.set_xlabel("Signal values")
         ax.set_ylabel("Distribution")
         ax.legend(loc="upper right")
+        return fig
+
+    if method in ["bin", "bins", "singh", "singh2016"]:
+        ax.set_title("Optimization of Tolerance Threshold (r)")
+        ax.set_xlabel("Chebyshev Distance")
+        ax.set_ylabel("Density")
+        ax.plot(info["Values"], info["Scores"], color="#4CAF50")
+        ax.axvline(x=r, color="#E91E63", label="Optimal r: " + str(np.round(r, 3)))
+        ax.legend(loc="upper right")
+
         return fig
 
     r_range = info["Values"]
