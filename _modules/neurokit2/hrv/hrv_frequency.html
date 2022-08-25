@@ -571,6 +571,7 @@ title="Open an issue"
     <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">order_criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">interpolation_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Computes frequency-domain indices of Heart Rate Variability (HRV)**</span>
@@ -608,8 +609,7 @@ title="Open an issue"
 <span class="sd">        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,</span>
 <span class="sd">        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.</span>
 <span class="sd">    sampling_rate : int, optional</span>
-<span class="sd">        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at</span>
-<span class="sd">        least twice as high as the highest frequency in vhf. By default 1000.</span>
+<span class="sd">        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.</span>
 <span class="sd">    ulf : tuple, optional</span>
 <span class="sd">        Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).</span>
 <span class="sd">    vlf : tuple, optional</span>
@@ -633,6 +633,9 @@ title="Open an issue"
 <span class="sd">    order_criteria : str</span>
 <span class="sd">        The criteria to automatically select order in parametric PSD (only used for autoregressive</span>
 <span class="sd">        (AR) methods such as ``&quot;burg&quot;``). Defaults to ``None``.</span>
+<span class="sd">    interpolation_rate : int, optional</span>
+<span class="sd">        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as </span>
+<span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4. </span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Additional other arguments.</span>
 
@@ -707,9 +710,9 @@ title="Open an issue"
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># Detect actual sampling rate</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="c1"># Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)</span>
+    <span class="c1"># Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)</span>
     <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="n">frequency_band</span> <span class="o">=</span> <span class="p">[</span><span class="n">ulf</span><span class="p">,</span> <span class="n">vlf</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">hf</span><span class="p">,</span> <span class="n">vhf</span><span class="p">]</span>
