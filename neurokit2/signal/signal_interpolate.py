@@ -85,7 +85,8 @@ def signal_interpolate(
         if len(x_values) == x_new:
             return y_values
     else:
-        if len(x_values) == len(x_new):
+      # if x_values is identical to x_new, no need for interpolation
+        if np.all(x_values == x_new):
             return y_values
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
