@@ -31,9 +31,10 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolatio
         
         # Compute x-values of interpolated heart period signal at requested sampling rate.
         x_new = np.arange(start=peaks[1], stop=peaks[-1] + 1 / interpolation_rate, step=1 / interpolation_rate)
+        rri_time = peaks[1:] / sampling_rate # Skip first peak since it has no corresponding element in heart_period
 
         rri = signal_interpolate(
-            peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
+            rri_time,
             rri,
             x_new=x_new,
             **kwargs
