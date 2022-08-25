@@ -24,7 +24,7 @@ def hrv_frequency(
     silent=True,
     normalize=True,
     order_criteria=None,
-    interpolation_rate=4,
+    interpolation_rate=100,
     **kwargs
 ):
     """**Computes frequency-domain indices of Heart Rate Variability (HRV)**
@@ -87,8 +87,8 @@ def hrv_frequency(
         The criteria to automatically select order in parametric PSD (only used for autoregressive
         (AR) methods such as ``"burg"``). Defaults to ``None``.
     interpolation_rate : int, optional
-        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at
-        least twice as high as the highest frequency in vhf. By default 4.
+        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as 
+        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4. 
     **kwargs
         Additional other arguments.
 
