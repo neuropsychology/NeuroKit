@@ -2,18 +2,6 @@ Optimal Selection of Delay and Embedding Dimension for EEG Complexity
 Analysis
 ================
 
-- [Analysis](#analysis)
-  - [Introduction](#introduction)
-  - [Methods](#methods)
-  - [Results](#results)
-    - [Optimization of Delay](#optimization-of-delay)
-      - [Per Channel](#per-channel)
-      - [Attractors](#attractors)
-    - [Optimization of Dimension](#optimization-of-dimension)
-      - [Per Channel](#per-channel-1)
-    - [Topological Clusters](#topological-clusters)
-  - [Discussion](#discussion)
-  - [References](#references)
 
 *This study can be referenced by* [*citing the package and the
 documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).

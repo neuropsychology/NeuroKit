@@ -7,7 +7,7 @@ from .utils_complexity_symbolize import complexity_symbolize
 
 
 def entropy_dispersion(
-    signal, delay=1, dimension=3, c=6, method="NCDF", fluctuation=False, rho=1, **kwargs
+    signal, delay=1, dimension=3, c=6, symbolize="NCDF", fluctuation=False, rho=1, **kwargs
 ):
     """**Dispersion Entropy (DispEn)**
 
@@ -25,9 +25,10 @@ def entropy_dispersion(
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
     c : int
         Number of symbols *c*. Rostaghi (2016) recommend in practice a *c* between 4 and 8.
-    method : str
-        Method of symbolization. Can be one of ``"NCDF"`` (default), ``"finesort"``, or others. See
-        :func:`complexity_symbolize` for details.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. Can be one
+        of ``"NCDF"`` (default), ``"finesort"``, or others. See :func:`complexity_symbolize` for
+        details.
     fluctuation : bool
         Fluctuation-based Dispersion entropy.
     rho : float
@@ -63,7 +64,7 @@ def entropy_dispersion(
       info["RDEn"]
 
       # Fluctuation-based DispEn with "finesort"
-      dispen, info = nk.entropy_dispersion(signal, c=3, method="finesort", fluctuation=True)
+      dispen, info = nk.entropy_dispersion(signal, c=3, symbolize="finesort", fluctuation=True)
       dispen
 
     References
@@ -79,10 +80,10 @@ def entropy_dispersion(
         )
 
     # Store parameters
-    info = {"Dimension": dimension, "Delay": delay, "c": c, "Method": method}
+    info = {"Dimension": dimension, "Delay": delay, "c": c, "Symbolization": symbolize}
 
     # Symbolization and embedding
-    if method == "finesort":
+    if symbolize == "finesort":
         symbolic = complexity_symbolize(signal, method="NCDF", c=c)
         Ym = np.zeros((len(signal) - (dimension - 1) * delay, dimension))
         for k in range(dimension):
@@ -92,7 +93,7 @@ def entropy_dispersion(
         Yi = np.expand_dims(Yi, axis=1)
         embedded = np.hstack((embedded, Yi))
     else:
-        symbolic = complexity_symbolize(signal, method=method, c=c)
+        symbolic = complexity_symbolize(signal, method=symbolize, c=c)
         embedded = complexity_embedding(symbolic, dimension=dimension, delay=delay)
 
     # Fluctuation

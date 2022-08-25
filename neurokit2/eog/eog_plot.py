@@ -23,10 +23,19 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
         the data should be plotted over time in seconds. Otherwise the data is plotted over
         samples. Defaults to ``None``. Must be specified to plot individual blinks.
 
+    See Also
+    --------
+    eog_process
+
     Returns
     -------
-    fig
-        Figure representing a plot of the processed EOG signals.
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after eog_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
 
     Examples
     --------
@@ -34,20 +43,17 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
 
       import neurokit2 as nk
 
-      # Get data
+      # Simulate data
       eog_signal = nk.data('eog_100hz')
 
-      # Process
+      # Process signal
       eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)
+
+      # Plot
       @savefig p.eog_plot.png scale=100%
       nk.eog_plot(eog_signals, peaks, sampling_rate=100)
       @suppress
       plt.close()
-
-
-    See Also
-    --------
-    eog_process
 
     """
 

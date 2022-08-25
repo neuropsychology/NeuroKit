@@ -4,14 +4,15 @@ import pandas as pd
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def fractal_petrosian(signal, method="C", show=False):
+def fractal_petrosian(signal, symbolize="C", show=False):
     """**Petrosian fractal dimension (PFD)**
 
     Petrosian (1995) proposed a fast method to estimate the fractal dimension by converting the
     signal into a binary sequence from which the fractal dimension is estimated. Several variations
-    of the algorithm exist (e.g., ``"A"``, ``"B"``, ``"C"`` or ``"D"``), primarily differing in the way the discrete
-    (symbolic) sequence is created (see func:`complexity_symbolize` for details). The most common
-    method (``"C"``, by default) binarizes the signal by the sign of consecutive differences.
+    of the algorithm exist (e.g., ``"A"``, ``"B"``, ``"C"`` or ``"D"``), primarily differing in the
+    way the discrete (symbolic) sequence is created (see func:`complexity_symbolize` for details).
+    The most common method (``"C"``, by default) binarizes the signal by the sign of consecutive
+    differences.
 
     .. math::
 
@@ -28,11 +29,10 @@ def fractal_petrosian(signal, method="C", show=False):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    method : str or int
-        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, and
-        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`complexity_symbolize`
-        for details.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. By default,
+        assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in
+        case the input is already discrete). See :func:`complexity_symbolize` for details.
     show : bool
         If ``True``, will show the discrete the signal.
 
@@ -53,7 +53,7 @@ def fractal_petrosian(signal, method="C", show=False):
       signal = nk.signal_simulate(duration=2, frequency=[5, 12])
 
       @savefig p_fractal_petrosian1.png scale=100%
-      pfd, info = nk.fractal_petrosian(signal, method = "C", show=True)
+      pfd, info = nk.fractal_petrosian(signal, symbolize = "C", show=True)
       @suppress
       plt.close()
 
@@ -85,7 +85,7 @@ def fractal_petrosian(signal, method="C", show=False):
         )
 
     # Binarize the sequence
-    symbolic = complexity_symbolize(signal, method=method, show=show)
+    symbolic = complexity_symbolize(signal, method=symbolize, show=show)
 
     # if isinstance(method, str) and method.lower() in ["d", "r"]:
     #     # These methods are already based on the consecutive differences
@@ -97,4 +97,4 @@ def fractal_petrosian(signal, method="C", show=False):
 
     n = len(symbolic)
     pfd = np.log10(n) / (np.log10(n) + np.log10(n / (n + 0.4 * n_inversions)))
-    return pfd, {"Method": method}
+    return pfd, {"Symbolization": symbolize}

@@ -13,6 +13,7 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
       It is a phase randomized, amplitude adjusted surrogates that have the same power spectrum
       (to a very high accuracy) and distribution as the original data, using an iterative scheme.
 
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
@@ -20,7 +21,7 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
     method : str
         Can be ``"random"`` or ``"IAAFT"``.
     **kwargs
-        Other keywords arguments, such as ``max_iter``(by default 1000).
+        Other keywords arguments, such as ``max_iter`` (by default 1000).
 
     Returns
     -------

@@ -3,7 +3,7 @@ import numpy as np
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kwargs):
+def entropy_renyi(signal=None, alpha=1, symbolize=None, show=False, freq=None, **kwargs):
     """**Rényi entropy (REn or H)**
 
     In information theory, the Rényi entropy *H* generalizes the Hartley entropy, the Shannon
@@ -26,11 +26,10 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
         The signal (i.e., a time series) in the form of a vector of values.
     alpha : float
         The *alpha* :math:`\\alpha` parameter (default to 1) for Rényi entropy.
-    method : str or int
-        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
-        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`fractal_petrosian`
-        for details.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. ``None`` by
+        default, which skips the process (and assumes the input is already discrete). See
+        :func:`complexity_symbolize` for details.
     show : bool
         If ``True``, will show the discrete the signal.
     freq : np.array
@@ -47,7 +46,7 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
 
     See Also
     --------
-    entropy_shannon, fractal_petrosian, entropy_tsallis
+    entropy_shannon, entropy_tsallis
 
     Examples
     ----------
@@ -80,12 +79,12 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
 
     """
     if freq is None:
-        _, freq = _entropy_freq(signal, method=method, show=show)
+        _, freq = _entropy_freq(signal, symbolize=symbolize, show=show)
     freq = freq / np.sum(freq)
 
     if np.isclose(alpha, 1):
         ren = -np.sum(freq * np.log(freq))
     else:
-        ren = (1 / (1 - alpha)) * np.log(np.sum(freq ** alpha))
+        ren = (1 / (1 - alpha)) * np.log(np.sum(freq**alpha))
 
-    return ren, {"Method": method}
+    return ren, {"Symbolization": symbolize}

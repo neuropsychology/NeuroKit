@@ -21,7 +21,8 @@ def signal_filter(
 ):
     """**Signal filtering**
 
-    Filter a signal using different methods such as "butterworth", "fir" or "savgol" filters.
+    Filter a signal using different methods such as "butterworth", "fir", "savgol" or "powerline"
+    filters.
 
     Apply a lowpass (if "highcut" frequency is provided), highpass (if "lowcut" frequency is
     provided) or bandpass (if both are provided) filter to the signal.
@@ -30,7 +31,6 @@ def signal_filter(
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-        or ``"bandstop"``.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     lowcut : float

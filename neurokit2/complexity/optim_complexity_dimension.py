@@ -34,7 +34,13 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
       embedding dimension, which is presumed to give an unfolded space-state reconstruction. This
       method can fail in noisy signals due to the futile attempt of unfolding the noise (and in
       purely random signals, the amount of false neighbors does not substantially drops as *m*
-      increases).
+      increases). The **figure** below show how projections to higher-dimensional spaces can be
+      used to detect false nearest neighbours. For instance, the red and the yellow points are
+      neighbours in the 1D space, but not in the 2D space.
+
+    .. figure:: ../img/douglas2022b.png
+       :alt: Illustration of FNN (Douglas et al., 2022).
+
     * **AFN** (Average False Neighbors): This modification by Cao (1997) of the FNN method
       addresses one of its main drawback, the need for a heuristic choice for the tolerance
       thresholds *r*. It uses the maximal Euclidian distance to represent nearest neighbors, and
@@ -227,8 +233,7 @@ def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
 
 
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
-    """AFN
-    """
+    """AFN"""
     values = np.asarray(
         [
             _embedding_dimension_afn_d(signal, dimension, delay, **kwargs)

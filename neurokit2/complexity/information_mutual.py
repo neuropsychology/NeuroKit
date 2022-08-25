@@ -9,7 +9,7 @@ import sklearn.neighbors
 
 
 def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
-    """Mutual Information (MI)
+    """**Mutual Information (MI)**
 
     Computes the mutual information (MI) between two vectors from a joint histogram.
     The mutual information of two variables is a measure of the mutual dependence between them.
@@ -17,6 +17,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
     observing the other variable.
 
     Different methods are available:
+
     * **nolitsa**: Standard mutual information (a bit faster than the ``"sklearn"`` method).
     * **varoquaux**: Applies a Gaussian filter on the joint-histogram. The smoothing amount can be
       modulated via the ``sigma`` argument (by default, ``sigma=1``).
@@ -55,6 +56,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
     ---------
     **Example 1**: Simple case
 
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -66,6 +68,7 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       nk.mutual_information(x, y, method="nolitsa")
       nk.mutual_information(x, y, method="knn")
       nk.mutual_information(x, y, method="max")
+
 
     **Example 2**: Method comparison
 
@@ -98,6 +101,8 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
       data.plot(x="Noise", y=["MI1", "MI2", "MI3", "MI4", "MI5"], kind="line")
       @suppress
       plt.close()
+
+    .. ipython:: python
 
       # Computation time
       # x = np.random.normal(size=10000)

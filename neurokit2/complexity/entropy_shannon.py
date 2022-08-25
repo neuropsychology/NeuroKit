@@ -5,7 +5,7 @@ import scipy.stats
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **kwargs):
+def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, **kwargs):
     """**Shannon entropy (SE or ShanEn)**
 
     Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
@@ -36,11 +36,10 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
         The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.
         stats.entropy()`` uses Euler's number (``np.e``) as default (the natural logarithm), giving
         a measure of information expressed in *nats*.
-    method : str or int
-        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
-        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`complexity_symbolize`
-        for details.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. ``None`` by
+        default, which skips the process (and assumes the input is already discrete). See
+        :func:`complexity_symbolize` for details.
     show : bool
         If ``True``, will show the discrete the signal.
     freq : np.array
@@ -80,7 +79,7 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
 
       # Compute Shannon's Entropy
       @savefig p_entropy_shannon1.png scale=100%
-      shanen, info = nk.entropy_shannon(signal, method=3, show=True)
+      shanen, info = nk.entropy_shannon(signal, symbolize=3, show=True)
       @suppress
       plt.close()
 
@@ -108,15 +107,15 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
 
     """
     if freq is None:
-        _, freq = _entropy_freq(signal, method=method, show=show)
+        _, freq = _entropy_freq(signal, symbolize=symbolize, show=show)
 
-    return scipy.stats.entropy(freq, base=base), {"Method": method, "Base": base}
+    return scipy.stats.entropy(freq, base=base), {"Symbolization": symbolize, "Base": base}
 
 
 # =============================================================================
 # Compute frequencies (common to Shannon and Tsallis)
 # =============================================================================
-def _entropy_freq(signal, method=None, show=False):
+def _entropy_freq(signal, symbolize=None, show=False):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError(
@@ -133,6 +132,6 @@ def _entropy_freq(signal, method=None, show=False):
 
     # Make discrete
     if np.isscalar(signal) is False:
-        signal = complexity_symbolize(signal, method=method, show=show)
+        signal = complexity_symbolize(signal, method=symbolize, show=show)
 
     return np.unique(signal, return_counts=True)

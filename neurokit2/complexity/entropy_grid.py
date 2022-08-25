@@ -5,7 +5,7 @@ import pandas as pd
 from .entropy_shannon import entropy_shannon
 
 
-def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
+def entropy_grid(signal, delay=1, k=3, show=False, **kwargs):
     """**Grid Entropy (GridEn)**
 
     Grid Entropy (GridEn or GDEn) is defined as a gridded descriptor of a :func:`Poincaré plot <.hrv_nonlinear>`,
@@ -25,7 +25,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
     delay : int
         Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
-    n : int
+    k : int
         The number of sections that the Poincaré plot is divided into. It is a coarse
         graining parameter that defines how fine the grid is.
     show : bool
@@ -56,7 +56,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
 
       # Compute Grid Entropy
       @savefig p_entropy_grid1.png scale=100%
-      phasen, info = nk.entropy_grid(signal, n=3, show=True)
+      phasen, info = nk.entropy_grid(signal, k=3, show=True)
       @suppress
       plt.close()
 
@@ -65,7 +65,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
       phasen
 
       @savefig p_entropy_grid2.png scale=100%
-      phasen, info = nk.entropy_grid(signal, n=10, show=True)
+      phasen, info = nk.entropy_grid(signal, k=10, show=True)
       @suppress
       plt.close()
 
@@ -86,7 +86,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    info = {"n": n, "Delay": delay}
+    info = {"k": k, "Delay": delay}
 
     # Normalization
     Sig_n = (signal - min(signal)) / np.ptp(signal)
@@ -95,7 +95,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
     Temp = np.array([Sig_n[:-delay], Sig_n[delay:]])
 
     # Get count of points in each grid
-    hist, _, _ = np.histogram2d(Temp[0, :], Temp[1, :], n)
+    hist, _, _ = np.histogram2d(Temp[0, :], Temp[1, :], k)
 
     # Get frequency
     freq = np.flipud(hist.T) / hist.sum()
@@ -109,7 +109,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
 
     if show is True:
 
-        gridlines = np.linspace(0, 1, n + 1)
+        gridlines = np.linspace(0, 1, k + 1)
         plt.subplots(1, 2)
         x1 = plt.subplot(121)
         ax1 = plt.axes(x1)
@@ -117,11 +117,11 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
         ax1.plot(Sig_n[:-delay], Sig_n[delay:], ".", color="#009688")
         ax1.plot(
             np.tile(gridlines, (2, 1)),
-            np.array((np.zeros(n + 1), np.ones(n + 1))),
+            np.array((np.zeros(k + 1), np.ones(k + 1))),
             color="red",
         )
         ax1.plot(
-            np.array((np.zeros(n + 1), np.ones(n + 1))),
+            np.array((np.zeros(k + 1), np.ones(k + 1))),
             np.tile(gridlines, (2, 1)),
             color="red",
         )

@@ -31,10 +31,19 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         Visualize the ECG data with ``"default"`` or visualize artifacts thresholds with
         ``"artifacts"`` produced by ``ecg_fixpeaks()``, or ``"full"`` to visualize both.
 
+    See Also
+    --------
+    ecg_process
+
     Returns
     -------
-    fig
-        Figure representing a plot of the processed ecg signals (and peak artifacts).
+    Though the function returns nothing, the figure can be retrieved and saved as follows:
+
+    .. code-block:: console
+
+        # To be run after ecg_plot()
+        fig = plt.gcf()
+        fig.savefig("myfig.png")
 
     Examples
     --------
@@ -42,16 +51,17 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
 
       import neurokit2 as nk
 
+      # Simulate data
       ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
+
+      # Process signal
       signals, info = nk.ecg_process(ecg, sampling_rate=1000)
+
+      # Plot
       @savefig p_ecg_plot.png scale=100%
       nk.ecg_plot(signals, sampling_rate=1000, show_type='default')
       @suppress
       plt.close()
-
-    See Also
-    --------
-    ecg_process
 
     """
     # Sanity-check input.

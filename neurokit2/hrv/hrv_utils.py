@@ -1,32 +1,49 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
 from ..signal import signal_interpolate
+from ..misc import NeuroKitWarning
 
 
-def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
+def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, interpolation_rate=100, **kwargs):
 
     rri = np.diff(peaks) / sampling_rate * 1000
 
     if interpolate is False:
-        sampling_rate = None
+        interpolation_rate = None
 
     else:
-
-        # Sanitize minimum sampling rate for interpolation to 10 Hz
-        sampling_rate = max(sampling_rate, 10)
-
-        # Compute length of interpolated heart period signal at requested sampling rate.
-        desired_length = int(np.rint(peaks[-1]))
+        # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
+        # We considered an interpolation rate 4 Hz by default to match Kubios
+        # but in case of some applications with high heart rates we decided to make it 100 Hz
+        # See https://github.com/neuropsychology/NeuroKit/pull/680 for more information 
+        # and if you have any thoughts to contribute, please let us know!
+        if interpolation_rate < 1:
+                warn(
+                    "The interpolation rate of the R-R intervals is too low for "
+                    " computing the frequency-domain features."
+                    " Consider increasing the interpolation rate to at least 1 Hz.",
+                    category=NeuroKitWarning,
+                )
+        
+        # Compute x-values of interpolated heart period signal at requested sampling rate.
+        x_new = np.arange(
+            start=peaks[1] / sampling_rate,
+            stop=peaks[-1] / sampling_rate + 1 / interpolation_rate,
+            step=1 / interpolation_rate,
+        )
+        rri_time = peaks[1:] / sampling_rate # Skip first peak since it has no corresponding element in heart_period
 
         rri = signal_interpolate(
-            peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
+            rri_time,
             rri,
-            x_new=np.arange(desired_length),
+            x_new=x_new,
             **kwargs
         )
-    return rri, sampling_rate
+    return rri, interpolation_rate
 
 
 def _hrv_sanitize_input(peaks=None):

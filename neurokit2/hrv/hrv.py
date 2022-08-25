@@ -21,7 +21,8 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     .. tip::
 
         We strongly recommend checking our open-access paper `Pham et al. (2021)
-        <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
+        <https://doi.org/10.3390/s21123998>`_ on HRV indices as well as `Frasch (2022)
+        <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/>`_ for more information.
 
     Parameters
     ----------
@@ -87,6 +88,8 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
       Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
       https://doi.org/10.3390/s21123998
+    * Frasch, M. G. (2022). Comprehensive HRV estimation pipeline in Python using Neurokit2:
+      Application to sleep physiology. MethodsX, 9, 101782.
     * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
       electrophysiology review, 6(3), 239-244.
     * Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and

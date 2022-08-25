@@ -65,9 +65,9 @@ def fractal_sevcik(signal):
     n = len(y_)
 
     # 2. Derive x* and y* (y* is actually the normalized signal)
-    x_ = np.arange(1, n + 1) / n
+    x_ = np.linspace(0, 1, n)
 
-    # 3. Compute L
+    # 3. Compute L (because we use np.diff, hence n-1 below)
     L = np.sum(np.sqrt(np.diff(y_) ** 2 + np.diff(x_) ** 2))
 
     # 4. Compute the fractal dimension (approximation)

@@ -33,6 +33,10 @@ Fractal Dimension
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_katz
 
+*fractal_linelength()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_linelength
+
 *fractal_petrosian()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_petrosian
@@ -53,6 +57,10 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_higuchi
 
+*fractal_density()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_density
+
 *fractal_hurst()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_hurst
@@ -65,6 +73,9 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_dfa
 
+*fractal_tmf()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_tmf
 
 Entropy
 ^^^^^^^^^^^^^^^^^
@@ -194,6 +205,10 @@ Other indices
 *complexity_hjorth()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
+
+*complexity_decorrelation()*
+"""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_decorrelation
 
 *complexity_lempelziv()*
 """"""""""""""""""""""""""
