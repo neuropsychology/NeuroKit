@@ -87,8 +87,8 @@ def hrv_frequency(
         The criteria to automatically select order in parametric PSD (only used for autoregressive
         (AR) methods such as ``"burg"``). Defaults to ``None``.
     interpolation_rate : int, optional
-        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as 
-        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4. 
+        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
+        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
     **kwargs
         Additional other arguments.
 
@@ -165,7 +165,11 @@ def hrv_frequency(
 
     # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)
     rri, sampling_rate = _hrv_get_rri(
-        peaks, sampling_rate=sampling_rate, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
+        peaks,
+        sampling_rate=sampling_rate,
+        interpolate=True,
+        interpolation_rate=interpolation_rate,
+        **kwargs
     )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
