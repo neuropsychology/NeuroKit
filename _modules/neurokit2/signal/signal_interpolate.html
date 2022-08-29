@@ -550,17 +550,19 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">scipy.interpolate</span>
 
 
-<div class="viewcode-block" id="signal_interpolate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_interpolate">[docs]</a><span class="k">def</span> <span class="nf">signal_interpolate</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="signal_interpolate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_interpolate">[docs]</a><span class="k">def</span> <span class="nf">signal_interpolate</span><span class="p">(</span>
+    <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Interpolate a signal**</span>
-
 <span class="sd">    Interpolate a signal using different methods.</span>
-
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x_values : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The samples corresponding to the values to be interpolated.</span>
 <span class="sd">    y_values : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The values to be interpolated.</span>
+<span class="sd">        The values to be interpolated. If not provided, any NaNs in the x_values</span>
+<span class="sd">        will be interpolated with :func:`_signal_interpolate_nan`,</span>
+<span class="sd">        considering the x_values as equally spaced.</span>
 <span class="sd">    x_new : Union[list, np.array, pd.Series] or int</span>
 <span class="sd">        The samples at which to interpolate the y_values. Samples before the first value in x_values</span>
 <span class="sd">        or after the last value in x_values will be extrapolated. If an integer is passed, nex_x</span>
@@ -576,27 +578,28 @@ title="Open an issue"
 <span class="sd">        order of the spline interpolator to use.</span>
 <span class="sd">        See `here &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
 <span class="sd">        PchipInterpolator.html&gt;`_ for details on the ``&quot;monotone_cubic&quot;`` method.</span>
-
+<span class="sd">    fill_value : float or tuple or str</span>
+<span class="sd">        If a ndarray (or float), this value will be used to fill in for</span>
+<span class="sd">        requested points outside of the data range.</span>
+<span class="sd">        If a two-element tuple, then the first element is used as a fill value</span>
+<span class="sd">        for x_new &lt; x[0] and the second element is used for x_new &gt; x[-1].</span>
+<span class="sd">        If &quot;extrapolate&quot;, then points outside the data range will be extrapolated.</span>
+<span class="sd">        If not provided, then the default is ([y_values[0]], [y_values[-1]]).</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    array</span>
 <span class="sd">        Vector of interpolated samples.</span>
-
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
-
 <span class="sd">      import numpy as np</span>
 <span class="sd">      import neurokit2 as nk</span>
 <span class="sd">      import matplotlib.pyplot as plt</span>
-
 <span class="sd">      # Generate Simulated Signal</span>
 <span class="sd">      signal = nk.signal_simulate(duration=2, sampling_rate=10)</span>
-
 <span class="sd">      # We want to interpolate to 2000 samples</span>
 <span class="sd">      x_values = np.linspace(0, 2000, num=len(signal), endpoint=False)</span>
 <span class="sd">      x_new = np.linspace(0, 2000, num=2000, endpoint=False)</span>
-
 <span class="sd">      # Visualize all interpolation methods</span>
 <span class="sd">      @savefig p_signal_interpolate1.png scale=100%</span>
 <span class="sd">      nk.signal_plot([</span>
@@ -612,9 +615,16 @@ title="Open an issue"
 <span class="sd">      plt.scatter(x_values, signal, label=&quot;original datapoints&quot;, zorder=3)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanity checks</span>
+    <span class="k">if</span> <span class="n">x_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: signal_interpolate(): x_values must be provided.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">y_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># for interpolating NaNs</span>
+        <span class="k">return</span> <span class="n">_signal_interpolate_nan</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_values</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;x_values and y_values must be of the same length.&quot;</span><span class="p">)</span>
 
@@ -622,35 +632,70 @@ title="Open an issue"
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">x_new</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">y_values</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_new</span><span class="p">):</span>
+      <span class="c1"># if x_values is identical to x_new, no need for interpolation</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x_values</span> <span class="o">==</span> <span class="n">x_new</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">y_values</span>
-
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;monotone_cubic&quot;</span><span class="p">:</span>
         <span class="n">interpolation_function</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">PchipInterpolator</span><span class="p">(</span>
             <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">extrapolate</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fill_value</span> <span class="o">=</span> <span class="p">([</span><span class="n">y_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
         <span class="n">interpolation_function</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
             <span class="n">x_values</span><span class="p">,</span>
             <span class="n">y_values</span><span class="p">,</span>
             <span class="n">kind</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
             <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">fill_value</span><span class="o">=</span><span class="p">([</span><span class="n">y_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]),</span>
+            <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">,</span>
         <span class="p">)</span>
-
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_new</span><span class="p">)</span>
-
     <span class="n">interpolated</span> <span class="o">=</span> <span class="n">interpolation_function</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;monotone_cubic&quot;</span><span class="p">:</span>
-        <span class="c1"># Swap out the cubic extrapolation of out-of-bounds segments generated by</span>
-        <span class="c1"># scipy.interpolate.PchipInterpolator for constant extrapolation akin to the behavior of</span>
-        <span class="c1"># scipy.interpolate.interp1d with fill_value=([y_values[0]], [y_values[-1]].</span>
-        <span class="n">interpolated</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">interpolated</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-        <span class="n">interpolated</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">interpolated</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;monotone_cubic&quot;</span> <span class="ow">and</span> <span class="n">fill_value</span> <span class="o">!=</span> <span class="s2">&quot;extrapolate&quot;</span><span class="p">:</span>
+        <span class="c1"># Find the index of the new x value that is closest to the first original x value</span>
+        <span class="n">first_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x_new</span> <span class="o">-</span> <span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="c1"># Find the index of the new x value that is closest to the last original x value</span>
+        <span class="n">last_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x_new</span> <span class="o">-</span> <span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        
+        <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Swap out the cubic extrapolation of out-of-bounds segments generated by</span>
+            <span class="c1"># scipy.interpolate.PchipInterpolator for constant extrapolation akin to the behavior of</span>
+            <span class="c1"># scipy.interpolate.interp1d with fill_value=([y_values[0]], [y_values[-1]].</span>
+            <span class="n">fill_value</span> <span class="o">=</span> <span class="p">([</span><span class="n">interpolated</span><span class="p">[</span><span class="n">first_index</span><span class="p">]],</span> <span class="p">[</span><span class="n">interpolated</span><span class="p">[</span><span class="n">last_index</span><span class="p">]])</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fill_value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fill_value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="c1"># if only a single integer or float is provided as a fill value, format as a tuple</span>
+            <span class="n">fill_value</span> <span class="o">=</span> <span class="p">([</span><span class="n">fill_value</span><span class="p">],</span> <span class="p">[</span><span class="n">fill_value</span><span class="p">])</span>
 
+        <span class="n">interpolated</span><span class="p">[:</span> <span class="n">first_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">interpolated</span><span class="p">[</span><span class="n">last_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">fill_value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            
     <span class="k">return</span> <span class="n">interpolated</span></div>
+
+
+<span class="k">def</span> <span class="nf">_signal_interpolate_nan</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">values</span><span class="p">)):</span>
+        <span class="c1"># assume that values are evenly spaced</span>
+        <span class="c1"># x_new corresponds to the indices of all values, including missing</span>
+        <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">not_missing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">values</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># remove the missing values</span>
+        <span class="n">y_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">not_missing</span><span class="p">]</span>
+
+        <span class="c1"># x_values corresponds to the indices of only non-missing values</span>
+        <span class="n">x_values</span> <span class="o">=</span> <span class="n">x_new</span><span class="p">[</span><span class="n">not_missing</span><span class="p">]</span>
+
+        <span class="c1"># interpolate to get the values at the indices where they are missing</span>
+        <span class="k">return</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">x_values</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span>
+                                  <span class="n">y_values</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span>
+                                  <span class="n">x_new</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span>
+                                  <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                                  <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># if there are no missing values, return original values</span>
+        <span class="k">return</span> <span class="n">values</span>
 </pre></div>
 
               </div>
