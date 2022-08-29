@@ -634,8 +634,8 @@ title="Open an issue"
 <span class="sd">        The criteria to automatically select order in parametric PSD (only used for autoregressive</span>
 <span class="sd">        (AR) methods such as ``&quot;burg&quot;``). Defaults to ``None``.</span>
 <span class="sd">    interpolation_rate : int, optional</span>
-<span class="sd">        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as </span>
-<span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4. </span>
+<span class="sd">        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as</span>
+<span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Additional other arguments.</span>
 
@@ -712,7 +712,11 @@ title="Open an issue"
 
     <span class="c1"># Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)</span>
     <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">peaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="n">frequency_band</span> <span class="o">=</span> <span class="p">[</span><span class="n">ulf</span><span class="p">,</span> <span class="n">vlf</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">hf</span><span class="p">,</span> <span class="n">vhf</span><span class="p">]</span>
