@@ -298,22 +298,29 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
         zeros = zeros[:-1]
 
     # exclude SCRs with small amplitude
-    thr = amplitude_min * np.max(df)
+    thr = 0 #amplitude_min * np.max(df)
 
     scrs, amps, ZC, pks = [], [], [], []
     for i in range(0, len(zeros) - 1, 2):
-        scrs += [df[zeros[i] : zeros[i + 1]]]
+        scrs += [eda_phasic[zeros[i] : zeros[i + 1]]]
         aux = scrs[-1].max()
         if aux > thr:
             amps += [aux]
             ZC += [zeros[i]]
             ZC += [zeros[i + 1]]
-            pks += [zeros[i] + np.argmax(df[zeros[i] : zeros[i + 1]])]
+            pks += [zeros[i] + np.argmax(eda_phasic[zeros[i] : zeros[i + 1]])]
 
     amps = np.array(amps)
     ZC = np.array(ZC)
     pks = np.array(pks)
     onsets = ZC[::2]
+
+    # exclude SCRs with small amplitude
+    thr = amplitude_min * np.nanmax(amps)
+    masked = (amps > thr)
+    amps = amps[masked]
+    pks = pks[masked]
+    onsets = onsets[masked]
 
     # output
     info = {"SCR_Onsets": onsets, "SCR_Peaks": pks, "SCR_Height": amps}
