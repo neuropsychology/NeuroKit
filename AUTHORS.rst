@@ -4,8 +4,10 @@ Authors
 .. hint::
    Want to be a part of the project? Read how to `contribute and join us <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
-Maintainers
------------
+The full log of contributors is available on `GitHub <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
+
+Current maintainers
+-------------------
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
@@ -21,12 +23,13 @@ Core contributors
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
 .. note::
-   We might sometimes update the authors page categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
+   We might sometimes update the categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
 
 
 Contributors
 -------------
 
+* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
@@ -46,6 +49,7 @@ Contributors
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 * `Patryk Wielopolski <https://github.com/pfilo8>`_ *(Wrocław University of Science and Technology, Poland)*
 * `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
+* `Jannik Gut <https://github.com/rostro36>`_
 * `Nattapong Thammasan <https://github.com/Nattapong-OnePlanet>`_ *(OnePlanet, Netherlands)*
 
 

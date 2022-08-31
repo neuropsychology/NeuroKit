@@ -88,17 +88,16 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
     # R-peaks
-    instant_peaks, rpeaks, = ecg_peaks(
-        ecg_cleaned=ecg_cleaned, sampling_rate=sampling_rate, method=method, correct_artifacts=True
-    )
+    (
+        instant_peaks,
+        rpeaks,
+    ) = ecg_peaks(ecg_cleaned=ecg_cleaned, sampling_rate=sampling_rate, method=method, correct_artifacts=True)
 
     rate = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned))
 
-    quality = ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=sampling_rate)
+    quality = ecg_quality(ecg_cleaned, rpeaks=rpeaks["ECG_R_Peaks"], sampling_rate=sampling_rate)
 
-    signals = pd.DataFrame(
-        {"ECG_Raw": ecg_signal, "ECG_Clean": ecg_cleaned, "ECG_Rate": rate, "ECG_Quality": quality}
-    )
+    signals = pd.DataFrame({"ECG_Raw": ecg_signal, "ECG_Clean": ecg_cleaned, "ECG_Rate": rate, "ECG_Quality": quality})
 
     # Additional info of the ecg signal
     delineate_signal, delineate_info = ecg_delineate(

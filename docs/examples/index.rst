@@ -28,6 +28,7 @@ EEG
    :maxdepth: 1
 
    eeg_power/eeg_power
+   eeg_complexity/eeg_complexity
 
 Misc
 =============

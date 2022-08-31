@@ -6,7 +6,7 @@ import pandas as pd
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
+def entropy_cumulativeresidual(signal, symbolize=None, show=False, freq=None):
     """**Cumulative residual entropy (CREn)**
 
     The cumulative residual entropy is an alternative to the Shannon
@@ -29,11 +29,10 @@ def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    method : str or int
-        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
-        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`complexity_symbolize`
-        for details.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. ``None`` by
+        default, which skips the process (and assumes the input is already discrete). See
+        :func:`complexity_symbolize` for details.
     show : bool
         If ``True``, will show the discrete the signal.
     freq : np.array
@@ -76,7 +75,7 @@ def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
         )
 
     if freq is None:
-        events, freq = _entropy_freq(signal, method=method, show=show)
+        events, freq = _entropy_freq(signal, symbolize=symbolize, show=show)
     freq = freq / np.sum(freq)
 
     events, freq = zip(*sorted(zip(events, freq)))
@@ -89,7 +88,7 @@ def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
         term = (b - a) * pgx * np.log2(pgx)
         terms[i] = term
 
-    return -np.nansum(terms), {"Values": terms, "Method": method}
+    return -np.nansum(terms), {"Values": terms, "Symbolization": symbolize}
 
 
 # =============================================================================

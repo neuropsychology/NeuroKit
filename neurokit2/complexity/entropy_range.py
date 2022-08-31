@@ -2,27 +2,26 @@ from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 
 
-def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate=False, **kwargs):
-    """**Range Entropy (RangeEn)**
+def entropy_range(signal, dimension=3, delay=1, tolerance="sd", approximate=False, **kwargs):
+    """**Range Entropy (RangEn)**
 
-    Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_,
-    RangeEn refers to a modified form of SampEn (or ApEn).
+    Introduced by Omidvarnia et al. (2018), Range Entropy (RangEn or RangeEn) refers to a modified
+    form of SampEn (or ApEn).
 
     Both ApEn and SampEn compute the logarithmic likelihood that runs of patterns that are close
     remain close on the next incremental comparisons, of which this closeness is estimated by the
     Chebyshev distance. Range Entropy uses instead a normalized "range distance", resulting in
-    modified forms of ApEn and SampEn, **RangeEn (A)** (*mApEn*) and **RangeEn (B)** (*mSampEn*).
+    modified forms of ApEn and SampEn, **RangEn (A)** (*mApEn*) and **RangEn (B)** (*mSampEn*).
 
-    However, the RangeEn (A), based on ApEn, often yields undefined entropies (i.e., *NaN* or
-    *Inf*). As such, using RangeEn (B) is recommended instead.
+    However, the RangEn (A), based on ApEn, often yields undefined entropies (i.e., *NaN* or
+    *Inf*). As such, using RangEn (B) is recommended instead.
 
-    RangeEn is described as more robust to nonstationary signal changes, and has a more linear
+    RangEn is described as more robust to nonstationary signal changes, and has a more linear
     relationship with the Hurst exponent (compared to ApEn and SampEn), and has no need for signal
     amplitude correction.
 
     Note that the :func:`corrected <entropy_approximate>` version of ApEn (cApEn) can be computed
     by setting ``corrected=True``.
-
 
 
     Parameters
@@ -41,8 +40,8 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     approximate : bool
         The entropy algorithm to use. If ``False`` (default), will use sample entropy and return
-        *mSampEn* (**RangeEn B**). If ``True``, will use approximate entropy and return *mApEn*
-        (**RangeEn A**).
+        *mSampEn* (**RangEn B**). If ``True``, will use approximate entropy and return *mApEn*
+        (**RangEn A**).
     **kwargs
         Other arguments.
 
@@ -52,7 +51,7 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate
 
     Returns
     -------
-    RangeEn : float
+    RangEn : float
         Range Entropy. If undefined conditional probabilities are detected (logarithm
         of sum of conditional probabilities is ``ln(0)``), ``np.inf`` will
         be returned, meaning it fails to retrieve 'accurate' regularity information.
@@ -70,22 +69,21 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate
       signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6])
 
       # Range Entropy B (mSampEn)
-      RangeEnB, info = nk.entropy_range(signal, approximate=False)
-      RangeEnB
+      RangEnB, info = nk.entropy_range(signal, approximate=False)
+      RangEnB
 
       # Range Entropy A (mApEn)
-      RangeEnA, info = nk.entropy_range(signal, approximate=True)
-      RangeEnA
+      RangEnA, info = nk.entropy_range(signal, approximate=True)
+      RangEnA
 
       # Range Entropy A (corrected)
-      RangeEnAc, info = nk.entropy_range(signal, approximate=True, corrected=True)
-      RangeEnAc
+      RangEnAc, info = nk.entropy_range(signal, approximate=True, corrected=True)
+      RangEnAc
 
     References
     ----------
     * Omidvarnia, A., Mesbah, M., Pedersen, M., & Jackson, G. (2018). Range entropy: A bridge
       between signal complexity and self-similarity. Entropy, 20(12), 962.
-
 
     """
     if approximate is False:  # mSampEn - RangeEn (B)

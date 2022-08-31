@@ -21,6 +21,9 @@ def complexity_rqa(
     for the investigation of dynamical systems. It quantifies the number and duration
     of recurrences of a dynamical system presented by its phase space trajectory.
 
+    .. figure:: ../img/douglas2022c.png
+       :alt: Illustration of RQA (Douglas et al., 2022).
+
     Features include:
 
     * **Recurrence rate (RR)**: Proportion of points that are labelled as recurrences. Depends on

@@ -5,7 +5,7 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
+def entropy_symbolicdynamic(signal, dimension=3, symbolize="MEP", c=6, **kwargs):
     """**Symbolic Dynamic Entropy (SyDyEn) and its Multiscale variants (MSSyDyEn)**
 
     Symbolic Dynamic Entropy (SyDyEn) combines the merits of symbolic dynamic and information
@@ -18,12 +18,12 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. Can be one
+        of ``"MEP"`` (default), ``"NCDF"``, ``"linear"``, ``"uniform"``, ``"kmeans"``, ``"equal"``,
+        or others. See :func:`complexity_symbolize` for details.
     c : int
         Number of symbols *c*.
-    method : str
-        Method of symbolization. Can be one of ``"MEP"`` (default), ``"NCDF"``, ``"linear"``,
-        ``"uniform"``, ``"kmeans"``, ``"equal"``, or others. See :func:`complexity_symbolize` for
-        details.
     **kwargs : optional
         Other keyword arguments (currently not used).
 
@@ -50,10 +50,10 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
       signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
 
       # Compute Symbolic Dynamic Entropy
-      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, method="MEP")
+      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, symbolize="MEP")
       sydyen
 
-      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, method="kmeans")
+      sydyen, info = nk.entropy_symbolicdynamic(signal, c=3, symbolize="kmeans")
       sydyen
 
       # Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)
@@ -87,7 +87,7 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
         )
 
     # Store parameters
-    info = {"Dimension": dimension, "c": c, "Method": method}
+    info = {"Dimension": dimension, "c": c, "Symbolization": symbolize}
 
     # We could technically expose the Delay, but the paper is about consecutive differences so...
     if "delay" in kwargs.keys():
@@ -100,7 +100,7 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
 
     # There are four main steps of SDE algorithm
     # 1. Convert the time series into the symbol time series (called symbolization).
-    symbolic = complexity_symbolize(signal, method=method, c=c)
+    symbolic = complexity_symbolize(signal, method=symbolize, c=c)
 
     # 2. Construct the embedding vectors based on the symbol time series and compute the potential
     # state patterns probability

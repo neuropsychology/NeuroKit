@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
 
-from .utils_complexity_embedding import complexity_embedding
 from .fractal_correlation import fractal_correlation
+from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
@@ -34,13 +34,23 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
       embedding dimension, which is presumed to give an unfolded space-state reconstruction. This
       method can fail in noisy signals due to the futile attempt of unfolding the noise (and in
       purely random signals, the amount of false neighbors does not substantially drops as *m*
-      increases).
+      increases). The **figure** below show how projections to higher-dimensional spaces can be
+      used to detect false nearest neighbours. For instance, the red and the yellow points are
+      neighbours in the 1D space, but not in the 2D space.
+
+    .. figure:: ../img/douglas2022b.png
+       :alt: Illustration of FNN (Douglas et al., 2022).
+
     * **AFN** (Average False Neighbors): This modification by Cao (1997) of the FNN method
       addresses one of its main drawback, the need for a heuristic choice for the tolerance
-      thresholds ``R``. It uses the maximal Euclidian distance to represent nearest neighbors, and
-      averages all ratios of the distance in :math:`m+1` to :math:`m` dimension and defines E1 as a
-      parameter. The optimal dimension corresponds to when E1(d) stops changing (reaches a plateau).
-
+      thresholds *r*. It uses the maximal Euclidian distance to represent nearest neighbors, and
+      averages all ratios of the distance in :math:`m+1` to :math:`m` dimension and defines *E1* and
+      *E2* as parameters. The optimal dimension corresponds to when *E1* stops changing (reaches a
+      plateau). E1 reaches a plateau at a dimension *d0* if the signal comes from an attractor.
+      Then *d0*+1 is the optimal minimum embedding dimension. *E2* is a useful quantity to
+      distinguish deterministic signals from stochastic signals. A constant *E2* close to 1 for any
+      embedding dimension *d* suggests random data, since the future values are independent of the
+      past values.
 
     Parameters
     ----------
@@ -79,30 +89,42 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-      # Find optimal delay
-      delay, parameters = nk.complexity_delay(signal, delay_max=500)
+      signal = nk.signal_simulate(duration=2, frequency=[5, 7, 8], noise=0.01)
 
-      # Find optimal dimension
+      # Correlation Dimension
       @savefig p_complexity_dimension1.png scale=100%
       optimal_dimension, info = nk.complexity_dimension(signal,
-                                                        delay=delay,
-                                                        dimension_max=20,
-                                                        method='afnn',
+                                                        delay=20,
+                                                        dimension_max=10,
+                                                        method='cd',
                                                         show=True)
       @suppress
       plt.close()
 
     .. ipython:: python
 
+      # FNN
       @savefig p_complexity_dimension2.png scale=100%
       optimal_dimension, info = nk.complexity_dimension(signal,
-                                                        delay=delay,
+                                                        delay=20,
                                                         dimension_max=20,
                                                         method='fnn',
                                                         show=True)
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      # AFNN
+      @savefig p_complexity_dimension3.png scale=100%
+      optimal_dimension, info = nk.complexity_dimension(signal,
+                                                        delay=20,
+                                                        dimension_max=20,
+                                                        method='afnn',
+                                                        show=True)
+      @suppress
+      plt.close()
+
 
     References
     -----------
@@ -211,19 +233,7 @@ def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
 
 
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
-    """Return E(d) and E^*(d) for a all d in dimension_seq.
-
-    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
-
-    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater than some value d0  if the time
-    series comes from an attractor. Then d0 + 1 is the minimum embedding dimension we look for.
-
-    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish deterministic signals from
-    stochastic signals. For random data, since the future values are independent of the past values,
-    E2(d) will be equal to 1 for any d. For deterministic data, E2(d) is certainly related to d, it
-    cannot be a constant for all d; there must exist somed's such that E2(d) is not 1.
-
-    """
+    """AFN"""
     values = np.asarray(
         [
             _embedding_dimension_afn_d(signal, dimension, delay, **kwargs)
@@ -238,10 +248,11 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
 def _embedding_dimension_afn_d(
     signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs
 ):
-    """Return E(d) and E^*(d) for a single d.
-
+    """
     Returns E(d) and E^*(d) for the AFN method for a single d.
-
+     E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
+     E1(d) = E(d + 1)/E(d).
+     E2(d) = E*(d + 1)/E*(d).
     """
     d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
 
@@ -431,7 +442,7 @@ def _embedding_dimension_plot(
         ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
         if method in ["afnn"]:
             ax.plot(dimension_seq, E1, "o-", label="$E_1(d)$", color="#FF5722")
-            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#f44336")
+            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#FFC107")
 
         if method in ["fnn"]:
             ax.plot(dimension_seq, 100 * f1, "o--", label="Test I", color="#FF5722")

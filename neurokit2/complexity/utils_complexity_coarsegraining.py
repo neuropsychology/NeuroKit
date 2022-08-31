@@ -6,9 +6,7 @@ import scipy.ndimage.filters
 from ..signal import signal_interpolate
 
 
-def complexity_coarsegraining(
-    signal, scale=2, method="nonoverlapping", force=False, show=False, **kwargs
-):
+def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=False, **kwargs):
     """**Coarse-graining of a signal**
 
     The goal of coarse-graining is to represent the signal at a different "scale". The
@@ -57,8 +55,6 @@ def complexity_coarsegraining(
         the amount of coarsegraining.
     method : str
         Can be ``"nonoverlapping"``, ``"rolling"``, ``"interpolate"``, or ``"timeshift"``.
-    force : bool
-        If ``True``, will include all the samples (even if the last segment is too short).
     show : bool
         If ``True``, will show the coarse-grained signal.
     **kwargs
@@ -86,8 +82,6 @@ def complexity_coarsegraining(
 
       signal = [0, 1, 2, 0, 1]
       nk.complexity_coarsegraining(signal, scale=3)
-      # Forcing uses all the samples even if the last segment is too short
-      nk.complexity_coarsegraining(signal, scale=3, force=True)
 
       nk.complexity_coarsegraining(signal=range(10), method="interpolate")
       nk.complexity_coarsegraining(signal=range(10), method="rolling")

@@ -24,6 +24,7 @@ def hrv_frequency(
     silent=True,
     normalize=True,
     order_criteria=None,
+    interpolation_rate=100,
     **kwargs
 ):
     """**Computes frequency-domain indices of Heart Rate Variability (HRV)**
@@ -37,6 +38,7 @@ def hrv_frequency(
     * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).
     * **HF**: The spectral power of high frequencies (by default, .15 to .4 Hz).
     * **VHF**: The spectral power of very high frequencies (by default, .4 to .5 Hz).
+    * **LFHF**: The ratio obtained by dividing the low frequency power by the high frequency power.
     * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
       the total power.
     * **HFn**: The normalized high frequency, obtained by dividing the low frequency power by
@@ -60,8 +62,7 @@ def hrv_frequency(
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
     sampling_rate : int, optional
-        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-        least twice as high as the highest frequency in vhf. By default 1000.
+        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.
     ulf : tuple, optional
         Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).
     vlf : tuple, optional
@@ -85,6 +86,9 @@ def hrv_frequency(
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
         (AR) methods such as ``"burg"``). Defaults to ``None``.
+    interpolation_rate : int, optional
+        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
+        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
     **kwargs
         Additional other arguments.
 
@@ -159,9 +163,13 @@ def hrv_frequency(
     if isinstance(peaks, tuple):  # Detect actual sampling rate
         peaks, sampling_rate = peaks[0], peaks[1]
 
-    # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
+    # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)
     rri, sampling_rate = _hrv_get_rri(
-        peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs
+        peaks,
+        sampling_rate=sampling_rate,
+        interpolate=True,
+        interpolation_rate=interpolation_rate,
+        **kwargs
     )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]

@@ -18,19 +18,19 @@ def entropy_permutation(
     EEG, ECG, and stock market time series.
 
     Mathematically, it corresponds to the :func:`Shannon entropy <entropy_shannon>` after the
-    signal has been made discrete (symbolic) by analyzing the permutations in the time-embedded
-    space.
+    signal has been made :func:`discrete <complexity_symbolize>` by analyzing the permutations in
+    the time-embedded space.
 
     However, the main shortcoming of traditional PEn is that no information besides the order
     structure is retained when extracting the ordinal patterns, which leads to several possible
-    issues (Fadlallah et al., 2013). The **Weighted PEn** was developped to address these
+    issues (Fadlallah et al., 2013). The **Weighted PEn** was developed to address these
     limitations by incorporating significant information (regarding the amplitude) from the
     original time series into the ordinal patterns.
 
-    The **Conditional Entropy (CPEn)** was originally defined by Bandt & Pompe as *Sorting
-    Entropy*, but recently gained in popularity as conditional through the work of Unakafov et al.
-    (2014). It describes the average diversity of the ordinal patterns succeeding a given ordinal
-    pattern (dimension+1 vs. dimension).
+    The **Conditional Permutation Entropy (CPEn)** was originally defined by Bandt & Pompe as
+    *Sorting Entropy*, but recently gained in popularity as conditional through the work of
+    Unakafov et al. (2014). It describes the average diversity of the ordinal patterns succeeding a
+    given ordinal pattern (dimension+1 vs. dimension).
 
     This function can be called either via ``entropy_permutation()`` or ``complexity_pe()``.
     Moreover, variants can be directly accessed via ``complexity_wpe()`` and ``complexity_mspe()``.
@@ -93,6 +93,8 @@ def entropy_permutation(
 
     References
     ----------
+    * Henry, M., & Judge, G. (2019). Permutation entropy and information recovery in nonlinear
+      dynamic economic time series. Econometrics, 7(1), 10.
     * Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A
       complexity measure for time series incorporating amplitude information. Physical Review E, 87
       (2), 022911.

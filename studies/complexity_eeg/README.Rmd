@@ -1,0 +1,39 @@
+---
+title: "Optimal Selection of Delay and Embedding Dimension for EEG Complexity Analysis"
+output:
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+editor_options:
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: utils/apa.csl
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# options and parameters
+options(digits = 3)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi = 450,
+  fig.path = "../../studies/complexity_eeg/figures/"
+)
+```
+
+
+
+*This study can be referenced by* [*citing the package and the documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
+
+**We'd like to improve this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+
+
+
+```{r, child=c('analysis.Rmd')}
+```
+
+
+
+
+## References

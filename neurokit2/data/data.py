@@ -40,7 +40,7 @@ def data(dataset="bio_eventrelated_100hz"):
       ``PhotoSensor``.
 
       * Single subject
-      * Resting-state of 8 min when the Photosensor is low (need to crop the data)
+      * Resting-state of 8 min when the photosensor is low (need to crop the data)
       * ``sampling_rate=100``
 
     * **bio_resting_8min_200hz**: Returns a dictionary with four subjects (``S01``, ``S02``,

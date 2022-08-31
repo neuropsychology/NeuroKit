@@ -29,6 +29,10 @@ Misc
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.find_plateau
 
+*find_knee()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.misc.find_knee
+
 *intervals_to_peaks()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.intervals_to_peaks
@@ -54,5 +58,5 @@ Misc
 
 .. automodule:: neurokit2.misc
    :members:
-   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, intervals_to_peaks, listify, parallel_run, replace, as_vector
+   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, intervals_to_peaks, listify, parallel_run, replace, as_vector, find_knee
 

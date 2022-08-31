@@ -21,6 +21,13 @@ Contributing is the best way to learn programming, to meet new people, to grow y
 
 For instance, authors of significant contributions (features, tough bug fixes etc.) will be listed as official `Contributors <https://neuropsychology.github.io/NeuroKit/authors.html>`_ section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g,participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be included in as package maintainers, in which case they'll be expected to be more generally involved in the general development direction. Finally, we expect this project (the development of the package *per se* and all of the discussions/experiments that are around it) to result in several **publications** (could be about some features of the package, but also some tutorial papers, validation studies or whatnot. Obviously, people that contributed and allowed for a paper to be written will be included as authors.
 
+.. tip::
+
+    On top of this, you can add that you are a contributor of NeuroKit to your CV. Since many labs
+    and companies use it, they might be particularly interested in recruiting someone that
+    has a good understanding of NeuroKit, and demonstrated skills in Python and software
+    development.
+
 Long story short, we want this project to be helpful to you, whether you're a user, a contributor, or anything else in between :) And as always, do not hesitate to ask us if you have any questions.
 
 

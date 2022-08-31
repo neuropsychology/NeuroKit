@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+from warnings import warn
 
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_resample
 
 
@@ -15,8 +17,9 @@ def read_bitalino(
     events_annotation=False,
     events_annotation_directory=None,
 ):
-    """**Read and format a  OpenSignals file (e.g., from BITalino) into a pandas' dataframe**
+    """**Read an OpenSignals file (from BITalino)**
 
+    Reads and loads a BITalino file into a Pandas DataFrame.
     The function outputs both the dataframe and the sampling rate (retrieved from the
     OpenSignals file).
 
@@ -60,17 +63,32 @@ def read_bitalino(
       # data, sampling_rate = nk.read_bitalino("data.txt")
     """
 
-    # read metadata
+    # Read metadata
+    # -------------------------------------------------------------------------
     with open(filename, "r") as f:
+        lines = f.readlines()
+        if "OpenSignals" not in lines[0]:
+            raise ValueError("Text file is not in OpenSignals format.")
+        metadata = json.loads(lines[1][1:])  # read second line + skip '#'
 
-        if "OpenSignals" not in f.readline():  # read first line
-            raise ValueError(
-                "NeuroKit error: read_bitalino(): Text file is not in OpenSignals format."
+    # Remove ":"
+    metadata = {k.replace(":", ""): metadata[k] for k in metadata.keys()}
+
+    # Try find events annotations
+    # -------------------------------------------------------------------------
+    annotations = _read_bitalino_annotations(filename)
+    for k in annotations.keys():
+        if k in metadata.keys():
+            metadata[k]["Annotations"] = annotations[k]
+        else:
+            warn(
+                f"Device {k} not found in metadata ({metadata.keys()}) Something might be wrong.",
+                category=NeuroKitWarning,
             )
 
-        metadata = json.loads(f.readline()[1:])  # read second line
-
-    if len(list(metadata.keys())) == 1:
+    # Read data
+    # -------------------------------------------------------------------------
+    if len(metadata.keys()) == 1:
         return _read_bitalino_onedevice(
             filename,
             metadata,
@@ -81,14 +99,30 @@ def read_bitalino(
         )
 
     else:
-        return _read_bitalino_multipledevice(
-            filename,
-            metadata,
-            sampling_rate,
-            resample_method,
-            events_annotation,
-            events_annotation_directory,
-        )
+        data = {k: None for k in metadata.keys()}
+        raw = pd.read_csv(filename, sep="\t", header=None, comment="#")
+
+        # Read file for each device
+        for i, k in enumerate(metadata.keys()):
+            # Select right columns
+            ch = np.array(metadata[k]["column"])
+            data[k] = raw.iloc[:, i * len(ch) : (i + 1) * len(ch)]
+
+            for j, s in enumerate(metadata[k]["label"]):
+                ch[ch == s] = metadata[k]["sensor"][j]
+            data[k].columns = ch
+
+            # Add annotations
+            if "Annotations" in metadata[k].keys():
+                sr = metadata[k]["sampling rate"]
+                data[k]["Events"] = 0
+                annot = metadata[k]["Annotations"]
+                annot = annot[annot["CHANNEL"].isin(metadata[k]["label"])]
+                annot = annot.drop_duplicates(["START", "END"])
+                for _, row in annot.iterrows():
+                    data[k]["Events"][int(row["START"] * sr) : int(row["END"] * sr) + 1] = 1
+
+    return data, metadata
 
 
 # =============================================================================
@@ -162,6 +196,7 @@ def _read_bitalino_multipledevice(
     events_annotation=False,
     events_annotation_directory=None,
 ):
+
     info = {}  # Initialize empty dict for storing
 
     # Read from multiple devices
@@ -239,6 +274,28 @@ def _read_bitalino_resample(
     data = signals.copy()
 
     return data, resampling_rate
+
+
+def _read_bitalino_annotations(filename):
+    """Read events that are annotated during BITalino signal acquisition.
+
+    Returns a dictionary containing the start and stop times (in seconds) in each channel detected
+    per unique event (label) within each device."""
+
+    file = filename.replace(".txt", "_EventsAnnotation.txt")
+    if os.path.isfile(file) is False:
+        return None
+
+    with open(file, "r") as f:
+        lines = f.readlines()
+        if "OpenSignals" not in lines[0]:
+            raise ValueError("Text file is not in OpenSignals format.")
+        metadata = json.loads(lines[1][1:])  # read second line + skip '#'
+        data = pd.read_csv(file, sep="\t", header=None, comment="#")
+        data = data.dropna(axis=1, how="all")
+        data.columns = metadata["columns"]["labels"]
+
+    return {k: data[data["MAC"] == k] for k in data["MAC"].unique()}
 
 
 def _read_bitalino_events_annotation(events_annotation_directory=None, channel_names=None):

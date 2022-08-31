@@ -3,7 +3,7 @@ import numpy as np
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwargs):
+def entropy_tsallis(signal=None, q=1, symbolize=None, show=False, freq=None, **kwargs):
     """**Tsallis entropy (TSEn)**
 
     Tsallis Entropy is an extension of :func:`Shannon entropy <entropy_shannon>` to the case where
@@ -23,11 +23,10 @@ def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwar
         The signal (i.e., a time series) in the form of a vector of values.
     q : float
         Tsallis's *q* parameter, sometimes referred to as the entropic-index (default to 1).
-    method : str or int
-        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
-        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`fractal_petrosian`
-        for details.
+    symbolize : str
+        Method to convert a continuous signal input into a symbolic (discrete) signal. ``None`` by
+        default, which skips the process (and assumes the input is already discrete). See
+        :func:`complexity_symbolize` for details.
     show : bool
         If ``True``, will show the discrete the signal.
     freq : np.array
@@ -67,7 +66,7 @@ def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwar
 
     """
     if freq is None:
-        _, freq = _entropy_freq(signal, method=method, show=show)
+        _, freq = _entropy_freq(signal, symbolize=symbolize, show=show)
     freq = freq / np.sum(freq)
 
     if np.isclose(q, 1):
@@ -76,4 +75,4 @@ def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwar
         lnq_1_over_p = ((1 / freq) ** (1 - q) - 1) / (1 - q)
 
     tsens = freq * lnq_1_over_p
-    return np.sum(tsens), {"Method": method, "Values": tsens}
+    return np.sum(tsens), {"Symbolization": symbolize, "Values": tsens}

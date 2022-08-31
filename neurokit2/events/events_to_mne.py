@@ -5,13 +5,13 @@ import numpy as np
 def events_to_mne(events, event_conditions=None):
     """**Create MNE-compatible events**
 
-    Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/
-    EEG.
+    Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with
+    M/EEG.
 
     Parameters
     ----------
     events : list or ndarray or dict
-        Events onset location. Can also be a dict obtained through :func:`.events_find'.
+        Events onset location. Can also be a dict obtained through :func:`.events_find`.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions. Defaults to ``None``.
@@ -20,7 +20,7 @@ def events_to_mne(events, event_conditions=None):
     -------
     tuple
         MNE-formatted events and the event id, that can be added
-        via :func:`.raw.add_events(events)`, and a dictionary with event's names.
+        via ``raw.add_events(events)``, and a dictionary with event's names.
 
     See Also
     --------
