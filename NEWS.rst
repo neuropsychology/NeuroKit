@@ -12,7 +12,7 @@ New Features
 
 * Allow for input with NaNs and extrapolation in `signal_interpolate()`
 * Add argument `method` in `find_outliers()`
-
+* A lot (see https://github.com/neuropsychology/NeuroKit/pull/645)
 
 
 
