@@ -54,7 +54,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
           extracted from n-minute segments of time series data (1, 2 and 5 by default). Note that
           these indices require a minimal duration of signal to be computed (3, 6 and 15 minutes
           respectively) and will be silently skipped if the data provided is too short.
-        * **RMSSD**: The square root of the mean of the sum of successive differences between
+        * **RMSSD**: The square root of the mean of the squared successive differences between
           adjacent RR intervals. It is equivalent (although on another scale) to SD1, and
           therefore it is redundant to report correlations with both (Ciccone, 2017).
         * **SDSD**: The standard deviation of the successive differences between RR intervals.
