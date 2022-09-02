@@ -60,7 +60,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         * **SDSD**: The standard deviation of the successive differences between RR intervals.
         * **CVNN**: The standard deviation of the RR intervals (**SDNN**) divided by the mean of
           the RR intervals (**MeanNN**).
-        * **CVSD**: The root mean square of the sum of successive differences (**RMSSD**) divided by
+        * **CVSD**: The root mean square of the squared successive differences (**RMSSD**) divided by
           the mean of the RR intervals (**MeanNN**).
         * **MedianNN**: The median of the absolute values of the successive differences between RR
           intervals.
