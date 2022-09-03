@@ -885,13 +885,13 @@ respectively) and will be silently skipped if the data provided is too short.</p
 extracted from n-minute segments of time series data (1, 2 and 5 by default). Note that
 these indices require a minimal duration of signal to be computed (3, 6 and 15 minutes
 respectively) and will be silently skipped if the data provided is too short.</p></li>
-<li><p><strong>RMSSD</strong>: The square root of the mean of the sum of successive differences between
+<li><p><strong>RMSSD</strong>: The square root of the mean of the squared successive differences between
 adjacent RR intervals. It is equivalent (although on another scale) to SD1, and
 therefore it is redundant to report correlations with both (Ciccone, 2017).</p></li>
 <li><p><strong>SDSD</strong>: The standard deviation of the successive differences between RR intervals.</p></li>
 <li><p><strong>CVNN</strong>: The standard deviation of the RR intervals (<strong>SDNN</strong>) divided by the mean of
 the RR intervals (<strong>MeanNN</strong>).</p></li>
-<li><p><strong>CVSD</strong>: The root mean square of the sum of successive differences (<strong>RMSSD</strong>) divided by
+<li><p><strong>CVSD</strong>: The root mean square of successive differences (<strong>RMSSD</strong>) divided by
 the mean of the RR intervals (<strong>MeanNN</strong>).</p></li>
 <li><p><strong>MedianNN</strong>: The median of the absolute values of the successive differences between RR
 intervals.</p></li>
