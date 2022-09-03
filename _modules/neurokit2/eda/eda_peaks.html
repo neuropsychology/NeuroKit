@@ -557,7 +557,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="eda_peaks"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_peaks">[docs]</a><span class="k">def</span> <span class="nf">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**</span>
+    <span class="sd">&quot;&quot;&quot;**Find Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**</span>
 
 <span class="sd">    Identify Skin Conductance Responses (SCR) peaks in the phasic component of</span>
 <span class="sd">    Electrodermal Activity (EDA) with different possible methods, such as:</span>
@@ -643,16 +643,22 @@ title="Open an issue"
             <span class="n">eda_phasic</span> <span class="o">=</span> <span class="n">eda_phasic</span><span class="o">.</span><span class="n">values</span>
 
     <span class="c1"># Get basic</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">eda_findpeaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="n">amplitude_min</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">eda_findpeaks</span><span class="p">(</span>
+        <span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="n">amplitude_min</span>
+    <span class="p">)</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">eda_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
 
     <span class="c1"># Get additional features (rise time, half recovery time, etc.)</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">_eda_peaks_getfeatures</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">recovery_percentage</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
     <span class="c1"># Prepare output.</span>
-    <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">),</span>
-                                     <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">other_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Recovery&quot;</span><span class="p">])</span>
-    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sampling_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
+    <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">),</span>
+        <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
+        <span class="n">other_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Recovery&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
     <span class="k">return</span> <span class="n">peak_signal</span><span class="p">,</span> <span class="n">info</span></div>
 
@@ -715,7 +721,9 @@ title="Open an issue"
         <span class="n">segment</span> <span class="o">=</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">segment</span><span class="p">)]</span>
 
         <span class="c1"># Find recovery time</span>
-        <span class="n">recovery_value</span> <span class="o">=</span> <span class="n">find_closest</span><span class="p">(</span><span class="n">recovery_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">segment</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;smaller&quot;</span><span class="p">,</span> <span class="n">strictly</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">recovery_value</span> <span class="o">=</span> <span class="n">find_closest</span><span class="p">(</span>
+            <span class="n">recovery_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">segment</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;smaller&quot;</span><span class="p">,</span> <span class="n">strictly</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
         <span class="c1"># Detect recovery points only if there are datapoints below recovery value</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">recovery_value</span><span class="p">:</span>
