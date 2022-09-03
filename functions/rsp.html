@@ -369,7 +369,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference external" href="https://psyarxiv.com/mwa6x/">
-     HRV Structure
+     HRV Indices
     </a>
    </li>
    <li class="toctree-l2">
@@ -378,13 +378,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+    <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">
      Complexity Review
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/v5tqw/">
-     Complexity Structure
+    <a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">
+     Complexity Indices
     </a>
    </li>
    <li class="toctree-l2">
@@ -1602,8 +1602,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1060.503654      3918.0  666.042989  ...    0.704153  0.091859         inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  827.879727     4056.75  515.418162  ...    0.684839  0.054067        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1656,18 +1656,18 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.00077939, 0.00077939,</span>
-<span class="go">       0.00077939])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.00069691, 0.00069691,</span>
+<span class="go">       0.00069691])</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;harrison2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.06814049, 0.06814253, 0.06814463, ..., 0.12880246, 0.12879893,</span>
-<span class="go">       0.12879546])</span>
+<span class="go">array([0.13902329, 0.1390237 , 0.13902416, ..., 0.1088685 , 0.10886447,</span>
+<span class="go">       0.10886048])</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;birn2006&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.77938531, 0.77938531,</span>
-<span class="go">       0.77938531])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.67279166, 0.67279166,</span>
+<span class="go">       0.67279166])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1749,9 +1749,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.956343</span>
-<span class="go">2     2        10000  ...        0.0              0.548077</span>
-<span class="go">3     3        15000  ...        1.0              0.373644</span>
+<span class="go">1     1         5000  ...        1.0              0.865482</span>
+<span class="go">2     2        10000  ...        0.0              0.482672</span>
+<span class="go">3     3        15000  ...        0.0              0.680031</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1886,18 +1886,18 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.00092328, 0.00092328,</span>
-<span class="go">       0.00092328])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.00070209, 0.00070209,</span>
+<span class="go">       0.00070209])</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;harrison2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.16534139, 0.16534117, 0.16534091, ..., 0.16456293, 0.16455596,</span>
-<span class="go">       0.16454902])</span>
+<span class="go">array([0.08062783, 0.08062967, 0.08063157, ..., 0.05218794, 0.05218757,</span>
+<span class="go">       0.05218724])</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;birn2006&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.87377792, 0.87377792,</span>
-<span class="go">       0.87377792])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.70209321, 0.70209321,</span>
+<span class="go">       0.70209321])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" /></a>

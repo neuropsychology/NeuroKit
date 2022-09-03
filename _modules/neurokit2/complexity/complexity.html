@@ -366,7 +366,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference external" href="https://psyarxiv.com/mwa6x/">
-     HRV Structure
+     HRV Indices
     </a>
    </li>
    <li class="toctree-l2">
@@ -375,13 +375,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/f8k3x/">
+    <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">
      Complexity Review
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/v5tqw/">
-     Complexity Structure
+    <a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">
+     Complexity Indices
     </a>
    </li>
    <li class="toctree-l2">
@@ -549,34 +549,16 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">.complexity_hjorth</span> <span class="kn">import</span> <span class="n">complexity_hjorth</span>
-<span class="kn">from</span> <span class="nn">.complexity_lempelziv</span> <span class="kn">import</span> <span class="n">complexity_lempelziv</span>
-<span class="kn">from</span> <span class="nn">.complexity_lyapunov</span> <span class="kn">import</span> <span class="n">complexity_lyapunov</span>
-<span class="kn">from</span> <span class="nn">.complexity_relativeroughness</span> <span class="kn">import</span> <span class="n">complexity_relativeroughness</span>
-<span class="kn">from</span> <span class="nn">.entropy_approximate</span> <span class="kn">import</span> <span class="n">entropy_approximate</span>
-<span class="kn">from</span> <span class="nn">.entropy_cumulativeresidual</span> <span class="kn">import</span> <span class="n">entropy_cumulativeresidual</span>
-<span class="kn">from</span> <span class="nn">.entropy_differential</span> <span class="kn">import</span> <span class="n">entropy_differential</span>
-<span class="kn">from</span> <span class="nn">.entropy_fuzzy</span> <span class="kn">import</span> <span class="n">entropy_fuzzy</span>
+<span class="kn">from</span> <span class="nn">.entropy_attention</span> <span class="kn">import</span> <span class="n">entropy_attention</span>
+<span class="kn">from</span> <span class="nn">.entropy_bubble</span> <span class="kn">import</span> <span class="n">entropy_bubble</span>
 <span class="kn">from</span> <span class="nn">.entropy_multiscale</span> <span class="kn">import</span> <span class="n">entropy_multiscale</span>
 <span class="kn">from</span> <span class="nn">.entropy_permutation</span> <span class="kn">import</span> <span class="n">entropy_permutation</span>
-<span class="kn">from</span> <span class="nn">.entropy_range</span> <span class="kn">import</span> <span class="n">entropy_range</span>
-<span class="kn">from</span> <span class="nn">.entropy_sample</span> <span class="kn">import</span> <span class="n">entropy_sample</span>
-<span class="kn">from</span> <span class="nn">.entropy_shannon</span> <span class="kn">import</span> <span class="n">entropy_shannon</span>
-<span class="kn">from</span> <span class="nn">.entropy_spectral</span> <span class="kn">import</span> <span class="n">entropy_spectral</span>
 <span class="kn">from</span> <span class="nn">.entropy_svd</span> <span class="kn">import</span> <span class="n">entropy_svd</span>
-<span class="kn">from</span> <span class="nn">.fractal_correlation</span> <span class="kn">import</span> <span class="n">fractal_correlation</span>
 <span class="kn">from</span> <span class="nn">.fractal_dfa</span> <span class="kn">import</span> <span class="n">fractal_dfa</span>
-<span class="kn">from</span> <span class="nn">.fractal_higuchi</span> <span class="kn">import</span> <span class="n">fractal_higuchi</span>
-<span class="kn">from</span> <span class="nn">.fractal_hurst</span> <span class="kn">import</span> <span class="n">fractal_hurst</span>
-<span class="kn">from</span> <span class="nn">.fractal_katz</span> <span class="kn">import</span> <span class="n">fractal_katz</span>
-<span class="kn">from</span> <span class="nn">.fractal_nld</span> <span class="kn">import</span> <span class="n">fractal_nld</span>
-<span class="kn">from</span> <span class="nn">.fractal_petrosian</span> <span class="kn">import</span> <span class="n">fractal_petrosian</span>
-<span class="kn">from</span> <span class="nn">.fractal_psdslope</span> <span class="kn">import</span> <span class="n">fractal_psdslope</span>
-<span class="kn">from</span> <span class="nn">.fractal_sda</span> <span class="kn">import</span> <span class="n">fractal_sda</span>
-<span class="kn">from</span> <span class="nn">.fractal_sevcik</span> <span class="kn">import</span> <span class="n">fractal_sevcik</span>
-<span class="kn">from</span> <span class="nn">.information_fisher</span> <span class="kn">import</span> <span class="n">fisher_information</span>
+<span class="kn">from</span> <span class="nn">.fractal_linelength</span> <span class="kn">import</span> <span class="n">fractal_linelength</span>
 
 
-<div class="viewcode-block" id="complexity"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity">[docs]</a><span class="k">def</span> <span class="nf">complexity</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fast&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">],</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="complexity"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity">[docs]</a><span class="k">def</span> <span class="nf">complexity</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;makowski2022&quot;</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Complexity and Chaos Analysis**</span>
 
 <span class="sd">    Measuring the complexity of a signal refers to the quantification of various aspects related to</span>
@@ -584,15 +566,15 @@ title="Open an issue"
 
 <span class="sd">    .. tip::</span>
 
-<span class="sd">        We recommend checking our open-access `preprint &lt;https://psyarxiv.com/f8k3x/&gt;`_ for an</span>
+<span class="sd">        We recommend checking our open-access `review &lt;https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800&gt;`_ for an</span>
 <span class="sd">        introduction to **fractal physiology** and its application in neuroscience.</span>
 
-<span class="sd">    There are many indices that have been developped and used to assess the complexity of signals,</span>
+<span class="sd">    There are many indices that have been developed and used to assess the complexity of signals,</span>
 <span class="sd">    and all of them come with different specificities and limitations. While they should be used in</span>
 <span class="sd">    an informed manner, it is also convenient to have a single function that can compute multiple</span>
 <span class="sd">    indices at once.</span>
 
-<span class="sd">    The ``nk.complexity()`` function can be used to compute a large number of complexity metrics</span>
+<span class="sd">    The ``nk.complexity()`` function can be used to compute a useful subset of complexity metrics</span>
 <span class="sd">    and features. While this is great for exploratory analyses, we recommend running each function</span>
 <span class="sd">    separately, to gain more control over the parameters and information that you get.</span>
 
@@ -601,6 +583,9 @@ title="Open an issue"
 <span class="sd">        The indices included in this function will be subjected to change in future versions,</span>
 <span class="sd">        depending on what the literature suggests. We recommend using this function only for quick</span>
 <span class="sd">        exploratory analyses, but then replacing it by the calls to the individual functions.</span>
+
+<span class="sd">        Check-out our open-access `study &lt;https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800&gt;`_</span>
+<span class="sd">        explaining the selection of indices.</span>
 
 <span class="sd">    The categorization by &quot;computation time&quot; is based on our `study</span>
 <span class="sd">    &lt;https://www.mdpi.com/1099-4300/24/8/1036&gt;`_ results:</span>
@@ -614,8 +599,7 @@ title="Open an issue"
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    which : list</span>
-<span class="sd">        What metrics to compute, based on their computation time. Can be ``&quot;fast&quot;``, ``&quot;medium&quot;``,</span>
-<span class="sd">        or ``&quot;slow&quot;``.</span>
+<span class="sd">        What metrics to compute. Can be &quot;makowski2022&quot;.</span>
 <span class="sd">    delay : int</span>
 <span class="sd">        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.</span>
 <span class="sd">        See :func:`complexity_delay` to estimate the optimal value for this parameter.</span>
@@ -649,19 +633,11 @@ title="Open an issue"
 <span class="sd">      # Simulate a signal of 3 seconds</span>
 <span class="sd">      signal = nk.signal_simulate(duration=3, frequency=[5, 10])</span>
 
-<span class="sd">      # Fast metrics</span>
-<span class="sd">      df, info = nk.complexity(signal, which = [&quot;fast&quot;, &quot;medium&quot;])</span>
+<span class="sd">      # Compute selection of complexity metrics (Makowski et al., 2022)</span>
+<span class="sd">      df, info = nk.complexity(signal, which = &quot;makowski2022&quot;)</span>
 <span class="sd">      df</span>
 
-<span class="sd">    * **Example 2**: Compute slow complexity metrics</span>
-
-<span class="sd">    .. ipython:: python</span>
-
-<span class="sd">      # Slow, with specific parameters for Higuchi and MFDFA</span>
-<span class="sd">      df, info = nk.complexity(signal, which = &quot;slow&quot;, k_max=6, q=range(-2, 3))</span>
-<span class="sd">      df</span>
-
-<span class="sd">    * **Example 3**: Compute complexity over time</span>
+<span class="sd">    * **Example 2**: Compute complexity over time</span>
 
 <span class="sd">    .. ipython:: python</span>
 
@@ -717,6 +693,15 @@ title="Open an issue"
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Lau, Z. J., Pham, T., Chen, S. H. A., &amp; Makowski, D. (2022). Brain entropy, fractal</span>
+<span class="sd">      dimensions and predictability: A review of complexity measures for EEG in healthy and</span>
+<span class="sd">      neuropsychiatric populations. European Journal of Neuroscience, 1-23.</span>
+<span class="sd">    * Makowski, D., Te, A. S., Pham, T., Lau, Z. J., &amp; Chen, S. H. (2022). The Structure of Chaos:</span>
+<span class="sd">      An Empirical Comparison of Fractal Physiology Complexity Indices Using NeuroKit2. Entropy, 24</span>
+<span class="sd">      (8), 1036.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanity checks</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">))</span> <span class="ow">and</span> <span class="n">signal</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -724,92 +709,33 @@ title="Open an issue"
             <span class="s2">&quot;Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.&quot;</span>
         <span class="p">)</span>
 
-    <span class="c1"># Sanitize which</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">which</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">which</span> <span class="o">=</span> <span class="p">[</span><span class="n">which</span><span class="p">]</span>
-
     <span class="c1"># Initialize</span>
     <span class="n">df</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Fast ======================================================================================</span>
-    <span class="k">if</span> <span class="s2">&quot;fast&quot;</span> <span class="ow">in</span> <span class="n">which</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">which</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;makowski2022&quot;</span><span class="p">,</span> <span class="s2">&quot;makowski&quot;</span><span class="p">]:</span>
 
-        <span class="c1"># Fractal Dimension</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;PFD&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PFD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;KFD&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;KFD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_katz</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;SFD&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;SFD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_sevcik</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-
-        <span class="c1"># Entropy</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DiffEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;DiffEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;PEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ShanEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ShanEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;SpEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;SpEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;SVDEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;SVDEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
-
-        <span class="c1"># Other</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;FI&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;FI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fisher_information</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;LL&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;LL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_linelength</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
         <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Hjorth&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Hjorth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">complexity_hjorth</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;RR&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">complexity_relativeroughness</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="s2">&quot;medium&quot;</span> <span class="ow">in</span> <span class="n">which</span><span class="p">:</span>
-
-        <span class="c1"># Fractal Dimension</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NLD&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;NLD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_nld</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;SDA&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;SDA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_sda</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;PSDslope&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PSDslope&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-
-        <span class="c1"># Entropy</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CREn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;CREn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_cumulativeresidual</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ApEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ApEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_approximate</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AttEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;AttEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;SVDEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;SVDEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;BubbEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;BubbEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_bubble</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;SampEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;SampEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_sample</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CWPEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;CWPEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_permutation</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+            <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
+            <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;MSEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;MSEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSEn&quot;</span>
-        <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_permutation</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;default&quot;</span>
-        <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;WPEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;WPEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_permutation</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSPEn&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
 
-        <span class="c1"># Other</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Hurst&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Hurst&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_hurst</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;LZC&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;LZC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;PLZC&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PLZC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">complexity_lempelziv</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-
-    <span class="k">if</span> <span class="s2">&quot;slow&quot;</span> <span class="ow">in</span> <span class="n">which</span><span class="p">:</span>
-
-        <span class="c1"># Fractal Dimension</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CD&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;CD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;HFD&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;HFD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_higuchi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="c1"># Entropy</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;FuzzyEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;FuzzyEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_fuzzy</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span>
-        <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RCMSEn&quot;</span>
-        <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;FuzzyMSEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;FuzzyMSEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">fuzzy</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;FuzzyRCMSEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;FuzzyRCMSEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">,</span> <span class="n">fuzzy</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;RangeEn&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RangeEn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_range</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Other</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;LLE&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;LLE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">complexity_lyapunov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DFA&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;DFA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
         <span class="n">mfdfa</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mfdfa</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">df</span><span class="p">[</span><span class="s2">&quot;MFDFA_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mfdfa</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
