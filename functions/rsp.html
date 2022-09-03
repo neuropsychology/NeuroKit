@@ -1603,7 +1603,7 @@ than 640 breath cycles in the signal.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  965.220264     4007.65  616.016172  ...    0.738807  0.018896         inf</span>
+<span class="go">0  784.369307      3944.8  507.770213  ...    0.766972  0.087805    1.098612</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1630,8 +1630,8 @@ often considered noise.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;power&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code> or
-<code class="docutils literal notranslate"><span class="pre">&quot;birn&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;harrison2020&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>.</p></li>
 <li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a simple plot of the RVT (with the re-scaled original RSP signal).</p></li>
 <li><p><strong>silent</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings will not be printed.</p></li>
 <li><p><strong>boundaries</strong> (<em>list, optional</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>. Lower and upper limit of (humanly possible)
@@ -1652,22 +1652,22 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.00069028, 0.00069028,</span>
-<span class="go">       0.00069028])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.00080883, 0.00080883,</span>
+<span class="go">       0.00080883])</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;harrison2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.11753351, 0.11753234, 0.1175312 , ..., 0.14714409, 0.14714368,</span>
-<span class="go">       0.14714332])</span>
+<span class="go">array([0.14442844, 0.14442627, 0.14442415, ..., 0.13887181, 0.13887087,</span>
+<span class="go">       0.13886997])</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;birn2006&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.72864787, 0.72864787,</span>
-<span class="go">       0.72864787])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.80883198, 0.80883198,</span>
+<span class="go">       0.80883198])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1749,9 +1749,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.998928</span>
-<span class="go">2     2        10000  ...        0.0              0.202171</span>
-<span class="go">3     3        15000  ...        0.0              0.717344</span>
+<span class="go">1     1         5000  ...        1.0              0.882221</span>
+<span class="go">2     2        10000  ...        0.0              0.248664</span>
+<span class="go">3     3        15000  ...        0.0              0.750720</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1860,8 +1860,8 @@ often considered noise.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;power&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code> or
-<code class="docutils literal notranslate"><span class="pre">&quot;birn&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;harrison2020&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>.</p></li>
 <li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a simple plot of the RVT (with the re-scaled original RSP signal).</p></li>
 <li><p><strong>silent</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings will not be printed.</p></li>
 <li><p><strong>boundaries</strong> (<em>list, optional</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>. Lower and upper limit of (humanly possible)
@@ -1882,22 +1882,22 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
-<span class="go">array([      nan,       nan,       nan, ..., 0.0008289, 0.0008289,</span>
-<span class="go">       0.0008289])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.00080883, 0.00080883,</span>
+<span class="go">       0.00080883])</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;harrison2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.1933729 , 0.193373  , 0.19337309, ..., 0.25473738, 0.25473   ,</span>
-<span class="go">       0.25472266])</span>
+<span class="go">array([0.14442844, 0.14442627, 0.14442415, ..., 0.13887181, 0.13887087,</span>
+<span class="go">       0.13886997])</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;birn2006&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.84327189, 0.84327189,</span>
-<span class="go">       0.84327189])</span>
+<span class="go">array([       nan,        nan,        nan, ..., 0.80883198, 0.80883198,</span>
+<span class="go">       0.80883198])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" /></a>

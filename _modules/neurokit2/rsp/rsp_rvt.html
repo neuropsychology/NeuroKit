@@ -581,8 +581,8 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    method: str, optional</span>
-<span class="sd">        The rvt method to apply. Can be one of ``&quot;power&quot;`` (default), ``&quot;harrison&quot;`` or</span>
-<span class="sd">        ``&quot;birn&quot;``.</span>
+<span class="sd">        The rvt method to apply. Can be one of ``&quot;power2020&quot;`` (default), ``&quot;harrison2020&quot;`` or</span>
+<span class="sd">        ``&quot;birn2006&quot;``.</span>
 <span class="sd">    show : bool, optional</span>
 <span class="sd">        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).</span>
 <span class="sd">    silent : bool, optional</span>
@@ -611,7 +611,7 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
+<span class="sd">      rsp = nk.rsp_simulate(duration=60, random_state=1)</span>
 
 <span class="sd">      @savefig p_rsp_rvt1.png scale=100%</span>
 <span class="sd">      nk.rsp_rvt(rsp, method=&quot;power2020&quot;, show=True)</span>
@@ -642,26 +642,39 @@ title="Open an issue"
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;harrison&quot;</span><span class="p">,</span> <span class="s2">&quot;harrison2020&quot;</span><span class="p">]:</span>
         <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_harrison</span><span class="p">(</span>
-            <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">boundaries</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span>
+            <span class="n">rsp_signal</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+            <span class="n">boundaries</span><span class="o">=</span><span class="n">boundaries</span><span class="p">,</span>
+            <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;birn&quot;</span><span class="p">,</span> <span class="s2">&quot;birn2006&quot;</span><span class="p">]:</span>
         <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_birn</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;power2020&quot;</span><span class="p">]:</span>
         <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_power</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: rsp_rvt(): &#39;method&#39; should be one of &#39;birn&#39;, &#39;power&#39; or &#39;harrison&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: rsp_rvt(): &#39;method&#39; should be one of &#39;birn&#39;, &#39;power&#39; or &#39;harrison&#39;.&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
         <span class="n">_rsp_rvt_plot</span><span class="p">(</span><span class="n">rvt</span><span class="p">,</span> <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rvt</span></div>
 
 
 <span class="k">def</span> <span class="nf">_rsp_rvt_birn</span><span class="p">(</span>
-    <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span>
+    <span class="n">rsp_signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">zsmooth_signal</span> <span class="o">=</span> <span class="n">_smooth_rsp_data</span><span class="p">(</span>
         <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span>
     <span class="p">)</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">zsmooth_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span>
+        <span class="n">zsmooth_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span>
+    <span class="p">)</span>
     <span class="n">peak_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
     <span class="n">trough_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">]</span>
     <span class="c1"># prepare for loop</span>
@@ -686,7 +699,12 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_rsp_rvt_power</span><span class="p">(</span>
-    <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span>
+    <span class="n">rsp_signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="c1"># preprocess signal</span>
     <span class="n">zsmooth_signal</span> <span class="o">=</span> <span class="n">_smooth_rsp_data</span><span class="p">(</span>
@@ -694,7 +712,9 @@ title="Open an issue"
     <span class="p">)</span>
     <span class="c1"># find peaks and troughs</span>
 
-    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">zsmooth_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span>
+        <span class="n">zsmooth_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span>
+    <span class="p">)</span>
     <span class="n">peak_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
     <span class="n">trough_coords</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">]</span>
     <span class="c1"># initialize for loop</span>
@@ -715,24 +735,34 @@ title="Open an issue"
 
         <span class="n">trough_loc</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">trough_locs</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="c1"># calculate peak_height for peak at peak_index</span>
-        <span class="n">peak_heights</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">peak_loc</span><span class="p">]</span> <span class="o">-</span> <span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">trough_loc</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">peak_loc</span> <span class="o">-</span> <span class="n">prev_peak_loc</span><span class="p">))</span>
+        <span class="n">peak_heights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">peak_loc</span><span class="p">]</span> <span class="o">-</span> <span class="n">zsmooth_signal</span><span class="p">[</span><span class="n">trough_loc</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">peak_loc</span> <span class="o">-</span> <span class="n">prev_peak_loc</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)),</span> <span class="n">peak_coords</span><span class="p">,</span> <span class="n">peak_heights</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_smooth_rsp_data</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">signal</span> <span class="o">=</span> <span class="n">rsp_clean</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hampel&quot;</span><span class="p">)</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">rsp_clean</span><span class="p">(</span>
+        <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">window_length</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hampel&quot;</span>
+    <span class="p">)</span>
     <span class="n">smooth_signal</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">savgol_filter</span><span class="p">(</span>
-        <span class="n">signal</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="n">_make_uneven_filter_size</span><span class="p">(</span><span class="n">window_length</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="p">),</span> <span class="n">polyorder</span><span class="o">=</span><span class="mi">2</span>
+        <span class="n">signal</span><span class="p">,</span>
+        <span class="n">window_length</span><span class="o">=</span><span class="n">_make_uneven_filter_size</span><span class="p">(</span><span class="n">window_length</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="p">),</span>
+        <span class="n">polyorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">zsmooth_signal</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">smooth_signal</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">zsmooth_signal</span>
 
 
-<span class="k">def</span> <span class="nf">_rsp_rvt_harrison</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span><span class="p">],</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_rsp_rvt_harrison</span><span class="p">(</span>
+    <span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span><span class="p">],</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
     <span class="c1"># low-pass filter at not too far above breathing-rate to remove high-frequency noise</span>
     <span class="n">n_pad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
 
-    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span>
+        <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
     <span class="n">fr_lp</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">n_pad</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">))</span>
     <span class="n">fr_lp</span> <span class="o">=</span> <span class="n">fr_lp</span><span class="p">[</span><span class="n">n_pad</span> <span class="p">:</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fr_lp</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_pad</span><span class="p">)]</span>
 
@@ -782,7 +812,9 @@ title="Open an issue"
     <span class="c1"># Low-pass filter to remove within_cycle changes</span>
     <span class="c1"># Note factor of two is for compatability with the common definition of RV</span>
     <span class="c1"># as the difference between max and min inhalation (i.e. twice the amplitude)</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">iirfilter</span><span class="p">(</span>
+        <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
     <span class="n">fr_rv</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">fr_mag</span><span class="p">,</span> <span class="n">n_pad</span><span class="p">,</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">))</span>
     <span class="n">fr_rv</span> <span class="o">=</span> <span class="n">fr_rv</span><span class="p">[</span><span class="n">n_pad</span> <span class="p">:</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fr_rv</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_pad</span><span class="p">)]</span>
     <span class="n">fr_rv</span><span class="p">[</span><span class="n">fr_rv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
