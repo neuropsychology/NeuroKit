@@ -7,7 +7,7 @@ from ..signal import signal_filter, signal_findpeaks, signal_smooth, signal_zero
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """**Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
+    """**Find Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
 
     Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in
     the phasic component of Electrodermal Activity (EDA) with different possible methods. See
@@ -65,20 +65,16 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     References
     ----------
     * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
-
+      PhD Thesis Universidade.
     * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
       monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
       419-427.
-
     * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
       Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
-
     * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
       Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
       journal of translational engineering in health and medicine, 6, 2800711.
-      https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
     # Try to retrieve the right column if a dataframe is passed
@@ -86,13 +82,17 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         try:
             eda_phasic = eda_phasic["EDA_Phasic"]
         except KeyError:
-            raise KeyError("NeuroKit error: eda_findpeaks(): Please provide an array as the input signal.")
+            raise KeyError(
+                "NeuroKit error: eda_findpeaks(): Please provide an array as the input signal."
+            )
 
     method = method.lower()  # remove capitalised letters
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", "biosppy"]:
-        info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
+        info = _eda_findpeaks_kim2004(
+            eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min
+        )
     elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     elif method in ["vanhalem2020", "vanhalem", "halem2020"]:
@@ -150,9 +150,9 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
 
     References
     ----------
-    - van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
-    Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
-    Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
+    * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
+      Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
+      Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
 
     """
     # smooth
@@ -210,8 +210,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     References
     ----------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
+    * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD Thesis Universidade.
 
     """
     derivative = np.diff(np.sign(np.diff(eda_phasic)))
@@ -222,7 +222,9 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     # sanity check
     if len(pi) == 0 or len(ni) == 0:
-        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
+        raise ValueError(
+            "NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method."
+        )
 
     # pair vectors
     if ni[0] < pi[0]:
@@ -273,8 +275,9 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
     References
     ----------
-    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
-      of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+    * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
+      monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
+      419-427.
 
     """
 
@@ -291,14 +294,11 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     if np.all(df[zeros[-1] :] > 0):
         zeros = zeros[:-1]
 
-    # exclude SCRs with small amplitude
-    thr = 0  # amplitude_min * np.max(df)
-
     scrs, amps, ZC, pks = [], [], [], []
     for i in range(0, len(zeros) - 1, 2):
         scrs += [eda_phasic[zeros[i] : zeros[i + 1]]]
         aux = scrs[-1].max()
-        if aux > thr:
+        if aux > 0:
             amps += [aux]
             ZC += [zeros[i]]
             ZC += [zeros[i + 1]]
@@ -310,8 +310,7 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     onsets = ZC[::2]
 
     # exclude SCRs with small amplitude
-    thr = amplitude_min * np.nanmax(amps)
-    masked = amps > thr
+    masked = amps > (amplitude_min * np.nanmax(amps))  # threshold
     amps = amps[masked]
     pks = pks[masked]
     onsets = onsets[masked]

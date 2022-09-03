@@ -48,7 +48,6 @@ Contributors
 * `Celal Savur <https://github.com/csavur>`_ *(Rochester Institute of Technology, USA)*
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 * `Patryk Wielopolski <https://github.com/pfilo8>`_ *(Wrocław University of Science and Technology, Poland)*
-* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `Jannik Gut <https://github.com/rostro36>`_
 * `Nattapong Thammasan <https://github.com/Nattapong-OnePlanet>`_ *(OnePlanet, Netherlands)*
 
