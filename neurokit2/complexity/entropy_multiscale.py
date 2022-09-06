@@ -31,7 +31,7 @@ def entropy_multiscale(
     One of the limitation of :func:`SampEn <entropy_sample>` is that it characterizes
     complexity strictly on the time scale defined by the sampling procedure (via the ``delay``
     argument). To address this, Costa et al. (2002) proposed the multiscale entropy (MSEn),
-    which compute sample entropies at multiple scales.
+    which computes sample entropies at multiple scales.
 
     The conventional MSEn algorithm consists of two steps:
 
