@@ -76,7 +76,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SD1d** and **SD1a**: short-term variance of contributions of decelerations (prolongations
       of RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski,
       2011)
-    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to s
+    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to
       short-term HRV, respectively (Piskorski,  2011).
     * **SD2d** and **SD2a**: long-term variance of contributions of decelerations (prolongations of
       RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski, 2011).
