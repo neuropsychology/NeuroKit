@@ -106,7 +106,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **CD**: See :func:`.fractal_correlation`.
     * **HFD**: See :func:`.fractal_higuchi` (with ``kmax`` set to ``"default"``).
     * **KFD**: See :func:`.fractal_katz`.
-    * **LZC**: See :func:`.fractal_lempelziv`.
+    * **LZC**: See :func:`.complexity_lempelziv`.
     * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal,
       corresponding to short-term correlations. See :func:`.fractal_dfa`.
     * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
