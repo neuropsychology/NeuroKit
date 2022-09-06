@@ -63,8 +63,6 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         * **CVSD**: The root mean square of the sum of successive differences (**RMSSD**) divided by
           the mean of the RR intervals (**MeanNN**).
         * **MedianNN**: The median of the RR intervals.
-        * **MedianSD**: The median of the absolute values of the successive differences between RR
-          intervals.
         * **MadNN**: The median absolute deviation of the RR intervals.
         * **MCVNN**: The median absolute deviation of the RR intervals (**MadNN**) divided by the
           median of the RR intervals (**MedianNN**).
@@ -161,7 +159,6 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     # Robust
     out["MedianNN"] = np.nanmedian(rri)
-    out["MedianSD"] = np.nanmedian(np.abs(diff_rri))
     out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]  # Normalized
     out["IQRNN"] = scipy.stats.iqr(rri)
