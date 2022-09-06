@@ -92,7 +92,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **PIP**: Percentage of inflection points of the RR intervals series.
     * **IALS**: Inverse of the average length of the acceleration/deceleration segments.
     * **PSS**: Percentage of short segments.
-    * **PAS**: IPercentage of NN intervals in alternation segments.
+    * **PAS**: Percentage of NN intervals in alternation segments.
 
     Indices of **Complexity** and **Fractal Physiology** include:
 
