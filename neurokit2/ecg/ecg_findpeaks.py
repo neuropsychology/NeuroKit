@@ -90,7 +90,7 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_elgendi
     elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
         return _ecg_findpeaks_kalidas
-    elif method in ["martinez2003", "martinez"]:
+    elif method in ["martinez2004", "martinez"]:
         return _ecg_findpeaks_WT
     elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
         return _ecg_findpeaks_rodrigues
@@ -916,7 +916,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
 
 
 # =============================================================================
-# Continuous Wavelet Transform (CWT) - Martinez et al. (2003)
+# Continuous Wavelet Transform (CWT) - Martinez et al. (2004)
 # =============================================================================
 #
 def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):

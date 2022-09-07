@@ -23,8 +23,8 @@ def ecg_peaks(
       the QRS complexes. Unpublished, but see https://github.com/neuropsychology/NeuroKit/issues/476
     * **pantompkins1985**: Algorithm by Pan & Tompkins (1985).
     * **hamilton2002**: Algorithm by Hamilton (2002).
-    * **martinez2003**: *Source unknown!* Please help us retrieve the original paper.
     * **zong2003**: Algorithm by Zong et al. (2003).
+    * **martinez2004**: Algorithm by Martinez et al (2004).
     * **christov2004**: Algorithm by Christov (2004).
     * **gamboa2008**: Algorithm by Gamboa (2008).
     * **elgendi2010**: Algorithm by Elgendi et al. (2010).
@@ -105,8 +105,8 @@ def ecg_peaks(
       cleaned = nk.ecg_clean(ecg, method="hamilton2002")
       _, hamilton2002 = nk.ecg_peaks(cleaned, method="hamilton2002")
 
-      # martinez2003
-      _, martinez2003 = nk.ecg_peaks(ecg, method="martinez2003")
+      # martinez2004
+      _, martinez2004 = nk.ecg_peaks(ecg, method="martinez2004")
 
       # zong2003
       _, zong2003 = nk.ecg_peaks(ecg, method="zong2003")
@@ -141,7 +141,7 @@ def ecg_peaks(
               pantompkins1985,
               nabian2018,
               hamilton2002,
-              martinez2003,
+              martinez2004,
               christov2004,
               gamboa2008,
               elgendi2010,
@@ -178,6 +178,8 @@ def ecg_peaks(
     * Zong, W., Moody, G. B., & Jiang, D. (2003, September). A robust open-source algorithm to
       detect onset and duration of QRS complexes. In Computers in Cardiology, 2003 (pp.
       737-740). IEEE.
+    * Martinez, J. P., Almeida, R., Olmos, S., Rocha, A. P., & Laguna, P. (2004) A wavelet-based
+      ECG delineator: evaluation on standard databases. IEEE Trans Biomed Eng, 51(4), 570–581.
     * Christov, I. I. (2004). Real time electrocardiogram QRS detection using combined adaptive
       threshold. Biomedical engineering online, 3(1), 1-9.
     * Gamboa, H. (2008). Multi-modal behavioral biometrics based on HCI and electrophysiology
