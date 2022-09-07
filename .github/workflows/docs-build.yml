@@ -10,7 +10,7 @@ on:
 
 jobs:
     docs:
-        runs-on: windows-latest # ubuntu-latest
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
               with:
