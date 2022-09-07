@@ -25,9 +25,11 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", **kwargs):
     sampling_rate : int
         The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default), ``"biosppy"`` or ``"scipy"``.
+        The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default), ``"biosppy"``
+        or ``"scipy"``.
     **kwargs
-        Other arguments to be passed to the different peak finding methods. See :func:`.rsp_findpeaks`.
+        Other arguments to be passed to the different peak finding methods. See
+        :func:`.rsp_findpeaks`.
 
     Returns
     -------
@@ -72,7 +74,9 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", **kwargs):
     """
     info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
     info = rsp_fixpeaks(info)
-    peak_signal = signal_formatpeaks(info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"])
+    peak_signal = signal_formatpeaks(
+        info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"]
+    )
 
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
