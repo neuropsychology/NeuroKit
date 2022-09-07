@@ -4,10 +4,13 @@ Authors
 .. hint::
    Want to be a part of the project? Read how to `contribute and join us <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_!
 
-Maintainers
------------
+The full log of contributors is available on `GitHub <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
+
+Current maintainers
+-------------------
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
+* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
 * `Max Ngoi Zi Liang <https://github.com/Max-ZiLiang>`_ *(Nanyang Technological University, Singapore)*
 
@@ -21,7 +24,7 @@ Core contributors
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
 .. note::
-   We might sometimes update the authors page categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
+   We might sometimes update the categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
 
 
 Contributors
@@ -45,7 +48,8 @@ Contributors
 * `Celal Savur <https://github.com/csavur>`_ *(Rochester Institute of Technology, USA)*
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 * `Patryk Wielopolski <https://github.com/pfilo8>`_ *(Wrocław University of Science and Technology, Poland)*
-* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
+* `Jannik Gut <https://github.com/rostro36>`_
+* `Nattapong Thammasan <https://github.com/Nattapong-OnePlanet>`_ *(OnePlanet, Netherlands)*
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.

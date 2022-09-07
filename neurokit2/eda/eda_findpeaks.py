@@ -7,7 +7,7 @@ from ..signal import signal_filter, signal_findpeaks, signal_smooth, signal_zero
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """**Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
+    """**Find Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
 
     Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in
     the phasic component of Electrodermal Activity (EDA) with different possible methods. See
@@ -65,20 +65,16 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     References
     ----------
     * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
-
+      PhD Thesis Universidade.
     * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
       monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
       419-427.
-
     * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
       Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
-
     * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
       Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
       journal of translational engineering in health and medicine, 6, 2800711.
-      https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
     # Try to retrieve the right column if a dataframe is passed
@@ -154,9 +150,9 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
 
     References
     ----------
-    - van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
-    Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
-    Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
+    * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
+      Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
+      Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
 
     """
     # smooth
@@ -214,8 +210,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     References
     ----------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
+    * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD Thesis Universidade.
 
     """
     derivative = np.diff(np.sign(np.diff(eda_phasic)))
@@ -256,8 +252,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
-    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
-    approach by Kim et al.(2004).
+    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et
+    al.(2004).
 
     Parameters
     ----------
@@ -279,8 +275,9 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
     References
     ----------
-    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
-      of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+    * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
+      monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
+      419-427.
 
     """
 
@@ -297,23 +294,26 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     if np.all(df[zeros[-1] :] > 0):
         zeros = zeros[:-1]
 
-    # exclude SCRs with small amplitude
-    thr = amplitude_min * np.max(df)
-
     scrs, amps, ZC, pks = [], [], [], []
     for i in range(0, len(zeros) - 1, 2):
-        scrs += [df[zeros[i] : zeros[i + 1]]]
+        scrs += [eda_phasic[zeros[i] : zeros[i + 1]]]
         aux = scrs[-1].max()
-        if aux > thr:
+        if aux > 0:
             amps += [aux]
             ZC += [zeros[i]]
             ZC += [zeros[i + 1]]
-            pks += [zeros[i] + np.argmax(df[zeros[i] : zeros[i + 1]])]
+            pks += [zeros[i] + np.argmax(eda_phasic[zeros[i] : zeros[i + 1]])]
 
     amps = np.array(amps)
     ZC = np.array(ZC)
     pks = np.array(pks)
     onsets = ZC[::2]
+
+    # exclude SCRs with small amplitude
+    masked = amps > (amplitude_min * np.nanmax(amps))  # threshold
+    amps = amps[masked]
+    pks = pks[masked]
+    onsets = onsets[masked]
 
     # output
     info = {"SCR_Onsets": onsets, "SCR_Peaks": pks, "SCR_Height": amps}
@@ -322,8 +322,8 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 
 def _eda_findpeaks_nabian2018(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
-    approach by Nabian et al. (2018).
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et
+    al. (2018).
 
     Parameters
     ----------

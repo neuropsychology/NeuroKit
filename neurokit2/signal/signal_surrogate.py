@@ -6,12 +6,13 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
 
     Generate a surrogate version of a signal. Different methods are available, such as:
 
-    * ``"random"``: Performs a random permutation of the signal value. This way, the signal
+    * **random**: Performs a random permutation of the signal value. This way, the signal
       distribution is unaffected and the serial correlations are cancelled, yielding a whitened
       signal with an distribution identical to that of the original.
-    * ``"IAAFT"``: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate.
-      It is a phase randomized, amplitude adjusted surrogates with the same power spectrum (to a
-      very high accuracy) and distribution as the original data, using an iterative scheme.
+    * **IAAFT**: Returns an Iterative Amplitude Adjusted Fourier Transform (IAAFT) surrogate.
+      It is a phase randomized, amplitude adjusted surrogates that have the same power spectrum
+      (to a very high accuracy) and distribution as the original data, using an iterative scheme.
+
 
     Parameters
     ----------
@@ -20,7 +21,7 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
     method : str
         Can be ``"random"`` or ``"IAAFT"``.
     **kwargs
-        Other keywords arguments, such as ``max_iter``(by default 1000).
+        Other keywords arguments, such as ``max_iter`` (by default 1000).
 
     Returns
     -------
@@ -46,7 +47,6 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
       plt.plot(signal, label = "Original")
       plt.legend()
       @suppress
-      plt.show()
       plt.close()
 
     As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
@@ -96,7 +96,6 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
 
 def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, **kwargs):
     """IAAFT
-
     max_iter : int
         Maximum iterations to be performed while checking for convergence. Convergence can be
         achieved before maximum interation.
@@ -136,7 +135,7 @@ def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, **kwar
         surrogate = sort[np.argsort(np.argsort(s))]
 
         t = np.fft.rfft(surrogate)
-        current_error = np.sqrt(np.mean((amplitudes**2 - np.abs(t) ** 2) ** 2))
+        current_error = np.sqrt(np.mean((amplitudes ** 2 - np.abs(t) ** 2) ** 2))
 
         # Check convergence
         if abs(current_error - previous_error) <= atol + rtol * abs(previous_error):
@@ -144,5 +143,5 @@ def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, **kwar
         previous_error = current_error
 
     # Normalize error w.r.t. mean of the "true" power spectrum.
-    rmsd = current_error / np.mean(amplitudes**2)
+    rmsd = current_error / np.mean(amplitudes ** 2)
     return surrogate, i, rmsd

@@ -2,6 +2,32 @@ News
 =====
 
 
+
+
+
+0.2.1
+-------------------
+New Features
++++++++++++++
+
+* Allow for input with NaNs and extrapolation in `signal_interpolate()`
+* Add argument `method` in `find_outliers()`
+* A lot (see https://github.com/neuropsychology/NeuroKit/pull/645)
+
+
+
+
+0.2.0
+-------------------
+New Features
++++++++++++++
+
+* Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
+
+
+
+
+
 0.1.6
 -------------------
 
@@ -15,6 +41,7 @@ New Features
 +++++++++++++
 
 * Add new time-domain measures in `hrv_time()`: `Prc20NN`, `Prc80NN`, `MinNN`, and `MaxNN`
+* Allow `fix_peaks()` to account for larger intervals
 
 Fixes
 +++++++++++++

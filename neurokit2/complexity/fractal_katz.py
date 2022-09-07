@@ -4,7 +4,6 @@ import pandas as pd
 
 
 def fractal_katz(signal):
-
     """**Katz's Fractal Dimension (KFD)**
 
     Computes Katz's Fractal Dimension (KFD). The euclidean distances between successive points in
@@ -27,6 +26,10 @@ def fractal_katz(signal):
     info : dict
         A dictionary containing additional information (currently empty, but returned nonetheless
         for consistency with other functions).
+
+    See Also
+    --------
+    fractal_linelength
 
     Examples
     ----------

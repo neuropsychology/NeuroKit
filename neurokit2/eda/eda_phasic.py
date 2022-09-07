@@ -14,7 +14,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     .. warning::
 
-      cvxEDA algorithm seems broken. Must investigate.
+      cvxEDA algorithm seems broken. Help is needed to investigate.
+
 
     Parameters
     ----------
@@ -39,6 +40,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     Examples
     ---------
     **Example 1**: Methods comparison.
+
     .. ipython:: python
 
       import neurokit2 as nk

@@ -1,17 +1,11 @@
-# - * - coding: utf-8 - * -
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (
-    signal_findpeaks,
-    signal_plot,
-    signal_sanitize,
-    signal_smooth,
-    signal_zerocrossings,
-)
+from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
+                      signal_smooth, signal_zerocrossings)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
@@ -82,8 +76,10 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_nabian2018
     elif method in ["gamboa2008", "gamboa"]:
         return _ecg_findpeaks_gamboa
-    elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
+    elif method in ["ssf", "slopesumfunction"]:
         return _ecg_findpeaks_ssf
+    elif method in ["zong", "zong2003", "wqrs"]:
+        return _ecg_findpeaks_zong
     elif method in ["hamilton", "hamilton2002"]:
         return _ecg_findpeaks_hamilton
     elif method in ["christov", "christov2004"]:
@@ -94,7 +90,7 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_elgendi
     elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
         return _ecg_findpeaks_kalidas
-    elif method in ["martinez2003", "martinez"]:
+    elif method in ["martinez2004", "martinez"]:
         return _ecg_findpeaks_WT
     elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
         return _ecg_findpeaks_rodrigues
@@ -115,6 +111,7 @@ def _ecg_findpeaks_promac(
         "neurokit",
         "gamboa",
         "ssf",
+        "zong",
         "engzee",
         "elgendi",
         "kalidas",
@@ -126,15 +123,6 @@ def _ecg_findpeaks_promac(
     **kwargs,
 ):
     """Probabilistic Methods-Agreement via Convolution (ProMAC).
-
-    ProMAC combines the result of several R-peak detectors in a probabilistic way. For a given peak
-    detector, the binary signal representing the peak locations is convolved with a Gaussian
-    distribution, resulting in a propabilistic representation of each peak location. This procedure
-    is repeated for all selected 'promac_methods' and the resulting signals are accumulated. Finally,
-    a threshold is used to accept or reject the peak locations.
-
-    See this discussion for more information on the origins of the method:
-    https://github.com/neuropsychology/NeuroKit/issues/222
 
     Parameters
     ----------
@@ -156,11 +144,6 @@ def _ecg_findpeaks_promac(
         The standard deviation of the Gaussian distribution used to represent the peak location
         probability. This value should be in millisencods and is usually taken as the size of
         QRS complexes.
-
-    Returns
-    -------
-    rpeaks : list of int
-        A list of array positions at which R-peaks occur.
 
     """
     x = np.zeros(len(signal))
@@ -304,8 +287,8 @@ def _ecg_findpeaks_neurokit(
 def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
-    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
-    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
+    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions
+      on biomedical engineering, (3), 230-236.
 
     """
     diff = np.diff(signal)
@@ -328,10 +311,9 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000, **kwargs):
 def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000, **kwargs):
     """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.
 
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).
-    An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
-    IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.
-    doi:10.1109/jtehm.2018.2878000
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
+      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
+      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.
 
     """
     window_size = int(0.4 * sampling_rate)
@@ -440,9 +422,6 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
-    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial
-      blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
-
     """
     # TODO: Doesn't really seems to work
 
@@ -456,7 +435,7 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     # diff
     dx = np.diff(signal)
     dx[dx >= 0] = 0
-    dx = dx ** 2
+    dx = dx**2
 
     # detection
     (idx,) = np.nonzero(dx > threshold)
@@ -484,13 +463,65 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
 
 
 # =============================================================================
+# Zong (2003) - WQRS
+# =============================================================================
+def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kwargs):
+    """From https://github.com/berndporr/py-ecg-detectors/
+
+    - Zong, W., Moody, G. B., & Jiang, D. (2003, September). A robust open-source algorithm to
+      detect onset and duration of QRS complexes. In Computers in Cardiology, 2003 (pp. 737-740).
+      IEEE.
+    """
+
+    # 1. Filter signal
+    # TODO: Should remove this step? It's technically part of cleaning,
+    # Not sure it is integral to the peak-detection per se. Opinions are welcome.
+    order = 2
+    # Cutoff normalized by nyquist frequency
+    b, a = scipy.signal.butter(order, cutoff / (0.5 * sampling_rate))
+    y = scipy.signal.lfilter(b, a, signal)
+
+    # Curve length transformation
+    w = int(np.ceil(window * sampling_rate))
+    tmp = np.zeros(len(y) - w)
+    for i, j in enumerate(np.arange(w, len(y))):
+        s = y[j - w : j]
+        tmp[i] = np.sum(
+            np.sqrt(np.power(1 / sampling_rate, 2) * np.ones(w - 1) + np.power(np.diff(s), 2))
+        )
+    # Pad with the first value
+    clt = np.concatenate([[tmp[0]] * w, tmp])
+
+    # Find adaptive threshold
+    window_size = 10 * sampling_rate
+
+    # Apply fast moving window average with 1D convolution
+
+    ret = np.pad(clt, (window_size - 1, 0), "constant", constant_values=(0, 0))
+    ret = np.convolve(ret, np.ones(window_size), "valid")
+
+    for i in range(1, window_size):
+        ret[i - 1] = ret[i - 1] / i
+    ret[window_size - 1 :] = ret[window_size - 1 :] / window_size
+
+    # Find peaks
+    peaks = []
+    for i in range(len(clt)):
+        z = sampling_rate * 0.35
+        if (len(peaks) == 0 or i > peaks[-1] + z) and clt[i] > ret[i]:
+            peaks.append(i)
+
+    return np.array(peaks)
+
+
+# =============================================================================
 # Christov (2004)
 # =============================================================================
 def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
-    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,
-      BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
+    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive
+      threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
 
     """
     total_taps = 0
@@ -622,8 +653,8 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002, **kwargs):
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.
 
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on HCI and electrophysiology
+      (Doctoral dissertation, Universidade Técnica de Lisboa).
 
     """
 
@@ -668,8 +699,8 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
 
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
       in Cardiology, vol. 6, pp. 37-42, 1979
-    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation
-      for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram
+      Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
 
     """
     engzee_fake_delay = 0
@@ -810,7 +841,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
     swt_level = 3
     padding = -1
     for i in range(1000):
-        if (len(signal) + i) % 2 ** swt_level == 0:
+        if (len(signal) + i) % 2**swt_level == 0:
             padding = i
             break
 
@@ -846,9 +877,9 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
 def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
-    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.
-      The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010).
-      428-431.
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS
+      Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing
+      (BIOSIGNALS2010). 428-431.
 
     """
 
@@ -885,7 +916,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
 
 
 # =============================================================================
-# Continuous Wavelet Transform (CWT) - Martinez et al. (2003)
+# Continuous Wavelet Transform (CWT) - Martinez et al. (2004)
 # =============================================================================
 #
 def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):
@@ -988,13 +1019,13 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
     a = [1]
     processed_ecg = scipy.signal.lfilter(b, a, squar)
     tf = len(processed_ecg)
-
+    rpeakpos = 0
     # R-peak finder FSM
-    while i < tf:  # ignore last second of recording
+    while i < tf:  # ignore last sample of recording
         # State 1: looking for maximum
         tf1 = np.round(i + Rmin * sampling_rate)
         Rpeakamp = 0
-        while i < tf1:
+        while i < tf1 and i < tf:
             # Rpeak amplitude and position
             if processed_ecg[i] > Rpeakamp:
                 Rpeakamp = processed_ecg[i]

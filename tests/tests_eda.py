@@ -89,16 +89,14 @@ def test_eda_peaks():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(
-        duration=30,
+        duration=30*20,
         sampling_rate=sampling_rate,
-        scr_number=6,
+        scr_number=6*20,
         noise=0,
         drift=0.01,
         random_state=42,
     )
-    eda_phasic = nk.eda_phasic(nk.standardize(eda), method="highpass")[
-        "EDA_Phasic"
-    ].values
+    eda_phasic = nk.eda_phasic(nk.standardize(eda), method="highpass")["EDA_Phasic"].values
 
     signals, info = nk.eda_peaks(eda_phasic, method="gamboa2008")
     onsets, peaks, amplitudes = biosppy.eda.basic_scr(eda_phasic, sampling_rate=1000)
@@ -106,7 +104,7 @@ def test_eda_peaks():
 
     signals, info = nk.eda_peaks(eda_phasic, method="kim2004")
     onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
-    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)
+    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=180)
 
     # Check that indices and values positions match
     peak_positions = np.where(info["SCR_Peaks"] != 0)[0]
@@ -120,9 +118,7 @@ def test_eda_peaks():
 
 def test_eda_process():
 
-    eda = nk.eda_simulate(
-        duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250
-    )
+    eda = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
     signals, info = nk.eda_process(eda, sampling_rate=250)
 
     assert signals.shape == (7500, 11)
@@ -193,7 +189,7 @@ def test_eda_plot():
 def test_eda_eventrelated():
 
     eda = nk.eda_simulate(duration=15, scr_number=3)
-    eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
+    eda_signals, _ = nk.eda_process(eda, sampling_rate=1000)
     epochs = nk.epochs_create(
         eda_signals,
         events=[5000, 10000, 15000],
@@ -208,39 +204,6 @@ def test_eda_eventrelated():
 
     assert len(eda_eventrelated["Label"]) == 3
 
-    # Test warning on missing columns
-    with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r".*does not have an `EDA_Phasic`.*"
-    ):
-        first_epoch_key = list(epochs.keys())[0]
-        first_epoch_copy = epochs[first_epoch_key].copy()
-        del first_epoch_copy["EDA_Phasic"]
-        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
-
-    with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r".*does not have an `SCR_Amplitude`.*"
-    ):
-        first_epoch_key = list(epochs.keys())[0]
-        first_epoch_copy = epochs[first_epoch_key].copy()
-        del first_epoch_copy["SCR_Amplitude"]
-        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
-
-    with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r".*does not have an `SCR_RecoveryTime`.*"
-    ):
-        first_epoch_key = list(epochs.keys())[0]
-        first_epoch_copy = epochs[first_epoch_key].copy()
-        del first_epoch_copy["SCR_RecoveryTime"]
-        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
-
-    with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r".*does not have an `SCR_RiseTime`.*"
-    ):
-        first_epoch_key = list(epochs.keys())[0]
-        first_epoch_copy = epochs[first_epoch_key].copy()
-        del first_epoch_copy["SCR_RiseTime"]
-        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
-
 
 def test_eda_intervalrelated():
 
@@ -251,17 +214,13 @@ def test_eda_intervalrelated():
     # Test with signal dataframe
     features_df = nk.eda_intervalrelated(df)
 
-    assert all(
-        elem in columns for elem in np.array(features_df.columns.values, dtype=str)
-    )
+    assert all(elem in columns for elem in np.array(features_df.columns.values, dtype=str))
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
-    columns.append('Label')
+    columns.append("Label")
     epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
     features_dict = nk.eda_intervalrelated(epochs)
 
-    assert all(
-        elem in columns for elem in np.array(features_dict.columns.values, dtype=str)
-    )
+    assert all(elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
     assert features_dict.shape[0] == 2  # Number of rows

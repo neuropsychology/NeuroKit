@@ -43,13 +43,13 @@ def fractal_sevcik(signal):
 
     References
     ----------
-    - Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint
+    * Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint
       arXiv:1003.5266.
-    - Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
+    * Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
       Signalling and image processing. CRC Press.
-    - Wang, H., Li, J., Guo, L., Dou, Z., Lin, Y., & Zhou, R. (2017). Fractal complexity-based
+    * Wang, H., Li, J., Guo, L., Dou, Z., Lin, Y., & Zhou, R. (2017). Fractal complexity-based
       feature extraction algorithm of communication signals. Fractals, 25(04), 1740008.
-    - Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
+    * Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
       dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
       Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
 
@@ -65,13 +65,14 @@ def fractal_sevcik(signal):
     n = len(y_)
 
     # 2. Derive x* and y* (y* is actually the normalized signal)
-    x_ = np.arange(1, n + 1) / n
+    x_ = np.linspace(0, 1, n)
 
-    # 3. Compute L
+    # 3. Compute L (because we use np.diff, hence n-1 below)
     L = np.sum(np.sqrt(np.diff(y_) ** 2 + np.diff(x_) ** 2))
 
     # 4. Compute the fractal dimension (approximation)
     sfd = 1 + np.log(L) / np.log(2 * (n - 1))
+
     # Some papers (e.g., Wang et al. 2017) suggest adding np.log(2) to the numerator:
     # sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))
     # But it's unclear why. Sticking to the original formula for now.

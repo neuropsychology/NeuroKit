@@ -47,6 +47,12 @@ def entropy_svd(signal, delay=1, dimension=2):
       svden, info = nk.entropy_svd(signal, delay=5, dimension=3)
       svden
 
+    References
+    ----------
+    * Roberts, S. J., Penny, W., & Rezek, I. (1999). Temporal and spatial complexity measures for
+      electroencephalogram based brain-computer interfacing. Medical & biological engineering &
+      computing, 37(1), 93-98.
+
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:

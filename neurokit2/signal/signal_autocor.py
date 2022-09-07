@@ -1,9 +1,10 @@
 import numpy as np
+import scipy.signal
 import scipy.stats
 from matplotlib import pyplot as plt
 
 
-def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
+def signal_autocor(signal, lag=None, demean=True, method="auto", show=False):
     """**Autocorrelation (ACF)**
 
     Compute the autocorrelation of a signal.
@@ -19,8 +20,9 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
         If ``True``, the mean of the signal will be subtracted from the signal before ACF
         computation.
     method : str
-        Can be ``"correlation"`` (using :func:`.np.correlate`) or ``"fft"`` (Fast Fourier Transform;
-        default).
+        Using ``"auto"`` runs ``scipy.signal.correlate`` to determine the faster algorithm. Other
+        methods are kept for legacy reasons, but are not recommended. Other methods include
+        ``"correlation"`` (using :func:`.np.correlate`) or ``"fft"`` (Fast Fourier Transform).
     show : bool
         If ``True``, plot the autocorrelation at all values of lag.
 
@@ -42,7 +44,7 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
       # Example 1: Using 'Correlation' Method
       signal = [1, 2, 3, 4, 5]
       @savefig p_signal_autocor1.png scale=100%
-      r, info = nk.signal_autocor(signal, show=True, method='correlate')
+      r, info = nk.signal_autocor(signal, show=True, method='correlation')
       @suppress
       plt.close()
 
@@ -64,20 +66,27 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
 
     # Run autocor
     method = method.lower()
-    if method in ["cor", "correlation", "correlate"]:
+    if method in ["auto"]:
+        acov = scipy.signal.correlate(signal, signal, mode="full", method="auto")[n - 1 :]
+    elif method in ["cor", "correlation", "correlate"]:
         acov = np.correlate(signal, signal, mode="full")
         acov = acov[n - 1 :]  # Min time lag is 0
     elif method == "fft":
         a = np.concatenate((signal, np.zeros(n - 1)))  # added zeros to your signal
-        A = np.fft.fft(a)
-        S = np.conj(A) * A
-        c_fourier = np.fft.ifft(S)
-        acov = c_fourier[: (c_fourier.size // 2) + 1].real
+        fft = np.fft.fft(a)
+        acf = np.fft.ifft(np.conjugate(fft) * fft)[:n]
+        acov = acf.real
+    elif method == "unbiased":
+        dnorm = np.r_[np.arange(1, n + 1), np.arange(n - 1, 0, -1)]
+        fft = np.fft.fft(signal, n=n)
+        acf = np.fft.ifft(np.conjugate(fft) * fft)[:n]
+        acf /= dnorm[n - 1 :]
+        acov = acf.real
     else:
-        raise ValueError("Method must be 'correlation' or 'fft'.")
+        raise ValueError("Method must be 'auto', 'correlation' or 'fft'.")
 
     # Normalize
-    r = acov / acov[0]
+    r = acov / np.max(acov)
 
     # Confidence interval
     varacf = 1.0 / n
@@ -90,7 +99,7 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
         plt.plot(np.arange(1, len(r) + 1), r, lw=2)
         plt.ylabel("Autocorrelation r")
         plt.xlabel("Lag")
-        plt.ylim(-1, 1)
+        plt.ylim(-1.1, 1.1)
 
     if lag is not None:
         if lag > n:

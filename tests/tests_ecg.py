@@ -9,17 +9,17 @@ import neurokit2 as nk
 
 def test_ecg_simulate():
 
-    ecg1 = nk.ecg_simulate(duration=20, length=5000, method="simple", noise=0)
+    ecg1 = nk.ecg_simulate(duration=20, length=5000, method="simple", noise=0, random_state=0)
     assert len(ecg1) == 5000
 
-    ecg2 = nk.ecg_simulate(duration=20, length=5000, heart_rate=500)
+    ecg2 = nk.ecg_simulate(duration=20, length=5000, heart_rate=500, random_state=1)
     #    pd.DataFrame({"ECG1":ecg1, "ECG2": ecg2}).plot()
     #    pd.DataFrame({"ECG1":ecg1, "ECG2": ecg2}).hist()
     assert len(nk.signal_findpeaks(ecg1, height_min=0.6)["Peaks"]) < len(
         nk.signal_findpeaks(ecg2, height_min=0.6)["Peaks"]
     )
 
-    ecg3 = nk.ecg_simulate(duration=10, length=5000)
+    ecg3 = nk.ecg_simulate(duration=10, length=5000, random_state=2)
     #    pd.DataFrame({"ECG1":ecg1, "ECG3": ecg3}).plot()
     assert len(nk.signal_findpeaks(ecg2, height_min=0.6)["Peaks"]) > len(
         nk.signal_findpeaks(ecg3, height_min=0.6)["Peaks"]
@@ -31,7 +31,7 @@ def test_ecg_clean():
     sampling_rate = 1000
     noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=3)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
 
     assert ecg.size == ecg_cleaned_nk.size
@@ -44,7 +44,8 @@ def test_ecg_clean():
 
     assert np.sum(fft_raw[freqs < 0.5]) > np.sum(fft_nk[freqs < 0.5])
 
-    # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
+    # Comparison to biosppy
+    # (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
     ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(
         signal=ecg,
@@ -66,13 +67,13 @@ def test_ecg_peaks():
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
 
     # Test without request to correct artifacts.
-    signals, info = nk.ecg_peaks(ecg_cleaned_nk, correct_artifacts=False, method="neurokit")
+    signals, _ = nk.ecg_peaks(ecg_cleaned_nk, correct_artifacts=False, method="neurokit")
 
     assert signals.shape == (120000, 1)
     assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139, atol=1)
 
     # Test with request to correct artifacts.
-    signals, info = nk.ecg_peaks(ecg_cleaned_nk, correct_artifacts=True, method="neurokit")
+    signals, _ = nk.ecg_peaks(ecg_cleaned_nk, correct_artifacts=True, method="neurokit")
 
     assert signals.shape == (120000, 1)
     assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139, atol=1)
@@ -83,13 +84,13 @@ def test_ecg_process():
     sampling_rate = 1000
     noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
-    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=4)
+    _ = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
 
 
 def test_ecg_plot():
 
-    ecg = nk.ecg_simulate(duration=60, heart_rate=70, noise=0.05)
+    ecg = nk.ecg_simulate(duration=60, heart_rate=70, noise=0.05, random_state=5)
 
     ecg_summary, _ = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
 
@@ -170,16 +171,16 @@ def test_ecg_findpeaks():
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
     assert np.allclose(info_kalidas["ECG_R_Peaks"].size, 68, atol=1)
 
-    # Test martinez2003 method
+    # Test martinez2004 method
     ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0, random_state=42)
     ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
-    info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2003")
+    info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2004")
     assert np.allclose(info_martinez["ECG_R_Peaks"].size, 69, atol=1)
 
 
 def test_ecg_eventrelated():
 
-    ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
+    ecg, _ = nk.ecg_process(nk.ecg_simulate(duration=20, random_state=6))
     epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
     ecg_eventrelated = nk.ecg_eventrelated(epochs)
 
@@ -262,7 +263,7 @@ def test_ecg_delineate():
 def test_ecg_intervalrelated():
 
     data = nk.data("bio_resting_5min_100hz")
-    df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+    df, _ = nk.ecg_process(data["ECG"], sampling_rate=100)
 
     columns = [
         "ECG_Rate_Mean",

@@ -138,6 +138,8 @@ data/eogdb/eogdb_task2.csv
 data/eogdb/eogdb_task3.csv
 data/eogdb/eogdb_task4.csv
 data/rs_eeg_texas/data/
+data/rebel_eeg_restingstate_fr
+data/rebel_eeg_restingstate_sg
 docs/readme/README_popularity.py
 paper/NeuroKit_Submission/
 data/fantasia/fantasia-database-1.0.0
@@ -147,6 +149,9 @@ data/RealObjectsEEG
 studies/hrv_structure/efa.csv
 studies/hrv_structure/data_stability_1.csv
 studies/hrv_structure/data2.csv
+data/lemon/lemon/*
+data/srm_restingstate_eeg/eeg/
+data/testretest_restingstate_eeg/eeg/
 data/mit_nst/data2.csv
 data/mit_long-term/download_mit_long-term.py
 *.atr
@@ -203,5 +208,7 @@ docs/readme/README_popularity.py
 paper/OHBM2022/OHBM2022_Makowski.mp4
 
 
-studies/complexity_benchmark/README_cache/
-studies/complexity_benchmark/manuscript_cache/
+studies/complexity_structure/README_cache/
+studies/complexity_structure/manuscript_cache/
+studies/complexity_eeg/data_attractor.csv
+studies/complexity_eeg/data_delay.csv

@@ -1,12 +1,12 @@
 Signal Processing
 ------------------
+
+Preprocessing
+^^^^^^^^^^^^^^
 *signal_simulate()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_simulate
 
-
-Preprocessing
-^^^^^^^^^^^^^^
 *signal_filter()*
 """"""""""""""""""
 .. autofunction:: neurokit2.signal_filter

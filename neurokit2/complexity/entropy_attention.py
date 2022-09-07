@@ -8,7 +8,7 @@ import scipy.signal
 from ..misc import NeuroKitWarning
 
 
-def entropy_attention(signal, show=False):
+def entropy_attention(signal, show=False, **kwargs):
     """**Attention Entropy (AttEn)**
 
     Yang et al. (2020) propose a conceptually new approach called **Attention Entropy (AttEn)**,
@@ -17,6 +17,17 @@ def entropy_attention(signal, show=False):
     of the intervals between the key observations in a time-series. The advantages of the attention
     entropy are that it does not need any parameter to tune, is robust to the time-series length,
     and requires only linear time to compute.
+
+    Because this index relies on peak-detection, it is not suited for noisy signals. Signal
+    cleaning (in particular filtering), and eventually more tuning for the peak detection
+    algorithm, can help.
+
+    **AttEn** is computed as the average of various subindices, such as:
+
+    * **MaxMax**: The entropy of local-maxima intervals.
+    * **MinMin**: The entropy of local-minima intervals.
+    * **MaxMin**: The entropy of intervals between local maxima and subsequent minima.
+    * **MinMax**: The entropy of intervals between local minima and subsequent maxima.
 
     Parameters
     ----------
@@ -30,11 +41,10 @@ def entropy_attention(signal, show=False):
     atten : float
         The attention entropy of the signal.
     info : dict
-        A dictionary containing values of sub-entropies that are averaged to give the general
-        AttEn, such as ``MaxMax`` (entropy of local-maxima intervals), ``MinMin`` (entropy of
-        local-minima intervals), ``MaxMin`` (entropy of intervals between local maxima and
-        subsequent minima), and ``MinMax`` (entropy of intervals between local minima and
-        subsequent maxima ).
+        A dictionary containing values of sub-entropies, such as ``MaxMax``, ``MinMin``,
+        ``MaxMin``, and ``MinMax``.
+    **kwargs
+        Other arguments to be passed to ``scipy.signal.find_peaks()``.
 
     See Also
     --------
@@ -74,8 +84,8 @@ def entropy_attention(signal, show=False):
         )
 
     # Identify key patterns
-    Xmax, _ = scipy.signal.find_peaks(signal)
-    Xmin, _ = scipy.signal.find_peaks(-signal)
+    Xmax, _ = scipy.signal.find_peaks(signal, **kwargs)
+    Xmin, _ = scipy.signal.find_peaks(-signal, **kwargs)
 
     if len(Xmax) == 0 or len(Xmin) == 0:
         warn(

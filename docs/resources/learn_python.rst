@@ -76,7 +76,7 @@ We can also store the output in a third variable:
     print(anothervariable)
 
 
-Variables and data types
+Data types
 -------------------------
 
 The next important thing to have in mind is that variables have **types**. Basic types include **integers** (numbers without decimals), **floats** (numbers with decimals), **strings** (character text) and **booleans** (``True`` and ``False``). Depending on their type, the variables will not behave in the same way. For example, try:

@@ -12,13 +12,8 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import (
-    signal_autocor,
-    signal_findpeaks,
-    signal_psd,
-    signal_surrogate,
-    signal_zerocrossings,
-)
+from ..signal import (signal_autocor, signal_findpeaks, signal_psd,
+                      signal_surrogate, signal_zerocrossings)
 from .entropy_kl import entropy_kl
 from .information_mutual import mutual_information
 from .utils_complexity_embedding import complexity_embedding
@@ -46,13 +41,21 @@ def complexity_delay(
     some joint-estimation methods do exist, that attempt at finding the optimal delay and dimension
     at the same time.
 
+    Note also that some authors (e.g., Rosenstein, 1994) suggest identifying the
+    optimal embedding dimension first, and that the optimal delay value should then be considered
+    as the optimal delay between the first and last delay coordinates (in other words, the actual
+    delay should be the optimal delay divided by the optimal embedding dimension minus 1).
+
     Several authors suggested different methods to guide the choice of the delay:
 
     * **Fraser and Swinney (1986)** suggest using the first local minimum of the mutual information
       between the delayed and non-delayed time series, effectively identifying a value of Tau for
-      which they share the least information.
+      which they share the least information (and where the attractor is the least redundant).
+      Unlike autocorrelation, mutual information takes into account also nonlinear correlations.
     * **Theiler (1990)** suggested to select Tau where the autocorrelation between the signal and
-      its lagged version at Tau first crosses the value :math:`1/e`.
+      its lagged version at Tau first crosses the value :math:`1/e`. The autocorrelation-based
+      methods have the advantage of short computation times when calculated via the fast Fourier
+      transform (FFT) algorithm.
     * **Casdagli (1991)** suggests instead taking the first zero-crossing of the autocorrelation.
     * **Rosenstein (1993)** suggests to approximate the point where the autocorrelation function
       drops to :math:`(1 - 1/e)` of its maximum value.
@@ -253,12 +256,16 @@ def complexity_delay(
     if isinstance(delay_max, int):
         tau_sequence = np.arange(1, delay_max + 1)
     else:
-        tau_sequence = np.array(delay_max)
+        tau_sequence = np.array(delay_max).astype(int)
 
     # Method
     method = method.lower()
     if method in ["fraser", "fraser1986", "tdmi"]:
         metric = "Mutual Information"
+        if algorithm is None:
+            algorithm = "first local minimum"
+    elif method in ["mi2"]:
+        metric = "Mutual Information 2"
         if algorithm is None:
             algorithm = "first local minimum"
     elif method in ["theiler", "theiler1990"]:
@@ -274,7 +281,7 @@ def complexity_delay(
         if algorithm is None:
             algorithm = "closest to 40% of the slope"
     elif method in ["rosenstein1993"]:
-        metric = "Autocorrelation (FFT)"
+        metric = "Autocorrelation"
         if algorithm is None:
             algorithm = "first drop below 1-(1/e) of maximum"
     elif method in ["kim1999", "cc"]:
@@ -286,30 +293,31 @@ def complexity_delay(
     elif method in ["gautama2003", "gautama", "entropyratio"]:
         return _complexity_delay_entropyratio(signal, delay_max=delay_max, show=show, **kwargs)
     else:
-        raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
+        raise ValueError("complexity_delay(): 'method' not recognized.")
 
     # Get metric
     metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
 
     # Get optimal tau
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+
     if np.isnan(optimal):
         warn(
             "No optimal time delay is found. Nan is returned."
             " Consider using a higher `delay_max`.",
             category=NeuroKitWarning,
         )
-        return optimal
-    optimal = tau_sequence[optimal]
+    else:
+        optimal = tau_sequence[optimal]
 
-    if show is True:
-        _embedding_delay_plot(
-            signal,
-            metric_values=metric_values,
-            tau_sequence=tau_sequence,
-            tau=optimal,
-            metric=metric,
-        )
+        if show is True:
+            _embedding_delay_plot(
+                signal,
+                metric_values=metric_values,
+                tau_sequence=tau_sequence,
+                tau=optimal,
+                metric=metric,
+            )
 
     # Return optimal tau and info dict
     return optimal, {
@@ -350,6 +358,7 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
                 + "`algorithm = 'first local minimum (corrected)'` or using another method.",
                 category=NeuroKitWarning,
             )
+            optimal = np.nan
 
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
@@ -361,7 +370,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         slope_in_deg = np.rad2deg(np.arctan(slope))
         optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
     elif algorithm == "first drop below 1-(1/e) of maximum":
-        optimal = np.where(metric_values < np.max(metric_values) * (1 - 1.0 / np.e))[0][0]
+        try:
+            optimal = np.where(metric_values < np.nanmax(metric_values) * (1 - 1.0 / np.e))[0][0]
+        except IndexError:  # If no value are below that threshold
+            optimal = np.nan
 
     if not isinstance(optimal, (int, float, np.integer)):
         if len(optimal) != 0:
@@ -372,6 +384,7 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
     return optimal
 
 
+# =============================================================================
 def _embedding_delay_metric(
     signal,
     tau_sequence,
@@ -388,10 +401,6 @@ def _embedding_delay_metric(
     if metric == "Autocorrelation":
         values, _ = signal_autocor(signal)
         values = values[: len(tau_sequence)]  # upper limit
-
-    elif metric == "Autocorrelation (FFT)":
-        values, _ = signal_autocor(signal, demean=False, method="fft")
-        values = values[: len(tau_sequence)]
 
     elif metric == "Correlation Integral":
         r_vals = [i * np.std(signal) for i in r_vals]
@@ -423,9 +432,13 @@ def _embedding_delay_metric(
             embedded = complexity_embedding(signal, delay=current_tau, dimension=2)
             if metric == "Mutual Information":
                 values[i] = mutual_information(
-                    embedded[:, 0], embedded[:, 1], normalized=True, method="shannon"
+                    embedded[:, 0], embedded[:, 1], method="varoquaux"
                 )
-            if metric == "Displacement":
+            elif metric == "Mutual Information 2":
+                values[i] = mutual_information(
+                    embedded[:, 0], embedded[:, 1], method="knn"
+                )
+            elif metric == "Displacement":
                 dimension = 2
 
                 # Reconstruct with zero time delay.
@@ -434,6 +447,8 @@ def _embedding_delay_metric(
                     [scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)]
                 )
                 values[i] = np.mean(dist)
+            else:
+                raise ValueError("'metric' not recognized.")
 
     return values
 

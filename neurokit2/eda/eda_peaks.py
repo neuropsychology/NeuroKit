@@ -10,7 +10,7 @@ from .eda_fixpeaks import eda_fixpeaks
 
 
 def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """**Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
+    """**Find Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)**
 
     Identify Skin Conductance Responses (SCR) peaks in the phasic component of
     Electrodermal Activity (EDA) with different possible methods, such as:
@@ -96,16 +96,22 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
             eda_phasic = eda_phasic.values
 
     # Get basic
-    info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
+    info = eda_findpeaks(
+        eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min
+    )
     info = eda_fixpeaks(info)
 
     # Get additional features (rise time, half recovery time, etc.)
     info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate, recovery_percentage=0.5)
 
     # Prepare output.
-    peak_signal = signal_formatpeaks(info, desired_length=len(eda_phasic),
-                                     peak_indices=info["SCR_Peaks"], other_indices=info["SCR_Recovery"])
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    peak_signal = signal_formatpeaks(
+        info,
+        desired_length=len(eda_phasic),
+        peak_indices=info["SCR_Peaks"],
+        other_indices=info["SCR_Recovery"],
+    )
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     return peak_signal, info
 
@@ -168,7 +174,9 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
         segment = segment[0 : np.argmin(segment)]
 
         # Find recovery time
-        recovery_value = find_closest(recovery_values[i], segment, direction="smaller", strictly=False)
+        recovery_value = find_closest(
+            recovery_values[i], segment, direction="smaller", strictly=False
+        )
 
         # Detect recovery points only if there are datapoints below recovery value
         if np.min(segment) < recovery_value:

@@ -15,8 +15,8 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     dimension of a signal.
 
     The time series is first :func:`time-delay embedded <complexity_embedding>`, and distances
-    between all points in the trajectory are calculated. The "correlation sum" is the computed,
-    which is the proportion of pairs of points which distance is smaller than a given radius. The
+    between all points in the trajectory are calculated. The "correlation sum" is then computed,
+    which is the proportion of pairs of points whose distance is smaller than a given radius. The
     final correlation dimension is then approximated by a log-log graph of correlation sum vs. a
     sequence of radiuses.
 

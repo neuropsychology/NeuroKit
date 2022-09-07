@@ -7,28 +7,40 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import (complexity_lempelziv, entropy_approximate,
-                          entropy_fuzzy, entropy_multiscale, entropy_sample,
-                          entropy_shannon, fractal_correlation, fractal_dfa,
-                          fractal_higuchi, fractal_katz)
+from ..complexity import (
+    complexity_lempelziv,
+    entropy_approximate,
+    entropy_fuzzy,
+    entropy_multiscale,
+    entropy_sample,
+    entropy_shannon,
+    fractal_correlation,
+    fractal_dfa,
+    fractal_higuchi,
+    fractal_katz,
+)
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
-    """**Computes nonlinear indices of Heart Rate Variability (HRV)**
+    """**Nonlinear indices of Heart Rate Variability (HRV)**
 
-    Non-linear indices include features derived from the *Poincaré plot*, as well as other
-    :func:`.complexity` indices. Note that there exist many more complexity indices that are
-    available in NeuroKit2 and that could be applied to HRV. The :func:`.hrv_nonlinear` function
-    only includes the most commonly used indices.
+    This function computes non-linear indices, which include features derived from the *Poincaré
+    plot*, as well as other :func:`.complexity` indices corresponding to entropy or fractal
+    dimension.
+
+    .. hint::
+        There exist many more complexity indices available in NeuroKit2, that could be applied to
+        HRV. The :func:`.hrv_nonlinear` function only includes the most commonly used indices.
+        Please see the documentation page for all the func:`.complexity` features.
 
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
     between successive NN intervals.
 
-    Indices derived from the Poincaré plot analysis are:
+    Basic indices derived from the Poincaré plot analysis include:
 
     * **SD1**: Standard deviation perpendicular to the line of identity. It is an index of
       short-term RR interval fluctuations, i.e., beat-to-beat variability. It is equivalent
@@ -64,7 +76,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SD1d** and **SD1a**: short-term variance of contributions of decelerations (prolongations
       of RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski,
       2011)
-    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to s
+    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to
       short-term HRV, respectively (Piskorski,  2011).
     * **SD2d** and **SD2a**: long-term variance of contributions of decelerations (prolongations of
       RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski, 2011).
@@ -80,7 +92,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **PIP**: Percentage of inflection points of the RR intervals series.
     * **IALS**: Inverse of the average length of the acceleration/deceleration segments.
     * **PSS**: Percentage of short segments.
-    * **PAS**: IPercentage of NN intervals in alternation segments.
+    * **PAS**: Percentage of NN intervals in alternation segments.
 
     Indices of **Complexity** and **Fractal Physiology** include:
 
@@ -94,7 +106,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **CD**: See :func:`.fractal_correlation`.
     * **HFD**: See :func:`.fractal_higuchi` (with ``kmax`` set to ``"default"``).
     * **KFD**: See :func:`.fractal_katz`.
-    * **LZC**: See :func:`.fractal_lempelziv`.
+    * **LZC**: See :func:`.complexity_lempelziv`.
     * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal,
       corresponding to short-term correlations. See :func:`.fractal_dfa`.
     * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
@@ -241,8 +253,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 def _hrv_nonlinear_poincare(rri, out):
     """Compute SD1 and SD2.
 
-    - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate
-    variability? - Brennan (2001)
+    - Brennan (2001). Do existing measures of Poincare plot geometry reflect nonlinear features of
+      heart rate variability?
 
     """
 
@@ -268,7 +280,7 @@ def _hrv_nonlinear_poincare(rri, out):
     L = 4 * out["SD2"]
     out["CSI"] = L / T
     out["CVI"] = np.log10(L * T)
-    out["CSI_Modified"] = L ** 2 / T
+    out["CSI_Modified"] = L**2 / T
 
     return out
 
@@ -301,9 +313,9 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # Calculate the angles
     theta_all = abs(np.arctan(1) - np.arctan(y / x))  # phase angle LI - phase angle of i-th point
     # Calculate the radius
-    r = np.sqrt(x ** 2 + y ** 2)
+    r = np.sqrt(x**2 + y**2)
     # Sector areas
-    S_all = 1 / 2 * theta_all * r ** 2
+    S_all = 1 / 2 * theta_all * r**2
 
     # Guzik's Index (GI)
     den_GI = np.sum(dist_all)
@@ -329,7 +341,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd1d = np.sqrt(np.sum(dist_all[decelerate_indices] ** 2) / (N - 1))
     sd1a = np.sqrt(np.sum(dist_all[accelerate_indices] ** 2) / (N - 1))
 
-    sd1I = np.sqrt(sd1d ** 2 + sd1a ** 2)
+    sd1I = np.sqrt(sd1d**2 + sd1a**2)
     out["C1d"] = (sd1d / sd1I) ** 2
     out["C1a"] = (sd1a / sd1I) ** 2
     out["SD1d"] = sd1d  # SD1 deceleration
@@ -344,7 +356,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd2d = np.sqrt(longterm_dec + 0.5 * longterm_nodiff)
     sd2a = np.sqrt(longterm_acc + 0.5 * longterm_nodiff)
 
-    sd2I = np.sqrt(sd2d ** 2 + sd2a ** 2)
+    sd2I = np.sqrt(sd2d**2 + sd2a**2)
     out["C2d"] = (sd2d / sd2I) ** 2
     out["C2a"] = (sd2a / sd2I) ** 2
     out["SD2d"] = sd2d  # SD2 deceleration
@@ -352,9 +364,9 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # out["SD2I"] = sd2I  # identical with SD2
 
     # Total asymmerty (SDNN)
-    sdnnd = np.sqrt(0.5 * (sd1d ** 2 + sd2d ** 2))  # SDNN deceleration
-    sdnna = np.sqrt(0.5 * (sd1a ** 2 + sd2a ** 2))  # SDNN acceleration
-    sdnn = np.sqrt(sdnnd ** 2 + sdnna ** 2)  # should be similar to sdnn in hrv_time
+    sdnnd = np.sqrt(0.5 * (sd1d**2 + sd2d**2))  # SDNN deceleration
+    sdnna = np.sqrt(0.5 * (sd1a**2 + sd2a**2))  # SDNN acceleration
+    sdnn = np.sqrt(sdnnd**2 + sdnna**2)  # should be similar to sdnn in hrv_time
     out["Cd"] = (sdnnd / sdnn) ** 2
     out["Ca"] = (sdnna / sdnn) ** 2
     out["SDNNd"] = sdnnd
@@ -559,7 +571,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     yc = ax2 - xy[1]
     xct = xc * cos_angle - yc * sin_angle
     yct = xc * sin_angle + yc * cos_angle
-    rad_cc = (xct ** 2 / (width / 2.0) ** 2) + (yct ** 2 / (height / 2.0) ** 2)
+    rad_cc = (xct**2 / (width / 2.0) ** 2) + (yct**2 / (height / 2.0) ** 2)
 
     points = np.where(rad_cc > 1)[0]
     ax.plot(ax1[points], ax2[points], "o", color="k", alpha=0.5, markersize=4)
