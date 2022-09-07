@@ -41,67 +41,10 @@ def signal_resample(
     array
         Vector containing resampled signal values.
 
-    Examples
-    --------
-    **Example 1**: Downsampling
-
-    .. ipython:: python
-
-      import numpy as np
-      import pandas as pd
-      import neurokit2 as nk
-
-      signal = nk.signal_simulate(duration=1, sampling_rate=500, frequency=3)
-
-      # Downsample
-      data = {}
-      for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
-          data[m] = nk.signal_resample(signal, sampling_rate=500, desired_sampling_rate=30, method=m)
-
-      @savefig p_signal_resample1.png scale=100%
-      nk.signal_plot([data[m] for m in data.keys()])
-      @supress
-      plt.close()
-
-    **Example 2**: Upsampling
-
-    .. ipython:: python
-      :verbatim:
-
-      signal = nk.signal_simulate(duration=1, sampling_rate=30, frequency=3)
-
-      # Upsample
-      data = {}
-      for m in ["interpolation", "FFT", "poly", "numpy", "pandas"]:
-          data[m] = nk.signal_resample(signal, sampling_rate=30, desired_sampling_rate=500, method=m)
-
-      @savefig p_signal_resample2.png scale=100%
-      nk.signal_plot([data[m] for m in data.keys()], labels=list(data.keys()))
-      @supress
-      plt.close()
-
-    **Example 3**: Benchmark
-
-    .. ipython:: python
-      :verbatim:
-
-      signal = nk.signal_simulate(duration=1, sampling_rate=1000, frequency=3)
-
-      # Timing benchmarks
-      %timeit nk.signal_resample(signal, method="interpolation",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="FFT",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="poly",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="numpy",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-      %timeit nk.signal_resample(signal, method="pandas",
-                                 sampling_rate=1000, desired_sampling_rate=500)
-
     See Also
     --------
     signal_interpolate
+
 
     """
     if desired_length is None:
