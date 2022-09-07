@@ -76,4 +76,4 @@ Analysis
 
 .. automodule:: neurokit2.rsp
    :members:
-   :exclude-members: rsp_process, rsp_analyze, rsp_plot, rsp_clean, rsp_amplitude, rsp_findpeaks, rsp_fixpeaks, rsp_peaks, rsp_phase, rsp_rate, rsp_rrv, rsp_eventrelated, rsp_intervalrelated, rsp_simulate
+   :exclude-members: rsp_process, rsp_analyze, rsp_plot, rsp_clean, rsp_amplitude, rsp_findpeaks, rsp_fixpeaks, rsp_peaks, rsp_phase, rsp_rate, rsp_rrv, rsp_eventrelated, rsp_intervalrelated, rsp_simulate, rsp_rvt

@@ -13,8 +13,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", **kwargs):
     using different sets of parameters, such as:
 
     * **khodad2018**: Uses the parameters in Khodadad et al. (2018).
-    * **biosppy**: Uses the parameters in the
-    `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
+    * **biosppy**: Uses the parameters in `BioSPPy's <https://github.com/PIA-Group/BioSPPy>`_
+      ``resp()`` function.
     * **scipy** Uses the `scipy <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html>`_
       peak-detection function.
 
