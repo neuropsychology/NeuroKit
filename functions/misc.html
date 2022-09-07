@@ -1035,31 +1035,31 @@ percentiles.</p></li>
 <span class="gp">In [3]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[4]: </span><span class="go">array([4, 9])</span>
+<span class="gh">Out[4]: </span><span class="go">array([4, 9], dtype=int64)</span>
 
 <span class="go"># Outliers beyond 1 MAD of the Median on one side</span>
 <span class="gp">In [5]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[6]: </span><span class="go">array([0, 9])</span>
+<span class="gh">Out[6]: </span><span class="go">array([0, 9], dtype=int64)</span>
 
 <span class="go"># 2.5% theoretical percentiles on each side</span>
 <span class="gp">In [7]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;norm&quot;</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[8]: </span><span class="go">array([4, 9])</span>
+<span class="gh">Out[8]: </span><span class="go">array([4, 9], dtype=int64)</span>
 
 <span class="go"># Outliers are beyond interquartile range</span>
 <span class="gp">In [9]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;percentile&quot;</span><span class="p">)</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[10]: </span><span class="go">array([ 0,  4,  9, 11, 13])</span>
+<span class="gh">Out[10]: </span><span class="go">array([ 0,  4,  9, 11, 13], dtype=int64)</span>
 
 <span class="go"># Outliers are beyond interdecile range</span>
 <span class="gp">In [11]: </span><span class="n">outliers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_outliers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;percentile&quot;</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">outliers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gh">Out[12]: </span><span class="go">array([ 0,  4,  9, 13])</span>
+<span class="gh">Out[12]: </span><span class="go">array([ 0,  4,  9, 13], dtype=int64)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1096,7 +1096,7 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">41</span>
+<span class="gh">Out[6]: </span><span class="go">13</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1128,7 +1128,7 @@ conservative.</p></li>
 <span class="gp">In [3]: </span><span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">find_knee</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">22</span>
+<span class="gh">Out[4]: </span><span class="go">21</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>

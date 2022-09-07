@@ -588,6 +588,10 @@ title="Open an issue"
 <span class="sd">    array</span>
 <span class="sd">        Vector containing resampled signal values.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    signal_interpolate</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    **Example 1**: Downsampling</span>
@@ -607,7 +611,7 @@ title="Open an issue"
 
 <span class="sd">      @savefig p_signal_resample1.png scale=100%</span>
 <span class="sd">      nk.signal_plot([data[m] for m in data.keys()])</span>
-<span class="sd">      @supress</span>
+<span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    **Example 2**: Upsampling</span>
@@ -624,7 +628,7 @@ title="Open an issue"
 
 <span class="sd">      @savefig p_signal_resample2.png scale=100%</span>
 <span class="sd">      nk.signal_plot([data[m] for m in data.keys()], labels=list(data.keys()))</span>
-<span class="sd">      @supress</span>
+<span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    **Example 3**: Benchmark</span>
@@ -645,10 +649,6 @@ title="Open an issue"
 <span class="sd">                                 sampling_rate=1000, desired_sampling_rate=500)</span>
 <span class="sd">      %timeit nk.signal_resample(signal, method=&quot;pandas&quot;,</span>
 <span class="sd">                                 sampling_rate=1000, desired_sampling_rate=500)</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    signal_interpolate</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">desired_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

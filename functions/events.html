@@ -747,7 +747,7 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 <span class="gh">Out[3]: </span><span class="go"></span>
 <span class="go">{&#39;onset&#39;: [500, 1500, 2500, 5000],</span>
 <span class="go"> &#39;duration&#39;: array([ 500, 1000, 1000, 2500]),</span>
-<span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U21&#39;)}</span>
+<span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U11&#39;)}</span>
 
 <span class="gp">In [4]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_create</span><span class="p">(</span><span class="n">event_onsets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">5000</span><span class="p">],</span>
 <span class="gp">   ...: </span>                          <span class="n">event_labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;S1&quot;</span><span class="p">,</span> <span class="s2">&quot;S2&quot;</span><span class="p">,</span> <span class="s2">&quot;S3&quot;</span><span class="p">,</span> <span class="s2">&quot;S4&quot;</span><span class="p">],</span>
@@ -828,7 +828,7 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 <span class="gh">Out[8]: </span><span class="go"></span>
 <span class="go">{&#39;onset&#39;: array([ 20, 100, 130]),</span>
 <span class="go"> &#39;duration&#39;: array([40,  5, 40]),</span>
-<span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;], dtype=&#39;&lt;U21&#39;)}</span>
+<span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;], dtype=&#39;&lt;U11&#39;)}</span>
 
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
@@ -974,7 +974,7 @@ via <code class="docutils literal notranslate"><span class="pre">raw.add_events(
 <span class="gp">In [8]: </span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_to_mne</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">event_id</span>
-<span class="gh">Out[9]: </span><span class="go">{&#39;A&#39;: 0, &#39;B&#39;: 1}</span>
+<span class="gh">Out[9]: </span><span class="go">{&#39;B&#39;: 0, &#39;A&#39;: 1}</span>
 </pre></div>
 </div>
 </dd></dl>

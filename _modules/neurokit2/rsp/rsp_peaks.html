@@ -560,8 +560,8 @@ title="Open an issue"
 <span class="sd">    using different sets of parameters, such as:</span>
 
 <span class="sd">    * **khodad2018**: Uses the parameters in Khodadad et al. (2018).</span>
-<span class="sd">    * **biosppy**: Uses the parameters in the</span>
-<span class="sd">    `BioSPPy &lt;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&gt;`_.</span>
+<span class="sd">    * **biosppy**: Uses the parameters in `BioSPPy&#39;s &lt;https://github.com/PIA-Group/BioSPPy&gt;`_</span>
+<span class="sd">      ``resp()`` function.</span>
 <span class="sd">    * **scipy** Uses the `scipy &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html&gt;`_</span>
 <span class="sd">      peak-detection function.</span>
 
@@ -572,9 +572,11 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;biosppy&quot;`` or ``&quot;scipy&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;biosppy&quot;``</span>
+<span class="sd">        or ``&quot;scipy&quot;``.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Other arguments to be passed to the different peak finding methods. See :func:`.rsp_findpeaks`.</span>
+<span class="sd">        Other arguments to be passed to the different peak finding methods. See</span>
+<span class="sd">        :func:`.rsp_findpeaks`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -619,7 +621,9 @@ title="Open an issue"
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-    <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">])</span>
+    <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 

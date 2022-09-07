@@ -893,11 +893,10 @@ therefore it is redundant to report correlations with both (Ciccone, 2017).</p><
 the RR intervals (<strong>MeanNN</strong>).</p></li>
 <li><p><strong>CVSD</strong>: The root mean square of successive differences (<strong>RMSSD</strong>) divided by
 the mean of the RR intervals (<strong>MeanNN</strong>).</p></li>
-<li><p><strong>MedianNN</strong>: The median of the absolute values of the successive differences between RR
-intervals.</p></li>
+<li><p><strong>MedianNN</strong>: The median of the RR intervals.</p></li>
 <li><p><strong>MadNN</strong>: The median absolute deviation of the RR intervals.</p></li>
 <li><p><strong>MCVNN</strong>: The median absolute deviation of the RR intervals (<strong>MadNN</strong>) divided by the
-median of the absolute differences of their successive differences (<strong>MedianNN</strong>).</p></li>
+median of the RR intervals (<strong>MedianNN</strong>).</p></li>
 <li><p><strong>IQRNN</strong>: The interquartile range (<strong>IQR</strong>) of the RR intervals.</p></li>
 <li><p><strong>Prc20NN</strong>: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</p></li>
 <li><p><strong>Prc80NN</strong>: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</p></li>
@@ -973,7 +972,7 @@ Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.</p
 <p>Computes frequency domain HRV metrics, such as the power in different frequency bands.</p>
 <ul class="simple">
 <li><p><strong>ULF</strong>: The spectral power of ultra low frequencies (by default, .0 to
-.0033 Hz) by default. Very long signals are required for this to index to be
+.0033 Hz). Very long signals are required for this to index to be
 extracted, otherwise, will return NaN.</p></li>
 <li><p><strong>VLF</strong>: The spectral power of very low frequencies (by default, .0033 to .04 Hz).</p></li>
 <li><p><strong>LF</strong>: The spectral power of low frequencies (by default, .04 to .15 Hz).</p></li>
@@ -1125,7 +1124,7 @@ of points in Poincaré plot except those that are located on LI.</p></li>
 <li><p><strong>SD1d</strong> and <strong>SD1a</strong>: short-term variance of contributions of decelerations (prolongations
 of RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski,
 2011)</p></li>
-<li><p><strong>C1d</strong> and <strong>C1a</strong>: the contributions of heart rate decelerations and accelerations to s
+<li><p><strong>C1d</strong> and <strong>C1a</strong>: the contributions of heart rate decelerations and accelerations to
 short-term HRV, respectively (Piskorski,  2011).</p></li>
 <li><p><strong>SD2d</strong> and <strong>SD2a</strong>: long-term variance of contributions of decelerations (prolongations of
 RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski, 2011).</p></li>
@@ -1141,7 +1140,7 @@ HRV.</p></li>
 <li><p><strong>PIP</strong>: Percentage of inflection points of the RR intervals series.</p></li>
 <li><p><strong>IALS</strong>: Inverse of the average length of the acceleration/deceleration segments.</p></li>
 <li><p><strong>PSS</strong>: Percentage of short segments.</p></li>
-<li><p><strong>PAS</strong>: IPercentage of NN intervals in alternation segments.</p></li>
+<li><p><strong>PAS</strong>: Percentage of NN intervals in alternation segments.</p></li>
 </ul>
 <p>Indices of <strong>Complexity</strong> and <strong>Fractal Physiology</strong> include:</p>
 <ul class="simple">
@@ -1155,7 +1154,7 @@ HRV.</p></li>
 <li><p><strong>CD</strong>: See <a class="reference internal" href="complexity.html#neurokit2.complexity.fractal_correlation" title="neurokit2.complexity.fractal_correlation"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_correlation()</span></code></a>.</p></li>
 <li><p><strong>HFD</strong>: See <a class="reference internal" href="complexity.html#neurokit2.complexity.fractal_higuchi" title="neurokit2.complexity.fractal_higuchi"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_higuchi()</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">kmax</span></code> set to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>).</p></li>
 <li><p><strong>KFD</strong>: See <a class="reference internal" href="complexity.html#neurokit2.complexity.fractal_katz" title="neurokit2.complexity.fractal_katz"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_katz()</span></code></a>.</p></li>
-<li><p><strong>LZC</strong>: See <code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_lempelziv()</span></code>.</p></li>
+<li><p><strong>LZC</strong>: See <a class="reference internal" href="complexity.html#neurokit2.complexity.complexity_lempelziv" title="neurokit2.complexity.complexity_lempelziv"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_lempelziv()</span></code></a>.</p></li>
 <li><p><strong>DFA_alpha1</strong>: The monofractal detrended fluctuation analysis of the HR signal,
 corresponding to short-term correlations. See <a class="reference internal" href="complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_dfa()</span></code></a>.</p></li>
 <li><p><strong>DFA_alpha2</strong>: The monofractal detrended fluctuation analysis of the HR signal,
@@ -1336,13 +1335,13 @@ when the signal to noise ratio is low, in <code class="docutils literal notransl
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">{&#39;RSA_P2T_Mean&#39;: 0.07513513513513514,</span>
-<span class="go"> &#39;RSA_P2T_Mean_log&#39;: -2.5884669849416784,</span>
+<span class="go"> &#39;RSA_P2T_Mean_log&#39;: -2.588466984941679,</span>
 <span class="go"> &#39;RSA_P2T_SD&#39;: 0.07116575415580562,</span>
 <span class="go"> &#39;RSA_P2T_NoRSA&#39;: 2,</span>
-<span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.647618796135399,</span>
-<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.434537070042705,</span>
-<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.1323348324577975,</span>
-<span class="go"> &#39;RSA_Gates_SD&#39;: 0.1681123952649135}</span>
+<span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.6476187961354,</span>
+<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.434537070042582,</span>
+<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.1323348324577833,</span>
+<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16811239526491908}</span>
 
 <span class="go"># Get RSA as a continuous signal</span>
 <span class="gp">In [6]: </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

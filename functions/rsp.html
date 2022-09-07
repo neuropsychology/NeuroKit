@@ -1264,20 +1264,20 @@ peaks (exhalation onsets) and troughs (inhalation onsets) in a preprocessed resp
 using different sets of parameters, such as:</p>
 <ul class="simple">
 <li><p><strong>khodad2018</strong>: Uses the parameters in Khodadad et al. (2018).</p></li>
-<li><p><strong>biosppy</strong>: Uses the parameters in the</p></li>
+<li><p><strong>biosppy</strong>: Uses the parameters in <a class="reference external" href="https://github.com/PIA-Group/BioSPPy">BioSPPy’s</a>
+<code class="docutils literal notranslate"><span class="pre">resp()</span></code> function.</p></li>
+<li><p><strong>scipy</strong> Uses the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html">scipy</a>
+peak-detection function.</p></li>
 </ul>
-<p><a class="reference external" href="https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py">BioSPPy</a>.
-* <strong>scipy</strong> Uses the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html">scipy</a></p>
-<blockquote>
-<div><p>peak-detection function.</p>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_cleaned()</span></code> (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code>.</p></li>
-<li><p><strong>**kwargs</strong> – Other arguments to be passed to the different peak finding methods. See <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to the different peak finding methods. See
+<a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1603,7 +1603,7 @@ than 640 breath cycles in the signal.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  784.369307      3944.8  507.770213  ...    0.766972  0.087805    1.098612</span>
+<span class="go">0  859.616224     3916.45  547.208367  ...    0.736596  0.018896         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1749,9 +1749,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.882221</span>
-<span class="go">2     2        10000  ...        0.0              0.248664</span>
-<span class="go">3     3        15000  ...        0.0              0.750720</span>
+<span class="go">1     1         5000  ...        0.0              0.006623</span>
+<span class="go">2     2        10000  ...        0.0              0.340541</span>
+<span class="go">3     3        15000  ...        0.0              0.511437</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -1848,74 +1848,6 @@ See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
 <span class="target" id="module-neurokit2.rsp"></span><p>Submodule for NeuroKit.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">rsp_rvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2.0,</span> <span class="pre">0.03333333333333333]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rvt.html#rsp_rvt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Respiratory Volume per Time (RVT)</strong></p>
-<p>Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and
-breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is
-often considered noise.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rsp_signal</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;harrison2020&quot;</span></code> or
-<code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>.</p></li>
-<li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a simple plot of the RVT (with the re-scaled original RSP signal).</p></li>
-<li><p><strong>silent</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings will not be printed.</p></li>
-<li><p><strong>boundaries</strong> (<em>list, optional</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>. Lower and upper limit of (humanly possible)
-breath frequency in Hertz.</p></li>
-<li><p><strong>iterations</strong> (<em>int, optional</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>. Amount of phase refinement estimates
-to remove high frequencies. Synthetic samples often take less than 3.</p></li>
-<li><p><strong>**kwargs</strong> – Arguments to be passed to the underlying peak detection algorithm.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – Array containing the current RVT at every timestep.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.00080883, 0.00080883,</span>
-<span class="go">       0.00080883])</span>
-
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;harrison2020&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">array([0.14442844, 0.14442627, 0.14442415, ..., 0.13887181, 0.13887087,</span>
-<span class="go">       0.13886997])</span>
-
-<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;birn2006&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.80883198, 0.80883198,</span>
-<span class="go">       0.80883198])</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<a class="reference internal image-reference" href="../_images/p_rsp_rvt2.png"><img alt="../_images/p_rsp_rvt2.png" src="../_images/p_rsp_rvt2.png" style="width: 640.0px; height: 480.0px;" /></a>
-<a class="reference internal image-reference" href="../_images/p_rsp_rvt3.png"><img alt="../_images/p_rsp_rvt3.png" src="../_images/p_rsp_rvt3.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Birn, R. M., Diamond, J. B., Smith, M. A., &amp; Bandettini, P. A. (2006). Separating
-respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in
-fMRI. Neuroimage, 31(4), 1536-1548.</p></li>
-<li><p>Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., &amp; Jones, R. M. (2020).
-Characteristics of respiratory measures in young adults scanned at rest, including systematic
-changes and “missed” deep breaths. Neuroimage, 204, 116234.</p></li>
-<li><p>Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).
-A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.</p></li>
-</ul>
-</dd></dl>
-
 </section>
 </section>
 </section>

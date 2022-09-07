@@ -637,7 +637,7 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">_ecg_findpeaks_elgendi</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kalidas2017&quot;</span><span class="p">,</span> <span class="s2">&quot;swt&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidas&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidastamil&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidastamil2017&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_kalidas</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;martinez2003&quot;</span><span class="p">,</span> <span class="s2">&quot;martinez&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;martinez2004&quot;</span><span class="p">,</span> <span class="s2">&quot;martinez&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_WT</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rodrigues2020&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues2021&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues&quot;</span><span class="p">,</span> <span class="s2">&quot;asi&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_rodrigues</span>
@@ -1463,7 +1463,7 @@ title="Open an issue"
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># Continuous Wavelet Transform (CWT) - Martinez et al. (2003)</span>
+<span class="c1"># Continuous Wavelet Transform (CWT) - Martinez et al. (2004)</span>
 <span class="c1"># =============================================================================</span>
 <span class="c1">#</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_WT</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
