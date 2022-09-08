@@ -108,9 +108,13 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         # TODO add warning if plotly isn't installed
         from plotly.subplots import make_subplots
         import plotly.graph_objects as go
-        # TODO create dicts with shared plot parameters so that code is less repetitive 
+
+        # TODO create dicts with shared plot parameters so that code is less repetitive
         fig = make_subplots(
-            rows=2, cols=1, shared_xaxes=True, subplot_titles=("Raw and Cleaned Signal", "Rate")
+            rows=2,
+            cols=1,
+            shared_xaxes=True,
+            subplot_titles=("Raw and Cleaned Signal", "Rate"),
         )
 
         # Plot cleaned and raw PPG
@@ -162,7 +166,7 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
             row=2,
             col=1,
         )
-        fig.update_layout(title_text="Photoplethysmogram (PPG)")
+        fig.update_layout(title_text="Photoplethysmogram (PPG)", height=500, width=750)
         if sampling_rate is not None:
             fig.update_xaxes(title_text="Time (seconds)", row=1, col=1)
             fig.update_xaxes(title_text="Time (seconds)", row=2, col=1)
