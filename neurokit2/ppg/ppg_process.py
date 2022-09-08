@@ -56,7 +56,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, report=None, method="elgendi", p
     ppg_signal = as_vector(ppg_signal)
     for kw_dict in [ppg_clean_kwargs, ppg_findpeaks_kwargs]:
         if "method" not in kw_dict.keys():
-            kw_dict["method"] = kw_dict
+            kw_dict["method"] = method
 
     # Clean signal
     ppg_cleaned = ppg_clean(ppg_signal, sampling_rate=sampling_rate, **ppg_clean_kwargs)
