@@ -9,7 +9,7 @@ from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
 
 
-def ppg_process(ppg_signal, sampling_rate=1000, report=None, **kwargs):
+def ppg_process(ppg_signal, sampling_rate=1000, report=None, method="elgendi", ppg_clean_kwargs={}, ppg_findpeaks_kwargs={}):
     """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
@@ -54,12 +54,16 @@ def ppg_process(ppg_signal, sampling_rate=1000, report=None, **kwargs):
     """
     # Sanitize input
     ppg_signal = as_vector(ppg_signal)
+    for kw_dict in [ppg_clean_kwargs, ppg_findpeaks_kwargs]:
+        if "method" not in kw_dict:
+            kw_dict["method"] = kw_dict
+        
 
     # Clean signal
-    ppg_cleaned = ppg_clean(ppg_signal, sampling_rate=sampling_rate)
+    ppg_cleaned = ppg_clean(ppg_signal, sampling_rate=sampling_rate, **ppg_clean_kwargs)
 
     # Find peaks
-    info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **kwargs)
+    info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **ppg_findpeaks_kwargs)
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
