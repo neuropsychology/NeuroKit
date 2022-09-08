@@ -32,7 +32,7 @@ def hrv_frequency(
     Computes frequency domain HRV metrics, such as the power in different frequency bands.
 
     * **ULF**: The spectral power of ultra low frequencies (by default, .0 to
-      .0033 Hz) by default. Very long signals are required for this to index to be
+      .0033 Hz). Very long signals are required for this to index to be
       extracted, otherwise, will return NaN.
     * **VLF**: The spectral power of very low frequencies (by default, .0033 to .04 Hz).
     * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).

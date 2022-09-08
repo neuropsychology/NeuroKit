@@ -10,6 +10,7 @@ Current maintainers
 -------------------
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
+* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
 * `Max Ngoi Zi Liang <https://github.com/Max-ZiLiang>`_ *(Nanyang Technological University, Singapore)*
 
@@ -29,7 +30,6 @@ Core contributors
 Contributors
 -------------
 
-* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
@@ -49,6 +49,7 @@ Contributors
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 * `Patryk Wielopolski <https://github.com/pfilo8>`_ *(Wrocław University of Science and Technology, Poland)*
 * `Jannik Gut <https://github.com/rostro36>`_
+* `Nattapong Thammasan <https://github.com/Nattapong-OnePlanet>`_ *(OnePlanet, Netherlands)*
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.

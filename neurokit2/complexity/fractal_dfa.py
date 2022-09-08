@@ -48,10 +48,10 @@ def fractal_dfa(
     singularity spectrum (MSP), and usually has shape of an inverted parabola. It measures the long
     range correlation property of a signal. From these elements, different features are extracted:
 
-    * **Width**: The width of the singularity spectrum and quantifies the degree of the
+    * **Width**: The width of the singularity spectrum, which quantifies the degree of the
       multifractality. In the case of monofractal signals, the MSP width is zero, since *h*\\(q) is
       independent of *q*.
-    * **Peak**: The value of the singularity exponent *H* corresponding to peak of
+    * **Peak**: The value of the singularity exponent *H* corresponding to the peak of
       singularity dimension *D*. It is a measure of the self-affinity of the signal, and a high
       value is an indicator of high degree of correlation between the data points. In the other
       words, the process is recurrent and repetitive.

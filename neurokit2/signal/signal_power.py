@@ -85,7 +85,7 @@ def signal_power(
 
       @savefig p_signal_power3.png scale=100%
       nk.signal_plot(power, standardize=True)
-      @supppress
+      @suppress
       plt.close()
 
     """
