@@ -4,11 +4,12 @@ import pandas as pd
 from ..misc import as_vector
 from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
+from ..report import report_create
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
 
 
-def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
+def ppg_process(ppg_signal, sampling_rate=1000, report=None, **kwargs):
     """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
@@ -62,7 +63,9 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
-    peaks_signal = _signal_from_indices(info["PPG_Peaks"], desired_length=len(ppg_cleaned))
+    peaks_signal = _signal_from_indices(
+        info["PPG_Peaks"], desired_length=len(ppg_cleaned)
+    )
 
     # Rate computation
     rate = signal_rate(
@@ -78,5 +81,8 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
             "PPG_Peaks": peaks_signal,
         }
     )
+
+    if report is not None:
+        report_create(filename=report, signals=signals, sampling_rate=sampling_rate)
 
     return signals, info
