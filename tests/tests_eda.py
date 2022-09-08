@@ -89,9 +89,9 @@ def test_eda_peaks():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(
-        duration=30,
+        duration=30*20,
         sampling_rate=sampling_rate,
-        scr_number=6,
+        scr_number=6*20,
         noise=0,
         drift=0.01,
         random_state=42,
@@ -104,7 +104,7 @@ def test_eda_peaks():
 
     signals, info = nk.eda_peaks(eda_phasic, method="kim2004")
     onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
-    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)
+    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=180)
 
     # Check that indices and values positions match
     peak_positions = np.where(info["SCR_Peaks"] != 0)[0]
