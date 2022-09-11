@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import numpy as np 
+import numpy as np
 
 from ..report import get_default_args
 from .ppg_clean import ppg_clean
@@ -23,7 +23,7 @@ def ppg_report(
         method_peaks = method
     defaults_cleaning = get_default_args(ppg_clean)
     defaults_peaks = get_default_args(ppg_findpeaks)
-    #defaults = {**defaults_cleaning, **defaults_peaks}
+    # defaults = {**defaults_cleaning, **defaults_peaks}
 
     report_info = {
         "sampling_rate": sampling_rate,
@@ -32,25 +32,28 @@ def ppg_report(
         "method_peaks": method_peaks,
         **kwargs,
     }
-    
+
     kwargs_cleaning = {}
     for key in defaults_cleaning.keys():
-        if key not in report_info.keys():
-            report_info[key] = defaults_cleaning[key]
-        elif report_info[key] != defaults_cleaning[key]:
-            kwargs_cleaning[key] = report_info[key]
-            
+        # if arguments have not already been specified
+        if key not in ["sampling_rate", "method"]:
+            if key not in report_info.keys():
+                report_info[key] = defaults_cleaning[key]
+            elif report_info[key] != defaults_cleaning[key]:
+                kwargs_cleaning[key] = report_info[key]
+                
     kwargs_peaks = {}
     for key in defaults_cleaning.keys():
-        if key not in report_info.keys():
-            report_info[key] = defaults_cleaning[key]
-        elif report_info[key] != defaults_cleaning[key]:
-            kwargs_peaks[key] = report_info[key]
-            
+        # if arguments have not already been specified
+        if key not in ["sampling_rate", "method"]:
+            if key not in report_info.keys():
+                report_info[key] = defaults_peaks[key]
+            elif report_info[key] != defaults_peaks[key]:
+                kwargs_peaks[key] = report_info[key]
     # could also specify parameters if they are not defaults
     report_info["kwargs_cleaning"] = kwargs_cleaning
     report_info["kwargs_peaks"] = kwargs_peaks
-    
+
     refs = []
 
     if method_cleaning in ["elgendi"]:
@@ -93,15 +96,15 @@ def ppg_report(
         report_info["text_cleaning"] = (
             "The data cleaning was performed using the " + method + " method."
         )
-        
     if method_peaks in ["elgendi"]:
-        report_info["text_peaks"] = "The peak detection was carried out using the Elgendi et al. (2013) method."
+        report_info[
+            "text_peaks"
+        ] = "The peak detection was carried out using the Elgendi et al. (2013) method."
         refs.append(
             """Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
           Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.
           PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585."""
         )
-    
     report_info["references"] = list(np.unique(refs))
-    
+
     return report_info
