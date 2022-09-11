@@ -21,7 +21,7 @@ def report_create(
 def describe_processing(report_info):
     # TODO: automate references?
     description = "<br><b>Description</b><br>"
-    for key in ["text_cleaning", "text_method"]:
+    for key in ["text_cleaning", "text_peaks"]:
         if key in report_info.keys():
             description += report_info[key] + "<br>"
     ref = "<br><b>References</b><br>"
