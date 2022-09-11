@@ -43,7 +43,7 @@ def ppg_report(
                 kwargs_cleaning[key] = report_info[key]
                 
     kwargs_peaks = {}
-    for key in defaults_cleaning.keys():
+    for key in defaults_peaks.keys():
         # if arguments have not already been specified
         if key not in ["sampling_rate", "method"]:
             if key not in report_info.keys():
