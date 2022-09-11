@@ -7,9 +7,12 @@ from ..signal.signal_formatpeaks import _signal_from_indices
 from ..report import report_create
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
+from .ppg_report import ppg_report
 
 
-def ppg_process(ppg_signal, sampling_rate=1000, report=None, method="elgendi", ppg_clean_kwargs={}, ppg_findpeaks_kwargs={}):
+def ppg_process(
+    ppg_signal, sampling_rate=1000, report=None, method="elgendi", **kwargs
+):
     """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
@@ -54,15 +57,24 @@ def ppg_process(ppg_signal, sampling_rate=1000, report=None, method="elgendi", p
     """
     # Sanitize input
     ppg_signal = as_vector(ppg_signal)
-    for kw_dict in [ppg_clean_kwargs, ppg_findpeaks_kwargs]:
-        if "method" not in kw_dict.keys():
-            kw_dict["method"] = method
+    report_info = ppg_report(sampling_rate=sampling_rate, method=method, **kwargs)
 
     # Clean signal
-    ppg_cleaned = ppg_clean(ppg_signal, sampling_rate=sampling_rate, **ppg_clean_kwargs)
+    ppg_cleaned = ppg_clean(
+        ppg_signal,
+        sampling_rate=sampling_rate,
+        method=report_info["method_cleaning"],
+        **report_info["kwargs_cleaning"]
+    )
 
     # Find peaks
-    info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **ppg_findpeaks_kwargs)
+    info = ppg_findpeaks(
+        ppg_cleaned,
+        sampling_rate=sampling_rate,
+        method=report_info["method_peaks"],
+        **report_info["kwargs_peaks"]
+    )
+
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
@@ -86,6 +98,6 @@ def ppg_process(ppg_signal, sampling_rate=1000, report=None, method="elgendi", p
     )
 
     if report is not None:
-        report_create(filename=report, signals=signals, sampling_rate=sampling_rate)
-
+        report_create(filename=report, signals=signals, report_info=report_info)
+        
     return signals, info

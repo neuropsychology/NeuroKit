@@ -11,5 +11,14 @@ from .ppg_intervalrelated import ppg_intervalrelated
 from .ppg_eventrelated import ppg_eventrelated
 from .ppg_analyze import ppg_analyze
 
-__all__ = ["ppg_simulate", "ppg_clean", "ppg_findpeaks", "ppg_rate", "ppg_process", "ppg_plot",
-           "ppg_intervalrelated", "ppg_eventrelated", "ppg_analyze"]
+__all__ = [
+    "ppg_simulate",
+    "ppg_clean",
+    "ppg_findpeaks",
+    "ppg_rate",
+    "ppg_process",
+    "ppg_plot",
+    "ppg_intervalrelated",
+    "ppg_eventrelated",
+    "ppg_analyze",
+]
