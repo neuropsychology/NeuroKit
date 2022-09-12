@@ -806,12 +806,12 @@ title="Print to PDF"
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ppg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw PPG channel.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">emg_signal()</span></code> (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_signal()</span></code> (in Hz, i.e., samples/second).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">emg_signal()</span></code> containing the following columns:</p>
+<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_signal()</span></code> containing the following columns:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Raw&quot;</span></code>: the raw signal.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Clean&quot;</span></code>: the cleaned signal.</p></li>
@@ -895,9 +895,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.665173           0.804420</span>
-<span class="go">2     2        10000  ...                 -1.416077           0.913351</span>
-<span class="go">3     3        15000  ...                  0.508859           0.968042</span>
+<span class="go">1     1         5000  ...                 -0.687101           0.820962</span>
+<span class="go">2     2        10000  ...                 -1.744790           0.980559</span>
+<span class="go">3     3        15000  ...                  1.331646           0.728189</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -1124,16 +1124,16 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229df9d88e0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x206a6f75690&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229d625b340&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x206a6f74c10&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x229d62580d0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x206aa977250&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x229e0f46710&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x206a52e4c40&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1206,9 +1206,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.345402           0.896122</span>
-<span class="go">2     2        10000  ...                  2.670809           0.871486</span>
-<span class="go">3     3        15000  ...                 -0.007459           0.489266</span>
+<span class="go">1     1         5000  ...                 -0.456079           0.930240</span>
+<span class="go">2     2        10000  ...                  0.269906           0.992575</span>
+<span class="go">3     3        15000  ...                 -1.542800           0.578217</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
