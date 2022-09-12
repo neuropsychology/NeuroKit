@@ -11,7 +11,7 @@ from .ppg_report import ppg_report
 
 
 def ppg_process(
-    ppg_signal, sampling_rate=1000, report=None, method="elgendi", **kwargs
+    ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs
 ):
     """**Process a photoplethysmogram (PPG)  signal**
 
@@ -22,12 +22,22 @@ def ppg_process(
     ppg_signal : Union[list, np.array, pd.Series]
         The raw PPG channel.
     sampling_rate : int
-        The sampling frequency of :func:`.emg_signal` (in Hz, i.e., samples/second).
-
+        The sampling frequency of :func:`.ppg_signal` (in Hz, i.e., samples/second).
+    method : str
+        The processing pipeline to apply. Can be one of ``"elgendi"``. 
+        Defaults to ``"elgendi"``.
+    report : str
+        The filename of a report containing description and figures of processing
+        (e.g. ``"myreport.html"``). Needs to be supplied if a report file 
+        should be generated. Defaults to ``None``.
+    **kwargs
+        Other arguments to be passed to specific methods. For more information,
+        see :func:`.ppg_report`.
+    
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as :func:`.emg_signal` containing the following columns:
+        A DataFrame of same length as :func:`.ppg_signal` containing the following columns:
 
         * ``"PPG_Raw"``: the raw signal.
         * ``"PPG_Clean"``: the cleaned signal.
@@ -98,6 +108,7 @@ def ppg_process(
     )
 
     if report is not None:
+        # Generate report containing description and figures of processing
         report_create(filename=report, signals=signals, report_info=report_info)
         
     return signals, info

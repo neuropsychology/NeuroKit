@@ -13,9 +13,22 @@ def ppg_report(
     method_peaks="default",
     **kwargs
 ):
-    # This function first sanitizes the input, i.e., if the specific methods are "default"
-    # then it adjusts based on the "general" default
-    # And then it creates the pieces of text for each element
+    """**Sanitize and describe methods for processing a PPG signal.**
+
+    This function first sanitizes the input, i.e., 
+    if the specific methods are "default"
+    then it adjusts based on the "general" default
+    And then it creates the pieces of text for each method.
+
+    Parameters
+    ----------
+    sampling_rate : int
+        The sampling frequency of the raw PPG signal (in Hz, i.e., samples/second).
+    method : str
+        The method used for cleaning and peak detection if ``"method_cleaning"``
+        and ``"method_peaks"`` are set to ``"default"``. Can be one of ``"elgendi"``. 
+        Defaults to ``"elgendi"``.
+    """
 
     if method_cleaning == "default":
         method_cleaning = method
@@ -23,7 +36,6 @@ def ppg_report(
         method_peaks = method
     defaults_cleaning = get_default_args(ppg_clean)
     defaults_peaks = get_default_args(ppg_findpeaks)
-    # defaults = {**defaults_cleaning, **defaults_peaks}
 
     report_info = {
         "sampling_rate": sampling_rate,
@@ -41,7 +53,6 @@ def ppg_report(
                 report_info[key] = defaults_cleaning[key]
             elif report_info[key] != defaults_cleaning[key]:
                 kwargs_cleaning[key] = report_info[key]
-                
     kwargs_peaks = {}
     for key in defaults_peaks.keys():
         # if arguments have not already been specified
