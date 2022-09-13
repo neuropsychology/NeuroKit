@@ -628,6 +628,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-average">
+     <em>
+      epochs_average()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#epochs-to-array">
      <em>
       epochs_to_array()
@@ -678,6 +685,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#epochs-plot">
      <em>
       epochs_plot()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#epochs-average">
+     <em>
+      epochs_average()
      </em>
     </a>
    </li>
@@ -804,7 +818,7 @@ experimental conditions.</p></li>
 <h3><em>epochs_plot()</em><a class="headerlink" href="#epochs-plot" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.epochs.epochs_plot">
-<span class="sig-name descname"><span class="pre">epochs_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_plot.html#epochs_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">epochs_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_plot.html#epochs_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Epochs visualization</strong></p>
 <p>Plot epochs.</p>
 <dl class="field-list simple">
@@ -812,8 +826,6 @@ experimental conditions.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <cite>epochs_create()</cite>.</p></li>
 <li><p><strong>legend</strong> (<em>bool</em>) – Display the legend (the key of each epoch).</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, don’t show the plot and only return a DataFrame that can be plotted
-externally.</p></li>
 </ul>
 </dd>
 </dl>
@@ -854,7 +866,45 @@ externally.</p></li>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_epochs_plot.png"><img alt="../_images/p_epochs_plot.png" src="../_images/p_epochs_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_epochs_plot2.png"><img alt="../_images/p_epochs_plot2.png" src="../_images/p_epochs_plot2.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
+<section id="epochs-average">
+<h3><em>epochs_average()</em><a class="headerlink" href="#epochs-average" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.epochs.epochs_average">
+<span class="sig-name descname"><span class="pre">epochs_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_average.html#epochs_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_average" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Compute Grand Average</strong></p>
+<p>Average epochs and returns the grand average, as well as the SD and the confidence interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <cite>epochs_create()</cite>.</p></li>
+<li><p><strong>which</strong> (<em>str or list</em>) – The name of the column(s) to compute the average from.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">events_plot</span></code>, <a class="reference internal" href="#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code></a>, <a class="reference internal" href="#neurokit2.epochs.epochs_to_df" title="neurokit2.epochs.epochs_to_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_to_df</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example with ECG Peaks</strong></p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="gp">In [2]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">   ...: </span><span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="n">grand_av</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_average</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_epochs_average1.png"><img alt="../_images/p_epochs_average1.png" src="../_images/p_epochs_average1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>

@@ -551,7 +551,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.epochs_to_df</span> <span class="kn">import</span> <span class="n">epochs_to_df</span>
 
 
-<div class="viewcode-block" id="epochs_plot"><a class="viewcode-back" href="../../../functions/epochs.html#neurokit2.epochs.epochs_plot">[docs]</a><span class="k">def</span> <span class="nf">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="epochs_plot"><a class="viewcode-back" href="../../../functions/epochs.html#neurokit2.epochs.epochs_plot">[docs]</a><span class="k">def</span> <span class="nf">epochs_plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Epochs visualization**</span>
 
 <span class="sd">    Plot epochs.</span>
@@ -562,9 +562,6 @@ title="Open an issue"
 <span class="sd">        A dict containing one DataFrame per event/trial. Usually obtained via `epochs_create()`.</span>
 <span class="sd">    legend : bool</span>
 <span class="sd">        Display the legend (the key of each epoch).</span>
-<span class="sd">    show : bool</span>
-<span class="sd">        If ``False``, don&#39;t show the plot and only return a DataFrame that can be plotted</span>
-<span class="sd">        externally.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    ----------</span>
@@ -598,7 +595,7 @@ title="Open an issue"
 <span class="sd">      epochs = nk.epochs_create(signal, events=events[&quot;ECG_R_Peaks&quot;], epochs_start=-0.5,</span>
 <span class="sd">      epochs_end=0.5)</span>
 
-<span class="sd">      @savefig p_epochs_plot.png scale=100%</span>
+<span class="sd">      @savefig p_epochs_plot2.png scale=100%</span>
 <span class="sd">      nk.epochs_plot(epochs)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
