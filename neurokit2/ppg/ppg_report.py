@@ -15,7 +15,7 @@ def ppg_report(
 ):
     """**Sanitize and describe methods for processing a PPG signal.**
 
-    This function first sanitizes the input, i.e., 
+    This function first sanitizes the input, i.e.,
     if the specific methods are "default"
     then it adjusts based on the "general" default
     And then it creates the pieces of text for each method.
@@ -25,18 +25,40 @@ def ppg_report(
     sampling_rate : int
         The sampling frequency of the raw PPG signal (in Hz, i.e., samples/second).
     method : str
-        The method used for cleaning and peak detection if ``"method_cleaning"``
-        and ``"method_peaks"`` are set to ``"default"``. Can be one of ``"elgendi"``. 
+        The method used for cleaning and peak finding if ``"method_cleaning"``
+        and ``"method_peaks"`` are set to ``"default"``. Can be one of ``"elgendi"``.
         Defaults to ``"elgendi"``.
-    """
+    method_cleaning: str
+        The method used to clean the raw PPG signal. If ``"default"``,
+        will be set to the value of ``"method"``. Defaults to ``"default"``.
+        For more information, see the ``"method"`` argument
+        of :func:`.ppg_clean`.
+    method_peaks: str
+        The method used to find peaks. If ``"default"``,
+        will be set to the value of ``"method"``. Defaults to ``"default"``.
+        For more information, see the ``"method"`` argument
+        of :func:`.ppg_findpeaks`.
+    **kwargs
+        Other arguments to be passed to :func:`.ppg_clean` and
+        :func:`.ppg_findpeaks`.
+        
+    Returns
+    -------
+    report_info : dict
+        A dictionary containing the keyword arguments passed to the cleaning
+        and peak finding functions, text describing the methods, and the corresponding
+        references.
 
+    See Also
+    --------
+    ppg_process, ppg_clean, ppg_findpeaks
+    """
+    # Sanitize inputs
     if method_cleaning == "default":
         method_cleaning = method
     if method_peaks == "default":
         method_peaks = method
-    defaults_cleaning = get_default_args(ppg_clean)
-    defaults_peaks = get_default_args(ppg_findpeaks)
-
+    # Create dictionary with all inputs
     report_info = {
         "sampling_rate": sampling_rate,
         "method": method,
@@ -45,23 +67,31 @@ def ppg_report(
         **kwargs,
     }
 
+    # Get arguments to be passed to cleaning and peak finding functions
+
+    defaults_cleaning = get_default_args(ppg_clean)
+    defaults_peaks = get_default_args(ppg_findpeaks)
+
     kwargs_cleaning = {}
     for key in defaults_cleaning.keys():
-        # if arguments have not already been specified
         if key not in ["sampling_rate", "method"]:
+            # if arguments have not been specified by user,
+            # set them to the defaults
             if key not in report_info.keys():
                 report_info[key] = defaults_cleaning[key]
             elif report_info[key] != defaults_cleaning[key]:
                 kwargs_cleaning[key] = report_info[key]
     kwargs_peaks = {}
+
     for key in defaults_peaks.keys():
-        # if arguments have not already been specified
         if key not in ["sampling_rate", "method"]:
+            # if arguments have not been specified by user,
+            # set them to the defaults
             if key not in report_info.keys():
                 report_info[key] = defaults_peaks[key]
             elif report_info[key] != defaults_peaks[key]:
                 kwargs_peaks[key] = report_info[key]
-    # could also specify parameters if they are not defaults
+    # save keyword arguments in dixrionEY
     report_info["kwargs_cleaning"] = kwargs_cleaning
     report_info["kwargs_peaks"] = kwargs_peaks
 
