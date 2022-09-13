@@ -2,17 +2,15 @@
 import pandas as pd
 
 from ..misc import as_vector
+from ..report import report_create
 from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
-from ..report import report_create
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
 from .ppg_report import ppg_report
 
 
-def ppg_process(
-    ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs
-):
+def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs):
     """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
@@ -24,16 +22,16 @@ def ppg_process(
     sampling_rate : int
         The sampling frequency of :func:`.ppg_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of ``"elgendi"``. 
+        The processing pipeline to apply. Can be one of ``"elgendi"``.
         Defaults to ``"elgendi"``.
     report : str
         The filename of a report containing description and figures of processing
-        (e.g. ``"myreport.html"``). Needs to be supplied if a report file 
+        (e.g. ``"myreport.html"``). Needs to be supplied if a report file
         should be generated. Defaults to ``None``.
     **kwargs
         Other arguments to be passed to specific methods. For more information,
         see :func:`.ppg_report`.
-    
+
     Returns
     -------
     signals : DataFrame
@@ -71,44 +69,29 @@ def ppg_process(
 
     # Clean signal
     ppg_cleaned = ppg_clean(
-        ppg_signal,
-        sampling_rate=sampling_rate,
-        method=report_info["method_cleaning"],
-        **report_info["kwargs_cleaning"]
+        ppg_signal, sampling_rate=sampling_rate, method=report_info["method_cleaning"], **report_info["kwargs_cleaning"]
     )
 
     # Find peaks
     info = ppg_findpeaks(
-        ppg_cleaned,
-        sampling_rate=sampling_rate,
-        method=report_info["method_peaks"],
-        **report_info["kwargs_peaks"]
+        ppg_cleaned, sampling_rate=sampling_rate, method=report_info["method_peaks"], **report_info["kwargs_peaks"]
     )
 
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
-    peaks_signal = _signal_from_indices(
-        info["PPG_Peaks"], desired_length=len(ppg_cleaned)
-    )
+    peaks_signal = _signal_from_indices(info["PPG_Peaks"], desired_length=len(ppg_cleaned))
 
     # Rate computation
-    rate = signal_rate(
-        info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned)
-    )
+    rate = signal_rate(info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned))
 
     # Prepare output
     signals = pd.DataFrame(
-        {
-            "PPG_Raw": ppg_signal,
-            "PPG_Clean": ppg_cleaned,
-            "PPG_Rate": rate,
-            "PPG_Peaks": peaks_signal,
-        }
+        {"PPG_Raw": ppg_signal, "PPG_Clean": ppg_cleaned, "PPG_Rate": rate, "PPG_Peaks": peaks_signal}
     )
 
     if report is not None:
         # Generate report containing description and figures of processing
         report_create(filename=report, signals=signals, report_info=report_info)
-        
+
     return signals, info

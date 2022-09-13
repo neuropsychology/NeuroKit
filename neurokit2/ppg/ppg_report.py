@@ -6,19 +6,13 @@ from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
 
 
-def ppg_report(
-    sampling_rate=1000,
-    method="elgendi",
-    method_cleaning="default",
-    method_peaks="default",
-    **kwargs
-):
+def ppg_report(sampling_rate=1000, method="elgendi", method_cleaning="default", method_peaks="default", **kwargs):
     """**Sanitize and describe methods for processing a PPG signal.**
 
     This function first sanitizes the input, i.e.,
-    if the specific methods are "default"
-    then it adjusts based on the "general" default
-    And then it creates the pieces of text for each method.
+    if the specific cleaning or peaks methods are "default",
+    then it adjusts based on the "general" default,
+    and then it creates the pieces of text describing each method.
 
     Parameters
     ----------
@@ -41,7 +35,7 @@ def ppg_report(
     **kwargs
         Other arguments to be passed to :func:`.ppg_clean` and
         :func:`.ppg_findpeaks`.
-        
+
     Returns
     -------
     report_info : dict
@@ -91,7 +85,7 @@ def ppg_report(
                 report_info[key] = defaults_peaks[key]
             elif report_info[key] != defaults_peaks[key]:
                 kwargs_peaks[key] = report_info[key]
-    # save keyword arguments in dixrionEY
+    # save keyword arguments in dictionary
     report_info["kwargs_cleaning"] = kwargs_cleaning
     report_info["kwargs_peaks"] = kwargs_peaks
 
@@ -99,7 +93,7 @@ def ppg_report(
 
     if method_cleaning in ["elgendi"]:
         report_info["text_cleaning"] = (
-            """The data cleaning was performed using the Elgendi et al. (2013) method: 
+            """The data cleaning was performed using the Elgendi et al. (2013) method:
                          the raw PPG signal (sampled at """
             + str(report_info["sampling_rate"])
             + """ Hz) was filtered with a bandpass filter ([0.5, 8], butterworth 3rd order).
@@ -114,12 +108,11 @@ def ppg_report(
         if report_info["heart_rate"] is None:
             text_cleaning_cutoff = "cutoff = 40"
         else:
-            text_cleaning_cutoff = (
-                "cutoff frequency determined based on provided heart rate of "
-                + str(report_info["heart_rate"])
+            text_cleaning_cutoff = "cutoff frequency determined based on provided heart rate of " + str(
+                report_info["heart_rate"]
             )
         report_info["text_cleaning"] = (
-            """The data cleaning was performed using the Nabian et al. (2018) method: 
+            """The data cleaning was performed using the Nabian et al. (2018) method:
                          the raw PPG signal (sampled at """
             + str(report_info["sampling_rate"])
             + """ Hz) was filtered with a lowpass filter ("""
@@ -134,13 +127,9 @@ def ppg_report(
         )
     else:
         # just in case more methods are added
-        report_info["text_cleaning"] = (
-            "The data cleaning was performed using the " + method + " method."
-        )
+        report_info["text_cleaning"] = "The data cleaning was performed using the " + method + " method."
     if method_peaks in ["elgendi"]:
-        report_info[
-            "text_peaks"
-        ] = "The peak detection was carried out using the Elgendi et al. (2013) method."
+        report_info["text_peaks"] = "The peak detection was carried out using the Elgendi et al. (2013) method."
         refs.append(
             """Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
           Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.
