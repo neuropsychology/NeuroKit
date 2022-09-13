@@ -12,9 +12,10 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         DataFrame obtained from :func:`.ppg_process`.
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if
-        the data should be plotted over time in seconds. Otherwise the data is plotted over samples. Defaults to ``None``.
+        the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
+        Defaults to ``None``.
     static : bool
-        If True, a static plot will be generated with matplotlib. 
+        If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
         Defaults to True.
     Returns
@@ -45,7 +46,6 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
             "NeuroKit error: The `ppg_signals` argument must"
             " be the DataFrame returned by `ppg_process()`."
         )
-
     # X-axis
     if sampling_rate is not None:
         x_axis = np.linspace(
@@ -53,7 +53,6 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         )
     else:
         x_axis = np.arange(0, ppg_signals.shape[0])
-
     # Get peak indices
     peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
 
@@ -66,7 +65,6 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         elif sampling_rate is None:
             ax0.set_xlabel("Samples")
             ax1.set_xlabel("Samples")
-
         fig.suptitle("Photoplethysmogram (PPG)", fontweight="bold")
         plt.subplots_adjust(hspace=0.4)
 
@@ -105,11 +103,17 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         ax1.axhline(y=ppg_rate_mean, label="Mean", linestyle="--", color="#FBB41C")
         ax1.legend(loc="upper right")
     else:
-        # TODO add warning if plotly isn't installed
-        from plotly.subplots import make_subplots
-        import plotly.graph_objects as go
+        try:
+            import plotly.graph_objects as go
+            from plotly.subplots import make_subplots
+            
+        except ImportError as e:
+            raise ImportError(
+                "NeuroKit error: ppg_plot(): the 'plotly'",
+                " module is required when 'static' is False.",
+                " Please install it first (`pip install plotly`).",
+            ) from e
 
-        # TODO create dicts with shared plot parameters so that code is less repetitive
         fig = make_subplots(
             rows=2,
             cols=1,
