@@ -14,7 +14,7 @@ def epochs_average(epochs, which=None, show=False, **kwargs):
     epochs : dict
         A dict containing one DataFrame per event/trial. Usually obtained via `epochs_create()`.
     which : str or list
-        Which column to compute the average from.
+        The name of the column(s) to compute the average from.
 
     See Also
     ----------
