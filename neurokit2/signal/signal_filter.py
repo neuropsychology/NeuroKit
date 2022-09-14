@@ -151,9 +151,7 @@ def signal_filter(
 
         # Sanity checks
         if lowcut is None and highcut is None:
-            raise ValueError(
-                "NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'."
-            )
+            raise ValueError("NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'.")
 
         if method in ["butter", "butterworth"]:
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
@@ -162,9 +160,7 @@ def signal_filter(
         elif method in ["bessel"]:
             filtered = _signal_filter_bessel(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
-            filtered = _signal_filter_fir(
-                signal, sampling_rate, lowcut, highcut, window_size=window_size
-            )
+            filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_size=window_size)
         else:
             raise ValueError(
                 "NeuroKit error: signal_filter(): 'method' should be",
@@ -203,9 +199,7 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="defa
 # =============================================================================
 # FIR
 # =============================================================================
-def _signal_filter_fir(
-    signal, sampling_rate=1000, lowcut=None, highcut=None, window_size="default"
-):
+def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_size="default"):
     """Filter a signal using a FIR filter."""
     try:
         import mne
@@ -243,9 +237,7 @@ def _signal_filter_fir(
 
 def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     """Filter a signal using IIR Butterworth SOS method."""
-    freqs, filter_type = _signal_filter_sanitize(
-        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
-    )
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
     sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
@@ -255,9 +247,7 @@ def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=
 def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     """Filter a signal using IIR Butterworth B/A method."""
     # Get coefficients
-    freqs, filter_type = _signal_filter_sanitize(
-        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
-    )
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
     b, a = scipy.signal.butter(order, freqs, btype=filter_type, output="ba", fs=sampling_rate)
     try:
@@ -274,9 +264,7 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
 
 
 def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
-    freqs, filter_type = _signal_filter_sanitize(
-        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
-    )
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
     sos = scipy.signal.bessel(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
