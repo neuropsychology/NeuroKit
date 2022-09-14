@@ -307,8 +307,8 @@ def _signal_filter_powerline(signal, sampling_rate, powerline=50):
 def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, normalize=False):
 
     # Sanity checks
-    if isinstance(highcut, int):
-        if sampling_rate <= 2 * highcut:
+    if lowcut is not None or highcut is not None:
+        if sampling_rate <= 2 * np.max(lowcut, highcut):
             warn(
                 "The sampling rate is too low. Sampling rate"
                 " must exceed the Nyquist rate to avoid aliasing problem."
