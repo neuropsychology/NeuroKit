@@ -296,7 +296,7 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
 
     # Sanity checks
     if lowcut is not None or highcut is not None:
-        if sampling_rate <= 2 * np.max([lowcut, highcut]):
+        if sampling_rate <= 2 * np.max(np.array([lowcut, highcut], dtype=np.float64)):
             warn(
                 "The sampling rate is too low. Sampling rate"
                 " must exceed the Nyquist rate to avoid aliasing problem."
