@@ -698,9 +698,7 @@ title="Open an issue"
 
         <span class="c1"># Sanity checks</span>
         <span class="k">if</span> <span class="n">lowcut</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">highcut</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;NeuroKit error: signal_filter(): you need to specify a &#39;lowcut&#39; or a &#39;highcut&#39;.&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: signal_filter(): you need to specify a &#39;lowcut&#39; or a &#39;highcut&#39;.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;butter&quot;</span><span class="p">,</span> <span class="s2">&quot;butterworth&quot;</span><span class="p">]:</span>
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_butterworth</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
@@ -709,9 +707,7 @@ title="Open an issue"
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bessel&quot;</span><span class="p">]:</span>
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_bessel</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fir&quot;</span><span class="p">]:</span>
-            <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_fir</span><span class="p">(</span>
-                <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span>
-            <span class="p">)</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_fir</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;NeuroKit error: signal_filter(): &#39;method&#39; should be&quot;</span><span class="p">,</span>
@@ -750,9 +746,7 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># FIR</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_signal_filter_fir</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="s2">&quot;default&quot;</span>
-<span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_filter_fir</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Filter a signal using a FIR filter.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">mne</span>
@@ -790,10 +784,7 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_signal_filter_butterworth</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth SOS method.&quot;&quot;&quot;</span>
-    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span>
-        <span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
-    <span class="p">)</span>
-
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">filter_type</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">filtered</span>
@@ -802,9 +793,7 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_signal_filter_butterworth_ba</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth B/A method.&quot;&quot;&quot;</span>
     <span class="c1"># Get coefficients</span>
-    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span>
-        <span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
-    <span class="p">)</span>
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">filter_type</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;ba&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -821,9 +810,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_filter_bessel</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span>
-        <span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
-    <span class="p">)</span>
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">bessel</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">filter_type</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
@@ -854,8 +841,8 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="c1"># Sanity checks</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">highcut</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">highcut</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">lowcut</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">highcut</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The sampling rate is too low. Sampling rate&quot;</span>
                 <span class="s2">&quot; must exceed the Nyquist rate to avoid aliasing problem.&quot;</span>
@@ -875,7 +862,8 @@ title="Open an issue"
             <span class="n">filter_type</span> <span class="o">=</span> <span class="s2">&quot;bandstop&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">filter_type</span> <span class="o">=</span> <span class="s2">&quot;bandpass&quot;</span>
-        <span class="n">freqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">]</span>
+        <span class="c1"># pass frequencies in order of lowest to highest to the scipy filter</span>
+        <span class="n">freqs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">]))</span>
     <span class="k">elif</span> <span class="n">lowcut</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">freqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">lowcut</span><span class="p">]</span>
         <span class="n">filter_type</span> <span class="o">=</span> <span class="s2">&quot;highpass&quot;</span>
