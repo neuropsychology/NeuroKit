@@ -328,7 +328,8 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
             filter_type = "bandstop"
         else:
             filter_type = "bandpass"
-        freqs = [lowcut, highcut]
+        # pass frequencies in order of lowest to highest to the scipy filter
+        freqs = list(np.sort([lowcut, highcut]))
     elif lowcut is not None:
         freqs = [lowcut]
         filter_type = "highpass"
