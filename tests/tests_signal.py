@@ -159,6 +159,12 @@ def test_signal_filter():
 
     assert np.allclose(sum(signal_clean - signal), -2, atol=0.2)
 
+    signal_bandstop = nk.signal_filter(
+        signal_corrupted, sampling_rate=sampling_rate, lowcut=52, highcut=48
+    )
+
+    assert np.allclose(sum(signal_bandstop - signal), -2, atol=0.2)
+
 
 def test_signal_interpolate():
 
