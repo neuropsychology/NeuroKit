@@ -15,6 +15,7 @@ from .listify import listify
 from .parallel_run import parallel_run
 from .replace import replace
 from .type_converters import as_vector
+from .find_successive_intervals import find_successive_intervals
 
 __all__ = [
     "listify",
@@ -32,4 +33,5 @@ __all__ = [
     "parallel_run",
     "find_plateau",
     "copyfunction",
+    "find_successive_intervals"
 ]
