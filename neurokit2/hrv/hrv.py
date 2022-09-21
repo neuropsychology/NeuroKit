@@ -8,7 +8,7 @@ from .hrv_frequency import _hrv_frequency_show, hrv_frequency
 from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
 from .hrv_rsa import hrv_rsa
 from .hrv_time import hrv_time
-from .hrv_utils import _hrv_preprocess_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_preprocess_rri, _hrv_format_input
 
 
 def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -150,7 +150,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
     fig.subplots_adjust(hspace=0.5, wspace=0.5)
 
     # Distribution of RR intervals
-    rri, rri_time = _hrv_sanitize_input(peaks, sampling_rate=sampling_rate)
+    rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
     ax_distrib = summary_plot(rri, ax=ax_distrib, **kwargs)
 
     # Poincare plot

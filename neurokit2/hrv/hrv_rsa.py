@@ -11,7 +11,7 @@ from ..rsp import rsp_process
 from ..signal import (signal_filter, signal_interpolate, signal_rate,
                       signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input, _hrv_get_rri, _hrv_preprocess_rri
 
 
 def hrv_rsa(
@@ -137,11 +137,8 @@ def hrv_rsa(
       Sciences, 1(06), 32.
 
     """
-    rpeaks = _hrv_sanitize_input(rpeaks)
-    if isinstance(rpeaks, tuple):  # Detect actual sampling rate
-        rpeaks, sampling_rate = rpeaks[0], rpeaks[1]
 
-    signals, ecg_period, rpeaks, _ = _hrv_rsa_formatinput(
+    signals, ecg_period, rpeaks, sampling_rate = _hrv_rsa_formatinput(
         ecg_signals, rsp_signals, rpeaks, sampling_rate
     )
 
@@ -363,13 +360,15 @@ def _hrv_rsa_gates(
     # Boundaries of rsa freq
     min_frequency = 0.12
     max_frequency = 0.40
+    
     # Retrived IBI and interpolate it
-    rri, sampling_rate = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate, interpolate=True)
+    rri, rri_time = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate)
 
     # Re-sample at 4 Hz
     desired_sampling_rate = 4
-    rri = signal_resample(
-        rri, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate
+   
+    rri, sampling_rate = _hrv_preprocess_rri(
+        rri, rri_time=rri_time, interpolate=True, interpolation_rate=desired_sampling_rate
     )
 
     # Sanitize parameters
@@ -508,6 +507,9 @@ def _hrv_rsa_cycles(signals):
 
 
 def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
+
+    rpeaks, sampling_rate = _hrv_format_input(rpeaks, sampling_rate=sampling_rate, output_format="peaks")
+
     # Sanity Checks
     if isinstance(ecg_signals, tuple):
         ecg_signals = ecg_signals[0]
@@ -562,14 +564,4 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
     nonduplicates = ecg_signals.columns[[i not in rsp_signals.columns for i in ecg_signals.columns]]
     signals = pd.concat([ecg_signals[nonduplicates], rsp_signals], axis=1)
 
-    # RSP signal
-    if "RSP_Clean" in signals.columns:
-        rsp_signal = signals["RSP_Clean"].values
-    elif "RSP_Raw" in signals.columns:
-        rsp_signal = signals["RSP_Raw"].values
-    elif "RSP" in signals.columns:
-        rsp_signal = signals["RSP"].values
-    else:
-        rsp_signal = None
-
-    return signals, ecg_period, rpeaks, rsp_signal
+    return signals, ecg_period, rpeaks, sampling_rate

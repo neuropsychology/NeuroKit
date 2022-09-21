@@ -4,7 +4,7 @@ from warnings import warn
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning, find_successive_intervals
+from ..misc import NeuroKitWarning, find_successive_intervals, intervals_to_peaks
 from ..signal import signal_interpolate
 
 
@@ -36,10 +36,8 @@ def _hrv_preprocess_rri(rri, rri_time=None, interpolate=False, interpolation_rat
 
 
 def _hrv_get_rri(peaks=None, sampling_rate=1000):
-    # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
+    if peaks is None:
+        return None, None
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = np.diff(peaks) / sampling_rate * 1000
     rri, rri_time = _hrv_sanitize_rri(rri)
@@ -70,20 +68,24 @@ def _hrv_sanitize_rri(rri, rri_time=None):
                 rri_time = rri_time / 1000
 
     # Remove NaN R-R intervals, if any
-    rri_time = rri_time[~np.isnan(rri)]
-    rri = rri[~np.isnan(rri)]
+    rri_time = rri_time[np.isfinite(rri)]
+    rri = rri[np.isfinite(rri)]
     return rri, rri_time
 
 
-def _hrv_sanitize_input(peaks=None, sampling_rate=1000):
+def _hrv_format_input(peaks=None, sampling_rate=1000, output_format="intervals"):
 
     if isinstance(peaks, tuple):
-        rri, rri_time = _hrv_sanitize_tuple(peaks, sampling_rate=sampling_rate)
+        rri, rri_time, sampling_rate = _hrv_sanitize_tuple(peaks, sampling_rate=sampling_rate)
     elif isinstance(peaks, (dict, pd.DataFrame)):
-        rri, rri_time = _hrv_sanitize_dict_or_df(peaks, sampling_rate=sampling_rate)
+        rri, rri_time, sampling_rate = _hrv_sanitize_dict_or_df(peaks, sampling_rate=sampling_rate)
     else:
+        peaks = _hrv_sanitize_peaks(peaks)
         rri, rri_time = _hrv_get_rri(peaks, sampling_rate=sampling_rate)
-    return rri, rri_time
+    if output_format == "intervals":
+        return rri, rri_time
+    elif output_format == "peaks":
+        return intervals_to_peaks(rri, intervals_time=rri_time, sampling_rate=sampling_rate), sampling_rate
 
 
 # =============================================================================
@@ -94,6 +96,10 @@ def _hrv_sanitize_tuple(peaks, sampling_rate=1000):
     # Get sampling rate
     info = [i for i in peaks if isinstance(i, dict)]
     sampling_rate = info[0]["sampling_rate"]
+
+    # Detect actual sampling rate
+    if len(info) < 1:
+        peaks, sampling_rate = peaks[0], peaks[1]
 
     # Get peaks
     if isinstance(peaks[0], (dict, pd.DataFrame)):
@@ -108,7 +114,7 @@ def _hrv_sanitize_tuple(peaks, sampling_rate=1000):
             else:
                 peaks = _hrv_sanitize_peaks(peaks[0])
 
-    return _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
+    return _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate), sampling_rate
 
 
 def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
@@ -128,7 +134,8 @@ def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
             rri_time = peaks["RRI_Time"]
         else:
             rri_time = None
-        return _hrv_sanitize_rri(rri, rri_time=rri_time)
+        rri, rri_time = _hrv_sanitize_rri(rri, rri_time=rri_time)
+        return rri, rri_time, sampling_rate
 
     cols = cols[["Peak" in s for s in cols]]
 
@@ -145,9 +152,10 @@ def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
     peaks = _hrv_sanitize_peaks(peaks[cols[0]])
 
     if sampling_rate is not None:
-        return _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
+        rri, rri_time = _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
     else:
-        return _hrv_get_rri(peaks=peaks)
+        rri, rri_time = _hrv_get_rri(peaks=peaks)
+    return rri, rri_time, sampling_rate
 
 
 def _hrv_sanitize_peaks(peaks):
