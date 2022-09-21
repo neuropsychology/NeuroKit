@@ -58,6 +58,22 @@ def test_hrv():
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
 
 
+def test_rri_input_hrv():
+
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+
+    _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
+    peaks = peaks["ECG_R_Peaks"]
+    rri = np.diff(peaks).astype(float)
+    rri_time = peaks[1:]/1000
+
+    rri[3:5] = [np.nan, np.nan]
+
+    ecg_hrv = nk.hrv({"RRI": rri, "RRI_Time": rri_time})
+
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
+
+
 def test_hrv_rsa():
     data = nk.data("bio_eventrelated_100hz")
     ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
