@@ -135,7 +135,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     """
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, rri_time = _hrv_sanitize_input(peaks, sampling_rate=sampling_rate)
+    rri, _ = _hrv_sanitize_input(peaks, sampling_rate=sampling_rate)
 
     diff_rri = np.diff(rri)
 
