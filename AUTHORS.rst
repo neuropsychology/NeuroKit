@@ -10,6 +10,7 @@ Current maintainers
 -------------------
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
+* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
 * `Max Ngoi Zi Liang <https://github.com/Max-ZiLiang>`_ *(Nanyang Technological University, Singapore)*
 
@@ -29,7 +30,6 @@ Core contributors
 Contributors
 -------------
 
-* `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*

@@ -117,7 +117,7 @@ def _ppg_clean_elgendi(ppg_signal, sampling_rate):
 
 
 def _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=None):
-    """Low-pass filter for continuous BP signal preprocessing, adaopted from Nabian et al. (2018)."""
+    """Low-pass filter for continuous BP signal preprocessing, adapted from Nabian et al. (2018)."""
 
     # Determine low-pass filter value
     highcut = 40

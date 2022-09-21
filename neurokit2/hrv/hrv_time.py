@@ -62,11 +62,10 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
           the RR intervals (**MeanNN**).
         * **CVSD**: The root mean square of successive differences (**RMSSD**) divided by
           the mean of the RR intervals (**MeanNN**).
-        * **MedianNN**: The median of the absolute values of the successive differences between RR
-          intervals.
+        * **MedianNN**: The median of the RR intervals.
         * **MadNN**: The median absolute deviation of the RR intervals.
         * **MCVNN**: The median absolute deviation of the RR intervals (**MadNN**) divided by the
-          median of the absolute differences of their successive differences (**MedianNN**).
+          median of the RR intervals (**MedianNN**).
         * **IQRNN**: The interquartile range (**IQR**) of the RR intervals.
         * **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).

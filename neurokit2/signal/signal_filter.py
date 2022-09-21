@@ -240,7 +240,6 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
 def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     """Filter a signal using IIR Butterworth SOS method."""
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
-
     sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
@@ -310,8 +309,8 @@ def _signal_filter_powerline(signal, sampling_rate, powerline=50):
 def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, normalize=False):
 
     # Sanity checks
-    if isinstance(highcut, int):
-        if sampling_rate <= 2 * highcut:
+    if lowcut is not None or highcut is not None:
+        if sampling_rate <= 2 * np.nanmax(np.array([lowcut, highcut], dtype=np.float64)):
             warn(
                 "The sampling rate is too low. Sampling rate"
                 " must exceed the Nyquist rate to avoid aliasing problem."
@@ -331,7 +330,8 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
             filter_type = "bandstop"
         else:
             filter_type = "bandpass"
-        freqs = [lowcut, highcut]
+        # pass frequencies in order of lowest to highest to the scipy filter
+        freqs = list(np.sort([lowcut, highcut]))
     elif lowcut is not None:
         freqs = [lowcut]
         filter_type = "highpass"
