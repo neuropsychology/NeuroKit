@@ -8,9 +8,7 @@ from ..misc import NeuroKitWarning, find_successive_intervals
 from ..signal import signal_interpolate
 
 
-def _hrv_preprocess_rri(
-    rri, rri_time=None, interpolate=False, interpolation_rate=100, **kwargs
-):
+def _hrv_preprocess_rri(rri, rri_time=None, interpolate=False, interpolation_rate=100, **kwargs):
     rri, rri_time = _hrv_sanitize_rri(rri, rri_time=rri_time)
 
     if interpolate is False:
@@ -31,11 +29,7 @@ def _hrv_preprocess_rri(
             )
 
         # Compute x-values of interpolated heart period signal at requested sampling rate.
-        x_new = np.arange(
-            start=rri_time[0],
-            stop=rri_time[-1] + 1 / interpolation_rate,
-            step=1 / interpolation_rate,
-        )
+        x_new = np.arange(start=rri_time[0], stop=rri_time[-1] + 1 / interpolation_rate, step=1 / interpolation_rate,)
 
         rri = signal_interpolate(rri_time, rri, x_new=x_new, **kwargs)
     return rri, interpolation_rate
@@ -60,16 +54,18 @@ def _hrv_sanitize_rri(rri, rri_time=None):
     else:
         # Confirm that timestamps are in seconds
         successive_intervals = find_successive_intervals(rri, intervals_time=rri_time)
-        
+
         if np.all(successive_intervals) is False:
             # If none of the differences between timestamps match
             # the length of the R-R intervals in seconds,
             # try converting milliseconds to seconds
-            converted_successive_intervals = find_successive_intervals(rri, intervals_time=rri_time/1000)
+            converted_successive_intervals = find_successive_intervals(rri, intervals_time=rri_time / 1000)
 
             # Check if converting to seconds increased the number of differences
             # between timestamps that match the length of the R-R intervals in seconds
-            if len(converted_successive_intervals[converted_successive_intervals]) > len(successive_intervals[successive_intervals]):
+            if len(converted_successive_intervals[converted_successive_intervals]) > len(
+                successive_intervals[successive_intervals]
+            ):
                 # Assume timestamps were passed in milliseconds and convert to seconds
                 rri_time = rri_time / 1000
 
