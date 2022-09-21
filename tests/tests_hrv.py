@@ -71,7 +71,7 @@ def test_rri_input_hrv():
 
     ecg_hrv = nk.hrv({"RRI": rri, "RRI_Time": rri_time})
 
-    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.2)
 
 
 def test_hrv_rsa():
