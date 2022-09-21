@@ -147,9 +147,7 @@ def _ecg_clean_missing(ecg_signal):
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5
-    )
+    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
 
     clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs)
     return clean
@@ -171,9 +169,7 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = (
-        2 * np.array(frequency) / sampling_rate
-    )  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
