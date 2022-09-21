@@ -206,7 +206,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, rri_time = _hrv_sanitize_input(peaks)
+    rri, _ = _hrv_sanitize_input(peaks, sampling_rate=sampling_rate)
 
     # Initialize empty container for results
     out = {}

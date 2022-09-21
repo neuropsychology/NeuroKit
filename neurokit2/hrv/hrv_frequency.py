@@ -162,7 +162,7 @@ def hrv_frequency(
 
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, rri_time = _hrv_sanitize_input(peaks)
+    rri, rri_time = _hrv_sanitize_input(peaks, sampling_rate=sampling_rate)
 
     # Preprocess R-R intervals (interpolated at 4 Hz by default)
     rri, sampling_rate = _hrv_preprocess_rri(

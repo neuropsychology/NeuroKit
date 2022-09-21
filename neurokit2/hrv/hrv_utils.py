@@ -75,22 +75,21 @@ def _hrv_sanitize_rri(rri, rri_time=None):
     return rri, rri_time
 
 
-def _hrv_sanitize_input(peaks=None):
+def _hrv_sanitize_input(peaks=None, sampling_rate=1000):
 
     if isinstance(peaks, tuple):
-        rri, rri_time = _hrv_sanitize_tuple(peaks)
+        rri, rri_time = _hrv_sanitize_tuple(peaks, sampling_rate=sampling_rate)
     elif isinstance(peaks, (dict, pd.DataFrame)):
-        rri, rri_time = _hrv_sanitize_dict_or_df(peaks)
+        rri, rri_time = _hrv_sanitize_dict_or_df(peaks, sampling_rate=sampling_rate)
     else:
-        peaks = _hrv_sanitize_peaks(peaks)
-        rri, rri_time = _hrv_get_rri(peaks)
+        rri, rri_time = _hrv_get_rri(peaks, sampling_rate=sampling_rate)
     return rri, rri_time
 
 
 # =============================================================================
 # Internals
 # =============================================================================
-def _hrv_sanitize_tuple(peaks):
+def _hrv_sanitize_tuple(peaks, sampling_rate=1000):
 
     # Get sampling rate
     info = [i for i in peaks if isinstance(i, dict)]
@@ -109,21 +108,18 @@ def _hrv_sanitize_tuple(peaks):
             else:
                 peaks = _hrv_sanitize_peaks(peaks[0])
 
-    return peaks, sampling_rate
+    return _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
 
 
-def _hrv_sanitize_dict_or_df(peaks):
+def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
 
     # Get columns
     if isinstance(peaks, dict):
         cols = np.array(list(peaks.keys()))
         if "sampling_rate" in cols:
             sampling_rate = peaks["sampling_rate"]
-        else:
-            sampling_rate = None
     elif isinstance(peaks, pd.DataFrame):
         cols = peaks.columns.values
-        sampling_rate = None
 
     # check whether R-R intervals were passed rather than peak indices
     if "RRI" in cols:
