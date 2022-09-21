@@ -5,7 +5,7 @@ import pandas as pd
 import scipy.stats
 
 from ..stats import mad, summary_plot
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_sanitize_input
 
 
 def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -132,12 +132,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     """
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, rri_time = _hrv_sanitize_input(peaks)
 
-    # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
     diff_rri = np.diff(rri)
 
     out = {}  # Initialize empty container for results

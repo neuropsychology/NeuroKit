@@ -203,12 +203,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     """
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
-
-    # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, rri_time = _hrv_sanitize_input(peaks)
 
     # Initialize empty container for results
     out = {}
@@ -223,7 +219,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out = _hrv_nonlinear_poincare_hra(rri, out)
 
     # DFA
-    out = _hrv_dfa(peaks, rri, out, **kwargs)
+    out = _hrv_dfa(rri, out, **kwargs)
 
     # Complexity
     tolerance = 0.2 * np.std(rri, ddof=1)
@@ -413,7 +409,7 @@ def _hrv_nonlinear_fragmentation(rri, out):
 # =============================================================================
 # DFA
 # =============================================================================
-def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
+def _hrv_dfa(rri, out, n_windows="default", **kwargs):
 
     # if "dfa_windows" in kwargs:
     #    dfa_windows = kwargs["dfa_windows"]
@@ -424,7 +420,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
     # Determine max beats
     if dfa_windows[1][1] is None:
-        max_beats = len(peaks) / 10
+        max_beats = (len(rri) + 1) / 10  # Number of peaks divided by 10
     else:
         max_beats = dfa_windows[1][1]
 
