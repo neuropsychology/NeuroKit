@@ -170,7 +170,7 @@ def signal_filter(
         else:
             raise ValueError(
                 "NeuroKit error: signal_filter(): 'method' should be",
-                " one of 'butterworth', 'butterworth_ba', 'bessel',",
+                " one of 'butterworth', 'butterworth_ba', 'butterworth_zi', 'bessel',",
                 " 'savgol' or 'fir'.",
             )
 
