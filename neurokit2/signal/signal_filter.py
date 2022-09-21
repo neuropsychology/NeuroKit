@@ -159,6 +159,8 @@ def signal_filter(
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["butter_ba", "butterworth_ba"]:
             filtered = _signal_filter_butterworth_ba(signal, sampling_rate, lowcut, highcut, order)
+        elif method in ["butter_zi", "butterworth_zi"]:
+            filtered = _signal_filter_butterworth_zi(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["bessel"]:
             filtered = _signal_filter_bessel(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
@@ -266,6 +268,21 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
         filtered = scipy.signal.filtfilt(b, a, signal, method="pad")
 
     return filtered
+
+
+def _signal_filter_butterworth_zi(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
+    """Filter a signal using IIR Butterworth SOS method, given initial state (zi)."""
+
+    freqs, filter_type = _signal_filter_sanitize(
+        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
+    )
+
+    sos = scipy.signal.butter(order, [freqs], btype=filter_type, output="sos", fs=sampling_rate)
+
+    zi_coeff = scipy.signal.sosfilt_zi(sos)
+    zi = zi_coeff * np.mean(signal)
+    # Filter data along one dimension using cascaded second-order sections.
+    return scipy.signal.sosfilt(sos, signal, zi=zi)[0]
 
 
 # =============================================================================
