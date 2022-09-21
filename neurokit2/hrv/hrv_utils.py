@@ -51,9 +51,9 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000):
     rri, rri_time = _hrv_sanitize_rri(rri)
     return rri, rri_time
 
-        
+
 def _hrv_sanitize_rri(rri, rri_time=None):
-   
+
     if rri_time is None:
         # Compute the timestamps of the R-R intervals in seconds
         rri_time = np.nancumsum(rri / 1000)
@@ -121,7 +121,7 @@ def _hrv_sanitize_dict_or_df(peaks):
             rri_time = peaks["RRI_Time"]
         else:
             rri_time = None
-        return rri, rri_time
+        return _hrv_sanitize_rri(rri, rri_time=rri_time)
 
     cols = cols[["Peak" in s for s in cols]]
 
