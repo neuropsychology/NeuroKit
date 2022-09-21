@@ -4,7 +4,7 @@ from warnings import warn
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning
+from ..misc import NeuroKitWarning, find_successive_intervals
 from ..signal import signal_interpolate
 
 
@@ -57,6 +57,21 @@ def _hrv_sanitize_rri(rri, rri_time=None):
     if rri_time is None:
         # Compute the timestamps of the R-R intervals in seconds
         rri_time = np.nancumsum(rri / 1000)
+    else:
+        # Confirm that timestamps are in seconds
+        successive_intervals = find_successive_intervals(rri, intervals_time=rri_time)
+        
+        if np.all(successive_intervals) is False:
+            # If none of the differences between timestamps match
+            # the length of the R-R intervals in seconds,
+            # try converting milliseconds to seconds
+            converted_successive_intervals = find_successive_intervals(rri, intervals_time=rri_time/1000)
+
+            # Check if converting to seconds increased the number of differences
+            # between timestamps that match the length of the R-R intervals in seconds
+            if len(converted_successive_intervals[converted_successive_intervals]) > len(successive_intervals[successive_intervals]):
+                # Assume timestamps were passed in milliseconds and convert to seconds
+                rri_time = rri_time / 1000
 
     # Remove NaN R-R intervals, if any
     rri_time = rri_time[~np.isnan(rri)]
