@@ -2,9 +2,11 @@ import numpy as np
 
 
 def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
-    """Identify successive intervals
+    """Identify successive intervals.
+
     Identification of intervals that are consecutive
     (e.g. in case of missing data).
+
     Parameters
     ----------
     intervals : list or ndarray
@@ -18,11 +20,13 @@ def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, 
         The number of times values are differenced.
         Can be used to check which values are valid for the n-th difference
         assuming successive intervals.
+
     Returns
     ----------
-    successive_intervals: ndarray
-        A list of True/False with True being the successive intervals.
-    Example
+    array
+        An array of True/False with True being the successive intervals.
+
+    Examples
     ----------
     >>> import neurokit2 as nk
     >>> rri = [400, 500, 700, 800, 900]
@@ -34,6 +38,7 @@ def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, 
     >>> successive_intervals = find_successive_intervals(rri)
     >>> successive_intervals
     array([ True, False, False,  True,  True])
+
     """
 
     # Convert to numpy array
