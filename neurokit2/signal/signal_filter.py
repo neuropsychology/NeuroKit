@@ -265,7 +265,7 @@ def _signal_filter_butterworth_zi(signal, sampling_rate=1000, lowcut=None, highc
 
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
-    sos = scipy.signal.butter(order, [freqs], btype=filter_type, output="sos", fs=sampling_rate)
+    sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
 
     zi_coeff = scipy.signal.sosfilt_zi(sos)
     zi = zi_coeff * np.mean(signal)
