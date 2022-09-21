@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from .epochs_to_df import epochs_to_df
 
 
-def epochs_plot(epochs, legend=True, show=True, **kwargs):
+def epochs_plot(epochs, legend=True, **kwargs):
     """**Epochs visualization**
 
     Plot epochs.
@@ -15,9 +15,6 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
         A dict containing one DataFrame per event/trial. Usually obtained via `epochs_create()`.
     legend : bool
         Display the legend (the key of each epoch).
-    show : bool
-        If ``False``, don't show the plot and only return a DataFrame that can be plotted
-        externally.
 
     See Also
     ----------
@@ -51,7 +48,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
       epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5,
       epochs_end=0.5)
 
-      @savefig p_epochs_plot.png scale=100%
+      @savefig p_epochs_plot2.png scale=100%
       nk.epochs_plot(epochs)
       @suppress
       plt.close()

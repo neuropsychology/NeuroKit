@@ -41,6 +41,10 @@ def signal_resample(
     array
         Vector containing resampled signal values.
 
+    See Also
+    --------
+    signal_interpolate
+
     Examples
     --------
     **Example 1**: Downsampling
@@ -60,7 +64,7 @@ def signal_resample(
 
       @savefig p_signal_resample1.png scale=100%
       nk.signal_plot([data[m] for m in data.keys()])
-      @supress
+      @suppress
       plt.close()
 
     **Example 2**: Upsampling
@@ -77,7 +81,7 @@ def signal_resample(
 
       @savefig p_signal_resample2.png scale=100%
       nk.signal_plot([data[m] for m in data.keys()], labels=list(data.keys()))
-      @supress
+      @suppress
       plt.close()
 
     **Example 3**: Benchmark
@@ -98,10 +102,6 @@ def signal_resample(
                                  sampling_rate=1000, desired_sampling_rate=500)
       %timeit nk.signal_resample(signal, method="pandas",
                                  sampling_rate=1000, desired_sampling_rate=500)
-
-    See Also
-    --------
-    signal_interpolate
 
     """
     if desired_length is None:

@@ -76,7 +76,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SD1d** and **SD1a**: short-term variance of contributions of decelerations (prolongations
       of RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski,
       2011)
-    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to s
+    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to
       short-term HRV, respectively (Piskorski,  2011).
     * **SD2d** and **SD2a**: long-term variance of contributions of decelerations (prolongations of
       RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski, 2011).
@@ -92,7 +92,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **PIP**: Percentage of inflection points of the RR intervals series.
     * **IALS**: Inverse of the average length of the acceleration/deceleration segments.
     * **PSS**: Percentage of short segments.
-    * **PAS**: IPercentage of NN intervals in alternation segments.
+    * **PAS**: Percentage of NN intervals in alternation segments.
 
     Indices of **Complexity** and **Fractal Physiology** include:
 
@@ -106,7 +106,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **CD**: See :func:`.fractal_correlation`.
     * **HFD**: See :func:`.fractal_higuchi` (with ``kmax`` set to ``"default"``).
     * **KFD**: See :func:`.fractal_katz`.
-    * **LZC**: See :func:`.fractal_lempelziv`.
+    * **LZC**: See :func:`.complexity_lempelziv`.
     * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal,
       corresponding to short-term correlations. See :func:`.fractal_dfa`.
     * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
