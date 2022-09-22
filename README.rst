@@ -512,7 +512,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 .. code-block:: python
 
     # Generate signal
-    signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=100)
+    signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=200)
 
     # Find optimal time delay, embedding dimension and r
     parameters = nk.complexity_optimize(signal, show=True)
