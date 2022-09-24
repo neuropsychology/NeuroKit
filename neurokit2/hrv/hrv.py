@@ -148,7 +148,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
     ax_marg_x.set_title("Poincaré Plot")
     ax_marg_y = fig.add_subplot(spec_within[1:4, 3])
 
-    fig.subplots_adjust(hspace=0.5, wspace=0.5)
+    plt.tight_layout(h_pad=0.5, w_pad=0.5)
 
     # Distribution of RR intervals
     peaks = _hrv_sanitize_input(peaks)

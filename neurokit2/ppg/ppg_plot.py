@@ -72,7 +72,7 @@ def ppg_plot(ppg_signals, sampling_rate=None):
         ax1.set_xlabel("Samples")
 
     fig.suptitle("Photoplethysmogram (PPG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.4)
+    plt.tight_layout(h_pad=0.4)
 
     # Plot cleaned and raw PPG
     ax0.set_title("Raw and Cleaned Signal")
