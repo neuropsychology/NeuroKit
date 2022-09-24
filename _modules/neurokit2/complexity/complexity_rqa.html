@@ -591,6 +591,9 @@ title="Open an issue"
 <span class="sd">    * **WEn**: Entropy of white vertical lines lengths.</span>
 <span class="sd">    * **DeteRec**: The ratio of determinism / recurrence rate.</span>
 <span class="sd">    * **LamiDet**: The ratio of laminarity / determinism.</span>
+<span class="sd">    * **DiagRec**: Diagonal Recurrence Rates, capturing the magnitude of autocorrelation at</span>
+<span class="sd">      different lags, which is related to fractal fluctuations. See Tomashin et al. (2022),</span>
+<span class="sd">      approach 3.</span>
 
 <span class="sd">    .. note::</span>
 
@@ -632,7 +635,7 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)</span>
+<span class="sd">      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6, 7], noise=0.2)</span>
 
 <span class="sd">      # RQA</span>
 <span class="sd">      @savefig p_complexity_rqa1.png scale=100%</span>
@@ -651,6 +654,8 @@ title="Open an issue"
 <span class="sd">    ----------</span>
 <span class="sd">    * Rawald, T., Sips, M., Marwan, N., &amp; Dransch, D. (2014). Fast computation of recurrences in</span>
 <span class="sd">      long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.</span>
+<span class="sd">    * Tomashin, A., Leonardi, G., &amp; Wallot, S. (2022). Four Methods to Distinguish between Fractal</span>
+<span class="sd">      Dimensions in Time Series through Recurrence Quantification Analysis. Entropy, 24(9), 1314.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
@@ -716,11 +721,23 @@ title="Open an issue"
     <span class="c1"># Find diagonale lines</span>
     <span class="c1"># --------------------------------------------------</span>
     <span class="n">diag_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">recdiag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
     <span class="c1"># All diagonals except the main one (0)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="n">diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>  <span class="c1"># Get diagonal</span>
+        <span class="n">recdiag</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span>
         <span class="n">diag</span> <span class="o">=</span> <span class="n">find_groups</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span>  <span class="c1"># Split into consecutives</span>
         <span class="n">diag_lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">diag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diag</span><span class="p">))</span> <span class="k">if</span> <span class="n">diag</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># Store 1s</span>
+
+    <span class="c1"># Diagonal Recurrence Rates (Diag %REC)</span>
+    <span class="c1"># Tomashin et al. (2022)</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="n">recdiag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">recdiag</span> <span class="o">=</span> <span class="n">recdiag</span><span class="p">[</span><span class="n">recdiag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">recdiag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;DiagRec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">distance</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">recdiag</span><span class="p">),</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># plt.loglog(distance, recdiag)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;DiagRec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="c1"># Get lengths</span>
     <span class="n">diag_lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">diag_lines</span><span class="p">])</span>

@@ -760,11 +760,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.070798  -0.071648  70.071629  ...            0     0.02   7.898421</span>
-<span class="go">1  1.018621  -0.193637  70.071629  ...            0     0.02   7.898421</span>
-<span class="go">2  0.883395  -0.328309  70.071629  ...            0     0.02   7.898421</span>
-<span class="go">3  0.691078  -0.480095  70.071629  ...            0     0.02   7.898421</span>
-<span class="go">4  0.469355  -0.645933  70.071629  ...            0     0.02   7.898421</span>
+<span class="go">0  1.063847  -0.075915  70.078904  ...            0    0.024   7.969328</span>
+<span class="go">1  1.014015  -0.193200  70.078904  ...            0    0.024   7.969328</span>
+<span class="go">2  0.884514  -0.323279  70.078904  ...            0    0.024   7.969328</span>
+<span class="go">3  0.699190  -0.470970  70.078904  ...            0    0.024   7.969328</span>
+<span class="go">4  0.483602  -0.633775  70.078904  ...            0    0.024   7.969328</span>
 
 <span class="go">[5 rows x 46 columns]</span>
 </pre></div>
@@ -772,10 +772,10 @@ as well as the signals’ sampling rate.</p></li>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize a subset of signals</span>
 <span class="gp">In [8]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[8]: </span><span class="go"></span>
-<span class="go">array([&lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;,</span>
-<span class="go">       &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;,</span>
-<span class="go">       &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;,</span>
-<span class="go">       &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;],</span>
+<span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
+<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
+<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
+<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;],</span>
 <span class="go">      dtype=object)</span>
 </pre></div>
 </div>
@@ -794,10 +794,10 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go"># Visualize all signals</span>
 <span class="gp">In [12]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[12]: </span><span class="go"></span>
-<span class="go">array([&lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;,</span>
-<span class="go">       &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;,</span>
-<span class="go">       &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;,</span>
-<span class="go">       &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;, &lt;AxesSubplot:&gt;],</span>
+<span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
+<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
+<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
+<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;],</span>
 <span class="go">      dtype=object)</span>
 </pre></div>
 </div>
@@ -868,11 +868,11 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="go"># Analyze</span>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
-<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime   RSA_P2T  RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN  0.012143   0.000000</span>
-<span class="go">2     2   Neutral         4957  ...               NaN -0.001503   0.009356</span>
-<span class="go">3     3   Neutral         9224  ...               NaN -0.003509   0.024010</span>
-<span class="go">4     4  Negative        12984  ...               NaN  0.002043   0.015371</span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime   RSA_P2T     RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN  0.012143 -1.776357e-15</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -0.001503  9.355725e-03</span>
+<span class="go">3     3   Neutral         9224  ...               NaN -0.003509  2.401042e-02</span>
+<span class="go">4     4  Negative        12984  ...               NaN  0.002043  1.537109e-02</span>
 
 <span class="go">[4 rows x 43 columns]</span>
 </pre></div>

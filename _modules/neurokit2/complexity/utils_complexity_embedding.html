@@ -551,7 +551,9 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
-<span class="kn">from</span> <span class="nn">.utils_complexity_attractor</span> <span class="kn">import</span> <span class="n">_attractor_equation</span><span class="p">,</span> <span class="n">complexity_attractor</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_sanitize</span>
+<span class="kn">from</span> <span class="nn">.utils_complexity_attractor</span> <span class="kn">import</span> <span class="p">(</span><span class="n">_attractor_equation</span><span class="p">,</span>
+                                         <span class="n">complexity_attractor</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="complexity_embedding"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_embedding">[docs]</a><span class="k">def</span> <span class="nf">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -673,6 +675,7 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">_attractor_equation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">signal_sanitize</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
     <span class="c1"># Sanity checks</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>

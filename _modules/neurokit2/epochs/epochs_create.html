@@ -749,7 +749,7 @@ title="Open an issue"
     <span class="c1"># Sanitize dtype of individual columns</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">epochs</span><span class="p">:</span>
 
-        <span class="k">for</span> <span class="n">colname</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">epochs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">colname</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">epochs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
             <span class="c1"># Check whether columns are indices or label/condition</span>
             <span class="n">values</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
