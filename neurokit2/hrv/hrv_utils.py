@@ -45,11 +45,18 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000):
 
 
 def _hrv_sanitize_rri(rri, rri_time=None):
-
+    if rri is None:
+        return None, None
+    else:
+        # Ensure that input is numpy array
+        rri = np.array(rri)
     if rri_time is None:
         # Compute the timestamps of the R-R intervals in seconds
         rri_time = np.nancumsum(rri / 1000)
     else:
+        # Ensure that input is numpy array
+        rri_time = np.array(rri_time)
+        
         # Confirm that timestamps are in seconds
         successive_intervals = find_successive_intervals(rri, intervals_time=rri_time)
 
