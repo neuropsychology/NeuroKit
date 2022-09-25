@@ -15,7 +15,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     intervals_time : list or array, optional
         List or numpy array of timestamps corresponding to intervals, in seconds.
     sampling_rate : int, optional
-        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.
+        Sampling rate (Hz) of the continuous signal in which the peaks occur.
 
     Returns
     -------
