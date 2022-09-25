@@ -704,6 +704,8 @@ title="Open an issue"
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_butterworth</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;butter_ba&quot;</span><span class="p">,</span> <span class="s2">&quot;butterworth_ba&quot;</span><span class="p">]:</span>
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_butterworth_ba</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;butter_zi&quot;</span><span class="p">,</span> <span class="s2">&quot;butterworth_zi&quot;</span><span class="p">]:</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_butterworth_zi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bessel&quot;</span><span class="p">]:</span>
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_bessel</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fir&quot;</span><span class="p">]:</span>
@@ -711,7 +713,7 @@ title="Open an issue"
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;NeuroKit error: signal_filter(): &#39;method&#39; should be&quot;</span><span class="p">,</span>
-                <span class="s2">&quot; one of &#39;butterworth&#39;, &#39;butterworth_ba&#39;, &#39;bessel&#39;,&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; one of &#39;butterworth&#39;, &#39;butterworth_ba&#39;, &#39;butterworth_zi&#39;, &#39;bessel&#39;,&quot;</span><span class="p">,</span>
                 <span class="s2">&quot; &#39;savgol&#39; or &#39;fir&#39;.&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -802,6 +804,19 @@ title="Open an issue"
         <span class="n">filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pad&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">filtered</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_filter_butterworth_zi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth SOS method, given initial state (zi).&quot;&quot;&quot;</span>
+
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">filter_type</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="n">zi_coeff</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt_zi</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
+    <span class="n">zi</span> <span class="o">=</span> <span class="n">zi_coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="c1"># Filter data along one dimension using cascaded second-order sections.</span>
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">zi</span><span class="o">=</span><span class="n">zi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 
 <span class="c1"># =============================================================================</span>

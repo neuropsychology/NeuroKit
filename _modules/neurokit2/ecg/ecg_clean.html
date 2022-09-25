@@ -694,9 +694,7 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_ecg_clean_nk</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
     <span class="c1"># Remove slow drift and dc offset with highpass Butterworth.</span>
-    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
-        <span class="n">signal</span><span class="o">=</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span>
-    <span class="p">)</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;powerline&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clean</span>
@@ -718,9 +716,7 @@ title="Open an issue"
 
     <span class="c1">#   -&gt; get_filter()</span>
     <span class="c1">#     -&gt; _norm_freq()</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-    <span class="p">)</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
 
     <span class="c1">#     -&gt; get coeffs</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
@@ -739,15 +735,12 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;Adapted from https://github.com/PIA-</span>
 <span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.&quot;&quot;&quot;</span>
 
-    <span class="n">f1</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">f2</span> <span class="o">=</span> <span class="mi">15</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">order</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">signal</span><span class="o">=</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth_zi&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span>
+    <span class="p">)</span>
 
-    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandpass&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
-    <span class="n">zi_coeff</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt_zi</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
-    <span class="n">zi</span> <span class="o">=</span> <span class="n">zi_coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="n">zi</span><span class="o">=</span><span class="n">zi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Return filtered</span>
+    <span class="k">return</span> <span class="n">clean</span>  <span class="c1"># Return filtered</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -762,14 +755,12 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">f1</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">f2</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">signal</span><span class="o">=</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth_zi&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span>
+    <span class="p">)</span>
 
-    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandpass&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
-    <span class="n">zi_coeff</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt_zi</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
-    <span class="n">zi</span> <span class="o">=</span> <span class="n">zi_coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="n">zi</span><span class="o">=</span><span class="n">zi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Return filtered</span>
+    <span class="k">return</span> <span class="n">clean</span>  <span class="c1"># Return filtered</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -779,14 +770,12 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;Adapted from https://github.com/PIA-</span>
 <span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.&quot;&quot;&quot;</span>
 
-    <span class="n">f1</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">f2</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">signal</span><span class="o">=</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth_zi&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span>
+    <span class="p">)</span>
 
-    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandpass&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
-    <span class="n">zi_coeff</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt_zi</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
-    <span class="n">zi</span> <span class="o">=</span> <span class="n">zi_coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="n">zi</span><span class="o">=</span><span class="n">zi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Return filtered</span>
+    <span class="k">return</span> <span class="n">clean</span>  <span class="c1"># Return filtered</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -803,14 +792,12 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">f1</span> <span class="o">=</span> <span class="mi">48</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">f2</span> <span class="o">=</span> <span class="mi">52</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">signal</span><span class="o">=</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth_zi&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span>
+    <span class="p">)</span>
 
-    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandstop&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
-    <span class="n">zi_coeff</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt_zi</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
-    <span class="n">zi</span> <span class="o">=</span> <span class="n">zi_coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="n">zi</span><span class="o">=</span><span class="n">zi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Return filtered</span>
+    <span class="k">return</span> <span class="n">clean</span>  <span class="c1"># Return filtered</span>
 </pre></div>
 
               </div>
