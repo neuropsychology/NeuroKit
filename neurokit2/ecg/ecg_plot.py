@@ -93,7 +93,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
             ax1.set_xlabel("Samples")
 
         fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
-        plt.subplots_adjust(hspace=0.3, wspace=0.1)
+        plt.tight_layout(h_pad=0.3, w_pad=0.1)
 
         # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")

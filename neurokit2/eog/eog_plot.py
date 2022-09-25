@@ -82,7 +82,7 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
         ax1.set_xlabel("Samples")
 
     fig.suptitle("Electrooculography (EOG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.3, wspace=0.2)
+    plt.tight_layout(h_pad=0.3, w_pad=0.2)
 
     # Plot cleaned and raw EOG
     ax0.set_title("Raw and Cleaned Signal")

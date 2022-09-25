@@ -173,7 +173,7 @@ def _complexity_plot(
         ax_attractor = fig.add_subplot(spec[:, -1])
 
     fig.suptitle("Otimization of Complexity Parameters", fontweight="bold", fontsize=16)
-    plt.subplots_adjust(hspace=0.4, wspace=0.05)
+    plt.tight_layout(h_pad=0.4, w_pad=0.05)
 
     # Plot tau optimization
     # Plot Attractor
