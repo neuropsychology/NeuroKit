@@ -217,7 +217,8 @@ hrv
 # Save plot
 fig = plt.gcf()
 fig.set_size_inches(10 * 1.5, 6 * 1.5, forward=True)
-fig.savefig("README_hrv.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_hrv.png", dpi=300)
 
 
 # =============================================================================
@@ -245,7 +246,8 @@ signal, waves = nk.ecg_delineate(
 # Save plot
 fig = plt.gcf()
 fig.set_size_inches(10 * 1.5, 6 * 1.5, forward=True)
-fig.savefig("README_delineate.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_delineate.png", dpi=300)
 
 
 # =============================================================================
@@ -253,7 +255,7 @@ fig.savefig("README_delineate.png", dpi=300, h_pad=3)
 # =============================================================================
 
 # Generate signal
-signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=100)
+signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=200)
 
 # Find optimal time delay, embedding dimension and r
 parameters = nk.complexity_optimize(signal, show=True)
@@ -263,7 +265,8 @@ parameters
 # Save plot
 fig = plt.gcf()
 fig.set_size_inches(10 * 1.5, 6 * 1.5, forward=True)
-fig.savefig("README_complexity_optimize.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_complexity_optimize.png", dpi=300)
 
 # =============================================================================
 # Signal Decomposition
@@ -304,7 +307,8 @@ for i in range(len(recomposed)):
 fig.set_size_inches(10, 6, forward=True)
 [ax.legend(loc=1) for ax in plt.gcf().axes]
 
-fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_decomposition.png", dpi=300)
 
 # =============================================================================
 # Signal Power Spectrum Density
@@ -357,7 +361,8 @@ axes[1].legend(loc="upper right")
 # Save plot
 fig = plt.gcf()
 fig.set_size_inches(10 * 1.5, 8 * 1.5, forward=True)
-fig.savefig("README_psd.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_psd.png", dpi=300)
 
 # =============================================================================
 # Statistics
@@ -370,4 +375,5 @@ ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
 # Save plot
 fig = plt.gcf()
 fig.set_size_inches(10 / 1.5, 6 / 1.5)
-fig.savefig("README_hdi.png", dpi=300, h_pad=3)
+plt.tight_layout()
+fig.savefig("README_hdi.png", dpi=300)

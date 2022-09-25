@@ -44,6 +44,9 @@ def complexity_rqa(
     * **WEn**: Entropy of white vertical lines lengths.
     * **DeteRec**: The ratio of determinism / recurrence rate.
     * **LamiDet**: The ratio of laminarity / determinism.
+    * **DiagRec**: Diagonal Recurrence Rates, capturing the magnitude of autocorrelation at
+      different lags, which is related to fractal fluctuations. See Tomashin et al. (2022),
+      approach 3.
 
     .. note::
 
@@ -85,7 +88,7 @@ def complexity_rqa(
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
+      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6, 7], noise=0.2)
 
       # RQA
       @savefig p_complexity_rqa1.png scale=100%
@@ -104,6 +107,8 @@ def complexity_rqa(
     ----------
     * Rawald, T., Sips, M., Marwan, N., & Dransch, D. (2014). Fast computation of recurrences in
       long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.
+    * Tomashin, A., Leonardi, G., & Wallot, S. (2022). Four Methods to Distinguish between Fractal
+      Dimensions in Time Series through Recurrence Quantification Analysis. Entropy, 24(9), 1314.
 
     """
     info = {
@@ -169,11 +174,23 @@ def _complexity_rqa_features(rc, min_linelength=2):
     # Find diagonale lines
     # --------------------------------------------------
     diag_lines = []
+    recdiag = np.zeros(width)
     # All diagonals except the main one (0)
     for i in range(1, width):
         diag = np.diagonal(rc, offset=i)  # Get diagonal
+        recdiag[i - 1] = np.sum(diag) / len(diag)
         diag = find_groups(diag)  # Split into consecutives
         diag_lines.extend([diag[i] for i in range(len(diag)) if diag[i][0] == 1])  # Store 1s
+
+    # Diagonal Recurrence Rates (Diag %REC)
+    # Tomashin et al. (2022)
+    distance = np.arange(1, width + 1)[recdiag > 0]
+    recdiag = recdiag[recdiag > 0]
+    if len(recdiag) > 2:
+        data["DiagRec"] = np.polyfit(np.log2(distance), np.log2(recdiag), 1)[0]
+        # plt.loglog(distance, recdiag)
+    else:
+        data["DiagRec"] = np.nan
 
     # Get lengths
     diag_lengths = np.array([len(i) for i in diag_lines])
