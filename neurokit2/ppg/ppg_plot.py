@@ -43,13 +43,15 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
     # Sanity-check input.
     if not isinstance(ppg_signals, pd.DataFrame):
         raise ValueError(
-            "NeuroKit error: The `ppg_signals` argument must" " be the DataFrame returned by `ppg_process()`."
+            "NeuroKit error: The `ppg_signals` argument must"
+            " be the DataFrame returned by `ppg_process()`."
         )
     # X-axis
     if sampling_rate is not None:
         x_axis = np.linspace(0, ppg_signals.shape[0] / sampling_rate, ppg_signals.shape[0])
     else:
         x_axis = np.arange(0, ppg_signals.shape[0])
+
     # Get peak indices
     peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
 
@@ -63,18 +65,27 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
             ax0.set_xlabel("Samples")
             ax1.set_xlabel("Samples")
         fig.suptitle("Photoplethysmogram (PPG)", fontweight="bold")
-        plt.subplots_adjust(hspace=0.4)
+        plt.tight_layout(h_pad=0.4)
 
         # Plot cleaned and raw PPG
         ax0.set_title("Raw and Cleaned Signal")
         ax0.plot(x_axis, ppg_signals["PPG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
         ax0.plot(
-            x_axis, ppg_signals["PPG_Clean"], color="#FB1CF0", label="Cleaned", zorder=1, linewidth=1.5,
+            x_axis,
+            ppg_signals["PPG_Clean"],
+            color="#FB1CF0",
+            label="Cleaned",
+            zorder=1,
+            linewidth=1.5,
         )
 
         # Plot peaks
         ax0.scatter(
-            x_axis[peaks], ppg_signals["PPG_Clean"][peaks], color="#D60574", label="Peaks", zorder=2,
+            x_axis[peaks],
+            ppg_signals["PPG_Clean"][peaks],
+            color="#D60574",
+            label="Peaks",
+            zorder=2,
         )
         ax0.legend(loc="upper right")
 
@@ -82,14 +93,17 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         ax1.set_title("Heart Rate")
         ppg_rate_mean = ppg_signals["PPG_Rate"].mean()
         ax1.plot(
-            x_axis, ppg_signals["PPG_Rate"], color="#FB661C", label="Rate", linewidth=1.5,
+            x_axis,
+            ppg_signals["PPG_Rate"],
+            color="#FB661C",
+            label="Rate",
+            linewidth=1.5,
         )
         ax1.axhline(y=ppg_rate_mean, label="Mean", linestyle="--", color="#FBB41C")
         ax1.legend(loc="upper right")
     else:
         try:
             import plotly.graph_objects as go
-
             from plotly.subplots import make_subplots
 
         except ImportError as e:
@@ -99,12 +113,24 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
                 " Please install it first (`pip install plotly`).",
             ) from e
 
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, subplot_titles=("Raw and Cleaned Signal", "Rate"),)
+        fig = make_subplots(
+            rows=2,
+            cols=1,
+            shared_xaxes=True,
+            subplot_titles=("Raw and Cleaned Signal", "Rate"),
+        )
 
         # Plot cleaned and raw PPG
         fig.add_trace(go.Scatter(x=x_axis, y=ppg_signals["PPG_Raw"], name="Raw"), row=1, col=1)
         fig.add_trace(
-            go.Scatter(x=x_axis, y=ppg_signals["PPG_Clean"], name="Cleaned", marker_color="#FB1CF0",), row=1, col=1,
+            go.Scatter(
+                x=x_axis,
+                y=ppg_signals["PPG_Clean"],
+                name="Cleaned",
+                marker_color="#FB1CF0",
+            ),
+            row=1,
+            col=1,
         )
 
         # Plot peaks
@@ -123,12 +149,23 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         # Rate
         ppg_rate_mean = ppg_signals["PPG_Rate"].mean()
         fig.add_trace(
-            go.Scatter(x=x_axis, y=ppg_signals["PPG_Rate"], name="Rate", mode="lines", marker_color="#FB661C",),
+            go.Scatter(
+                x=x_axis,
+                y=ppg_signals["PPG_Rate"],
+                name="Rate",
+                mode="lines",
+                marker_color="#FB661C",
+            ),
             row=2,
             col=1,
         )
         fig.add_hline(
-            y=ppg_rate_mean, line_dash="dash", line_color="#FBB41C", name="Mean", row=2, col=1,
+            y=ppg_rate_mean,
+            line_dash="dash",
+            line_color="#FBB41C",
+            name="Mean",
+            row=2,
+            col=1,
         )
         fig.update_layout(title_text="Photoplethysmogram (PPG)", height=500, width=750)
         if sampling_rate is not None:

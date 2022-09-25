@@ -202,7 +202,7 @@ def epochs_create(
     # Sanitize dtype of individual columns
     for i in epochs:
 
-        for colname, column in epochs[i].select_dtypes(include=["object"]).iteritems():
+        for colname, column in epochs[i].select_dtypes(include=["object"]).items():
 
             # Check whether columns are indices or label/condition
             values = column.unique().tolist()
