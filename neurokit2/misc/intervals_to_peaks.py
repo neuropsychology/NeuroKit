@@ -39,16 +39,27 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     """
     if intervals is None:
         return None
+    else:
+        # Ensure that input is numpy array
+        intervals = np.array(intervals)
 
     if intervals_time is None:
         intervals_time = np.nancumsum(intervals) / 1000
-
+    else:
+        # Ensure that input is numpy array
+        intervals_time = np.array(intervals_time)
+    
+    # Remove missing or infinite values
     intervals_time = intervals_time[np.isfinite(intervals)]
     intervals = intervals[np.isfinite(intervals)]
-
+    
+    # Check for non successive intervals in case of missing data
     non_successive_indices = np.arange(1, len(intervals_time))[np.invert(
         find_successive_intervals(intervals, intervals_time))]
-
+    
+    # The number of peaks should be the number of intervals
+    # plus one extra at the beginning of each group of successive intervals
+    # (with no missing data there should be N_intervals + 1 peaks)
     to_insert_indices = np.concatenate(
         (np.array([0]), non_successive_indices))
 
@@ -56,6 +67,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
         intervals[to_insert_indices]/1000
 
     peaks_time = np.sort(np.concatenate((intervals_time, times_to_insert)))
+    # convert seconds to sample indices
     peaks = peaks_time*sampling_rate
 
     return np.array([int(np.round(i)) for i in peaks])
