@@ -28,16 +28,19 @@ def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, 
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>> rri = [400, 500, 700, 800, 900]
-    >>> rri_time = [0.7,  1.2,  2.5, 3.3, 4.2]
-    >>> successive_intervals = nk.find_successive_intervals(rri, rri_time)
-    >>> successive_intervals
-    array([ True, False,  True,  True])
-    >>> rri = [400, 500, np.nan, 700, 800, 900]
-    >>> successive_intervals = find_successive_intervals(rri)
-    >>> successive_intervals
-    array([ True, False, False,  True,  True])
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rri = [400, 500, 700, 800, 900]
+      rri_time = [0.7,  1.2, 2.5, 3.3, 4.2]
+
+      successive_intervals = nk.find_successive_intervals(rri, rri_time)
+      successive_intervals
+
+      rri = [400, 500, np.nan, 700, 800, 900]
+      successive_intervals = nk.find_successive_intervals(rri)
+      successive_intervals
 
     """
 
@@ -53,7 +56,9 @@ def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, 
 
     diff_intervals_time_ms = np.diff(intervals_time, n=n_diff) * 1000
 
-    abs_error_intervals_ref_time = abs(diff_intervals_time_ms - np.diff(intervals[1:], n=n_diff - 1))
+    abs_error_intervals_ref_time = abs(
+        diff_intervals_time_ms - np.diff(intervals[1:], n=n_diff - 1)
+    )
 
     successive_intervals = abs_error_intervals_ref_time <= thresh_unequal
 
