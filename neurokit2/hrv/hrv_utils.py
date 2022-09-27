@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from .intervals_sanitize import intervals_sanitize
-from ..misc import intervals_to_peaks
+from .intervals_to_peaks import intervals_to_peaks
 
 
 def _hrv_get_rri(peaks=None, sampling_rate=1000):
