@@ -4,7 +4,7 @@ from warnings import warn
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning, find_successive_intervals, intervals_to_peaks
+from ..misc import NeuroKitWarning, intervals_successive, intervals_to_peaks
 from ..signal import signal_interpolate
 
 
@@ -29,7 +29,11 @@ def _hrv_preprocess_rri(rri, rri_time=None, interpolate=False, interpolation_rat
             )
 
         # Compute x-values of interpolated heart period signal at requested sampling rate.
-        x_new = np.arange(start=rri_time[0], stop=rri_time[-1] + 1 / interpolation_rate, step=1 / interpolation_rate,)
+        x_new = np.arange(
+            start=rri_time[0],
+            stop=rri_time[-1] + 1 / interpolation_rate,
+            step=1 / interpolation_rate,
+        )
 
         rri = signal_interpolate(rri_time, rri, x_new=x_new, **kwargs)
     return rri, interpolation_rate
@@ -56,15 +60,17 @@ def _hrv_sanitize_rri(rri, rri_time=None):
     else:
         # Ensure that input is numpy array
         rri_time = np.array(rri_time)
-        
+
         # Confirm that timestamps are in seconds
-        successive_intervals = find_successive_intervals(rri, intervals_time=rri_time)
+        successive_intervals = intervals_successive(rri, intervals_time=rri_time)
 
         if np.all(successive_intervals) is False:
             # If none of the differences between timestamps match
             # the length of the R-R intervals in seconds,
             # try converting milliseconds to seconds
-            converted_successive_intervals = find_successive_intervals(rri, intervals_time=rri_time / 1000)
+            converted_successive_intervals = intervals_successive(
+                rri, intervals_time=rri_time / 1000
+            )
 
             # Check if converting to seconds increased the number of differences
             # between timestamps that match the length of the R-R intervals in seconds
@@ -92,7 +98,10 @@ def _hrv_format_input(peaks=None, sampling_rate=1000, output_format="intervals")
     if output_format == "intervals":
         return rri, rri_time
     elif output_format == "peaks":
-        return intervals_to_peaks(rri, intervals_time=rri_time, sampling_rate=sampling_rate), sampling_rate
+        return (
+            intervals_to_peaks(rri, intervals_time=rri_time, sampling_rate=sampling_rate),
+            sampling_rate,
+        )
 
 
 # =============================================================================

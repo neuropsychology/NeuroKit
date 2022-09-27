@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
+def intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
     """Identify successive intervals.
 
     Identification of intervals that are consecutive
@@ -35,11 +35,11 @@ def find_successive_intervals(intervals, intervals_time=None, thresh_unequal=2, 
       rri = [400, 500, 700, 800, 900]
       rri_time = [0.7,  1.2, 2.5, 3.3, 4.2]
 
-      successive_intervals = nk.find_successive_intervals(rri, rri_time)
+      successive_intervals = nk.intervals_successive(rri, rri_time)
       successive_intervals
 
       rri = [400, 500, np.nan, 700, 800, 900]
-      successive_intervals = nk.find_successive_intervals(rri)
+      successive_intervals = nk.intervals_successive(rri)
       successive_intervals
 
     """
