@@ -167,7 +167,7 @@ def hrv_frequency(
 
     # Preprocess R-R intervals (interpolated at 100 Hz by default)
     rri, sampling_rate = intervals_preprocess(
-        rri, rri_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
