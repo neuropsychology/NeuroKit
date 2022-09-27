@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+
 def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
     """Identify successive intervals.
 
