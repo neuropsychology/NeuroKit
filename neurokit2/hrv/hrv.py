@@ -8,7 +8,8 @@ from .hrv_frequency import _hrv_frequency_show, hrv_frequency
 from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
 from .hrv_rsa import hrv_rsa
 from .hrv_time import hrv_time
-from .hrv_utils import _hrv_preprocess_rri, _hrv_format_input
+from .hrv_utils import _hrv_format_input
+from .intervals_preprocess import intervals_preprocess
 
 
 def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -158,7 +159,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
     _hrv_nonlinear_show(rri, out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
 
     # PSD plot
-    rri, sampling_rate = _hrv_preprocess_rri(
+    rri, sampling_rate = intervals_preprocess(
         rri, rri_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 
