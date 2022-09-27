@@ -160,7 +160,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
 
     # PSD plot
     rri, sampling_rate = intervals_preprocess(
-        rri, rri_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 
     frequency_bands = out[["ULF", "VLF", "LF", "HF", "VHF"]]
