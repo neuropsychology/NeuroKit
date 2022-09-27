@@ -22,6 +22,7 @@ def signal_psd(
     order_criteria="KIC",
     order_corrected=True,
     silent=True,
+    t=None,
     **kwargs,
 ):
     """**Compute the Power Spectral Density (PSD)**
@@ -64,6 +65,9 @@ def signal_psd(
         the order, rely on the default (i.e., the corrected KIC).
     silent : bool
         If ``False``, warnings will be printed. Default to ``True``.
+    t : array
+        The timestamps corresponding to each sample in the signal, in seconds
+        (for ``"lombscargle"`` method). Defaults to None.
     **kwargs : optional
         Keyword arguments to be passed to :func:`.scipy.signal.welch`.
 
@@ -155,6 +159,7 @@ def signal_psd(
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
             max_frequency=max_frequency,
+            t=t
         )
 
     # Method that are using a window
@@ -295,17 +300,23 @@ def _signal_psd_welch(signal, sampling_rate=1000, nperseg=None, window_type="han
 # =============================================================================
 
 
-def _signal_psd_lomb(signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf):
+def _signal_psd_lomb(signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, t=None):
 
     try:
         import astropy.timeseries
-
-        if max_frequency == np.inf:
-            max_frequency = sampling_rate / 2  # sanitize highest frequency
-        t = np.arange(len(signal)) / sampling_rate
-        frequency, power = astropy.timeseries.LombScargle(t, signal, normalization="psd").autopower(
-            minimum_frequency=min_frequency, maximum_frequency=max_frequency
-        )
+        if t is None:
+            if max_frequency == np.inf:
+                max_frequency = sampling_rate / 2  # sanitize highest frequency
+            t = np.arange(len(signal)) / sampling_rate
+            frequency, power = astropy.timeseries.LombScargle(t, signal, normalization="psd").autopower(
+                minimum_frequency=min_frequency, maximum_frequency=max_frequency
+            )
+        else:
+            # determine maximum frequency with astropy defaults for unevenly spaced data
+            # https://docs.astropy.org/en/stable/api/astropy.timeseries.LombScargle.html#astropy.timeseries.LombScargle.autopower
+            frequency, power = astropy.timeseries.LombScargle(t, signal, normalization="psd").autopower(
+                minimum_frequency=min_frequency
+            )
 
     except ImportError as e:
         raise ImportError(

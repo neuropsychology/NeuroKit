@@ -4,7 +4,7 @@ from warnings import warn
 import numpy as np
 
 from ..signal import signal_interpolate
-from .hrv_utils import _intervals_sanitize
+from .hrv_utils import _intervals_sanitize, _intervals_time_uniform, _intervals_time_to_sampling_rate
 
 from ..misc import NeuroKitWarning
 
@@ -39,7 +39,7 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
     if interpolate is False:
         interpolation_rate = None
 
-    else:
+    if interpolation_rate is not None:
         # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
         # We considered an interpolation rate 4 Hz by default to match Kubios
         # but in case of some applications with high heart rates we decided to make it 100 Hz
@@ -61,4 +61,9 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
+    else:
+        # check if intervals appear to be already interpolated
+        if _intervals_time_uniform(intervals_time):
+            # get sampling rate used for interpolation
+            interpolation_rate = _intervals_time_to_sampling_rate(intervals_time)
     return intervals, interpolation_rate

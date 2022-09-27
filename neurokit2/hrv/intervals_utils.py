@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import scipy
 
 
 def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
@@ -66,6 +67,26 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_di
     return np.array(successive_intervals)
 
 
+def _intervals_time_uniform(intervals_time, decimals=3):
+    """Check whether timestamps are uniformly spaced
+
+    Useful for determining whether intervals have been interpolated.
+
+    Parameters
+    ----------
+    intervals_time : list or array, optional
+        List or numpy array of timestamps corresponding to intervals, in seconds.
+    decimals : int, optional
+        The precision of the timestamps. The default is 3.
+
+    Returns
+    ----------
+    bool
+        Whether the timestamps are uniformly spaced
+    """
+    return len(np.unique(np.round(np.diff(intervals_time), decimals=decimals))) == 1
+
+
 def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
     """**Interval input sanitization**
 
@@ -111,23 +132,53 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
         successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time)
 
         if np.all(successive_intervals) is False:
-            # If none of the differences between timestamps match
-            # the length of the R-R intervals in seconds,
-            # try converting milliseconds to seconds
-            converted_successive_intervals = _intervals_successive(
-                intervals, intervals_time=intervals_time / 1000
-            )
+            # Check whether intervals appear to be interpolated
+            if not _intervals_time_uniform(intervals_time):
+                # If none of the differences between timestamps match
+                # the length of the R-R intervals in seconds,
+                # try converting milliseconds to seconds
+                converted_successive_intervals = _intervals_successive(
+                    intervals, intervals_time=intervals_time / 1000
+                )
 
-            # Check if converting to seconds increased the number of differences
-            # between timestamps that match the length of the R-R intervals in seconds
-            if len(converted_successive_intervals[converted_successive_intervals]) > len(
-                successive_intervals[successive_intervals]
-            ):
-                # Assume timestamps were passed in milliseconds and convert to seconds
-                intervals_time = intervals_time / 1000
+                # Check if converting to seconds increased the number of differences
+                # between timestamps that match the length of the R-R intervals in seconds
+                if len(converted_successive_intervals[converted_successive_intervals]) > len(
+                    successive_intervals[successive_intervals]
+                ):
+                    # Assume timestamps were passed in milliseconds and convert to seconds
+                    intervals_time = intervals_time / 1000
 
     if remove_missing:
         # Remove NaN R-R intervals, if any
         intervals_time = intervals_time[np.isfinite(intervals)]
         intervals = intervals[np.isfinite(intervals)]
     return intervals, intervals_time
+
+
+def _intervals_time_to_sampling_rate(
+    intervals_time, central_measure="mean"
+):
+    """Get sampling rate from timestamps
+
+    Useful for determining sampling rate used to interpolate intervals.
+
+    Parameters
+    ----------
+    intervals_time : list or array, optional
+        List or numpy array of timestamps corresponding to intervals, in seconds.
+    central_measure : str, optional
+        The measure of central tendancy used. Either ``"mean"`` (default), ``"median"``, or ``"mode"``.
+
+    Returns
+    ----------
+    bool
+        Whether the timestamps are uniformly spaced
+    """
+    if central_measure == "mean":
+        sampling_rate = float(1 / np.nanmean(np.diff(intervals_time)))
+    elif central_measure == "median":
+        sampling_rate = float(1 / np.nanmedian(np.diff(intervals_time)))
+    else:
+        sampling_rate = float(1 / scipy.stats.mode(np.diff(intervals_time)))
+    return sampling_rate
