@@ -1,6 +1,6 @@
 import numpy as np
 
-from .hrv_utils import _intervals_successive, _intervals_sanitize
+from .intervals_utils import _intervals_successive, _intervals_sanitize
 
 
 def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
