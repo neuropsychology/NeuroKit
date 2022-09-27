@@ -58,9 +58,7 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_di
 
     diff_intervals_time_ms = np.diff(intervals_time, n=n_diff) * 1000
 
-    abs_error_intervals_ref_time = abs(
-        diff_intervals_time_ms - np.diff(intervals[1:], n=n_diff - 1)
-    )
+    abs_error_intervals_ref_time = abs(diff_intervals_time_ms - np.diff(intervals[1:], n=n_diff - 1))
 
     successive_intervals = abs_error_intervals_ref_time <= thresh_unequal
 
@@ -68,7 +66,7 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_di
 
 
 def _intervals_time_uniform(intervals_time, decimals=3):
-    """Check whether timestamps are uniformly spaced
+    """Check whether timestamps are uniformly spaced.
 
     Useful for determining whether intervals have been interpolated.
 
@@ -83,6 +81,7 @@ def _intervals_time_uniform(intervals_time, decimals=3):
     ----------
     bool
         Whether the timestamps are uniformly spaced
+
     """
     return len(np.unique(np.round(np.diff(intervals_time), decimals=decimals))) == 1
 
@@ -137,9 +136,7 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
                 # If none of the differences between timestamps match
                 # the length of the R-R intervals in seconds,
                 # try converting milliseconds to seconds
-                converted_successive_intervals = _intervals_successive(
-                    intervals, intervals_time=intervals_time / 1000
-                )
+                converted_successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time / 1000)
 
                 # Check if converting to seconds increased the number of differences
                 # between timestamps that match the length of the R-R intervals in seconds
@@ -156,10 +153,8 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
     return intervals, intervals_time
 
 
-def _intervals_time_to_sampling_rate(
-    intervals_time, central_measure="mean"
-):
-    """Get sampling rate from timestamps
+def _intervals_time_to_sampling_rate(intervals_time, central_measure="mean"):
+    """Get sampling rate from timestamps.
 
     Useful for determining sampling rate used to interpolate intervals.
 
@@ -174,6 +169,7 @@ def _intervals_time_to_sampling_rate(
     ----------
     bool
         Whether the timestamps are uniformly spaced
+
     """
     if central_measure == "mean":
         sampling_rate = float(1 / np.nanmean(np.diff(intervals_time)))

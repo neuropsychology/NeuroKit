@@ -3,10 +3,9 @@ from warnings import warn
 
 import numpy as np
 
-from ..signal import signal_interpolate
-from .hrv_utils import _intervals_sanitize, _intervals_time_uniform, _intervals_time_to_sampling_rate
-
 from ..misc import NeuroKitWarning
+from ..signal import signal_interpolate
+from .intervals_utils import _intervals_sanitize, _intervals_time_to_sampling_rate, _intervals_time_uniform
 
 
 def intervals_preprocess(intervals, intervals_time=None, interpolate=False, interpolation_rate=100, **kwargs):
@@ -55,9 +54,7 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
 
         # Compute x-values of interpolated interval signal at requested sampling rate.
         x_new = np.arange(
-            start=intervals_time[0],
-            stop=intervals_time[-1] + 1 / interpolation_rate,
-            step=1 / interpolation_rate,
+            start=intervals_time[0], stop=intervals_time[-1] + 1 / interpolation_rate, step=1 / interpolation_rate,
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
