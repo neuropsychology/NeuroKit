@@ -1,6 +1,7 @@
 import numpy as np
 
 from .intervals_successive import intervals_successive
+from .intervals_sanitize import intervals_sanitize
 
 
 def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
@@ -38,21 +39,9 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
       hrv_indices
 
     """
-    if intervals is None:
-        return None
-    else:
-        # Ensure that input is numpy array
-        intervals = np.array(intervals)
-
-    if intervals_time is None:
-        intervals_time = np.nancumsum(intervals) / 1000
-    else:
-        # Ensure that input is numpy array
-        intervals_time = np.array(intervals_time)
-
-    # Remove missing or infinite values
-    intervals_time = intervals_time[np.isfinite(intervals)]
-    intervals = intervals[np.isfinite(intervals)]
+    intervals, intervals_time = intervals_sanitize(
+        intervals, intervals_time=intervals_time, remove_missing=True
+    )
 
     # Check for non successive intervals in case of missing data
     non_successive_indices = np.arange(1, len(intervals_time))[
@@ -64,7 +53,9 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     # (with no missing data there should be N_intervals + 1 peaks)
     to_insert_indices = np.concatenate((np.array([0]), non_successive_indices))
 
-    times_to_insert = intervals_time[to_insert_indices] - intervals[to_insert_indices] / 1000
+    times_to_insert = (
+        intervals_time[to_insert_indices] - intervals[to_insert_indices] / 1000
+    )
 
     peaks_time = np.sort(np.concatenate((intervals_time, times_to_insert)))
     # convert seconds to sample indices

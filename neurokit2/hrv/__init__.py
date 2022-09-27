@@ -6,7 +6,6 @@ from .hrv_rqa import hrv_rqa
 from .hrv_rsa import hrv_rsa
 from .hrv_time import hrv_time
 from .intervals_preprocess import intervals_preprocess
-from .intervals_sanitize import intervals_sanitize
 from .intervals_to_peaks import intervals_to_peaks
 
 __all__ = [
@@ -17,6 +16,5 @@ __all__ = [
     "hrv_rqa",
     "hrv",
     "intervals_preprocess",
-    "intervals_sanitize",
     "intervals_to_peaks",
 ]

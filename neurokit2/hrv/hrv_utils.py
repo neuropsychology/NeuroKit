@@ -3,7 +3,6 @@
 import numpy as np
 import pandas as pd
 
-from .intervals_sanitize import intervals_sanitize
 from .intervals_to_peaks import intervals_to_peaks
 
 
@@ -12,7 +11,7 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000):
         return None, None
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = np.diff(peaks) / sampling_rate * 1000
-    rri, rri_time = intervals_sanitize(rri)
+    rri, rri_time = _intervals_sanitize(rri)
     return rri, rri_time
 
 
@@ -98,6 +97,73 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_di
     return np.array(successive_intervals)
 
 
+def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
+    """**Interval input sanitization**
+
+    Parameters
+    ----------
+    intervals : list or array
+        List or numpy array of intervals, in milliseconds.
+    intervals_time : list or array, optional
+        List or numpy array of timestamps corresponding to intervals, in seconds.
+    remove_missing : bool, optional
+        Whether to remove NaNs and infinite values from intervals and timestamps.
+        The default is True.
+
+    Returns
+    -------
+    intervals : array
+        Sanitized intervals, in milliseconds.
+    intervals_time : array
+        Sanitized timestamps corresponding to intervals, in seconds.
+
+    Examples
+    ---------
+    .. ipython:: python
+
+      import neurokit2 as nk
+      ibi = [500, 400, 700, 500, 300, 800, 500]
+      ibi, ibi_time = intervals_sanitize(ibi)
+
+    """
+    if intervals is None:
+        return None, None
+    else:
+        # Ensure that input is numpy array
+        intervals = np.array(intervals)
+    if intervals_time is None:
+        # Compute the timestamps of the intervals in seconds
+        intervals_time = np.nancumsum(intervals / 1000)
+    else:
+        # Ensure that input is numpy array
+        intervals_time = np.array(intervals_time)
+
+        # Confirm that timestamps are in seconds
+        successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time)
+
+        if np.all(successive_intervals) is False:
+            # If none of the differences between timestamps match
+            # the length of the R-R intervals in seconds,
+            # try converting milliseconds to seconds
+            converted_successive_intervals = _intervals_successive(
+                intervals, intervals_time=intervals_time / 1000
+            )
+
+            # Check if converting to seconds increased the number of differences
+            # between timestamps that match the length of the R-R intervals in seconds
+            if len(converted_successive_intervals[converted_successive_intervals]) > len(
+                successive_intervals[successive_intervals]
+            ):
+                # Assume timestamps were passed in milliseconds and convert to seconds
+                intervals_time = intervals_time / 1000
+
+    if remove_missing:
+        # Remove NaN R-R intervals, if any
+        intervals_time = intervals_time[np.isfinite(intervals)]
+        intervals = intervals[np.isfinite(intervals)]
+    return intervals, intervals_time
+
+
 # =============================================================================
 # Internals
 # =============================================================================
@@ -144,7 +210,7 @@ def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
             rri_time = peaks["RRI_Time"]
         else:
             rri_time = None
-        rri, rri_time = intervals_sanitize(rri, rri_time=rri_time)
+        rri, rri_time = _intervals_sanitize(rri, rri_time=rri_time)
         return rri, rri_time, sampling_rate
 
     cols = cols[["Peak" in s for s in cols]]

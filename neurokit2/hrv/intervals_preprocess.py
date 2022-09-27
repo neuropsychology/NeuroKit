@@ -4,13 +4,37 @@ from warnings import warn
 import numpy as np
 
 from ..signal import signal_interpolate
-from .hrv_utils import intervals_sanitize
+from .hrv_utils import _intervals_sanitize
 
 from ..misc import NeuroKitWarning
 
 
 def intervals_preprocess(intervals, intervals_time=None, interpolate=False, interpolation_rate=100, **kwargs):
-    intervals, intervals_time = intervals_sanitize(intervals, intervals_time=intervals_time)
+    """**Interval preprocessing**
+
+    Parameters
+    ----------
+    intervals : list or array
+        List or numpy array of intervals, in milliseconds.
+    intervals_time : list or array, optional
+        List or numpy array of timestamps corresponding to intervals, in seconds.
+    interpolate : bool, optional
+        Whether to interpolate the interval signal. The default is False.
+    interpolation_rate : int, optional
+        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
+        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
+    **kwargs
+        Keyword arguments to be passed to :func:`.signal_interpolate`.
+
+    Returns
+    -------
+    intervals : array
+        Preprocessed intervals, in milliseconds.
+    intervals_time : array
+        Preprocessed timestamps corresponding to intervals, in seconds.
+
+    """
+    intervals, intervals_time = _intervals_sanitize(intervals, intervals_time=intervals_time)
 
     if interpolate is False:
         interpolation_rate = None
