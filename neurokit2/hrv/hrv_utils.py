@@ -80,7 +80,7 @@ def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
             rri_time = peaks["RRI_Time"]
         else:
             rri_time = None
-        rri, rri_time = _intervals_sanitize(rri, rri_time=rri_time)
+        rri, rri_time = _intervals_sanitize(rri, intervals_time=rri_time)
         return rri, rri_time, sampling_rate
 
     cols = cols[["Peak" in s for s in cols]]
