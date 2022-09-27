@@ -38,6 +38,9 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
       hrv_indices
 
     """
+    if intervals is None:
+        return None
+
     intervals, intervals_time = _intervals_sanitize(
         intervals, intervals_time=intervals_time, remove_missing=True
     )
