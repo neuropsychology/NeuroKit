@@ -11,7 +11,8 @@ from ..rsp import rsp_process
 from ..signal import (signal_filter, signal_interpolate, signal_rate,
                       signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from .hrv_utils import _hrv_format_input, _hrv_get_rri, _hrv_preprocess_rri
+from .hrv_utils import _hrv_format_input, _hrv_get_rri
+from .intervals_preprocess import intervals_preprocess
 
 
 def hrv_rsa(
@@ -360,15 +361,15 @@ def _hrv_rsa_gates(
     # Boundaries of rsa freq
     min_frequency = 0.12
     max_frequency = 0.40
-    
+
     # Retrived IBI and interpolate it
     rri, rri_time = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate)
 
     # Re-sample at 4 Hz
     desired_sampling_rate = 4
-   
-    rri, sampling_rate = _hrv_preprocess_rri(
-        rri, rri_time=rri_time, interpolate=True, interpolation_rate=desired_sampling_rate
+
+    rri, sampling_rate = intervals_preprocess(
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=desired_sampling_rate
     )
 
     # Sanitize parameters

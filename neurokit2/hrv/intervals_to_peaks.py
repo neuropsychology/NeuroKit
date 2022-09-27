@@ -1,7 +1,6 @@
 import numpy as np
 
-from .intervals_successive import intervals_successive
-from .intervals_sanitize import intervals_sanitize
+from .hrv_utils import _intervals_successive, _intervals_sanitize
 
 
 def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
@@ -39,13 +38,13 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
       hrv_indices
 
     """
-    intervals, intervals_time = intervals_sanitize(
+    intervals, intervals_time = _intervals_sanitize(
         intervals, intervals_time=intervals_time, remove_missing=True
     )
 
     # Check for non successive intervals in case of missing data
     non_successive_indices = np.arange(1, len(intervals_time))[
-        np.invert(intervals_successive(intervals, intervals_time))
+        np.invert(_intervals_successive(intervals, intervals_time))
     ]
 
     # The number of peaks should be the number of intervals

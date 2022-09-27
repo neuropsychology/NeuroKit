@@ -8,7 +8,8 @@ import pandas as pd
 from ..misc import NeuroKitWarning
 from ..signal.signal_power import _signal_power_instant_plot, signal_power
 from ..signal.signal_psd import signal_psd
-from .hrv_utils import _hrv_preprocess_rri, _hrv_format_input
+from .hrv_utils import _hrv_format_input
+from .intervals_preprocess import intervals_preprocess
 
 
 def hrv_frequency(
@@ -165,7 +166,7 @@ def hrv_frequency(
     rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     # Preprocess R-R intervals (interpolated at 100 Hz by default)
-    rri, sampling_rate = _hrv_preprocess_rri(
+    rri, sampling_rate = intervals_preprocess(
         rri, rri_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 
