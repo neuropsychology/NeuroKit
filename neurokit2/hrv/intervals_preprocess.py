@@ -3,13 +3,20 @@ from warnings import warn
 
 import numpy as np
 
-from ..signal import signal_interpolate
+from ..signal import signal_interpolate, signal_detrend
 from .hrv_utils import _intervals_sanitize
 
 from ..misc import NeuroKitWarning
 
 
-def intervals_preprocess(intervals, intervals_time=None, interpolate=False, interpolation_rate=100, **kwargs):
+def intervals_preprocess(
+    intervals,
+    intervals_time=None,
+    interpolate=False,
+    interpolation_rate=100,
+    detrend_method=None,
+    **kwargs
+):
     """**Interval preprocessing**
 
     Parameters
@@ -23,6 +30,12 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
     interpolation_rate : int, optional
         Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
         high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
+    detrend_method : str
+        Can be one of ``"polynomial"`` (traditional detrending of a given order) or
+        ``"tarvainen2002"`` to use the smoothness priors approach described by Tarvainen (2002)
+        (mostly used in HRV analyses as a lowpass filter to remove complex trends), ``"loess"`` for
+        LOESS smoothing trend removal or ``"locreg"`` for local linear regression (the *'runline'*
+        algorithm from chronux). By default None such that there is no detrending.
     **kwargs
         Keyword arguments to be passed to :func:`.signal_interpolate`.
 
@@ -34,11 +47,12 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
         Preprocessed timestamps corresponding to intervals, in seconds.
 
     """
-    intervals, intervals_time = _intervals_sanitize(intervals, intervals_time=intervals_time)
+    intervals, intervals_time = _intervals_sanitize(
+        intervals, intervals_time=intervals_time
+    )
 
     if interpolate is False:
         interpolation_rate = None
-
     else:
         # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
         # We considered an interpolation rate 4 Hz by default to match Kubios
@@ -52,7 +66,6 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
                 " Consider increasing the interpolation rate to at least 1 Hz.",
                 category=NeuroKitWarning,
             )
-
         # Compute x-values of interpolated interval signal at requested sampling rate.
         x_new = np.arange(
             start=intervals_time[0],
@@ -61,4 +74,7 @@ def intervals_preprocess(intervals, intervals_time=None, interpolate=False, inte
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
+    if detrend_method is not None:
+        intervals = signal_detrend(intervals, method=detrend_method)
+
     return intervals, interpolation_rate
