@@ -555,7 +555,8 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.hrv_nonlinear</span> <span class="kn">import</span> <span class="n">_hrv_nonlinear_show</span><span class="p">,</span> <span class="n">hrv_nonlinear</span>
 <span class="kn">from</span> <span class="nn">.hrv_rsa</span> <span class="kn">import</span> <span class="n">hrv_rsa</span>
 <span class="kn">from</span> <span class="nn">.hrv_time</span> <span class="kn">import</span> <span class="n">hrv_time</span>
-<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
+<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span>
+<span class="kn">from</span> <span class="nn">.intervals_preprocess</span> <span class="kn">import</span> <span class="n">intervals_preprocess</span>
 
 
 <div class="viewcode-block" id="hrv"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv">[docs]</a><span class="k">def</span> <span class="nf">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -576,7 +577,8 @@ title="Open an issue"
 <span class="sd">    peaks : dict</span>
 <span class="sd">        Samples at which R-peaks occur. Can be a list of indices or the output(s) of other</span>
 <span class="sd">        functions such as :func:`.ecg_peaks`, :func:`.ppg_peaks`, :func:`.ecg_process` or</span>
-<span class="sd">        :func:`bio_process`</span>
+<span class="sd">        :func:`bio_process`. Can also be a dict containing the keys `RRI` and `RRI_Time`</span>
+<span class="sd">        to directly pass the R-R intervals and their timestamps, respectively.</span>
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at</span>
 <span class="sd">        least twice as high as the highest frequency in vhf. By default 1000.</span>
@@ -675,7 +677,7 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Plot</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_hrv_plot</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_hrv_plot</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">spec</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -687,9 +689,7 @@ title="Open an issue"
 
     <span class="n">ax_psd</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-    <span class="n">spec_within</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span>
-        <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">subplot_spec</span><span class="o">=</span><span class="n">spec</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.05</span>
-    <span class="p">)</span>
+    <span class="n">spec_within</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">subplot_spec</span><span class="o">=</span><span class="n">spec</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
     <span class="n">ax_poincare</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec_within</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
     <span class="n">ax_marg_x</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec_within</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
     <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Poincaré Plot&quot;</span><span class="p">)</span>
@@ -698,8 +698,7 @@ title="Open an issue"
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
     <span class="c1"># Distribution of RR intervals</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_hrv_sanitize_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">ax_distrib</span> <span class="o">=</span> <span class="n">summary_plot</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_distrib</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Poincare plot</span>
@@ -707,7 +706,10 @@ title="Open an issue"
     <span class="n">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_poincare</span><span class="p">,</span> <span class="n">ax_marg_x</span><span class="o">=</span><span class="n">ax_marg_x</span><span class="p">,</span> <span class="n">ax_marg_y</span><span class="o">=</span><span class="n">ax_marg_y</span><span class="p">)</span>
 
     <span class="c1"># PSD plot</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_preprocess</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
     <span class="n">frequency_bands</span> <span class="o">=</span> <span class="n">out</span><span class="p">[[</span><span class="s2">&quot;ULF&quot;</span><span class="p">,</span> <span class="s2">&quot;VLF&quot;</span><span class="p">,</span> <span class="s2">&quot;LF&quot;</span><span class="p">,</span> <span class="s2">&quot;HF&quot;</span><span class="p">,</span> <span class="s2">&quot;VHF&quot;</span><span class="p">]]</span>
     <span class="n">_hrv_frequency_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">frequency_bands</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_psd</span><span class="p">)</span>
 </pre></div>

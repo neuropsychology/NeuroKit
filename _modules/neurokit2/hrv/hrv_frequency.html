@@ -555,7 +555,8 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_power</span> <span class="kn">import</span> <span class="n">_signal_power_instant_plot</span><span class="p">,</span> <span class="n">signal_power</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_psd</span> <span class="kn">import</span> <span class="n">signal_psd</span>
-<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
+<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span>
+<span class="kn">from</span> <span class="nn">.intervals_preprocess</span> <span class="kn">import</span> <span class="n">intervals_preprocess</span>
 
 
 <div class="viewcode-block" id="hrv_frequency"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_frequency">[docs]</a><span class="k">def</span> <span class="nf">hrv_frequency</span><span class="p">(</span>
@@ -608,6 +609,8 @@ title="Open an issue"
 <span class="sd">        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.</span>
 <span class="sd">        Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,</span>
 <span class="sd">        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.</span>
+<span class="sd">        Can also be a dict containing the keys `RRI` and `RRI_Time`</span>
+<span class="sd">        to directly pass the R-R intervals and their timestamps, respectively.</span>
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.</span>
 <span class="sd">    ulf : tuple, optional</span>
@@ -706,17 +709,12 @@ title="Open an issue"
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Sanitize input</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_hrv_sanitize_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># Detect actual sampling rate</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># If given peaks, compute R-R intervals (also referred to as NN) in milliseconds</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
-    <span class="c1"># Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span>
-        <span class="n">peaks</span><span class="p">,</span>
-        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-        <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="c1"># Preprocess R-R intervals (interpolated at 100 Hz by default)</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_preprocess</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="n">frequency_band</span> <span class="o">=</span> <span class="p">[</span><span class="n">ulf</span><span class="p">,</span> <span class="n">vlf</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">hf</span><span class="p">,</span> <span class="n">vhf</span><span class="p">]</span>

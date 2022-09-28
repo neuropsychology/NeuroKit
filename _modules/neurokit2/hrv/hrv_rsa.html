@@ -558,7 +558,8 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span>
                       <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_timefrequency</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_formatpeaks_sanitize</span>
-<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
+<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span><span class="p">,</span> <span class="n">_hrv_get_rri</span>
+<span class="kn">from</span> <span class="nn">.intervals_preprocess</span> <span class="kn">import</span> <span class="n">intervals_preprocess</span>
 
 
 <div class="viewcode-block" id="hrv_rsa"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_rsa">[docs]</a><span class="k">def</span> <span class="nf">hrv_rsa</span><span class="p">(</span>
@@ -684,11 +685,8 @@ title="Open an issue"
 <span class="sd">      Sciences, 1(06), 32.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">_hrv_sanitize_input</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># Detect actual sampling rate</span>
-        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rpeaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">signals</span><span class="p">,</span> <span class="n">ecg_period</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_rsa_formatinput</span><span class="p">(</span>
+    <span class="n">signals</span><span class="p">,</span> <span class="n">ecg_period</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_rsa_formatinput</span><span class="p">(</span>
         <span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span>
     <span class="p">)</span>
 
@@ -910,13 +908,15 @@ title="Open an issue"
     <span class="c1"># Boundaries of rsa freq</span>
     <span class="n">min_frequency</span> <span class="o">=</span> <span class="mf">0.12</span>
     <span class="n">max_frequency</span> <span class="o">=</span> <span class="mf">0.40</span>
+
     <span class="c1"># Retrived IBI and interpolate it</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="c1"># Re-sample at 4 Hz</span>
     <span class="n">desired_sampling_rate</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="n">rri</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
-        <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span>
+
+    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_preprocess</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span>
     <span class="p">)</span>
 
     <span class="c1"># Sanitize parameters</span>
@@ -1055,6 +1055,9 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_hrv_rsa_formatinput</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">)</span>
+
     <span class="c1"># Sanity Checks</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
         <span class="n">ecg_signals</span> <span class="o">=</span> <span class="n">ecg_signals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1109,17 +1112,7 @@ title="Open an issue"
     <span class="n">nonduplicates</span> <span class="o">=</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">[[</span><span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rsp_signals</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ecg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ecg_signals</span><span class="p">[</span><span class="n">nonduplicates</span><span class="p">],</span> <span class="n">rsp_signals</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># RSP signal</span>
-    <span class="k">if</span> <span class="s2">&quot;RSP_Clean&quot;</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Clean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="k">elif</span> <span class="s2">&quot;RSP_Raw&quot;</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="k">elif</span> <span class="s2">&quot;RSP&quot;</span> <span class="ow">in</span> <span class="n">signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">rsp_signal</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">ecg_period</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">rsp_signal</span>
+    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">ecg_period</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span>
 </pre></div>
 
               </div>

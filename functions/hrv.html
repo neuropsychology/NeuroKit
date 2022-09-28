@@ -771,7 +771,8 @@ function that aggregates results from the <a class="reference internal" href="#n
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which R-peaks occur. Can be a list of indices or the output(s) of other
 functions such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or
-<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code>. Can also be a dict containing the keys <cite>RRI</cite> and <cite>RRI_Time</cite>
+to directly pass the R-R intervals and their timestamps, respectively.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plots that are generated for each of the domains.</p></li>
@@ -818,7 +819,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[10]: </span><span class="go"></span>
 <span class="go">   HRV_MeanNN   HRV_SDNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
-<span class="go">0  694.756381  49.036043  ...            2.045876      0.155555</span>
+<span class="go">0  694.756381  49.036043  ...            2.045955      0.156187</span>
 
 <span class="go">[1 rows x 97 columns]</span>
 </pre></div>
@@ -866,7 +867,9 @@ intervals.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
 Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a></p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.
+Can also be a dict containing the keys <cite>RRI</cite> and <cite>RRI_Time</cite>
+to directly pass the R-R intervals and their timestamps, respectively.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will plot the distribution of R-R intervals.</p></li>
@@ -997,7 +1000,9 @@ recommended minima for HF, LF and LF/HF, respectively.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
 Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.</p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.
+Can also be a dict containing the keys <cite>RRI</cite> and <cite>RRI_Time</cite>
+to directly pass the R-R intervals and their timestamps, respectively.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.</p></li>
 <li><p><strong>ulf</strong> (<em>tuple, optional</em>) – Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).</p></li>
 <li><p><strong>vlf</strong> (<em>tuple, optional</em>) – Upper and lower limit of the very-low frequency band. By default (0.0033, 0.04).</p></li>
@@ -1172,7 +1177,9 @@ are not implemented yet (but soon).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
 Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.</p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>.
+Can also be a dict containing the keys <cite>RRI</cite> and <cite>RRI_Time</cite>
+to directly pass the R-R intervals and their timestamps, respectively.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a Poincaré plot, a scattergram, which plots each RR interval
@@ -1334,14 +1341,14 @@ when the signal to noise ratio is low, in <code class="docutils literal notransl
 <span class="go"># Get RSA features</span>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">{&#39;RSA_P2T_Mean&#39;: 0.07513513513513514,</span>
-<span class="go"> &#39;RSA_P2T_Mean_log&#39;: -2.588466984941679,</span>
-<span class="go"> &#39;RSA_P2T_SD&#39;: 0.07116575415580562,</span>
-<span class="go"> &#39;RSA_P2T_NoRSA&#39;: 2,</span>
-<span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.647618796135399,</span>
-<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.434537070042603,</span>
-<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.132334832457786,</span>
-<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16811239526491914}</span>
+<span class="go">{&#39;RSA_P2T_Mean&#39;: 0.08333333333333336,</span>
+<span class="go"> &#39;RSA_P2T_Mean_log&#39;: -2.484906649788,</span>
+<span class="go"> &#39;RSA_P2T_SD&#39;: 0.06978664226480946,</span>
+<span class="go"> &#39;RSA_P2T_NoRSA&#39;: 0,</span>
+<span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.6476187961354,</span>
+<span class="go"> &#39;RSA_Gates_Mean&#39;: 8.434240314518084,</span>
+<span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.1322996484586394,</span>
+<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16772920880079195}</span>
 
 <span class="go"># Get RSA as a continuous signal</span>
 <span class="gp">In [6]: </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1349,17 +1356,17 @@ when the signal to noise ratio is low, in <code class="docutils literal notransl
 <span class="gp">In [7]: </span><span class="n">rsa</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">       RSA_P2T  RSA_Gates</span>
-<span class="go">0         0.09   8.499485</span>
-<span class="go">1         0.09   8.499485</span>
-<span class="go">2         0.09   8.499485</span>
-<span class="go">3         0.09   8.499485</span>
-<span class="go">4         0.09   8.499485</span>
+<span class="go">0         0.09   8.499165</span>
+<span class="go">1         0.09   8.499165</span>
+<span class="go">2         0.09   8.499165</span>
+<span class="go">3         0.09   8.499165</span>
+<span class="go">4         0.09   8.499165</span>
 <span class="go">...        ...        ...</span>
-<span class="go">14995     0.04   8.729359</span>
-<span class="go">14996     0.04   8.729359</span>
-<span class="go">14997     0.04   8.729359</span>
-<span class="go">14998     0.04   8.729359</span>
-<span class="go">14999     0.04   8.729359</span>
+<span class="go">14995     0.08   8.734514</span>
+<span class="go">14996     0.08   8.734514</span>
+<span class="go">14997     0.08   8.734514</span>
+<span class="go">14998     0.08   8.734514</span>
+<span class="go">14999     0.08   8.734514</span>
 
 <span class="go">[15000 rows x 2 columns]</span>
 
@@ -1449,7 +1456,71 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.hrv"></span></section>
+<span class="target" id="module-neurokit2.hrv"></span><dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.hrv.intervals_preprocess">
+<span class="sig-name descname"><span class="pre">intervals_preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_preprocess.html#intervals_preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_preprocess" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Interval preprocessing</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intervals</strong> (<em>list or array</em>) – List or numpy array of intervals, in milliseconds.</p></li>
+<li><p><strong>intervals_time</strong> (<em>list or array, optional</em>) – List or numpy array of timestamps corresponding to intervals, in seconds.</p></li>
+<li><p><strong>interpolate</strong> (<em>bool, optional</em>) – Whether to interpolate the interval signal. The default is False.</p></li>
+<li><p><strong>interpolation_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
+high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments to be passed to <a class="reference internal" href="signal.html#neurokit2.signal_interpolate" title="neurokit2.signal_interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_interpolate()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>intervals</strong> (<em>array</em>) – Preprocessed intervals, in milliseconds.</p></li>
+<li><p><strong>intervals_time</strong> (<em>array</em>) – Preprocessed timestamps corresponding to intervals, in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.hrv.intervals_to_peaks">
+<span class="sig-name descname"><span class="pre">intervals_to_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_to_peaks.html#intervals_to_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_to_peaks" title="Permalink to this definition">#</a></dt>
+<dd><p>Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an ECG signal.</p>
+<p>This can be useful if you do not have raw peak indices and have only
+interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intervals</strong> (<em>list or array</em>) – List or numpy array of intervals, in milliseconds.</p></li>
+<li><p><strong>intervals_time</strong> (<em>list or array, optional</em>) – List or numpy array of timestamps corresponding to intervals, in seconds.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous signal in which the peaks occur.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – An array of integer values indicating the peak indices,
+with the first peak occurring at sample point 0.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">ibi</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
+
+<span class="gp">In [3]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">intervals_to_peaks</span><span class="p">(</span><span class="n">ibi</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">hrv_indices</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">    HRV_MeanNN     HRV_SDNN  HRV_SDANN1  ...  HRV_MaxNN   HRV_HTI  HRV_TINN</span>
+<span class="go">0  5285.714286  1704.336206         NaN  ...     8000.0  2.333333    2000.0</span>
+
+<span class="go">[1 rows x 24 columns]</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_intervals_to_peaks.png"><img alt="../_images/p_intervals_to_peaks.png" src="../_images/p_intervals_to_peaks.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
 </section>
 </section>
 

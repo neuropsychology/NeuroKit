@@ -551,7 +551,7 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">..complexity</span> <span class="kn">import</span> <span class="n">complexity_rqa</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_detrend</span>
-<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_get_rri</span><span class="p">,</span> <span class="n">_hrv_sanitize_input</span>
+<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span>
 
 
 <div class="viewcode-block" id="hrv_rqa"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_rqa">[docs]</a><span class="k">def</span> <span class="nf">hrv_rqa</span><span class="p">(</span>
@@ -631,12 +631,8 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_hrv_sanitize_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># Detect actual sampling rate</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># Compute R-R intervals (also referred to as NN) in milliseconds</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># If given peaks, compute R-R intervals (also referred to as NN) in milliseconds</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="c1"># Linear detrend (Zimatore, 2021)</span>
     <span class="n">rri</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;polynomial&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

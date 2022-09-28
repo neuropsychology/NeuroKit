@@ -1096,7 +1096,7 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">45</span>
+<span class="gh">Out[6]: </span><span class="go">3</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1128,7 +1128,7 @@ conservative.</p></li>
 <span class="gp">In [3]: </span><span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">find_knee</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">20</span>
+<span class="gh">Out[4]: </span><span class="go">22</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1142,42 +1142,6 @@ distributed computing systems workshops (pp. 166-171). IEEE.</p></li>
 </section>
 <section id="intervals-to-peaks">
 <h2><em>intervals_to_peaks()</em><a class="headerlink" href="#intervals-to-peaks" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.misc.intervals_to_peaks">
-<span class="sig-name descname"><span class="pre">intervals_to_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/misc/intervals_to_peaks.html#intervals_to_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.misc.intervals_to_peaks" title="Permalink to this definition">#</a></dt>
-<dd><p>Convenience function to convert intervals to peaks,
-such as from R-R intervals to R-peaks of an ECG signal.</p>
-<p>This can be useful if you do not have raw peak indices and have only
-interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>intervals</strong> (<em>list or array</em>) – List or numpy array of intervals.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – An array of integer values indicating the peak indices,
-with the first peak occurring at sample point 0.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [2]: </span><span class="n">ibi</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
-
-<span class="gp">In [3]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">intervals_to_peaks</span><span class="p">(</span><span class="n">ibi</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">hrv_indices</span>
-<span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">    HRV_MeanNN     HRV_SDNN  HRV_SDANN1  ...  HRV_MaxNN   HRV_HTI  HRV_TINN</span>
-<span class="go">0  5285.714286  1704.336206         NaN  ...     8000.0  2.333333    2000.0</span>
-
-<span class="go">[1 rows x 24 columns]</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_intervals_to_peaks.png"><img alt="../_images/p_intervals_to_peaks.png" src="../_images/p_intervals_to_peaks.png" style="width: 640.0px; height: 480.0px;" /></a>
-</dd></dl>
-
 </section>
 <section id="listify">
 <h2><em>listify()</em><a class="headerlink" href="#listify" title="Permalink to this headline">#</a></h2>
