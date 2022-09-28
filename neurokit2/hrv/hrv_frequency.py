@@ -8,7 +8,8 @@ import pandas as pd
 from ..misc import NeuroKitWarning
 from ..signal.signal_power import _signal_power_instant_plot, signal_power
 from ..signal.signal_psd import signal_psd
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
+from .intervals_preprocess import intervals_preprocess
 
 
 def hrv_frequency(
@@ -61,6 +62,8 @@ def hrv_frequency(
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
+        Can also be a dict containing the keys `RRI` and `RRI_Time`
+        to directly pass the R-R intervals and their timestamps, respectively.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.
     ulf : tuple, optional
@@ -159,17 +162,12 @@ def hrv_frequency(
     """
 
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
-    # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)
-    rri, sampling_rate = _hrv_get_rri(
-        peaks,
-        sampling_rate=sampling_rate,
-        interpolate=True,
-        interpolation_rate=interpolation_rate,
-        **kwargs
+    # Preprocess R-R intervals (interpolated at 100 Hz by default)
+    rri, sampling_rate = intervals_preprocess(
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]

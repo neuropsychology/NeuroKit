@@ -21,7 +21,7 @@ from ..complexity import (
 )
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -127,6 +127,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
+        Can also be a dict containing the keys `RRI` and `RRI_Time`
+        to directly pass the R-R intervals and their timestamps, respectively.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -203,12 +205,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     """
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
-
-    # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     # Initialize empty container for results
     out = {}
@@ -223,7 +221,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out = _hrv_nonlinear_poincare_hra(rri, out)
 
     # DFA
-    out = _hrv_dfa(peaks, rri, out, **kwargs)
+    out = _hrv_dfa(rri, out, **kwargs)
 
     # Complexity
     tolerance = 0.2 * np.std(rri, ddof=1)
@@ -280,7 +278,7 @@ def _hrv_nonlinear_poincare(rri, out):
     L = 4 * out["SD2"]
     out["CSI"] = L / T
     out["CVI"] = np.log10(L * T)
-    out["CSI_Modified"] = L**2 / T
+    out["CSI_Modified"] = L ** 2 / T
 
     return out
 
@@ -313,9 +311,9 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # Calculate the angles
     theta_all = abs(np.arctan(1) - np.arctan(y / x))  # phase angle LI - phase angle of i-th point
     # Calculate the radius
-    r = np.sqrt(x**2 + y**2)
+    r = np.sqrt(x ** 2 + y ** 2)
     # Sector areas
-    S_all = 1 / 2 * theta_all * r**2
+    S_all = 1 / 2 * theta_all * r ** 2
 
     # Guzik's Index (GI)
     den_GI = np.sum(dist_all)
@@ -341,7 +339,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd1d = np.sqrt(np.sum(dist_all[decelerate_indices] ** 2) / (N - 1))
     sd1a = np.sqrt(np.sum(dist_all[accelerate_indices] ** 2) / (N - 1))
 
-    sd1I = np.sqrt(sd1d**2 + sd1a**2)
+    sd1I = np.sqrt(sd1d ** 2 + sd1a ** 2)
     out["C1d"] = (sd1d / sd1I) ** 2
     out["C1a"] = (sd1a / sd1I) ** 2
     out["SD1d"] = sd1d  # SD1 deceleration
@@ -356,7 +354,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd2d = np.sqrt(longterm_dec + 0.5 * longterm_nodiff)
     sd2a = np.sqrt(longterm_acc + 0.5 * longterm_nodiff)
 
-    sd2I = np.sqrt(sd2d**2 + sd2a**2)
+    sd2I = np.sqrt(sd2d ** 2 + sd2a ** 2)
     out["C2d"] = (sd2d / sd2I) ** 2
     out["C2a"] = (sd2a / sd2I) ** 2
     out["SD2d"] = sd2d  # SD2 deceleration
@@ -364,9 +362,9 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # out["SD2I"] = sd2I  # identical with SD2
 
     # Total asymmerty (SDNN)
-    sdnnd = np.sqrt(0.5 * (sd1d**2 + sd2d**2))  # SDNN deceleration
-    sdnna = np.sqrt(0.5 * (sd1a**2 + sd2a**2))  # SDNN acceleration
-    sdnn = np.sqrt(sdnnd**2 + sdnna**2)  # should be similar to sdnn in hrv_time
+    sdnnd = np.sqrt(0.5 * (sd1d ** 2 + sd2d ** 2))  # SDNN deceleration
+    sdnna = np.sqrt(0.5 * (sd1a ** 2 + sd2a ** 2))  # SDNN acceleration
+    sdnn = np.sqrt(sdnnd ** 2 + sdnna ** 2)  # should be similar to sdnn in hrv_time
     out["Cd"] = (sdnnd / sdnn) ** 2
     out["Ca"] = (sdnna / sdnn) ** 2
     out["SDNNd"] = sdnnd
@@ -413,7 +411,7 @@ def _hrv_nonlinear_fragmentation(rri, out):
 # =============================================================================
 # DFA
 # =============================================================================
-def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
+def _hrv_dfa(rri, out, n_windows="default", **kwargs):
 
     # if "dfa_windows" in kwargs:
     #    dfa_windows = kwargs["dfa_windows"]
@@ -424,7 +422,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
     # Determine max beats
     if dfa_windows[1][1] is None:
-        max_beats = len(peaks) / 10
+        max_beats = (len(rri) + 1) / 10  # Number of peaks divided by 10
     else:
         max_beats = dfa_windows[1][1]
 
@@ -441,9 +439,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # For monofractal
     out["DFA_alpha1"], _ = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)
     # For multifractal
-    mdfa_alpha1, _ = fractal_dfa(
-        rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs
-    )
+    mdfa_alpha1, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs)
     for k in mdfa_alpha1.columns:
         out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
@@ -463,9 +459,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         # For monofractal
         out["DFA_alpha2"], _ = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)
         # For multifractal
-        mdfa_alpha2, _ = fractal_dfa(
-            rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs
-        )
+        mdfa_alpha2, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs)
         for k in mdfa_alpha2.columns:
             out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
 
@@ -523,9 +517,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     ax.imshow(np.rot90(f), extent=[ax1_min, ax1_max, ax2_min, ax2_max], aspect="auto")
 
     # Marginal densities
-    ax_marg_x.hist(
-        ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none"
-    )
+    ax_marg_x.hist(ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none")
     ax_marg_y.hist(
         ax2,
         bins=int(len(ax2) / 10),
@@ -544,9 +536,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     kde2 = scipy.stats.gaussian_kde(ax2)
     x2_plot = np.linspace(ax2_min, ax2_max, len(ax2))
     x2_dens = kde2.evaluate(x2_plot)
-    ax_marg_y.fill_betweenx(
-        x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2
-    )
+    ax_marg_y.fill_betweenx(x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2)
 
     # Turn off marginal axes labels
     ax_marg_x.axis("off")
@@ -557,9 +547,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     width = 2 * sd2 + 1
     height = 2 * sd1 + 1
     xy = (mean_heart_period, mean_heart_period)
-    ellipse = matplotlib.patches.Ellipse(
-        xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False
-    )
+    ellipse = matplotlib.patches.Ellipse(xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False)
     ellipse.set_alpha(0.5)
     ellipse.set_facecolor("#2196F3")
     ax.add_patch(ellipse)
@@ -571,7 +559,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     yc = ax2 - xy[1]
     xct = xc * cos_angle - yc * sin_angle
     yct = xc * sin_angle + yc * cos_angle
-    rad_cc = (xct**2 / (width / 2.0) ** 2) + (yct**2 / (height / 2.0) ** 2)
+    rad_cc = (xct ** 2 / (width / 2.0) ** 2) + (yct ** 2 / (height / 2.0) ** 2)
 
     points = np.where(rad_cc > 1)[0]
     ax.plot(ax1[points], ax2[points], "o", color="k", alpha=0.5, markersize=4)
