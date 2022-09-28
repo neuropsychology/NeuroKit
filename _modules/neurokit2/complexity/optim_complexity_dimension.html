@@ -619,9 +619,8 @@ title="Open an issue"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    delay : int</span>
-<span class="sd">        Time delay (often denoted &#39;Tau&#39; :math:`\\tau`, sometimes referred to as &#39;lag&#39;) in samples.</span>
-<span class="sd">        See :func:`complexity_delay` to choose the optimal value for this parameter.</span>
+<span class="sd">    dimension : int</span>
+<span class="sd">        Optimal embedding dimension.</span>
 <span class="sd">    parameters : dict</span>
 <span class="sd">        A dictionary containing additional information regarding the parameters used</span>
 <span class="sd">        to compute the optimal dimension.</span>
@@ -725,9 +724,7 @@ title="Open an issue"
             <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fnn&quot;</span><span class="p">]:</span>
-        <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">_embedding_dimension_ffn</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+        <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">_embedding_dimension_ffn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="o">=</span><span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">min_dimension</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f3</span> <span class="o">&lt;=</span> <span class="mf">1.85</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">f3</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">f3</span><span class="p">)]))</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
@@ -780,26 +777,22 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_dimension_afn</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension_seq</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;AFN&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;AFN.&quot;&quot;&quot;</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">_embedding_dimension_afn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">dimension_seq</span>
-        <span class="p">]</span>
+        <span class="p">[</span><span class="n">_embedding_dimension_afn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">dimension_seq</span><span class="p">]</span>
     <span class="p">)</span><span class="o">.</span><span class="n">T</span>
     <span class="n">E</span><span class="p">,</span> <span class="n">Es</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
 
     <span class="k">return</span> <span class="n">E</span><span class="p">,</span> <span class="n">Es</span>
 
 
-<span class="k">def</span> <span class="nf">_embedding_dimension_afn_d</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns E(d) and E^*(d) for the AFN method for a single d.</span>
-<span class="sd">     E(d) and E^*(d) will be used to calculate E1(d) and E2(d).</span>
-<span class="sd">     E1(d) = E(d + 1)/E(d).</span>
-<span class="sd">     E2(d) = E*(d + 1)/E*(d).</span>
+<span class="k">def</span> <span class="nf">_embedding_dimension_afn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns E(d) and E^*(d) for the AFN method for a single d.</span>
+
+<span class="sd">    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).</span>
+<span class="sd">    E1(d) = E(d + 1)/E(d).</span>
+<span class="sd">    E2(d) = E*(d + 1)/E*(d).</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">d</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">_embedding_dimension_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">)</span>
 
@@ -830,19 +823,14 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">_embedding_dimension_ffn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">dimension_seq</span>
-        <span class="p">]</span>
+        <span class="p">[</span><span class="n">_embedding_dimension_ffn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">dimension_seq</span><span class="p">]</span>
     <span class="p">)</span><span class="o">.</span><span class="n">T</span>
     <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
 
     <span class="k">return</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span>
 
 
-<span class="k">def</span> <span class="nf">_embedding_dimension_ffn_d</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span>
-<span class="p">):</span>
+<span class="k">def</span> <span class="nf">_embedding_dimension_ffn_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return fraction of false nearest neighbors for a single d.&quot;&quot;&quot;</span>
     <span class="n">d</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">_embedding_dimension_d</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">)</span>
 
@@ -876,8 +864,8 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_dimension_neighbors</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxnum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the</span>
-<span class="sd">    given array using SciPy&#39;s KDTree search.</span>
+    <span class="sd">&quot;&quot;&quot;Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given</span>
+<span class="sd">    array using SciPy&#39;s KDTree search.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -918,9 +906,7 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;euclidean&quot;</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Unknown metric. Should be one of &quot;cityblock&quot;, &#39;</span> <span class="s1">&#39;&quot;euclidean&quot;, or &quot;chebyshev&quot;.&#39;</span>
-        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown metric. Should be one of &quot;cityblock&quot;, &#39;</span> <span class="s1">&#39;&quot;euclidean&quot;, or &quot;chebyshev&quot;.&#39;</span><span class="p">)</span>
 
     <span class="n">tree</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">cKDTree</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># pylint: disable=E1102</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
