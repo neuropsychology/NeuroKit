@@ -177,9 +177,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             )
 
     elif method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(
-            signal, dimension_seq=dimension_seq, delay=delay, **kwargs
-        )
+        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
 
@@ -232,26 +230,22 @@ def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
 
 
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
-    """AFN"""
+    """AFN."""
     values = np.asarray(
-        [
-            _embedding_dimension_afn_d(signal, dimension, delay, **kwargs)
-            for dimension in dimension_seq
-        ]
+        [_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]
     ).T
     E, Es = values[0, :], values[1, :]
 
     return E, Es
 
 
-def _embedding_dimension_afn_d(
-    signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs
-):
-    """
-    Returns E(d) and E^*(d) for the AFN method for a single d.
-     E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
-     E1(d) = E(d + 1)/E(d).
-     E2(d) = E*(d + 1)/E*(d).
+def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs):
+    """Returns E(d) and E^*(d) for the AFN method for a single d.
+
+    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
+    E1(d) = E(d + 1)/E(d).
+    E2(d) = E*(d + 1)/E*(d).
+
     """
     d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
 
@@ -282,19 +276,14 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, **kw
 
     """
     values = np.asarray(
-        [
-            _embedding_dimension_ffn_d(signal, dimension, delay, R=R, A=A, **kwargs)
-            for dimension in dimension_seq
-        ]
+        [_embedding_dimension_ffn_d(signal, dimension, delay, R=R, A=A, **kwargs) for dimension in dimension_seq]
     ).T
     f1, f2, f3 = values[0, :], values[1, :], values[2, :]
 
     return f1, f2, f3
 
 
-def _embedding_dimension_ffn_d(
-    signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None
-):
+def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
     """Return fraction of false nearest neighbors for a single d."""
     d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
 
@@ -328,8 +317,8 @@ def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", windo
 
 
 def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None, show=False):
-    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the
-    given array using SciPy's KDTree search.
+    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
+    array using SciPy's KDTree search.
 
     Parameters
     ----------
@@ -370,9 +359,7 @@ def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None,
     elif metric == "euclidean":
         p = 2
     else:
-        raise ValueError(
-            'Unknown metric. Should be one of "cityblock", ' '"euclidean", or "chebyshev".'
-        )
+        raise ValueError('Unknown metric. Should be one of "cityblock", ' '"euclidean", or "chebyshev".')
 
     tree = scipy.spatial.cKDTree(y)  # pylint: disable=E1102
     n = len(y)
