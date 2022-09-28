@@ -72,9 +72,8 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
     Returns
     -------
-    delay : int
-        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
-        See :func:`complexity_delay` to choose the optimal value for this parameter.
+    dimension : int
+        Optimal embedding dimension.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
         to compute the optimal dimension.
