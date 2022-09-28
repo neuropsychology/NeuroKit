@@ -556,7 +556,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.hrv_rsa</span> <span class="kn">import</span> <span class="n">hrv_rsa</span>
 <span class="kn">from</span> <span class="nn">.hrv_time</span> <span class="kn">import</span> <span class="n">hrv_time</span>
 <span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span>
-<span class="kn">from</span> <span class="nn">.intervals_preprocess</span> <span class="kn">import</span> <span class="n">intervals_preprocess</span>
+<span class="kn">from</span> <span class="nn">.intervals_process</span> <span class="kn">import</span> <span class="n">intervals_process</span>
 
 
 <div class="viewcode-block" id="hrv"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv">[docs]</a><span class="k">def</span> <span class="nf">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -706,7 +706,7 @@ title="Open an issue"
     <span class="n">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_poincare</span><span class="p">,</span> <span class="n">ax_marg_x</span><span class="o">=</span><span class="n">ax_marg_x</span><span class="p">,</span> <span class="n">ax_marg_y</span><span class="o">=</span><span class="n">ax_marg_y</span><span class="p">)</span>
 
     <span class="c1"># PSD plot</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_preprocess</span><span class="p">(</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_process</span><span class="p">(</span>
         <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 

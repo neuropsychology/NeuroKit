@@ -559,7 +559,7 @@ title="Open an issue"
                       <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_timefrequency</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_formatpeaks_sanitize</span>
 <span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span><span class="p">,</span> <span class="n">_hrv_get_rri</span>
-<span class="kn">from</span> <span class="nn">.intervals_preprocess</span> <span class="kn">import</span> <span class="n">intervals_preprocess</span>
+<span class="kn">from</span> <span class="nn">.intervals_process</span> <span class="kn">import</span> <span class="n">intervals_process</span>
 
 
 <div class="viewcode-block" id="hrv_rsa"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_rsa">[docs]</a><span class="k">def</span> <span class="nf">hrv_rsa</span><span class="p">(</span>
@@ -915,7 +915,7 @@ title="Open an issue"
     <span class="c1"># Re-sample at 4 Hz</span>
     <span class="n">desired_sampling_rate</span> <span class="o">=</span> <span class="mi">4</span>
 
-    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_preprocess</span><span class="p">(</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_process</span><span class="p">(</span>
         <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span>
     <span class="p">)</span>
 
