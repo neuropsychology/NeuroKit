@@ -9,7 +9,12 @@ from .hrv_utils import _intervals_sanitize
 
 
 def intervals_preprocess(
-    intervals, intervals_time=None, interpolate=False, interpolation_rate=100, detrend_method=None, **kwargs
+    intervals,
+    intervals_time=None,
+    interpolate=False,
+    interpolation_rate=100,
+    detrend_method=None,
+    **kwargs
 ):
     """**Interval preprocessing**
 
@@ -40,8 +45,37 @@ def intervals_preprocess(
     intervals_time : array
         Preprocessed timestamps corresponding to intervals, in seconds.
 
+    Examples
+    --------
+    **Example 1**: With interpolation and detrending
+    .. ipython:: python
+      import neurokit2 as nk
+      import matplotlib.pyplot as plt
+      plt.rc('font', size=8)
+      # Download data
+      data = nk.data("bio_resting_5min_100hz")
+      # Clean signal and find peaks
+      ecg_cleaned = nk.ecg_clean(data["ECG"], sampling_rate=100)
+      peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
+      # Convert peaks to intervals
+      rri = np.diff(peaks) / sampling_rate * 1000
+      rri_time = np.array(peaks[1:]) / sampling_rate
+      # Compute HRV indices
+      @savefig p_intervals_preprocess1.png scale=100%
+      plt.figure()
+      plt.plot(intervals_time, intervals, label="Original intervals")
+      intervals, intervals_time = intervals_preprocess(rri,
+                                                      intervals_time=rri_time,
+                                                      interpolate=True,
+                                                      interpolation_rate=100,
+                                                      detrend_method="tarvainen2002")
+      plt.plot(intervals_time, intervals, label="Preprocessed intervals")
+      plt.xlabel("Time (seconds)")
+      plt.ylabel("Interbeat intervals (milliseconds)")
+      @suppress
+      plt.close()
+
     """
-    intervals, intervals_time = _intervals_sanitize(intervals, intervals_time=intervals_time)
 
     if interpolate is False:
         interpolation_rate = None
@@ -60,11 +94,12 @@ def intervals_preprocess(
             )
         # Compute x-values of interpolated interval signal at requested sampling rate.
         x_new = np.arange(
-            start=intervals_time[0], stop=intervals_time[-1] + 1 / interpolation_rate, step=1 / interpolation_rate,
+            start=intervals_time[0],
+            stop=intervals_time[-1] + 1 / interpolation_rate,
+            step=1 / interpolation_rate,
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
     if detrend_method is not None:
         intervals = signal_detrend(intervals, method=detrend_method)
-
     return intervals, interpolation_rate
