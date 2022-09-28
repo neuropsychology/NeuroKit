@@ -20,7 +20,7 @@ from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegrain
 def entropy_multiscale(
     signal,
     scale="default",
-    dimension=2,
+    dimension=3,
     tolerance="sd",
     method="MSEn",
     show=False,
@@ -242,11 +242,9 @@ def entropy_multiscale(
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
-        )
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
     # Prevent multiple arguments error in case 'delay' is passed in kwargs
-    if "delay" in kwargs.keys():
+    if "delay" in kwargs:
         kwargs.pop("delay")
 
     # Parameters selection
@@ -361,7 +359,6 @@ def entropy_multiscale(
 # Internal
 # =============================================================================
 def _entropy_multiscale_plot(mse, info):
-
     fig = plt.figure(constrained_layout=False)
     fig.suptitle("Entropy values across scale factors")
     plt.title(f"(Total {info['Method']} = {np.round(mse, 3)})")
@@ -426,7 +423,7 @@ def _entropy_multiscale(coarse, algorithm, dimension, tolerance, refined=False, 
 
 
 def _validmean(x):
-    """Mean that is robust to NaN and Inf"""
+    """Mean that is robust to NaN and Inf."""
     x = np.array(x)[np.isfinite(x)]
     if len(x) == 0:
         return np.nan
