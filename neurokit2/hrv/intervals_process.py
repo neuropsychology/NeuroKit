@@ -8,7 +8,7 @@ from ..signal import signal_detrend, signal_interpolate
 from .hrv_utils import _intervals_sanitize
 
 
-def intervals_preprocess(
+def intervals_process(
     intervals,
     intervals_time=None,
     interpolate=False,
@@ -61,15 +61,15 @@ def intervals_preprocess(
       rri = np.diff(peaks) / sampling_rate * 1000
       rri_time = np.array(peaks[1:]) / sampling_rate
       # Compute HRV indices
-      @savefig p_intervals_preprocess1.png scale=100%
+      @savefig p_intervals_process1.png scale=100%
       plt.figure()
       plt.plot(intervals_time, intervals, label="Original intervals")
-      intervals, intervals_time = intervals_preprocess(rri,
+      intervals, intervals_time = intervals_process(rri,
                                                       intervals_time=rri_time,
                                                       interpolate=True,
                                                       interpolation_rate=100,
                                                       detrend_method="tarvainen2002")
-      plt.plot(intervals_time, intervals, label="Preprocessed intervals")
+      plt.plot(intervals_time, intervals, label="Processed intervals")
       plt.xlabel("Time (seconds)")
       plt.ylabel("Interbeat intervals (milliseconds)")
       @suppress
