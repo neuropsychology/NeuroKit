@@ -12,7 +12,7 @@ from ..signal import (signal_filter, signal_interpolate, signal_rate,
                       signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .hrv_utils import _hrv_format_input, _hrv_get_rri
-from .intervals_preprocess import intervals_preprocess
+from .intervals_process import intervals_process
 
 
 def hrv_rsa(
@@ -368,7 +368,7 @@ def _hrv_rsa_gates(
     # Re-sample at 4 Hz
     desired_sampling_rate = 4
 
-    rri, sampling_rate = intervals_preprocess(
+    rri, sampling_rate = intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=desired_sampling_rate
     )
 
