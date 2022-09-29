@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import inspect
 
-import numpy as np
-import pandas as pd
-
 
 def text_combine(info):
     """Reformat dictionary describing processing methods as strings to be inserted into HTML file."""
