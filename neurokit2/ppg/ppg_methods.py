@@ -129,7 +129,7 @@ def ppg_methods(
         if report_info["heart_rate"] is None:
             cutoff = "of 40 Hz"
         else:
-            cutoff = f'based of the heart rate of {report_info["heart_rate"]} bpm'
+            cutoff = f'based on the heart rate of {report_info["heart_rate"]} bpm'
 
         report_info["text_cleaning"] = (
             report_info["text_cleaning"]
@@ -143,10 +143,14 @@ def ppg_methods(
             + "physiological data. IEEE Journal of Translational Engineering in Health and Medicine"
             + ", 6, 1-11."
         )
-    # TODO: What if no cleaning? is it possible to set None/"none" to cleaning?
+    elif method_cleaning is None or method_cleaning.lower() == "none":
+        report_info["text_cleaning"] = (
+            report_info["text_cleaning"]
+            + "was directly used for peak detection without preprocessing."
+        )
     else:
         # just in case more methods are added
-        report_info["text_cleaning"] = "was cleanied following the " + method + " method."
+        report_info["text_cleaning"] = "was cleaned following the " + method + " method."
 
     # 2. Peaks
     # ----------

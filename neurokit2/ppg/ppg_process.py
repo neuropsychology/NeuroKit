@@ -67,13 +67,16 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
     ppg_signal = as_vector(ppg_signal)
     methods = ppg_methods(sampling_rate=sampling_rate, method=method, **kwargs)
 
-    # Clean signal
-    ppg_cleaned = ppg_clean(
-        ppg_signal,
-        sampling_rate=sampling_rate,
-        method=methods["method_cleaning"],
-        **methods["kwargs_cleaning"]
-    )
+    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
+        ppg_cleaned = ppg_signal
+    else:
+        # Clean signal
+        ppg_cleaned = ppg_clean(
+            ppg_signal,
+            sampling_rate=sampling_rate,
+            method=methods["method_cleaning"],
+            **methods["kwargs_cleaning"]
+        )
 
     # Find peaks
     info = ppg_findpeaks(
