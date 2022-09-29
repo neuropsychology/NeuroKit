@@ -5,7 +5,11 @@ import numpy as np
 
 from ..misc import NeuroKitWarning
 from ..signal import signal_detrend, signal_interpolate
-from .hrv_utils import _intervals_sanitize
+from .intervals_utils import (
+    _intervals_sanitize,
+    _intervals_time_to_sampling_rate,
+    _intervals_time_uniform,
+)
 
 
 def intervals_process(
@@ -13,7 +17,7 @@ def intervals_process(
     intervals_time=None,
     interpolate=False,
     interpolation_rate=100,
-    detrend_method=None,
+    detrend=None,
     **kwargs
 ):
     """**Interval preprocessing**
@@ -29,7 +33,7 @@ def intervals_process(
     interpolation_rate : int, optional
         Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
         high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
-    detrend_method : str
+    detrend : str
         Can be one of ``"polynomial"`` (traditional detrending of a given order) or
         ``"tarvainen2002"`` to use the smoothness priors approach described by Tarvainen (2002)
         (mostly used in HRV analyses as a lowpass filter to remove complex trends), ``"loess"`` for
@@ -68,7 +72,7 @@ def intervals_process(
                                                       intervals_time=rri_time,
                                                       interpolate=True,
                                                       interpolation_rate=100,
-                                                      detrend_method="tarvainen2002")
+                                                      detrend="tarvainen2002")
       plt.plot(intervals_time, intervals, label="Processed intervals")
       plt.xlabel("Time (seconds)")
       plt.ylabel("Interbeat intervals (milliseconds)")
@@ -81,7 +85,9 @@ def intervals_process(
 
     if interpolate is False:
         interpolation_rate = None
-    else:
+
+    if interpolation_rate is not None:
+
         # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
         # We considered an interpolation rate 4 Hz by default to match Kubios
         # but in case of some applications with high heart rates we decided to make it 100 Hz
@@ -102,6 +108,12 @@ def intervals_process(
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
-    if detrend_method is not None:
-        intervals = signal_detrend(intervals, method=detrend_method)
+    else:
+        # check if intervals appear to be already interpolated
+        if _intervals_time_uniform(intervals_time):
+            # get sampling rate used for interpolation
+            interpolation_rate = _intervals_time_to_sampling_rate(intervals_time)
+
+    if detrend is not None:
+        intervals = signal_detrend(intervals, method=detrend)
     return intervals, interpolation_rate

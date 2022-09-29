@@ -92,6 +92,8 @@ def hrv_frequency(
     interpolation_rate : int, optional
         Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
         high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
+        To not interpolate, set interpolation_rate to None (in case the interbeat intervals are already
+        interpolated or when using the ``"lombscargle"`` psd_method for which interpolation is not required).
     **kwargs
         Additional other arguments.
 
@@ -170,6 +172,11 @@ def hrv_frequency(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 
+    if interpolation_rate is None:
+        t = rri_time
+    else:
+        t = None
+
     frequency_band = [ulf, vlf, lf, hf, vhf]
 
     # Find maximum frequency
@@ -184,6 +191,7 @@ def hrv_frequency(
         show=False,
         normalize=normalize,
         order_criteria=order_criteria,
+        t=t,
         **kwargs
     )
 
@@ -228,6 +236,7 @@ def hrv_frequency(
             order_criteria=order_criteria,
             normalize=normalize,
             max_frequency=max_frequency,
+            t=t,
         )
     return out
 
@@ -245,6 +254,7 @@ def _hrv_frequency_show(
     order_criteria=None,
     normalize=True,
     max_frequency=0.5,
+    t=None,
     **kwargs
 ):
 
@@ -273,6 +283,7 @@ def _hrv_frequency_show(
         max_frequency=max_frequency,
         order_criteria=order_criteria,
         normalize=normalize,
+        t=t,
     )
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)
