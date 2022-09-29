@@ -2,11 +2,15 @@ import numpy as np
 from .ecg_clean import ecg_clean
 
 
-def ecg_invert(ecg_signal, sampling_rate=1000):
-    if _ecg_inverted(ecg_signal, sampling_rate=sampling_rate):
-        return ecg_signal * -1 + 2 * np.nanmean(ecg_signal)
+def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
+    inverted_ecg_signal = ecg_signal * -1 + 2 * np.nanmean(ecg_signal)
+    if check_inverted:
+        if _ecg_inverted(ecg_signal, sampling_rate=sampling_rate):
+            return inverted_ecg_signal
+        else:
+            return ecg_signal
     else:
-        return ecg_signal
+        return inverted_ecg_signal
 
 
 def _ecg_inverted(ecg_signal, sampling_rate=1000):
