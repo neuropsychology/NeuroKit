@@ -5,7 +5,7 @@ import pandas as pd
 import scipy.stats
 
 from ..stats import mad, summary_plot
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
 
 
 def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -32,7 +32,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     peaks : dict
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
-        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`
+        :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
+        Can also be a dict containing the keys `RRI` and `RRI_Time`
+        to directly pass the R-R intervals and their timestamps, respectively.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -132,12 +134,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     """
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
-    # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
     diff_rri = np.diff(rri)
 
     out = {}  # Initialize empty container for results

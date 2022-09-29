@@ -8,7 +8,8 @@ from .hrv_frequency import _hrv_frequency_show, hrv_frequency
 from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
 from .hrv_rsa import hrv_rsa
 from .hrv_time import hrv_time
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
+from .intervals_process import intervals_process
 
 
 def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -29,7 +30,8 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     peaks : dict
         Samples at which R-peaks occur. Can be a list of indices or the output(s) of other
         functions such as :func:`.ecg_peaks`, :func:`.ppg_peaks`, :func:`.ecg_process` or
-        :func:`bio_process`
+        :func:`bio_process`. Can also be a dict containing the keys `RRI` and `RRI_Time`
+        to directly pass the R-R intervals and their timestamps, respectively.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -128,7 +130,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
 # =============================================================================
 # Plot
 # =============================================================================
-def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
+def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
 
     fig = plt.figure(constrained_layout=False)
     spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
@@ -140,9 +142,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
 
     ax_psd = fig.add_subplot(spec[1, :-1])
 
-    spec_within = gs.GridSpecFromSubplotSpec(
-        4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05
-    )
+    spec_within = gs.GridSpecFromSubplotSpec(4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05)
     ax_poincare = fig.add_subplot(spec_within[1:4, 0:3])
     ax_marg_x = fig.add_subplot(spec_within[0, 0:3])
     ax_marg_x.set_title("Poincaré Plot")
@@ -151,8 +151,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
     plt.tight_layout(h_pad=0.5, w_pad=0.5)
 
     # Distribution of RR intervals
-    peaks = _hrv_sanitize_input(peaks)
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
     ax_distrib = summary_plot(rri, ax=ax_distrib, **kwargs)
 
     # Poincare plot
@@ -160,6 +159,9 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
     _hrv_nonlinear_show(rri, out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
 
     # PSD plot
-    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True)
+    rri, sampling_rate = intervals_process(
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
+    )
+
     frequency_bands = out[["ULF", "VLF", "LF", "HF", "VHF"]]
     _hrv_frequency_show(rri, frequency_bands, sampling_rate=sampling_rate, ax=ax_psd)

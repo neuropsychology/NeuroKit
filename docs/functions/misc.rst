@@ -33,10 +33,6 @@ Misc
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.find_knee
 
-*intervals_to_peaks()*
-""""""""""""""""""""""""""
-.. autofunction:: neurokit2.misc.intervals_to_peaks
-
 *listify()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.listify
