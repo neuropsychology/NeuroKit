@@ -11,10 +11,10 @@ def text_combine(info):
 
     ref = "<br><b>References</b><br>"
     if "references" in info.keys():
-        ref += "<ul>"
+        ref += "\n <ul> \n"
         for reference in info["references"]:
-            ref += "<li>" + reference + "</li>"
-        ref += "</ul>"
+            ref += "<li>" + reference + "</li>" + "\n"
+        ref += "\n </ul> \n"
     return preprocessing, ref
 
 
