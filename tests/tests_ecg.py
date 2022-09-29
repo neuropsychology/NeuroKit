@@ -260,6 +260,16 @@ def test_ecg_delineate():
     assert np.allclose(len(waves_cwt["ECG_T_Offsets"]), 22, atol=1)
 
 
+def test_ecg_invert():
+
+    sampling_rate = 500
+    noise = 0.05
+
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=3)
+    ecg_inverted = ecg * -1 + 2 * np.nanmean(ecg)
+    assert np.allclose((ecg - nk.ecg_invert(ecg_inverted)).mean(), 0, atol=1e-6)
+
+
 def test_ecg_intervalrelated():
 
     data = nk.data("bio_resting_5min_100hz")
