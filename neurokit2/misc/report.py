@@ -48,7 +48,8 @@ def html_combine(contents=[], file="myreport.html"):
                                }
                            </style>
                            </head>
-                           <body>"""
+                           <body>
+                           <h1>NeuroKit Processing Report</h1>"""
         )
         for content in contents:
             if isinstance(content, str):
