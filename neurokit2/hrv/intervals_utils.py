@@ -3,7 +3,7 @@ import numpy as np
 import scipy
 
 
-def _intervals_successive(intervals, intervals_time=None, thresh_unequal=10, n_diff=1):
+def _intervals_successive(intervals, intervals_time=None, thresh_unequal=10, n_diff=1, min_n_true=0):
     """Identify successive intervals.
 
     Identification of intervals that are consecutive
@@ -14,14 +14,15 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=10, n_d
     intervals : list or ndarray
         Intervals, e.g. breath-to-breath (BBI) or rpeak-to-rpeak (RRI)
     intervals_time : list or ndarray, optional
-        Time points corresponding to intervals, in seconds.
+        Time points corresponding to intervals, in seconds. Defaults to None,
+        in which case the cumulative sum of the intervals is used.
     thresh_unequal : int or float, optional
         Threshold at which the difference between time points is considered to
-        be unequal to the interval, in milliseconds.
+        be unequal to the interval, in milliseconds. Defaults to 10.
     n_diff: int, optional
         The number of times values are differenced.
         Can be used to check which values are valid for the n-th difference
-        assuming successive intervals.
+        assuming successive intervals. Defaults to 1.
 
     Returns
     ----------
