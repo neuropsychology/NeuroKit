@@ -1,140 +1,37 @@
-# -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
-from ..report import get_default_args
-from .ppg_clean import ppg_clean
-from .ppg_findpeaks import ppg_findpeaks
+from ..misc.report import html_combine, text_combine
+from .ppg_plot import ppg_plot
 
 
-def ppg_report(sampling_rate=1000, method="elgendi", method_cleaning="default", method_peaks="default", **kwargs):
-    """**Sanitize and describe methods for processing a PPG signal.**
+def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000}):
+    """Create report containing description and figures of processing.
 
-    This function first sanitizes the input, i.e.,
-    if the specific cleaning or peaks methods are "default",
-    then it adjusts based on the "general" default,
-    and then it creates the pieces of text describing each method.
-
-    Parameters
-    ----------
-    sampling_rate : int
-        The sampling frequency of the raw PPG signal (in Hz, i.e., samples/second).
-    method : str
-        The method used for cleaning and peak finding if ``"method_cleaning"``
-        and ``"method_peaks"`` are set to ``"default"``. Can be one of ``"elgendi"``.
-        Defaults to ``"elgendi"``.
-    method_cleaning: str
-        The method used to clean the raw PPG signal. If ``"default"``,
-        will be set to the value of ``"method"``. Defaults to ``"default"``.
-        For more information, see the ``"method"`` argument
-        of :func:`.ppg_clean`.
-    method_peaks: str
-        The method used to find peaks. If ``"default"``,
-        will be set to the value of ``"method"``. Defaults to ``"default"``.
-        For more information, see the ``"method"`` argument
-        of :func:`.ppg_findpeaks`.
-    **kwargs
-        Other arguments to be passed to :func:`.ppg_clean` and
-        :func:`.ppg_findpeaks`.
-
-    Returns
-    -------
-    report_info : dict
-        A dictionary containing the keyword arguments passed to the cleaning
-        and peak finding functions, text describing the methods, and the corresponding
-        references.
-
-    See Also
+    Examples
     --------
-    ppg_process, ppg_clean, ppg_findpeaks
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ppg_report(file="myreport.html")
+
     """
-    # Sanitize inputs
-    if method_cleaning == "default":
-        method_cleaning = method
-    if method_peaks == "default":
-        method_peaks = method
-    # Create dictionary with all inputs
-    report_info = {
-        "sampling_rate": sampling_rate,
-        "method": method,
-        "method_cleaning": method_cleaning,
-        "method_peaks": method_peaks,
-        **kwargs,
-    }
 
-    # Get arguments to be passed to cleaning and peak finding functions
+    description, ref = text_combine(info)
+    summary_table = ppg_table(signals)
+    fig = ppg_plot(signals, sampling_rate=info["sampling_rate"], static=False)
+    contents = [description, summary_table, fig, ref]
+    html_combine(contents=contents, file=file)
 
-    defaults_cleaning = get_default_args(ppg_clean)
-    defaults_peaks = get_default_args(ppg_findpeaks)
 
-    kwargs_cleaning = {}
-    for key in defaults_cleaning.keys():
-        if key not in ["sampling_rate", "method"]:
-            # if arguments have not been specified by user,
-            # set them to the defaults
-            if key not in report_info.keys():
-                report_info[key] = defaults_cleaning[key]
-            elif report_info[key] != defaults_cleaning[key]:
-                kwargs_cleaning[key] = report_info[key]
-    kwargs_peaks = {}
+def ppg_table(signals):
+    """Create table to summarize statistics of a PPG signal."""
 
-    for key in defaults_peaks.keys():
-        if key not in ["sampling_rate", "method"]:
-            # if arguments have not been specified by user,
-            # set them to the defaults
-            if key not in report_info.keys():
-                report_info[key] = defaults_peaks[key]
-            elif report_info[key] != defaults_peaks[key]:
-                kwargs_peaks[key] = report_info[key]
-    # save keyword arguments in dictionary
-    report_info["kwargs_cleaning"] = kwargs_cleaning
-    report_info["kwargs_peaks"] = kwargs_peaks
-
-    refs = []
-
-    if method_cleaning in ["elgendi"]:
-        report_info["text_cleaning"] = (
-            """The data cleaning was performed using the Elgendi et al. (2013) method:
-                         the raw PPG signal (sampled at """
-            + str(report_info["sampling_rate"])
-            + """ Hz) was filtered with a bandpass filter ([0.5, 8], butterworth 3rd order).
-                         """
-        )
-        refs.append(
-            """Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
-          Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.
-          PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585."""
-        )
-    elif method_cleaning in ["nabian2018"]:
-        if report_info["heart_rate"] is None:
-            text_cleaning_cutoff = "cutoff = 40"
-        else:
-            text_cleaning_cutoff = "cutoff frequency determined based on provided heart rate of " + str(
-                report_info["heart_rate"]
-            )
-        report_info["text_cleaning"] = (
-            """The data cleaning was performed using the Nabian et al. (2018) method:
-                         the raw PPG signal (sampled at """
-            + str(report_info["sampling_rate"])
-            + """ Hz) was filtered with a lowpass filter ("""
-            + text_cleaning_cutoff
-            + """, butterworth 2nd order).
-                         """
-        )
-        refs.append(
-            """Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S.
-          (2018). An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological
-          Data. IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000"""
-        )
-    else:
-        # just in case more methods are added
-        report_info["text_cleaning"] = "The data cleaning was performed using the " + method + " method."
-    if method_peaks in ["elgendi"]:
-        report_info["text_peaks"] = "The peak detection was carried out using the Elgendi et al. (2013) method."
-        refs.append(
-            """Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
-          Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.
-          PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585."""
-        )
-    report_info["references"] = list(np.unique(refs))
-
-    return report_info
+    summary = {}
+    # currently only implemented for PPG
+    summary["PPG_Rate_Mean"] = np.mean(signals["PPG_Rate"])
+    summary["PPG_Rate_SD"] = np.std(signals["PPG_Rate"])
+    summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
+    print(summary_table.to_markdown(index=None))
+    return "<br><b>Summary table</b><br>" + summary_table.to_html(index=None)
