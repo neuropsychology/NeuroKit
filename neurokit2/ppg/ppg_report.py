@@ -20,7 +20,13 @@ def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000})
 
     description, ref = text_combine(info)
     summary_table = ppg_table(signals)
-    fig = ppg_plot(signals, sampling_rate=info["sampling_rate"], static=False)
+    fig = '<h2 style="background-color: #FB661C">Visualization</h1>'
+    fig += (
+        ppg_plot(signals, sampling_rate=info["sampling_rate"], static=False)
+        .to_html()
+        .split("<body>")[1]
+        .split("</body>")[0]
+    )
     contents = [description, summary_table, fig, ref]
     html_combine(contents=contents, file=file)
 
@@ -34,4 +40,7 @@ def ppg_table(signals):
     summary["PPG_Rate_SD"] = np.std(signals["PPG_Rate"])
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
     print(summary_table.to_markdown(index=None))
-    return "<br><b>Summary table</b><br>" + summary_table.to_html(index=None)
+    return (
+        '<h2 style="background-color: #D60574">Summary table</h1>'
+        + summary_table.to_html(index=None)
+    )
