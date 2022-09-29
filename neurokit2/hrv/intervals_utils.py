@@ -3,7 +3,7 @@ import numpy as np
 import scipy
 
 
-def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
+def _intervals_successive(intervals, intervals_time=None, thresh_unequal=10, n_diff=1):
     """Identify successive intervals.
 
     Identification of intervals that are consecutive
