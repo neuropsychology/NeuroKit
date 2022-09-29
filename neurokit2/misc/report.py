@@ -8,7 +8,6 @@ def text_combine(info):
     for key in ["text_cleaning", "text_peaks"]:
         if key in info.keys():
             preprocessing += info[key] + "<br>"
-
     ref = "<br><b>References</b><br>"
     if "references" in info.keys():
         ref += "\n <ul> \n"
@@ -22,7 +21,35 @@ def html_combine(contents=[], file="myreport.html"):
     """Combine figures and text in a single HTML document."""
     # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
     with open(file, "w") as page:
-        page.write("<html><head></head><body>" + "\n")
+        page.write(
+            r"""<html>
+                           <head>
+                           <style>
+                           h1 {
+                               text-align: center;
+                               font-family: Arial, Helvetica, sans-serif;
+                               }
+                           h2 {
+                               text-align: center;
+                               font-family: Arial, Helvetica, sans-serif;
+                               }
+                           p {
+                               text-align: left;
+                               font-family: Arial, Helvetica, sans-serif;
+                               }
+                           div {
+                               text-align: center;
+                               font-family: Arial, Helvetica, sans-serif;
+                               }
+                           ul {
+                               text-align: left;
+                               list-style-position: inside;
+                               font-family: Arial, Helvetica, sans-serif;
+                               }
+                           </style>
+                           </head>
+                           <body>"""
+        )
         for content in contents:
             if isinstance(content, str):
                 inner_html = content
