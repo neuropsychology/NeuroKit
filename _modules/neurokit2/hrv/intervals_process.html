@@ -552,7 +552,11 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_detrend</span><span class="p">,</span> <span class="n">signal_interpolate</span>
-<span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_intervals_sanitize</span>
+<span class="kn">from</span> <span class="nn">.intervals_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_intervals_sanitize</span><span class="p">,</span>
+    <span class="n">_intervals_time_to_sampling_rate</span><span class="p">,</span>
+    <span class="n">_intervals_time_uniform</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="intervals_process"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.intervals_process">[docs]</a><span class="k">def</span> <span class="nf">intervals_process</span><span class="p">(</span>
@@ -560,7 +564,7 @@ title="Open an issue"
     <span class="n">intervals_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">interpolation_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">detrend_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">detrend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Interval preprocessing**</span>
@@ -576,7 +580,7 @@ title="Open an issue"
 <span class="sd">    interpolation_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as</span>
 <span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</span>
-<span class="sd">    detrend_method : str</span>
+<span class="sd">    detrend : str</span>
 <span class="sd">        Can be one of ``&quot;polynomial&quot;`` (traditional detrending of a given order) or</span>
 <span class="sd">        ``&quot;tarvainen2002&quot;`` to use the smoothness priors approach described by Tarvainen (2002)</span>
 <span class="sd">        (mostly used in HRV analyses as a lowpass filter to remove complex trends), ``&quot;loess&quot;`` for</span>
@@ -615,7 +619,7 @@ title="Open an issue"
 <span class="sd">                                                      intervals_time=rri_time,</span>
 <span class="sd">                                                      interpolate=True,</span>
 <span class="sd">                                                      interpolation_rate=100,</span>
-<span class="sd">                                                      detrend_method=&quot;tarvainen2002&quot;)</span>
+<span class="sd">                                                      detrend=&quot;tarvainen2002&quot;)</span>
 <span class="sd">      plt.plot(intervals_time, intervals, label=&quot;Processed intervals&quot;)</span>
 <span class="sd">      plt.xlabel(&quot;Time (seconds)&quot;)</span>
 <span class="sd">      plt.ylabel(&quot;Interbeat intervals (milliseconds)&quot;)</span>
@@ -628,7 +632,9 @@ title="Open an issue"
 
     <span class="k">if</span> <span class="n">interpolate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">interpolation_rate</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">interpolation_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
         <span class="c1"># Rate should be at least 1 Hz (due to Nyquist &amp; frequencies we are interested in)</span>
         <span class="c1"># We considered an interpolation rate 4 Hz by default to match Kubios</span>
         <span class="c1"># but in case of some applications with high heart rates we decided to make it 100 Hz</span>
@@ -649,8 +655,14 @@ title="Open an issue"
         <span class="p">)</span>
 
         <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">,</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">detrend_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend_method</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># check if intervals appear to be already interpolated</span>
+        <span class="k">if</span> <span class="n">_intervals_time_uniform</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">):</span>
+            <span class="c1"># get sampling rate used for interpolation</span>
+            <span class="n">interpolation_rate</span> <span class="o">=</span> <span class="n">_intervals_time_to_sampling_rate</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">detrend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">interpolation_rate</span></div>
 </pre></div>
 

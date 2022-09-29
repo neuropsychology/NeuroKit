@@ -1060,7 +1060,9 @@ Normalization allows comparison between different PSD methods.</p></li>
 <li><p><strong>order_criteria</strong> (<em>str</em>) – The criteria to automatically select order in parametric PSD (only used for autoregressive
 (AR) methods such as <code class="docutils literal notranslate"><span class="pre">&quot;burg&quot;</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>interpolation_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
-high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</p></li>
+high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
+To not interpolate, set interpolation_rate to None (in case the interbeat intervals are already
+interpolated or when using the <code class="docutils literal notranslate"><span class="pre">&quot;lombscargle&quot;</span></code> psd_method for which interpolation is not required).</p></li>
 <li><p><strong>**kwargs</strong> – Additional other arguments.</p></li>
 </ul>
 </dd>
@@ -1505,7 +1507,7 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 <h3><em>intervals_process()</em><a class="headerlink" href="#intervals-process" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.intervals_process">
-<span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Interval preprocessing</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1515,7 +1517,7 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 <li><p><strong>interpolate</strong> (<em>bool, optional</em>) – Whether to interpolate the interval signal. The default is False.</p></li>
 <li><p><strong>interpolation_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
 high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</p></li>
-<li><p><strong>detrend_method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code> (traditional detrending of a given order) or
+<li><p><strong>detrend</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code> (traditional detrending of a given order) or
 <code class="docutils literal notranslate"><span class="pre">&quot;tarvainen2002&quot;</span></code> to use the smoothness priors approach described by Tarvainen (2002)
 (mostly used in HRV analyses as a lowpass filter to remove complex trends), <code class="docutils literal notranslate"><span class="pre">&quot;loess&quot;</span></code> for
 LOESS smoothing trend removal or <code class="docutils literal notranslate"><span class="pre">&quot;locreg&quot;</span></code> for local linear regression (the <em>‘runline’</em>
@@ -1555,7 +1557,7 @@ intervals, intervals_time = intervals_process(rri,</p>
 <div><p>intervals_time=rri_time,
 interpolate=True,
 interpolation_rate=100,
-detrend_method=”tarvainen2002”)</p>
+detrend=”tarvainen2002”)</p>
 </div></blockquote>
 <p>plt.plot(intervals_time, intervals, label=”Processed intervals”)
 plt.xlabel(“Time (seconds)”)
@@ -1610,7 +1612,7 @@ with the first peak occurring at sample point 0.</p>
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
 <span class="target" id="module-neurokit2.hrv"></span><dl class="py function">
 <dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Interval preprocessing</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1620,7 +1622,7 @@ with the first peak occurring at sample point 0.</p>
 <li><p><strong>interpolate</strong> (<em>bool, optional</em>) – Whether to interpolate the interval signal. The default is False.</p></li>
 <li><p><strong>interpolation_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
 high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</p></li>
-<li><p><strong>detrend_method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code> (traditional detrending of a given order) or
+<li><p><strong>detrend</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code> (traditional detrending of a given order) or
 <code class="docutils literal notranslate"><span class="pre">&quot;tarvainen2002&quot;</span></code> to use the smoothness priors approach described by Tarvainen (2002)
 (mostly used in HRV analyses as a lowpass filter to remove complex trends), <code class="docutils literal notranslate"><span class="pre">&quot;loess&quot;</span></code> for
 LOESS smoothing trend removal or <code class="docutils literal notranslate"><span class="pre">&quot;locreg&quot;</span></code> for local linear regression (the <em>‘runline’</em>
@@ -1660,7 +1662,7 @@ intervals, intervals_time = intervals_process(rri,</p>
 <div><p>intervals_time=rri_time,
 interpolate=True,
 interpolation_rate=100,
-detrend_method=”tarvainen2002”)</p>
+detrend=”tarvainen2002”)</p>
 </div></blockquote>
 <p>plt.plot(intervals_time, intervals, label=”Processed intervals”)
 plt.xlabel(“Time (seconds)”)

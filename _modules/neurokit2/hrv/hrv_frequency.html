@@ -639,6 +639,8 @@ title="Open an issue"
 <span class="sd">    interpolation_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as</span>
 <span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</span>
+<span class="sd">        To not interpolate, set interpolation_rate to None (in case the interbeat intervals are already</span>
+<span class="sd">        interpolated or when using the ``&quot;lombscargle&quot;`` psd_method for which interpolation is not required).</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Additional other arguments.</span>
 
@@ -717,6 +719,11 @@ title="Open an issue"
         <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">interpolation_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">rri_time</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="kc">None</span>
+
     <span class="n">frequency_band</span> <span class="o">=</span> <span class="p">[</span><span class="n">ulf</span><span class="p">,</span> <span class="n">vlf</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">hf</span><span class="p">,</span> <span class="n">vhf</span><span class="p">]</span>
 
     <span class="c1"># Find maximum frequency</span>
@@ -731,6 +738,7 @@ title="Open an issue"
         <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
         <span class="n">order_criteria</span><span class="o">=</span><span class="n">order_criteria</span><span class="p">,</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
@@ -775,6 +783,7 @@ title="Open an issue"
             <span class="n">order_criteria</span><span class="o">=</span><span class="n">order_criteria</span><span class="p">,</span>
             <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
             <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
 
@@ -792,6 +801,7 @@ title="Open an issue"
     <span class="n">order_criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">max_frequency</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 
@@ -820,6 +830,7 @@ title="Open an issue"
         <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
         <span class="n">order_criteria</span><span class="o">=</span><span class="n">order_criteria</span><span class="p">,</span>
         <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">_signal_power_instant_plot</span><span class="p">(</span><span class="n">psd</span><span class="p">,</span> <span class="n">out_bands</span><span class="p">,</span> <span class="n">frequency_band</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>

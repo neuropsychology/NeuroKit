@@ -569,6 +569,7 @@ title="Open an issue"
     <span class="n">order_criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span>
     <span class="n">order_corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Compute the Power Spectral Density (PSD)**</span>
@@ -611,6 +612,9 @@ title="Open an issue"
 <span class="sd">        the order, rely on the default (i.e., the corrected KIC).</span>
 <span class="sd">    silent : bool</span>
 <span class="sd">        If ``False``, warnings will be printed. Default to ``True``.</span>
+<span class="sd">    t : array</span>
+<span class="sd">        The timestamps corresponding to each sample in the signal, in seconds</span>
+<span class="sd">        (for ``&quot;lombscargle&quot;`` method). Defaults to None.</span>
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Keyword arguments to be passed to :func:`.scipy.signal.welch`.</span>
 
@@ -685,10 +689,7 @@ title="Open an issue"
     <span class="c1"># MNE</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;multitaper&quot;</span><span class="p">,</span> <span class="s2">&quot;multitapers&quot;</span><span class="p">,</span> <span class="s2">&quot;mne&quot;</span><span class="p">]:</span>
         <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_multitaper</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span>
-            <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># FFT (Numpy)</span>
@@ -698,10 +699,7 @@ title="Open an issue"
     <span class="c1"># Lombscargle (AtroPy)</span>
     <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;lombscargle&quot;</span><span class="p">,</span> <span class="s2">&quot;lomb&quot;</span><span class="p">]:</span>
         <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_lomb</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span>
-            <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span>
         <span class="p">)</span>
 
     <span class="c1"># Method that are using a window</span>
@@ -730,11 +728,7 @@ title="Open an issue"
         <span class="c1"># Welch (Scipy)</span>
         <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;welch&quot;</span><span class="p">]:</span>
             <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_welch</span><span class="p">(</span>
-                <span class="n">signal</span><span class="p">,</span>
-                <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-                <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
-                <span class="n">window_type</span><span class="o">=</span><span class="n">window_type</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">window_type</span><span class="o">=</span><span class="n">window_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># BURG</span>
@@ -757,15 +751,11 @@ title="Open an issue"
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Frequency&quot;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">:</span> <span class="n">power</span><span class="p">})</span>
 
     <span class="c1"># Filter</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_frequency</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">max_frequency</span><span class="p">)</span>
-    <span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_frequency</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">max_frequency</span><span class="p">)]</span>
     <span class="c1">#    data[&quot;Power&quot;] = 10 * np.log(data[&quot;Power&quot;])</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Power Spectral Density (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; method)&quot;</span>
-        <span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Power Spectral Density (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; method)&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spectrum&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
@@ -842,17 +832,24 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_lomb</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_psd_lomb</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">astropy.timeseries</span>
 
-        <span class="k">if</span> <span class="n">max_frequency</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
-            <span class="n">max_frequency</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># sanitize highest frequency</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-        <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span>
-            <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">max_frequency</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">max_frequency</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+                <span class="n">max_frequency</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># sanitize highest frequency</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+            <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span>
+                <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">max_frequency</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># determine maximum frequency with astropy defaults for unevenly spaced data</span>
+            <span class="c1"># https://docs.astropy.org/en/stable/api/astropy.timeseries.LombScargle.html#astropy.timeseries.LombScargle.autopower</span>
+            <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span>
+                <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">min_frequency</span>
+            <span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
@@ -870,13 +867,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_psd_burg</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">order</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-    <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span>
-    <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
-    <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="n">nfft</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nperseg</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
@@ -946,9 +937,7 @@ title="Open an issue"
 
         <span class="k">if</span> <span class="n">criteria</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># k=k+1 because order goes from 1 to P whereas k starts at 0.</span>
-            <span class="n">residual_new</span> <span class="o">=</span> <span class="n">_criteria</span><span class="p">(</span>
-                <span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">new_rho</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="n">corrected</span>
-            <span class="p">)</span>
+            <span class="n">residual_new</span> <span class="o">=</span> <span class="n">_criteria</span><span class="p">(</span><span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">new_rho</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="n">corrected</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">residual_old</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">residual_new</span><span class="p">)</span>
 
@@ -960,9 +949,7 @@ title="Open an issue"
             <span class="n">residual_old</span> <span class="o">=</span> <span class="n">residual_new</span>
         <span class="n">rho</span> <span class="o">=</span> <span class="n">new_rho</span>
         <span class="k">if</span> <span class="n">rho</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Found a negative value (expected positive strictly) </span><span class="si">{</span><span class="n">rho</span><span class="si">}</span><span class="s2">. Decrease the order.&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found a negative value (expected positive strictly) </span><span class="si">{</span><span class="n">rho</span><span class="si">}</span><span class="s2">. Decrease the order.&quot;</span><span class="p">)</span>
 
         <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ar</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">ar</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">kp</span>
@@ -1037,9 +1024,7 @@ title="Open an issue"
 
     <span class="k">elif</span> <span class="n">criteria</span> <span class="o">==</span> <span class="s2">&quot;KIC&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">corrected</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">residual</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span>
-            <span class="p">)</span>
+            <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 
@@ -1054,9 +1039,7 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">residual</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_from_arma</span><span class="p">(</span>
-    <span class="n">ar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span>
-<span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_psd_from_arma</span><span class="p">(</span><span class="n">ar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">):</span>
 
     <span class="k">if</span> <span class="n">ar</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either AR or MA model must be provided&quot;</span><span class="p">)</span>
