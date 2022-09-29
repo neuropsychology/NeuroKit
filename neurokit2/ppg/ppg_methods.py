@@ -165,4 +165,7 @@ def ppg_methods(
         )
     report_info["references"] = list(np.unique(refs))
 
+    for key in ["text_cleaning", "text_peaks", "references"]:
+        print(report_info[key])
+
     return report_info
