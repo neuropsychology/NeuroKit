@@ -71,7 +71,9 @@ Miscellaneous
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_findpeaks
 
-
+*ecg_invert()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_invert
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
