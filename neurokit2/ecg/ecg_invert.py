@@ -1,6 +1,5 @@
 import numpy as np
 
-from numba import njit
 from .ecg_clean import ecg_clean
 
 
@@ -75,10 +74,10 @@ def _ecg_inverted(ecg_signal, sampling_rate=1000, window_time=2.0):
     return med_max_squared < 0
 
 
-@njit
 def _roll_orig_max_squared(x, window=2000):
     """With a rolling window, takes the original value corresponding to the maximum of the squared signal."""
-    roll_x = []
-    for i in range(len(x) - window):
-        roll_x.append(x[i : i + window][np.argmax(np.square(x[i : i + window]))])
-    return roll_x
+    x_rolled = np.lib.stride_tricks.sliding_window_view(x, window, axis=0)
+    # https://stackoverflow.com/questions/61703879/in-numpy-how-to-select-elements-based-on-the-maximum-of-their-absolute-values
+    shape = np.array(x_rolled.shape)
+    shape[-1] = -1
+    return np.take_along_axis(x_rolled, np.square(x_rolled).argmax(-1).reshape(shape), axis=-1)
