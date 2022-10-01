@@ -57,16 +57,14 @@ def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
 def _ecg_inverted(ecg_signal, sampling_rate=1000):
     """Checks whether an ECG signal is inverted."""
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate)
-    med_max = np.nanmedian(_roll_func(ecg_cleaned, window=1 * sampling_rate, func=_orig_max_squared))
+    med_max = np.nanmedian(_roll_orig_max_squared(ecg_cleaned, window=1 * sampling_rate))
     return med_max < np.nanmean(ecg_cleaned)
 
 
-def _roll_func(x, window, func, func_args={}):
-    """Applies a function with a rolling window."""
-    roll_x = np.array([func(x[i : i + window], **func_args) for i in range(len(x) - window)])
+@njit
+def _roll_orig_max_squared(x, window=2000):
+    """With a rolling window, takes the original value corresponding to the maximum of the squared signal."""
+    roll_x = []
+    for i in range(len(x) - window):
+        roll_x.append(x[i : i + window][np.argmax(np.square(x[i : i + window]))])
     return roll_x
-
-
-def _orig_max_squared(x):
-    """Returns the original value corresponding to the maximum of the squared signal."""
-    return x[np.argmax(np.square(x))]
