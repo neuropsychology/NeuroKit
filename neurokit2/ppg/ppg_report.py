@@ -39,7 +39,10 @@ def ppg_table(signals):
     summary["PPG_Rate_Mean"] = np.mean(signals["PPG_Rate"])
     summary["PPG_Rate_SD"] = np.std(signals["PPG_Rate"])
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
-    print(summary_table.to_markdown(index=None))
+    try:
+        print(summary_table.to_markdown(index=None))
+    except:
+        print(summary_table) # in case printing markdown export fails
     return (
         '<h2 style="background-color: #D60574">Summary table</h1>'
         + summary_table.to_html(index=None)
