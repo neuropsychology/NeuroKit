@@ -4,7 +4,7 @@ from numba import njit
 from .ecg_clean import ecg_clean
 
 
-def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
+def ecg_invert(ecg_signal, sampling_rate=1000, force=False):
     """**ECG signal inversion**
 
     Checks whether an ECG signal is inverted, and if so, corrects for this inversion.
@@ -15,13 +15,15 @@ def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
         The raw ECG channel.
     sampling_rate : int
         The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
-    check_inverted : bool, optional
-        Whether to check whether the signal is inverted before inverting it. The default is True.
-        If False, always returns the inverted input signal regardless of whether the input was inverted.
+    force : bool, optional
+        Whether to force inversion of the signal regardless of whether it is 
+        detected as inverted. The default is False.
     Returns
     -------
     array
         Vector containing the corrected ECG signal.
+    bool
+        Whether the inversion was performed.
     Examples
     --------
     **Example 1**: With an inverted ECG signal
@@ -31,10 +33,11 @@ def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
       plt.rc('font', size=8)
       # Download data
       data = nk.data("bio_resting_5min_100hz")
+      sampling_rate = 100
       # Invert ECG signal
       ecg_inverted = data["ECG"] * -1 + 2 * np.nanmean(data["ECG"])
       # Fix inversion
-      ecg_fixed = nk.ecg_invert(ecg_inverted, sampling_rate=100)
+      ecg_fixed, inversion_performed = nk.ecg_invert(ecg_inverted, sampling_rate=sampling_rate)
 
       # Plot inverted ECG and fixed ECG
       @savefig p_ecg_inverted1.png scale=100%
@@ -46,13 +49,13 @@ def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
       fig.show()
     """
     inverted_ecg_signal = np.array(ecg_signal) * -1 + 2 * np.nanmean(ecg_signal)
-    if check_inverted:
-        if _ecg_inverted(ecg_signal, sampling_rate=sampling_rate):
-            return inverted_ecg_signal
-        else:
-            return ecg_signal
+    if force:
+        return inverted_ecg_signal, True
     else:
-        return inverted_ecg_signal
+        if _ecg_inverted(ecg_signal, sampling_rate=sampling_rate):
+            return inverted_ecg_signal, True
+        else:
+            return ecg_signal, False
 
 
 def _ecg_inverted(ecg_signal, sampling_rate=1000, window_time=2.0): 
