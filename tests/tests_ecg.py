@@ -253,7 +253,8 @@ def test_ecg_invert():
 
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=3)
     ecg_inverted = ecg * -1 + 2 * np.nanmean(ecg)
-    assert np.allclose((ecg - nk.ecg_invert(ecg_inverted)).mean(), 0, atol=1e-6)
+    ecg_fixed, _ = nk.ecg_invert(ecg_inverted)
+    assert np.allclose((ecg - ecg_fixed).mean(), 0, atol=1e-6)
 
 
 def test_ecg_intervalrelated():
