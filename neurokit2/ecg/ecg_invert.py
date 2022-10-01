@@ -1,5 +1,6 @@
 import numpy as np
 
+from numba import njit
 from .ecg_clean import ecg_clean
 
 
