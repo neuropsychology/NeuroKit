@@ -55,10 +55,13 @@ def ecg_invert(ecg_signal, sampling_rate=1000, check_inverted=True):
         return inverted_ecg_signal
 
 
-def _ecg_inverted(ecg_signal, sampling_rate=1000):
+def _ecg_inverted(ecg_signal, sampling_rate=1000, window_time=2.0):
     """Checks whether an ECG signal is inverted."""
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate)
-    med_max = np.nanmedian(_roll_orig_max_squared(ecg_cleaned, window=1 * sampling_rate))
+    # take the median of the original value of the maximum of the squared signal
+    # over a window where we would expect at least one heartbeat
+    med_max = np.nanmedian(_roll_orig_max_squared(ecg_cleaned, 
+                                                  window=int(window_time * sampling_rate)))
     return med_max < np.nanmean(ecg_cleaned)
 
 
