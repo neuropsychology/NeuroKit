@@ -138,3 +138,38 @@ def test_ppg_findpeaks():
 
     assert peaks.size == 29
     assert peaks.sum() == 219764
+    
+    
+@pytest.mark.parametrize(
+    "method_cleaning, method_peaks",
+    [("elgendi", "elgendi"), ("nabian2018", "elgendi")],
+)
+def test_ppg_report(method_cleaning, method_peaks):
+
+    sampling_rate = 500
+
+    ppg = nk.ppg_simulate(
+        duration=30,
+        sampling_rate=sampling_rate,
+        heart_rate=60,
+        frequency_modulation=0.01,
+        ibi_randomness=0.1,
+        drift=1,
+        motion_amplitude=0.5,
+        powerline_amplitude=0.1,
+        burst_amplitude=1,
+        burst_number=5,
+        random_state=42,
+        show=True,
+    )
+
+    d = tmp_path / "sub"
+    d.mkdir()
+    p = d / "myreport.html"
+
+    signals, _ = nk.ppg_process(ppg, 
+    	sampling_rate=sampling_rate, 
+    	report=str(p), 
+    	method_cleaning=method_cleaning, 
+    	method_peaks=method_peaks)
+    assert p.is_file()
