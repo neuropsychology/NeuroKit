@@ -41,7 +41,7 @@ def ppg_table(signals):
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
     try:
         print(summary_table.to_markdown(index=None))
-    except:
+    except ImportError:
         print(summary_table) # in case printing markdown export fails
     return (
         '<h2 style="background-color: #D60574">Summary table</h1>'
