@@ -144,7 +144,7 @@ def test_ppg_findpeaks():
     "method_cleaning, method_peaks",
     [("elgendi", "elgendi"), ("nabian2018", "elgendi")],
 )
-def test_ppg_report(method_cleaning, method_peaks):
+def test_ppg_report(tmp_path, method_cleaning, method_peaks):
 
     sampling_rate = 500
 
