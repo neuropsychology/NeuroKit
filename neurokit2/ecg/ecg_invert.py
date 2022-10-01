@@ -8,6 +8,10 @@ def ecg_invert(ecg_signal, sampling_rate=1000, force=False):
     """**ECG signal inversion**
 
     Checks whether an ECG signal is inverted, and if so, corrects for this inversion.
+    To automatically detect the inversion, the ECG signal is cleaned, the mean is subtracted,
+    and with a rolling window of 2 seconds, the original value corresponding to the maximum 
+    of the squared signal is taken. If the median of these values is negative, it is 
+    assumed that the signal is inverted.
 
     Parameters
     ----------
