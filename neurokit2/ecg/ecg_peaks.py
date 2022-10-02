@@ -85,6 +85,8 @@ def ecg_peaks(
 
       @savefig p_ecg_peaks1.png scale=100%
       nk.events_plot(info["ECG_R_Peaks"], ecg)
+      @suppress
+      plt.close()
 
     * **Example 2**: Compare different methods
 
@@ -153,6 +155,8 @@ def ecg_peaks(
       # Visualize results
       @savefig p_ecg_peaks2.png scale=100%
       nk.events_plot(rpeaks, ecg)
+      @suppress
+      plt.close()
 
     * **Example 3**: Method-agreement procedure ('promac')
 
@@ -165,6 +169,8 @@ def ecg_peaks(
                               artifacts_amplitude=0.05, artifacts_frequency=50)
       @savefig p_ecg_peaks3.png scale=100%
       info = nk.ecg_findpeaks(ecg, sampling_rate=500, method="promac", show=True)
+      @suppress
+      plt.close()
 
     References
     ----------
