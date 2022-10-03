@@ -42,7 +42,7 @@ def ppg_table(signals):
     try:
         print(summary_table.to_markdown(index=None))
     except ImportError:
-        print(summary_table) # in case printing markdown export fails
+        print(summary_table)  # in case printing markdown export fails
     return (
         '<h2 style="background-color: #D60574">Summary table</h1>'
         + summary_table.to_html(index=None)
