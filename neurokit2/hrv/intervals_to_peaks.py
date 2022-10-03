@@ -51,7 +51,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
             np.invert(_intervals_successive(intervals, intervals_time))
         ]
     else:
-        non_successive_indices = np.array([])
+        non_successive_indices = np.array([]).astype(int)
     # The number of peaks should be the number of intervals
     # plus one extra at the beginning of each group of successive intervals
     # (with no missing data there should be N_intervals + 1 peaks)
