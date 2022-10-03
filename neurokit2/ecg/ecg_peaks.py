@@ -36,7 +36,7 @@ def ecg_peaks(
       al. (2015) by Rodrigues et al. (2021).
     * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.
       For a given peak detector, the binary signal representing the peak locations is convolved
-      with a Gaussian distribution, resulting in a propabilistic representation of each peak
+      with a Gaussian distribution, resulting in a probabilistic representation of each peak
       location. This procedure is repeated for all selected methods and the resulting
       signals are accumulated. Finally, a threshold is used to accept or reject the peak locations.
       See this discussion for more information on the origins of the method:
