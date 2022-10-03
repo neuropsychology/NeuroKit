@@ -22,8 +22,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -34,12 +33,7 @@
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../../_static/togglebutton.js"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <link rel="shortcut icon" href="../../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -632,6 +626,8 @@ title="Open an issue"
 
 <span class="sd">      @savefig p_ecg_peaks1.png scale=100%</span>
 <span class="sd">      nk.events_plot(info[&quot;ECG_R_Peaks&quot;], ecg)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    * **Example 2**: Compare different methods</span>
 
@@ -700,6 +696,8 @@ title="Open an issue"
 <span class="sd">      # Visualize results</span>
 <span class="sd">      @savefig p_ecg_peaks2.png scale=100%</span>
 <span class="sd">      nk.events_plot(rpeaks, ecg)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    * **Example 3**: Method-agreement procedure (&#39;promac&#39;)</span>
 
@@ -712,6 +710,8 @@ title="Open an issue"
 <span class="sd">                              artifacts_amplitude=0.05, artifacts_frequency=50)</span>
 <span class="sd">      @savefig p_ecg_peaks3.png scale=100%</span>
 <span class="sd">      info = nk.ecg_findpeaks(ecg, sampling_rate=500, method=&quot;promac&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>

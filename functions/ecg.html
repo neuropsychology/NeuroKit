@@ -23,8 +23,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -35,12 +34,7 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -739,6 +733,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-invert">
+     <em>
+      ecg_invert()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -888,6 +889,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#ecg-findpeaks">
      <em>
       ecg_findpeaks()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-invert">
+     <em>
+      ecg_invert()
      </em>
     </a>
    </li>
@@ -1358,7 +1366,7 @@ Physiology, 9, 727.</p></li>
 <span class="gp">   ...: </span>               <span class="n">method</span><span class="o">=</span><span class="s2">&quot;zhao2018&quot;</span><span class="p">,</span>
 <span class="gp">   ...: </span>               <span class="n">approach</span><span class="o">=</span><span class="s2">&quot;fuzzy&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[6]: </span><span class="go">&#39;Excellent&#39;</span>
+<span class="gh">Out[6]: </span><span class="go">&#39;Barely acceptable&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2016,9 +2024,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.750511          0.970376</span>
-<span class="go">2     2        10000  ...                          0.365503          0.951074</span>
-<span class="go">3     3        15000  ...                          0.153689          0.959371</span>
+<span class="go">1     1         5000  ...                          0.736626          0.994913</span>
+<span class="go">2     2        10000  ...                          0.434511          0.937206</span>
+<span class="go">3     3        15000  ...                          0.154004          0.974094</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -2149,6 +2157,39 @@ samples at which R-peaks occur, accessible with the key <code class="docutils li
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
 </div>
+</dd></dl>
+
+</section>
+<section id="ecg-invert">
+<h3><em>ecg_invert()</em><a class="headerlink" href="#ecg-invert" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_invert">
+<span class="sig-name descname"><span class="pre">ecg_invert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ecg/ecg_invert.html#ecg_invert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ecg.ecg_invert" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>ECG signal inversion</strong></p>
+<p>Checks whether an ECG signal is inverted, and if so, corrects for this inversion.
+To automatically detect the inversion, the ECG signal is cleaned, the mean is subtracted,
+and with a rolling window of 2 seconds, the original value corresponding to the maximum
+of the squared signal is taken. If the median of these values is negative, it is
+assumed that the signal is inverted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw ECG channel.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Whether to force inversion of the signal regardless of whether it is
+detected as inverted. The default is False.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Shows a plot of the original and inverted signal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>array</em> – Vector containing the corrected ECG signal.</p></li>
+<li><p><em>bool</em> – Whether the inversion was performed.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>

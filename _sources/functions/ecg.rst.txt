@@ -71,10 +71,12 @@ Miscellaneous
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_findpeaks
 
-
+*ecg_invert()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_invert
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.ecg
    :members:
-   :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_rate, ecg_segment, ecg_eventrelated, ecg_intervalrelated, ecg_findpeaks
+   :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_rate, ecg_segment, ecg_eventrelated, ecg_intervalrelated, ecg_findpeaks, ecg_invert
