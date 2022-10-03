@@ -638,7 +638,10 @@ title="Open an issue"
     <span class="n">x_onset</span> <span class="o">-=</span> <span class="n">x_onset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># make sure seconds start at zero</span>
     <span class="c1"># Add respiratory sinus arrythmia (frequency modulation).</span>
     <span class="n">periods</span><span class="p">,</span> <span class="n">x_onset</span> <span class="o">=</span> <span class="n">_frequency_modulation</span><span class="p">(</span>
-        <span class="n">periods</span><span class="p">,</span> <span class="n">x_onset</span><span class="p">,</span> <span class="n">modulation_frequency</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">modulation_strength</span><span class="o">=</span><span class="n">frequency_modulation</span>
+        <span class="n">periods</span><span class="p">,</span>
+        <span class="n">x_onset</span><span class="p">,</span>
+        <span class="n">modulation_frequency</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">modulation_strength</span><span class="o">=</span><span class="n">frequency_modulation</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># Randomly modulate duration of waves by subracting a random value between</span>
     <span class="c1"># 0 and ibi_randomness% of the wave duration (see function definition).</span>

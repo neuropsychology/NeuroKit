@@ -548,7 +548,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_smooth</span>
 
 
-<div class="viewcode-block" id="ppg_findpeaks"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ppg_findpeaks"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Find systolic peaks in a photoplethysmogram (PPG) signal**</span>
 
 <span class="sd">    Parameters</span>
@@ -603,7 +603,7 @@ title="Open an issue"
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;.&quot;</span><span class="p">)</span>
 
@@ -614,7 +614,13 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ppg_findpeaks_elgendi</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">peakwindow</span><span class="o">=</span><span class="mf">0.111</span><span class="p">,</span> <span class="n">beatwindow</span><span class="o">=</span><span class="mf">0.667</span><span class="p">,</span> <span class="n">beatoffset</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">mindelay</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">peakwindow</span><span class="o">=</span><span class="mf">0.111</span><span class="p">,</span>
+    <span class="n">beatwindow</span><span class="o">=</span><span class="mf">0.667</span><span class="p">,</span>
+    <span class="n">beatoffset</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+    <span class="n">mindelay</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in</span>
 <span class="sd">    Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585.</span>
@@ -658,7 +664,9 @@ title="Open an issue"
 
     <span class="c1"># Identify systolic peaks within waves (ignore waves that are too short).</span>
     <span class="n">num_waves</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">beg_waves</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">end_waves</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">min_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">peakwindow</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>  <span class="c1"># this is threshold 2 in the paper</span>
+    <span class="n">min_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">peakwindow</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># this is threshold 2 in the paper</span>
     <span class="n">min_delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">mindelay</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 

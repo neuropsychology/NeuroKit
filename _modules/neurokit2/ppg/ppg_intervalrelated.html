@@ -616,13 +616,17 @@ title="Open an issue"
             <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty container</span>
 
             <span class="c1"># Add label info</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s1">&#39;Label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s1">&#39;Label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Rate</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ppg_intervalrelated_formatinput</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ppg_intervalrelated_formatinput</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="p">)</span>
 
             <span class="c1"># HRV</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ppg_intervalrelated_hrv</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ppg_intervalrelated_hrv</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="p">)</span>
 
         <span class="n">ppg_intervals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
 

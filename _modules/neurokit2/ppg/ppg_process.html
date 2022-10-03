@@ -547,9 +547,11 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_from_indices</span>
 <span class="kn">from</span> <span class="nn">.ppg_clean</span> <span class="kn">import</span> <span class="n">ppg_clean</span>
 <span class="kn">from</span> <span class="nn">.ppg_findpeaks</span> <span class="kn">import</span> <span class="n">ppg_findpeaks</span>
+<span class="kn">from</span> <span class="nn">.ppg_methods</span> <span class="kn">import</span> <span class="n">ppg_methods</span>
+<span class="kn">from</span> <span class="nn">.ppg_report</span> <span class="kn">import</span> <span class="n">ppg_report</span>
 
 
-<div class="viewcode-block" id="ppg_process"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_process">[docs]</a><span class="k">def</span> <span class="nf">ppg_process</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ppg_process"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_process">[docs]</a><span class="k">def</span> <span class="nf">ppg_process</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Process a photoplethysmogram (PPG)  signal**</span>
 
 <span class="sd">    Convenience function that automatically processes a photoplethysmogram signal.</span>
@@ -560,6 +562,16 @@ title="Open an issue"
 <span class="sd">        The raw PPG channel.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of :func:`.ppg_signal` (in Hz, i.e., samples/second).</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``.</span>
+<span class="sd">        Defaults to ``&quot;elgendi&quot;``.</span>
+<span class="sd">    report : str</span>
+<span class="sd">        The filename of a report containing description and figures of processing</span>
+<span class="sd">        (e.g. ``&quot;myreport.html&quot;``). Needs to be supplied if a report file</span>
+<span class="sd">        should be generated. Defaults to ``None``.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to be passed to specific methods. For more information,</span>
+<span class="sd">        see :func:`.ppg_methods`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -594,12 +606,27 @@ title="Open an issue"
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
     <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">)</span>
+    <span class="n">methods</span> <span class="o">=</span> <span class="n">ppg_methods</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="c1"># Clean signal</span>
-    <span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+        <span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">ppg_signal</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Clean signal</span>
+        <span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">ppg_clean</span><span class="p">(</span>
+            <span class="n">ppg_signal</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;kwargs_cleaning&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
 
     <span class="c1"># Find peaks</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">ppg_findpeaks</span><span class="p">(</span>
+        <span class="n">ppg_cleaned</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;kwargs_peaks&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
     <span class="c1"># Mark peaks</span>
@@ -619,6 +646,10 @@ title="Open an issue"
             <span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks_signal</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">report</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Generate report containing description and figures of processing</span>
+        <span class="n">ppg_report</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">signals</span><span class="o">=</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">methods</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
 </pre></div>

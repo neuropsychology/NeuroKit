@@ -850,6 +850,12 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 
 <span class="go"># Process</span>
 <span class="gp">In [9]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">The raw signal, sampled at 100 Hz, was preprocessed using a bandpass filter ([0.5 - 8 Hz], Butterworth 3rd order; following Elgendi et al., 2013).</span>
+
+<span class="go">The peak detection was carried out using the method described in Elgendi et al. (2013).</span>
+
+<span class="go">Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
+
 
 <span class="go"># Get HRV</span>
 <span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>

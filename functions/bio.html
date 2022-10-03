@@ -754,11 +754,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span><span class="go"></span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.059039  -0.072623  70.013484  ...            0    0.016   7.976149</span>
-<span class="go">1  1.006188  -0.196300  70.013484  ...            0    0.016   7.976149</span>
-<span class="go">2  0.869213  -0.332840  70.013484  ...            0    0.016   7.976149</span>
-<span class="go">3  0.674380  -0.486744  70.013484  ...            0    0.016   7.976149</span>
-<span class="go">4  0.449706  -0.654915  70.013484  ...            0    0.016   7.976149</span>
+<span class="go">0  1.088002  -0.067502  70.042544  ...            0    0.012   7.946577</span>
+<span class="go">1  1.034014  -0.193202  70.042544  ...            0    0.012   7.946577</span>
+<span class="go">2  0.894391  -0.331493  70.042544  ...            0    0.012   7.946577</span>
+<span class="go">3  0.696729  -0.486509  70.042544  ...            0    0.012   7.946577</span>
+<span class="go">4  0.470365  -0.654760  70.042544  ...            0    0.012   7.946577</span>
 
 <span class="go">[5 rows x 46 columns]</span>
 </pre></div>
@@ -877,6 +877,12 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 
 <span class="go"># Process the data</span>
 <span class="gp">In [8]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">ppg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;PPG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">The raw signal, sampled at 100 Hz, was preprocessed using a bandpass filter ([0.5 - 8 Hz], Butterworth 3rd order; following Elgendi et al., 2013).</span>
+
+<span class="go">The peak detection was carried out using the method described in Elgendi et al. (2013).</span>
+
+<span class="go">Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
+
 
 <span class="go"># Analyze</span>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
