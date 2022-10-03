@@ -9,7 +9,7 @@ from .intervals_utils import _intervals_sanitize
 
 def _hrv_get_rri(peaks=None, sampling_rate=1000):
     if peaks is None:
-        return None, None
+        return None, None, None
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = np.diff(peaks) / sampling_rate * 1000
     rri, rri_time, rri_missing = _intervals_sanitize(rri)
