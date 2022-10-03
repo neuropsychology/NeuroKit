@@ -362,8 +362,8 @@ def _hrv_rsa_gates(
     min_frequency = 0.12
     max_frequency = 0.40
 
-    # Retrived IBI and interpolate it
-    rri, rri_time = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate)
+    # Retrieve IBI and interpolate it
+    rri, rri_time, _ = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate)
 
     # Re-sample at 4 Hz
     desired_sampling_rate = 4

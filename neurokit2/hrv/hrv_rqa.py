@@ -85,7 +85,7 @@ def hrv_rqa(
     """
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
+    rri, _, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     # Linear detrend (Zimatore, 2021)
     rri = signal_detrend(rri, method="polynomial", order=1)

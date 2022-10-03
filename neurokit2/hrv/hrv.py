@@ -151,7 +151,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
     plt.tight_layout(h_pad=0.5, w_pad=0.5)
 
     # Distribution of RR intervals
-    rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
+    rri, rri_time, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
     ax_distrib = summary_plot(rri, ax=ax_distrib, **kwargs)
 
     # Poincare plot

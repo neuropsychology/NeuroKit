@@ -81,7 +81,7 @@ def intervals_process(
 
     """
     # Sanitize input
-    intervals, intervals_time = _intervals_sanitize(intervals, intervals_time=intervals_time)
+    intervals, intervals_time, _ = _intervals_sanitize(intervals, intervals_time=intervals_time)
 
     if interpolate is False:
         interpolation_rate = None

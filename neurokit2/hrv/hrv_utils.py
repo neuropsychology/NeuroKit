@@ -12,21 +12,21 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000):
         return None, None
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = np.diff(peaks) / sampling_rate * 1000
-    rri, rri_time = _intervals_sanitize(rri)
-    return rri, rri_time
+    rri, rri_time, rri_missing = _intervals_sanitize(rri)
+    return rri, rri_time, rri_missing
 
 
 def _hrv_format_input(peaks=None, sampling_rate=1000, output_format="intervals"):
 
     if isinstance(peaks, tuple):
-        rri, rri_time, sampling_rate = _hrv_sanitize_tuple(peaks, sampling_rate=sampling_rate)
+        rri, rri_time, rri_missing, sampling_rate = _hrv_sanitize_tuple(peaks, sampling_rate=sampling_rate)
     elif isinstance(peaks, (dict, pd.DataFrame)):
-        rri, rri_time, sampling_rate = _hrv_sanitize_dict_or_df(peaks, sampling_rate=sampling_rate)
+        rri, rri_time, rri_missing, sampling_rate = _hrv_sanitize_dict_or_df(peaks, sampling_rate=sampling_rate)
     else:
         peaks = _hrv_sanitize_peaks(peaks)
-        rri, rri_time = _hrv_get_rri(peaks, sampling_rate=sampling_rate)
+        rri, rri_time, rri_missing = _hrv_get_rri(peaks, sampling_rate=sampling_rate)
     if output_format == "intervals":
-        return rri, rri_time
+        return rri, rri_time, rri_missing
     elif output_format == "peaks":
         return (
             intervals_to_peaks(rri, intervals_time=rri_time, sampling_rate=sampling_rate),
@@ -59,8 +59,10 @@ def _hrv_sanitize_tuple(peaks, sampling_rate=1000):
                     peaks = _hrv_sanitize_peaks(peaks[1])
             else:
                 peaks = _hrv_sanitize_peaks(peaks[0])
+    
+    rri, rri_time, rri_missing = _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
 
-    return _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate), sampling_rate
+    return rri, rri_time, rri_missing, sampling_rate
 
 
 def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
@@ -80,8 +82,8 @@ def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
             rri_time = peaks["RRI_Time"]
         else:
             rri_time = None
-        rri, rri_time = _intervals_sanitize(rri, intervals_time=rri_time)
-        return rri, rri_time, sampling_rate
+        rri, rri_time, rri_missing = _intervals_sanitize(rri, intervals_time=rri_time)
+        return rri, rri_time, rri_missing, sampling_rate
 
     cols = cols[["Peak" in s for s in cols]]
 
@@ -98,10 +100,10 @@ def _hrv_sanitize_dict_or_df(peaks, sampling_rate=None):
     peaks = _hrv_sanitize_peaks(peaks[cols[0]])
 
     if sampling_rate is not None:
-        rri, rri_time = _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
+        rri, rri_time, rri_missing = _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
     else:
-        rri, rri_time = _hrv_get_rri(peaks=peaks)
-    return rri, rri_time, sampling_rate
+        rri, rri_time, rri_missing = _hrv_get_rri(peaks=peaks)
+    return rri, rri_time, rri_missing, sampling_rate
 
 
 def _hrv_sanitize_peaks(peaks):
