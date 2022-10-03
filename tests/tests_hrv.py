@@ -65,15 +65,15 @@ def test_rri_input_hrv():
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
     peaks = peaks["ECG_R_Peaks"]
     rri = np.diff(peaks).astype(float)
-    rri_time = peaks[1:]/1000
+    rri_time = peaks[1:] / 1000
 
     rri[3:5] = [np.nan, np.nan]
 
     ecg_hrv = nk.hrv({"RRI": rri, "RRI_Time": rri_time})
 
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.2)
-    
-    
+
+
 def test_hrv_detrended_rri():
 
     ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
@@ -81,17 +81,15 @@ def test_hrv_detrended_rri():
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
     peaks = peaks["ECG_R_Peaks"]
     rri = np.diff(peaks).astype(float)
-    rri_time = peaks[1:]/1000
-    
-    rri_processed, _ = nk.intervals_process(rri,
-                                            intervals_time=rri_time,
-                                            interpolate=False,
-                                            interpolation_rate=None,
-                                            detrend="tarvainen2002")
+    rri_time = peaks[1:] / 1000
+
+    rri_processed, _ = nk.intervals_process(
+        rri, intervals_time=rri_time, interpolate=False, interpolation_rate=None, detrend="tarvainen2002"
+    )
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_time})
 
-    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(rri_processed))), atol=0.1)
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
 
 
 def test_hrv_rsa():
@@ -110,9 +108,7 @@ def test_hrv_rsa():
         "RSA_Gates_SD",
     ]
 
-    rsa_features = nk.hrv_rsa(
-        ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False
-    )
+    rsa_features = nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
 
     assert all(key in rsa_feature_columns for key in rsa_features.keys())
 
