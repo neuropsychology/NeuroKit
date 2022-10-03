@@ -6,6 +6,7 @@ import scipy.stats
 
 from ..stats import mad, summary_plot
 from .hrv_utils import _hrv_format_input
+from .intervals_utils import _intervals_successive
 
 
 def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -135,9 +136,13 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     """
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
+    rri, rri_time, rri_missing = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     diff_rri = np.diff(rri)
+    
+    if rri_missing:
+        # Only include successive differences
+        diff_rri = diff_rri[_intervals_successive(rri, intervals_time=rri_time)]
 
     out = {}  # Initialize empty container for results
 
@@ -167,8 +172,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     # Extreme-based
     nn50 = np.sum(np.abs(diff_rri) > 50)
     nn20 = np.sum(np.abs(diff_rri) > 20)
-    out["pNN50"] = nn50 / len(rri) * 100
-    out["pNN20"] = nn20 / len(rri) * 100
+    out["pNN50"] = nn50 / (len(diff_rri) + 1) * 100
+    out["pNN20"] = nn20 / (len(diff_rri) + 1) * 100
     out["MinNN"] = np.nanmin(rri)
     out["MaxNN"] = np.nanmax(rri)
 
