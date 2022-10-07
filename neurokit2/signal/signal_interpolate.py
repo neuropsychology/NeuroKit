@@ -90,7 +90,7 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
             return y_values
     else:
         # if x_values is identical to x_new, no need for interpolation
-        if np.all(x_values == x_new):
+        if len(x_values) == len(x_new) and np.all(x_values == x_new):
             return y_values
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
