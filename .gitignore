@@ -97,6 +97,9 @@ ENV/
 # vscode stuff
 .vscode/
 
+# PyCharm stuff
+.idea/
+
 # Rope project settings
 .ropeproject
 
