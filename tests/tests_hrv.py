@@ -93,7 +93,7 @@ def test_hrv_detrended_rri(detrend):
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
 
 
-@pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 1000])
+@pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 100])
 def test_hrv_interpolated_rri(interpolation_rate):
 
     ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
