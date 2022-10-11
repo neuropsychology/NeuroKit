@@ -102,14 +102,21 @@ def test_hrv_interpolated_rri(interpolation_rate):
     peaks = peaks["ECG_R_Peaks"]
     rri = np.diff(peaks).astype(float)
     rri_time = peaks[1:] / 1000
-    
+
     if interpolation_rate=="from_mean_rri":
         interpolation_rate = 1000/np.mean(rri)
+
     rri_processed, _ = nk.intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate
     )
 
-    ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_time})
+    rri_processed_time = np.arange(
+        start=rri_time[0],
+        stop=rri_time[-1] + 1 / interpolation_rate,
+        step=1 / interpolation_rate,
+    )
+
+    ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
 
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
 
