@@ -106,7 +106,7 @@ def test_hrv_interpolated_rri(interpolation_rate):
     if interpolation_rate=="from_mean_rri":
         interpolation_rate = 1000/np.mean(rri)
     rri_processed, _ = nk.intervals_process(
-        rri, intervals_time=rri_time, interpolate=False, interpolation_rate=interpolation_rate
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate
     )
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_time})
