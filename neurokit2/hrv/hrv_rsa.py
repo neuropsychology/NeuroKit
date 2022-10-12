@@ -368,7 +368,7 @@ def _hrv_rsa_gates(
     # Re-sample at 4 Hz
     desired_sampling_rate = 4
 
-    rri, sampling_rate = intervals_process(
+    rri, rri_time, sampling_rate = intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=desired_sampling_rate
     )
 

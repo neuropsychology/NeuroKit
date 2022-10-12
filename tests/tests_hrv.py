@@ -84,11 +84,11 @@ def test_hrv_detrended_rri(detrend):
     rri = np.diff(peaks).astype(float)
     rri_time = peaks[1:] / 1000
 
-    rri_processed, _ = nk.intervals_process(
+    rri_processed, rri_processed_time, _ = nk.intervals_process(
         rri, intervals_time=rri_time, interpolate=False, interpolation_rate=None, detrend=detrend
     )
 
-    ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_time})
+    ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
 
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
 
@@ -106,15 +106,10 @@ def test_hrv_interpolated_rri(interpolation_rate):
     if interpolation_rate=="from_mean_rri":
         interpolation_rate = 1000/np.mean(rri)
 
-    rri_processed, _ = nk.intervals_process(
+    rri_processed, rri_processed_time, _ = nk.intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate
     )
 
-    rri_processed_time = np.arange(
-        start=rri_time[0],
-        stop=rri_time[-1] + 1 / interpolation_rate,
-        step=1 / interpolation_rate,
-    )
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
 

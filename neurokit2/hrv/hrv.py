@@ -159,7 +159,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
     _hrv_nonlinear_show(rri, rri_time=rri_time, rri_missing=rri_missing, out=out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
 
     # PSD plot
-    rri, sampling_rate = intervals_process(
+    rri, rri_time, sampling_rate = intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 

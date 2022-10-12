@@ -168,7 +168,7 @@ def hrv_frequency(
     rri, rri_time, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     # Process R-R intervals (interpolated at 100 Hz by default)
-    rri, sampling_rate = intervals_process(
+    rri, rri_time, sampling_rate = intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 

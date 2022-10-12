@@ -116,4 +116,4 @@ def intervals_process(
 
     if detrend is not None:
         intervals = signal_detrend(intervals, method=detrend)
-    return intervals, interpolation_rate
+    return intervals, intervals_time, interpolation_rate
