@@ -15,6 +15,7 @@ def signal_detrend(
     window=1.5,
     stepsize=0.02,
     components=[-1],
+    sampling_rate=None,
 ):
     """**Signal Detrending**
 
@@ -44,15 +45,19 @@ def signal_detrend(
         Only used if ``method`` is "loess". The parameter which controls the degree of smoothing.
     window : float
         Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
-        desired low frequency band to remove multiplied by the sampling rate
-        (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at
-        1000Hz).
+        desired low frequency band to remove multiplied by the sampling rate if sampling_rate is not
+        provided to the function directly (for instance, ``1.5*1000`` will remove frequencies below 
+        1.5Hz for a signal sampled at 1000Hz).
     stepsize : float
         Only used if ``method`` is ``"locreg"``. Similarly to ``window``, ``stepsize`` should also
-        be multiplied by the sampling rate.
+        be multiplied by the sampling rate if sampling_rate is not provided.
     components : list
         Only used if ``method`` is ``"EMD"``. What Intrinsic Mode Functions (IMFs) from EMD to
         remove. By default, the last one.
+    sampling_rate : int, optional
+        Only used if ``method`` is "locreg". Sampling rate (Hz) of the signal. 
+        If provided, the stepsize and window arguments will be interpreted in
+        seconds rather than samples. By default None.
 
 
     Returns
@@ -138,7 +143,7 @@ def signal_detrend(
     elif method in ["loess", "lowess"]:
         detrended = signal - fit_loess(signal, alpha=alpha)[0]
     elif method in ["locdetrend", "runline", "locreg", "locregression"]:
-        detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize)
+        detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize, sampling_rate=sampling_rate)
     elif method in ["emd"]:
         detrended = _signal_detrend_emd(signal, components=components)
     else:
@@ -173,7 +178,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     return signal - trend
 
 
-def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
+def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02, sampling_rate=None):
     """Local linear regression ('runline' algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.
 
     - http://chronux.org/chronuxFiles/Documentation/chronux/spectral_analysis/continuous/locdetrend.html
@@ -182,10 +187,14 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
 
     """
     length = len(signal)
-
-    # Sanity chekcs
-    window = int(window)
-    stepsize = int(stepsize)
+    
+    # Sanitize input
+    if sampling_rate is None:
+        sampling_rate = 1
+    
+    # Sanity checks
+    window = int(window*sampling_rate)
+    stepsize = int(stepsize*sampling_rate)
     if window > length:
         raise ValueError(
             "NeuroKit error: signal_detrend(): 'window' should be "
