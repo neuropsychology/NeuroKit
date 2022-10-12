@@ -108,6 +108,7 @@ def intervals_process(
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
+        intervals_time = x_new
     else:
         # check if intervals appear to be already interpolated
         if _intervals_time_uniform(intervals_time):
