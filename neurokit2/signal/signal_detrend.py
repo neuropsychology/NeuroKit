@@ -15,7 +15,7 @@ def signal_detrend(
     window=1.5,
     stepsize=0.02,
     components=[-1],
-    sampling_rate=None,
+    sampling_rate=1000,
 ):
     """**Signal Detrending**
 
@@ -45,19 +45,17 @@ def signal_detrend(
         Only used if ``method`` is "loess". The parameter which controls the degree of smoothing.
     window : float
         Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
-        desired low frequency band to remove multiplied by the sampling rate if sampling_rate is not
-        provided to the function directly (for instance, ``1.5*1000`` will remove frequencies below 
-        1.5Hz for a signal sampled at 1000Hz).
+        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below 
+        1.5Hz).
     stepsize : float
-        Only used if ``method`` is ``"locreg"``. Similarly to ``window``, ``stepsize`` should also
-        be multiplied by the sampling rate if sampling_rate is not provided.
+        Only used if ``method`` is ``"locreg"``. 
     components : list
         Only used if ``method`` is ``"EMD"``. What Intrinsic Mode Functions (IMFs) from EMD to
         remove. By default, the last one.
     sampling_rate : int, optional
         Only used if ``method`` is "locreg". Sampling rate (Hz) of the signal. 
-        If provided, the stepsize and window arguments will be interpreted in
-        seconds rather than samples. By default None.
+        If not None, the ``stepsize`` and ``window`` arguments will be multiplied
+        by the sampling rate. By default 1000.
 
 
     Returns
@@ -178,7 +176,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     return signal - trend
 
 
-def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02, sampling_rate=None):
+def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02, sampling_rate=1000):
     """Local linear regression ('runline' algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.
 
     - http://chronux.org/chronuxFiles/Documentation/chronux/spectral_analysis/continuous/locdetrend.html
