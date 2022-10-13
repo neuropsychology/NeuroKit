@@ -88,9 +88,7 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     return signal
 
 
-def _signal_formatpeaks_sanitize(
-    peaks, key="Peaks"
-):  # FIXME: private function not used in this module
+def _signal_formatpeaks_sanitize(peaks, key="Peaks"):  # FIXME: private function not used in this module
     # Attempt to retrieve column.
     if isinstance(peaks, tuple):
         if isinstance(peaks[0], (dict, pd.DataFrame)):
