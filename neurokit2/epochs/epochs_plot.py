@@ -15,6 +15,8 @@ def epochs_plot(epochs, legend=True, **kwargs):
         A dict containing one DataFrame per event/trial. Usually obtained via `epochs_create()`.
     legend : bool
         Display the legend (the key of each epoch).
+    **kwargs
+        Other arguments to pass (not used for now).
 
     See Also
     ----------
