@@ -749,7 +749,7 @@ title="Open an issue"
     <span class="c1"># Sanitize input</span>
     <span class="c1"># If given peaks, compute R-R intervals (also referred to as NN) in milliseconds</span>
     <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Missing interbeat intervals have been detected. &quot;</span>
@@ -808,13 +808,12 @@ title="Open an issue"
     <span class="c1"># HRV and hrvanalysis</span>
     <span class="n">rri_n</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">rri_plus</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    
+
     <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
         <span class="c1"># Only include successive differences</span>
         <span class="n">rri_plus</span> <span class="o">=</span> <span class="n">rri_plus</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
         <span class="n">rri_n</span> <span class="o">=</span> <span class="n">rri_n</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
 
-    
     <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="n">rri_n</span> <span class="o">-</span> <span class="n">rri_plus</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Eq.7</span>
     <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="n">rri_n</span> <span class="o">+</span> <span class="n">rri_plus</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">sd1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -834,7 +833,7 @@ title="Open an issue"
     <span class="n">L</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD2&quot;</span><span class="p">]</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CSI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">T</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CVI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">L</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CSI_Modified&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">T</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CSI_Modified&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">T</span>
 
     <span class="k">return</span> <span class="n">out</span>
 
@@ -850,7 +849,7 @@ title="Open an issue"
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># rri_n, x-axis</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># rri_plus, y-axis</span>
-    
+
     <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
         <span class="c1"># Only include successive differences</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
@@ -873,9 +872,9 @@ title="Open an issue"
     <span class="c1"># Calculate the angles</span>
     <span class="n">theta_all</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">x</span><span class="p">))</span>  <span class="c1"># phase angle LI - phase angle of i-th point</span>
     <span class="c1"># Calculate the radius</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="c1"># Sector areas</span>
-    <span class="n">S_all</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">theta_all</span> <span class="o">*</span> <span class="n">r</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">S_all</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">theta_all</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># Guzik&#39;s Index (GI)</span>
     <span class="n">den_GI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_all</span><span class="p">)</span>
@@ -901,7 +900,7 @@ title="Open an issue"
     <span class="n">sd1d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_all</span><span class="p">[</span><span class="n">decelerate_indices</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">sd1a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_all</span><span class="p">[</span><span class="n">accelerate_indices</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
-    <span class="n">sd1I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd1d</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd1a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sd1I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd1d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd1a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C1d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd1d</span> <span class="o">/</span> <span class="n">sd1I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C1a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd1a</span> <span class="o">/</span> <span class="n">sd1I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD1d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sd1d</span>  <span class="c1"># SD1 deceleration</span>
@@ -916,7 +915,7 @@ title="Open an issue"
     <span class="n">sd2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">longterm_dec</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">longterm_nodiff</span><span class="p">)</span>
     <span class="n">sd2a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">longterm_acc</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">longterm_nodiff</span><span class="p">)</span>
 
-    <span class="n">sd2I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd2d</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sd2I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sd2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C2d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd2d</span> <span class="o">/</span> <span class="n">sd2I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;C2a&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sd2a</span> <span class="o">/</span> <span class="n">sd2I</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD2d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sd2d</span>  <span class="c1"># SD2 deceleration</span>
@@ -924,9 +923,9 @@ title="Open an issue"
     <span class="c1"># out[&quot;SD2I&quot;] = sd2I  # identical with SD2</span>
 
     <span class="c1"># Total asymmerty (SDNN)</span>
-    <span class="n">sdnnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1d</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd2d</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN deceleration</span>
-    <span class="n">sdnna</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1a</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN acceleration</span>
-    <span class="n">sdnn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sdnnd</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sdnna</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># should be similar to sdnn in hrv_time</span>
+    <span class="n">sdnnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd2d</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN deceleration</span>
+    <span class="n">sdnna</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sd2a</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># SDNN acceleration</span>
+    <span class="n">sdnn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sdnnd</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sdnna</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># should be similar to sdnn in hrv_time</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Cd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sdnnd</span> <span class="o">/</span> <span class="n">sdnn</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Ca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sdnna</span> <span class="o">/</span> <span class="n">sdnn</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDNNd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sdnnd</span>
@@ -945,7 +944,7 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
         <span class="c1"># Only include successive differences</span>
         <span class="n">diff_rri</span> <span class="o">=</span> <span class="n">diff_rri</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
-    
+
     <span class="n">zerocrossings</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">diff_rri</span><span class="p">)</span>
 
     <span class="c1"># Percentage of inflection points (PIP)</span>
@@ -1049,7 +1048,7 @@ title="Open an issue"
     <span class="c1"># Poincare values</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    
+
     <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
         <span class="c1"># Only include successive differences</span>
         <span class="n">ax1</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
@@ -1131,7 +1130,7 @@ title="Open an issue"
     <span class="n">yc</span> <span class="o">=</span> <span class="n">ax2</span> <span class="o">-</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">xct</span> <span class="o">=</span> <span class="n">xc</span> <span class="o">*</span> <span class="n">cos_angle</span> <span class="o">-</span> <span class="n">yc</span> <span class="o">*</span> <span class="n">sin_angle</span>
     <span class="n">yct</span> <span class="o">=</span> <span class="n">xc</span> <span class="o">*</span> <span class="n">sin_angle</span> <span class="o">+</span> <span class="n">yc</span> <span class="o">*</span> <span class="n">cos_angle</span>
-    <span class="n">rad_cc</span> <span class="o">=</span> <span class="p">(</span><span class="n">xct</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">yct</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">rad_cc</span> <span class="o">=</span> <span class="p">(</span><span class="n">xct</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">yct</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rad_cc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax1</span><span class="p">[</span><span class="n">points</span><span class="p">],</span> <span class="n">ax2</span><span class="p">[</span><span class="n">points</span><span class="p">],</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
