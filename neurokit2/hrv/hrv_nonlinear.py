@@ -278,7 +278,7 @@ def _hrv_nonlinear_poincare(rri, out):
     L = 4 * out["SD2"]
     out["CSI"] = L / T
     out["CVI"] = np.log10(L * T)
-    out["CSI_Modified"] = L ** 2 / T
+    out["CSI_Modified"] = L**2 / T
 
     return out
 
@@ -311,9 +311,9 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # Calculate the angles
     theta_all = abs(np.arctan(1) - np.arctan(y / x))  # phase angle LI - phase angle of i-th point
     # Calculate the radius
-    r = np.sqrt(x ** 2 + y ** 2)
+    r = np.sqrt(x**2 + y**2)
     # Sector areas
-    S_all = 1 / 2 * theta_all * r ** 2
+    S_all = 1 / 2 * theta_all * r**2
 
     # Guzik's Index (GI)
     den_GI = np.sum(dist_all)
@@ -339,7 +339,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd1d = np.sqrt(np.sum(dist_all[decelerate_indices] ** 2) / (N - 1))
     sd1a = np.sqrt(np.sum(dist_all[accelerate_indices] ** 2) / (N - 1))
 
-    sd1I = np.sqrt(sd1d ** 2 + sd1a ** 2)
+    sd1I = np.sqrt(sd1d**2 + sd1a**2)
     out["C1d"] = (sd1d / sd1I) ** 2
     out["C1a"] = (sd1a / sd1I) ** 2
     out["SD1d"] = sd1d  # SD1 deceleration
@@ -354,7 +354,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd2d = np.sqrt(longterm_dec + 0.5 * longterm_nodiff)
     sd2a = np.sqrt(longterm_acc + 0.5 * longterm_nodiff)
 
-    sd2I = np.sqrt(sd2d ** 2 + sd2a ** 2)
+    sd2I = np.sqrt(sd2d**2 + sd2a**2)
     out["C2d"] = (sd2d / sd2I) ** 2
     out["C2a"] = (sd2a / sd2I) ** 2
     out["SD2d"] = sd2d  # SD2 deceleration
@@ -362,9 +362,9 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # out["SD2I"] = sd2I  # identical with SD2
 
     # Total asymmerty (SDNN)
-    sdnnd = np.sqrt(0.5 * (sd1d ** 2 + sd2d ** 2))  # SDNN deceleration
-    sdnna = np.sqrt(0.5 * (sd1a ** 2 + sd2a ** 2))  # SDNN acceleration
-    sdnn = np.sqrt(sdnnd ** 2 + sdnna ** 2)  # should be similar to sdnn in hrv_time
+    sdnnd = np.sqrt(0.5 * (sd1d**2 + sd2d**2))  # SDNN deceleration
+    sdnna = np.sqrt(0.5 * (sd1a**2 + sd2a**2))  # SDNN acceleration
+    sdnn = np.sqrt(sdnnd**2 + sdnna**2)  # should be similar to sdnn in hrv_time
     out["Cd"] = (sdnnd / sdnn) ** 2
     out["Ca"] = (sdnna / sdnn) ** 2
     out["SDNNd"] = sdnnd
@@ -559,7 +559,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     yc = ax2 - xy[1]
     xct = xc * cos_angle - yc * sin_angle
     yct = xc * sin_angle + yc * cos_angle
-    rad_cc = (xct ** 2 / (width / 2.0) ** 2) + (yct ** 2 / (height / 2.0) ** 2)
+    rad_cc = (xct**2 / (width / 2.0) ** 2) + (yct**2 / (height / 2.0) ** 2)
 
     points = np.where(rad_cc > 1)[0]
     ax.plot(ax1[points], ax2[points], "o", color="k", alpha=0.5, markersize=4)
