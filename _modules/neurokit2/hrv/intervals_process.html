@@ -622,7 +622,7 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
-    <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span> <span class="o">=</span> <span class="n">_intervals_sanitize</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">intervals_time</span><span class="p">)</span>
+    <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_intervals_sanitize</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">intervals_time</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">interpolate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">interpolation_rate</span> <span class="o">=</span> <span class="kc">None</span>
@@ -649,6 +649,7 @@ title="Open an issue"
         <span class="p">)</span>
 
         <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">,</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">intervals_time</span> <span class="o">=</span> <span class="n">x_new</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># check if intervals appear to be already interpolated</span>
         <span class="k">if</span> <span class="n">_intervals_time_uniform</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">):</span>
@@ -657,7 +658,7 @@ title="Open an issue"
 
     <span class="k">if</span> <span class="n">detrend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">interpolation_rate</span></div>
+    <span class="k">return</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="p">,</span> <span class="n">interpolation_rate</span></div>
 </pre></div>
 
               </div>

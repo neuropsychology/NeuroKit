@@ -903,13 +903,13 @@ title="Open an issue"
     <span class="n">min_frequency</span> <span class="o">=</span> <span class="mf">0.12</span>
     <span class="n">max_frequency</span> <span class="o">=</span> <span class="mf">0.40</span>
 
-    <span class="c1"># Retrived IBI and interpolate it</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="c1"># Retrieve IBI and interpolate it</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_get_rri</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="c1"># Re-sample at 4 Hz</span>
     <span class="n">desired_sampling_rate</span> <span class="o">=</span> <span class="mi">4</span>
 
-    <span class="n">rri</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_process</span><span class="p">(</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_process</span><span class="p">(</span>
         <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span>
     <span class="p">)</span>
 

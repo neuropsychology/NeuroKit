@@ -563,6 +563,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_consecutive</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_zerocrossings</span>
 <span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span>
+<span class="kn">from</span> <span class="nn">.intervals_utils</span> <span class="kn">import</span> <span class="n">_intervals_successive</span>
 
 
 <div class="viewcode-block" id="hrv_nonlinear"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_nonlinear">[docs]</a><span class="k">def</span> <span class="nf">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -747,19 +748,26 @@ title="Open an issue"
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
     <span class="c1"># If given peaks, compute R-R intervals (also referred to as NN) in milliseconds</span>
-    <span class="n">rri</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-
+    <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Missing interbeat intervals have been detected. &quot;</span>
+            <span class="s2">&quot;Note that missing intervals can distort some HRV features, in particular &quot;</span>
+            <span class="s2">&quot;nonlinear indices.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="c1"># Initialize empty container for results</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Poincaré features (SD1, SD2, etc.)</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
     <span class="c1"># Heart Rate Fragmentation</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_fragmentation</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_fragmentation</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
     <span class="c1"># Heart Rate Asymmetry</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare_hra</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare_hra</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
     <span class="c1"># DFA</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_dfa</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -780,7 +788,7 @@ title="Open an issue"
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;LZC&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-        <span class="n">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
     <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;HRV_&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
@@ -789,7 +797,7 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Get SD1 and SD2</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_hrv_nonlinear_poincare</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_hrv_nonlinear_poincare</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{}):</span>
     <span class="sd">&quot;&quot;&quot;Compute SD1 and SD2.</span>
 
 <span class="sd">    - Brennan (2001). Do existing measures of Poincare plot geometry reflect nonlinear features of</span>
@@ -800,6 +808,13 @@ title="Open an issue"
     <span class="c1"># HRV and hrvanalysis</span>
     <span class="n">rri_n</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">rri_plus</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    
+    <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
+        <span class="c1"># Only include successive differences</span>
+        <span class="n">rri_plus</span> <span class="o">=</span> <span class="n">rri_plus</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
+        <span class="n">rri_n</span> <span class="o">=</span> <span class="n">rri_n</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
+
+    
     <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="n">rri_n</span> <span class="o">-</span> <span class="n">rri_plus</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Eq.7</span>
     <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="n">rri_n</span> <span class="o">+</span> <span class="n">rri_plus</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">sd1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -824,7 +839,7 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">out</span>
 
 
-<span class="k">def</span> <span class="nf">_hrv_nonlinear_poincare_hra</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_hrv_nonlinear_poincare_hra</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{}):</span>
     <span class="sd">&quot;&quot;&quot;Heart Rate Asymmetry Indices.</span>
 
 <span class="sd">    - Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)</span>
@@ -835,6 +850,12 @@ title="Open an issue"
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># rri_n, x-axis</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># rri_plus, y-axis</span>
+    
+    <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
+        <span class="c1"># Only include successive differences</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
     <span class="n">diff</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">x</span>
     <span class="n">decelerate_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># set of points above IL where y &gt; x</span>
@@ -914,17 +935,22 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">out</span>
 
 
-<span class="k">def</span> <span class="nf">_hrv_nonlinear_fragmentation</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_hrv_nonlinear_fragmentation</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{}):</span>
     <span class="sd">&quot;&quot;&quot;Heart Rate Fragmentation Indices - Costa (2017)</span>
 
 <span class="sd">    The more fragmented a time series is, the higher the PIP, IALS, PSS, and PAS indices will be.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">diff_rri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
+        <span class="c1"># Only include successive differences</span>
+        <span class="n">diff_rri</span> <span class="o">=</span> <span class="n">diff_rri</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
+    
     <span class="n">zerocrossings</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">diff_rri</span><span class="p">)</span>
 
     <span class="c1"># Percentage of inflection points (PIP)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;PIP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">zerocrossings</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">diff_rri</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;PIP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">zerocrossings</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
 
     <span class="c1"># Inverse of the average length of the acceleration/deceleration segments (IALS)</span>
     <span class="n">accelerations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff_rri</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1010,9 +1036,9 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Plot</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_marg_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_marg_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{},</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_marg_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_marg_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-    <span class="n">mean_heart_period</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
+    <span class="n">mean_heart_period</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
     <span class="n">sd1</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD1&quot;</span><span class="p">]</span>
     <span class="n">sd2</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD2&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sd1</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
@@ -1023,6 +1049,11 @@ title="Open an issue"
     <span class="c1"># Poincare values</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    
+    <span class="k">if</span> <span class="n">rri_missing</span><span class="p">:</span>
+        <span class="c1"># Only include successive differences</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">[</span><span class="n">_intervals_successive</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">)]</span>
 
     <span class="c1"># Set grid boundaries</span>
     <span class="n">ax1_lim</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ax1</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">ax1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10</span>
