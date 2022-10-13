@@ -165,7 +165,7 @@ def _intervals_missing(intervals, intervals_time=None):
         return True
     elif intervals_time is not None:
         successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time)
-        if np.all(successive_intervals) is False:
+        if not np.all(successive_intervals):
             # Check whether intervals appear to be interpolated
             if not _intervals_time_uniform(intervals_time):
                 return True
