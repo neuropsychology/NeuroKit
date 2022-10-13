@@ -41,15 +41,17 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     if intervals is None:
         return None
 
-    intervals, intervals_time = _intervals_sanitize(
+    intervals, intervals_time, intervals_missing = _intervals_sanitize(
         intervals, intervals_time=intervals_time, remove_missing=True
     )
-
-    # Check for non successive intervals in case of missing data
-    non_successive_indices = np.arange(1, len(intervals_time))[
-        np.invert(_intervals_successive(intervals, intervals_time))
-    ]
-
+    
+    if intervals_missing:
+        # Check for non successive intervals in case of missing data
+        non_successive_indices = np.arange(1, len(intervals_time))[
+            np.invert(_intervals_successive(intervals, intervals_time))
+        ]
+    else:
+        non_successive_indices = np.array([]).astype(int)
     # The number of peaks should be the number of intervals
     # plus one extra at the beginning of each group of successive intervals
     # (with no missing data there should be N_intervals + 1 peaks)

@@ -3,7 +3,7 @@ import numpy as np
 import scipy
 
 
-def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_diff=1):
+def _intervals_successive(intervals, intervals_time=None, thresh_unequal=10, n_diff=1, min_n_true=0):
     """Identify successive intervals.
 
     Identification of intervals that are consecutive
@@ -14,14 +14,15 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=2, n_di
     intervals : list or ndarray
         Intervals, e.g. breath-to-breath (BBI) or rpeak-to-rpeak (RRI)
     intervals_time : list or ndarray, optional
-        Time points corresponding to intervals, in seconds.
+        Time points corresponding to intervals, in seconds. Defaults to None,
+        in which case the cumulative sum of the intervals is used.
     thresh_unequal : int or float, optional
         Threshold at which the difference between time points is considered to
-        be unequal to the interval, in milliseconds.
+        be unequal to the interval, in milliseconds. Defaults to 10.
     n_diff: int, optional
         The number of times values are differenced.
         Can be used to check which values are valid for the n-th difference
-        assuming successive intervals.
+        assuming successive intervals. Defaults to 1.
 
     Returns
     ----------
@@ -105,6 +106,8 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
         Sanitized intervals, in milliseconds.
     intervals_time : array
         Sanitized timestamps corresponding to intervals, in seconds.
+    intervals_missing : bool
+        Whether there were missing intervals detected.
 
     Examples
     ---------
@@ -112,7 +115,7 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
 
       import neurokit2 as nk
       ibi = [500, 400, 700, 500, 300, 800, 500]
-      ibi, ibi_time = intervals_sanitize(ibi)
+      ibi, ibi_time, intervals_missing = intervals_sanitize(ibi)
 
     """
     if intervals is None:
@@ -121,8 +124,12 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
         # Ensure that input is numpy array
         intervals = np.array(intervals)
     if intervals_time is None:
+        # Impute intervals with median in case of missing values to calculate timestamps
+        imputed_intervals = np.where(np.isnan(intervals), 
+                                     np.nanmedian(intervals, axis=0), 
+                                     intervals)
         # Compute the timestamps of the intervals in seconds
-        intervals_time = np.nancumsum(intervals / 1000)
+        intervals_time = np.nancumsum(imputed_intervals / 1000)
     else:
         # Ensure that input is numpy array
         intervals_time = np.array(intervals_time)
@@ -145,12 +152,26 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
                 ):
                     # Assume timestamps were passed in milliseconds and convert to seconds
                     intervals_time = intervals_time / 1000
+    
+    intervals_missing = _intervals_missing(intervals, intervals_time)
 
     if remove_missing:
         # Remove NaN R-R intervals, if any
         intervals_time = intervals_time[np.isfinite(intervals)]
         intervals = intervals[np.isfinite(intervals)]
-    return intervals, intervals_time
+    return intervals, intervals_time, intervals_missing
+
+
+def _intervals_missing(intervals, intervals_time=None, min_n_true=2):
+    if len(intervals[np.isfinite(intervals)]) < len(intervals):
+        return True
+    elif intervals_time is not None:
+        successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time, min_n_true=min_n_true)
+        if np.all(successive_intervals) is False:
+            # Check whether intervals appear to be interpolated
+            if not _intervals_time_uniform(intervals_time):
+                return True
+    return False
 
 
 def _intervals_time_to_sampling_rate(intervals_time, central_measure="mean"):
