@@ -74,7 +74,7 @@ def test_rri_input_hrv():
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.2)
 
 
-@pytest.mark.parametrize("detrend", ["tarvainen2002", "polynomial", "tarvainen2002", "loess"])
+@pytest.mark.parametrize("detrend", ["tarvainen2002", "polynomial", "tarvainen2002", "loess", "locreg"])
 def test_hrv_detrended_rri(detrend):
 
     ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
