@@ -165,10 +165,10 @@ def hrv_frequency(
 
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
+    rri, rri_time, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     # Process R-R intervals (interpolated at 100 Hz by default)
-    rri, sampling_rate = intervals_process(
+    rri, rri_time, sampling_rate = intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 

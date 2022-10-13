@@ -151,15 +151,15 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
     plt.tight_layout(h_pad=0.5, w_pad=0.5)
 
     # Distribution of RR intervals
-    rri, rri_time = _hrv_format_input(peaks, sampling_rate=sampling_rate)
+    rri, rri_time, rri_missing = _hrv_format_input(peaks, sampling_rate=sampling_rate)
     ax_distrib = summary_plot(rri, ax=ax_distrib, **kwargs)
 
     # Poincare plot
     out.columns = [col.replace("HRV_", "") for col in out.columns]
-    _hrv_nonlinear_show(rri, out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
+    _hrv_nonlinear_show(rri, rri_time=rri_time, rri_missing=rri_missing, out=out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
 
     # PSD plot
-    rri, sampling_rate = intervals_process(
+    rri, rri_time, sampling_rate = intervals_process(
         rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
 

@@ -81,7 +81,7 @@ def intervals_process(
 
     """
     # Sanitize input
-    intervals, intervals_time = _intervals_sanitize(intervals, intervals_time=intervals_time)
+    intervals, intervals_time, _ = _intervals_sanitize(intervals, intervals_time=intervals_time)
 
     if interpolate is False:
         interpolation_rate = None
@@ -108,6 +108,7 @@ def intervals_process(
         )
 
         intervals = signal_interpolate(intervals_time, intervals, x_new=x_new, **kwargs)
+        intervals_time = x_new
     else:
         # check if intervals appear to be already interpolated
         if _intervals_time_uniform(intervals_time):
@@ -116,4 +117,4 @@ def intervals_process(
 
     if detrend is not None:
         intervals = signal_detrend(intervals, method=detrend)
-    return intervals, interpolation_rate
+    return intervals, intervals_time, interpolation_rate
