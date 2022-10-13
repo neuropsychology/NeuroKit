@@ -59,7 +59,6 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     Used in *_findpeaks to transform vectors of peak indices to signal.
 
     """
-    # signal = np.zeros(desired_length, dtype=float)
     signal = pd.Series(np.zeros(desired_length, dtype=float))
 
     if isinstance(indices, list) and (not indices):  # skip empty lists
@@ -85,14 +84,11 @@ def _signal_from_indices(indices, desired_length=None, value=1):
                 "is different from the number of indices."
             )
         signal[indices] = value
-        # signal[indices] = value
 
     return signal
 
 
-def _signal_formatpeaks_sanitize(
-    peaks, key="Peaks"
-):  # FIXME: private function not used in this module
+def _signal_formatpeaks_sanitize(peaks, key="Peaks"):  # FIXME: private function not used in this module
     # Attempt to retrieve column.
     if isinstance(peaks, tuple):
         if isinstance(peaks[0], (dict, pd.DataFrame)):
