@@ -77,7 +77,8 @@ def signal_detrend(
       import matplotlib.pyplot as plt
 
       # Simulate signal with low and high frequency
-      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=100)
+      sampling_rate = 100
+      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)
       signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend
 
       # Apply detrending algorithms
@@ -101,7 +102,7 @@ def signal_detrend(
 
       # Method 4: Local linear regression (100Hz)
       locreg = nk.signal_detrend(signal, method="locreg",
-                                 window=1.5*100, stepsize=0.02*100)
+                                 window=1.5, stepsize=0.02, sampling_rate=sampling_rate)
 
       # Method 5: EMD
       emd = nk.signal_detrend(signal, method="EMD", components=[-2, -1])
