@@ -935,12 +935,8 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         # Onsets/Offsets ------
         P_onsets.append(_ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P))
         T_offsets.append(_ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T))
-        # Manual fix for T_offsets
-        if T_offsets[-1] >= len(ecg):
-            T_offsets[-1] = np.nan
 
-    # Return info dictionary
-    return {
+    info = {
         "ECG_P_Peaks": P_list,
         "ECG_Q_Peaks": Q_list,
         "ECG_S_Peaks": S_list,
@@ -948,6 +944,14 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         "ECG_P_Onsets": P_onsets,
         "ECG_T_Offsets": T_offsets,
     }
+
+    # Ensure that all indices are not larger than ECG signal indices
+    for key, value in info.items():
+        if info[key][-1] >= len(ecg):
+            info[key][-1] = np.nan
+
+    # Return info dictionary
+    return info
 
 
 # Internal
