@@ -160,11 +160,11 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
     return intervals, intervals_time, intervals_missing
 
 
-def _intervals_missing(intervals, intervals_time=None, min_n_true=2):
+def _intervals_missing(intervals, intervals_time=None):
     if len(intervals[np.isfinite(intervals)]) < len(intervals):
         return True
     elif intervals_time is not None:
-        successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time, min_n_true=min_n_true)
+        successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time)
         if np.all(successive_intervals) is False:
             # Check whether intervals appear to be interpolated
             if not _intervals_time_uniform(intervals_time):
