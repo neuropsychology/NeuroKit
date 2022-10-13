@@ -123,9 +123,7 @@ def test_ecg_findpeaks():
 
     sampling_rate = 1000
 
-    ecg = nk.ecg_simulate(
-        duration=60, sampling_rate=sampling_rate, noise=0, method="simple", random_state=42
-    )
+    ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0, method="simple", random_state=42)
 
     ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
 
@@ -138,15 +136,11 @@ def test_ecg_findpeaks():
     assert len(fig.axes) == 2
 
     # Test pantompkins1985 method
-    info_pantom = nk.ecg_findpeaks(
-        nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985"
-    )
+    info_pantom = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
     assert info_pantom["ECG_R_Peaks"].size == 70
 
     # Test hamilton2002 method
-    info_hamilton = nk.ecg_findpeaks(
-        nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002"
-    )
+    info_hamilton = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
     assert info_hamilton["ECG_R_Peaks"].size == 69
 
     # Test christov2004 method
@@ -162,9 +156,7 @@ def test_ecg_findpeaks():
     assert info_elgendi["ECG_R_Peaks"].size == 70
 
     # Test engzeemod2012 method
-    info_engzeemod = nk.ecg_findpeaks(
-        nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012"
-    )
+    info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     assert info_engzeemod["ECG_R_Peaks"].size == 69
 
     # Test kalidas2017 method
@@ -185,13 +177,9 @@ def test_ecg_eventrelated():
     ecg_eventrelated = nk.ecg_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(
-        np.array(ecg_eventrelated["ECG_Rate_Min"]) < np.array(ecg_eventrelated["ECG_Rate_Mean"])
-    )
+    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Min"]) < np.array(ecg_eventrelated["ECG_Rate_Mean"]))
 
-    assert np.alltrue(
-        np.array(ecg_eventrelated["ECG_Rate_Mean"]) < np.array(ecg_eventrelated["ECG_Rate_Max"])
-    )
+    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Mean"]) < np.array(ecg_eventrelated["ECG_Rate_Max"]))
 
     assert len(ecg_eventrelated["Label"]) == 3
 
@@ -202,9 +190,7 @@ def test_ecg_eventrelated():
         del first_epoch_copy["ECG_Phase_Atrial"]
         nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r".*does not have an.*`ECG_Phase_Ventricular`"
-    ):
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an.*`ECG_Phase_Ventricular`"):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["ECG_Phase_Ventricular"]
@@ -258,6 +244,17 @@ def test_ecg_delineate():
     assert np.allclose(len(waves_cwt["ECG_P_Offsets"]), 22, atol=1)
     assert np.allclose(len(waves_cwt["ECG_T_Onsets"]), 22, atol=1)
     assert np.allclose(len(waves_cwt["ECG_T_Offsets"]), 22, atol=1)
+
+
+def test_ecg_invert():
+
+    sampling_rate = 500
+    noise = 0.05
+
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=3)
+    ecg_inverted = ecg * -1 + 2 * np.nanmean(ecg)
+    ecg_fixed, _ = nk.ecg_invert(ecg_inverted)
+    assert np.allclose((ecg - ecg_fixed).mean(), 0, atol=1e-6)
 
 
 def test_ecg_intervalrelated():

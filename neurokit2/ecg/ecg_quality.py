@@ -82,6 +82,8 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 
       @savefig p_ecg_quality.png scale=100%
       nk.signal_plot([ecg_cleaned, quality], standardize=True)
+      @suppress
+      plt.close()
 
     * **Example 2:** Zhao et al. (2018) method
 

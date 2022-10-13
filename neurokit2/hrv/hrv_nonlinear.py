@@ -22,6 +22,7 @@ from ..complexity import (
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_format_input
+from .intervals_utils import _intervals_successive
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -206,19 +207,26 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """
     # Sanitize input
     # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
+    rri, rri_time, rri_missing = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
+    if rri_missing:
+        warn(
+            "Missing interbeat intervals have been detected. "
+            "Note that missing intervals can distort some HRV features, in particular "
+            "nonlinear indices.",
+            category=NeuroKitWarning,
+        )
     # Initialize empty container for results
     out = {}
 
     # Poincaré features (SD1, SD2, etc.)
-    out = _hrv_nonlinear_poincare(rri, out)
+    out = _hrv_nonlinear_poincare(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     # Heart Rate Fragmentation
-    out = _hrv_nonlinear_fragmentation(rri, out)
+    out = _hrv_nonlinear_fragmentation(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     # Heart Rate Asymmetry
-    out = _hrv_nonlinear_poincare_hra(rri, out)
+    out = _hrv_nonlinear_poincare_hra(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     # DFA
     out = _hrv_dfa(rri, out, **kwargs)
@@ -239,7 +247,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out["LZC"], _ = complexity_lempelziv(rri, **kwargs)
 
     if show:
-        _hrv_nonlinear_show(rri, out)
+        _hrv_nonlinear_show(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
@@ -248,7 +256,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 # =============================================================================
 # Get SD1 and SD2
 # =============================================================================
-def _hrv_nonlinear_poincare(rri, out):
+def _hrv_nonlinear_poincare(rri, rri_time=None, rri_missing=False, out={}):
     """Compute SD1 and SD2.
 
     - Brennan (2001). Do existing measures of Poincare plot geometry reflect nonlinear features of
@@ -259,6 +267,12 @@ def _hrv_nonlinear_poincare(rri, out):
     # HRV and hrvanalysis
     rri_n = rri[:-1]
     rri_plus = rri[1:]
+
+    if rri_missing:
+        # Only include successive differences
+        rri_plus = rri_plus[_intervals_successive(rri, intervals_time=rri_time)]
+        rri_n = rri_n[_intervals_successive(rri, intervals_time=rri_time)]
+
     x1 = (rri_n - rri_plus) / np.sqrt(2)  # Eq.7
     x2 = (rri_n + rri_plus) / np.sqrt(2)
     sd1 = np.std(x1, ddof=1)
@@ -283,7 +297,7 @@ def _hrv_nonlinear_poincare(rri, out):
     return out
 
 
-def _hrv_nonlinear_poincare_hra(rri, out):
+def _hrv_nonlinear_poincare_hra(rri, rri_time=None, rri_missing=False, out={}):
     """Heart Rate Asymmetry Indices.
 
     - Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
@@ -294,6 +308,12 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     N = len(rri) - 1
     x = rri[:-1]  # rri_n, x-axis
     y = rri[1:]  # rri_plus, y-axis
+
+    if rri_missing:
+        # Only include successive differences
+        x = x[_intervals_successive(rri, intervals_time=rri_time)]
+        y = y[_intervals_successive(rri, intervals_time=rri_time)]
+        N = len(x)
 
     diff = y - x
     decelerate_indices = np.where(diff > 0)[0]  # set of points above IL where y > x
@@ -373,17 +393,22 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     return out
 
 
-def _hrv_nonlinear_fragmentation(rri, out):
+def _hrv_nonlinear_fragmentation(rri, rri_time=None, rri_missing=False, out={}):
     """Heart Rate Fragmentation Indices - Costa (2017)
 
     The more fragmented a time series is, the higher the PIP, IALS, PSS, and PAS indices will be.
     """
 
     diff_rri = np.diff(rri)
+    if rri_missing:
+        # Only include successive differences
+        diff_rri = diff_rri[_intervals_successive(rri, intervals_time=rri_time)]
+
     zerocrossings = signal_zerocrossings(diff_rri)
 
     # Percentage of inflection points (PIP)
-    out["PIP"] = len(zerocrossings) / len(rri)
+    N = len(diff_rri) + 1
+    out["PIP"] = len(zerocrossings) / N
 
     # Inverse of the average length of the acceleration/deceleration segments (IALS)
     accelerations = np.where(diff_rri > 0)[0]
@@ -469,9 +494,9 @@ def _hrv_dfa(rri, out, n_windows="default", **kwargs):
 # =============================================================================
 # Plot
 # =============================================================================
-def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
+def _hrv_nonlinear_show(rri, rri_time=None, rri_missing=False, out={}, ax=None, ax_marg_x=None, ax_marg_y=None):
 
-    mean_heart_period = np.mean(rri)
+    mean_heart_period = np.nanmean(rri)
     sd1 = out["SD1"]
     sd2 = out["SD2"]
     if isinstance(sd1, pd.Series):
@@ -482,6 +507,11 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     # Poincare values
     ax1 = rri[:-1]
     ax2 = rri[1:]
+
+    if rri_missing:
+        # Only include successive differences
+        ax1 = ax1[_intervals_successive(rri, intervals_time=rri_time)]
+        ax2 = ax2[_intervals_successive(rri, intervals_time=rri_time)]
 
     # Set grid boundaries
     ax1_lim = (max(ax1) - min(ax1)) / 10
