@@ -125,9 +125,7 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
         intervals = np.array(intervals)
     if intervals_time is None:
         # Impute intervals with median in case of missing values to calculate timestamps
-        imputed_intervals = np.where(np.isnan(intervals), 
-                                     np.nanmedian(intervals, axis=0), 
-                                     intervals)
+        imputed_intervals = np.where(np.isnan(intervals), np.nanmedian(intervals, axis=0), intervals)
         # Compute the timestamps of the intervals in seconds
         intervals_time = np.nancumsum(imputed_intervals / 1000)
     else:
@@ -152,7 +150,7 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
                 ):
                     # Assume timestamps were passed in milliseconds and convert to seconds
                     intervals_time = intervals_time / 1000
-    
+
     intervals_missing = _intervals_missing(intervals, intervals_time)
 
     if remove_missing:

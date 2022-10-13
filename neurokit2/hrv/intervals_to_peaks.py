@@ -1,6 +1,6 @@
 import numpy as np
 
-from .intervals_utils import _intervals_successive, _intervals_sanitize
+from .intervals_utils import _intervals_sanitize, _intervals_successive
 
 
 def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
@@ -44,7 +44,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     intervals, intervals_time, intervals_missing = _intervals_sanitize(
         intervals, intervals_time=intervals_time, remove_missing=True
     )
-    
+
     if intervals_missing:
         # Check for non successive intervals in case of missing data
         non_successive_indices = np.arange(1, len(intervals_time))[
@@ -57,9 +57,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     # (with no missing data there should be N_intervals + 1 peaks)
     to_insert_indices = np.concatenate((np.array([0]), non_successive_indices))
 
-    times_to_insert = (
-        intervals_time[to_insert_indices] - intervals[to_insert_indices] / 1000
-    )
+    times_to_insert = intervals_time[to_insert_indices] - intervals[to_insert_indices] / 1000
 
     peaks_time = np.sort(np.concatenate((intervals_time, times_to_insert)))
     # convert seconds to sample indices

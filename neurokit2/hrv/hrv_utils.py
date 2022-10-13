@@ -59,7 +59,7 @@ def _hrv_sanitize_tuple(peaks, sampling_rate=1000):
                     peaks = _hrv_sanitize_peaks(peaks[1])
             else:
                 peaks = _hrv_sanitize_peaks(peaks[0])
-    
+
     rri, rri_time, rri_missing = _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
 
     return rri, rri_time, rri_missing, sampling_rate

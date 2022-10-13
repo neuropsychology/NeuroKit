@@ -139,7 +139,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     rri, rri_time, rri_missing = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     diff_rri = np.diff(rri)
-    
+
     if rri_missing:
         # Only include successive differences
         diff_rri = diff_rri[_intervals_successive(rri, intervals_time=rri_time)]
@@ -154,7 +154,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         out["SDNNI" + str(i)] = _sdnni(rri, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -215,7 +215,7 @@ def _sdann(rri, rri_time=None, window=1):
         # Compute the timestamps of the R-R intervals in seconds
         rri_time = np.nancumsum(rri / 1000)
     # Convert timestamps to milliseconds and ensure first timestamp is equal to first interval
-    rri_cumsum = (rri_time - rri_time[0])*1000 + rri[0]
+    rri_cumsum = (rri_time - rri_time[0]) * 1000 + rri[0]
     n_windows = int(np.round(rri_cumsum[-1] / window_size))
     if n_windows < 3:
         return np.nan
@@ -236,7 +236,7 @@ def _sdnni(rri, rri_time=None, window=1):
         # Compute the timestamps of the R-R intervals in seconds
         rri_time = np.nancumsum(rri / 1000)
     # Convert timestamps to milliseconds and ensure first timestamp is equal to first interval
-    rri_cumsum = (rri_time - rri_time[0])*1000 + rri[0]
+    rri_cumsum = (rri_time - rri_time[0]) * 1000 + rri[0]
     n_windows = int(np.round(rri_cumsum[-1] / window_size))
     if n_windows < 3:
         return np.nan
@@ -252,7 +252,7 @@ def _sdnni(rri, rri_time=None, window=1):
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2 ** 14
+    min_error = 2**14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]
