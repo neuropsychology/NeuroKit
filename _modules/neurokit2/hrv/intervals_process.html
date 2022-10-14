@@ -657,7 +657,7 @@ title="Open an issue"
             <span class="n">interpolation_rate</span> <span class="o">=</span> <span class="n">_intervals_time_to_sampling_rate</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">detrend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend</span><span class="p">)</span>
+        <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="p">,</span> <span class="n">interpolation_rate</span></div>
 </pre></div>
 

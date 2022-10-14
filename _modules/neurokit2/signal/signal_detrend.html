@@ -556,6 +556,7 @@ title="Open an issue"
     <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
     <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
     <span class="n">components</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Signal Detrending**</span>
 
@@ -585,15 +586,17 @@ title="Open an issue"
 <span class="sd">        Only used if ``method`` is &quot;loess&quot;. The parameter which controls the degree of smoothing.</span>
 <span class="sd">    window : float</span>
 <span class="sd">        Only used if ``method`` is &quot;locreg&quot;. The detrending ``window`` should correspond to the</span>
-<span class="sd">        desired low frequency band to remove multiplied by the sampling rate</span>
-<span class="sd">        (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at</span>
-<span class="sd">        1000Hz).</span>
+<span class="sd">        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below </span>
+<span class="sd">        1.5Hz).</span>
 <span class="sd">    stepsize : float</span>
-<span class="sd">        Only used if ``method`` is ``&quot;locreg&quot;``. Similarly to ``window``, ``stepsize`` should also</span>
-<span class="sd">        be multiplied by the sampling rate.</span>
+<span class="sd">        Only used if ``method`` is ``&quot;locreg&quot;``. </span>
 <span class="sd">    components : list</span>
 <span class="sd">        Only used if ``method`` is ``&quot;EMD&quot;``. What Intrinsic Mode Functions (IMFs) from EMD to</span>
 <span class="sd">        remove. By default, the last one.</span>
+<span class="sd">    sampling_rate : int, optional</span>
+<span class="sd">        Only used if ``method`` is &quot;locreg&quot;. Sampling rate (Hz) of the signal. </span>
+<span class="sd">        If not None, the ``stepsize`` and ``window`` arguments will be multiplied</span>
+<span class="sd">        by the sampling rate. By default 1000.</span>
 
 
 <span class="sd">    Returns</span>
@@ -615,7 +618,8 @@ title="Open an issue"
 <span class="sd">      import matplotlib.pyplot as plt</span>
 
 <span class="sd">      # Simulate signal with low and high frequency</span>
-<span class="sd">      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=100)</span>
+<span class="sd">      sampling_rate = 100</span>
+<span class="sd">      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)</span>
 <span class="sd">      signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend</span>
 
 <span class="sd">      # Apply detrending algorithms</span>
@@ -639,7 +643,7 @@ title="Open an issue"
 
 <span class="sd">      # Method 4: Local linear regression (100Hz)</span>
 <span class="sd">      locreg = nk.signal_detrend(signal, method=&quot;locreg&quot;,</span>
-<span class="sd">                                 window=1.5*100, stepsize=0.02*100)</span>
+<span class="sd">                                 window=1.5, stepsize=0.02, sampling_rate=sampling_rate)</span>
 
 <span class="sd">      # Method 5: EMD</span>
 <span class="sd">      emd = nk.signal_detrend(signal, method=&quot;EMD&quot;, components=[-2, -1])</span>
@@ -679,7 +683,7 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;loess&quot;</span><span class="p">,</span> <span class="s2">&quot;lowess&quot;</span><span class="p">]:</span>
         <span class="n">detrended</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">-</span> <span class="n">fit_loess</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;locdetrend&quot;</span><span class="p">,</span> <span class="s2">&quot;runline&quot;</span><span class="p">,</span> <span class="s2">&quot;locreg&quot;</span><span class="p">,</span> <span class="s2">&quot;locregression&quot;</span><span class="p">]:</span>
-        <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_locreg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="n">stepsize</span><span class="p">)</span>
+        <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_locreg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="n">stepsize</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;emd&quot;</span><span class="p">]:</span>
         <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_emd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -714,7 +718,7 @@ title="Open an issue"
     <span class="k">return</span> <span class="n">signal</span> <span class="o">-</span> <span class="n">trend</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_detrend_locreg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_detrend_locreg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Local linear regression (&#39;runline&#39; algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.</span>
 
 <span class="sd">    - http://chronux.org/chronuxFiles/Documentation/chronux/spectral_analysis/continuous/locdetrend.html</span>
@@ -723,10 +727,14 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-
-    <span class="c1"># Sanity chekcs</span>
-    <span class="n">window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
-    <span class="n">stepsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stepsize</span><span class="p">)</span>
+    
+    <span class="c1"># Sanitize input</span>
+    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="c1"># Sanity checks</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">stepsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stepsize</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">window</span> <span class="o">&gt;</span> <span class="n">length</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: signal_detrend(): &#39;window&#39; should be &quot;</span>
