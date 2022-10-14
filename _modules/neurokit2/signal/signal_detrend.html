@@ -559,12 +559,10 @@ title="Open an issue"
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Signal Detrending**</span>
-
 <span class="sd">    Apply a baseline (order = 0), linear (order = 1), or polynomial (order &gt; 1) detrending to the</span>
 <span class="sd">    signal (i.e., removing a general trend). One can also use other methods, such as smoothness</span>
 <span class="sd">    priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for</span>
 <span class="sd">    long signals.</span>
-
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
@@ -586,68 +584,54 @@ title="Open an issue"
 <span class="sd">        Only used if ``method`` is &quot;loess&quot;. The parameter which controls the degree of smoothing.</span>
 <span class="sd">    window : float</span>
 <span class="sd">        Only used if ``method`` is &quot;locreg&quot;. The detrending ``window`` should correspond to the</span>
-<span class="sd">        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below </span>
+<span class="sd">        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below</span>
 <span class="sd">        1.5Hz).</span>
 <span class="sd">    stepsize : float</span>
-<span class="sd">        Only used if ``method`` is ``&quot;locreg&quot;``. </span>
+<span class="sd">        Only used if ``method`` is ``&quot;locreg&quot;``.</span>
 <span class="sd">    components : list</span>
 <span class="sd">        Only used if ``method`` is ``&quot;EMD&quot;``. What Intrinsic Mode Functions (IMFs) from EMD to</span>
 <span class="sd">        remove. By default, the last one.</span>
 <span class="sd">    sampling_rate : int, optional</span>
-<span class="sd">        Only used if ``method`` is &quot;locreg&quot;. Sampling rate (Hz) of the signal. </span>
+<span class="sd">        Only used if ``method`` is &quot;locreg&quot;. Sampling rate (Hz) of the signal.</span>
 <span class="sd">        If not None, the ``stepsize`` and ``window`` arguments will be multiplied</span>
 <span class="sd">        by the sampling rate. By default 1000.</span>
-
-
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    array</span>
 <span class="sd">        Vector containing the detrended signal.</span>
-
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    signal_filter, fit_loess, signal_decompose</span>
-
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
-
 <span class="sd">      import numpy as np</span>
 <span class="sd">      import pandas as pd</span>
 <span class="sd">      import neurokit2 as nk</span>
 <span class="sd">      import matplotlib.pyplot as plt</span>
-
 <span class="sd">      # Simulate signal with low and high frequency</span>
 <span class="sd">      sampling_rate = 100</span>
 <span class="sd">      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)</span>
 <span class="sd">      signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend</span>
-
 <span class="sd">      # Apply detrending algorithms</span>
 <span class="sd">      # Method 1: Default Polynomial Detrending of a Given Order</span>
 <span class="sd">      # Constant detrend (removes the mean)</span>
 <span class="sd">      baseline = nk.signal_detrend(signal, order=0)</span>
-
 <span class="sd">      # Linear Detrend (removes the linear trend)</span>
 <span class="sd">      linear = nk.signal_detrend(signal, order=1)</span>
-
 <span class="sd">      # Polynomial Detrend (removes the polynomial trend)</span>
 <span class="sd">      quadratic = nk.signal_detrend(signal, order=2)  # Quadratic detrend</span>
 <span class="sd">      cubic = nk.signal_detrend(signal, order=3)  # Cubic detrend</span>
 <span class="sd">      poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)</span>
-
 <span class="sd">      # Method 2: Tarvainen&#39;s smoothness priors approach (Tarvainen et al., 2002)</span>
 <span class="sd">      tarvainen = nk.signal_detrend(signal, method=&quot;tarvainen2002&quot;)</span>
-
 <span class="sd">      # Method 3: LOESS smoothing trend removal</span>
 <span class="sd">      loess = nk.signal_detrend(signal, method=&quot;loess&quot;)</span>
-
 <span class="sd">      # Method 4: Local linear regression (100Hz)</span>
 <span class="sd">      locreg = nk.signal_detrend(signal, method=&quot;locreg&quot;,</span>
 <span class="sd">                                 window=1.5, stepsize=0.02, sampling_rate=sampling_rate)</span>
-
 <span class="sd">      # Method 5: EMD</span>
 <span class="sd">      emd = nk.signal_detrend(signal, method=&quot;EMD&quot;, components=[-2, -1])</span>
-
 <span class="sd">      # Visualize different methods</span>
 <span class="sd">      @savefig signal_detrend1.png scale=100%</span>
 <span class="sd">      axes = pd.DataFrame({&quot;Original signal&quot;: signal,</span>
@@ -665,13 +649,11 @@ title="Open an issue"
 <span class="sd">          subplot.axhline(y=0, color=&quot;k&quot;, linestyle=&quot;--&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    * Tarvainen, M. P., Ranta-Aho, P. O., &amp; Karjalainen, P. A. (2002). An advanced detrending</span>
 <span class="sd">      method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2),</span>
 <span class="sd">      172-175</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>  <span class="c1"># Force vector</span>
 
@@ -683,7 +665,9 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;loess&quot;</span><span class="p">,</span> <span class="s2">&quot;lowess&quot;</span><span class="p">]:</span>
         <span class="n">detrended</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">-</span> <span class="n">fit_loess</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;locdetrend&quot;</span><span class="p">,</span> <span class="s2">&quot;runline&quot;</span><span class="p">,</span> <span class="s2">&quot;locreg&quot;</span><span class="p">,</span> <span class="s2">&quot;locregression&quot;</span><span class="p">]:</span>
-        <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_locreg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="n">stepsize</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_locreg</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="n">stepsize</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;emd&quot;</span><span class="p">]:</span>
         <span class="n">detrended</span> <span class="o">=</span> <span class="n">_signal_detrend_emd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="n">components</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -691,7 +675,6 @@ title="Open an issue"
             <span class="s2">&quot;NeuroKit error: signal_detrend(): &#39;method&#39; should be one of &#39;polynomial&#39;, &#39;loess&#39;&quot;</span>
             <span class="o">+</span> <span class="s2">&quot;&#39;locreg&#39;, &#39;EMD&#39; or &#39;tarvainen2002&#39;.&quot;</span>
         <span class="p">)</span>
-
     <span class="k">return</span> <span class="n">detrended</span></div>
 
 
@@ -700,15 +683,15 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_signal_detrend_tarvainen2002</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">regularization</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Method by Tarvainen et al., 2002.</span>
-
 <span class="sd">    - Tarvainen, M. P., Ranta-Aho, P. O., &amp; Karjalainen, P. A. (2002). An advanced detrending method</span>
 <span class="sd">    with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
     <span class="n">identity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]))</span>
-    <span class="n">D_2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">dia_matrix</span><span class="p">((</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>  <span class="c1"># pylint: disable=E1101</span>
+    <span class="n">D_2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">dia_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># pylint: disable=E1101</span>
     <span class="n">inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">identity</span> <span class="o">+</span> <span class="n">regularization</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">D_2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">D_2</span><span class="p">)</span>
     <span class="n">z_stat</span> <span class="o">=</span> <span class="p">((</span><span class="n">identity</span> <span class="o">-</span> <span class="n">inv</span><span class="p">))</span> <span class="o">@</span> <span class="n">signal</span>
 
@@ -720,21 +703,18 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_signal_detrend_locreg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Local linear regression (&#39;runline&#39; algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.</span>
-
 <span class="sd">    - http://chronux.org/chronuxFiles/Documentation/chronux/spectral_analysis/continuous/locdetrend.html</span>
 <span class="sd">    - https://github.com/sappelhoff/pyprep/blob/master/pyprep/removeTrend.py</span>
 <span class="sd">    - https://github.com/VisLab/EEG-Clean-Tools/blob/master/PrepPipeline/utilities/localDetrend.m</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-    
+
     <span class="c1"># Sanitize input</span>
     <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1</span>
-    
     <span class="c1"># Sanity checks</span>
-    <span class="n">window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">stepsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stepsize</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">stepsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stepsize</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">window</span> <span class="o">&gt;</span> <span class="n">length</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: signal_detrend(): &#39;window&#39; should be &quot;</span>
@@ -744,7 +724,6 @@ title="Open an issue"
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: signal_detrend(): &#39;stepsize&#39; should be more than 1. Increase its value.&quot;</span>
         <span class="p">)</span>
-
     <span class="n">y_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">length</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">length</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">nwin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">length</span> <span class="o">-</span> <span class="n">window</span><span class="p">)</span> <span class="o">/</span> <span class="n">stepsize</span><span class="p">))</span>
@@ -764,7 +743,6 @@ title="Open an issue"
         <span class="n">norm</span><span class="p">[(</span><span class="n">j</span> <span class="o">*</span> <span class="n">stepsize</span><span class="p">)</span> <span class="p">:</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="n">stepsize</span> <span class="o">+</span> <span class="n">window</span><span class="p">)]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">[</span>
             <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="n">stepsize</span><span class="p">)</span> <span class="p">:</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="n">stepsize</span> <span class="o">+</span> <span class="n">window</span><span class="p">)</span>
         <span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">wt</span><span class="p">,</span> <span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-
     <span class="n">above_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">norm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">y_line</span><span class="p">[</span><span class="n">above_norm</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_line</span><span class="p">[</span><span class="n">above_norm</span><span class="p">]</span> <span class="o">/</span> <span class="n">norm</span><span class="p">[</span><span class="n">above_norm</span><span class="p">]</span>
 
