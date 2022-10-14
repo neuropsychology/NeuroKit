@@ -600,7 +600,6 @@ title="Open an issue"
 <span class="sd">    Used in *_findpeaks to transform vectors of peak indices to signal.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># signal = np.zeros(desired_length, dtype=float)</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">desired_length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">indices</span><span class="p">):</span>  <span class="c1"># skip empty lists</span>
@@ -626,14 +625,11 @@ title="Open an issue"
                 <span class="s2">&quot;is different from the number of indices.&quot;</span>
             <span class="p">)</span>
         <span class="n">signal</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="c1"># signal[indices] = value</span>
 
     <span class="k">return</span> <span class="n">signal</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_formatpeaks_sanitize</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;Peaks&quot;</span>
-<span class="p">):</span>  <span class="c1"># FIXME: private function not used in this module</span>
+<span class="k">def</span> <span class="nf">_signal_formatpeaks_sanitize</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;Peaks&quot;</span><span class="p">):</span>  <span class="c1"># FIXME: private function not used in this module</span>
     <span class="c1"># Attempt to retrieve column.</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)):</span>
