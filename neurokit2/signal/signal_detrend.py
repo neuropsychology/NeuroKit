@@ -44,9 +44,9 @@ def signal_detrend(
         Only used if ``method`` is "loess". The parameter which controls the degree of smoothing.
     window : float
         Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
-        desired low frequency band to remove multiplied by the sampling rate
-        (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at
-        1000Hz).
+        sample rate divided by the desired low frequency band to remove (window=sample_rate / frequency) .
+        For instance, to remove frequencies below 0.67Hz for a signal sampled at 1000Hz, a window
+        of the size round(1000 / 0.67) = ``1.5*1000`` should be used.
     stepsize : float
         Only used if ``method`` is ``"locreg"``. Similarly to ``window``, ``stepsize`` should also
         be multiplied by the sampling rate.
