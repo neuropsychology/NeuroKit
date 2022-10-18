@@ -36,7 +36,7 @@ def ecg_peaks(
       al. (2015) by Rodrigues et al. (2021).
     * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.
       For a given peak detector, the binary signal representing the peak locations is convolved
-      with a Gaussian distribution, resulting in a propabilistic representation of each peak
+      with a Gaussian distribution, resulting in a probabilistic representation of each peak
       location. This procedure is repeated for all selected methods and the resulting
       signals are accumulated. Finally, a threshold is used to accept or reject the peak locations.
       See this discussion for more information on the origins of the method:
@@ -85,6 +85,8 @@ def ecg_peaks(
 
       @savefig p_ecg_peaks1.png scale=100%
       nk.events_plot(info["ECG_R_Peaks"], ecg)
+      @suppress
+      plt.close()
 
     * **Example 2**: Compare different methods
 
@@ -153,6 +155,8 @@ def ecg_peaks(
       # Visualize results
       @savefig p_ecg_peaks2.png scale=100%
       nk.events_plot(rpeaks, ecg)
+      @suppress
+      plt.close()
 
     * **Example 3**: Method-agreement procedure ('promac')
 
@@ -165,6 +169,8 @@ def ecg_peaks(
                               artifacts_amplitude=0.05, artifacts_frequency=50)
       @savefig p_ecg_peaks3.png scale=100%
       info = nk.ecg_findpeaks(ecg, sampling_rate=500, method="promac", show=True)
+      @suppress
+      plt.close()
 
     References
     ----------

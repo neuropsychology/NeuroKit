@@ -6,9 +6,11 @@ from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
+from .ppg_methods import ppg_methods
+from .ppg_report import ppg_report
 
 
-def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
+def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs):
     """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
@@ -18,12 +20,22 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     ppg_signal : Union[list, np.array, pd.Series]
         The raw PPG channel.
     sampling_rate : int
-        The sampling frequency of :func:`.emg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of :func:`.ppg_signal` (in Hz, i.e., samples/second).
+    method : str
+        The processing pipeline to apply. Can be one of ``"elgendi"``.
+        Defaults to ``"elgendi"``.
+    report : str
+        The filename of a report containing description and figures of processing
+        (e.g. ``"myreport.html"``). Needs to be supplied if a report file
+        should be generated. Defaults to ``None``.
+    **kwargs
+        Other arguments to be passed to specific methods. For more information,
+        see :func:`.ppg_methods`.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as :func:`.emg_signal` containing the following columns:
+        A DataFrame of same length as :func:`.ppg_signal` containing the following columns:
 
         * ``"PPG_Raw"``: the raw signal.
         * ``"PPG_Clean"``: the cleaned signal.
@@ -53,12 +65,27 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     """
     # Sanitize input
     ppg_signal = as_vector(ppg_signal)
+    methods = ppg_methods(sampling_rate=sampling_rate, method=method, **kwargs)
 
-    # Clean signal
-    ppg_cleaned = ppg_clean(ppg_signal, sampling_rate=sampling_rate)
+    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
+        ppg_cleaned = ppg_signal
+    else:
+        # Clean signal
+        ppg_cleaned = ppg_clean(
+            ppg_signal,
+            sampling_rate=sampling_rate,
+            method=methods["method_cleaning"],
+            **methods["kwargs_cleaning"]
+        )
 
     # Find peaks
-    info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **kwargs)
+    info = ppg_findpeaks(
+        ppg_cleaned,
+        sampling_rate=sampling_rate,
+        method=methods["method_peaks"],
+        **methods["kwargs_peaks"]
+    )
+
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
@@ -78,5 +105,9 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
             "PPG_Peaks": peaks_signal,
         }
     )
+
+    if report is not None:
+        # Generate report containing description and figures of processing
+        ppg_report(file=report, signals=signals, info=methods)
 
     return signals, info

@@ -16,6 +16,7 @@ from .ecg_quality import ecg_quality
 from .ecg_rsp import ecg_rsp
 from .ecg_segment import ecg_segment
 from .ecg_simulate import ecg_simulate
+from .ecg_invert import ecg_invert
 
 __all__ = [
     "ecg_simulate",
@@ -33,4 +34,5 @@ __all__ = [
     "ecg_intervalrelated",
     "ecg_analyze",
     "ecg_rate",
+    "ecg_invert",
 ]

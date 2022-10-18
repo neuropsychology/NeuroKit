@@ -4,7 +4,9 @@ from warnings import warn
 import numpy as np
 
 from ..misc import NeuroKitWarning
-from .utils_complexity_attractor import _attractor_equation, complexity_attractor
+from ..signal import signal_sanitize
+from .utils_complexity_attractor import (_attractor_equation,
+                                         complexity_attractor)
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
@@ -126,6 +128,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
         return _attractor_equation(signal, **kwargs)
 
     N = len(signal)
+    signal = signal_sanitize(signal)
 
     # Sanity checks
     if isinstance(delay, float):

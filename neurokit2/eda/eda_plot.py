@@ -56,7 +56,7 @@ def eda_plot(eda_signals, sampling_rate=None):
         last_ax.set_xlabel("Samples")
         x_axis = np.arange(0, len(eda_signals))
 
-    plt.subplots_adjust(hspace=0.2)
+    plt.tight_layout(h_pad=0.2)
 
     # Plot cleaned and raw respiration as well as peaks and troughs.
     ax0.set_title("Raw and Cleaned Signal")

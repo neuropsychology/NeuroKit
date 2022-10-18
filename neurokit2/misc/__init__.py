@@ -10,7 +10,6 @@ from .find_groups import find_groups
 from .find_knee import find_knee
 from .find_outliers import find_outliers
 from .find_plateau import find_plateau
-from .intervals_to_peaks import intervals_to_peaks
 from .listify import listify
 from .parallel_run import parallel_run
 from .replace import replace
@@ -28,7 +27,6 @@ __all__ = [
     "NeuroKitWarning",
     "check_type",
     "find_outliers",
-    "intervals_to_peaks",
     "parallel_run",
     "find_plateau",
     "copyfunction",
