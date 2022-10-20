@@ -1027,6 +1027,32 @@ rate, and the events annotation timings if <code class="docutils literal notrans
 <section id="module-neurokit2.data">
 <span id="other"></span><h2><em>Other</em><a class="headerlink" href="#module-neurokit2.data" title="Permalink to this headline">#</a></h2>
 <p>Submodule for NeuroKit.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.data.read_video">
+<span class="sig-name descname"><span class="pre">read_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'video.mp4'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_video.html#read_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_video" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Reads a video file into an array</strong></p>
+<p>Reads a video file (e.g., .mp4) into a numpy array of shape. This function requires OpenCV to
+be installed via the <code class="docutils literal notranslate"><span class="pre">opencv-python</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The path of a video file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>array</em> – numpy array of shape (frame, RGB-channel, height, width).</p></li>
+<li><p><em>int</em> – Sampling rate in frames per second.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># videodata, sampling_rate = nk.read_video(&quot;video.mp4&quot;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 </section>
 
