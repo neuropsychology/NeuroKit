@@ -46,7 +46,7 @@ def video_plot(video, sampling_rate=30, frames=3, signals=None):
     length = video[0].shape[0]
 
     # TODO: height_ratios doesn't work as expected
-    fig, ax = plt.subplots(
+    _, ax = plt.subplots(
         nrows=nrows,
         sharex=True,
         # gridspec_kw={"height_ratios": height_ratios},
@@ -70,9 +70,10 @@ def video_plot(video, sampling_rate=30, frames=3, signals=None):
         for j, signal in enumerate(signals):
 
             # Make sure the size is correct
-            assert (
-                len(signal) == length
-            ), f"Length if the {j+1} signals is not equal to the video length of the video (length = {length}). Use signal_resample() to get the right size."
+            assert len(signal) == length, (
+                f"Length if the {j+1} signals is not equal to the video length of the video"
+                + f"(length= {length}). Use signal_resample() to get the right size."
+            )
 
             # Plot
             ax[i + j + 1].plot(signal, color="red")
@@ -100,8 +101,6 @@ def _video_plot_format(video, frames=[0], desired_length=1000):
 
     # (frames, width, height, RGB channels) for matplotlib
     video = video.swapaxes(3, 1).swapaxes(2, 1)
-
-    length = video.shape[0]
 
     # Concatenate
     vid = np.concatenate(video[frames], axis=1)
