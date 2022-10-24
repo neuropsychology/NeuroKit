@@ -706,15 +706,6 @@ title="Open an issue"
         <span class="p">)</span>
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">refs</span><span class="p">))</span>
 
-    <span class="c1"># Print text</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">,</span> <span class="s2">&quot;text_peaks&quot;</span><span class="p">,</span> <span class="s2">&quot;references&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="n">report_info</span></div>
 </pre></div>
 
