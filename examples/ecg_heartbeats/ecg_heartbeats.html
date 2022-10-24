@@ -739,6 +739,14 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\hostedtoolcache\windows\Python\3.10.8\x64\lib\site-packages\numpy\core\fromnumeric.py:3432: RuntimeWarning: Mean of empty slice.
+  return _methods._mean(a, axis=axis, dtype=dtype,
+C:\hostedtoolcache\windows\Python\3.10.8\x64\lib\site-packages\numpy\core\_methods.py:190: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
+</pre></div>
+</div>
+</div>
 </div>
 <p>This function outputs two elements, a <em>dataframe</em> containing the different signals (raw, cleaned, etc.) and a <em>dictionary</em> containing various additional information (peaks location, …).</p>
 </section>
@@ -763,7 +771,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/eac3d2ffbd9feb23552629d199e995ca01cbd4bcba95ddbae3de2bba815b6c59.png" src="../../_images/eac3d2ffbd9feb23552629d199e995ca01cbd4bcba95ddbae3de2bba815b6c59.png" />
+<img alt="../../_images/454f5e6d60b08a0b321ad828efbcc675dbe0880d011f17f872ae7f1fdf76e928.png" src="../../_images/454f5e6d60b08a0b321ad828efbcc675dbe0880d011f17f872ae7f1fdf76e928.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -779,7 +787,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/1aa74ec4bd82374727fe4d145f4f6abc9ccec7404399f44f939f8bc813e5141f.png" src="../../_images/1aa74ec4bd82374727fe4d145f4f6abc9ccec7404399f44f939f8bc813e5141f.png" />
+<img alt="../../_images/135c6c32cc05870c4a680d8d0b71304dde45c4389f38fd1df6a130a5e2bf6a69.png" src="../../_images/135c6c32cc05870c4a680d8d0b71304dde45c4389f38fd1df6a130a5e2bf6a69.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -835,36 +843,36 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.214856</td>
-      <td>134</td>
+      <td>-0.218792</td>
+      <td>135</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.210033</td>
-      <td>135</td>
+      <td>-0.213392</td>
+      <td>136</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.205217</td>
-      <td>136</td>
+      <td>-0.207932</td>
+      <td>137</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.200359</td>
-      <td>137</td>
+      <td>-0.202364</td>
+      <td>138</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.195399</td>
-      <td>138</td>
+      <td>-0.196626</td>
+      <td>139</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -910,10 +918,10 @@ title="Print to PDF"
       <th>17</th>
       <th>18</th>
       <th>...</th>
-      <th>31</th>
       <th>32</th>
       <th>33</th>
       <th>34</th>
+      <th>35</th>
       <th>4</th>
       <th>5</th>
       <th>6</th>
@@ -949,127 +957,127 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.214856</td>
-      <td>-0.127984</td>
-      <td>-0.126355</td>
-      <td>-0.130417</td>
-      <td>-0.142566</td>
-      <td>-0.136476</td>
-      <td>-0.136032</td>
-      <td>-0.145214</td>
-      <td>-0.144857</td>
-      <td>-0.140815</td>
-      <td>...</td>
-      <td>-0.135915</td>
-      <td>-0.158915</td>
-      <td>-0.090063</td>
-      <td>-0.230475</td>
-      <td>-0.128799</td>
-      <td>-0.152548</td>
-      <td>-0.133441</td>
+      <td>-0.218792</td>
       <td>-0.132015</td>
-      <td>-0.142802</td>
-      <td>-0.145511</td>
+      <td>-0.134232</td>
+      <td>-0.138969</td>
+      <td>-0.146808</td>
+      <td>-0.139364</td>
+      <td>-0.132264</td>
+      <td>-0.137122</td>
+      <td>-0.139949</td>
+      <td>-0.134535</td>
+      <td>...</td>
+      <td>-0.131101</td>
+      <td>-0.159855</td>
+      <td>-0.086879</td>
+      <td>-0.206085</td>
+      <td>-0.122700</td>
+      <td>-0.137917</td>
+      <td>-0.131835</td>
+      <td>-0.132860</td>
+      <td>-0.140139</td>
+      <td>-0.134372</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.210033</td>
-      <td>-0.127355</td>
-      <td>-0.125405</td>
-      <td>-0.129093</td>
-      <td>-0.141724</td>
-      <td>-0.136195</td>
-      <td>-0.135008</td>
-      <td>-0.143887</td>
-      <td>-0.143786</td>
-      <td>-0.140615</td>
+      <td>-0.213392</td>
+      <td>-0.131140</td>
+      <td>-0.132860</td>
+      <td>-0.137854</td>
+      <td>-0.145743</td>
+      <td>-0.138646</td>
+      <td>-0.130988</td>
+      <td>-0.136197</td>
+      <td>-0.139252</td>
+      <td>-0.133536</td>
       <td>...</td>
-      <td>-0.135075</td>
-      <td>-0.157146</td>
-      <td>-0.089488</td>
-      <td>-0.230388</td>
-      <td>-0.128282</td>
-      <td>-0.151706</td>
-      <td>-0.132752</td>
-      <td>-0.130665</td>
-      <td>-0.142147</td>
-      <td>-0.144606</td>
+      <td>-0.130523</td>
+      <td>-0.158888</td>
+      <td>-0.085698</td>
+      <td>-0.203065</td>
+      <td>-0.122130</td>
+      <td>-0.137041</td>
+      <td>-0.130752</td>
+      <td>-0.131584</td>
+      <td>-0.138725</td>
+      <td>-0.133135</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.205217</td>
-      <td>-0.126666</td>
-      <td>-0.124345</td>
-      <td>-0.127561</td>
-      <td>-0.140623</td>
-      <td>-0.135753</td>
-      <td>-0.133839</td>
-      <td>-0.142353</td>
-      <td>-0.142557</td>
-      <td>-0.140270</td>
+      <td>-0.207932</td>
+      <td>-0.130142</td>
+      <td>-0.131312</td>
+      <td>-0.136574</td>
+      <td>-0.144489</td>
+      <td>-0.137805</td>
+      <td>-0.129602</td>
+      <td>-0.135094</td>
+      <td>-0.138352</td>
+      <td>-0.132412</td>
       <td>...</td>
-      <td>-0.134135</td>
-      <td>-0.155166</td>
-      <td>-0.088739</td>
-      <td>-0.230154</td>
-      <td>-0.127497</td>
-      <td>-0.150726</td>
-      <td>-0.131917</td>
-      <td>-0.129171</td>
-      <td>-0.141345</td>
-      <td>-0.143596</td>
+      <td>-0.129765</td>
+      <td>-0.157766</td>
+      <td>-0.084387</td>
+      <td>-0.199824</td>
+      <td>-0.121390</td>
+      <td>-0.136057</td>
+      <td>-0.129541</td>
+      <td>-0.130060</td>
+      <td>-0.137050</td>
+      <td>-0.131827</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.200359</td>
-      <td>-0.125880</td>
-      <td>-0.123134</td>
-      <td>-0.125765</td>
-      <td>-0.139200</td>
-      <td>-0.135108</td>
-      <td>-0.132489</td>
-      <td>-0.140541</td>
-      <td>-0.141113</td>
-      <td>-0.139726</td>
+      <td>-0.202364</td>
+      <td>-0.128993</td>
+      <td>-0.129556</td>
+      <td>-0.135077</td>
+      <td>-0.143011</td>
+      <td>-0.136819</td>
+      <td>-0.128084</td>
+      <td>-0.133754</td>
+      <td>-0.137184</td>
+      <td>-0.131137</td>
       <td>...</td>
-      <td>-0.133074</td>
-      <td>-0.152942</td>
-      <td>-0.087787</td>
-      <td>-0.229731</td>
-      <td>-0.126377</td>
-      <td>-0.149567</td>
-      <td>-0.130907</td>
-      <td>-0.127486</td>
-      <td>-0.140337</td>
-      <td>-0.142458</td>
+      <td>-0.128766</td>
+      <td>-0.156453</td>
+      <td>-0.082917</td>
+      <td>-0.196310</td>
+      <td>-0.120440</td>
+      <td>-0.134946</td>
+      <td>-0.128167</td>
+      <td>-0.128218</td>
+      <td>-0.135035</td>
+      <td>-0.130409</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.195399</td>
-      <td>-0.124954</td>
-      <td>-0.121716</td>
-      <td>-0.123648</td>
-      <td>-0.137385</td>
-      <td>-0.134201</td>
-      <td>-0.130902</td>
-      <td>-0.138365</td>
-      <td>-0.139379</td>
-      <td>-0.138921</td>
+      <td>-0.196626</td>
+      <td>-0.127653</td>
+      <td>-0.127551</td>
+      <td>-0.133285</td>
+      <td>-0.141262</td>
+      <td>-0.135661</td>
+      <td>-0.126397</td>
+      <td>-0.132097</td>
+      <td>-0.135670</td>
+      <td>-0.129679</td>
       <td>...</td>
-      <td>-0.131853</td>
-      <td>-0.150441</td>
-      <td>-0.086593</td>
-      <td>-0.229064</td>
-      <td>-0.124852</td>
-      <td>-0.148177</td>
-      <td>-0.129691</td>
-      <td>-0.125548</td>
-      <td>-0.139039</td>
-      <td>-0.141159</td>
+      <td>-0.127462</td>
+      <td>-0.154897</td>
+      <td>-0.081250</td>
+      <td>-0.192448</td>
+      <td>-0.119241</td>
+      <td>-0.133685</td>
+      <td>-0.126578</td>
+      <td>-0.125984</td>
+      <td>-0.132595</td>
+      <td>-0.128831</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 34 columns</p>
+<p>5 rows × 35 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -1093,7 +1101,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/094463390b0cd3ff3772947100b4e0c7de508de22e015a83d489d9f3431d1c58.png" src="../../_images/094463390b0cd3ff3772947100b4e0c7de508de22e015a83d489d9f3431d1c58.png" />
+<img alt="../../_images/4a690762a55477f93806520383e486cedb26028211d49ce6baa193529db4d742.png" src="../../_images/4a690762a55477f93806520383e486cedb26028211d49ce6baa193529db4d742.png" />
 </div>
 </div>
 </section>

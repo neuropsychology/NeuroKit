@@ -618,14 +618,15 @@ title="Open an issue"
     <span class="c1"># Try find events annotations</span>
     <span class="c1"># -------------------------------------------------------------------------</span>
     <span class="n">annotations</span> <span class="o">=</span> <span class="n">_read_bitalino_annotations</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Device </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> not found in metadata (</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">) Something might be wrong.&quot;</span><span class="p">,</span>
-                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
-            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">annotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Device </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> not found in metadata (</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">) Something might be wrong.&quot;</span><span class="p">,</span>
+                    <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+                <span class="p">)</span>
 
     <span class="c1"># Read data</span>
     <span class="c1"># -------------------------------------------------------------------------</span>
