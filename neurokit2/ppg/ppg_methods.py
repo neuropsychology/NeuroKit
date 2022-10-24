@@ -165,13 +165,4 @@ def ppg_methods(
         )
     report_info["references"] = list(np.unique(refs))
 
-    # Print text
-    for key in ["text_cleaning", "text_peaks", "references"]:
-        if isinstance(report_info[key], list):
-            for s in report_info[key]:
-                print(s)
-        else:
-            print(report_info[key])
-        print("")
-
     return report_info

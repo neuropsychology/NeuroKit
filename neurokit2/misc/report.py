@@ -4,11 +4,11 @@ import inspect
 
 def text_combine(info):
     """Reformat dictionary describing processing methods as strings to be inserted into HTML file."""
-    preprocessing = "<h2 style=\"background-color: #FB1CF0\">Preprocessing</h1>"
+    preprocessing = '<h2 style="background-color: #FB1CF0">Preprocessing</h1>'
     for key in ["text_cleaning", "text_peaks"]:
         if key in info.keys():
             preprocessing += info[key] + "<br>"
-    ref = "<h2 style=\"background-color: #FBB41C\">References</h1>"
+    ref = '<h2 style="background-color: #FBB41C">References</h1>'
     if "references" in info.keys():
         ref += "\n <ul> \n"
         for reference in info["references"]:
@@ -17,7 +17,7 @@ def text_combine(info):
     return preprocessing, ref
 
 
-def html_combine(contents=[], file="myreport.html"):
+def html_save(contents=[], file="myreport.html"):
     """Combine figures and text in a single HTML document."""
     # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
     with open(file, "w") as page:
