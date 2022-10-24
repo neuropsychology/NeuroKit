@@ -77,14 +77,15 @@ def read_bitalino(
     # Try find events annotations
     # -------------------------------------------------------------------------
     annotations = _read_bitalino_annotations(filename)
-    for k in annotations.keys():
-        if k in metadata.keys():
-            metadata[k]["Annotations"] = annotations[k]
-        else:
-            warn(
-                f"Device {k} not found in metadata ({metadata.keys()}) Something might be wrong.",
-                category=NeuroKitWarning,
-            )
+    if annotations is not None:
+        for k in annotations.keys():
+            if k in metadata.keys():
+                metadata[k]["Annotations"] = annotations[k]
+            else:
+                warn(
+                    f"Device {k} not found in metadata ({metadata.keys()}) Something might be wrong.",
+                    category=NeuroKitWarning,
+                )
 
     # Read data
     # -------------------------------------------------------------------------
