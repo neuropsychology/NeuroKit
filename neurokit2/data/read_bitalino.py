@@ -7,15 +7,14 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning
-from ..signal import signal_resample
 
 
 def read_bitalino(filename):
     """**Read an OpenSignals file (from BITalino)**
 
     Reads and loads a BITalino file into a Pandas DataFrame.
-    The function outputs both the dataframe and the sampling rate (retrieved from the
-    OpenSignals file).
+    The function outputs both the dataframe and the information (such as the sampling rate)
+    retrieved from the OpenSignals file).
 
     Parameters
     ----------
