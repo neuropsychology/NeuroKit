@@ -63,13 +63,13 @@ def video_ppg(video, sampling_rate=30, **kwargs):
 
     # Plane-Orthogonal-to-Skin (POS)
     # ==============================
-    # Calculating l
-    l = int(sampling_rate * 1.6)
+    # Calculating window (l)
+    window = int(sampling_rate * 1.6)
     H = np.zeros(rgb.shape[0])
 
     for t in range(0, (rgb.shape[0] - l)):
         # 4. Spatial averaging
-        C = rgb[t : t + l - 1, :].T
+        C = rgb[t : t + window - 1, :].T
 
         # 5. Temporal normalization
         mean_color = np.mean(C, axis=1)
@@ -83,6 +83,6 @@ def video_ppg(video, sampling_rate=30, **kwargs):
         P = np.matmul(std, S)
 
         # 8. Overlap-Adding
-        H[t : t + l - 1] = H[t : t + l - 1] + (P - np.mean(P)) / np.std(P)
+        H[t : t + window - 1] = H[t : t + window - 1] + (P - np.mean(P)) / np.std(P)
 
     return H

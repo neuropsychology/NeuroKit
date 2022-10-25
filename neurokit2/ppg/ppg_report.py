@@ -8,7 +8,8 @@ from .ppg_plot import ppg_plot
 def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000}):
     """**PPG Reports**
 
-    Create report containing description and figures of processing. This function is meant to be used via the `ppg_process()` function.
+    Create report containing description and figures of processing. This function is meant to be
+    used via the `ppg_process()` function.
 
     Examples
     --------
