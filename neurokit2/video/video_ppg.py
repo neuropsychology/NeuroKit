@@ -5,6 +5,47 @@ from .video_skin import video_skin
 
 
 def video_ppg(video, sampling_rate=30, **kwargs):
+    """**Remote Photoplethysmography (rPPG) from Video**
+
+    Extracts the photoplethysmogram (PPG) from a webcam video using the Plane-Orthogonal-to-Skin
+    (POS) algorithm.
+
+    .. note::
+
+        This function is experimental. If you are interested in helping us improve that aspect of
+        NeuroKit (e.g., by adding more detection algorithms), please get in touch!
+
+
+    Parameters
+    ----------
+    video : np.ndarray
+        A video data numpy array of the shape (frame, channel, height, width).
+    sampling_rate : int
+        The sampling rate of the video, by default 30 fps (a common sampling rate for commercial
+        webcams).
+    **kwargs
+        Additional arguments to pass to :func:`video_face()` and :func:`video_skin()`.
+
+    Returns
+    -------
+    np.ndarray
+        A PPG signal.
+
+    Examples
+    --------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # video, sampling_rate = nk.read_video("video.mp4")
+      # ppg = nk.video_ppg(video)
+
+    References
+    ----------
+    * Wang, W., Den Brinker, A. C., Stuijk, S., & De Haan, G. (2016). Algorithmic principles of
+      remote PPG. IEEE Transactions on Biomedical Engineering, 64(7), 1479-1491.
+
+    """
 
     # 1. Extract faces
     faces = video_face(video, **kwargs)

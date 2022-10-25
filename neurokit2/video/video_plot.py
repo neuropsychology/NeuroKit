@@ -16,6 +16,9 @@ def video_plot(video, sampling_rate=30, frames=3, signals=None):
         An video data numpy array of the shape (frame, channel, height, width)
     sampling_rate : int
         The number of frames per second (FPS), by default 30.
+    frames : int or list
+        What frames to plot. If list, indicates the index of frames. If number, will select
+        linearly spaced frames.
     signals : list
         A list of signals to plot under the videos.
 

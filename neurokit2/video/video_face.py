@@ -5,7 +5,39 @@ from ..misc import progress_bar
 
 
 def video_face(video, verbose=True):
-    """**Extract face from video**"""
+    """**Extract face from video**
+
+    This function extracts the faces from a video. This function requires the `cv2, `menpo` and
+    `menpodetect` modules to be installed.
+
+    .. note::
+
+        This function is experimental. If you are interested in helping us improve that aspect of
+        NeuroKit (e.g., by adding more detection algorithms), please get in touch!
+
+    Parameters
+    ----------
+    video : np.ndarray
+        An video data numpy array of the shape (frame, channel, height, width)
+    verbose : bool
+        Whether to print progress bar.
+
+    Returns
+    -------
+    list
+        A list of cropped faces.
+
+    Examples
+    --------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # video, sampling_rate = nk.read_video("video.mp4")
+      # faces = nk.video_face(video)
+      # nk.video_plot([video, faces])
+
+    """
 
     faceboxes = np.full([len(video), 3, 500, 500], 0)
     for i, frame in progress_bar(video, verbose=verbose):

@@ -4,8 +4,41 @@ from ..misc import find_closest
 
 
 def video_skin(face, show=False):
-    """
-    https://github.com/pavisj/rppg-pos/blob/master/SkinDetector/skin_detector/skin_detector.py
+    """**Skin detection**
+
+    This function detects the skin in a face.
+
+    .. note::
+
+        This function is experimental. If you are interested in helping us improve that aspect of
+        NeuroKit (e.g., by adding more detection algorithms), please get in touch!
+
+    Parameters
+    ----------
+    face : np.ndarray
+        A face data numpy array of the shape (channel, height, width).
+    show : bool
+        Whether to show the skin detection mask.
+
+    Returns
+    -------
+    np.ndarray
+        A skin detection mask.
+
+    See Also
+    --------
+    video_face, video_ppg
+
+    Examples
+    --------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # video, sampling_rate = nk.read_video("video.mp4")
+      # faces = nk.video_face(video)
+      # skin = nk.video_skin(faces[0], show=True)
+
     """
     # Try loading cv2
     try:
@@ -17,6 +50,9 @@ def video_skin(face, show=False):
         )
 
     img = face.swapaxes(0, 1).swapaxes(1, 2)
+
+    # Credits:
+    # https://github.com/pavisj/rppg-pos/blob/master/SkinDetector/skin_detector/skin_detector.py
 
     # Get mask in HSV space
     img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
