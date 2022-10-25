@@ -1,18 +1,45 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ..misc import progress_bar
 
-def video_face(video):
 
+def video_face(video, verbose=True):
     """**Extract face from video**"""
 
-    face_centers = np.full([len(video), 2], np.nan)
-    for i, frame in enumerate(video):
-        faces, eyes = _video_face_landmarks(frame)
+    faceboxes = np.full([len(video), 3, 500, 500], 0)
+    for i, frame in progress_bar(video, verbose=verbose):
+        faces = _video_face_landmarks(frame)
         if len(faces) > 0:
-            face_centers[i] = faces[0].centre()
-        plt.imshow(frame.swapaxes(0, 1).swapaxes(1, 2))
-        plt.text(face_centers[i][1], face_centers[i][0], "+")
+            faceboxes[i, :, :, :] = _video_face_crop(frame, faces[0])
+
+            # plt.imshow(faceboxes[i, :, :, :].swapaxes(0, 1).swapaxes(1, 2).astype(int))
+            # plt.plot(facebox[:, 1], facebox[:, 0], color="red")
+    return faceboxes.astype("uint8")
+
+
+# ==============================================================================
+# Internals
+# ==============================================================================
+def _video_face_crop(frame, face):
+
+    # Try loading cv2
+    try:
+        import cv2
+    except ImportError:
+        raise ImportError(
+            "The 'cv2' module is required for this function to run. ",
+            "Please install it first (`pip install opencv-python`).",
+        )
+
+    facebox = face.as_vector().reshape(-1, 2).astype(int)
+
+    # Crop
+    img = frame[:, facebox[0, 0] : facebox[1, 0], facebox[0, 1] : facebox[2, 1]]
+
+    # Resize
+    img = cv2.resize(img.swapaxes(0, 1).swapaxes(1, 2), (500, 500))
+    return img.swapaxes(0, 2).swapaxes(1, 2).astype(int)
 
 
 def _video_face_landmarks(frame):
@@ -36,6 +63,6 @@ def _video_face_landmarks(frame):
     faces = menpodetect.load_opencv_frontal_face_detector()(img_bw)
 
     # Eyes detection
-    eyes = menpodetect.load_opencv_eye_detector()(img_bw)
+    # eyes = menpodetect.load_opencv_eye_detector()(img_bw)
 
-    return faces, eyes
+    return faces

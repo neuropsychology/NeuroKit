@@ -1,0 +1,42 @@
+import sys
+
+
+def progress_bar(it, prefix="", size=40, out=sys.stdout, verbose=True):
+    """Display a progress bar.
+
+    Parameters
+    ----------
+    it : iterable
+        An iterable object.
+    prefix : str
+        A prefix to display before the progress bar.
+    size : int
+        The size of the progress bar.
+    out : file
+        The file to write the progress bar to.
+
+    Examples
+    --------
+    ..ipython:: python
+
+      import neurokit2 as nk
+      for i, j in nk.progress_bar(["a", "b", "c"], prefix="Progress: "):
+          pass
+      print(i, j)
+
+    """
+    if verbose is False:
+        for i, item in enumerate(it):
+            yield i, item
+    else:
+        count = len(it)
+
+        def show(j):
+            x = int(size * j / count)
+            print(f"{prefix}[{u'█'*x}{('.'*(size-x))}] {j}/{count}", end="\r", file=out, flush=True)
+
+        show(0)
+        for i, item in enumerate(it):
+            yield i, item
+            show(i + 1)
+        print("\n", flush=True, file=out)

@@ -2,6 +2,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ..signal import signal_resample
+
 
 def video_plot(video, sampling_rate=30, frames=3, signals=None):
     """**Visualize video**
@@ -33,17 +35,17 @@ def video_plot(video, sampling_rate=30, frames=3, signals=None):
         video = [video]
     # How many subplots
     nrows = len(video)
-    # Determine the height of each subplot (so that the width is the same)
-    # height_ratios = [v.shape[3] / v.shape[2] for v in video]
 
     if signals is not None:
         if isinstance(signals, list) is False:
             signals = [signals]
         nrows += len(signals)
-        # height_ratios += [1] * len(signals)
 
     # Get x-axis (of the first video)
     length = video[0].shape[0]
+    desired_length = 1000
+    if length > 1000:
+        desired_length = length
 
     # TODO: height_ratios doesn't work as expected
     _, ax = plt.subplots(
@@ -61,8 +63,7 @@ def video_plot(video, sampling_rate=30, frames=3, signals=None):
     if nrows == 1:
         ax = [ax]  # Otherwise it will make ax[i] non subscritable
     for i, vid in enumerate(video):
-
-        vid = _video_plot_format(vid, frames=frames, desired_length=length)
+        vid = _video_plot_format(vid, frames=frames, desired_length=desired_length)
         ax[i].axis("off")
         ax[i].imshow(vid, aspect="auto")
 
@@ -70,26 +71,29 @@ def video_plot(video, sampling_rate=30, frames=3, signals=None):
         for j, signal in enumerate(signals):
 
             # Make sure the size is correct
-            assert len(signal) == length, (
-                f"Length if the {j+1} signals is not equal to the video length of the video"
-                + f"(length= {length}). Use signal_resample() to get the right size."
-            )
+            if len(signal) != length:
+                signal = signal_resample(signal, desired_length=desired_length)
 
             # Plot
-            ax[i + j + 1].plot(signal, color="red")
+            ax[i + j + 1].plot(signal)
 
             for frame in frames:
-                ax[i + j + 1].axvline(x=frame, color="black", linestyle="--", alpha=0.5)
+                ax[i + j + 1].axvline(
+                    x=int(np.round(frame / length * desired_length)),
+                    color="black",
+                    linestyle="--",
+                    alpha=0.5,
+                )
 
     # Ticks in seconds
     plt.xticks(
-        np.linspace(0, length, 5),
+        np.linspace(0, desired_length, 5),
         np.char.mod("%.1f", np.linspace(0, length / sampling_rate, 5)),
     )
     plt.xlabel("Time (s)")
 
 
-def _video_plot_format(video, frames=[0], desired_length=1000):
+def _video_plot_format(vid, frames=[0], desired_length=1000):
     # Try loading cv2
     try:
         import cv2
@@ -99,17 +103,17 @@ def _video_plot_format(video, frames=[0], desired_length=1000):
             "Please install it first (`pip install opencv-python`).",
         )
 
-    # (frames, width, height, RGB channels) for matplotlib
-    video = video.swapaxes(3, 1).swapaxes(2, 1)
+    # (frames, height, width, RGB channels) for cv2
+    vid = vid.swapaxes(3, 1).swapaxes(2, 1)
 
     # Concatenate
-    vid = np.concatenate(video[frames], axis=1)
+    excerpt = np.concatenate(vid[frames], axis=1)
 
     # Rescale
-    vid = cv2.resize(
-        vid,
-        dsize=(desired_length, int(video.shape[1] * desired_length / video.shape[2] / len(frames))),
+    excerpt = cv2.resize(
+        excerpt.astype("uint8"),
+        dsize=(desired_length, vid.shape[1]),
         interpolation=cv2.INTER_CUBIC,
     )
 
-    return vid
+    return excerpt
