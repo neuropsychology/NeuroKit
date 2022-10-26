@@ -67,7 +67,7 @@ def video_ppg(video, sampling_rate=30, **kwargs):
     window = int(sampling_rate * 1.6)
     H = np.zeros(rgb.shape[0])
 
-    for t in range(0, (rgb.shape[0] - l)):
+    for t in range(0, (rgb.shape[0] - window)):
         # 4. Spatial averaging
         C = rgb[t : t + window - 1, :].T
 
