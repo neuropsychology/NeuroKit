@@ -19,7 +19,7 @@ def video_face(video, verbose=True):
     video : np.ndarray
         An video data numpy array of the shape (frame, channel, height, width)
     verbose : bool
-        Whether to print progress bar.
+        Whether to print the progress bar.
 
     Returns
     -------
@@ -43,9 +43,6 @@ def video_face(video, verbose=True):
         faces = _video_face_landmarks(frame)
         if len(faces) > 0:
             faceboxes[i, :, :, :] = _video_face_crop(frame, faces[0])
-
-            # plt.imshow(faceboxes[i, :, :, :].swapaxes(0, 1).swapaxes(1, 2).astype(int))
-            # plt.plot(facebox[:, 1], facebox[:, 0], color="red")
     return faceboxes.astype("uint8")
 
 

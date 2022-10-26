@@ -1,10 +1,11 @@
 import numpy as np
 
+from ..misc import progress_bar
 from .video_face import video_face
 from .video_skin import video_skin
 
 
-def video_ppg(video, sampling_rate=30, **kwargs):
+def video_ppg(video, sampling_rate=30, verbose=True):
     """**Remote Photoplethysmography (rPPG) from Video**
 
     Extracts the photoplethysmogram (PPG) from a webcam video using the Plane-Orthogonal-to-Skin
@@ -23,8 +24,8 @@ def video_ppg(video, sampling_rate=30, **kwargs):
     sampling_rate : int
         The sampling rate of the video, by default 30 fps (a common sampling rate for commercial
         webcams).
-    **kwargs
-        Additional arguments to pass to :func:`video_face()` and :func:`video_skin()`.
+    verbose : bool
+        Whether to print the progress bar.
 
     Returns
     -------
@@ -46,9 +47,25 @@ def video_ppg(video, sampling_rate=30, **kwargs):
       remote PPG. IEEE Transactions on Biomedical Engineering, 64(7), 1479-1491.
 
     """
+    # Initialize heart rate
+    ppg = np.full((len(video)), np.nan)
 
+    # Chunk into 8 second segments (5 * 1.6 which is the temporal smoothing window)
+    chunk_size = int(sampling_rate * 8)
+    for _, start in progress_bar(np.arange(0, len(video), chunk_size), verbose=verbose):
+        end = start + chunk_size
+        if end > len(video):
+            end = len(video)
+        ppg[start:end] = _video_ppg(video[start:end, :, :, :], sampling_rate, window=1.6)
+    return ppg
+
+
+# ==============================================================================
+# Internals
+# ==============================================================================
+def _video_ppg(video, sampling_rate=30, window=1.6):
     # 1. Extract faces
-    faces = video_face(video, **kwargs)
+    faces = video_face(video, verbose=False)
 
     rgb = np.full((len(faces), 3), np.nan)
     for i, face in enumerate(faces):
@@ -64,8 +81,8 @@ def video_ppg(video, sampling_rate=30, **kwargs):
     # Plane-Orthogonal-to-Skin (POS)
     # ==============================
     # Calculating window (l)
-    window = int(sampling_rate * 1.6)
-    H = np.zeros(rgb.shape[0])
+    window = int(sampling_rate * window)
+    H = np.full(len(rgb), 0)
 
     for t in range(0, (rgb.shape[0] - window)):
         # 4. Spatial averaging
@@ -73,7 +90,10 @@ def video_ppg(video, sampling_rate=30, **kwargs):
 
         # 5. Temporal normalization
         mean_color = np.mean(C, axis=1)
-        Cn = np.matmul(np.linalg.inv(np.diag(mean_color)), C)
+        try:
+            Cn = np.matmul(np.linalg.inv(np.diag(mean_color)), C)
+        except np.linalg.LinAlgError:  # Singular matrix
+            continue
 
         # 6. Projection
         S = np.matmul(np.array([[0, 1, -1], [-2, 1, 1]]), Cn)
