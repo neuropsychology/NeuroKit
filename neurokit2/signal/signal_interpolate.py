@@ -45,6 +45,10 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
     array
         Vector of interpolated samples.
 
+    See Also
+    --------
+    signal_resample
+
     Examples
     --------
     .. ipython:: python

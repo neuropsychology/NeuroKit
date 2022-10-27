@@ -13,9 +13,10 @@ def video_ppg(video, sampling_rate=30, verbose=True):
 
     .. note::
 
-        This function is experimental. If you are interested in helping us improve that aspect of
-        NeuroKit (e.g., by adding more detection algorithms), please get in touch!
-
+        This function is experimental and does NOT seem to work at all
+        (https://github.com/DominiqueMakowski/RemotePhysiology). If you
+        are interested in helping us improve that aspect of NeuroKit
+        (e.g., by adding more detection algorithms), please get in touch!
 
     Parameters
     ----------
