@@ -64,8 +64,9 @@ def ppg_table(signals):
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
 
     # Make HTML and Markdown versions
-    html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
-        index=None
+    html = (
+        '<h2 style="background-color: #D60574">Summary table</h1>'
+        + summary_table.to_html(index=None)
     )
 
     try:
