@@ -228,7 +228,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
         return pickle.load(
             urllib.request.urlopen(
-                "https://github.com/neuropsychology/NeuroKit/blob/fix_docs/data/eeg_1min_200hz.pickle?raw=true"
+                "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
             )
         )
 
