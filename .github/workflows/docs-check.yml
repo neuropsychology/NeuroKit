@@ -30,6 +30,7 @@ jobs:
                   pip install scipy
                   pip install scikit-learn
                   pip install matplotlib
+                  pip install pooch
                   pip install mne[data]
                   pip install PyWavelets
                   pip install astropy
