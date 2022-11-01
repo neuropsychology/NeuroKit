@@ -8,8 +8,8 @@ from .ppg_plot import ppg_plot
 def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000}):
     """**PPG Reports**
 
-    Create report containing description and figures of processing. This function is meant to be
-    used via the `ppg_process()` function.
+    Create report containing description and figures of processing.
+    This function is meant to be used via the `ppg_process()` function.
 
     Examples
     --------
@@ -65,8 +65,9 @@ def ppg_table(signals):
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
 
     # Make HTML and Markdown versions
-    html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
-        index=None
+    html = (
+        '<h2 style="background-color: #D60574">Summary table</h1>'
+        + summary_table.to_html(index=None)
     )
 
     try:
