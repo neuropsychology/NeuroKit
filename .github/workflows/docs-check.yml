@@ -30,7 +30,7 @@ jobs:
                   pip install scipy
                   pip install scikit-learn
                   pip install matplotlib
-                  pip install mne[data]
+                  pip install mne
                   pip install PyWavelets
                   pip install astropy
                   pip install seaborn
