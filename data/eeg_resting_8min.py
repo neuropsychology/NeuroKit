@@ -43,18 +43,3 @@ raw.save("eeg_restingstate_300hz.fif", overwrite=True)
 # df = pd.DataFrame(raw.get_data().T)
 # df.columns = raw.info["ch_names"]
 # df.to_csv("eeg_restingstate_300hz.csv")
-
-
-import pickle
-
-# FIF TO PICKLE
-# ===========
-import mne
-
-raw = mne.io.read_raw_fif("eeg_resting_8min_300hz.fif", preload=True)
-raw = raw.crop(0, 60).resample(200).pick(["eeg"], verbose=False)
-
-
-# Store data (serialize)
-with open("eeg_resting_1min_200hz.pickle", "wb") as handle:
-    pickle.dump(raw, handle, protocol=pickle.HIGHEST_PROTOCOL)
