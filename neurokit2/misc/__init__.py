@@ -12,6 +12,7 @@ from .find_outliers import find_outliers
 from .find_plateau import find_plateau
 from .listify import listify
 from .parallel_run import parallel_run
+from .progress_bar import progress_bar
 from .replace import replace
 from .type_converters import as_vector
 
@@ -28,6 +29,7 @@ __all__ = [
     "check_type",
     "find_outliers",
     "parallel_run",
+    "progress_bar",
     "find_plateau",
     "copyfunction",
 ]

@@ -17,6 +17,7 @@ You can find here the API documentation of NeuroKit, with a description of all t
    emg
    eog
    eeg
+   video
    Microstates <microstates>
    Signal <signal>
    events

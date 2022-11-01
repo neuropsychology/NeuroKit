@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 import numpy as np
 
 
@@ -26,7 +28,7 @@ def read_video(filename="video.mp4"):
 
       import neurokit2 as nk
 
-      # videodata, sampling_rate = nk.read_video("video.mp4")
+      # video, sampling_rate = nk.read_video("video.mp4")
 
     """
     # Try loading cv2
@@ -37,6 +39,9 @@ def read_video(filename="video.mp4"):
             "The 'cv2' module is required for this function to run. ",
             "Please install it first (`pip install opencv-python`).",
         )
+
+    # Check if file exists
+    assert os.path.isfile(filename) is True, f"No file found with the specified name ({filename})."
 
     capture = cv2.VideoCapture(filename)
     sampling_rate = int(capture.get(cv2.CAP_PROP_FPS))
