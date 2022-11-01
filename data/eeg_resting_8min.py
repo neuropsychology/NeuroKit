@@ -52,8 +52,9 @@ import pickle
 import mne
 
 raw = mne.io.read_raw_fif("eeg_resting_8min_300hz.fif", preload=True)
-raw = raw.crop(0, 120).resample(100)
+raw = raw.crop(0, 60).resample(200).pick(["eeg"], verbose=False)
+
 
 # Store data (serialize)
-with open("eeg_resting_2min_100hz.pickle", "wb") as handle:
+with open("eeg_resting_1min_200hz.pickle", "wb") as handle:
     pickle.dump(raw, handle, protocol=pickle.HIGHEST_PROTOCOL)

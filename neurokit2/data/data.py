@@ -224,11 +224,11 @@ def data(dataset="bio_eventrelated_100hz"):
         return df
 
     # TODO: Add more EEG (fif and edf datasets)
-    if dataset in ["eeg_resting_2min_100hz"]:
+    if dataset in ["eeg_resting_1min_200hz"]:
 
         return pickle.load(
             urllib.request.urlopen(
-                "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_resting_2min_100hz.pickle?raw=true"
+                "https://github.com/neuropsychology/NeuroKit/blob/fix_docs/data/eeg_resting_1min_200hz.pickle?raw=true"
             )
         )
 
