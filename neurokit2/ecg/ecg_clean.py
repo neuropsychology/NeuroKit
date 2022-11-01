@@ -147,9 +147,7 @@ def _ecg_clean_missing(ecg_signal):
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5
-    )
+    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
 
     clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs)
     return clean
@@ -171,9 +169,7 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = (
-        2 * np.array(frequency) / sampling_rate
-    )  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
@@ -192,15 +188,12 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
 
-    f1 = 5 / (0.5 * sampling_rate)
-    f2 = 15 / (0.5 * sampling_rate)
     order = 1
+    clean = signal_filter(
+        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=5, highcut=15, method="butterworth_zi", order=order
+    )
 
-    sos = scipy.signal.butter(order, [f1, f2], btype="bandpass", output="sos")
-    zi_coeff = scipy.signal.sosfilt_zi(sos)
-    zi = zi_coeff * np.mean(ecg_signal)
-
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
+    return clean  # Return filtered
 
 
 # =============================================================================
@@ -215,14 +208,12 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 
     """
 
-    f1 = 8 / (0.5 * sampling_rate)
-    f2 = 20 / (0.5 * sampling_rate)
+    order = 2
+    clean = signal_filter(
+        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=8, highcut=20, method="butterworth_zi", order=order
+    )
 
-    sos = scipy.signal.butter(2, [f1, f2], btype="bandpass", output="sos")
-    zi_coeff = scipy.signal.sosfilt_zi(sos)
-    zi = zi_coeff * np.mean(ecg_signal)
-
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
+    return clean  # Return filtered
 
 
 # =============================================================================
@@ -232,14 +223,12 @@ def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
 
-    f1 = 8 / (0.5 * sampling_rate)
-    f2 = 16 / (0.5 * sampling_rate)
+    order = 1
+    clean = signal_filter(
+        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=8, highcut=16, method="butterworth_zi", order=order
+    )
 
-    sos = scipy.signal.butter(1, [f1, f2], btype="bandpass", output="sos")
-    zi_coeff = scipy.signal.sosfilt_zi(sos)
-    zi = zi_coeff * np.mean(ecg_signal)
-
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
+    return clean  # Return filtered
 
 
 # =============================================================================
@@ -256,11 +245,9 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
 
     """
 
-    f1 = 48 / (0.5 * sampling_rate)
-    f2 = 52 / (0.5 * sampling_rate)
+    order = 4
+    clean = signal_filter(
+        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=52, highcut=48, method="butterworth_zi", order=order
+    )
 
-    sos = scipy.signal.butter(4, [f1, f2], btype="bandstop", output="sos")
-    zi_coeff = scipy.signal.sosfilt_zi(sos)
-    zi = zi_coeff * np.mean(ecg_signal)
-
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
+    return clean  # Return filtered

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import scipy.interpolate
 
 
@@ -44,6 +45,10 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
     array
         Vector of interpolated samples.
 
+    See Also
+    --------
+    signal_resample
+
     Examples
     --------
     .. ipython:: python
@@ -78,9 +83,13 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
     # Sanity checks
     if x_values is None:
         raise ValueError("NeuroKit error: signal_interpolate(): x_values must be provided.")
-    elif y_values is None:
+    if y_values is None:
         # for interpolating NaNs
         return _signal_interpolate_nan(x_values, method=method, fill_value=fill_value)
+    if isinstance(x_values, pd.Series):
+        x_values = np.squeeze(x_values.values)
+    if isinstance(x_new, pd.Series):
+        x_new = np.squeeze(x_new.values)
 
     if len(x_values) != len(y_values):
         raise ValueError("x_values and y_values must be of the same length.")

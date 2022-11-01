@@ -15,14 +15,13 @@ def signal_detrend(
     window=1.5,
     stepsize=0.02,
     components=[-1],
+    sampling_rate=1000,
 ):
     """**Signal Detrending**
-
     Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the
     signal (i.e., removing a general trend). One can also use other methods, such as smoothness
     priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for
     long signals.
-
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
@@ -44,65 +43,54 @@ def signal_detrend(
         Only used if ``method`` is "loess". The parameter which controls the degree of smoothing.
     window : float
         Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
-        desired low frequency band to remove multiplied by the sampling rate
-        (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at
-        1000Hz).
+        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below
+        1.5Hz).
     stepsize : float
-        Only used if ``method`` is ``"locreg"``. Similarly to ``window``, ``stepsize`` should also
-        be multiplied by the sampling rate.
+        Only used if ``method`` is ``"locreg"``.
     components : list
         Only used if ``method`` is ``"EMD"``. What Intrinsic Mode Functions (IMFs) from EMD to
         remove. By default, the last one.
-
-
+    sampling_rate : int, optional
+        Only used if ``method`` is "locreg". Sampling rate (Hz) of the signal.
+        If not None, the ``stepsize`` and ``window`` arguments will be multiplied
+        by the sampling rate. By default 1000.
     Returns
     -------
     array
         Vector containing the detrended signal.
-
     See Also
     --------
     signal_filter, fit_loess, signal_decompose
-
     Examples
     --------
     .. ipython:: python
-
       import numpy as np
       import pandas as pd
       import neurokit2 as nk
       import matplotlib.pyplot as plt
-
       # Simulate signal with low and high frequency
-      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=100)
+      sampling_rate = 100
+      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)
       signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend
-
       # Apply detrending algorithms
       # Method 1: Default Polynomial Detrending of a Given Order
       # Constant detrend (removes the mean)
       baseline = nk.signal_detrend(signal, order=0)
-
       # Linear Detrend (removes the linear trend)
       linear = nk.signal_detrend(signal, order=1)
-
       # Polynomial Detrend (removes the polynomial trend)
       quadratic = nk.signal_detrend(signal, order=2)  # Quadratic detrend
       cubic = nk.signal_detrend(signal, order=3)  # Cubic detrend
       poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)
-
       # Method 2: Tarvainen's smoothness priors approach (Tarvainen et al., 2002)
       tarvainen = nk.signal_detrend(signal, method="tarvainen2002")
-
       # Method 3: LOESS smoothing trend removal
       loess = nk.signal_detrend(signal, method="loess")
-
       # Method 4: Local linear regression (100Hz)
       locreg = nk.signal_detrend(signal, method="locreg",
-                                 window=1.5*100, stepsize=0.02*100)
-
+                                 window=1.5, stepsize=0.02, sampling_rate=sampling_rate)
       # Method 5: EMD
       emd = nk.signal_detrend(signal, method="EMD", components=[-2, -1])
-
       # Visualize different methods
       @savefig signal_detrend1.png scale=100%
       axes = pd.DataFrame({"Original signal": signal,
@@ -120,13 +108,11 @@ def signal_detrend(
           subplot.axhline(y=0, color="k", linestyle="--")
       @suppress
       plt.close()
-
     References
     ----------
     * Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending
       method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2),
       172-175
-
     """
     signal = np.array(signal)  # Force vector
 
@@ -138,7 +124,9 @@ def signal_detrend(
     elif method in ["loess", "lowess"]:
         detrended = signal - fit_loess(signal, alpha=alpha)[0]
     elif method in ["locdetrend", "runline", "locreg", "locregression"]:
-        detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize)
+        detrended = _signal_detrend_locreg(
+            signal, window=window, stepsize=stepsize, sampling_rate=sampling_rate
+        )
     elif method in ["emd"]:
         detrended = _signal_detrend_emd(signal, components=components)
     else:
@@ -146,7 +134,6 @@ def signal_detrend(
             "NeuroKit error: signal_detrend(): 'method' should be one of 'polynomial', 'loess'"
             + "'locreg', 'EMD' or 'tarvainen2002'."
         )
-
     return detrended
 
 
@@ -155,15 +142,15 @@ def signal_detrend(
 # =============================================================================
 def _signal_detrend_tarvainen2002(signal, regularization=500):
     """Method by Tarvainen et al., 2002.
-
     - Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method
     with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.
-
     """
     N = len(signal)
     identity = np.eye(N)
     B = np.dot(np.ones((N - 2, 1)), np.array([[1, -2, 1]]))
-    D_2 = scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N - 2, N))  # pylint: disable=E1101
+    D_2 = scipy.sparse.dia_matrix(
+        (B.T, [0, 1, 2]), shape=(N - 2, N)
+    )  # pylint: disable=E1101
     inv = np.linalg.inv(identity + regularization**2 * D_2.T @ D_2)
     z_stat = ((identity - inv)) @ signal
 
@@ -173,19 +160,20 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     return signal - trend
 
 
-def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
+def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02, sampling_rate=1000):
     """Local linear regression ('runline' algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.
-
     - http://chronux.org/chronuxFiles/Documentation/chronux/spectral_analysis/continuous/locdetrend.html
     - https://github.com/sappelhoff/pyprep/blob/master/pyprep/removeTrend.py
     - https://github.com/VisLab/EEG-Clean-Tools/blob/master/PrepPipeline/utilities/localDetrend.m
-
     """
     length = len(signal)
 
-    # Sanity chekcs
-    window = int(window)
-    stepsize = int(stepsize)
+    # Sanitize input
+    if sampling_rate is None:
+        sampling_rate = 1
+    # Sanity checks
+    window = int(window * sampling_rate)
+    stepsize = int(stepsize * sampling_rate)
     if window > length:
         raise ValueError(
             "NeuroKit error: signal_detrend(): 'window' should be "
@@ -195,7 +183,6 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
         raise ValueError(
             "NeuroKit error: signal_detrend(): 'stepsize' should be more than 1. Increase its value."
         )
-
     y_line = np.zeros((length, 1))
     norm = np.zeros((length, 1))
     nwin = int(np.ceil((length - window) / stepsize))
@@ -215,7 +202,6 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
         norm[(j * stepsize) : (j * stepsize + window)] = norm[
             (j * stepsize) : (j * stepsize + window)
         ] + np.reshape(wt, (window, 1))
-
     above_norm = np.where(norm[:, 0] > 0)
     y_line[above_norm] = y_line[above_norm] / norm[above_norm]
 

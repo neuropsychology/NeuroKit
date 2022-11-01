@@ -12,7 +12,7 @@ def signal_rate(
     ``60 / period``, where the period is the time between the peaks (see func:`.signal_period`).
 
     .. note:: This function is implemented under :func:`.signal_rate`, but it also re-exported under
-       different names, such as :func:`.ecg_rate`, :func:`.ppg_rate`, or :func:`.rsp_rate`. The
+       different names, such as :func:`.ecg_rate`, or :func:`.rsp_rate`. The
        aliases provided for consistency.
 
     Parameters
@@ -55,7 +55,7 @@ def signal_rate(
       import neurokit2 as nk
 
       # Create signal of varying frequency
-      freq = nk.signal_simulate(2, frequency = 1)
+      freq = nk.signal_simulate(1, frequency = 1)
       signal = np.sin((freq).cumsum() * 0.5)
 
       # Find peaks
