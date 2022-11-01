@@ -34,7 +34,7 @@ Sub-domains
 Intervals
 ^^^^^^^^^^^^^^^^
 *intervals_process()*
-""""""""""""""""""
+""""""""""""""""""""""
 .. autofunction:: neurokit2.hrv.intervals_process
 
 *intervals_to_peaks()*

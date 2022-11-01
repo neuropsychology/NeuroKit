@@ -4,10 +4,11 @@ from .intervals_utils import _intervals_sanitize, _intervals_successive
 
 
 def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
-    """Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an ECG signal.
+    """**Convert intervals to peaks**
 
-    This can be useful if you do not have raw peak indices and have only
-    interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.
+    Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an
+    ECG signal. This can be useful if you do not have raw peak indices and have only interval data
+    such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.
 
     Parameters
     ----------
@@ -20,7 +21,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
 
     Returns
     -------
-    array
+    np.ndarray
         An array of integer values indicating the peak indices,
         with the first peak occurring at sample point 0.
 
@@ -29,12 +30,15 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     .. ipython:: python
 
       import neurokit2 as nk
+
       ibi = [500, 400, 700, 500, 300, 800, 500]
       peaks = nk.intervals_to_peaks(ibi)
+
       @savefig p_intervals_to_peaks.png scale=100%
       hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)
       @suppress
       plt.close()
+
       hrv_indices
 
     """

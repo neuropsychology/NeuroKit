@@ -22,6 +22,8 @@ def intervals_process(
 ):
     """**Interval preprocessing**
 
+    R-peak intervals preprocessing.
+
     Parameters
     ----------
     intervals : list or array
@@ -32,7 +34,8 @@ def intervals_process(
         Whether to interpolate the interval signal. The default is False.
     interpolation_rate : int, optional
         Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
-        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
+        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set
+        to 4.
     detrend : str
         Can be one of ``"polynomial"`` (traditional detrending of a given order) or
         ``"tarvainen2002"`` to use the smoothness priors approach described by Tarvainen (2002)
@@ -44,35 +47,41 @@ def intervals_process(
 
     Returns
     -------
-    intervals : array
+    np.ndarray
         Preprocessed intervals, in milliseconds.
-    intervals_time : array
+    np.ndarray
         Preprocessed timestamps corresponding to intervals, in seconds.
 
     Examples
     --------
     **Example 1**: With interpolation and detrending
     .. ipython:: python
+
       import neurokit2 as nk
       import matplotlib.pyplot as plt
+
       plt.rc('font', size=8)
+
       # Download data
       data = nk.data("bio_resting_5min_100hz")
+
       # Clean signal and find peaks
       ecg_cleaned = nk.ecg_clean(data["ECG"], sampling_rate=100)
       peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
+
       # Convert peaks to intervals
       rri = np.diff(peaks) / sampling_rate * 1000
       rri_time = np.array(peaks[1:]) / sampling_rate
+
       # Compute HRV indices
       @savefig p_intervals_process1.png scale=100%
       plt.figure()
       plt.plot(intervals_time, intervals, label="Original intervals")
       intervals, intervals_time = intervals_process(rri,
-                                                      intervals_time=rri_time,
-                                                      interpolate=True,
-                                                      interpolation_rate=100,
-                                                      detrend="tarvainen2002")
+                                                    intervals_time=rri_time,
+                                                    interpolate=True,
+                                                    interpolation_rate=100,
+                                                    detrend="tarvainen2002")
       plt.plot(intervals_time, intervals, label="Processed intervals")
       plt.xlabel("Time (seconds)")
       plt.ylabel("Interbeat intervals (milliseconds)")

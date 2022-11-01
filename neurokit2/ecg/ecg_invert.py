@@ -35,12 +35,13 @@ def ecg_invert(ecg_signal, sampling_rate=1000, force=False, show=False):
     Examples
     --------
     .. ipython:: python
+
       import neurokit2 as nk
 
       ecg = -1 * nk.ecg_simulate(duration=10, sampling_rate=200, heart_rate=70)
 
       # Invert if necessary
-      @savefig p_ecg_inverted1.png scale=100%
+      @savefig p_ecg_invert1.png scale=100%
       ecg_fixed, is_inverted = nk.ecg_invert(ecg, sampling_rate=200, show=True)
       @suppress
       plt.close()

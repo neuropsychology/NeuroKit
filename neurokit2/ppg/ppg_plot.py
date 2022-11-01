@@ -6,6 +6,9 @@ import pandas as pd
 
 def ppg_plot(ppg_signals, sampling_rate=None, static=True):
     """**Visualize photoplethysmogram (PPG) data**
+
+    Visualize the PPG signal processing.
+
     Parameters
     ----------
     ppg_signals : DataFrame
@@ -18,23 +21,29 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
         Defaults to True.
+
     Returns
     -------
     fig
         Figure representing a plot of the processed PPG signals.
+
     Examples
     --------
     .. ipython:: python
+
       import neurokit2 as nk
+
       # Simulate data
       ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
       # Process signal
       signals, info = nk.ppg_process(ppg, sampling_rate=1000)
+
       # Plot
       @savefig p_ppg_plot1.png scale=100%
       nk.ppg_plot(signals)
       @suppress
       plt.close()
+
     See Also
     --------
     ppg_process
