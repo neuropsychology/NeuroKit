@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
+import matplotlib.gridspec
 import numpy as np
 import pandas as pd
-import matplotlib.gridspec
 from matplotlib import pyplot as plt
-from ..misc import find_groups, as_vector
+
+from ..misc import as_vector, find_groups
 
 
 def microstates_static(microstates, sampling_rate=1000, show=False):
-    """**Static properties of microstates**
+    """**Static Properties of Microstates**
 
     The duration of each microstate is also referred to as the Ratio of Time Covered (RTT) in
     some microstates publications.
@@ -15,8 +16,7 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     Parameters
     ----------
     microstates : np.ndarray
-        The topographic maps of the found unique microstates which has a shape of n_channels x
-        n_states, generated from :func:`.nk.microstates_segment`.
+        The sequence .
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to 1000.
     show : bool
@@ -27,26 +27,42 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     DataFrame
         Values of microstates proportion, lifetime distribution and duration (median, mean, and their averages).
 
+    See Also
+    --------
+    .microstates_dynamic
+
     Examples
     --------
     .. ipython:: python
 
       import neurokit2 as nk
 
-      microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
-      nk.microstates_static(microstates, sampling_rate=100)
+      microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0, 2, 2]
+
+      @savefig p_microstates_static1.png scale=100%
+      nk.microstates_static(microstates, sampling_rate=100, show=True)
+      @suppress
+      plt.close()
 
 
     """
-    out = {}
+    # Try retrieving info
+    if isinstance(microstates, dict):
+        microstates = microstates["Sequence"]
+    # Sanitize
     microstates = as_vector(microstates)
+
+    # Initialize output container
+    out = {}
 
     out, lifetimes = _microstates_prevalence(microstates, out=out)
     out, durations, types = _microstates_duration(microstates, sampling_rate=sampling_rate, out=out)
 
     if show is True:
         fig = plt.figure(constrained_layout=False)
-        spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
+        spec = matplotlib.gridspec.GridSpec(
+            ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1]
+        )
 
         ax0 = fig.add_subplot(spec[1, :])
         ax1 = fig.add_subplot(spec[0, :-1])
@@ -54,11 +70,11 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 
         _microstates_duration_plot(durations, types, ax=ax0)
         _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=ax1, ax_distrib=ax2)
+        plt.tight_layout()
 
     df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
 
     return df
-
 
 
 # =============================================================================
@@ -103,16 +119,19 @@ def _microstates_duration_plot(durations, types, ax=None):
     else:
         fig = None
 
-    parts = ax.violinplot(data, vert=False, showmedians=True, showextrema=False)
+    parts = ax.violinplot(
+        data, positions=range(len(states)), vert=False, showmedians=True, showextrema=False
+    )
     for component in parts:
         if isinstance(parts[component], list):
             for part in parts[component]:
-                part.set_facecolor('#FF5722')
-                part.set_edgecolor('white')
+                # part.set_facecolor("#FF5722")
+                part.set_edgecolor("white")
         else:
-            parts[component].set_edgecolor('black')
+            parts[component].set_edgecolor("black")
     ax.set_xlabel("Duration (s)")
     ax.set_title("Duration")
+    ax.set_yticks(range(len(states)))
 
     return fig
 
@@ -153,6 +172,7 @@ def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_d
         ax_distrib.plot(lifetimes[s], label=str(s))
 
     plt.legend()
+    ax_prop.set_xticks(range(len(states)))
     ax_prop.set_title("Proportion")
     ax_distrib.set_title("Lifetime Distribution")
 
@@ -190,7 +210,7 @@ def _microstates_lifetime(microstates, out=None):
     for s in states:
         for j in range(len(tau_dict[s])):
             tau = tau_dict[s][j]
-            lifetimes[s][int(tau)-1] += 1.0
+            lifetimes[s][int(tau) - 1] += 1.0
 
     # Get Area under curve (AUCs)
     if out is None:

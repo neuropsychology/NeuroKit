@@ -14,10 +14,21 @@ def transition_matrix(sequence, order=1, adjust=True, show=False):
     **discrete Markov chains**. Each of its entries is a probability of transitioning from one
     state to the other.
 
+    .. note::
+
+        This function is fairly new and hasn't be tested extensively. Please help us by
+        double-checking the code and letting us know if everything is correct.
+
     Parameters
     ----------
     sequence : Union[list, np.array, pd.Series]
         A list of discrete states.
+    order : int
+        The order of the Markov chain.
+    adjust : bool
+        If ``True``, the transition matrix will be adjusted to ensure that the sum of each row is
+        equal to 1. This is useful when the transition matrix is used to represent a probability
+        distribution.
     show : bool
         Displays the transition matrix heatmap.
 
@@ -116,7 +127,11 @@ def transition_matrix(sequence, order=1, adjust=True, show=False):
         # Loop over data dimensions and create text annotations.
         for i, row in enumerate(tm.index):
             for j, col in enumerate(tm.columns):
-                ax.text(j, i, f"{tm.loc[row, col]:.2f}", ha="center", va="center", color="w")
+                if tm.loc[row, col] > 0.5:
+                    color = "white"
+                else:
+                    color = "black"
+                ax.text(j, i, f"{tm.loc[row, col]:.2f}", ha="center", va="center", color=color)
         ax.set_title("Transition Matrix")
         fig.tight_layout()
 
