@@ -35,7 +35,7 @@ jobs:
                   pip install scipy
                   pip install scikit-learn
                   pip install matplotlib
-                  pip install mne
+                  pip install mne[data]
                   pip install PyWavelets
                   pip install EMD-signal
                   pip install astropy
