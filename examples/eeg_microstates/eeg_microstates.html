@@ -735,11 +735,13 @@ title="Print to PDF"
 </div>
 <section id="eeg-preprocessing">
 <h2>EEG Preprocessing<a class="headerlink" href="#eeg-preprocessing" title="Permalink to this headline">#</a></h2>
-<p>First, let’s download a raw eeg data in an <a class="reference external" href="https://mne.tools/stable/index.html">MNE</a> format.</p>
+<p>First, let’s download a raw eeg data in an <a class="reference external" href="https://mne.tools/stable/index.html">MNE</a> format and select teh EEG channels.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
-<span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">pick</span><span class="p">([</span><span class="s2">&quot;eeg&quot;</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>  <span class="c1"># Store the sampling rate</span>
 </pre></div>
 </div>
 </div>
@@ -779,7 +781,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5ef0332f705ffdaa3c9acba36fdff7a2d636499227834e4bcc0f561553c04688.png" src="../../_images/5ef0332f705ffdaa3c9acba36fdff7a2d636499227834e4bcc0f561553c04688.png" />
+<img alt="../../_images/65d37408613c0843f052b2642ce70ab700c9458f186462b70b687a4d0ea71c2a.png" src="../../_images/65d37408613c0843f052b2642ce70ab700c9458f186462b70b687a4d0ea71c2a.png" />
 </div>
 </div>
 <p>This shows the aspect of the microstates and their sequence in the Global Field Power (GFP; see below). We can then proceed to a statistical analysis.</p>
@@ -831,28 +833,28 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.262083</td>
-      <td>0.17525</td>
-      <td>0.251333</td>
-      <td>0.311333</td>
-      <td>738.5</td>
-      <td>491.0</td>
-      <td>690.0</td>
-      <td>792.0</td>
-      <td>0.019084</td>
+      <td>0.264833</td>
+      <td>0.269</td>
+      <td>0.179833</td>
+      <td>0.286333</td>
+      <td>739.5</td>
+      <td>686.0</td>
+      <td>493.5</td>
+      <td>776.5</td>
+      <td>0.018962</td>
       <td>0.015</td>
-      <td>0.018287</td>
+      <td>0.021265</td>
+      <td>0.015</td>
+      <td>0.01835</td>
       <td>0.01</td>
-      <td>0.019309</td>
+      <td>0.019954</td>
       <td>0.015</td>
-      <td>0.021496</td>
-      <td>0.015</td>
-      <td>0.019679</td>
+      <td>0.019698</td>
       <td>0.015</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/19cba08be113ce3313b7403dc44dcc16347b16b836d5181053ad71a05b650385.png" src="../../_images/19cba08be113ce3313b7403dc44dcc16347b16b836d5181053ad71a05b650385.png" />
+</div></div><img alt="../../_images/5162d1615c6c13973a3eb4b059b7bf39462c80b8bb28665c21dd076a9a4a946d.png" src="../../_images/5162d1615c6c13973a3eb4b059b7bf39462c80b8bb28665c21dd076a9a4a946d.png" />
 </div>
 </div>
 <p>This shows computes static statistics, such as the prevalence of each microstates and the median duration time (also shown in the graph).</p>
@@ -902,26 +904,26 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.738232</td>
-      <td>0.062659</td>
-      <td>0.09701</td>
-      <td>0.102099</td>
-      <td>0.092249</td>
-      <td>0.726581</td>
-      <td>0.072753</td>
-      <td>0.108417</td>
-      <td>0.098806</td>
-      <td>0.054377</td>
-      <td>0.741048</td>
-      <td>0.105769</td>
-      <td>0.088865</td>
-      <td>0.057281</td>
-      <td>0.086456</td>
-      <td>0.767398</td>
+      <td>0.736544</td>
+      <td>0.09254</td>
+      <td>0.056657</td>
+      <td>0.114259</td>
+      <td>0.091698</td>
+      <td>0.76487</td>
+      <td>0.054213</td>
+      <td>0.089219</td>
+      <td>0.090825</td>
+      <td>0.084801</td>
+      <td>0.727525</td>
+      <td>0.096849</td>
+      <td>0.100698</td>
+      <td>0.082072</td>
+      <td>0.067811</td>
+      <td>0.749418</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/5534abe6bed289aa71ad6bf0cfdcb49d441c251d2c361fbcdbe779c64ee4d35b.png" src="../../_images/5534abe6bed289aa71ad6bf0cfdcb49d441c251d2c361fbcdbe779c64ee4d35b.png" />
+</div></div><img alt="../../_images/db93ebb10ae2162eaf3ace9d519e9ce485210bd795e9b11000ae50813cbe6268.png" src="../../_images/db93ebb10ae2162eaf3ace9d519e9ce485210bd795e9b11000ae50813cbe6268.png" />
 </div>
 </div>
 <p>Finally, one can compute complexity features of the sequence of microstates, such as the entropy.</p>
@@ -956,11 +958,11 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.971495</td>
+      <td>1.978964</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/3cfad28cf000079df4fe0dcfbaa872875266b2a44b2294c14df35786c32a72b1.png" src="../../_images/3cfad28cf000079df4fe0dcfbaa872875266b2a44b2294c14df35786c32a72b1.png" />
+</div></div><img alt="../../_images/bdba13547c438247bd102e889493c51a32928965eaccadb66f590f5afedf4538.png" src="../../_images/bdba13547c438247bd102e889493c51a32928965eaccadb66f590f5afedf4538.png" />
 </div>
 </div>
 </section>
@@ -997,7 +999,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b22649cefdc0f5f402cf607602b9413594f3eaf0c0fec0d8bf0bf2271c9eea1b.png" src="../../_images/b22649cefdc0f5f402cf607602b9413594f3eaf0c0fec0d8bf0bf2271c9eea1b.png" />
+<img alt="../../_images/94927935e7f52f4bcfb4e555dd00b4b9a823fb7b973a8227e33d97a52c7253b5.png" src="../../_images/94927935e7f52f4bcfb4e555dd00b4b9a823fb7b973a8227e33d97a52c7253b5.png" />
 </div>
 </div>
 </section>
@@ -1041,10 +1043,10 @@ title="Print to PDF"
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal number of microstates:  3.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal number of microstates:  4.0
 </pre></div>
 </div>
-<img alt="../../_images/c6b55211b37ff91ba42aa8351aa3fa02cfb42b316a36d2f8635853fd89a6d140.png" src="../../_images/c6b55211b37ff91ba42aa8351aa3fa02cfb42b316a36d2f8635853fd89a6d140.png" />
+<img alt="../../_images/ffbe054e53f65bfdfa83c194931c04f1a21d555d489435c2d3617028c06d2aa2.png" src="../../_images/ffbe054e53f65bfdfa83c194931c04f1a21d555d489435c2d3617028c06d2aa2.png" />
 </div>
 </div>
 </section>
@@ -1071,12 +1073,12 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 61.46%
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 61.36%
  Using modified Kmeans,  GEV = 72.07%
 </pre></div>
 </div>
-<img alt="../../_images/ddea7f6b3ffe98a19a51627af640ad9af9d98aa94ae0360f0dfb5514a90df8ca.png" src="../../_images/ddea7f6b3ffe98a19a51627af640ad9af9d98aa94ae0360f0dfb5514a90df8ca.png" />
-<img alt="../../_images/8e5f2dd0bc0c233e3be5f7f07abe11ddbc6a0f230d4251ccecb63205a24ede58.png" src="../../_images/8e5f2dd0bc0c233e3be5f7f07abe11ddbc6a0f230d4251ccecb63205a24ede58.png" />
+<img alt="../../_images/a78c33d2bd3b72e089de34dde91bb1dec8540b60335428b5894eb15367915050.png" src="../../_images/a78c33d2bd3b72e089de34dde91bb1dec8540b60335428b5894eb15367915050.png" />
+<img alt="../../_images/161b7946a1731901e2a92ebf5feb86d3fb2768df861519c0b13f721e0a24e816.png" src="../../_images/161b7946a1731901e2a92ebf5feb86d3fb2768df861519c0b13f721e0a24e816.png" />
 </div>
 </div>
 </section>

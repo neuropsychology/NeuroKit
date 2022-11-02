@@ -20,7 +20,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -33,7 +33,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 4,
    "metadata": {
     "tags": [
      "remove-input"
@@ -64,16 +64,20 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 11,
    "metadata": {},
    "outputs": [],
    "source": [
-    "# # Load raw EEG data\n",
-    "# raw = raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() / 'MEG/sample/sample_audvis_filt-0-40_raw.fif', preload=True, verbose=False)\n",
-    "# raw.pick(['eeg', 'eog'], verbose=False)\n",
+    "# Load raw EEG data\n",
+    "raw = nk.data(\"eeg_1min_200hz\")\n",
+    "raw = raw.pick(['eeg', 'eog'], verbose=False)\n",
     "\n",
+    "sampling_rate = raw.info[\"sfreq\"]\n",
+    "\n",
+    "# print(raw)\n",
     "# # Load events\n",
-    "# events = mne.read_events(mne.datasets.sample.data_path() / 'MEG/sample/sample_audvis_filt-0-40_raw-eve.fif')\n",
+    "# events = mne.find_events(raw, stim_channel='STI 014')\n",
+    "# print(raw)\n",
     "\n",
     "# # Discard events >90 seconds (not strictly necessary, but avoids some warnings)\n",
     "# raw.crop(tmax=90)  # in seconds (happens in-place)\n",

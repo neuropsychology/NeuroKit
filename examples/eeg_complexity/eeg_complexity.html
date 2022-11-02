@@ -674,12 +674,16 @@ title="Print to PDF"
 <p>Load and format the EEG data of one participant. Following <a class="reference external" href="https://mne.tools/dev/auto_tutorials/evoked/30_eeg_erp.html">this MNE example</a>, we’ll load the events from an external events file, and weell crop the raw data from ~4.5 minutes down to 90 seconds to speed up computations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Load raw EEG data</span>
-<span class="c1"># raw = raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() / &#39;MEG/sample/sample_audvis_filt-0-40_raw.fif&#39;, preload=True, verbose=False)</span>
-<span class="c1"># raw.pick([&#39;eeg&#39;, &#39;eog&#39;], verbose=False)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load raw EEG data</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">pick</span><span class="p">([</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;eog&#39;</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
+<span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>
+
+<span class="c1"># print(raw)</span>
 <span class="c1"># # Load events</span>
-<span class="c1"># events = mne.read_events(mne.datasets.sample.data_path() / &#39;MEG/sample/sample_audvis_filt-0-40_raw-eve.fif&#39;)</span>
+<span class="c1"># events = mne.find_events(raw, stim_channel=&#39;STI 014&#39;)</span>
+<span class="c1"># print(raw)</span>
 
 <span class="c1"># # Discard events &gt;90 seconds (not strictly necessary, but avoids some warnings)</span>
 <span class="c1"># raw.crop(tmax=90)  # in seconds (happens in-place)</span>
