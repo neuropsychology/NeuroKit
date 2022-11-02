@@ -726,26 +726,12 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the NeuroKit package and other useful packages</span>
 <span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">mne</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This cell is hidden using the &quot;hide-input&quot; tag.</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>  <span class="c1"># Bigger images</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">14</span>
-</pre></div>
-</div>
-</div>
-</details>
+<div class="cell tag_remove-input docutils container">
 </div>
 <section id="eeg-preprocessing">
 <h2>EEG Preprocessing<a class="headerlink" href="#eeg-preprocessing" title="Permalink to this headline">#</a></h2>
@@ -784,37 +770,197 @@ title="Print to PDF"
 <p>Microstates can be extracted and analyzed like that:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Extract microstates</span>
-<span class="c1"># microstates = nk.microstates_segment(eeg, n_microstates=4)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract microstates</span>
+<span class="n">microstates</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
-<span class="c1"># # Visualize the extracted microstates</span>
-<span class="c1"># nk.microstates_plot(microstates, epoch = (0, 500))</span>
+<span class="c1"># Visualize the extracted microstates</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/0b275848a1b72f837844630f6fd364f15c69ee6e4453cd5dfd419bbe78202a2a.png" src="../../_images/0b275848a1b72f837844630f6fd364f15c69ee6e4453cd5dfd419bbe78202a2a.png" />
 </div>
 </div>
 <p>This shows the aspect of the microstates and their sequence in the Global Field Power (GFP; see below). We can then proceed to a statistical analysis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># nk.microstates_static(microstates, sampling_rate=sampling_rate, show=True)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_static</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Microstate_0_Proportion</th>
+      <th>Microstate_1_Proportion</th>
+      <th>Microstate_2_Proportion</th>
+      <th>Microstate_3_Proportion</th>
+      <th>Microstate_0_LifetimeDistribution</th>
+      <th>Microstate_1_LifetimeDistribution</th>
+      <th>Microstate_2_LifetimeDistribution</th>
+      <th>Microstate_3_LifetimeDistribution</th>
+      <th>Microstate_0_DurationMean</th>
+      <th>Microstate_0_DurationMedian</th>
+      <th>Microstate_1_DurationMean</th>
+      <th>Microstate_1_DurationMedian</th>
+      <th>Microstate_2_DurationMean</th>
+      <th>Microstate_2_DurationMedian</th>
+      <th>Microstate_3_DurationMean</th>
+      <th>Microstate_3_DurationMedian</th>
+      <th>Microstate_Average_DurationMean</th>
+      <th>Microstate_Average_DurationMedian</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.269583</td>
+      <td>0.25925</td>
+      <td>0.17975</td>
+      <td>0.291417</td>
+      <td>707.5</td>
+      <td>711.5</td>
+      <td>504.0</td>
+      <td>786.0</td>
+      <td>0.020501</td>
+      <td>0.015</td>
+      <td>0.019395</td>
+      <td>0.015</td>
+      <td>0.018157</td>
+      <td>0.01</td>
+      <td>0.020214</td>
+      <td>0.015</td>
+      <td>0.019672</td>
+      <td>0.015</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><img alt="../../_images/5f1a2084428d42f3b3d2690d8dcc667b2499ebdaf826539b777543d6c114f930.png" src="../../_images/5f1a2084428d42f3b3d2690d8dcc667b2499ebdaf826539b777543d6c114f930.png" />
 </div>
 </div>
 <p>This shows computes static statistics, such as the prevalence of each microstates and the median duration time (also shown in the graph).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># nk.microstates_dynamic(microstates, show=True)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_dynamic</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Microstate_0_to_0</th>
+      <th>Microstate_0_to_1</th>
+      <th>Microstate_0_to_2</th>
+      <th>Microstate_0_to_3</th>
+      <th>Microstate_1_to_0</th>
+      <th>Microstate_1_to_1</th>
+      <th>Microstate_1_to_2</th>
+      <th>Microstate_1_to_3</th>
+      <th>Microstate_2_to_0</th>
+      <th>Microstate_2_to_1</th>
+      <th>Microstate_2_to_2</th>
+      <th>Microstate_2_to_3</th>
+      <th>Microstate_3_to_0</th>
+      <th>Microstate_3_to_1</th>
+      <th>Microstate_3_to_2</th>
+      <th>Microstate_3_to_3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.756105</td>
+      <td>0.092117</td>
+      <td>0.054405</td>
+      <td>0.097372</td>
+      <td>0.098714</td>
+      <td>0.742444</td>
+      <td>0.054984</td>
+      <td>0.103859</td>
+      <td>0.087158</td>
+      <td>0.082986</td>
+      <td>0.724618</td>
+      <td>0.105239</td>
+      <td>0.083786</td>
+      <td>0.092937</td>
+      <td>0.070632</td>
+      <td>0.752645</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><img alt="../../_images/e4b4562a82e44aeed1ff2b911185252cafff7d05327dc5a04afd699a27a2d666.png" src="../../_images/e4b4562a82e44aeed1ff2b911185252cafff7d05327dc5a04afd699a27a2d666.png" />
 </div>
 </div>
 <p>Finally, one can compute complexity features of the sequence of microstates, such as the entropy.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># nk.microstates_complexity(microstates, show=True)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_complexity</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Microstates_Entropy_Shannon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.978181</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><img alt="../../_images/371400388fe07f378bb18dc84a14ce377052a4dc2a35054fe70c00ff635793be.png" src="../../_images/371400388fe07f378bb18dc84a14ce377052a4dc2a35054fe70c00ff635793be.png" />
 </div>
 </div>
 </section>
@@ -829,14 +975,17 @@ title="Print to PDF"
 <p>This can be visualized manually:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># gfp = nk.eeg_gfp(eeg)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gfp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
 
-<span class="c1"># peaks = nk.microstates_peaks(eeg, gfp=gfp)</span>
+<span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">gfp</span><span class="o">=</span><span class="n">gfp</span><span class="p">)</span>
 
-<span class="c1"># # Plot the peaks in the first 200 data points</span>
-<span class="c1"># nk.events_plot(events = peaks[peaks &lt; 200], signal = gfp[0:200])</span>
+<span class="c1"># Plot the peaks in the first 200 data points</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">peaks</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">],</span> <span class="n">signal</span> <span class="o">=</span> <span class="n">gfp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">])</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/6a7fcdab7b959e1c2052f9ccff4843b8d89d75fad08605106a02190f9be5f1db.png" src="../../_images/6a7fcdab7b959e1c2052f9ccff4843b8d89d75fad08605106a02190f9be5f1db.png" />
 </div>
 </div>
 <p>By default, the microstates clustering algorithm is <strong>trained</strong> on the EEG activity at these peaks, and then applied to back-predict the state at all data points. However, this behaviour can be changed. For instance, one can decide to train the algorithm directly on all data points.</p>
