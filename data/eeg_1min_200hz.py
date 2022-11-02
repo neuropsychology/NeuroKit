@@ -7,13 +7,13 @@ raw = mne.io.read_raw_fif(
     preload=True,
     verbose=False,
 )
-raw = raw.pick(["eeg"], verbose=False)
-
+raw = raw.pick(["eeg", "eog", "stim"], verbose=False)
 raw = raw.crop(0, 60)
 raw = raw.resample(200)
 
+# raw.ch_names
 
-raw.info["sfreq"]
+# raw.info["sfreq"]
 
 # Store data (serialize)
 with open("eeg_1min_200hz.pickle", "wb") as handle:
