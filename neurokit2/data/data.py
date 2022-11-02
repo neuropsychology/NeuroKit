@@ -60,8 +60,8 @@ def data(dataset="bio_eventrelated_100hz"):
         order was: ``["Negative", "Neutral", "Neutral", "Negative"]``)
       * ``sampling_rate=100``
 
-    * **eeg_resting_2min_100hz**: Returns an MNE raw object containing 2 min of resting state EEG
-      data.
+    * **eeg_1min_200hz**: Returns an MNE raw object containing 1 min of EEG
+      data (from the MNE-sample dataset).
 
     Parameters
     ----------
@@ -162,7 +162,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
       raw = nk.data("eeg_1min_200hz")
       @savefig p_data9.png scale=100%
-      nk.signal_plot(raw.get_data()[0:3, 0:2000], sampling_rate=100)
+      nk.signal_plot(raw.get_data()[0:3, 0:2000], sampling_rate=200)
       @suppress
       plt.close()
 
