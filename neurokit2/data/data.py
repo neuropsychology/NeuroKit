@@ -160,7 +160,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
     .. ipython:: python
 
-      raw = nk.data("eeg_resting_2min_100hz")
+      raw = nk.data("eeg_1min_200hz")
       @savefig p_data9.png scale=100%
       nk.signal_plot(raw.get_data()[0:3, 0:2000], sampling_rate=100)
       @suppress
