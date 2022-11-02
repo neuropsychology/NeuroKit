@@ -753,7 +753,7 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
-<span class="c1"># sampling_rate = raw.info[&quot;sfreq&quot;]</span>
+<span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -762,15 +762,18 @@ title="Print to PDF"
 <p>Below, we will apply a band-pass filter and re-reference the signals to remove power line noise, slow drifts and other large artifacts from the raw input.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Apply band-pass filter (1-35Hz) and re-reference the raw signal</span>
-<span class="c1"># eeg = raw.copy().filter(1, 35, verbose = False)</span>
-<span class="c1"># eeg = nk.eeg_rereference(eeg, &#39;average&#39;)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply band-pass filter (1-35Hz) and re-reference the raw signal</span>
+<span class="n">eeg</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">)</span>
 
-<span class="c1"># nk.signal_plot([raw.get_data()[0, 0:500], eeg.get_data()[0, 0:500]], </span>
-<span class="c1">#                labels =[&quot;Raw&quot;, &quot;Preprocessed&quot;], </span>
-<span class="c1">#                sampling_rate = eeg.info[&quot;sfreq&quot;])</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">],</span> <span class="n">eeg</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">]],</span> 
+               <span class="n">labels</span> <span class="o">=</span><span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Preprocessed&quot;</span><span class="p">],</span> 
+               <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/29099e0832edf9ca39354bbdb515248472e3b0ca6e0c4d0291950ba465b47fe7.png" src="../../_images/29099e0832edf9ca39354bbdb515248472e3b0ca6e0c4d0291950ba465b47fe7.png" />
 </div>
 </div>
 </section>
