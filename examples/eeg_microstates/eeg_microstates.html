@@ -749,10 +749,10 @@ title="Print to PDF"
 </div>
 <section id="eeg-preprocessing">
 <h2>EEG Preprocessing<a class="headerlink" href="#eeg-preprocessing" title="Permalink to this headline">#</a></h2>
-<p>First, let’s download a raw eeg data from the <a class="reference external" href="https://mne.tools/stable/index.html">MNE</a> package. We will crop the data for faster processing.</p>
+<p>First, let’s download a raw eeg data in an <a class="reference external" href="https://mne.tools/stable/index.html">MNE</a> format.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># raw = nk.data(&quot;eeg_1min_200hz&quot;)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
 <span class="c1"># sampling_rate = raw.info[&quot;sfreq&quot;]</span>
 </pre></div>
 </div>
