@@ -29,20 +29,24 @@
             "metadata": {},
             "outputs": [],
             "source": [
-                "# Load the NeuroKit package and other useful packages\n",
-                "import neurokit2 as nk\n",
-                "import matplotlib.pyplot as plt"
+                "# Load the NeuroKit package\n",
+                "import neurokit2 as nk"
             ]
         },
         {
             "cell_type": "code",
-            "execution_count": 2,
-            "metadata": {},
+            "execution_count": null,
+            "metadata": {
+                "tags": [
+                    "remove-input"
+                ]
+            },
             "outputs": [],
             "source": [
-                "# This \"decorative\" cell should be hidden from the docs once this is implemented:\n",
-                "# https://github.com/microsoft/vscode-jupyter/issues/1182 \n",
-                "plt.rcParams['figure.figsize'] = [15, 5]  # Bigger images\n",
+                "# Note: this cell is hidden using the \"remove-input\" tag\n",
+                "# Make bigger images\n",
+                "import matplotlib.pyplot as plt\n",
+                "plt.rcParams['figure.figsize'] = [15, 5]  \n",
                 "plt.rcParams['font.size']= 14"
             ]
         },

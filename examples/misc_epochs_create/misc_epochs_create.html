@@ -668,22 +668,13 @@ title="Print to PDF"
 <p>This example shows how to use NeuroKit to extract epochs from data based on events localisation. In case you have multiple data files for each subject, this example also shows you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit package</span>
 <span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This &quot;decorative&quot; cell should be hidden from the docs once this is implemented:</span>
-<span class="c1"># https://github.com/microsoft/vscode-jupyter/issues/1182 </span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>  <span class="c1"># Bigger images</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">14</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 </div>
 <p>In this example, we will use a short segment of data which has ECG, EDA and respiration (RSP) signals.</p>
 <section id="one-signal-with-multiple-event-markings">
@@ -701,15 +692,12 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize the event-marking channel</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">])</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Photosensor&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x19217012290&gt;]
-</pre></div>
-</div>
-<img alt="../../_images/8a83ae137b689cd30a2b5e422f3e70e02d1c1cd8ea654f80601815a444990958.png" src="../../_images/8a83ae137b689cd30a2b5e422f3e70e02d1c1cd8ea654f80601815a444990958.png" />
+<img alt="../../_images/178ccda4b97d1270ff2e0e89de6f41dd1bb1f14d04e3978bb79fe916a235e5ec.png" src="../../_images/178ccda4b97d1270ff2e0e89de6f41dd1bb1f14d04e3978bb79fe916a235e5ec.png" />
 </div>
 </div>
 <p>Depending on how you set up your experiment, the onset of the event can either be marked by signal going from 0 to 5 or vice versa. Specific to this data, the onsets of the events are marked where the signal in the event-marking channel goes from 5 to 0 and the offsets of the events are marked where the signal goes from 0 to 5.</p>
