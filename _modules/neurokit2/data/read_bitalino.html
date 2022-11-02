@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -548,39 +558,19 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_resample</span>
 
 
-<div class="viewcode-block" id="read_bitalino"><a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.read_bitalino">[docs]</a><span class="k">def</span> <span class="nf">read_bitalino</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
-    <span class="n">resample_method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
-    <span class="n">events_annotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="read_bitalino"><a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.read_bitalino">[docs]</a><span class="k">def</span> <span class="nf">read_bitalino</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Read an OpenSignals file (from BITalino)**</span>
 
 <span class="sd">    Reads and loads a BITalino file into a Pandas DataFrame.</span>
-<span class="sd">    The function outputs both the dataframe and the sampling rate (retrieved from the</span>
-<span class="sd">    OpenSignals file).</span>
+<span class="sd">    The function outputs both the dataframe and the information (such as the sampling rate)</span>
+<span class="sd">    retrieved from the OpenSignals file).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename :  str</span>
 <span class="sd">        Filename (with or without the extension) of an OpenSignals file (e.g., ``&quot;data.txt&quot;``).</span>
-<span class="sd">    sampling_rate : int</span>
-<span class="sd">        Sampling rate (in Hz, i.e., samples/second). Defaults to the original sampling rate at</span>
-<span class="sd">        which signals were sampled if set to ``max``. If the sampling rate is set to a given value,</span>
-<span class="sd">        will resample the signals to the desired value. Note that the value of the sampling rate is</span>
-<span class="sd">        outputted along with the data.</span>
-<span class="sd">    resample_method : str</span>
-<span class="sd">        Method of resampling (see :func:`.signal_resample()`).</span>
-<span class="sd">    events_annotation : bool</span>
-<span class="sd">        Defaults to False. If True, will read signal annotation events.</span>
-<span class="sd">    events_annotation_directory : str</span>
-<span class="sd">        If ``None`` (default), reads signal annotation events from the same location where the</span>
-<span class="sd">        acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder</span>
-<span class="sd">        directory of where the ``&quot;EventsAnnotation.txt&quot;`` file is stored.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
@@ -601,7 +591,8 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # data, sampling_rate = nk.read_bitalino(&quot;data.txt&quot;)</span>
+<span class="sd">      # data, info = nk.read_bitalino(&quot;data.txt&quot;)</span>
+<span class="sd">      # sampling_rate = info[&quot;sampling_rate&quot;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Read metadata</span>
@@ -624,200 +615,49 @@ title="Open an issue"
                 <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">annotations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Device </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> not found in metadata (</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">) Something might be wrong.&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;Device </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> not found in metadata (</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">).&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; Something might be wrong.&quot;</span><span class="p">,</span>
                     <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
                 <span class="p">)</span>
 
     <span class="c1"># Read data</span>
     <span class="c1"># -------------------------------------------------------------------------</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_read_bitalino_onedevice</span><span class="p">(</span>
-            <span class="n">filename</span><span class="p">,</span>
-            <span class="n">metadata</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">resample_method</span><span class="p">,</span>
-            <span class="n">events_annotation</span><span class="p">,</span>
-            <span class="n">events_annotation_directory</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
-        <span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+    <span class="c1"># Read file for each device</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="c1"># Select right columns</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;column&quot;</span><span class="p">])</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)]</span>
 
-        <span class="c1"># Read file for each device</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="c1"># Select right columns</span>
-            <span class="n">ch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;column&quot;</span><span class="p">])</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">ch</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]):</span>
+            <span class="n">ch</span><span class="p">[</span><span class="n">ch</span> <span class="o">==</span> <span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;sensor&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">ch</span>
 
-            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]):</span>
-                <span class="n">ch</span><span class="p">[</span><span class="n">ch</span> <span class="o">==</span> <span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;sensor&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">ch</span>
+        <span class="c1"># Add annotations</span>
+        <span class="k">if</span> <span class="s2">&quot;Annotations&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">sr</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Events&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">annot</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span>
+            <span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span><span class="p">[</span><span class="n">annot</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">])]</span>
+            <span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">&quot;START&quot;</span><span class="p">,</span> <span class="s2">&quot;END&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">annot</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Events&quot;</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;START&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sr</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;END&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sr</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-            <span class="c1"># Add annotations</span>
-            <span class="k">if</span> <span class="s2">&quot;Annotations&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">sr</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">]</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Events&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">annot</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Annotations&quot;</span><span class="p">]</span>
-                <span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span><span class="p">[</span><span class="n">annot</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">])]</span>
-                <span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">&quot;START&quot;</span><span class="p">,</span> <span class="s2">&quot;END&quot;</span><span class="p">])</span>
-                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">annot</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;Events&quot;</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;START&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sr</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;END&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sr</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Format metadata names</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
+    <span class="c1"># If only one device is detected, extract from dict</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span></div>
-
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Convenience functions</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_read_bitalino_onedevice</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">,</span>
-    <span class="n">metadata</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
-    <span class="n">resample_method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
-    <span class="n">events_annotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty dict for storing</span>
-
-    <span class="c1"># If only one device</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span>
-        <span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="p">]</span>  <span class="c1"># convert json header to dict (only select first device / MAC address)</span>
-    <span class="n">channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">5</span>  <span class="c1"># analog channels start from column 5</span>
-
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sensors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;channel_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
-
-    <span class="c1"># Adjust sampling rate</span>
-    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
-        <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># resample</span>
-        <span class="n">colnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_read_bitalino_resample</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">,</span>
-            <span class="n">original_sampling_rate</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">],</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">resample_method</span><span class="o">=</span><span class="n">resample_method</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">colnames</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>
-
-    <span class="c1"># Add manual events annotation</span>
-    <span class="k">if</span> <span class="n">events_annotation</span><span class="p">:</span>
-        <span class="n">events</span> <span class="o">=</span> <span class="n">_read_bitalino_events_annotation</span><span class="p">(</span>
-            <span class="n">events_annotation_directory</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;channel_names&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">chname</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">event</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="c1"># Initiate event columns in dataframe</span>
-                <span class="n">start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-                <span class="n">stop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-
-                <span class="c1"># Convert timings to samples</span>
-                <span class="n">start_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">event</span><span class="p">][</span><span class="n">chname</span><span class="p">][</span><span class="s2">&quot;start&quot;</span><span class="p">]]</span>
-                <span class="n">stop_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">event</span><span class="p">][</span><span class="n">chname</span><span class="p">][</span><span class="s2">&quot;stop&quot;</span><span class="p">]]</span>
-                <span class="n">start</span><span class="p">[</span><span class="n">start_times</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">stop</span><span class="p">[</span><span class="n">stop_times</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">chname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">event</span> <span class="o">+</span> <span class="s2">&quot;_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">chname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">event</span> <span class="o">+</span> <span class="s2">&quot;_stop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stop</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;events annotation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span>
-
-    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">info</span>
-
-
-<span class="k">def</span> <span class="nf">_read_bitalino_multipledevice</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">,</span>
-    <span class="n">metadata</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
-    <span class="n">resample_method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
-    <span class="n">events_annotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-
-    <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty dict for storing</span>
-
-    <span class="c1"># Read from multiple devices</span>
-    <span class="n">devices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">devices</span><span class="p">):</span>
-
-        <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;channels&quot;</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">index</span><span class="p">)</span>
-        <span class="c1"># analog channels start from column 5 for each device</span>
-
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span>
-        <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;sensors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span>
-        <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;channel_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Adjust sampling rate</span>
-        <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
-            <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># resample</span>
-            <span class="n">colnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-            <span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_read_bitalino_resample</span><span class="p">(</span>
-                <span class="n">df</span><span class="p">,</span>
-                <span class="n">original_sampling_rate</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;sampling rate&quot;</span><span class="p">],</span>
-                <span class="n">resampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-                <span class="n">resample_method</span><span class="o">=</span><span class="n">resample_method</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">colnames</span>
-        <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>
-
-        <span class="c1"># Add manual events annotation</span>
-        <span class="k">if</span> <span class="n">events_annotation</span><span class="p">:</span>
-            <span class="n">metaevents</span> <span class="o">=</span> <span class="n">_read_bitalino_events_annotation</span><span class="p">(</span>
-                <span class="n">events_annotation_directory</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;channel_names&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="n">events</span> <span class="o">=</span> <span class="n">metaevents</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)]</span>
-
-            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">for</span> <span class="n">chname</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">event</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="c1"># Initiate event columns in dataframe</span>
-                    <span class="n">start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
-                    <span class="n">stop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
-
-                    <span class="c1"># Convert timings to samples</span>
-                    <span class="n">start_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">event</span><span class="p">][</span><span class="n">chname</span><span class="p">][</span><span class="s2">&quot;start&quot;</span><span class="p">]]</span>
-                    <span class="n">stop_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="n">event</span><span class="p">][</span><span class="n">chname</span><span class="p">][</span><span class="s2">&quot;stop&quot;</span><span class="p">]]</span>
-                    <span class="n">start</span><span class="p">[</span><span class="n">start_times</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                    <span class="n">stop</span><span class="p">[</span><span class="n">stop_times</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                    <span class="n">df</span><span class="p">[</span><span class="n">chname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">event</span> <span class="o">+</span> <span class="s2">&quot;_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-                    <span class="n">df</span><span class="p">[</span><span class="n">chname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">event</span> <span class="o">+</span> <span class="s2">&quot;_stop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stop</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-            <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;events annotation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span>
-
-    <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>  <span class="c1"># dict of dataframes for each device</span>
-    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">info</span>
 
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internals</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_read_bitalino_resample</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">original_sampling_rate</span><span class="p">,</span> <span class="n">resampling_rate</span><span class="p">,</span> <span class="n">resample_method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span>
-<span class="p">):</span>
-
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">signal</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">original_sampling_rate</span><span class="p">,</span>
-            <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">resampling_rate</span><span class="p">,</span>
-            <span class="n">method</span><span class="o">=</span><span class="n">resample_method</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-        <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">signal</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">resampling_rate</span>
-
-
 <span class="k">def</span> <span class="nf">_read_bitalino_annotations</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Read events that are annotated during BITalino signal acquisition.</span>
 
@@ -838,57 +678,6 @@ title="Open an issue"
         <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">][</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;MAC&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;MAC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()}</span>
-
-
-<span class="k">def</span> <span class="nf">_read_bitalino_events_annotation</span><span class="p">(</span><span class="n">events_annotation_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read events that are annotated during BITalino signal acquisition.</span>
-<span class="sd">    Returns a dictionary containing the start and stop times (in seconds) in each channel detected per unique event</span>
-<span class="sd">    (label) within each device.&quot;&quot;&quot;</span>
-
-    <span class="c1"># Get working directory of data file (assume events stored together in same folder)</span>
-    <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">events_annotation_directory</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">folder</span> <span class="k">if</span> <span class="s2">&quot;_EventsAnnotation.txt&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: _read_bitalino_events_annotation(): No events annotation file found in the working directory. &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;Please specify `events_annotation_directory` argument to where the events annotation text file is stored.&quot;</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">events_file</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">folder</span> <span class="k">if</span> <span class="s2">&quot;_EventsAnnotation.txt&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="c1"># read metadata</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">events_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-
-        <span class="k">if</span> <span class="s2">&quot;OpenSignals&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">():</span>  <span class="c1"># read first line</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;NeuroKit error: read_bitalino(): Events text file is not in OpenSignals format.&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">eventdata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1"># read second line</span>
-
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">events_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">eventdata</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">][</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
-
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">channel_names</span><span class="p">)]</span>  <span class="c1"># read only from recorded channels</span>
-
-    <span class="c1"># Initialize data</span>
-    <span class="n">metaevents</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;MAC&quot;</span><span class="p">]):</span>
-        <span class="n">metaevents</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]):</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;label&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">metaevents</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-
-            <span class="n">device_data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;MAC&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">device</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]):</span>
-                <span class="n">metaevents</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="n">channel</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-
-                <span class="c1"># Append data</span>
-                <span class="n">start</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">device_data</span><span class="p">[</span><span class="n">device_data</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">channel</span><span class="p">][</span><span class="s2">&quot;START&quot;</span><span class="p">])</span>
-                <span class="n">stop</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">device_data</span><span class="p">[</span><span class="n">device_data</span><span class="p">[</span><span class="s2">&quot;CHANNEL&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">channel</span><span class="p">][</span><span class="s2">&quot;END&quot;</span><span class="p">])</span>
-                <span class="n">metaevents</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="n">channel</span><span class="p">][</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
-                <span class="n">metaevents</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="n">channel</span><span class="p">][</span><span class="s2">&quot;stop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stop</span>
-
-    <span class="k">return</span> <span class="n">metaevents</span>
 </pre></div>
 
               </div>

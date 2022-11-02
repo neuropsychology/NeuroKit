@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -545,10 +555,11 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="intervals_to_peaks"><a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.intervals_to_peaks">[docs]</a><span class="k">def</span> <span class="nf">intervals_to_peaks</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an ECG signal.</span>
+    <span class="sd">&quot;&quot;&quot;**Convert intervals to peaks**</span>
 
-<span class="sd">    This can be useful if you do not have raw peak indices and have only</span>
-<span class="sd">    interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</span>
+<span class="sd">    Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an</span>
+<span class="sd">    ECG signal. This can be useful if you do not have raw peak indices and have only interval data</span>
+<span class="sd">    such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -561,7 +572,7 @@ title="Open an issue"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    array</span>
+<span class="sd">    np.ndarray</span>
 <span class="sd">        An array of integer values indicating the peak indices,</span>
 <span class="sd">        with the first peak occurring at sample point 0.</span>
 
@@ -570,12 +581,15 @@ title="Open an issue"
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
+
 <span class="sd">      ibi = [500, 400, 700, 500, 300, 800, 500]</span>
 <span class="sd">      peaks = nk.intervals_to_peaks(ibi)</span>
+
 <span class="sd">      @savefig p_intervals_to_peaks.png scale=100%</span>
 <span class="sd">      hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
 <span class="sd">      hrv_indices</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>

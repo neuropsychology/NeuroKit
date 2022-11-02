@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -563,6 +573,8 @@ title="Open an issue"
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Interval preprocessing**</span>
 
+<span class="sd">    R-peak intervals preprocessing.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    intervals : list or array</span>
@@ -573,7 +585,8 @@ title="Open an issue"
 <span class="sd">        Whether to interpolate the interval signal. The default is False.</span>
 <span class="sd">    interpolation_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as</span>
-<span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</span>
+<span class="sd">        high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set</span>
+<span class="sd">        to 4.</span>
 <span class="sd">    detrend : str</span>
 <span class="sd">        Can be one of ``&quot;polynomial&quot;`` (traditional detrending of a given order) or</span>
 <span class="sd">        ``&quot;tarvainen2002&quot;`` to use the smoothness priors approach described by Tarvainen (2002)</span>
@@ -585,35 +598,41 @@ title="Open an issue"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    intervals : array</span>
+<span class="sd">    np.ndarray</span>
 <span class="sd">        Preprocessed intervals, in milliseconds.</span>
-<span class="sd">    intervals_time : array</span>
+<span class="sd">    np.ndarray</span>
 <span class="sd">        Preprocessed timestamps corresponding to intervals, in seconds.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    **Example 1**: With interpolation and detrending</span>
 <span class="sd">    .. ipython:: python</span>
+
 <span class="sd">      import neurokit2 as nk</span>
 <span class="sd">      import matplotlib.pyplot as plt</span>
+
 <span class="sd">      plt.rc(&#39;font&#39;, size=8)</span>
+
 <span class="sd">      # Download data</span>
 <span class="sd">      data = nk.data(&quot;bio_resting_5min_100hz&quot;)</span>
+
 <span class="sd">      # Clean signal and find peaks</span>
 <span class="sd">      ecg_cleaned = nk.ecg_clean(data[&quot;ECG&quot;], sampling_rate=100)</span>
 <span class="sd">      peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)</span>
+
 <span class="sd">      # Convert peaks to intervals</span>
 <span class="sd">      rri = np.diff(peaks) / sampling_rate * 1000</span>
 <span class="sd">      rri_time = np.array(peaks[1:]) / sampling_rate</span>
+
 <span class="sd">      # Compute HRV indices</span>
 <span class="sd">      @savefig p_intervals_process1.png scale=100%</span>
 <span class="sd">      plt.figure()</span>
 <span class="sd">      plt.plot(intervals_time, intervals, label=&quot;Original intervals&quot;)</span>
 <span class="sd">      intervals, intervals_time = intervals_process(rri,</span>
-<span class="sd">                                                      intervals_time=rri_time,</span>
-<span class="sd">                                                      interpolate=True,</span>
-<span class="sd">                                                      interpolation_rate=100,</span>
-<span class="sd">                                                      detrend=&quot;tarvainen2002&quot;)</span>
+<span class="sd">                                                    intervals_time=rri_time,</span>
+<span class="sd">                                                    interpolate=True,</span>
+<span class="sd">                                                    interpolation_rate=100,</span>
+<span class="sd">                                                    detrend=&quot;tarvainen2002&quot;)</span>
 <span class="sd">      plt.plot(intervals_time, intervals, label=&quot;Processed intervals&quot;)</span>
 <span class="sd">      plt.xlabel(&quot;Time (seconds)&quot;)</span>
 <span class="sd">      plt.ylabel(&quot;Interbeat intervals (milliseconds)&quot;)</span>

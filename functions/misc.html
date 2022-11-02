@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -673,6 +683,13 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#progress-bar">
+   <em>
+    progress_bar()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#replace">
    <em>
     replace()
@@ -772,6 +789,13 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#parallel-run">
    <em>
     parallel_run()
+   </em>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#progress-bar">
+   <em>
+    progress_bar()
    </em>
   </a>
  </li>
@@ -1076,7 +1100,7 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">24</span>
+<span class="gh">Out[6]: </span><span class="go">46</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1108,7 +1132,7 @@ conservative.</p></li>
 <span class="gp">In [3]: </span><span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">find_knee</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">22</span>
+<span class="gh">Out[4]: </span><span class="go">21</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1173,6 +1197,36 @@ inside as <code class="docutils literal notranslate"><span class="pre">**kwargs<
 <span class="gh">Out[5]: </span><span class="go">[1, 2, 3]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</section>
+<section id="progress-bar">
+<h2><em>progress_bar()</em><a class="headerlink" href="#progress-bar" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.misc.progress_bar">
+<span class="sig-name descname"><span class="pre">progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">it</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/misc/progress_bar.html#progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.misc.progress_bar" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Progress Bar</strong></p>
+<p>Display a progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>it</strong> (<em>iterable</em>) – An iterable object.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – A prefix to display before the progress bar.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The size of the progress bar.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to display the progress bar.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>..ipython:: python</p>
+<blockquote>
+<div><p>import neurokit2 as nk</p>
+<dl class="simple">
+<dt>for i, j in nk.progress_bar([“a”, “b”, “c”], prefix=”Progress: “):</dt><dd><p>pass</p>
+</dd>
+</dl>
+<p>print(i, j)</p>
+</div></blockquote>
 </dd></dl>
 
 </section>

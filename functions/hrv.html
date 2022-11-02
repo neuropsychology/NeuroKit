@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -1503,6 +1513,7 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 <dt class="sig sig-object py" id="neurokit2.hrv.intervals_process">
 <span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Interval preprocessing</strong></p>
+<p>R-peak intervals preprocessing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1510,7 +1521,8 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 <li><p><strong>intervals_time</strong> (<em>list or array, optional</em>) – List or numpy array of timestamps corresponding to intervals, in seconds.</p></li>
 <li><p><strong>interpolate</strong> (<em>bool, optional</em>) – Whether to interpolate the interval signal. The default is False.</p></li>
 <li><p><strong>interpolation_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
-high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</p></li>
+high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set
+to 4.</p></li>
 <li><p><strong>detrend</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code> (traditional detrending of a given order) or
 <code class="docutils literal notranslate"><span class="pre">&quot;tarvainen2002&quot;</span></code> to use the smoothness priors approach described by Tarvainen (2002)
 (mostly used in HRV analyses as a lowpass filter to remove complex trends), <code class="docutils literal notranslate"><span class="pre">&quot;loess&quot;</span></code> for
@@ -1521,8 +1533,8 @@ algorithm from chronux). By default None such that there is no detrending.</p></
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>intervals</strong> (<em>array</em>) – Preprocessed intervals, in milliseconds.</p></li>
-<li><p><strong>intervals_time</strong> (<em>array</em>) – Preprocessed timestamps corresponding to intervals, in seconds.</p></li>
+<li><p><em>np.ndarray</em> – Preprocessed intervals, in milliseconds.</p></li>
+<li><p><em>np.ndarray</em> – Preprocessed timestamps corresponding to intervals, in seconds.</p></li>
 </ul>
 </p>
 </dd>
@@ -1532,17 +1544,17 @@ algorithm from chronux). By default None such that there is no detrending.</p></
 .. ipython:: python</p>
 <blockquote>
 <div><p>import neurokit2 as nk
-import matplotlib.pyplot as plt
-plt.rc(‘font’, size=8)
-# Download data
-data = nk.data(“bio_resting_5min_100hz”)
-# Clean signal and find peaks
+import matplotlib.pyplot as plt</p>
+<p>plt.rc(‘font’, size=8)</p>
+<p># Download data
+data = nk.data(“bio_resting_5min_100hz”)</p>
+<p># Clean signal and find peaks
 ecg_cleaned = nk.ecg_clean(data[“ECG”], sampling_rate=100)
-peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
-# Convert peaks to intervals
+peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)</p>
+<p># Convert peaks to intervals
 rri = np.diff(peaks) / sampling_rate * 1000
-rri_time = np.array(peaks[1:]) / sampling_rate
-# Compute HRV indices
+rri_time = np.array(peaks[1:]) / sampling_rate</p>
+<p># Compute HRV indices
 &#64;savefig p_intervals_process1.png scale=100%
 plt.figure()
 plt.plot(intervals_time, intervals, label=”Original intervals”)
@@ -1567,9 +1579,10 @@ plt.close()</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.intervals_to_peaks">
 <span class="sig-name descname"><span class="pre">intervals_to_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_to_peaks.html#intervals_to_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_to_peaks" title="Permalink to this definition">#</a></dt>
-<dd><p>Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an ECG signal.</p>
-<p>This can be useful if you do not have raw peak indices and have only
-interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
+<dd><p><strong>Convert intervals to peaks</strong></p>
+<p>Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an
+ECG signal. This can be useful if you do not have raw peak indices and have only interval data
+such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1579,7 +1592,7 @@ interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.<
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – An array of integer values indicating the peak indices,
+<dd class="field-even"><p><em>np.ndarray</em> – An array of integer values indicating the peak indices,
 with the first peak occurring at sample point 0.</p>
 </dd>
 </dl>
@@ -1608,6 +1621,7 @@ with the first peak occurring at sample point 0.</p>
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Interval preprocessing</strong></p>
+<p>R-peak intervals preprocessing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1615,7 +1629,8 @@ with the first peak occurring at sample point 0.</p>
 <li><p><strong>intervals_time</strong> (<em>list or array, optional</em>) – List or numpy array of timestamps corresponding to intervals, in seconds.</p></li>
 <li><p><strong>interpolate</strong> (<em>bool, optional</em>) – Whether to interpolate the interval signal. The default is False.</p></li>
 <li><p><strong>interpolation_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
-high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.</p></li>
+high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set
+to 4.</p></li>
 <li><p><strong>detrend</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;polynomial&quot;</span></code> (traditional detrending of a given order) or
 <code class="docutils literal notranslate"><span class="pre">&quot;tarvainen2002&quot;</span></code> to use the smoothness priors approach described by Tarvainen (2002)
 (mostly used in HRV analyses as a lowpass filter to remove complex trends), <code class="docutils literal notranslate"><span class="pre">&quot;loess&quot;</span></code> for
@@ -1626,8 +1641,8 @@ algorithm from chronux). By default None such that there is no detrending.</p></
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>intervals</strong> (<em>array</em>) – Preprocessed intervals, in milliseconds.</p></li>
-<li><p><strong>intervals_time</strong> (<em>array</em>) – Preprocessed timestamps corresponding to intervals, in seconds.</p></li>
+<li><p><em>np.ndarray</em> – Preprocessed intervals, in milliseconds.</p></li>
+<li><p><em>np.ndarray</em> – Preprocessed timestamps corresponding to intervals, in seconds.</p></li>
 </ul>
 </p>
 </dd>
@@ -1637,17 +1652,17 @@ algorithm from chronux). By default None such that there is no detrending.</p></
 .. ipython:: python</p>
 <blockquote>
 <div><p>import neurokit2 as nk
-import matplotlib.pyplot as plt
-plt.rc(‘font’, size=8)
-# Download data
-data = nk.data(“bio_resting_5min_100hz”)
-# Clean signal and find peaks
+import matplotlib.pyplot as plt</p>
+<p>plt.rc(‘font’, size=8)</p>
+<p># Download data
+data = nk.data(“bio_resting_5min_100hz”)</p>
+<p># Clean signal and find peaks
 ecg_cleaned = nk.ecg_clean(data[“ECG”], sampling_rate=100)
-peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
-# Convert peaks to intervals
+peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)</p>
+<p># Convert peaks to intervals
 rri = np.diff(peaks) / sampling_rate * 1000
-rri_time = np.array(peaks[1:]) / sampling_rate
-# Compute HRV indices
+rri_time = np.array(peaks[1:]) / sampling_rate</p>
+<p># Compute HRV indices
 &#64;savefig p_intervals_process1.png scale=100%
 plt.figure()
 plt.plot(intervals_time, intervals, label=”Original intervals”)
@@ -1669,9 +1684,10 @@ plt.close()</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="id5">
 <span class="sig-name descname"><span class="pre">intervals_to_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_to_peaks.html#intervals_to_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition">#</a></dt>
-<dd><p>Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an ECG signal.</p>
-<p>This can be useful if you do not have raw peak indices and have only
-interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
+<dd><p><strong>Convert intervals to peaks</strong></p>
+<p>Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an
+ECG signal. This can be useful if you do not have raw peak indices and have only interval data
+such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1681,7 +1697,7 @@ interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.<
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – An array of integer values indicating the peak indices,
+<dd class="field-even"><p><em>np.ndarray</em> – An array of integer values indicating the peak indices,
 with the first peak occurring at sample point 0.</p>
 </dd>
 </dl>

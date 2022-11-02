@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -570,7 +580,9 @@ title="Open an issue"
 <span class="sd">    random initializations.The run that resulted in the best segmentation, as measured by global</span>
 <span class="sd">    explained variance (GEV), is used.</span>
 
-<span class="sd">    * **kmod**: Modified k-means algorithm.</span>
+<span class="sd">    * **kmod**: Modified k-means algorithm. It differs from a traditional k-means in that it is</span>
+<span class="sd">      *polarity-invariant*, which means that samples with EEG potential distribution maps that are</span>
+<span class="sd">      similar but have opposite polarity will be assigned the *same* microstate class.</span>
 <span class="sd">    * **kmeans**: Normal k-means.</span>
 <span class="sd">    * **kmedoids**: k-medoids clustering, a more stable version of k-means.</span>
 <span class="sd">    * **pca**: Principal Component Analysis.</span>

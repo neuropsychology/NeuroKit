@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -543,30 +553,37 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..markov</span> <span class="kn">import</span> <span class="n">transition_matrix</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span>
 
 
-<div class="viewcode-block" id="microstates_dynamic"><a class="viewcode-back" href="../../../functions/microstates.html#neurokit2.microstates.microstates_dynamic">[docs]</a><span class="k">def</span> <span class="nf">microstates_dynamic</span><span class="p">(</span><span class="n">microstates</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Dynamic properties of microstates (transition pattern)**</span>
+<div class="viewcode-block" id="microstates_dynamic"><a class="viewcode-back" href="../../../functions/microstates.html#neurokit2.microstates.microstates_dynamic">[docs]</a><span class="k">def</span> <span class="nf">microstates_dynamic</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**Dynamic Properties of Microstates**</span>
 
-<span class="sd">    Based on https://github.com/Frederic-vW/eeg_microstates and https://github.com/maximtrp/mchmm</span>
+<span class="sd">    This computes statistics related to the transition pattern (based on the</span>
+<span class="sd">    :func:`.transition_matrix`).</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        This function does not compute all the features available under the markov submodule.</span>
+<span class="sd">        Don&#39;t hesitate to open an issue to help us test and decide what features to include.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    microstates : np.ndarray</span>
 <span class="sd">        The topographic maps of the found unique microstates which has a shape of n_channels x</span>
 <span class="sd">        n_states, generated from :func:`.nk.microstates_segment`.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Show the transition matrix.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    DataFrame</span>
-<span class="sd">        Dynamic properties of microstates:</span>
-<span class="sd">        * Results of the observed transition matrix</span>
-<span class="sd">        * Chi-square test statistics of the observed microstates against the expected microstates</span>
-<span class="sd">        * Symmetry test statistics of the observed microstates against the expected microstates</span>
+<span class="sd">        Dynamic properties of microstates.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    transition_matrix</span>
+<span class="sd">    .transition_matrix, .microstates_static</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -574,23 +591,37 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]</span>
-<span class="sd">      nk.microstates_dynamic(microstates)</span>
+<span class="sd">      microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0, 2, 2]</span>
+<span class="sd">      @savefig p_microstates_dynamic1.png scale=100%</span>
+<span class="sd">      nk.microstates_dynamic(microstates, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># See https://github.com/Frederic-vW/eeg_microstates</span>
+    <span class="c1"># and https://github.com/maximtrp/mchmm</span>
+    <span class="c1"># for other implementations</span>
+
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
 
+    <span class="c1"># Try retrieving info</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">microstates</span> <span class="o">=</span> <span class="n">microstates</span><span class="p">[</span><span class="s2">&quot;Sequence&quot;</span><span class="p">]</span>
+    <span class="c1"># Sanitize</span>
+    <span class="n">microstates</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">microstates</span><span class="p">)</span>
+
     <span class="c1"># Transition matrix</span>
-    <span class="n">tm</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">transition_matrix</span><span class="p">(</span><span class="n">microstates</span><span class="p">)</span>
+    <span class="n">tm</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">transition_matrix</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tm</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">tm</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">out</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_to_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tm</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">tm</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">row</span><span class="p">]</span>
 
-    <span class="c1"># out.update(results)</span>
-    <span class="c1"># out.pop(&quot;Expected&quot;)</span>
-
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;Microstate_&quot;</span><span class="p">)</span>
+
+    <span class="c1"># TODO:</span>
+    <span class="c1"># * Chi-square test statistics of the observed microstates against the expected microstates</span>
+    <span class="c1"># * Symmetry test statistics of the observed microstates against the expected microstates</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 </pre></div>

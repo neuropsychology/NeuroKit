@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Signal Processing" href="signal.html" />
-    <link rel="prev" title="EEG" href="eeg.html" />
+    <link rel="prev" title="Video Analysis" href="video.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -772,7 +782,9 @@ clustering algorithms. Several runs of the clustering algorithm are performed, u
 random initializations.The run that resulted in the best segmentation, as measured by global
 explained variance (GEV), is used.</p>
 <ul class="simple">
-<li><p><strong>kmod</strong>: Modified k-means algorithm.</p></li>
+<li><p><strong>kmod</strong>: Modified k-means algorithm. It differs from a traditional k-means in that it is
+<em>polarity-invariant</em>, which means that samples with EEG potential distribution maps that are
+similar but have opposite polarity will be assigned the <em>same</em> microstate class.</p></li>
 <li><p><strong>kmeans</strong>: Normal k-means.</p></li>
 <li><p><strong>kmedoids</strong>: k-medoids clustering, a more stable version of k-means.</p></li>
 <li><p><strong>pca</strong>: Principal Component Analysis.</p></li>
@@ -988,13 +1000,14 @@ channels (thus, depends on how channels are ordered).</p>
 <dt class="sig sig-object py" id="neurokit2.microstates.microstates_clean">
 <span class="sig-name descname"><span class="pre">microstates_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gfp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize_eeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gfp_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l1'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_clean.html#microstates_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_clean" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Prepare eeg data for microstates extraction</strong></p>
+<p>This is mostly a utility function to get the data ready for <a class="reference internal" href="#neurokit2.microstates.microstates_segment" title="neurokit2.microstates.microstates_segment"><code class="xref py py-func docutils literal notranslate"><span class="pre">microstates_segment()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>train</strong> (<em>Union[str, int, float]</em>) – Method for selecting the timepoints how which to train the clustering algorithm. Can be
-<code class="docutils literal notranslate"><span class="pre">&quot;gfp&quot;</span></code> to use the peaks found in the <code class="docutils literal notranslate"><span class="pre">Peaks</span></code> in the global field power. Can be
+<code class="docutils literal notranslate"><span class="pre">&quot;gfp&quot;</span></code> to use the peaks found in the global field power (GFP). Can be
 <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, in which case it will select all the datapoints. It can also be a number or a
 ratio, in which case it will select the corresponding number of evenly spread data points.
 For instance, <code class="docutils literal notranslate"><span class="pre">train=10</span></code> will select 10 equally spaced datapoints, whereas <code class="docutils literal notranslate"><span class="pre">train=0.5</span></code>
@@ -1018,9 +1031,17 @@ GFP extraction and running k-means algorithm. Defaults to <code class="docutils 
 </p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eeg</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">gfp</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_clean</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="s2">&quot;gfp&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eeg_gfp</span></code>, <a class="reference internal" href="#neurokit2.microstates.microstates_peaks" title="neurokit2.microstates.microstates_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">microstates_peaks</span></code></a></p>
+<p><a class="reference internal" href="eeg.html#neurokit2.eeg.eeg_gfp" title="neurokit2.eeg.eeg_gfp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eeg_gfp</span></code></a>, <a class="reference internal" href="#neurokit2.microstates.microstates_peaks" title="neurokit2.microstates.microstates_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">microstates_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.microstates.microstates_segment" title="neurokit2.microstates.microstates_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">microstates_segment</span></code></a></p>
 </div>
 </dd></dl>
 
@@ -1029,38 +1050,45 @@ GFP extraction and running k-means algorithm. Defaults to <code class="docutils 
 <h3><em>microstates_dynamic()</em><a class="headerlink" href="#microstates-dynamic" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.microstates.microstates_dynamic">
-<span class="sig-name descname"><span class="pre">microstates_dynamic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microstates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_dynamic.html#microstates_dynamic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_dynamic" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Dynamic properties of microstates (transition pattern)</strong></p>
-<p>Based on <a class="reference external" href="https://github.com/Frederic-vW/eeg_microstates">https://github.com/Frederic-vW/eeg_microstates</a> and <a class="reference external" href="https://github.com/maximtrp/mchmm">https://github.com/maximtrp/mchmm</a></p>
+<span class="sig-name descname"><span class="pre">microstates_dynamic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microstates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_dynamic.html#microstates_dynamic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_dynamic" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Dynamic Properties of Microstates</strong></p>
+<p>This computes statistics related to the transition pattern (based on the
+<a class="reference internal" href="markov.html#neurokit2.markov.transition_matrix" title="neurokit2.markov.transition_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">transition_matrix()</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function does not compute all the features available under the markov submodule.
+Don’t hesitate to open an issue to help us test and decide what features to include.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>microstates</strong> (<em>np.ndarray</em>) – The topographic maps of the found unique microstates which has a shape of n_channels x
-n_states, generated from <code class="xref py py-func docutils literal notranslate"><span class="pre">nk.microstates_segment()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>microstates</strong> (<em>np.ndarray</em>) – The topographic maps of the found unique microstates which has a shape of n_channels x
+n_states, generated from <code class="xref py py-func docutils literal notranslate"><span class="pre">nk.microstates_segment()</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Show the transition matrix.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em> – Dynamic properties of microstates:
-* Results of the observed transition matrix
-* Chi-square test statistics of the observed microstates against the expected microstates
-* Symmetry test statistics of the observed microstates against the expected microstates</p>
+<dd class="field-even"><p><em>DataFrame</em> – Dynamic properties of microstates.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></p>
+<p><a class="reference internal" href="markov.html#neurokit2.markov.transition_matrix" title="neurokit2.markov.transition_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transition_matrix</span></code></a>, <a class="reference internal" href="#neurokit2.microstates.microstates_static" title="neurokit2.microstates.microstates_static"><code class="xref py py-obj docutils literal notranslate"><span class="pre">microstates_static</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">microstates</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">In [2]: </span><span class="n">microstates</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_dynamic</span><span class="p">(</span><span class="n">microstates</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_dynamic</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
 <span class="go">   Microstate_0_to_0  Microstate_0_to_1  ...  Microstate_2_to_1  Microstate_2_to_2</span>
-<span class="go">0               0.75               0.25  ...               0.25               0.75</span>
+<span class="go">0                0.6                0.2  ...                0.2                0.8</span>
 
 <span class="go">[1 rows x 9 columns]</span>
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../_images/p_microstates_dynamic1.png"><img alt="../_images/p_microstates_dynamic1.png" src="../_images/p_microstates_dynamic1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -1068,20 +1096,36 @@ n_states, generated from <code class="xref py py-func docutils literal notransla
 <h3><em>microstates_findnumber()</em><a class="headerlink" href="#microstates-findnumber" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.microstates.microstates_findnumber">
-<span class="sig-name descname"><span class="pre">microstates_findnumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_findnumber.html#microstates_findnumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_findnumber" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">microstates_findnumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GEV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmod'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_findnumber.html#microstates_findnumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_findnumber" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Estimate optimal number of microstates</strong></p>
-<p>Estimate the optimal number of microstates using a variety of indices.</p>
+<p>Computes statistical indices useful for estimating the optimal number of microstates using a</p>
+<ul class="simple">
+<li><p><strong>Global Explained Variance (GEV)</strong>: measures how similar each EEG sample is to its assigned
+microstate class. The <strong>higher</strong> (closer to 1), the better the segmentation.</p></li>
+<li><p><strong>Krzanowski-Lai Criterion (KL)</strong>: measures quality of microstate segmentation based on the
+dispersion measure (average distance between samples in the same microstate class); the
+<strong>larger the KL value</strong>, the better the segmentation. Note that KL is not a polarity
+invariant measure and thus might not be a suitable measure of fit for polarity-invariant
+methods such as modified K-means and (T)AAHC.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eeg</strong> (<em>np.ndarray</em>) – An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</p></li>
 <li><p><strong>n_max</strong> (<em>int</em>) – Maximum number of microstates to try. A higher number leads to a longer process.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The method to use to estimate the optimal number of microstates. Can be “GEV” (the elbow,
+detected using <code class="xref py py-func docutils literal notranslate"><span class="pre">find_knee()</span></code>), or “KL” (the location of the maximum value).</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – Plot indices normalized on the same scale.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Print progress bar.</p></li>
 <li><p><strong>**kwargs</strong> – Arguments to be passed to <a class="reference internal" href="#neurokit2.microstates.microstates_segment" title="neurokit2.microstates.microstates_segment"><code class="xref py py-func docutils literal notranslate"><span class="pre">microstates_segment()</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em> – The different quality scores for each number of microstates.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>int</em> – Optimal number of microstates.</p></li>
+<li><p><em>DataFrame</em> – The different quality scores for each number of microstates.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1091,28 +1135,21 @@ n_states, generated from <code class="xref py py-func docutils literal notransla
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">35</span><span class="p">)</span>
-<span class="go">Filtering raw data in 1 contiguous segment</span>
-<span class="go">Setting up band-pass filter from 1 - 35 Hz</span>
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
-<span class="go">FIR filter parameters</span>
-<span class="gt">---------------------</span>
-<span class="n">Designing</span> <span class="n">a</span> <span class="n">one</span><span class="o">-</span><span class="k">pass</span><span class="p">,</span> <span class="n">zero</span><span class="o">-</span><span class="n">phase</span><span class="p">,</span> <span class="n">non</span><span class="o">-</span><span class="n">causal</span> <span class="n">bandpass</span> <span class="nb">filter</span><span class="p">:</span>
-<span class="o">-</span> <span class="n">Windowed</span> <span class="n">time</span><span class="o">-</span><span class="n">domain</span> <span class="n">design</span> <span class="p">(</span><span class="n">firwin</span><span class="p">)</span> <span class="n">method</span>
-<span class="o">-</span> <span class="n">Hamming</span> <span class="n">window</span> <span class="k">with</span> <span class="mf">0.0194</span> <span class="n">passband</span> <span class="n">ripple</span> <span class="ow">and</span> <span class="mi">53</span> <span class="n">dB</span> <span class="n">stopband</span> <span class="n">attenuation</span>
-<span class="o">-</span> <span class="n">Lower</span> <span class="n">passband</span> <span class="n">edge</span><span class="p">:</span> <span class="mf">1.00</span>
-<span class="o">-</span> <span class="n">Lower</span> <span class="n">transition</span> <span class="n">bandwidth</span><span class="p">:</span> <span class="mf">1.00</span> <span class="n">Hz</span> <span class="p">(</span><span class="o">-</span><span class="mi">6</span> <span class="n">dB</span> <span class="n">cutoff</span> <span class="n">frequency</span><span class="p">:</span> <span class="mf">0.50</span> <span class="n">Hz</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">Upper</span> <span class="n">passband</span> <span class="n">edge</span><span class="p">:</span> <span class="mf">35.00</span> <span class="n">Hz</span>
-<span class="o">-</span> <span class="n">Upper</span> <span class="n">transition</span> <span class="n">bandwidth</span><span class="p">:</span> <span class="mf">8.75</span> <span class="n">Hz</span> <span class="p">(</span><span class="o">-</span><span class="mi">6</span> <span class="n">dB</span> <span class="n">cutoff</span> <span class="n">frequency</span><span class="p">:</span> <span class="mf">39.38</span> <span class="n">Hz</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">Filter</span> <span class="n">length</span><span class="p">:</span> <span class="mi">497</span> <span class="n">samples</span> <span class="p">(</span><span class="mf">3.310</span> <span class="n">sec</span><span class="p">)</span>
-
-
-<span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">)</span>
-
-<span class="go"># Estimate optimal number (currently comment out due to memory error)</span>
-<span class="go"># results = nk.microstates_findnumber(eeg, n_max=4, show=True, method=&quot;kmod&quot;)</span>
+<span class="go"># Estimate optimal number</span>
+<span class="gp">In [3]: </span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_findnumber</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_max</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[........................................] 0/7</span>
+<span class="go">[█████...................................] 1/7</span>
+<span class="go">[███████████.............................] 2/7</span>
+<span class="go">[█████████████████.......................] 3/7</span>
+<span class="go">[██████████████████████..................] 4/7</span>
+<span class="go">[████████████████████████████............] 5/7</span>
+<span class="go">[██████████████████████████████████......] 6/7</span>
+<span class="go">[████████████████████████████████████████] 7/7</span>
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../_images/p_microstates_findnumber1.png"><img alt="../_images/p_microstates_findnumber1.png" src="../_images/p_microstates_findnumber1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -1140,19 +1177,25 @@ toolbox).</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>import neurokit2 as nk</p>
-<p>eeg = nk.mne_data(“filt-0-40_raw”)</p>
-<p>gfp = nk.eeg_gfp(eeg)
-peaks1 = nk.microstates_peaks(eeg, distance_between=0.01)
-peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)
-peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
-&#64;savefig p_microstates_peaks_png scale=100%
-nk.events_plot([peaks1[peaks1 &lt; 500], peaks2[peaks2 &lt; 500], peaks3[peaks3 &lt; 500]], gfp[0:500])
-&#64;suppress
-plt.close()</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">gfp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">peaks1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">distance_between</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">peaks2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">distance_between</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">peaks3</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">distance_between</span><span class="o">=</span><span class="mf">0.10</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">peaks1</span><span class="p">[</span><span class="n">peaks1</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">],</span> <span class="n">peaks2</span><span class="p">[</span><span class="n">peaks2</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">],</span> <span class="n">peaks3</span><span class="p">[</span><span class="n">peaks3</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">]],</span> <span class="n">gfp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_microstates_peaks1.png"><img alt="../_images/p_microstates_peaks1.png" src="../_images/p_microstates_peaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eeg_gfp</span></code></p>
+<p><a class="reference internal" href="eeg.html#neurokit2.eeg.eeg_gfp" title="neurokit2.eeg.eeg_gfp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eeg_gfp</span></code></a></p>
 </div>
 </dd></dl>
 
@@ -1162,14 +1205,13 @@ plt.close()</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.microstates.microstates_static">
 <span class="sig-name descname"><span class="pre">microstates_static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microstates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/microstates/microstates_static.html#microstates_static"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.microstates.microstates_static" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Static properties of microstates</strong></p>
+<dd><p><strong>Static Properties of Microstates</strong></p>
 <p>The duration of each microstate is also referred to as the Ratio of Time Covered (RTT) in
 some microstates publications.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>microstates</strong> (<em>np.ndarray</em>) – The topographic maps of the found unique microstates which has a shape of n_channels x
-n_states, generated from <code class="xref py py-func docutils literal notranslate"><span class="pre">nk.microstates_segment()</span></code>.</p></li>
+<li><p><strong>microstates</strong> (<em>np.ndarray</em>) – The sequence .</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – Returns a plot of microstate duration, proportion, and lifetime distribution if <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
@@ -1178,19 +1220,24 @@ n_states, generated from <code class="xref py py-func docutils literal notransla
 <dd class="field-even"><p><em>DataFrame</em> – Values of microstates proportion, lifetime distribution and duration (median, mean, and their averages).</p>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.microstates.microstates_dynamic" title="neurokit2.microstates.microstates_dynamic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">microstates_dynamic</span></code></a></p>
+</div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">microstates</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">In [2]: </span><span class="n">microstates</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_static</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">microstates_static</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
 <span class="go">   Microstate_0_Proportion  ...  Microstate_Average_DurationMedian</span>
-<span class="go">0                 0.416667  ...                               0.02</span>
+<span class="go">0                 0.357143  ...                               0.02</span>
 
 <span class="go">[1 rows x 14 columns]</span>
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../_images/p_microstates_static1.png"><img alt="../_images/p_microstates_static1.png" src="../_images/p_microstates_static1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -1205,11 +1252,11 @@ n_states, generated from <code class="xref py py-func docutils literal notransla
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="eeg.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="video.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">EEG</p>
+            <p class="prev-next-title">Video Analysis</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="signal.html" title="next page">

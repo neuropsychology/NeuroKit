@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -540,6 +550,8 @@ title="Open an issue"
                 
   <h1>Source code for neurokit2.data.read_video</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
@@ -567,7 +579,7 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # videodata, sampling_rate = nk.read_video(&quot;video.mp4&quot;)</span>
+<span class="sd">      # video, sampling_rate = nk.read_video(&quot;video.mp4&quot;)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Try loading cv2</span>
@@ -578,6 +590,9 @@ title="Open an issue"
             <span class="s2">&quot;The &#39;cv2&#39; module is required for this function to run. &quot;</span><span class="p">,</span>
             <span class="s2">&quot;Please install it first (`pip install opencv-python`).&quot;</span><span class="p">,</span>
         <span class="p">)</span>
+
+    <span class="c1"># Check if file exists</span>
+    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;No file found with the specified name (</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">).&quot;</span>
 
     <span class="n">capture</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">sampling_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">capture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">))</span>

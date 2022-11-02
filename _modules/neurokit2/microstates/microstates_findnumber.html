@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -540,17 +550,29 @@ title="Open an issue"
                 
   <h1>Source code for neurokit2.microstates.microstates_findnumber</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">find_knee</span><span class="p">,</span> <span class="n">progress_bar</span>
 <span class="kn">from</span> <span class="nn">..stats.cluster_quality</span> <span class="kn">import</span> <span class="n">_cluster_quality_dispersion</span>
 <span class="kn">from</span> <span class="nn">.microstates_segment</span> <span class="kn">import</span> <span class="n">microstates_segment</span>
 
 
-<div class="viewcode-block" id="microstates_findnumber"><a class="viewcode-back" href="../../../functions/microstates.html#neurokit2.microstates.microstates_findnumber">[docs]</a><span class="k">def</span> <span class="nf">microstates_findnumber</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_max</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="microstates_findnumber"><a class="viewcode-back" href="../../../functions/microstates.html#neurokit2.microstates.microstates_findnumber">[docs]</a><span class="k">def</span> <span class="nf">microstates_findnumber</span><span class="p">(</span>
+    <span class="n">eeg</span><span class="p">,</span> <span class="n">n_max</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GEV&quot;</span><span class="p">,</span> <span class="n">clustering_method</span><span class="o">=</span><span class="s2">&quot;kmod&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Estimate optimal number of microstates**</span>
 
-<span class="sd">    Estimate the optimal number of microstates using a variety of indices.</span>
+<span class="sd">    Computes statistical indices useful for estimating the optimal number of microstates using a</span>
+
+<span class="sd">    * **Global Explained Variance (GEV)**: measures how similar each EEG sample is to its assigned</span>
+<span class="sd">      microstate class. The **higher** (closer to 1), the better the segmentation.</span>
+<span class="sd">    * **Krzanowski-Lai Criterion (KL)**: measures quality of microstate segmentation based on the</span>
+<span class="sd">      dispersion measure (average distance between samples in the same microstate class); the</span>
+<span class="sd">      **larger the KL value**, the better the segmentation. Note that KL is not a polarity</span>
+<span class="sd">      invariant measure and thus might not be a suitable measure of fit for polarity-invariant</span>
+<span class="sd">      methods such as modified K-means and (T)AAHC.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -558,13 +580,20 @@ title="Open an issue"
 <span class="sd">        An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.</span>
 <span class="sd">    n_max : int</span>
 <span class="sd">        Maximum number of microstates to try. A higher number leads to a longer process.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The method to use to estimate the optimal number of microstates. Can be &quot;GEV&quot; (the elbow,</span>
+<span class="sd">        detected using :func:`find_knee`), or &quot;KL&quot; (the location of the maximum value).</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        Plot indices normalized on the same scale.</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        Print progress bar.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Arguments to be passed to :func:`.microstates_segment`</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Optimal number of microstates.</span>
 <span class="sd">    DataFrame</span>
 <span class="sd">        The different quality scores for each number of microstates.</span>
 
@@ -578,11 +607,13 @@ title="Open an issue"
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;).filter(1, 35)</span>
-<span class="sd">      eeg = nk.eeg_rereference(eeg, &#39;average&#39;)</span>
+<span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;).crop(0, 5)</span>
 
-<span class="sd">      # Estimate optimal number (currently comment out due to memory error)</span>
-<span class="sd">      # results = nk.microstates_findnumber(eeg, n_max=4, show=True, method=&quot;kmod&quot;)</span>
+<span class="sd">      # Estimate optimal number</span>
+<span class="sd">      @savefig p_microstates_findnumber1.png scale=100%</span>
+<span class="sd">      n_clusters, results = nk.microstates_findnumber(eeg, n_max=8, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Retrieve data</span>
@@ -598,17 +629,13 @@ title="Open an issue"
     <span class="n">dispersion_previous</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="n">dispersion_diff_previous</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">n_microstates</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">n_microstates</span><span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="n">n_microstates</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">n_microstates</span> <span class="ow">in</span> <span class="n">progress_bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">):</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="n">microstates_segment</span><span class="p">(</span>
+            <span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="n">n_microstates</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">clustering_method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
         <span class="n">segmentation</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Sequence&quot;</span><span class="p">]</span>
-        <span class="c1">#        info = out[&quot;Info_algorithm&quot;]</span>
-        <span class="c1">#        sd = out[&quot;GFP&quot;]</span>
-
-        <span class="c1">#        nk.cluster_quality(data.T, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)</span>
-
-        <span class="c1">#        _, rez = _cluster_quality_sklearn(data.T, segmentation, microstates)</span>
         <span class="n">rez</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="n">rez</span><span class="p">[</span><span class="s2">&quot;Score_GEV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;GEV&quot;</span><span class="p">]</span>
@@ -633,17 +660,28 @@ title="Open an issue"
         <span class="n">dispersion_diff_previous</span> <span class="o">=</span> <span class="n">dispersion_diff</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span>
+
     <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-    <span class="c1">#        results.append(pd.DataFrame.from_dict(rez, orient=&quot;index&quot;).T)</span>
-    <span class="c1">#    results = pd.concat(results, axis=0).reset_index(drop=True)</span>
+
+    <span class="c1"># Estimate optimal number</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;KL&quot;</span><span class="p">:</span>
+        <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;KL_Criterion&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n_clusters</span> <span class="o">=</span> <span class="n">find_knee</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;Score_GEV&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">results</span> <span class="o">-</span> <span class="n">results</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">results</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
-        <span class="n">normalized</span><span class="p">[</span><span class="s2">&quot;n_Clusters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_max</span><span class="p">))</span>
+        <span class="n">normalized</span><span class="p">[</span><span class="s2">&quot;n_Clusters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">normalized</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">normalized</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Score&quot;</span><span class="p">,</span> <span class="s2">&quot;Normalized&quot;</span><span class="p">)</span>
         <span class="n">normalized</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;n_Clusters&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Method: </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Number of microstates&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Normalized score&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Optimal number of microstates&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">results</span></div>
+    <span class="k">return</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">results</span></div>
 </pre></div>
 
               </div>

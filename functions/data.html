@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -636,6 +646,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#read-video">
+     <em>
+      read_video()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#write-csv">
      <em>
       write_csv()
@@ -700,6 +717,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#read-bitalino">
      <em>
       read_bitalino()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#read-video">
+     <em>
+      read_video()
      </em>
     </a>
    </li>
@@ -792,6 +816,8 @@ order was: <code class="docutils literal notranslate"><span class="pre">[&quot;N
 <li><p><code class="docutils literal notranslate"><span class="pre">sampling_rate=100</span></code></p></li>
 </ul>
 </li>
+<li><p><strong>eeg_1min_200hz</strong>: Returns an MNE raw object containing 1 min of EEG
+data (from the MNE-sample dataset).</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -884,6 +910,12 @@ order was: <code class="docutils literal notranslate"><span class="pre">[&quot;N
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_data8.png"><img alt="../_images/p_data8.png" src="../_images/p_data8.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
+
+<span class="gp">In [24]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_data9.png"><img alt="../_images/p_data9.png" src="../_images/p_data9.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -940,25 +972,14 @@ signal interruptions using padding.</p></li>
 <h3><em>read_bitalino()</em><a class="headerlink" href="#read-bitalino" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_bitalino">
-<span class="sig-name descname"><span class="pre">read_bitalino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events_annotation_directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_bitalino.html#read_bitalino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_bitalino" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read_bitalino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_bitalino.html#read_bitalino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_bitalino" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Read an OpenSignals file (from BITalino)</strong></p>
 <p>Reads and loads a BITalino file into a Pandas DataFrame.
-The function outputs both the dataframe and the sampling rate (retrieved from the
-OpenSignals file).</p>
+The function outputs both the dataframe and the information (such as the sampling rate)
+retrieved from the OpenSignals file).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Filename (with or without the extension) of an OpenSignals file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.txt&quot;</span></code>).</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – Sampling rate (in Hz, i.e., samples/second). Defaults to the original sampling rate at
-which signals were sampled if set to <code class="docutils literal notranslate"><span class="pre">max</span></code>. If the sampling rate is set to a given value,
-will resample the signals to the desired value. Note that the value of the sampling rate is
-outputted along with the data.</p></li>
-<li><p><strong>resample_method</strong> (<em>str</em>) – Method of resampling (see <a class="reference internal" href="signal.html#neurokit2.signal_resample" title="neurokit2.signal_resample"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_resample()</span></code></a>).</p></li>
-<li><p><strong>events_annotation</strong> (<em>bool</em>) – Defaults to False. If True, will read signal annotation events.</p></li>
-<li><p><strong>events_annotation_directory</strong> (<em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), reads signal annotation events from the same location where the
-acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder
-directory of where the <code class="docutils literal notranslate"><span class="pre">&quot;EventsAnnotation.txt&quot;</span></code> file is stored.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Filename (with or without the extension) of an OpenSignals file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.txt&quot;</span></code>).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
@@ -977,7 +998,37 @@ rate, and the events annotation timings if <code class="docutils literal notrans
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="go"># data, sampling_rate = nk.read_bitalino(&quot;data.txt&quot;)</span>
+<span class="go"># data, info = nk.read_bitalino(&quot;data.txt&quot;)</span>
+<span class="go"># sampling_rate = info[&quot;sampling_rate&quot;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="read-video">
+<h3><em>read_video()</em><a class="headerlink" href="#read-video" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.data.read_video">
+<span class="sig-name descname"><span class="pre">read_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'video.mp4'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_video.html#read_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_video" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Reads a video file into an array</strong></p>
+<p>Reads a video file (e.g., .mp4) into a numpy array of shape. This function requires OpenCV to
+be installed via the <code class="docutils literal notranslate"><span class="pre">opencv-python</span></code> package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The path of a video file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>array</em> – numpy array of shape (frame, RGB-channel, height, width).</p></li>
+<li><p><em>int</em> – Sampling rate in frames per second.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># video, sampling_rate = nk.read_video(&quot;video.mp4&quot;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1027,32 +1078,6 @@ rate, and the events annotation timings if <code class="docutils literal notrans
 <section id="module-neurokit2.data">
 <span id="other"></span><h2><em>Other</em><a class="headerlink" href="#module-neurokit2.data" title="Permalink to this headline">#</a></h2>
 <p>Submodule for NeuroKit.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.data.read_video">
-<span class="sig-name descname"><span class="pre">read_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'video.mp4'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_video.html#read_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_video" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Reads a video file into an array</strong></p>
-<p>Reads a video file (e.g., .mp4) into a numpy array of shape. This function requires OpenCV to
-be installed via the <code class="docutils literal notranslate"><span class="pre">opencv-python</span></code> package.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The path of a video file.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>array</em> – numpy array of shape (frame, RGB-channel, height, width).</p></li>
-<li><p><em>int</em> – Sampling rate in frames per second.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># videodata, sampling_rate = nk.read_video(&quot;video.mp4&quot;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </section>
 </section>
 

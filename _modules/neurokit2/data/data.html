@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -542,6 +552,8 @@ title="Open an issue"
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span> <span class="k">as</span> <span class="n">sklearn_datasets</span>
@@ -599,7 +611,8 @@ title="Open an issue"
 <span class="sd">        order was: ``[&quot;Negative&quot;, &quot;Neutral&quot;, &quot;Neutral&quot;, &quot;Negative&quot;]``)</span>
 <span class="sd">      * ``sampling_rate=100``</span>
 
-
+<span class="sd">    * **eeg_1min_200hz**: Returns an MNE raw object containing 1 min of EEG</span>
+<span class="sd">      data (from the MNE-sample dataset).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -696,6 +709,14 @@ title="Open an issue"
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      raw = nk.data(&quot;eeg_1min_200hz&quot;)</span>
+<span class="sd">      @savefig p_data9.png scale=100%</span>
+<span class="sd">      nk.signal_plot(raw.get_data()[0:3, 0:2000], sampling_rate=200)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: one could further improve this function with like</span>
     <span class="c1"># selectors &#39;ecg=True, eda=True, restingstate=True&#39; that would</span>
@@ -753,7 +774,14 @@ title="Open an issue"
 
         <span class="k">return</span> <span class="n">df</span>
 
-    <span class="c1"># TODO: Add EEG (fif and edf datasets)</span>
+    <span class="c1"># TODO: Add more EEG (fif and edf datasets)</span>
+    <span class="k">if</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">]:</span>
+
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span>
+                <span class="s2">&quot;https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="c1"># General case</span>
     <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># pylint: disable=unused-variable</span>

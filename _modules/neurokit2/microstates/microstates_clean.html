@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -543,13 +553,23 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">.microstates_peaks</span> <span class="kn">import</span> <span class="n">microstates_peaks</span>
 <span class="kn">from</span> <span class="nn">..eeg</span> <span class="kn">import</span> <span class="n">eeg_gfp</span>
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">standardize</span>
+<span class="kn">from</span> <span class="nn">.microstates_peaks</span> <span class="kn">import</span> <span class="n">microstates_peaks</span>
 
 
-<div class="viewcode-block" id="microstates_clean"><a class="viewcode-back" href="../../../functions/microstates.html#neurokit2.microstates.microstates_clean">[docs]</a><span class="k">def</span> <span class="nf">microstates_clean</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="s2">&quot;gfp&quot;</span><span class="p">,</span> <span class="n">standardize_eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gfp_method</span><span class="o">=</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="microstates_clean"><a class="viewcode-back" href="../../../functions/microstates.html#neurokit2.microstates.microstates_clean">[docs]</a><span class="k">def</span> <span class="nf">microstates_clean</span><span class="p">(</span>
+    <span class="n">eeg</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">train</span><span class="o">=</span><span class="s2">&quot;gfp&quot;</span><span class="p">,</span>
+    <span class="n">standardize_eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">gfp_method</span><span class="o">=</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Prepare eeg data for microstates extraction**</span>
+
+<span class="sd">    This is mostly a utility function to get the data ready for :func:`.microstates_segment`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -559,7 +579,7 @@ title="Open an issue"
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to ``None``.</span>
 <span class="sd">    train : Union[str, int, float]</span>
 <span class="sd">        Method for selecting the timepoints how which to train the clustering algorithm. Can be</span>
-<span class="sd">        ``&quot;gfp&quot;`` to use the peaks found in the ``Peaks`` in the global field power. Can be</span>
+<span class="sd">        ``&quot;gfp&quot;`` to use the peaks found in the global field power (GFP). Can be</span>
 <span class="sd">        ``&quot;all&quot;``, in which case it will select all the datapoints. It can also be a number or a</span>
 <span class="sd">        ratio, in which case it will select the corresponding number of evenly spread data points.</span>
 <span class="sd">        For instance, ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5``</span>
@@ -587,9 +607,19 @@ title="Open an issue"
 <span class="sd">    info : dict</span>
 <span class="sd">        Other information pertaining to the eeg raw object.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;)</span>
+<span class="sd">      eeg, peaks, gfp, info = nk.microstates_clean(eeg, train=&quot;gfp&quot;)</span>
+
+
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    eeg_gfp, microstates_peaks</span>
+<span class="sd">    .eeg_gfp, microstates_peaks, .microstates_segment</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># If MNE object</span>
@@ -605,12 +635,16 @@ title="Open an issue"
         <span class="n">eeg</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Get GFP</span>
-    <span class="n">gfp</span> <span class="o">=</span> <span class="n">eeg_gfp</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">gfp_method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">gfp</span> <span class="o">=</span> <span class="n">eeg_gfp</span><span class="p">(</span>
+        <span class="n">eeg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">gfp_method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
 
+    <span class="c1"># If train is a custom of vector (assume it&#39;s the pre-computed peaks)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">train</span>
     <span class="c1"># Find peaks in the global field power (GFP) or take a given amount of indices</span>
-    <span class="k">if</span> <span class="n">train</span> <span class="o">==</span> <span class="s2">&quot;gfp&quot;</span><span class="p">:</span>
-        <span class="n">train</span> <span class="o">=</span> <span class="n">gfp</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">gfp</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">gfp</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">eeg</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">gfp</span><span class="p">,</span> <span class="n">info</span></div>
 </pre></div>

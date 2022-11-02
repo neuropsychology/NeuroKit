@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -727,10 +737,19 @@ title="Print to PDF"
 convenient way of representing and describing a sequence of (discrete) states, also known as
 <strong>discrete Markov chains</strong>. Each of its entries is a probability of transitioning from one
 state to the other.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is fairly new and hasn’t be tested extensively. Please help us by
+double-checking the code and letting us know if everything is correct.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sequence</strong> (<em>Union[list, np.array, pd.Series]</em>) – A list of discrete states.</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – The order of the Markov chain.</p></li>
+<li><p><strong>adjust</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the transition matrix will be adjusted to ensure that the sum of each row is
+equal to 1. This is useful when the transition matrix is used to represent a probability
+distribution.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – Displays the transition matrix heatmap.</p></li>
 </ul>
 </dd>
@@ -831,7 +850,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1], dtype=int64)</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 3, 0, 0, 0, 1, 0, 0, 0, 0, 3, 1, 2, 1, 2], dtype=int64)</span>
 </pre></div>
 </div>
 </dd></dl>

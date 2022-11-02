@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -547,6 +557,9 @@ title="Open an issue"
 
 <div class="viewcode-block" id="ppg_plot"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_plot">[docs]</a><span class="k">def</span> <span class="nf">ppg_plot</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Visualize photoplethysmogram (PPG) data**</span>
+
+<span class="sd">    Visualize the PPG signal processing.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ppg_signals : DataFrame</span>
@@ -559,23 +572,29 @@ title="Open an issue"
 <span class="sd">        If True, a static plot will be generated with matplotlib.</span>
 <span class="sd">        If False, an interactive plot will be generated with plotly.</span>
 <span class="sd">        Defaults to True.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fig</span>
 <span class="sd">        Figure representing a plot of the processed PPG signals.</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
+
 <span class="sd">      import neurokit2 as nk</span>
+
 <span class="sd">      # Simulate data</span>
 <span class="sd">      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)</span>
 <span class="sd">      # Process signal</span>
 <span class="sd">      signals, info = nk.ppg_process(ppg, sampling_rate=1000)</span>
+
 <span class="sd">      # Plot</span>
 <span class="sd">      @savefig p_ppg_plot1.png scale=100%</span>
 <span class="sd">      nk.ppg_plot(signals)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    ppg_process</span>

@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -896,9 +906,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  1.347990           0.618510</span>
-<span class="go">2     2        10000  ...                 -0.967776           0.932124</span>
-<span class="go">3     3        15000  ...                 -0.003589           0.998174</span>
+<span class="go">1     1         5000  ...                  0.257215           0.978806</span>
+<span class="go">2     2        10000  ...                 -1.543870           0.971320</span>
+<span class="go">3     3        15000  ...                  0.092915           0.790165</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -981,10 +991,12 @@ possible if <code class="docutils literal notranslate"><span class="pre">samplin
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_plot">
 <span class="sig-name descname"><span class="pre">ppg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_plot.html#ppg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_plot" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Visualize photoplethysmogram (PPG) data</strong>
-:Parameters: * <strong>ppg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>.</p>
-<blockquote>
-<div><ul class="simple">
+<dd><p><strong>Visualize photoplethysmogram (PPG) data</strong></p>
+<p>Visualize the PPG signal processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ppg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if
 the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
 Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -992,13 +1004,25 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">None</s
 If False, an interactive plot will be generated with plotly.
 Defaults to True.</p></li>
 </ul>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>fig</em> – Figure representing a plot of the processed PPG signals.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed PPG signals.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate data</span>
+<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="go"># Process signal</span>
+<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="go"># Plot</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" src="../_images/p_ppg_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a></p>
@@ -1108,16 +1132,16 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e2128231c0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1bbafcab730&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e212823b50&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1bbafcabaf0&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1e212820070&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1bbafca9960&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1e2229b5f00&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1bbac7573d0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1190,9 +1214,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  1.996939           0.648709</span>
-<span class="go">2     2        10000  ...                  0.411915           0.988298</span>
-<span class="go">3     3        15000  ...                  0.259547           0.620677</span>
+<span class="go">1     1         5000  ...                  1.740752           0.657932</span>
+<span class="go">2     2        10000  ...                 -3.506843           0.874961</span>
+<span class="go">3     3        15000  ...                 -0.931267           0.592472</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>

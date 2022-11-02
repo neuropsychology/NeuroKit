@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -553,7 +563,7 @@ title="Open an issue"
 <span class="sd">    ``60 / period``, where the period is the time between the peaks (see func:`.signal_period`).</span>
 
 <span class="sd">    .. note:: This function is implemented under :func:`.signal_rate`, but it also re-exported under</span>
-<span class="sd">       different names, such as :func:`.ecg_rate`, :func:`.ppg_rate`, or :func:`.rsp_rate`. The</span>
+<span class="sd">       different names, such as :func:`.ecg_rate`, or :func:`.rsp_rate`. The</span>
 <span class="sd">       aliases provided for consistency.</span>
 
 <span class="sd">    Parameters</span>
@@ -596,7 +606,7 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      # Create signal of varying frequency</span>
-<span class="sd">      freq = nk.signal_simulate(2, frequency = 1)</span>
+<span class="sd">      freq = nk.signal_simulate(1, frequency = 1)</span>
 <span class="sd">      signal = np.sin((freq).cumsum() * 0.5)</span>
 
 <span class="sd">      # Find peaks</span>

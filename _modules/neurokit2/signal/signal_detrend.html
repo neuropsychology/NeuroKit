@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -605,50 +615,60 @@ title="Open an issue"
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
-<span class="sd">      import numpy as np</span>
-<span class="sd">      import pandas as pd</span>
-<span class="sd">      import neurokit2 as nk</span>
-<span class="sd">      import matplotlib.pyplot as plt</span>
-<span class="sd">      # Simulate signal with low and high frequency</span>
-<span class="sd">      sampling_rate = 100</span>
-<span class="sd">      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)</span>
-<span class="sd">      signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend</span>
-<span class="sd">      # Apply detrending algorithms</span>
-<span class="sd">      # Method 1: Default Polynomial Detrending of a Given Order</span>
-<span class="sd">      # Constant detrend (removes the mean)</span>
-<span class="sd">      baseline = nk.signal_detrend(signal, order=0)</span>
-<span class="sd">      # Linear Detrend (removes the linear trend)</span>
-<span class="sd">      linear = nk.signal_detrend(signal, order=1)</span>
-<span class="sd">      # Polynomial Detrend (removes the polynomial trend)</span>
-<span class="sd">      quadratic = nk.signal_detrend(signal, order=2)  # Quadratic detrend</span>
-<span class="sd">      cubic = nk.signal_detrend(signal, order=3)  # Cubic detrend</span>
-<span class="sd">      poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)</span>
-<span class="sd">      # Method 2: Tarvainen&#39;s smoothness priors approach (Tarvainen et al., 2002)</span>
-<span class="sd">      tarvainen = nk.signal_detrend(signal, method=&quot;tarvainen2002&quot;)</span>
-<span class="sd">      # Method 3: LOESS smoothing trend removal</span>
-<span class="sd">      loess = nk.signal_detrend(signal, method=&quot;loess&quot;)</span>
-<span class="sd">      # Method 4: Local linear regression (100Hz)</span>
-<span class="sd">      locreg = nk.signal_detrend(signal, method=&quot;locreg&quot;,</span>
-<span class="sd">                                 window=1.5, stepsize=0.02, sampling_rate=sampling_rate)</span>
-<span class="sd">      # Method 5: EMD</span>
-<span class="sd">      emd = nk.signal_detrend(signal, method=&quot;EMD&quot;, components=[-2, -1])</span>
-<span class="sd">      # Visualize different methods</span>
-<span class="sd">      @savefig signal_detrend1.png scale=100%</span>
-<span class="sd">      axes = pd.DataFrame({&quot;Original signal&quot;: signal,</span>
-<span class="sd">                           &quot;Baseline&quot;: baseline,</span>
-<span class="sd">                           &quot;Linear&quot;: linear,</span>
-<span class="sd">                           &quot;Quadratic&quot;: quadratic,</span>
-<span class="sd">                           &quot;Cubic&quot;: cubic,</span>
-<span class="sd">                           &quot;Polynomial (10th)&quot;: poly10,</span>
-<span class="sd">                           &quot;Tarvainen&quot;: tarvainen,</span>
-<span class="sd">                           &quot;LOESS&quot;: loess,</span>
-<span class="sd">                           &quot;Local Regression&quot;: locreg,</span>
-<span class="sd">                           &quot;EMD&quot;: emd}).plot(subplots=True)</span>
-<span class="sd">      # Plot horizontal lines to better visualize the detrending</span>
-<span class="sd">      for subplot in axes:</span>
-<span class="sd">          subplot.axhline(y=0, color=&quot;k&quot;, linestyle=&quot;--&quot;)</span>
-<span class="sd">      @suppress</span>
-<span class="sd">      plt.close()</span>
+
+<span class="sd">        import numpy as np</span>
+<span class="sd">        import pandas as pd</span>
+<span class="sd">        import neurokit2 as nk</span>
+<span class="sd">        import matplotlib.pyplot as plt</span>
+
+<span class="sd">        # Simulate signal with low and high frequency</span>
+<span class="sd">        sampling_rate = 100</span>
+<span class="sd">        signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)</span>
+<span class="sd">        signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend</span>
+
+<span class="sd">        # Apply detrending algorithms</span>
+<span class="sd">        # ---------------------------</span>
+
+<span class="sd">        # Method 1: Default Polynomial Detrending of a Given Order</span>
+<span class="sd">        # Constant detrend (removes the mean)</span>
+<span class="sd">        baseline = nk.signal_detrend(signal, order=0)</span>
+<span class="sd">        # Linear Detrend (removes the linear trend)</span>
+<span class="sd">        linear = nk.signal_detrend(signal, order=1)</span>
+<span class="sd">        # Polynomial Detrend (removes the polynomial trend)</span>
+<span class="sd">        quadratic = nk.signal_detrend(signal, order=2)  # Quadratic detrend</span>
+<span class="sd">        cubic = nk.signal_detrend(signal, order=3)  # Cubic detrend</span>
+<span class="sd">        poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)</span>
+
+<span class="sd">        # Method 2: Tarvainen&#39;s smoothness priors approach (Tarvainen et al., 2002)</span>
+<span class="sd">        tarvainen = nk.signal_detrend(signal, method=&quot;tarvainen2002&quot;)</span>
+
+<span class="sd">        # Method 3: LOESS smoothing trend removal</span>
+<span class="sd">        loess = nk.signal_detrend(signal, method=&quot;loess&quot;)</span>
+
+<span class="sd">        # Method 4: Local linear regression (100Hz)</span>
+<span class="sd">        locreg = nk.signal_detrend(signal, method=&quot;locreg&quot;,</span>
+<span class="sd">                                   window=1.5, stepsize=0.02, sampling_rate=sampling_rate)</span>
+
+<span class="sd">        # Method 5: EMD</span>
+<span class="sd">        emd = nk.signal_detrend(signal, method=&quot;EMD&quot;, components=[-2, -1])</span>
+<span class="sd">        # Visualize different methods</span>
+<span class="sd">        @savefig signal_detrend1.png scale=100%</span>
+<span class="sd">        axes = pd.DataFrame({&quot;Original signal&quot;: signal,</span>
+<span class="sd">                             &quot;Baseline&quot;: baseline,</span>
+<span class="sd">                             &quot;Linear&quot;: linear,</span>
+<span class="sd">                             &quot;Quadratic&quot;: quadratic,</span>
+<span class="sd">                             &quot;Cubic&quot;: cubic,</span>
+<span class="sd">                             &quot;Polynomial (10th)&quot;: poly10,</span>
+<span class="sd">                             &quot;Tarvainen&quot;: tarvainen,</span>
+<span class="sd">                             &quot;LOESS&quot;: loess,</span>
+<span class="sd">                             &quot;Local Regression&quot;: locreg,</span>
+<span class="sd">                             &quot;EMD&quot;: emd}).plot(subplots=True)</span>
+<span class="sd">        # Plot horizontal lines to better visualize the detrending</span>
+<span class="sd">        for subplot in axes:</span>
+<span class="sd">            subplot.axhline(y=0, color=&quot;k&quot;, linestyle=&quot;--&quot;)</span>
+<span class="sd">        @suppress</span>
+<span class="sd">        plt.close()</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    * Tarvainen, M. P., Ranta-Aho, P. O., &amp; Karjalainen, P. A. (2002). An advanced detrending</span>
@@ -689,9 +709,7 @@ title="Open an issue"
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
     <span class="n">identity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]))</span>
-    <span class="n">D_2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">dia_matrix</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-    <span class="p">)</span>  <span class="c1"># pylint: disable=E1101</span>
+    <span class="n">D_2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">dia_matrix</span><span class="p">((</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>  <span class="c1"># pylint: disable=E1101</span>
     <span class="n">inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">identity</span> <span class="o">+</span> <span class="n">regularization</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">D_2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">D_2</span><span class="p">)</span>
     <span class="n">z_stat</span> <span class="o">=</span> <span class="p">((</span><span class="n">identity</span> <span class="o">-</span> <span class="n">inv</span><span class="p">))</span> <span class="o">@</span> <span class="n">signal</span>
 

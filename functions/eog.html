@@ -196,6 +196,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -260,6 +265,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -1435,7 +1445,7 @@ for any series of peaks (i.e., not specific to a particular type of signal). It 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function is implemented under <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>, but it also re-exported under
-different names, such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_rate" title="neurokit2.ecg.ecg_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_rate()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_rate()</span></code>, or <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_rate" title="neurokit2.rsp.rsp_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rate()</span></code></a>. The
+different names, such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_rate" title="neurokit2.ecg.ecg_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_rate()</span></code></a>, or <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_rate" title="neurokit2.rsp.rsp_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rate()</span></code></a>. The
 aliases provided for consistency.</p>
 </div>
 <dl class="field-list simple">
@@ -1472,7 +1482,7 @@ spline interpolation does not ensure monotonicity.</p></li>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
 <span class="go"># Create signal of varying frequency</span>
-<span class="gp">In [2]: </span><span class="n">freq</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">freq</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">freq</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
 

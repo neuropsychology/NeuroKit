@@ -193,6 +193,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">
+     EEG Microstates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">
      Fit a function to a non-linear pattern
     </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../functions/eeg.html">
      EEG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../functions/video.html">
+     Video Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -576,12 +586,13 @@ title="Open an issue"
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
+
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      ecg = -1 * nk.ecg_simulate(duration=10, sampling_rate=200, heart_rate=70)</span>
 
 <span class="sd">      # Invert if necessary</span>
-<span class="sd">      @savefig p_ecg_inverted1.png scale=100%</span>
+<span class="sd">      @savefig p_ecg_invert1.png scale=100%</span>
 <span class="sd">      ecg_fixed, is_inverted = nk.ecg_invert(ecg, sampling_rate=200, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
