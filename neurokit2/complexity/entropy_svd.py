@@ -4,7 +4,7 @@ import pandas as pd
 from .utils_complexity_embedding import complexity_embedding
 
 
-def entropy_svd(signal, delay=1, dimension=2):
+def entropy_svd(signal, delay=1, dimension=2, show=False):
     """**Singular Value Decomposition (SVD) Entropy**
 
     SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
@@ -27,6 +27,8 @@ def entropy_svd(signal, delay=1, dimension=2):
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
+    show : bool
+        If True, will plot the attractor.
 
     Returns
     ----------
@@ -44,7 +46,11 @@ def entropy_svd(signal, delay=1, dimension=2):
 
       signal = nk.signal_simulate(duration=1, frequency=5)
 
-      svden, info = nk.entropy_svd(signal, delay=5, dimension=3)
+      @savefig p_entropy_svd1.png scale=100%
+      svden, info = nk.entropy_svd(signal, delay=5, dimension=3, show=True)
+      @suppress
+      plt.close()
+
       svden
 
     References
@@ -60,7 +66,7 @@ def entropy_svd(signal, delay=1, dimension=2):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=show)
     W = np.linalg.svd(embedded, compute_uv=False)  # Compute SVD
     W /= np.sum(W)  # Normalize singular values
 
