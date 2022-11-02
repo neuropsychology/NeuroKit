@@ -555,7 +555,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
 
 
-<div class="viewcode-block" id="entropy_svd"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_svd">[docs]</a><span class="k">def</span> <span class="nf">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="entropy_svd"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_svd">[docs]</a><span class="k">def</span> <span class="nf">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Singular Value Decomposition (SVD) Entropy**</span>
 
 <span class="sd">    SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed</span>
@@ -578,6 +578,8 @@ title="Open an issue"
 <span class="sd">    dimension : int</span>
 <span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
 <span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If True, will plot the attractor.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
@@ -595,7 +597,11 @@ title="Open an issue"
 
 <span class="sd">      signal = nk.signal_simulate(duration=1, frequency=5)</span>
 
-<span class="sd">      svden, info = nk.entropy_svd(signal, delay=5, dimension=3)</span>
+<span class="sd">      @savefig p_entropy_svd1.png scale=100%</span>
+<span class="sd">      svden, info = nk.entropy_svd(signal, delay=5, dimension=3, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 <span class="sd">      svden</span>
 
 <span class="sd">    References</span>
@@ -611,7 +617,7 @@ title="Open an issue"
             <span class="s2">&quot;Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.&quot;</span>
         <span class="p">)</span>
 
-    <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
+    <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
     <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># Compute SVD</span>
     <span class="n">W</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>  <span class="c1"># Normalize singular values</span>
 

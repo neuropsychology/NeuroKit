@@ -613,9 +613,31 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
+  <a class="reference internal nav-link" href="#data-preprocessing">
+   Data Preprocessing
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#complexity-analysis">
+   Complexity Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#event-related-attractors">
+     Event-related Attractors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compute-complexity-indices-per-epoch">
+     Compute complexity indices per epoch
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-density">
+     Fractal Density
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -637,9 +659,31 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
+  <a class="reference internal nav-link" href="#data-preprocessing">
+   Data Preprocessing
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#complexity-analysis">
+   Complexity Analysis
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#event-related-attractors">
+     Event-related Attractors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compute-complexity-indices-per-epoch">
+     Compute complexity indices per epoch
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-density">
+     Fractal Density
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -662,6 +706,9 @@ title="Print to PDF"
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
 <span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 </pre></div>
 </div>
@@ -669,80 +716,376 @@ title="Print to PDF"
 </div>
 <div class="cell tag_remove-input docutils container">
 </div>
-<section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
-<p>Load and format the EEG data of one participant. Following <a class="reference external" href="https://mne.tools/dev/auto_tutorials/evoked/30_eeg_erp.html">this MNE example</a>, we’ll load the events from an external events file, and weell crop the raw data from ~4.5 minutes down to 90 seconds to speed up computations.</p>
+<section id="data-preprocessing">
+<h2>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">#</a></h2>
+<p>Load and format the EEG data of one participant following this <a class="reference external" href="https://mne.tools/dev/auto_tutorials/evoked/30_eeg_erp.html">MNE example</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load raw EEG data</span>
 <span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
+
+<span class="c1"># Find events and map them to a condition</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">find_events</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">stim_channel</span><span class="o">=</span><span class="s1">&#39;STI 014&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">event_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;auditory/left&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auditory/right&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;visual/left&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+              <span class="s1">&#39;visual/right&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;buttonpress&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">}</span>
+
+<span class="c1"># Select only relevant channels</span>
 <span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">pick</span><span class="p">([</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;eog&#39;</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
+<span class="c1"># Store sampling rate</span>
 <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>
-
-<span class="c1"># print(raw)</span>
-<span class="c1"># # Load events</span>
-<span class="c1"># events = mne.find_events(raw, stim_channel=&#39;STI 014&#39;)</span>
-<span class="c1"># print(raw)</span>
-
-<span class="c1"># # Discard events &gt;90 seconds (not strictly necessary, but avoids some warnings)</span>
-<span class="c1"># raw.crop(tmax=90)  # in seconds (happens in-place)</span>
-<span class="c1"># events = events[events[:, 0] &lt;= raw.last_samp]</span>
-
-<span class="c1"># # Event condition mapping</span>
-<span class="c1"># event_dict = {&#39;auditory/left&#39;: 1, &#39;auditory/right&#39;: 2, &#39;visual/left&#39;: 3,</span>
-<span class="c1">#               &#39;visual/right&#39;: 4, &#39;face&#39;: 5, &#39;buttonpress&#39;: 32}</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># raw = raw.filter(l_freq=0.1, h_freq=40,verbose=False)</span>
-<span class="c1"># raw.plot_sensors(show_names=True)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">l_freq</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">h_freq</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">show_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../../_images/603a88490387fcf6f90afdd1020091b85ad263a96d5ce049eadcd40a86dc4755.png" src="../../_images/603a88490387fcf6f90afdd1020091b85ad263a96d5ce049eadcd40a86dc4755.png" />
+<img alt="../../_images/603a88490387fcf6f90afdd1020091b85ad263a96d5ce049eadcd40a86dc4755.png" src="../../_images/603a88490387fcf6f90afdd1020091b85ad263a96d5ce049eadcd40a86dc4755.png" />
 </div>
+</div>
+<p>We will now create <strong>epochs</strong> around each event, and reject some based on extreme values.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># epochs = mne.Epochs(raw, events, event_id=event_dict, tmin=-0.3, tmax=0.7, preload=True, verbose=False)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epochs</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">Epochs</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> 
+                    <span class="n">events</span><span class="p">,</span> 
+                    <span class="n">event_id</span><span class="o">=</span><span class="n">event_dict</span><span class="p">,</span> 
+                    <span class="n">tmin</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">,</span> 
+                    <span class="n">tmax</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> 
+                    <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># # Reject epochs by providing maximum peak-to-peak signal value thresholds</span>
-<span class="c1"># epochs = epochs.drop_bad(reject= dict(eeg=100e-6, eog=200e-6), verbose=False)  # 100 µV, 200 µV</span>
+<span class="c1"># Reject epochs by providing maximum peak-to-peak signal value thresholds</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">drop_bad</span><span class="p">(</span><span class="n">reject</span><span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="mf">100e-6</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># 100 µV, 200 µV</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>We will pick 4 fronto-central channels of interests (namely <em>EEG 011-014</em>), that we can visualize as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Channels of interest</span>
-<span class="c1"># channels = [&quot;EEG 0&quot; + str(i) for i in range(11, 15)]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Channels of interest</span>
+<span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;EEG 011&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 012&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 013&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 014&quot;</span><span class="p">]</span>
+<span class="c1"># channels = [&quot;EEG 0&quot; + str(i) for i in range(11, 15)]  # Alternative</span>
 
-<span class="c1"># auditory = epochs[&#39;auditory/left&#39;].pick_channels(channels).crop(tmin=0)</span>
-<span class="c1"># visual = epochs[&#39;visual/left&#39;].pick_channels(channels).crop(tmin=0)</span>
 
-<span class="c1"># auditory.average().plot_joint()</span>
-<span class="c1"># visual.average().plot_joint()</span>
+<span class="n">auditory</span> <span class="o">=</span> <span class="n">epochs</span><span class="p">[</span><span class="s1">&#39;auditory/left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pick_channels</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">visual</span> <span class="o">=</span> <span class="n">epochs</span><span class="p">[</span><span class="s1">&#39;visual/left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pick_channels</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">auditory</span><span class="o">.</span><span class="n">average</span><span class="p">()</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;auditory/left&#39;</span><span class="p">)</span>
+<span class="n">visual</span><span class="o">.</span><span class="n">average</span><span class="p">()</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;visual/left&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No projector specified for this dataset. Please consider the method self.add_proj.
+</pre></div>
 </div>
+<img alt="../../_images/79abcf7c20f7644b0cbcb240b7e71e3f0922259b27d7e4060cc9d6ed0e33a9ac.png" src="../../_images/79abcf7c20f7644b0cbcb240b7e71e3f0922259b27d7e4060cc9d6ed0e33a9ac.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No projector specified for this dataset. Please consider the method self.add_proj.
+</pre></div>
+</div>
+<img alt="../../_images/42b08efe76e66d7f6eca7d21a679c0e7e840dd36a8e1e2580b7ee5a7e0aee1c3.png" src="../../_images/42b08efe76e66d7f6eca7d21a679c0e7e840dd36a8e1e2580b7ee5a7e0aee1c3.png" />
+<img alt="../../_images/42b08efe76e66d7f6eca7d21a679c0e7e840dd36a8e1e2580b7ee5a7e0aee1c3.png" src="../../_images/42b08efe76e66d7f6eca7d21a679c0e7e840dd36a8e1e2580b7ee5a7e0aee1c3.png" />
+</div>
+</div>
+<p>Now we are going to convert the data to a Pandas dataframe and concatenate the two groups of epochs. Next, we are going to average together the EEG channels.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># epochs_auditory = {str(i + 1): pd.DataFrame({&quot;Signal&quot;: epoch.mean(axis=0)}) for i, epoch in enumerate(auditory)}</span>
-<span class="c1"># epochs_visual = {str(i + 1): pd.DataFrame({&quot;Signal&quot;: epoch.mean(axis=0)}) for i, epoch in enumerate(visual)}</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">auditory</span><span class="o">.</span><span class="n">to_data_frame</span><span class="p">(),</span>
+               <span class="n">visual</span><span class="o">.</span><span class="n">to_data_frame</span><span class="p">()])</span>
 
-<span class="c1"># delay = 27 / (1000 / 150.15)  # delay in milliseconds</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;EEG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">channels</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="c1"># dfd1, _ = nk.fractal_density(epochs_auditory, delay=int(delay), show=True)</span>
-<span class="c1"># dfd2, _ = nk.fractal_density(epochs_visual, delay=int(delay), show=True)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="c1"># print(f&quot;DFD1 = {dfd1}, DFD2 = {dfd2}&quot;)</span>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>time</th>
+      <th>condition</th>
+      <th>epoch</th>
+      <th>EEG 011</th>
+      <th>EEG 012</th>
+      <th>EEG 013</th>
+      <th>EEG 014</th>
+      <th>EEG</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>-4.414247</td>
+      <td>-3.515468</td>
+      <td>-0.330308</td>
+      <td>3.829678</td>
+      <td>-1.107586</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.005</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>-2.360910</td>
+      <td>-0.880196</td>
+      <td>1.669160</td>
+      <td>4.023423</td>
+      <td>0.612870</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.010</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>0.815137</td>
+      <td>2.031109</td>
+      <td>4.031405</td>
+      <td>6.675097</td>
+      <td>3.388187</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.015</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>1.605833</td>
+      <td>2.434812</td>
+      <td>4.953165</td>
+      <td>9.598465</td>
+      <td>4.648069</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.020</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>-0.559503</td>
+      <td>0.475777</td>
+      <td>3.917993</td>
+      <td>10.289093</td>
+      <td>3.530840</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="complexity-analysis">
+<h2>Complexity Analysis<a class="headerlink" href="#complexity-analysis" title="Permalink to this headline">#</a></h2>
+<p>Many complexity metrics require some parameters to be specified. For the “delay”, a good value could be 27 ms, that we need to convert into a number of samples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">27</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1000</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">))</span>  <span class="c1"># 27 is the delay in milliseconds</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="event-related-attractors">
+<h3>Event-related Attractors<a class="headerlink" href="#event-related-attractors" title="Permalink to this headline">#</a></h3>
+<p>Let’s visualize the attractors of the averaged events. We will then compute the complexity metrics for each epoch separately.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_event</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">cond</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;auditory/left&quot;</span><span class="p">,</span> <span class="s2">&quot;visual/left&quot;</span><span class="p">]:</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">df_event</span><span class="p">[</span><span class="n">df_event</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cond</span><span class="p">][</span><span class="s2">&quot;EEG&quot;</span><span class="p">]</span>
+    <span class="n">attractor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">attractor</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">attractor</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">cond</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;EEG Potential at t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;EEG Potential at t+27 ms&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Event-related Attractors&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Event-related Attractors&#39;)
+</pre></div>
+</div>
+<img alt="../../_images/473b420093823d1ce9919757c86e7a101ec68b011d4468cae99c7cb95fa642fa.png" src="../../_images/473b420093823d1ce9919757c86e7a101ec68b011d4468cae99c7cb95fa642fa.png" />
+</div>
+</div>
+</section>
+<section id="compute-complexity-indices-per-epoch">
+<h3>Compute complexity indices per epoch<a class="headerlink" href="#compute-complexity-indices-per-epoch" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_sdvden</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">rez</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;EEG&quot;</span><span class="p">],</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;SVDEn&#39;</span><span class="p">:</span> <span class="n">rez</span><span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">get_hjorth</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">rez</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;EEG&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;Hjorth&#39;</span><span class="p">:</span> <span class="n">rez</span><span class="p">})</span>
+
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;condition&quot;</span><span class="p">,</span> <span class="s2">&quot;epoch&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">get_sdvden</span><span class="p">),</span> 
+    <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;condition&quot;</span><span class="p">,</span> <span class="s2">&quot;epoch&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">get_hjorth</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">results</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>condition</th>
+      <th>epoch</th>
+      <th>SVDEn</th>
+      <th>Hjorth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>1.415754</td>
+      <td>0.576404</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>auditory/left</td>
+      <td>6</td>
+      <td>1.402700</td>
+      <td>0.484591</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>auditory/left</td>
+      <td>10</td>
+      <td>1.442964</td>
+      <td>0.614160</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>auditory/left</td>
+      <td>14</td>
+      <td>1.451905</td>
+      <td>0.588377</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>auditory/left</td>
+      <td>19</td>
+      <td>1.392537</td>
+      <td>0.535773</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Lets’ run some t-tests on these indices.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;auditory/left&quot;</span><span class="p">][</span><span class="s2">&quot;SVDEn&quot;</span><span class="p">],</span> 
+                      <span class="n">results</span><span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;visual/left&quot;</span><span class="p">][</span><span class="s2">&quot;SVDEn&quot;</span><span class="p">],</span> 
+                      <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;auditory/left&quot;</span><span class="p">][</span><span class="s2">&quot;Hjorth&quot;</span><span class="p">],</span> 
+                      <span class="n">results</span><span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;visual/left&quot;</span><span class="p">][</span><span class="s2">&quot;Hjorth&quot;</span><span class="p">],</span> 
+                      <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ttest_indResult(statistic=0.3821440082668749, pvalue=0.7055440395078632)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize these differences like follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standardize</span>
+<span class="n">results</span><span class="p">[[</span><span class="s1">&#39;SVDEn&#39;</span><span class="p">,</span> <span class="s1">&#39;Hjorth&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">results</span><span class="p">[[</span><span class="s1">&#39;SVDEn&#39;</span><span class="p">,</span> <span class="s1">&#39;Hjorth&#39;</span><span class="p">]])</span>
+
+<span class="c1"># Pivot to long format</span>
+<span class="n">results_long</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="s2">&quot;epoch&quot;</span><span class="p">],</span> <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SVDEn&#39;</span><span class="p">,</span> <span class="s1">&#39;Hjorth&#39;</span><span class="p">])</span>
+
+<span class="c1"># Plot results</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results_long</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;condition&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: xlabel=&#39;variable&#39;, ylabel=&#39;value&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/0337783304517b60bc767beb539d274333ded8a3e01f1ac9ac1c13e16567bec2.png" src="../../_images/0337783304517b60bc767beb539d274333ded8a3e01f1ac9ac1c13e16567bec2.png" />
+</div>
+</div>
+</section>
+<section id="fractal-density">
+<h3>Fractal Density<a class="headerlink" href="#fractal-density" title="Permalink to this headline">#</a></h3>
+<p><strong>Note: this index is totally exploratory and is mentioned here as part of a WIP development.</strong></p>
+<p>Now, we will average the signal of those 4 channels for each epoch and store them in a dictionary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epochs_auditory</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Signal&quot;</span><span class="p">:</span> <span class="n">epoch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)})</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">auditory</span><span class="p">)}</span>
+<span class="n">epochs_visual</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Signal&quot;</span><span class="p">:</span> <span class="n">epoch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)})</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">visual</span><span class="p">)}</span>
+
+<span class="n">dfd1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_density</span><span class="p">(</span><span class="n">epochs_auditory</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">delay</span><span class="p">),</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dfd2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_density</span><span class="p">(</span><span class="n">epochs_visual</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">delay</span><span class="p">),</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DFD1 = </span><span class="si">{</span><span class="n">dfd1</span><span class="si">}</span><span class="s2">, DFD2 = </span><span class="si">{</span><span class="n">dfd2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DFD1 = 3.679826749445238, DFD2 = 2.9874001096501495
+</pre></div>
+</div>
+<img alt="../../_images/a4e364f075cdcaa1c814fa9a2fea4de878bc520e03a1ac482bac7f81c43485fe.png" src="../../_images/a4e364f075cdcaa1c814fa9a2fea4de878bc520e03a1ac482bac7f81c43485fe.png" />
+<img alt="../../_images/ad1b8412f8055a513ce17930db2ef9b6a12c954b7e412f0d6cb1d62dc8286d80.png" src="../../_images/ad1b8412f8055a513ce17930db2ef9b6a12c954b7e412f0d6cb1d62dc8286d80.png" />
+</div>
+</div>
+</section>
 </section>
 </section>
 
