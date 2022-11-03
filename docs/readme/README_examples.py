@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import neurokit2 as nk
 
-# setup matplotlib with Agg to run on server
+# Setup matplotlib with Agg to run on server
 matplotlib.use("Agg")
 plt.rcParams["figure.figsize"] = (10, 6.5)
 
