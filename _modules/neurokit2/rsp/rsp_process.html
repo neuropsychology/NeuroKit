@@ -602,7 +602,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    rsp_clean, rsp_findpeaks, signal_rate, rsp_amplitude, rsp_plot</span>
+<span class="sd">    rsp_clean, rsp_findpeaks, .signal_rate, rsp_amplitude, rsp_plot</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -625,17 +625,26 @@ title="Open an issue"
     <span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 
     <span class="c1"># Extract, fix and format peaks</span>
-    <span class="n">peak_signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sampling_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
+    <span class="n">peak_signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">(</span>
+        <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span>
+    <span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
     <span class="c1"># Get additional parameters</span>
     <span class="n">phase</span> <span class="o">=</span> <span class="n">rsp_phase</span><span class="p">(</span><span class="n">peak_signal</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">))</span>
     <span class="n">amplitude</span> <span class="o">=</span> <span class="n">rsp_amplitude</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">)</span>
-    <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">))</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Prepare output</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;RSP_Raw&quot;</span><span class="p">:</span> <span class="n">rsp_signal</span><span class="p">,</span> <span class="s2">&quot;RSP_Clean&quot;</span><span class="p">:</span> <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">,</span> <span class="s2">&quot;RSP_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">}</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;RSP_Raw&quot;</span><span class="p">:</span> <span class="n">rsp_signal</span><span class="p">,</span>
+            <span class="s2">&quot;RSP_Clean&quot;</span><span class="p">:</span> <span class="n">rsp_cleaned</span><span class="p">,</span>
+            <span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">,</span>
+            <span class="s2">&quot;RSP_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
+        <span class="p">}</span>
     <span class="p">)</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 

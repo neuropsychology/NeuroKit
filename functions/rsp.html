@@ -944,7 +944,7 @@ signals’ sampling rate.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1606,8 +1606,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  727.423644      4055.1  465.343212  ...    0.742478  0.145627    1.098612</span>
+<span class="go">    RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  705.760071  4072.684211  457.653684  ...     0.76717  0.279976         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1753,9 +1753,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        0.0              0.475927</span>
-<span class="go">2     2        10000  ...        0.0              0.916867</span>
-<span class="go">3     3        15000  ...        1.0              0.791273</span>
+<span class="go">1     1         5000  ...        0.0              0.205995</span>
+<span class="go">2     2        10000  ...        0.0              0.670288</span>
+<span class="go">3     3        15000  ...        1.0              0.592131</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 

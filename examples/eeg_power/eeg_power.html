@@ -612,32 +612,37 @@ title="Print to PDF"
     </div>
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   EEG Power in Frequency Bands
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#frequency-bands">
-   Frequency Bands
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-frequency-bands">
+   EEG Frequency Bands
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preprocessing">
+     Preprocessing
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#frontal-alpha-asymmetry-faa">
      Frontal Alpha Asymmetry (FAA)
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#frontal-midline-theta-fmt">
      Frontal Midline Theta (FMT)
     </a>
    </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#f-electrophysiological-noise">
+     1/f Electrophysiological Noise
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#f-electrophysiological-noise">
-   1/f Electrophysiological Noise
-  </a>
  </li>
 </ul>
 
@@ -658,32 +663,37 @@ title="Print to PDF"
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   EEG Power in Frequency Bands
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#frequency-bands">
-   Frequency Bands
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#eeg-frequency-bands">
+   EEG Frequency Bands
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preprocessing">
+     Preprocessing
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#frontal-alpha-asymmetry-faa">
      Frontal Alpha Asymmetry (FAA)
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#frontal-midline-theta-fmt">
      Frontal Midline Theta (FMT)
     </a>
    </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#f-electrophysiological-noise">
+     1/f Electrophysiological Noise
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#f-electrophysiological-noise">
-   1/f Electrophysiological Noise
-  </a>
  </li>
 </ul>
 
@@ -711,11 +721,9 @@ title="Print to PDF"
 </div>
 <div class="cell tag_remove-input docutils container">
 </div>
-<section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
 </section>
-<section id="frequency-bands">
-<h2>Frequency Bands<a class="headerlink" href="#frequency-bands" title="Permalink to this headline">#</a></h2>
+<section id="eeg-frequency-bands">
+<h1>EEG Frequency Bands<a class="headerlink" href="#eeg-frequency-bands" title="Permalink to this headline">#</a></h1>
 <p>From fastest to slowest:</p>
 <ul class="simple">
 <li><p><strong>Gamma</strong> (30-80 Hz)</p></li>
@@ -733,13 +741,282 @@ title="Print to PDF"
 <li><p><strong>Delta</strong> (1-4 Hz): Strongest in frontal areas. Inhibition of the sensory afferences (Harmony, 2013).</p></li>
 </ul>
 <p>Note that the ranges are approximate and artificial, and studies are quite <a class="reference external" href="https://sapienlabs.org/the-remarkable-inconsistency-of-frequency-band-definitions/">inconsistent</a> in their definition.</p>
+<section id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the NeuroKit package and other useful packages</span>
+<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">mne</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_remove-input docutils container">
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
+
+<span class="n">events</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">find_events</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">stim_channel</span><span class="o">=</span><span class="s1">&#39;STI 014&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">event_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;auditory/left&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;auditory/right&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;visual/left&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+              <span class="s1">&#39;visual/right&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;face&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;buttonpress&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">}</span>
+              
+<span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>  <span class="c1"># Store the sampling rate</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">compute_psd</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">spectrum</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Effective window size : 1.280 (s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\hostedtoolcache\windows\Python\3.10.8\x64\lib\site-packages\mne\viz\utils.py:137: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  (fig or plt).show(**kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/e1a42bc4098696d5b975721caf175b3e3405ace0a4c8146efe3bca8761e46f51.png" src="../../_images/e1a42bc4098696d5b975721caf175b3e3405ace0a4c8146efe3bca8761e46f51.png" />
+</div>
+</div>
+</section>
 <section id="frontal-alpha-asymmetry-faa">
-<h3>Frontal Alpha Asymmetry (FAA)<a class="headerlink" href="#frontal-alpha-asymmetry-faa" title="Permalink to this headline">#</a></h3>
+<h2>Frontal Alpha Asymmetry (FAA)<a class="headerlink" href="#frontal-alpha-asymmetry-faa" title="Permalink to this headline">#</a></h2>
 <p>Frontal Alpha Asymmetry (FAA) is the difference between right and left alpha activity over frontal regions of the brain (Davidson et al., 1990). Relatively higher right to left alpha power has commonly been interpreted as relatively higher left to right brain activity (Reznik and Allen 2018). The laterality quotient (LQ) is calculated by subtracting left alpha power from right alpha power ($log_{right} - log_{left}$).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># bandpass filter in the alpha band</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># epoch</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">Epochs</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span><span class="o">=</span><span class="n">event_dict</span><span class="p">,</span> 
+                    <span class="n">tmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">reject</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="mf">100e-6</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">),</span>  <span class="c1"># 100 µV, 200 µV</span>
+                    <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># remove evoked response</span>
+<span class="n">epochs</span><span class="o">.</span><span class="n">subtract_evoked</span><span class="p">()</span>
+
+<span class="c1"># get analytic signal (envelope)</span>
+<span class="n">epochs</span><span class="o">.</span><span class="n">apply_hilbert</span><span class="p">(</span><span class="n">envelope</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Get channels</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">pick</span><span class="p">([</span><span class="s2">&quot;eeg&quot;</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to_data_frame</span><span class="p">()</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Subtracting Evoked from Epochs
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 006, STI 001, EOG 061, STI 003, STI 014, STI 015, STI 002, STI 004, STI 016, STI 005
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[done]
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>time</th>
+      <th>condition</th>
+      <th>epoch</th>
+      <th>EEG 001</th>
+      <th>EEG 002</th>
+      <th>EEG 003</th>
+      <th>EEG 004</th>
+      <th>EEG 005</th>
+      <th>EEG 006</th>
+      <th>EEG 007</th>
+      <th>...</th>
+      <th>EEG 051</th>
+      <th>EEG 052</th>
+      <th>EEG 053</th>
+      <th>EEG 054</th>
+      <th>EEG 055</th>
+      <th>EEG 056</th>
+      <th>EEG 057</th>
+      <th>EEG 058</th>
+      <th>EEG 059</th>
+      <th>EEG 060</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.000</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>4.603340</td>
+      <td>5.577354</td>
+      <td>5.549989</td>
+      <td>2.294839</td>
+      <td>1.603964</td>
+      <td>8.190367</td>
+      <td>6.997543</td>
+      <td>...</td>
+      <td>3.343396</td>
+      <td>3.490367</td>
+      <td>0.495476</td>
+      <td>2.107493</td>
+      <td>3.614102</td>
+      <td>4.115371</td>
+      <td>2.246272</td>
+      <td>3.192879</td>
+      <td>3.651536</td>
+      <td>4.649433</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.995</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>4.130175</td>
+      <td>4.795339</td>
+      <td>4.697831</td>
+      <td>3.770529</td>
+      <td>1.905294</td>
+      <td>6.939186</td>
+      <td>5.987536</td>
+      <td>...</td>
+      <td>5.374473</td>
+      <td>5.517775</td>
+      <td>0.415732</td>
+      <td>2.847505</td>
+      <td>5.838453</td>
+      <td>6.378043</td>
+      <td>3.554294</td>
+      <td>5.083503</td>
+      <td>5.887976</td>
+      <td>6.621199</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.990</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>3.757025</td>
+      <td>4.743189</td>
+      <td>4.512835</td>
+      <td>3.853489</td>
+      <td>1.749135</td>
+      <td>6.568133</td>
+      <td>5.846587</td>
+      <td>...</td>
+      <td>5.241180</td>
+      <td>5.575242</td>
+      <td>0.372363</td>
+      <td>2.161122</td>
+      <td>5.567885</td>
+      <td>6.417209</td>
+      <td>3.076908</td>
+      <td>4.609265</td>
+      <td>5.671409</td>
+      <td>6.621751</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.985</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>4.266403</td>
+      <td>5.151007</td>
+      <td>4.877517</td>
+      <td>4.480817</td>
+      <td>2.083486</td>
+      <td>7.107199</td>
+      <td>6.292162</td>
+      <td>...</td>
+      <td>5.946933</td>
+      <td>6.280525</td>
+      <td>0.406884</td>
+      <td>2.435819</td>
+      <td>6.318629</td>
+      <td>7.134714</td>
+      <td>3.336008</td>
+      <td>5.231508</td>
+      <td>6.358379</td>
+      <td>7.110262</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.980</td>
+      <td>auditory/left</td>
+      <td>2</td>
+      <td>4.025493</td>
+      <td>5.072771</td>
+      <td>4.691993</td>
+      <td>4.604783</td>
+      <td>2.055094</td>
+      <td>6.765428</td>
+      <td>6.090766</td>
+      <td>...</td>
+      <td>5.881406</td>
+      <td>6.355397</td>
+      <td>0.373503</td>
+      <td>1.838393</td>
+      <td>6.152002</td>
+      <td>7.161327</td>
+      <td>2.931837</td>
+      <td>4.898243</td>
+      <td>6.209309</td>
+      <td>7.028288</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 63 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">show_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/fc8230d9c7453407c8abae07e979aabd2fc261e43a25422091a9f3d1b76f3ac9.png" src="../../_images/fc8230d9c7453407c8abae07e979aabd2fc261e43a25422091a9f3d1b76f3ac9.png" />
+</div>
+</div>
+<p>This is work in progress for now. Help is needed to finish this example!</p>
+<p>See https://mne.tools/dev/auto_examples/time_frequency/time_frequency_global_field_power.html</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s2">&quot;EEG 001&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 002&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 004&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 005&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;Right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s2">&quot;EEG 003&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 006&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 007&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;FAA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Right&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="frontal-midline-theta-fmt">
-<h3>Frontal Midline Theta (FMT)<a class="headerlink" href="#frontal-midline-theta-fmt" title="Permalink to this headline">#</a></h3>
-</section>
+<h2>Frontal Midline Theta (FMT)<a class="headerlink" href="#frontal-midline-theta-fmt" title="Permalink to this headline">#</a></h2>
+<p>Work in Progress. Please help!</p>
 </section>
 <section id="f-electrophysiological-noise">
 <h2>1/f Electrophysiological Noise<a class="headerlink" href="#f-electrophysiological-noise" title="Permalink to this headline">#</a></h2>
