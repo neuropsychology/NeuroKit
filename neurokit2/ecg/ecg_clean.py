@@ -120,6 +120,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         "kalidas",
         "kalidastamil",
         "kalidastamil2017",
+        "vg",
+        "vgraph",
+        "koka2022",
     ]:
         clean = ecg_signal
     else:

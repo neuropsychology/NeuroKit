@@ -94,6 +94,8 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_WT
     elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
         return _ecg_findpeaks_rodrigues
+    elif method in ["vg", "vgraph", "koka2022"]:
+        return _ecg_findpeaks_vgraph
     elif method in ["promac", "all"]:
         return _ecg_findpeaks_promac
     else:
@@ -1050,6 +1052,80 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
     rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
 
+
+# =============================================================================
+# Visibility graph transformation - by Koka and Muma (2022)
+# =============================================================================
+def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwargs):
+    """R-Peak Detector Using Visibility Graphs by Taulant Koka and Michael Muma (2022).
+
+    References
+    ----------
+    - T. Koka and M. Muma (2022), Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
+      Visibility Graphs. In: 2022 44th Annual International Conference of the IEEE Engineering
+      in Medicine & Biology Society (EMBC). Uses the Pan and Tompkins thresholding.
+
+    """
+    # Try loading ts2vg
+    try:
+        from ts2vg import NaturalVG
+    except ImportError as import_error:
+        raise ImportError(
+            "NeuroKit error: ecg_findpeaks(): the 'ts2vg' module is required for"
+            " this method to run. Please install it first (`pip install ts2vg`)."
+        ) from import_error
+
+    # Filter signal using highpass Butterworth filter
+    nyq = 0.5 * sampling_rate
+    high = lowcut / nyq
+    b, a = scipy.signal.butter(order, high, btype="highpass")
+    filtered = scipy.signal.filtfilt(b, a, signal)
+
+    N = len(filtered)
+    M = 2 * sampling_rate
+    w = np.zeros(N)
+    rpeaks = []
+    beta = 0.55
+    gamma = 0.5
+    L = 0
+    R = M
+
+    # Compute number of segments
+    deltaM = int(gamma * M)
+    n_segments = int((N - deltaM) / (M - deltaM)) + 1
+
+    for segment in range(n_segments):
+        y = filtered[L:R]
+
+        # Compute the adjacency matrix to the directed visibility graph
+        A = NaturalVG(directed="top_to_bottom").build(y).adjacency_matrix()
+        _w = np.ones(len(y))
+
+        # Computee the weights for the ecg using its VG transformation
+        while np.count_nonzero(_w) / len(y) >= beta:
+            _w = np.matmul(A, _w) / np.linalg.norm(_w)
+
+        # Update the weight vector
+        if L == 0:
+            w[L:R] = _w
+        elif N - deltaM <= L < L < N:
+            w[L:] = 0.5 * (_w + w[L:])
+        else:
+            w[L: L + deltaM] = 0.5 * (_w[:deltaM] + w[L: L + deltaM])
+            w[L + deltaM: R] = _w[deltaM:]
+
+        # Update the boundary conditions
+        L = L + (M - deltaM)
+        if R + (M - deltaM) <= N:
+            R = R + (M - deltaM)
+        else:
+            R = N
+
+        # Multiply signal by its weights and apply thresholding algorithm
+        weighted_signal = filtered * w
+        rpeaks = _ecg_findpeaks_peakdetect(weighted_signal, sampling_rate)
+        rpeaks = np.array(rpeaks, dtype="int")
+    return rpeaks
 
 # =============================================================================
 # Utilities
