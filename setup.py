@@ -45,6 +45,7 @@ test_requirements = requirements + [
     "EMD-signal",
     "astropy",
     "plotly",
+    "ts2vg",
 ]
 
 # Setup
