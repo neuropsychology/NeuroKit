@@ -1098,7 +1098,7 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
         y = filtered[L:R]
 
         # Compute the adjacency matrix to the directed visibility graph
-        A = NaturalVG(directed="top_to_bottom").build(y).adjacency_matrix()
+        A = ts2vg.NaturalVG(directed="top_to_bottom").build(y).adjacency_matrix()
         _w = np.ones(len(y))
 
         # Computee the weights for the ecg using its VG transformation
