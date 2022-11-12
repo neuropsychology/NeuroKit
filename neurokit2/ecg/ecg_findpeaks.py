@@ -1068,7 +1068,7 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
     """
     # Try loading ts2vg
     try:
-        from ts2vg import NaturalVG
+        import ts2vg
     except ImportError as import_error:
         raise ImportError(
             "NeuroKit error: ecg_findpeaks(): the 'ts2vg' module is required for"
