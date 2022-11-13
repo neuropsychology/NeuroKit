@@ -34,6 +34,7 @@ def ecg_peaks(
     * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.
     * **rodrigues2021**: Adaptation of the work by Sadhukhan & Mitra (2012) and Gutiérrez-Rivas et
       al. (2015) by Rodrigues et al. (2021).
+    * **koka2022**: Algorithm by Koka et al. (2022) based on the visibility graphs.
     * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.
       For a given peak detector, the binary signal representing the peak locations is convolved
       with a Gaussian distribution, resulting in a probabilistic representation of each peak
@@ -135,6 +136,9 @@ def ecg_peaks(
       # rodrigues2021
       _, rodrigues2021 = nk.ecg_peaks(ecg, method="rodrigues2021")
 
+      # koka2022
+      _, koka2022 = nk.ecg_peaks(ecg, method="koka2022")
+
       # Collect all R-peak lists by iterating through the result dicts
       rpeaks = [
           i["ECG_R_Peaks"]
@@ -150,6 +154,7 @@ def ecg_peaks(
               engzeemod2012,
               kalidas2017,
               rodrigues2021,
+              koka2022
           ]
       ]
       # Visualize results
@@ -212,6 +217,9 @@ def ecg_peaks(
     * Rodrigues, T., Samoutphonh, S., Silva, H., & Fred, A. (2021, January). A Low-Complexity
       R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices. In 2020 25th
       International Conference on Pattern Recognition (ICPR) (pp. 1-8). IEEE.
+    * T. Koka and M. Muma, "Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
+      Visibility Graphs," 2022 44th Annual International Conference of the IEEE Engineering in
+      Medicine & Biology Society (EMBC), 2022, pp. 121-126.
 
     * ``nabian2018``
 
@@ -230,6 +238,8 @@ def ecg_peaks(
 
 
     * ``rodrigues2021``
+
+    * ``koka2022``
 
     * ``promac``
         * **Unpublished.** It runs different methods and derives a probability index using
