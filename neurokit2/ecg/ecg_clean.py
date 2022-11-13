@@ -269,13 +269,7 @@ def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
 
     """
 
-    # Normalize frequency to Nyquist Frequency (Fs/2).
-    high = 4
-    frequency = 2 * high / sampling_rate
-
     order = 2
-    clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=frequency, method="butterworth_ba", order=order
-    )
+    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=4, method="butterworth", order=order)
 
     return clean  # Return filtered
