@@ -1075,13 +1075,7 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
             " this method to run. Please install it first (`pip install ts2vg`)."
         ) from import_error
 
-    # Filter signal using highpass Butterworth filter
-    nyq = 0.5 * sampling_rate
-    high = lowcut / nyq
-    b, a = scipy.signal.butter(order, high, btype="highpass")
-    filtered = scipy.signal.filtfilt(b, a, signal)
-
-    N = len(filtered)
+    N = len(signal)
     M = 2 * sampling_rate
     w = np.zeros(N)
     rpeaks = []
@@ -1095,7 +1089,7 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
     n_segments = int((N - deltaM) / (M - deltaM)) + 1
 
     for segment in range(n_segments):
-        y = filtered[L:R]
+        y = signal[L:R]
 
         # Compute the adjacency matrix to the directed visibility graph
         A = ts2vg.NaturalVG(directed="top_to_bottom").build(y).adjacency_matrix()
@@ -1122,7 +1116,7 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
             R = N
 
         # Multiply signal by its weights and apply thresholding algorithm
-        weighted_signal = filtered * w
+        weighted_signal = signal * w
         rpeaks = _ecg_findpeaks_peakdetect(weighted_signal, sampling_rate)
         rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
