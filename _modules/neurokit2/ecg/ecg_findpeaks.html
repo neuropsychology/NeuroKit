@@ -645,6 +645,8 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">_ecg_findpeaks_WT</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rodrigues2020&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues2021&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues&quot;</span><span class="p">,</span> <span class="s2">&quot;asi&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_rodrigues</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;vg&quot;</span><span class="p">,</span> <span class="s2">&quot;vgraph&quot;</span><span class="p">,</span> <span class="s2">&quot;koka2022&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_vgraph</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;promac&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_promac</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1601,6 +1603,74 @@ title="Open an issue"
     <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rpeaks</span>
 
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Visibility graph transformation - by Koka and Muma (2022)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_findpeaks_vgraph</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;R-Peak Detector Using Visibility Graphs by Taulant Koka and Michael Muma (2022).</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    - T. Koka and M. Muma (2022), Fast and Sample Accurate R-Peak Detection for Noisy ECG Using</span>
+<span class="sd">      Visibility Graphs. In: 2022 44th Annual International Conference of the IEEE Engineering</span>
+<span class="sd">      in Medicine &amp; Biology Society (EMBC). Uses the Pan and Tompkins thresholding.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Try loading ts2vg</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">ts2vg</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">import_error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_findpeaks(): the &#39;ts2vg&#39; module is required for&quot;</span>
+            <span class="s2">&quot; this method to run. Please install it first (`pip install ts2vg`).&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span> <span class="nn">import_error</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.55</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">M</span>
+
+    <span class="c1"># Compute number of segments</span>
+    <span class="n">deltaM</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">M</span><span class="p">)</span>
+    <span class="n">n_segments</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">N</span> <span class="o">-</span> <span class="n">deltaM</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">deltaM</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_segments</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">L</span><span class="p">:</span><span class="n">R</span><span class="p">]</span>
+
+        <span class="c1"># Compute the adjacency matrix to the directed visibility graph</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">ts2vg</span><span class="o">.</span><span class="n">NaturalVG</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="s2">&quot;top_to_bottom&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">adjacency_matrix</span><span class="p">()</span>
+        <span class="n">_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+        <span class="c1"># Computee the weights for the ecg using its VG transformation</span>
+        <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">_w</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="p">:</span>
+            <span class="n">_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">_w</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">_w</span><span class="p">)</span>
+
+        <span class="c1"># Update the weight vector</span>
+        <span class="k">if</span> <span class="n">L</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">L</span><span class="p">:</span><span class="n">R</span><span class="p">]</span> <span class="o">=</span> <span class="n">_w</span>
+        <span class="k">elif</span> <span class="n">N</span> <span class="o">-</span> <span class="n">deltaM</span> <span class="o">&lt;=</span> <span class="n">L</span> <span class="o">&lt;</span> <span class="n">L</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">L</span><span class="p">:]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">_w</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="n">L</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">L</span><span class="p">:</span> <span class="n">L</span> <span class="o">+</span> <span class="n">deltaM</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">_w</span><span class="p">[:</span><span class="n">deltaM</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="n">L</span><span class="p">:</span> <span class="n">L</span> <span class="o">+</span> <span class="n">deltaM</span><span class="p">])</span>
+            <span class="n">w</span><span class="p">[</span><span class="n">L</span> <span class="o">+</span> <span class="n">deltaM</span><span class="p">:</span> <span class="n">R</span><span class="p">]</span> <span class="o">=</span> <span class="n">_w</span><span class="p">[</span><span class="n">deltaM</span><span class="p">:]</span>
+
+        <span class="c1"># Update the boundary conditions</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">deltaM</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">R</span> <span class="o">+</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">deltaM</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">deltaM</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">N</span>
+
+        <span class="c1"># Multiply signal by its weights and apply thresholding algorithm</span>
+        <span class="n">weighted_signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">*</span> <span class="n">w</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">_ecg_findpeaks_peakdetect</span><span class="p">(</span><span class="n">weighted_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rpeaks</span>
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Utilities</span>

@@ -585,6 +585,7 @@ title="Open an issue"
 <span class="sd">    * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.</span>
 <span class="sd">    * **rodrigues2021**: Adaptation of the work by Sadhukhan &amp; Mitra (2012) and Gutiérrez-Rivas et</span>
 <span class="sd">      al. (2015) by Rodrigues et al. (2021).</span>
+<span class="sd">    * **koka2022**: Algorithm by Koka et al. (2022) based on the visibility graphs.</span>
 <span class="sd">    * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.</span>
 <span class="sd">      For a given peak detector, the binary signal representing the peak locations is convolved</span>
 <span class="sd">      with a Gaussian distribution, resulting in a probabilistic representation of each peak</span>
@@ -686,6 +687,9 @@ title="Open an issue"
 <span class="sd">      # rodrigues2021</span>
 <span class="sd">      _, rodrigues2021 = nk.ecg_peaks(ecg, method=&quot;rodrigues2021&quot;)</span>
 
+<span class="sd">      # koka2022</span>
+<span class="sd">      _, koka2022 = nk.ecg_peaks(ecg, method=&quot;koka2022&quot;)</span>
+
 <span class="sd">      # Collect all R-peak lists by iterating through the result dicts</span>
 <span class="sd">      rpeaks = [</span>
 <span class="sd">          i[&quot;ECG_R_Peaks&quot;]</span>
@@ -701,6 +705,7 @@ title="Open an issue"
 <span class="sd">              engzeemod2012,</span>
 <span class="sd">              kalidas2017,</span>
 <span class="sd">              rodrigues2021,</span>
+<span class="sd">              koka2022</span>
 <span class="sd">          ]</span>
 <span class="sd">      ]</span>
 <span class="sd">      # Visualize results</span>
@@ -763,6 +768,9 @@ title="Open an issue"
 <span class="sd">    * Rodrigues, T., Samoutphonh, S., Silva, H., &amp; Fred, A. (2021, January). A Low-Complexity</span>
 <span class="sd">      R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices. In 2020 25th</span>
 <span class="sd">      International Conference on Pattern Recognition (ICPR) (pp. 1-8). IEEE.</span>
+<span class="sd">    * T. Koka and M. Muma, &quot;Fast and Sample Accurate R-Peak Detection for Noisy ECG Using</span>
+<span class="sd">      Visibility Graphs,&quot; 2022 44th Annual International Conference of the IEEE Engineering in</span>
+<span class="sd">      Medicine &amp; Biology Society (EMBC), 2022, pp. 121-126.</span>
 
 <span class="sd">    * ``nabian2018``</span>
 
@@ -781,6 +789,8 @@ title="Open an issue"
 
 
 <span class="sd">    * ``rodrigues2021``</span>
+
+<span class="sd">    * ``koka2022``</span>
 
 <span class="sd">    * ``promac``</span>
 <span class="sd">        * **Unpublished.** It runs different methods and derives a probability index using</span>

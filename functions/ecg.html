@@ -1500,6 +1500,7 @@ al. (2012).</p></li>
 <li><p><strong>nabian2018</strong>: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.</p></li>
 <li><p><strong>rodrigues2021</strong>: Adaptation of the work by Sadhukhan &amp; Mitra (2012) and Gutiérrez-Rivas et
 al. (2015) by Rodrigues et al. (2021).</p></li>
+<li><p><strong>koka2022</strong>: Algorithm by Koka et al. (2022) based on the visibility graphs.</p></li>
 <li><p><strong>promac</strong>: ProMAC combines the result of several R-peak detectors in a probabilistic way.
 For a given peak detector, the binary signal representing the peak locations is convolved
 with a Gaussian distribution, resulting in a probabilistic representation of each peak
@@ -1602,8 +1603,11 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 <span class="go"># rodrigues2021</span>
 <span class="gp">In [23]: </span><span class="n">_</span><span class="p">,</span> <span class="n">rodrigues2021</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rodrigues2021&quot;</span><span class="p">)</span>
 
+<span class="go"># koka2022</span>
+<span class="gp">In [24]: </span><span class="n">_</span><span class="p">,</span> <span class="n">koka2022</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;koka2022&quot;</span><span class="p">)</span>
+
 <span class="go"># Collect all R-peak lists by iterating through the result dicts</span>
-<span class="gp">In [24]: </span><span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">In [25]: </span><span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[</span>
 <span class="gp">   ....: </span>    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
 <span class="gp">   ....: </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span>
 <span class="gp">   ....: </span>        <span class="n">neurokit</span><span class="p">,</span>
@@ -1617,27 +1621,28 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 <span class="gp">   ....: </span>        <span class="n">engzeemod2012</span><span class="p">,</span>
 <span class="gp">   ....: </span>        <span class="n">kalidas2017</span><span class="p">,</span>
 <span class="gp">   ....: </span>        <span class="n">rodrigues2021</span><span class="p">,</span>
+<span class="gp">   ....: </span>        <span class="n">koka2022</span>
 <span class="gp">   ....: </span>    <span class="p">]</span>
 <span class="gp">   ....: </span><span class="p">]</span>
 <span class="gp">   ....: </span>
 
 <span class="go"># Visualize results</span>
-<span class="gp">In [25]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">ecg</span><span class="p">)</span>
+<span class="gp">In [26]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">ecg</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_peaks2.png"><img alt="../_images/p_ecg_peaks2.png" src="../_images/p_ecg_peaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <ul class="simple">
 <li><p><strong>Example 3</strong>: Method-agreement procedure (‘promac’)</p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 
-<span class="gp">In [27]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span>
+<span class="gp">In [28]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span>
 <span class="gp">   ....: </span>                        <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
 <span class="gp">   ....: </span>                        <span class="n">noise_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
 <span class="gp">   ....: </span>                        <span class="n">artifacts_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">artifacts_frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [28]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;promac&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [29]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;promac&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_peaks3.png"><img alt="../_images/p_ecg_peaks3.png" src="../_images/p_ecg_peaks3.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1681,6 +1686,9 @@ Sensors Journal, 15(10), 6036-6043.</p></li>
 <li><p>Rodrigues, T., Samoutphonh, S., Silva, H., &amp; Fred, A. (2021, January). A Low-Complexity
 R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices. In 2020 25th
 International Conference on Pattern Recognition (ICPR) (pp. 1-8). IEEE.</p></li>
+<li><p>T. Koka and M. Muma, “Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
+Visibility Graphs,” 2022 44th Annual International Conference of the IEEE Engineering in
+Medicine &amp; Biology Society (EMBC), 2022, pp. 121-126.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nabian2018</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gamboa2008</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">hamilton2002</span></code></p></li>
@@ -1689,6 +1697,7 @@ International Conference on Pattern Recognition (ICPR) (pp. 1-8). IEEE.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">elgendi2010</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rodrigues2021</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">koka2022</span></code></p></li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">promac</span></code></dt><dd><ul>
 <li><p><strong>Unpublished.</strong> It runs different methods and derives a probability index using
@@ -2034,9 +2043,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.715447          0.969729</span>
-<span class="go">2     2        10000  ...                          0.458848          0.957048</span>
-<span class="go">3     3        15000  ...                          0.097363          0.934195</span>
+<span class="go">1     1         5000  ...                          0.732510          0.967493</span>
+<span class="go">2     2        10000  ...                          0.423077          0.985744</span>
+<span class="go">3     3        15000  ...                          0.187764          0.944773</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
