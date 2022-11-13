@@ -108,6 +108,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_elgendi(ecg_signal, sampling_rate)
     elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
+    elif method in ["vg", "vgraph", "koka2022"]:
+        clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
     elif method in [
         "christov",
         "christov2004",
@@ -119,10 +121,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         "swt",
         "kalidas",
         "kalidastamil",
-        "kalidastamil2017",
-        "vg",
-        "vgraph",
-        "koka2022",
+        "kalidastamil2017"
     ]:
         clean = ecg_signal
     else:
@@ -251,6 +250,32 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
     order = 4
     clean = signal_filter(
         signal=ecg_signal, sampling_rate=sampling_rate, lowcut=52, highcut=48, method="butterworth_zi", order=order
+    )
+
+    return clean  # Return filtered
+
+
+# =============================================================================
+# Engzee Modified (2012)
+# =============================================================================
+def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
+    """Filtering used by Taulant Koka and Michael Muma (2022).
+
+    References
+    ----------
+    - T. Koka and M. Muma (2022), Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
+      Visibility Graphs. In: 2022 44th Annual International Conference of the IEEE Engineering
+      in Medicine & Biology Society (EMBC). Uses the Pan and Tompkins thresholding.
+
+    """
+
+    # Normalize frequency to Nyquist Frequency (Fs/2).
+    high = 4
+    frequency = 2 * high / sampling_rate
+
+    order = 2
+    clean = signal_filter(
+        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=frequency, method="butterworth_ba", order=order
     )
 
     return clean  # Return filtered
