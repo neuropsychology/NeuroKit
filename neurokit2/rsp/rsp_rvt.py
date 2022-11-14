@@ -14,11 +14,11 @@ from .rsp_peaks import rsp_findpeaks
 def rsp_rvt(
     rsp_signal,
     sampling_rate=1000,
-    method="power",
-    show=False,
-    silent=False,
+    method="harrison2021",
     boundaries=[2.0, 1 / 30],
     iterations=10,
+    show=False,
+    silent=False,
     **kwargs
 ):
     """**Respiratory Volume per Time (RVT)**
@@ -34,18 +34,18 @@ def rsp_rvt(
     sampling_rate : int, optional
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method: str, optional
-        The rvt method to apply. Can be one of ``"power2020"`` (default), ``"harrison2020"`` or
+        The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"power2020"`` or
         ``"birn2006"``.
-    show : bool, optional
-        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).
-    silent : bool, optional
-        If ``True``, warnings will not be printed.
     boundaries : list, optional
         Only applies if method is ``"harrison"``. Lower and upper limit of (humanly possible)
         breath frequency in Hertz.
     iterations : int, optional
         Only applies if method is ``"harrison"``. Amount of phase refinement estimates
         to remove high frequencies. Synthetic samples often take less than 3.
+    show : bool, optional
+        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).
+    silent : bool, optional
+        If ``True``, warnings will not be printed.
     **kwargs
         Arguments to be passed to the underlying peak detection algorithm.
 
@@ -72,7 +72,7 @@ def rsp_rvt(
       plt.close()
 
       @savefig p_rsp_rvt2.png scale=100%
-      nk.rsp_rvt(rsp, method="harrison2020", show=True)
+      nk.rsp_rvt(rsp, method="harrison2021", show=True)
       @suppress
       plt.close()
 
@@ -93,7 +93,7 @@ def rsp_rvt(
       A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.
     """
     method = method.lower()  # remove capitalised letters
-    if method in ["harrison", "harrison2020"]:
+    if method in ["harrison", "harrison2021"]:
         rvt = _rsp_rvt_harrison(
             rsp_signal,
             sampling_rate=sampling_rate,
