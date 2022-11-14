@@ -101,8 +101,11 @@ def rsp_amplitude(
         amplitude[0:-1] /= 2
 
     # Interpolate amplitude to length of rsp_cleaned.
-    amplitude = signal_interpolate(
-        peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method
-    )
+    if len(peaks) == 1:
+        amplitude = np.full(rsp_cleaned.shape, amplitude[0])
+    else:
+        amplitude = signal_interpolate(
+            peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method
+        )
 
     return amplitude
