@@ -14,7 +14,10 @@ from ..stats import mad
 
 
 def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True):
-    """**Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis**
+    """**Respiratory Rate Variability (RRV)**
+
+    Computes time domain and frequency domain features for Respiratory Rate Variability (RRV)
+    analysis.
 
     Parameters
     ----------

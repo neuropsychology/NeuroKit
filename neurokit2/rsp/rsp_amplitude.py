@@ -14,7 +14,7 @@ def rsp_amplitude(
     Compute respiratory amplitude given the raw respiration signal and its extrema. The
     **standard** method computes the amplitude as the difference between a peak and its preceding
     trough, while the **prepost** method computes the amplitude as the average of the differences
-    of peak to its preceding and succeeding troughs.
+    of peak to its preceding and succeeding troughs (Cole, 2019).
 
     Parameters
     ----------
@@ -43,7 +43,7 @@ def rsp_amplitude(
 
     See Also
     --------
-    rsp_clean, rsp_peaks, signal_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_peaks, signal_rate, rsp_process, rsp_plot, rsp_symmetry
 
     Examples
     --------
@@ -68,6 +68,11 @@ def rsp_amplitude(
       fig = nk.signal_plot([amplitude, amp2], labels=["Standard", "Prepost"])
       @suppress
       plt.close()
+
+    References
+    ----------
+    * Cole, S., & Voytek, B. (2019). Cycle-by-cycle analysis of neural oscillations. Journal of
+      neurophysiology, 122(2), 849-861.
 
     """
     # Format input.
