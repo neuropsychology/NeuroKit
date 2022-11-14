@@ -113,6 +113,8 @@ nk.rsp_plot(signals, sampling_rate=250)
 
 # Save it
 nk.rsp_plot(signals, sampling_rate=250)
+fig = plt.gcf()
+fig.set_size_inches(10, 12, forward=True)
 plt.tight_layout()
 plt.savefig("README_rsp.png", dpi=300)
 
