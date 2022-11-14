@@ -90,7 +90,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal)
     )
     symmetry = rsp_symmetry(rsp_cleaned, peak_signal)
-    rvt = rsp_rvt(rsp_cleaned, sampling_rate=sampling_rate)
+    rvt = rsp_rvt(rsp_cleaned, sampling_rate=sampling_rate, silent=True)
 
     # Prepare output
     signals = pd.DataFrame(

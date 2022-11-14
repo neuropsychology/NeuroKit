@@ -15,10 +15,10 @@ def rsp_rvt(
     rsp_signal,
     sampling_rate=1000,
     method="harrison2021",
-    show=False,
-    silent=False,
     boundaries=[2.0, 1 / 30],
     iterations=10,
+    show=False,
+    silent=False,
     **kwargs
 ):
     """**Respiratory Volume per Time (RVT)**
@@ -36,16 +36,16 @@ def rsp_rvt(
     method: str, optional
         The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"power2020"`` or
         ``"birn2006"``.
-    show : bool, optional
-        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).
-    silent : bool, optional
-        If ``True``, warnings will not be printed.
     boundaries : list, optional
         Only applies if method is ``"harrison"``. Lower and upper limit of (humanly possible)
         breath frequency in Hertz.
     iterations : int, optional
         Only applies if method is ``"harrison"``. Amount of phase refinement estimates
         to remove high frequencies. Synthetic samples often take less than 3.
+    show : bool, optional
+        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).
+    silent : bool, optional
+        If ``True``, warnings will not be printed.
     **kwargs
         Arguments to be passed to the underlying peak detection algorithm.
 
