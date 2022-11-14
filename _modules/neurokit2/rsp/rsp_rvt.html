@@ -565,11 +565,11 @@ title="Open an issue"
 <div class="viewcode-block" id="rsp_rvt"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_rvt">[docs]</a><span class="k">def</span> <span class="nf">rsp_rvt</span><span class="p">(</span>
     <span class="n">rsp_signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">,</span>
-    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;harrison2021&quot;</span><span class="p">,</span>
     <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">30</span><span class="p">],</span>
     <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Respiratory Volume per Time (RVT)**</span>
@@ -585,18 +585,18 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    method: str, optional</span>
-<span class="sd">        The rvt method to apply. Can be one of ``&quot;power2020&quot;`` (default), ``&quot;harrison2020&quot;`` or</span>
+<span class="sd">        The rvt method to apply. Can be one of ``&quot;harrison2021&quot;`` (default), ``&quot;power2020&quot;`` or</span>
 <span class="sd">        ``&quot;birn2006&quot;``.</span>
-<span class="sd">    show : bool, optional</span>
-<span class="sd">        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).</span>
-<span class="sd">    silent : bool, optional</span>
-<span class="sd">        If ``True``, warnings will not be printed.</span>
 <span class="sd">    boundaries : list, optional</span>
 <span class="sd">        Only applies if method is ``&quot;harrison&quot;``. Lower and upper limit of (humanly possible)</span>
 <span class="sd">        breath frequency in Hertz.</span>
 <span class="sd">    iterations : int, optional</span>
 <span class="sd">        Only applies if method is ``&quot;harrison&quot;``. Amount of phase refinement estimates</span>
 <span class="sd">        to remove high frequencies. Synthetic samples often take less than 3.</span>
+<span class="sd">    show : bool, optional</span>
+<span class="sd">        If ``True``, will return a simple plot of the RVT (with the re-scaled original RSP signal).</span>
+<span class="sd">    silent : bool, optional</span>
+<span class="sd">        If ``True``, warnings will not be printed.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Arguments to be passed to the underlying peak detection algorithm.</span>
 
@@ -623,7 +623,7 @@ title="Open an issue"
 <span class="sd">      plt.close()</span>
 
 <span class="sd">      @savefig p_rsp_rvt2.png scale=100%</span>
-<span class="sd">      nk.rsp_rvt(rsp, method=&quot;harrison2020&quot;, show=True)</span>
+<span class="sd">      nk.rsp_rvt(rsp, method=&quot;harrison2021&quot;, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -644,7 +644,7 @@ title="Open an issue"
 <span class="sd">      A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 117787.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;harrison&quot;</span><span class="p">,</span> <span class="s2">&quot;harrison2020&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;harrison&quot;</span><span class="p">,</span> <span class="s2">&quot;harrison2021&quot;</span><span class="p">]:</span>
         <span class="n">rvt</span> <span class="o">=</span> <span class="n">_rsp_rvt_harrison</span><span class="p">(</span>
             <span class="n">rsp_signal</span><span class="p">,</span>
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>

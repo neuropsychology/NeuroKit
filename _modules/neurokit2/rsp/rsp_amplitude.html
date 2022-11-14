@@ -557,10 +557,15 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.rsp_fixpeaks</span> <span class="kn">import</span> <span class="n">_rsp_fixpeaks_retrieve</span>
 
 
-<div class="viewcode-block" id="rsp_amplitude"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_amplitude">[docs]</a><span class="k">def</span> <span class="nf">rsp_amplitude</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="rsp_amplitude"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_amplitude">[docs]</a><span class="k">def</span> <span class="nf">rsp_amplitude</span><span class="p">(</span>
+    <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Compute respiratory amplitude**</span>
 
-<span class="sd">    Compute respiratory amplitude given the raw respiration signal and its extrema.</span>
+<span class="sd">    Compute respiratory amplitude given the raw respiration signal and its extrema. The</span>
+<span class="sd">    **standard** method computes the amplitude as the difference between a peak and its preceding</span>
+<span class="sd">    trough, while the **prepost** method computes the amplitude as the average of the differences</span>
+<span class="sd">    of peak to its preceding and succeeding troughs (Cole, 2019).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -573,6 +578,8 @@ title="Open an issue"
 <span class="sd">    troughs : list or array or DataFrame or Series or dict</span>
 <span class="sd">        The samples at which the respiration troughs (inhalation onsets) occur. If a dict or a</span>
 <span class="sd">        is passed, it is assumed that these containers were obtained with :func:`.rsp_findpeaks`.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The method to use to compute the amplitude. Can be ``&quot;standard&quot;`` or ``&quot;prepost&quot;``.</span>
 <span class="sd">    interpolation_method : str</span>
 <span class="sd">        Method used to interpolate the amplitude between peaks. See :func:`.signal_interpolate`.</span>
 <span class="sd">        ``&quot;monotone_cubic&quot;`` is chosen as the default interpolation method since it ensures monotone</span>
@@ -587,14 +594,13 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    rsp_clean, rsp_peaks, signal_rate, rsp_process, rsp_plot</span>
+<span class="sd">    rsp_clean, rsp_peaks, signal_rate, rsp_process, rsp_plot, rsp_symmetry</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
-<span class="sd">      import pandas as pd</span>
 
 <span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
 <span class="sd">      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)</span>
@@ -602,9 +608,22 @@ title="Open an issue"
 
 <span class="sd">      amplitude = nk.rsp_amplitude(cleaned, peak_signals)</span>
 <span class="sd">      @savefig p_rsp_amp1.png scale=100%</span>
-<span class="sd">      fig = nk.signal_plot(pd.DataFrame({&quot;RSP&quot;: rsp, &quot;Amplitude&quot;: amplitude}), subplots=True)</span>
+<span class="sd">      fig = nk.signal_plot([rsp, amplitude], labels=[&quot;RSP&quot;, &quot;Amplitude&quot;], subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      amp2 = nk.rsp_amplitude(cleaned, peak_signals, method=&quot;prepost&quot;)</span>
+<span class="sd">      @savefig p_rsp_amp2.png scale=100%</span>
+<span class="sd">      fig = nk.signal_plot([amplitude, amp2], labels=[&quot;Standard&quot;, &quot;Prepost&quot;])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Cole, S., &amp; Voytek, B. (2019). Cycle-by-cycle analysis of neural oscillations. Journal of</span>
+<span class="sd">      neurophysiology, 122(2), 849-861.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Format input.</span>
@@ -623,10 +642,22 @@ title="Open an issue"
     <span class="c1"># difference of each peak to the preceding trough.</span>
     <span class="n">amplitude</span> <span class="o">=</span> <span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">peaks</span><span class="p">]</span> <span class="o">-</span> <span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">troughs</span><span class="p">]</span>
 
+    <span class="c1"># The above is the standard amplitude (each peak height to the preceding trough).</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;prepost&quot;</span><span class="p">]:</span>
+        <span class="c1"># Alternative amplitude calculation that corresponds to the average of</span>
+        <span class="c1"># the peak height to the preceding and following troughs.</span>
+        <span class="c1"># https://twitter.com/bradleyvoytek/status/1591495571269124096/photo/1</span>
+        <span class="c1"># (Note that it cannot be done for the last peak)</span>
+        <span class="n">amplitude</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">-</span> <span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">troughs</span><span class="p">[</span><span class="mi">1</span><span class="p">::]]</span>
+        <span class="n">amplitude</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">2</span>
+
     <span class="c1"># Interpolate amplitude to length of rsp_cleaned.</span>
-    <span class="n">amplitude</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">amplitude</span></div>
 </pre></div>

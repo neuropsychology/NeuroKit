@@ -578,7 +578,7 @@ title="Open an issue"
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    signals : DataFrame</span>
+<span class="sd">    pd.DataFrame</span>
 <span class="sd">        A DataFrame of same length as :func:`.rsp_signal` containing the following columns:</span>
 
 <span class="sd">        * ``&quot;RSP_Phase&quot;``: breathing phase, marked by &quot;1&quot; for inspiration and &quot;0&quot; for expiration.</span>
@@ -622,9 +622,7 @@ title="Open an issue"
     <span class="c1"># Phase Completion</span>
     <span class="n">completion</span> <span class="o">=</span> <span class="n">signal_phase</span><span class="p">(</span><span class="n">inspiration</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;percent&quot;</span><span class="p">)</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">:</span> <span class="n">inspiration</span><span class="p">,</span> <span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">:</span> <span class="n">completion</span><span class="p">})</span>
-
-    <span class="k">return</span> <span class="n">out</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">:</span> <span class="n">inspiration</span><span class="p">,</span> <span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">:</span> <span class="n">completion</span><span class="p">})</span></div>
 </pre></div>
 
               </div>

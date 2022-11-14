@@ -619,6 +619,7 @@ title="Open an issue"
 <span class="sd">      # Analyze</span>
 <span class="sd">      nk.rsp_eventrelated(epochs)</span>
 
+<span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # Example with real data</span>
 <span class="sd">      data = nk.data(&quot;bio_eventrelated_100hz&quot;)</span>
@@ -651,6 +652,9 @@ title="Open an issue"
 
         <span class="c1"># Inspiration</span>
         <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rsp_eventrelated_inspiration</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="c1"># RVT</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rsp_eventrelated_rvt</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
         <span class="c1"># Fill with more info</span>
         <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_eventrelated_addinfo</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -685,7 +689,8 @@ title="Open an issue"
     <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Baseline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">baseline</span>
     <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="n">baseline</span>
     <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="n">baseline</span>
-    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="n">baseline</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_MeanRaw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_MeanRaw&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">baseline</span>
     <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_SD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">output</span>
@@ -705,6 +710,56 @@ title="Open an issue"
     <span class="c1"># Indication of inspiration</span>
     <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="k">def</span> <span class="nf">_rsp_eventrelated_rvt</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{}):</span>
+
+    <span class="c1"># Sanitize input</span>
+    <span class="k">if</span> <span class="s2">&quot;RSP_RVT&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">epoch</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Input does not have an `RSP_RVT` column. Will skip all RVT-related features.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="c1"># Get baseline</span>
+    <span class="n">zero</span> <span class="o">=</span> <span class="n">find_closest</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Find index closest to 0</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_RVT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">zero</span><span class="p">]</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_RVT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">zero</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">:]</span>
+
+    <span class="c1"># Mean</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_RVT_Baseline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">baseline</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_RVT_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="n">baseline</span>
+
+    <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="k">def</span> <span class="nf">_rsp_eventrelated_symmetry</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{}):</span>
+
+    <span class="c1"># Sanitize input</span>
+    <span class="k">if</span> <span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">epoch</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Input does not have an `RSP_Symmetry_PeakTrough` column.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Will skip all symmetry-related features.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="c1"># Get baseline</span>
+    <span class="n">zero</span> <span class="o">=</span> <span class="n">find_closest</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Find index closest to 0</span>
+    <span class="n">baseline1</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">zero</span><span class="p">]</span>
+    <span class="n">signal1</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">zero</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">:]</span>
+
+    <span class="n">baseline2</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">zero</span><span class="p">]</span>
+    <span class="n">signal2</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">zero</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">:]</span>
+
+    <span class="c1"># Mean</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough_Baseline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">baseline1</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay_Baseline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">baseline2</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal1</span><span class="p">)</span> <span class="o">-</span> <span class="n">baseline1</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal2</span><span class="p">)</span> <span class="o">-</span> <span class="n">baseline2</span>
 
     <span class="k">return</span> <span class="n">output</span>
 </pre></div>

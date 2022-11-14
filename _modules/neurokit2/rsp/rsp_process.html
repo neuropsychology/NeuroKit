@@ -557,6 +557,8 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.rsp_clean</span> <span class="kn">import</span> <span class="n">rsp_clean</span>
 <span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_peaks</span>
 <span class="kn">from</span> <span class="nn">.rsp_phase</span> <span class="kn">import</span> <span class="n">rsp_phase</span>
+<span class="kn">from</span> <span class="nn">.rsp_rvt</span> <span class="kn">import</span> <span class="n">rsp_rvt</span>
+<span class="kn">from</span> <span class="nn">.rsp_symmetry</span> <span class="kn">import</span> <span class="n">rsp_symmetry</span>
 
 
 <div class="viewcode-block" id="rsp_process"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_process">[docs]</a><span class="k">def</span> <span class="nf">rsp_process</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">):</span>
@@ -595,6 +597,7 @@ title="Open an issue"
 <span class="sd">        * ``&quot;RSP_Phase&quot;``: breathing phase, marked by &quot;1&quot; for inspiration and &quot;0&quot; for expiration.</span>
 <span class="sd">        * ``&quot;RSP_PhaseCompletion&quot;``: breathing phase completion, expressed in percentage (from 0 to</span>
 <span class="sd">          1), representing the stage of the current respiratory phase.</span>
+<span class="sd">         * ``&quot;RSP_RVT&quot;``: respiratory volume per time (RVT).</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,</span>
 <span class="sd">        accessible with the keys ``&quot;RSP_Peaks&quot;``, and ``&quot;RSP_Troughs&quot;`` respectively, as well as the</span>
@@ -602,7 +605,7 @@ title="Open an issue"
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    rsp_clean, rsp_findpeaks, .signal_rate, rsp_amplitude, rsp_plot</span>
+<span class="sd">    rsp_clean, rsp_findpeaks, .signal_rate, rsp_amplitude, rsp_plot, rsp_phase, rsp_rvt, rsp_symmetry</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -612,8 +615,9 @@ title="Open an issue"
 
 <span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
 <span class="sd">      signals, info = nk.rsp_process(rsp, sampling_rate=1000)</span>
+
 <span class="sd">      @savefig p_rsp_process_1.png scale=100%</span>
-<span class="sd">      fig = nk.rsp_plot(signals)</span>
+<span class="sd">      fig = nk.rsp_plot(signals, sampling_rate=1000)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -636,6 +640,8 @@ title="Open an issue"
     <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
     <span class="p">)</span>
+    <span class="n">symmetry</span> <span class="o">=</span> <span class="n">rsp_symmetry</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">)</span>
+    <span class="n">rvt</span> <span class="o">=</span> <span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Prepare output</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
@@ -644,9 +650,10 @@ title="Open an issue"
             <span class="s2">&quot;RSP_Clean&quot;</span><span class="p">:</span> <span class="n">rsp_cleaned</span><span class="p">,</span>
             <span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">,</span>
             <span class="s2">&quot;RSP_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
+            <span class="s2">&quot;RSP_RVT&quot;</span><span class="p">:</span> <span class="n">rvt</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">symmetry</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
 </pre></div>
