@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import find_closest
+from ..misc import NeuroKitWarning, find_closest
 from ..signal import signal_interpolate
 from ..stats import rescale
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
@@ -82,6 +84,33 @@ def rsp_symmetry(
     # Format input.
     peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
+    # Sanity checks -----------------------------------------------------------
+    failed_checks = False
+    if len(peaks) <= 4 or len(troughs) <= 4:
+        warn(
+            "Not enough peaks and troughs (signal too short?) to compute symmetry"
+            + ", returning nan for symmetry.",
+            category=NeuroKitWarning,
+        )
+        failed_checks = True
+
+    if np.any(peaks - troughs < 0):
+        warn(
+            "Peaks and troughs are not correctly aligned (i.e., not consecutive)"
+            + ", returning nan for symmetry.",
+            category=NeuroKitWarning,
+        )
+        failed_checks = True
+
+    if failed_checks:
+        return pd.DataFrame(
+            {
+                "RSP_Symmetry_PeakTrough": np.full(len(rsp_cleaned), np.nan),
+                "RSP_Symmetry_RiseDecay": np.full(len(rsp_cleaned), np.nan),
+            }
+        )
+
+    # Compute symmetry features -----------------------------------------------
     # See https://twitter.com/bradleyvoytek/status/1591495571269124096/photo/1
 
     # Rise-decay symmetry
