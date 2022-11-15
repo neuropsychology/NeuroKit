@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="EEG Complexity Analysis" href="../eeg_complexity/eeg_complexity.html" />
-    <link rel="prev" title="Simulate Artificial Physiological Signals" href="../signal_simulation/signal_simulation.html" />
+    <link rel="prev" title="Save Preprocessing Reports" href="../ppg_report/ppg_report.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -183,6 +183,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../signal_simulation/signal_simulation.html">
      Simulate Artificial Physiological Signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ppg_report/ppg_report.html">
+     Save Preprocessing Reports
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -612,37 +617,30 @@ title="Print to PDF"
     </div>
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   EEG Power in Frequency Bands
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#eeg-frequency-bands">
    EEG Frequency Bands
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#preprocessing">
-     Preprocessing
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#frontal-alpha-asymmetry-faa">
-     Frontal Alpha Asymmetry (FAA)
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#frontal-midline-theta-fmt">
-     Frontal Midline Theta (FMT)
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#f-electrophysiological-noise">
-     1/f Electrophysiological Noise
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing">
+   Preprocessing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frontal-alpha-asymmetry-faa">
+   Frontal Alpha Asymmetry (FAA)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frontal-midline-theta-fmt">
+   Frontal Midline Theta (FMT)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#f-electrophysiological-noise">
+   1/f Electrophysiological Noise
+  </a>
  </li>
 </ul>
 
@@ -663,37 +661,30 @@ title="Print to PDF"
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   EEG Power in Frequency Bands
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#eeg-frequency-bands">
    EEG Frequency Bands
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#preprocessing">
-     Preprocessing
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#frontal-alpha-asymmetry-faa">
-     Frontal Alpha Asymmetry (FAA)
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#frontal-midline-theta-fmt">
-     Frontal Midline Theta (FMT)
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#f-electrophysiological-noise">
-     1/f Electrophysiological Noise
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing">
+   Preprocessing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frontal-alpha-asymmetry-faa">
+   Frontal Alpha Asymmetry (FAA)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#frontal-midline-theta-fmt">
+   Frontal Midline Theta (FMT)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#f-electrophysiological-noise">
+   1/f Electrophysiological Noise
+  </a>
  </li>
 </ul>
 
@@ -721,9 +712,8 @@ title="Print to PDF"
 </div>
 <div class="cell tag_remove-input docutils container">
 </div>
-</section>
 <section id="eeg-frequency-bands">
-<h1>EEG Frequency Bands<a class="headerlink" href="#eeg-frequency-bands" title="Permalink to this headline">#</a></h1>
+<h2>EEG Frequency Bands<a class="headerlink" href="#eeg-frequency-bands" title="Permalink to this headline">#</a></h2>
 <p>From fastest to slowest:</p>
 <ul class="simple">
 <li><p><strong>Gamma</strong> (30-80 Hz)</p></li>
@@ -741,6 +731,7 @@ title="Print to PDF"
 <li><p><strong>Delta</strong> (1-4 Hz): Strongest in frontal areas. Inhibition of the sensory afferences (Harmony, 2013).</p></li>
 </ul>
 <p>Note that the ranges are approximate and artificial, and studies are quite <a class="reference external" href="https://sapienlabs.org/the-remarkable-inconsistency-of-frequency-band-definitions/">inconsistent</a> in their definition.</p>
+</section>
 <section id="preprocessing">
 <h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
@@ -818,7 +809,7 @@ title="Print to PDF"
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Subtracting Evoked from Epochs
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 014, STI 016, STI 006, STI 002, STI 003, STI 004, EOG 061, STI 005, STI 015, STI 001
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 004, STI 003, STI 015, STI 016, STI 006, STI 014, STI 005, EOG 061, STI 002, STI 001
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[done]
@@ -1034,11 +1025,11 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../signal_simulation/signal_simulation.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../ppg_report/ppg_report.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Simulate Artificial Physiological Signals</p>
+            <p class="prev-next-title">Save Preprocessing Reports</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../eeg_complexity/eeg_complexity.html" title="next page">

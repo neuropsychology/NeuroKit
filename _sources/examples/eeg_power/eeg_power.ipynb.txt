@@ -49,7 +49,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# EEG Frequency Bands\n",
+    "## EEG Frequency Bands\n",
     "\n",
     "From fastest to slowest:\n",
     "\n",
@@ -71,7 +71,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "### Preprocessing"
+    "## Preprocessing"
    ]
   },
   {
@@ -160,7 +160,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "### Frontal Alpha Asymmetry (FAA)"
+    "## Frontal Alpha Asymmetry (FAA)"
    ]
   },
   {
@@ -454,7 +454,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "### Frontal Midline Theta (FMT)\n",
+    "## Frontal Midline Theta (FMT)\n",
     "\n",
     "\n",
     "\n"

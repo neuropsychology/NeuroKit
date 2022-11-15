@@ -186,6 +186,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/ppg_report/ppg_report.html">
+     Save Preprocessing Reports
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
      EEG Power in Frequency Bands
     </a>
@@ -1704,8 +1709,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  572.977496      3977.0  442.346375  ...    1.125937  0.018896         inf</span>
+<span class="go">     RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1104.967533  3802.809524  695.424519  ...    0.710887  0.040536    1.098612</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1851,9 +1856,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.129807      0.060138</span>
-<span class="go">2     2        10000  ...          0.277751     -0.026267</span>
-<span class="go">3     3        15000  ...          0.146375     -0.017584</span>
+<span class="go">1     1         5000  ...          0.165918     -0.016531</span>
+<span class="go">2     2        10000  ...          0.236023     -0.001977</span>
+<span class="go">3     3        15000  ...          0.259867      0.007107</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
