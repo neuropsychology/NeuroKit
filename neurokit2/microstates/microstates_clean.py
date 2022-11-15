@@ -2,13 +2,23 @@
 import numpy as np
 import pandas as pd
 
-from .microstates_peaks import microstates_peaks
 from ..eeg import eeg_gfp
 from ..stats import standardize
+from .microstates_peaks import microstates_peaks
 
 
-def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True, normalize=True, gfp_method="l1", **kwargs):
+def microstates_clean(
+    eeg,
+    sampling_rate=None,
+    train="gfp",
+    standardize_eeg=True,
+    normalize=True,
+    gfp_method="l1",
+    **kwargs
+):
     """**Prepare eeg data for microstates extraction**
+
+    This is mostly a utility function to get the data ready for :func:`.microstates_segment`.
 
     Parameters
     ----------
@@ -18,7 +28,7 @@ def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True
         The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to ``None``.
     train : Union[str, int, float]
         Method for selecting the timepoints how which to train the clustering algorithm. Can be
-        ``"gfp"`` to use the peaks found in the ``Peaks`` in the global field power. Can be
+        ``"gfp"`` to use the peaks found in the global field power (GFP). Can be
         ``"all"``, in which case it will select all the datapoints. It can also be a number or a
         ratio, in which case it will select the corresponding number of evenly spread data points.
         For instance, ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5``
@@ -46,9 +56,19 @@ def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True
     info : dict
         Other information pertaining to the eeg raw object.
 
+    Examples
+    ---------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eeg = nk.mne_data("filt-0-40_raw")
+      eeg, peaks, gfp, info = nk.microstates_clean(eeg, train="gfp")
+
+
     See Also
     --------
-    eeg_gfp, microstates_peaks
+    .eeg_gfp, microstates_peaks, .microstates_segment
 
     """
     # If MNE object
@@ -64,11 +84,15 @@ def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True
         eeg = standardize(eeg, **kwargs)
 
     # Get GFP
-    gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=normalize, method=gfp_method, **kwargs)
+    gfp = eeg_gfp(
+        eeg, sampling_rate=sampling_rate, normalize=normalize, method=gfp_method, **kwargs
+    )
 
+    # If train is a custom of vector (assume it's the pre-computed peaks)
+    if isinstance(train, (list, np.ndarray)):
+        peaks = train
     # Find peaks in the global field power (GFP) or take a given amount of indices
-    if train == "gfp":
-        train = gfp
-    peaks = microstates_peaks(eeg, gfp=train, sampling_rate=sampling_rate, **kwargs)
+    else:
+        peaks = microstates_peaks(eeg, gfp=train, sampling_rate=sampling_rate, **kwargs)
 
     return eeg, peaks, gfp, info

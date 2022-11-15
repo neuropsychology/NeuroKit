@@ -54,54 +54,30 @@ def rsp_intervalrelated(data, sampling_rate=1000):
       nk.rsp_intervalrelated(epochs)
 
     """
-    intervals = {}
 
-    # Format input
+    # If one interval dataframe
     if isinstance(data, pd.DataFrame):
-        rate_cols = [col for col in data.columns if "RSP_Rate" in col]
-        if len(rate_cols) == 1:
-            intervals.update(_rsp_intervalrelated_formatinput(data, sampling_rate))
-            intervals.update(_rsp_intervalrelated_rrv(data, sampling_rate))
-        else:
-            raise ValueError(
-                "NeuroKit error: rsp_intervalrelated(): Wrong"
-                "input, we couldn't extract breathing rate."
-                "Please make sure your DataFrame"
-                "contains an `RSP_Rate` column."
-            )
-        amp_cols = [col for col in data.columns if "RSP_Amplitude" in col]
-        if len(amp_cols) == 1:
-            intervals["RSP_Amplitude_Mean"] = data[amp_cols[0]].values.mean()
-        else:
-            raise ValueError(
-                "NeuroKit error: rsp_intervalrelated(): Wrong"
-                "input, we couldn't extract respiratory amplitude."
-                "Please make sure your DataFrame"
-                "contains an `RSP_Amplitude` column."
-            )
 
-        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index").T
+        intervals = _rsp_intervalrelated_features(data, sampling_rate)
+        intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
+    # If data is a dict (containing multiple intervals)
     elif isinstance(data, dict):
+        intervals = {}
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
             # Add label info
             intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
-            # Rate, Amplitude and Phase
-            intervals[index] = _rsp_intervalrelated_formatinput(
+            # Features
+            intervals[index] = _rsp_intervalrelated_features(
                 data[index], sampling_rate, intervals[index]
             )
 
-            # RRV
-            intervals[index] = _rsp_intervalrelated_rrv(
-                data[index], sampling_rate, intervals[index]
-            )
+        intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
-        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index")
-
-    return rsp_intervals
+    return intervals
 
 
 # =============================================================================
@@ -109,87 +85,73 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
+def _rsp_intervalrelated_features(data, sampling_rate, output={}):
     # Sanitize input
     colnames = data.columns.values
-    if len([i for i in colnames if "RSP_Rate" in i]) == 0:
-        raise ValueError(
-            "NeuroKit error: rsp_intervalrelated(): Wrong"
-            "input, we couldn't extract breathing rate."
-            "Please make sure your DataFrame"
-            "contains an `RSP_Rate` column."
+
+    if "RSP_Rate" in colnames:
+        output["RSP_Rate_Mean"] = np.nanmean(data["RSP_Rate"].values)
+        rrv = rsp_rrv(data, sampling_rate=sampling_rate)
+        for column in rrv.columns:
+            output[column] = float(rrv[column])
+
+    if "RSP_Amplitude" in colnames:
+        output["RSP_Amplitude_Mean"] = np.nanmean(data["RSP_Amplitude"].values)
+
+    if "RSP_RVT" in colnames:
+        output["RSP_RVT"] = np.nanmean(data["RSP_RVT"].values)
+
+    if "RSP_Symmetry_PeakTrough" in colnames:
+        output["RSP_Symmetry_PeakTrough"] = np.nanmean(data["RSP_Symmetry_PeakTrough"].values)
+        output["RSP_Symmetry_RiseDecay"] = np.nanmean(data["RSP_Symmetry_RiseDecay"].values)
+
+    if "RSP_Phase" in colnames:
+
+        # Extract inspiration durations
+        insp_phases = data[data["RSP_Phase"] == 1]
+        insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
+        insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
+
+        # Check that start of phase is before end of phase
+        if insp_start[0] > insp_end[0]:
+            insp_end = insp_end[1:]
+
+        # Check for unequal lengths
+        diff = abs(len(insp_start) - len(insp_end))
+        if len(insp_start) > len(insp_end):
+            insp_start = insp_start[: len(insp_start) - diff]  # remove extra start points
+        elif len(insp_end) > len(insp_start):
+            insp_end = insp_end[: len(insp_end) - diff]  # remove extra end points
+
+        insp_times = np.array(insp_end - insp_start) / sampling_rate
+
+        # Extract expiration durations
+        exp_phases = data[data["RSP_Phase"] == 0]
+        exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
+        exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
+
+        # Check that start of phase is before end of phase
+        if exp_start[0] > exp_end[0]:
+            exp_end = exp_end[1:]
+
+        # Check for unequal lengths
+        diff = abs(len(exp_start) - len(exp_end))
+        if len(exp_start) > len(exp_end):
+            exp_start = exp_start[: len(exp_start) - diff]  # remove extra start points
+        elif len(exp_end) > len(exp_start):
+            exp_end = exp_end[: len(exp_end) - diff]  # remove extra end points
+
+        exp_times = np.array(exp_end - exp_start) / sampling_rate
+
+        output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
+        output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
+        output["RSP_Phase_Duration_Ratio"] = (
+            output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
         )
-    if len([i for i in colnames if "RSP_Amplitude" in i]) == 0:
-        raise ValueError(
-            "NeuroKit error: rsp_intervalrelated(): Wrong"
-            "input we couldn't extract respiratory amplitude."
-            "Please make sure your DataFrame"
-            "contains an `RSP_Amplitude` column."
-        )
-
-    rate = data["RSP_Rate"].values
-    amplitude = data["RSP_Amplitude"].values
-
-    output["RSP_Rate_Mean"] = np.mean(rate)
-    output["RSP_Amplitude_Mean"] = np.mean(amplitude)
-
-    if len([i for i in colnames if "RSP_Phase" in i]) == 0:
-        raise ValueError(
-            "NeuroKit error: rsp_intervalrelated(): Wrong"
-            "input we couldn't extract respiratory phases."
-            "Please make sure your DataFrame"
-            "contains `RSP_Phase` and `RSP_Phase_Completion` columns."
-        )
-
-    # Extract inspiration durations
-    insp_phases = data[data["RSP_Phase"] == 1]
-    insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
-    insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
-
-    # Check that start of phase is before end of phase
-    if insp_start[0] > insp_end[0]:
-        insp_end = insp_end[1:]
-
-    # Check for unequal lengths
-    diff = abs(len(insp_start) - len(insp_end))
-    if len(insp_start) > len(insp_end):
-        insp_start = insp_start[: len(insp_start) - diff]  # remove extra start points
-    elif len(insp_end) > len(insp_start):
-        insp_end = insp_end[: len(insp_end) - diff]  # remove extra end points
-
-    insp_times = np.array(insp_end - insp_start) / sampling_rate
-
-    # Extract expiration durations
-    exp_phases = data[data["RSP_Phase"] == 0]
-    exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
-    exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
-
-    # Check that start of phase is before end of phase
-    if exp_start[0] > exp_end[0]:
-        exp_end = exp_end[1:]
-
-    # Check for unequal lengths
-    diff = abs(len(exp_start) - len(exp_end))
-    if len(exp_start) > len(exp_end):
-        exp_start = exp_start[: len(exp_start) - diff]  # remove extra start points
-    elif len(exp_end) > len(exp_start):
-        exp_end = exp_end[: len(exp_end) - diff]  # remove extra end points
-
-    exp_times = np.array(exp_end - exp_start) / sampling_rate
-
-    output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
-    output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
-    output["RSP_Phase_Duration_Ratio"] = (
-        output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
-    )
 
     return output
 
 
 def _rsp_intervalrelated_rrv(data, sampling_rate, output={}):
-
-    rrv = rsp_rrv(data, sampling_rate=sampling_rate)
-    for column in rrv.columns:
-        output[column] = float(rrv[column])
 
     return output

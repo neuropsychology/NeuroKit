@@ -8,7 +8,8 @@ import pandas as pd
 from ..misc import NeuroKitWarning
 from ..signal.signal_power import _signal_power_instant_plot, signal_power
 from ..signal.signal_psd import signal_psd
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
+from .intervals_process import intervals_process
 
 
 def hrv_frequency(
@@ -61,6 +62,8 @@ def hrv_frequency(
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
+        Can also be a dict containing the keys `RRI` and `RRI_Time`
+        to directly pass the R-R intervals and their timestamps, respectively.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur.
     ulf : tuple, optional
@@ -89,6 +92,8 @@ def hrv_frequency(
     interpolation_rate : int, optional
         Sampling rate (Hz) of the interpolated interbeat intervals. Should be at least twice as
         high as the highest frequency in vhf. By default 100. To replicate Kubios defaults, set to 4.
+        To not interpolate, set interpolation_rate to None (in case the interbeat intervals are already
+        interpolated or when using the ``"lombscargle"`` psd_method for which interpolation is not required).
     **kwargs
         Additional other arguments.
 
@@ -159,18 +164,18 @@ def hrv_frequency(
     """
 
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, rri_time, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
-    # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 4 Hz by default)
-    rri, sampling_rate = _hrv_get_rri(
-        peaks,
-        sampling_rate=sampling_rate,
-        interpolate=True,
-        interpolation_rate=interpolation_rate,
-        **kwargs
+    # Process R-R intervals (interpolated at 100 Hz by default)
+    rri, rri_time, sampling_rate = intervals_process(
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
     )
+
+    if interpolation_rate is None:
+        t = rri_time
+    else:
+        t = None
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
 
@@ -186,6 +191,7 @@ def hrv_frequency(
         show=False,
         normalize=normalize,
         order_criteria=order_criteria,
+        t=t,
         **kwargs
     )
 
@@ -230,6 +236,7 @@ def hrv_frequency(
             order_criteria=order_criteria,
             normalize=normalize,
             max_frequency=max_frequency,
+            t=t,
         )
     return out
 
@@ -247,6 +254,7 @@ def _hrv_frequency_show(
     order_criteria=None,
     normalize=True,
     max_frequency=0.5,
+    t=None,
     **kwargs
 ):
 
@@ -275,6 +283,7 @@ def _hrv_frequency_show(
         max_frequency=max_frequency,
         order_criteria=order_criteria,
         normalize=normalize,
+        t=t,
     )
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

@@ -29,6 +29,7 @@ EEG
 
    eeg_power/eeg_power
    eeg_complexity/eeg_complexity
+   eeg_microstates/eeg_microstates
 
 Misc
 =============

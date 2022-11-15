@@ -186,12 +186,32 @@ def _signal_findpeaks_filter(info, keep):
 
 
 def _signal_findpeaks_distances(peaks):
+    """Calculate distance between adjacent peaks.
+
+    Parameters
+    ----------
+    peaks : np.ndarray
+        detected peaks
+
+    Returns
+    ----------
+    np.ndarray
+        Distance vector of the same length as `peaks`
+
+    Examples
+    ---------
+    ```
+    peaks = np.array([1, 10, 10**2, 10**3, 10**4], dtype=np.float32)
+    _signal_findpeaks_distances(peaks)  # array([   9.,    9.,   90.,  900., 9000.])
+    ```
+
+    """
 
     if len(peaks) <= 2:
         distances = np.full(len(peaks), np.nan)
     else:
         distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
-        distances_prev = np.concatenate([np.abs(np.diff(peaks[::-1])), [np.nan]])
+        distances_prev = np.concatenate([distances_next[1:], [np.nan]])
         distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
 
     return distances

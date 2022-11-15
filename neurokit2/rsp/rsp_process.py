@@ -6,6 +6,8 @@ from .rsp_amplitude import rsp_amplitude
 from .rsp_clean import rsp_clean
 from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
+from .rsp_rvt import rsp_rvt
+from .rsp_symmetry import rsp_symmetry
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -44,6 +46,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
         * ``"RSP_PhaseCompletion"``: breathing phase completion, expressed in percentage (from 0 to
           1), representing the stage of the current respiratory phase.
+         * ``"RSP_RVT"``: respiratory volume per time (RVT).
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
         accessible with the keys ``"RSP_Peaks"``, and ``"RSP_Troughs"`` respectively, as well as the
@@ -51,7 +54,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, signal_rate, rsp_amplitude, rsp_plot
+    rsp_clean, rsp_findpeaks, .signal_rate, rsp_amplitude, rsp_plot, rsp_phase, rsp_rvt, rsp_symmetry
 
     Examples
     --------
@@ -61,8 +64,9 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
       signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+
       @savefig p_rsp_process_1.png scale=100%
-      fig = nk.rsp_plot(signals)
+      fig = nk.rsp_plot(signals, sampling_rate=1000)
       @suppress
       plt.close()
 
@@ -74,18 +78,30 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
 
     # Extract, fix and format peaks
-    peak_signal, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    peak_signal, info = rsp_peaks(
+        rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3
+    )
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Get additional parameters
     phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = signal_rate(info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal))
+    rate = signal_rate(
+        info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal)
+    )
+    symmetry = rsp_symmetry(rsp_cleaned, peak_signal)
+    rvt = rsp_rvt(rsp_cleaned, sampling_rate=sampling_rate, silent=True)
 
     # Prepare output
     signals = pd.DataFrame(
-        {"RSP_Raw": rsp_signal, "RSP_Clean": rsp_cleaned, "RSP_Amplitude": amplitude, "RSP_Rate": rate}
+        {
+            "RSP_Raw": rsp_signal,
+            "RSP_Clean": rsp_cleaned,
+            "RSP_Amplitude": amplitude,
+            "RSP_Rate": rate,
+            "RSP_RVT": rvt,
+        }
     )
-    signals = pd.concat([signals, phase, peak_signal], axis=1)
+    signals = pd.concat([signals, phase, symmetry, peak_signal], axis=1)
 
     return signals, info

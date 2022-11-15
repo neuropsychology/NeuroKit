@@ -9,7 +9,6 @@ import pytest
 
 import neurokit2 as nk
 
-
 random.seed(a=13, version=2)
 
 
@@ -37,7 +36,11 @@ def test_rsp_clean():
     sampling_rate = 100
     duration = 120
     rsp = nk.rsp_simulate(
-        duration=duration, sampling_rate=sampling_rate, respiratory_rate=15, noise=0.1, random_state=42
+        duration=duration,
+        sampling_rate=sampling_rate,
+        respiratory_rate=15,
+        noise=0.1,
+        random_state=42,
     )
     # Add linear drift (to test baseline removal).
     rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True)
@@ -63,7 +66,12 @@ def test_rsp_clean():
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
     rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(
-        signal=rsp, ftype="butter", band="bandpass", order=2, frequency=[0.1, 0.35], sampling_rate=sampling_rate
+        signal=rsp,
+        ftype="butter",
+        band="bandpass",
+        order=2,
+        frequency=[0.1, 0.35],
+        sampling_rate=sampling_rate,
     )
     original = nk.signal_detrend(original, order=0)
     assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
@@ -71,14 +79,20 @@ def test_rsp_clean():
     # Check if outlier was corrected
     hampel_sampling_rate = 1000
     hampel_sample = nk.rsp_simulate(
-        duration=duration, sampling_rate=hampel_sampling_rate, respiratory_rate=15, noise=0.1, random_state=42
+        duration=duration,
+        sampling_rate=hampel_sampling_rate,
+        respiratory_rate=15,
+        noise=0.1,
+        random_state=42,
     )
     # Random numbers
     distort_locations = random.sample(range(len(hampel_sample)), 20)
     distorted_sample = copy.copy(hampel_sample)
     distorted_sample[distort_locations] = 100
     assert np.allclose(
-        nk.rsp_clean(distorted_sample, sampling_rate=hampel_sampling_rate, method="hampel", window_length=1),
+        nk.rsp_clean(
+            distorted_sample, sampling_rate=hampel_sampling_rate, method="hampel", window_length=1
+        ),
         hampel_sample,
         atol=1,
     )
@@ -104,7 +118,12 @@ def test_rsp_peaks():
 def test_rsp_amplitude():
 
     rsp = nk.rsp_simulate(
-        duration=120, sampling_rate=1000, respiratory_rate=15, method="sinusoidal", noise=0, random_state=1
+        duration=120,
+        sampling_rate=1000,
+        respiratory_rate=15,
+        method="sinusoidal",
+        noise=0,
+        random_state=1,
     )
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
@@ -127,21 +146,21 @@ def test_rsp_process():
 
     # Only check array dimensions since functions called by rsp_process have
     # already been unit tested.
-    assert signals.shape == (120000, 8)
-    assert (
-        np.array(
-            [
+    assert len(signals) == 120000
+    assert np.all(
+        [
+            i in signals.columns.values
+            for i in [
                 "RSP_Raw",
                 "RSP_Clean",
                 "RSP_Amplitude",
                 "RSP_Rate",
                 "RSP_Phase",
-                "RSP_PhaseCompletion",
+                "RSP_Phase_Completion",
                 "RSP_Peaks",
                 "RSP_Troughs",
             ]
-        )
-        in signals.columns.values
+        ]
     )
 
 
@@ -152,7 +171,7 @@ def test_rsp_plot():
     nk.rsp_plot(rsp_summary)
     # This will identify the latest figure.
     fig = plt.gcf()
-    assert len(fig.axes) == 3
+    assert len(fig.axes) == 5
     titles = ["Raw and Cleaned Signal", "Breathing Rate", "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
@@ -166,17 +185,23 @@ def test_rsp_eventrelated():
     rsp_eventrelated = nk.rsp_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Min"]) < np.array(rsp_eventrelated["RSP_Rate_Mean"]))
-
-    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Mean"]) < np.array(rsp_eventrelated["RSP_Rate_Max"]))
-
-    # Test amplitude features
     assert np.alltrue(
-        np.array(rsp_eventrelated["RSP_Amplitude_Min"]) < np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
+        np.array(rsp_eventrelated["RSP_Rate_Min"]) < np.array(rsp_eventrelated["RSP_Rate_Mean"])
     )
 
     assert np.alltrue(
-        np.array(rsp_eventrelated["RSP_Amplitude_Mean"]) < np.array(rsp_eventrelated["RSP_Amplitude_Max"])
+        np.array(rsp_eventrelated["RSP_Rate_Mean"]) < np.array(rsp_eventrelated["RSP_Rate_Max"])
+    )
+
+    # Test amplitude features
+    assert np.alltrue(
+        np.array(rsp_eventrelated["RSP_Amplitude_Min"])
+        < np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
+    )
+
+    assert np.alltrue(
+        np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
+        < np.array(rsp_eventrelated["RSP_Amplitude_Max"])
     )
 
     assert len(rsp_eventrelated["Label"]) == 3
@@ -249,8 +274,12 @@ def test_rsp_intervalrelated():
 
 def test_rsp_rvt():
     sampling_rate = 1000
-    rsp10 = nk.rsp_simulate(duration=60, sampling_rate=sampling_rate, respiratory_rate=10, random_state=42)
-    rsp20 = nk.rsp_simulate(duration=60, sampling_rate=sampling_rate, respiratory_rate=20, random_state=42)
+    rsp10 = nk.rsp_simulate(
+        duration=60, sampling_rate=sampling_rate, respiratory_rate=10, random_state=42
+    )
+    rsp20 = nk.rsp_simulate(
+        duration=60, sampling_rate=sampling_rate, respiratory_rate=20, random_state=42
+    )
     for method in ["harrison", "birn", "power"]:
         rvt10 = nk.rsp_rvt(rsp10, method=method, sampling_rate=sampling_rate)
         rvt20 = nk.rsp_rvt(rsp20, method=method, sampling_rate=sampling_rate)
