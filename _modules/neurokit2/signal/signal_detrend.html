@@ -594,8 +594,10 @@ title="Open an issue"
 <span class="sd">        Only used if ``method`` is &quot;loess&quot;. The parameter which controls the degree of smoothing.</span>
 <span class="sd">    window : float</span>
 <span class="sd">        Only used if ``method`` is &quot;locreg&quot;. The detrending ``window`` should correspond to the</span>
-<span class="sd">        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below</span>
-<span class="sd">        1.5Hz).</span>
+<span class="sd">        1 divided by the desired low-frequency band to remove</span>
+<span class="sd">        (``window = 1 / detrend_frequency``)</span>
+<span class="sd">        For instance, to remove frequencies below ``0.67Hz`` the window should be ``1.5``</span>
+<span class="sd">        (``1 / 0.67 = 1.5``).</span>
 <span class="sd">    stepsize : float</span>
 <span class="sd">        Only used if ``method`` is ``&quot;locreg&quot;``.</span>
 <span class="sd">    components : list</span>
