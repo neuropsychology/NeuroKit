@@ -43,8 +43,10 @@ def signal_detrend(
         Only used if ``method`` is "loess". The parameter which controls the degree of smoothing.
     window : float
         Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
-        desired low frequency band to remove (for instance, ``1.5`` will remove frequencies below
-        1.5Hz).
+        1 divided by the desired low-frequency band to remove
+        (``window = 1 / detrend_frequency``)
+        For instance, to remove frequencies below ``0.67Hz`` the window should be ``1.5``
+        (``1 / 0.67 = 1.5``).
     stepsize : float
         Only used if ``method`` is ``"locreg"``.
     components : list

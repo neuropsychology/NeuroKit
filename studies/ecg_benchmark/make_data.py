@@ -152,8 +152,8 @@ results.to_csv("data_normalization.csv", index=False)
 #def locreg(ecg, sampling_rate):
 #    ecg = nk.signal_detrend(ecg,
 #                            method="locreg",
-#                            window=0.5*sampling_rate,
-#                            stepsize=0.02*sampling_rate)
+#                            window=1/0.5,
+#                            stepsize=0.02)
 #    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
 #    return info["ECG_R_Peaks"]
 #
