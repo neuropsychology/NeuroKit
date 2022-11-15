@@ -20,6 +20,7 @@ Physiological
    rsp_rrv/rsp_rrv
    eog_analyze/eog_analyze
    signal_simulation/signal_simulation
+   ppg_report/ppg_report
 
 EEG
 =============
