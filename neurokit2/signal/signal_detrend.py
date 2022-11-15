@@ -45,7 +45,7 @@ def signal_detrend(
         Only used if ``method`` is "locreg". The detrending ``window`` should correspond to the
         1 divided by the desired low-frequency band to remove
         (``window = 1 / detrend_frequency``)
-        For instance, to remove frequencies below ``0.67Hz`` the window should be ``1500``
+        For instance, to remove frequencies below ``0.67Hz`` the window should be ``1.5``
         (``1000 / 0.67 = 1500``).
     stepsize : float
         Only used if ``method`` is ``"locreg"``.
