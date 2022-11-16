@@ -139,6 +139,8 @@ def _rsp_rvt_birn(
         ending_peak = peak_coords[ending_peak_index]
         mid_peak.append(round((starting_peak + ending_peak) / 2))
         seconds_delta.append((ending_peak - starting_peak) / sampling_rate)
+
+    # Interpolate
     output_range = range(len(zsmooth_signal))
     rvt_time = np.interp(output_range, mid_peak, seconds_delta)
     rvt_peaks = np.interp(output_range, peak_coords, zsmooth_signal[peak_coords])
