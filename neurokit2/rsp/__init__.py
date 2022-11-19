@@ -9,6 +9,7 @@ from .rsp_eventrelated import rsp_eventrelated
 from .rsp_findpeaks import rsp_findpeaks
 from .rsp_fixpeaks import rsp_fixpeaks
 from .rsp_intervalrelated import rsp_intervalrelated
+from .rsp_methods import rsp_methods
 from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
 from .rsp_plot import rsp_plot
@@ -36,4 +37,5 @@ __all__ = [
     "rsp_analyze",
     "rsp_rate",
     "rsp_symmetry",
+    "rsp_methods",
 ]

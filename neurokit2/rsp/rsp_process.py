@@ -78,21 +78,15 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
 
     # Extract, fix and format peaks
-    peak_signal, info = rsp_peaks(
-        rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3
-    )
+    peak_signal, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Get additional parameters
     phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = signal_rate(
-        info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal)
-    )
+    rate = signal_rate(info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal))
     symmetry = rsp_symmetry(rsp_cleaned, peak_signal)
-    rvt = rsp_rvt(
-        rsp_cleaned, method="harrison2021", sampling_rate=sampling_rate, silent=True
-    )
+    rvt = rsp_rvt(rsp_cleaned, method="harrison2021", sampling_rate=sampling_rate, silent=True)
 
     # Prepare output
     signals = pd.DataFrame(

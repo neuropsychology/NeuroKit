@@ -66,8 +66,19 @@ def get_default_args(func):
     """Get the default values of a function's arguments."""
     # https://stackoverflow.com/questions/12627118/get-a-function-arguments-default-value
     signature = inspect.signature(func)
-    return {
-        k: v.default
-        for k, v in signature.parameters.items()
-        if v.default is not inspect.Parameter.empty
-    }
+    return {k: v.default for k, v in signature.parameters.items() if v.default is not inspect.Parameter.empty}
+
+
+def get_kwargs(report_info, func):
+    """Get keyword arguments from report_info and update report_info if defaults."""
+    defaults = get_default_args(func)
+    kwargs = {}
+    for key in defaults:
+        if key not in ["sampling_rate", "method"]:
+            # if arguments have not been specified by user,
+            # set them to the defaults
+            if key not in report_info:
+                report_info[key] = defaults[key]
+            elif report_info[key] != defaults[key]:
+                kwargs[key] = report_info[key]
+    return kwargs, report_info
