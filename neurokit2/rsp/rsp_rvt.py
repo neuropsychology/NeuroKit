@@ -6,6 +6,7 @@ import numpy as np
 import scipy.signal
 
 from ..misc import NeuroKitWarning
+from ..signal import signal_interpolate
 from ..stats import rescale
 from .rsp_clean import rsp_clean
 from .rsp_peaks import rsp_findpeaks
@@ -102,9 +103,13 @@ def rsp_rvt(
             iterations=iterations,
         )
     elif method in ["birn", "birn2006"]:
-        rvt = _rsp_rvt_birn(rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs)
+        rvt = _rsp_rvt_birn(
+            rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs
+        )
     elif method in ["power", "power2020"]:
-        rvt = _rsp_rvt_power(rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs)
+        rvt = _rsp_rvt_power(
+            rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs
+        )
     else:
         raise ValueError(
             "NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'."
@@ -121,12 +126,19 @@ def _rsp_rvt_birn(
     window_length=0.4,
     peak_distance=0.8,
     peak_prominence=0.5,
+    interpolation_method="linear",
 ):
     zsmooth_signal = _smooth_rsp_data(
-        rsp_signal, sampling_rate=sampling_rate, window_length=window_length, silent=silent
+        rsp_signal,
+        sampling_rate=sampling_rate,
+        window_length=window_length,
+        silent=silent,
     )
     info = rsp_findpeaks(
-        zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence
+        zsmooth_signal,
+        method="scipy",
+        peak_distance=peak_distance,
+        peak_prominence=peak_prominence,
     )
     peak_coords = info["RSP_Peaks"]
     trough_coords = info["RSP_Troughs"]
@@ -142,9 +154,21 @@ def _rsp_rvt_birn(
 
     # Interpolate
     output_range = range(len(zsmooth_signal))
-    rvt_time = np.interp(output_range, mid_peak, seconds_delta)
-    rvt_peaks = np.interp(output_range, peak_coords, zsmooth_signal[peak_coords])
-    rvt_troughs = np.interp(output_range, trough_coords, zsmooth_signal[trough_coords])
+    rvt_time = signal_interpolate(
+        mid_peak, seconds_delta, output_range, method=interpolation_method
+    )
+    rvt_peaks = signal_interpolate(
+        peak_coords,
+        zsmooth_signal[peak_coords],
+        output_range,
+        method=interpolation_method,
+    )
+    rvt_troughs = signal_interpolate(
+        trough_coords,
+        zsmooth_signal[trough_coords],
+        output_range,
+        method=interpolation_method,
+    )
 
     # what is trigvec?
     # trigvec = (TR * signal_rate):len(zsmoothresp)
@@ -160,15 +184,21 @@ def _rsp_rvt_power(
     window_length=0.4,
     peak_distance=0.8,
     peak_prominence=0.5,
+    interpolation_method="linear",
 ):
     # preprocess signal
     zsmooth_signal = _smooth_rsp_data(
-        rsp_signal, sampling_rate=sampling_rate, silent=silent, window_length=window_length
+        rsp_signal,
+        sampling_rate=sampling_rate,
+        silent=silent,
+        window_length=window_length,
     )
     # find peaks and troughs
-
     info = rsp_findpeaks(
-        zsmooth_signal, method="scipy", peak_distance=peak_distance, peak_prominence=peak_prominence
+        zsmooth_signal,
+        method="scipy",
+        peak_distance=peak_distance,
+        peak_prominence=peak_prominence,
     )
     peak_coords = info["RSP_Peaks"]
     trough_coords = info["RSP_Troughs"]
@@ -191,14 +221,21 @@ def _rsp_rvt_power(
         trough_loc = sorted(list(trough_locs))[-1]
         # calculate peak_height for peak at peak_index
         peak_heights.append(
-            (zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]) / (peak_loc - prev_peak_loc)
+            (zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc])
+            / (peak_loc - prev_peak_loc)
         )
-    return np.interp(range(len(rsp_signal)), peak_coords, peak_heights)
+
+    return signal_interpolate(
+        peak_coords, peak_heights, range(len(rsp_signal)), method=interpolation_method
+    )
 
 
 def _smooth_rsp_data(signal, sampling_rate=1000, window_length=0.4, silent=False):
     signal = rsp_clean(
-        signal, sampling_rate=sampling_rate, window_length=window_length, method="hampel"
+        signal,
+        sampling_rate=sampling_rate,
+        window_length=window_length,
+        method="hampel",
     )
     smooth_signal = scipy.signal.savgol_filter(
         signal,
@@ -210,7 +247,11 @@ def _smooth_rsp_data(signal, sampling_rate=1000, window_length=0.4, silent=False
 
 
 def _rsp_rvt_harrison(
-    rsp_signal, sampling_rate=1000, boundaries=[2.0, 1 / 30], iterations=10, silent=False
+    rsp_signal,
+    sampling_rate=1000,
+    boundaries=[2.0, 1 / 30],
+    iterations=10,
+    silent=False,
 ):
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
@@ -255,9 +296,13 @@ def _rsp_rvt_harrison(
                 n_end = n_end[-1].squeeze()
 
             # Linearly interpolate from n_start to n_end
-            fr_phase[n_start:n_end] = np.linspace(fr_min, fr_max, num=n_end - n_start).squeeze()
+            fr_phase[n_start:n_end] = np.linspace(
+                fr_min, fr_max, num=n_end - n_start
+            ).squeeze()
         # Filter out any high frequencies from phase-only signal
-        fr_filt = scipy.signal.sosfiltfilt(d, np.pad(np.cos(fr_phase), n_pad, "symmetric"))
+        fr_filt = scipy.signal.sosfiltfilt(
+            d, np.pad(np.cos(fr_phase), n_pad, "symmetric")
+        )
         fr_filt = fr_filt[n_pad : (len(fr_filt) - n_pad)]
     # Keep phase only signal as reference
     fr_filt = np.cos(fr_phase)
@@ -318,11 +363,17 @@ def _rsp_rvt_plot(rvt, rsp_signal, sampling_rate):
     plt.figure()
     plt.title("Respiratory Volume per Time (RVT)")
     plt.xlabel("Time [s]")
-    plt.plot(rescale(rsp_signal, to=[np.nanmin(rvt), np.nanmax(rvt)]), label="RSP", color="#CFD8DC")
+    plt.plot(
+        rescale(rsp_signal, to=[np.nanmin(rvt), np.nanmax(rvt)]),
+        label="RSP",
+        color="#CFD8DC",
+    )
     plt.plot(rvt, label="RVT", color="#00BCD4")
     plt.legend()
     tickpositions = plt.gca().get_xticks()[1:-1]
-    plt.xticks(tickpositions, [tickposition / sampling_rate for tickposition in tickpositions])
+    plt.xticks(
+        tickpositions, [tickposition / sampling_rate for tickposition in tickpositions]
+    )
 
 
 def _make_uneven_filter_size(number, silent=False):
