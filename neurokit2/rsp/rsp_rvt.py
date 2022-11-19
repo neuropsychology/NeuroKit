@@ -203,7 +203,7 @@ def _rsp_rvt_power(
     peak_coords = info["RSP_Peaks"]
     trough_coords = info["RSP_Troughs"]
     # initialize for loop
-    peak_heights = [np.nan]
+    peak_heights = [np.nan] * len(peak_coords)
 
     # go over loop
     for peak_index in range(1, len(peak_coords)):
@@ -211,19 +211,19 @@ def _rsp_rvt_power(
         peak_loc = peak_coords[peak_index]
         prev_peak_loc = peak_coords[peak_index - 1]
         # find troughs between prev_peak_loc and peak_loc
-        trough_locs = set(range(prev_peak_loc, peak_loc)).intersection(trough_coords)
+        trough_locs = trough_coords[
+            (trough_coords > prev_peak_loc) & (trough_coords < peak_loc)
+        ]
 
         # safety catch if there is no trough found
         if len(trough_locs) == 0:
-            peak_heights.append(np.nan)
             continue
 
-        trough_loc = sorted(list(trough_locs))[-1]
+        trough_loc = max(trough_locs)
         # calculate peak_height for peak at peak_index
-        peak_heights.append(
-            (zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc])
-            / (peak_loc - prev_peak_loc)
-        )
+        peak_heights[peak_index] = (
+            zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]
+        ) / (peak_loc - prev_peak_loc)
 
     return signal_interpolate(
         peak_coords, peak_heights, range(len(rsp_signal)), method=interpolation_method
