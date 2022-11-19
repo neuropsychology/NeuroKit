@@ -15,7 +15,7 @@ from .rsp_peaks import rsp_findpeaks
 def rsp_rvt(
     rsp_signal,
     sampling_rate=1000,
-    method="harrison2021",
+    method="power2020",
     boundaries=[2.0, 1 / 30],
     iterations=10,
     show=False,
@@ -35,7 +35,7 @@ def rsp_rvt(
     sampling_rate : int, optional
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method: str, optional
-        The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"power2020"`` or
+        The rvt method to apply. Can be one of  ``"power2020"`` (default for rsp_rvt), ``"harrison2021"`` or
         ``"birn2006"``.
     boundaries : list, optional
         Only applies if method is ``"harrison"``. Lower and upper limit of (humanly possible)
