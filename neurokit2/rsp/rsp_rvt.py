@@ -103,17 +103,11 @@ def rsp_rvt(
             iterations=iterations,
         )
     elif method in ["birn", "birn2006"]:
-        rvt = _rsp_rvt_birn(
-            rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs
-        )
+        rvt = _rsp_rvt_birn(rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs)
     elif method in ["power", "power2020"]:
-        rvt = _rsp_rvt_power(
-            rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs
-        )
+        rvt = _rsp_rvt_power(rsp_signal, sampling_rate=sampling_rate, silent=silent, **kwargs)
     else:
-        raise ValueError(
-            "NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'."
-        )
+        raise ValueError("NeuroKit error: rsp_rvt(): 'method' should be one of 'birn', 'power' or 'harrison'.")
     if show:
         _rsp_rvt_plot(rvt, rsp_signal, sampling_rate)
     return rvt
@@ -154,9 +148,7 @@ def _rsp_rvt_birn(
 
     # Interpolate
     output_range = range(len(zsmooth_signal))
-    rvt_time = signal_interpolate(
-        mid_peak, seconds_delta, output_range, method=interpolation_method
-    )
+    rvt_time = signal_interpolate(mid_peak, seconds_delta, output_range, method=interpolation_method)
     rvt_peaks = signal_interpolate(
         peak_coords,
         zsmooth_signal[peak_coords],
@@ -211,9 +203,7 @@ def _rsp_rvt_power(
         peak_loc = peak_coords[peak_index]
         prev_peak_loc = peak_coords[peak_index - 1]
         # find troughs between prev_peak_loc and peak_loc
-        trough_locs = trough_coords[
-            (trough_coords > prev_peak_loc) & (trough_coords < peak_loc)
-        ]
+        trough_locs = trough_coords[(trough_coords > prev_peak_loc) & (trough_coords < peak_loc)]
 
         # safety catch if there is no trough found
         if len(trough_locs) == 0:
@@ -221,13 +211,9 @@ def _rsp_rvt_power(
 
         trough_loc = max(trough_locs)
         # calculate peak_height for peak at peak_index
-        peak_heights[peak_index] = (
-            zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]
-        ) / (peak_loc - prev_peak_loc)
+        peak_heights[peak_index] = (zsmooth_signal[peak_loc] - zsmooth_signal[trough_loc]) / (peak_loc - prev_peak_loc)
 
-    return signal_interpolate(
-        peak_coords, peak_heights, range(len(rsp_signal)), method=interpolation_method
-    )
+    return signal_interpolate(peak_coords, peak_heights, range(len(rsp_signal)), method=interpolation_method)
 
 
 def _smooth_rsp_data(signal, sampling_rate=1000, window_length=0.4, silent=False):
@@ -256,9 +242,7 @@ def _rsp_rvt_harrison(
     # low-pass filter at not too far above breathing-rate to remove high-frequency noise
     n_pad = int(np.ceil(10 * sampling_rate))
 
-    d = scipy.signal.iirfilter(
-        N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate
-    )
+    d = scipy.signal.iirfilter(N=10, Wn=0.75, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
     fr_lp = scipy.signal.sosfiltfilt(d, np.pad(rsp_signal, n_pad, "symmetric"))
     fr_lp = fr_lp[n_pad : (len(fr_lp) - n_pad)]
 
@@ -296,13 +280,9 @@ def _rsp_rvt_harrison(
                 n_end = n_end[-1].squeeze()
 
             # Linearly interpolate from n_start to n_end
-            fr_phase[n_start:n_end] = np.linspace(
-                fr_min, fr_max, num=n_end - n_start
-            ).squeeze()
+            fr_phase[n_start:n_end] = np.linspace(fr_min, fr_max, num=n_end - n_start).squeeze()
         # Filter out any high frequencies from phase-only signal
-        fr_filt = scipy.signal.sosfiltfilt(
-            d, np.pad(np.cos(fr_phase), n_pad, "symmetric")
-        )
+        fr_filt = scipy.signal.sosfiltfilt(d, np.pad(np.cos(fr_phase), n_pad, "symmetric"))
         fr_filt = fr_filt[n_pad : (len(fr_filt) - n_pad)]
     # Keep phase only signal as reference
     fr_filt = np.cos(fr_phase)
@@ -312,9 +292,7 @@ def _rsp_rvt_harrison(
     # Low-pass filter to remove within_cycle changes
     # Note factor of two is for compatability with the common definition of RV
     # as the difference between max and min inhalation (i.e. twice the amplitude)
-    d = scipy.signal.iirfilter(
-        N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate
-    )
+    d = scipy.signal.iirfilter(N=10, Wn=0.2, btype="lowpass", analog=False, output="sos", fs=sampling_rate)
     fr_rv = 2 * scipy.signal.sosfiltfilt(d, np.pad(fr_mag, n_pad, "symmetric"))
     fr_rv = fr_rv[n_pad : (len(fr_rv) - n_pad)]
     fr_rv[fr_rv < 0] = 0
@@ -371,9 +349,7 @@ def _rsp_rvt_plot(rvt, rsp_signal, sampling_rate):
     plt.plot(rvt, label="RVT", color="#00BCD4")
     plt.legend()
     tickpositions = plt.gca().get_xticks()[1:-1]
-    plt.xticks(
-        tickpositions, [tickposition / sampling_rate for tickposition in tickpositions]
-    )
+    plt.xticks(tickpositions, [tickposition / sampling_rate for tickposition in tickpositions])
 
 
 def _make_uneven_filter_size(number, silent=False):
