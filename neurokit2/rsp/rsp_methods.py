@@ -21,7 +21,7 @@ def rsp_methods(
     Parameters
     ----------
     sampling_rate : int
-        The sampling frequency of the raw PPG signal (in Hz, i.e., samples/second).
+        The sampling frequency of the raw RSP signal (in Hz, i.e., samples/second).
     method : str
         The method used for cleaning and peak finding if ``"method_cleaning"``
         and ``"method_peaks"`` are set to ``"default"``. Can be one of ``"Khodadad"``, ``"BioSPPy"``.
