@@ -96,7 +96,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs)
     peak_signal, info = rsp_peaks(
         rsp_cleaned,
         sampling_rate=sampling_rate,
-        method=method["method_peaks"],
+        method=methods["method_peaks"],
         amplitude_min=0.3,
         **methods["kwargs_peaks"],
     )
