@@ -557,7 +557,7 @@ title="Open an issue"
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..misc.report</span> <span class="kn">import</span> <span class="n">get_default_args</span>
+<span class="kn">from</span> <span class="nn">..misc.report</span> <span class="kn">import</span> <span class="n">get_kwargs</span>
 <span class="kn">from</span> <span class="nn">.ppg_clean</span> <span class="kn">import</span> <span class="n">ppg_clean</span>
 <span class="kn">from</span> <span class="nn">.ppg_findpeaks</span> <span class="kn">import</span> <span class="n">ppg_findpeaks</span>
 
@@ -621,10 +621,8 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize inputs</span>
-    <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
-        <span class="n">method_cleaning</span> <span class="o">=</span> <span class="n">method</span>
-    <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
-        <span class="n">method_peaks</span> <span class="o">=</span> <span class="n">method</span>
+    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">method_peaks</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="c1"># Create dictionary with all inputs</span>
     <span class="n">report_info</span> <span class="o">=</span> <span class="p">{</span>
@@ -636,29 +634,8 @@ title="Open an issue"
     <span class="p">}</span>
 
     <span class="c1"># Get arguments to be passed to cleaning and peak finding functions</span>
-
-    <span class="n">defaults_cleaning</span> <span class="o">=</span> <span class="n">get_default_args</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">)</span>
-    <span class="n">defaults_peaks</span> <span class="o">=</span> <span class="n">get_default_args</span><span class="p">(</span><span class="n">ppg_findpeaks</span><span class="p">)</span>
-
-    <span class="n">kwargs_cleaning</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">defaults_cleaning</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">]:</span>
-            <span class="c1"># if arguments have not been specified by user,</span>
-            <span class="c1"># set them to the defaults</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">report_info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults_cleaning</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">defaults_cleaning</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="n">kwargs_cleaning</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-    <span class="n">kwargs_peaks</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">defaults_peaks</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">]:</span>
-            <span class="c1"># if arguments have not been specified by user,</span>
-            <span class="c1"># set them to the defaults</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">report_info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults_peaks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">defaults_peaks</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
-                <span class="n">kwargs_peaks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">report_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">kwargs_cleaning</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">ppg_clean</span><span class="p">)</span>
+    <span class="n">kwargs_peaks</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">ppg_findpeaks</span><span class="p">)</span>
 
     <span class="c1"># Save keyword arguments in dictionary</span>
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_cleaning</span>
@@ -669,58 +646,60 @@ title="Open an issue"
 
     <span class="c1"># 1. Cleaning</span>
     <span class="c1"># ------------</span>
-    <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The raw signal, sampled at </span><span class="si">{</span><span class="n">sampling_rate</span><span class="si">}</span><span class="s2"> Hz, &quot;</span>
-    <span class="k">if</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;was preprocessed using a bandpass filter ([0.5 - 8 Hz], Butterworth 3rd order&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;; following Elgendi et al., 2013).&quot;</span>
+    <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The raw signal, sampled at </span><span class="si">{</span><span class="n">sampling_rate</span><span class="si">}</span><span class="s2"> Hz,&quot;</span>
+    <span class="k">if</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="s2">&quot;elgendi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;elgendi2013&quot;</span><span class="p">,</span>
+    <span class="p">]:</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="s2">&quot; was preprocessed using a bandpass filter ([0.5 - 8 Hz], Butterworth 3rd order;&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; following Elgendi et al., 2013).&quot;</span>
         <span class="p">)</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="s2">&quot;Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; in Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; Conditions. PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.&quot;</span>
+            <span class="sd">&quot;&quot;&quot;Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013)</span>
+<span class="sd">            Systolic Peak Detection in Acceleration Photoplethysmograms</span>
+<span class="sd">            Measured from Emergency Responders in Tropical Conditions</span>
+<span class="sd">            PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.&quot;&quot;&quot;</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian&quot;</span><span class="p">,</span> <span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;heart_rate&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cutoff</span> <span class="o">=</span> <span class="s2">&quot;of 40 Hz&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">cutoff</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;based on the heart rate of </span><span class="si">{</span><span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;heart_rate&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> bpm&#39;</span>
+            <span class="n">cutoff</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39; based on the heart rate of </span><span class="si">{</span><span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;heart_rate&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> bpm&#39;</span>
 
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;was preprocessed using a lowpass filter (with a cutoff frequency &quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cutoff</span><span class="si">}</span><span class="s2">, butterworth 2nd order; following Nabian et al., 2018).&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; was preprocessed using a lowpass filter (with a cutoff frequency </span><span class="si">{</span><span class="n">cutoff</span><span class="si">}</span><span class="s2">,&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; butterworth 2nd order; following Nabian et al., 2018).&quot;</span>
         <span class="p">)</span>
-
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="s2">&quot;Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S.&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; (2018). An open-source feature extraction tool for the analysis of peripheral &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;physiological data. IEEE Journal of Translational Engineering in Health and Medicine&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;, 6, 1-11.&quot;</span>
+            <span class="sd">&quot;&quot;&quot;Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S.(2018).</span>
+<span class="sd">            An open-source feature extraction tool for the analysis of peripheral physiological data.</span>
+<span class="sd">            IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.&quot;&quot;&quot;</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">method_cleaning</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;was directly used for peak detection without preprocessing.&quot;</span>
-        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; was directly used for peak detection without preprocessing.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># just in case more methods are added</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;was cleaned following the &quot;</span> <span class="o">+</span> <span class="n">method</span> <span class="o">+</span> <span class="s2">&quot; method.&quot;</span>
 
     <span class="c1"># 2. Peaks</span>
     <span class="c1"># ----------</span>
-    <span class="k">if</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="s2">&quot;elgendi13&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span>
             <span class="s2">&quot;text_peaks&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The peak detection was carried out using the method described in Elgendi et al. (2013).&quot;</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="s2">&quot;Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; in Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; Conditions. PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.&quot;</span>
+            <span class="sd">&quot;&quot;&quot;Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013)</span>
+<span class="sd">            Systolic Peak Detection in Acceleration Photoplethysmograms</span>
+<span class="sd">            Measured from Emergency Responders in Tropical Conditions</span>
+<span class="sd">            PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.&quot;&quot;&quot;</span>
         <span class="p">)</span>
-    <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">refs</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;There was no peak detection carried out.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
 
+    <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">refs</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">report_info</span></div>
 </pre></div>
 

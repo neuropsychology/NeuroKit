@@ -920,7 +920,7 @@ title="Print to PDF"
 <h3><em>rsp_process()</em><a class="headerlink" href="#rsp-process" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_process">
-<span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Process a respiration (RSP) signal</strong></p>
 <p>Convenience function that automatically processes a respiration signal with one of the
 following methods:</p>
@@ -935,6 +935,10 @@ following methods:</p>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default)
 or <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>.</p></li>
+<li><p><strong>method_rvt</strong> (<em>str</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;harrison2021&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to specific methods. For more information,
+see <a class="reference internal" href="#neurokit2.rsp.rsp_methods" title="neurokit2.rsp.rsp_methods"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1709,8 +1713,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">     RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1104.967533  3802.809524  695.424519  ...    0.710887  0.040536    1.098612</span>
+<span class="go">     RRV_RMSSD   RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1170.143866  4045.894737  686.44324  ...    0.548301  0.057158        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1727,7 +1731,7 @@ meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
 <h3><em>rsp_rvt()</em><a class="headerlink" href="#rsp-rvt" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rvt">
-<span class="sig-name descname"><span class="pre">rsp_rvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2.0,</span> <span class="pre">0.03333333333333333]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rvt.html#rsp_rvt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rvt" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_rvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2.0,</span> <span class="pre">0.03333333333333333]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rvt.html#rsp_rvt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rvt" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Respiratory Volume per Time (RVT)</strong></p>
 <p>Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and
 breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is
@@ -1737,7 +1741,7 @@ often considered noise.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;harrison2021&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> or
+<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of  <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> (default for rsp_rvt), <code class="docutils literal notranslate"><span class="pre">&quot;harrison2021&quot;</span></code> or
 <code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>.</p></li>
 <li><p><strong>boundaries</strong> (<em>list, optional</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>. Lower and upper limit of (humanly possible)
 breath frequency in Hertz.</p></li>
@@ -1772,9 +1776,7 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 <span class="go">       0.13886997])</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;birn2006&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go"></span>
-<span class="go">array([       nan,        nan,        nan, ..., 0.80883198, 0.80883198,</span>
-<span class="go">       0.80883198])</span>
+<span class="gh">Out[5]: </span><span class="go">array([nan, nan, nan, ..., nan, nan, nan])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1856,9 +1858,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.165918     -0.016531</span>
-<span class="go">2     2        10000  ...          0.236023     -0.001977</span>
-<span class="go">3     3        15000  ...          0.259867      0.007107</span>
+<span class="go">1     1         5000  ...          0.289084     -0.026698</span>
+<span class="go">2     2        10000  ...          0.264239      0.026162</span>
+<span class="go">3     3        15000  ...          0.258040      0.011186</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1956,6 +1958,49 @@ See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
 <span class="target" id="module-neurokit2.rsp"></span><p>Submodule for NeuroKit.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.rsp.rsp_methods">
+<span class="sig-name descname"><span class="pre">rsp_methods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_cleaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_methods.html#rsp_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_methods" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>RSP Preprocessing Methods</strong>
+This function analyzes and specifies the methods used in the preprocessing, and create a
+textual description of the methods used. It is used by <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a> to dispatch the
+correct methods to each subroutine of the pipeline and <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_report()</span></code> to create a
+preprocessing report.
+:Parameters: * <strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the raw RSP signal (in Hz, i.e., samples/second).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>method</strong> (<em>str</em>) – The method used for cleaning and peak finding if <code class="docutils literal notranslate"><span class="pre">&quot;method_cleaning&quot;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&quot;method_peaks&quot;</span></code> are set to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;Khodadad&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;BioSPPy&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;Khodadad&quot;</span></code>.</p></li>
+<li><p><strong>method_cleaning</strong> (<em>str</em>) – The method used to clean the raw RSP signal. If <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>,
+will be set to the value of <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.
+For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
+of <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
+<li><p><strong>method_peaks</strong> (<em>str</em>) – The method used to find peaks. If <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>,
+will be set to the value of <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.
+For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
+of <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
+<li><p><strong>method_rvt</strong> (<em>str</em>) – The method used to compute respiratory volume per time. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>.
+For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
+of <a class="reference internal" href="#neurokit2.rsp.rsp_rvt" title="neurokit2.rsp.rsp_rvt"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rvt()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a> and
+<a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>report_info</strong> (<em>dict</em>) – A dictionary containing the keyword arguments passed to the cleaning
+and peak finding functions, text describing the methods, and the corresponding
+references.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+</dd></dl>
+
 </section>
 </section>
 </section>

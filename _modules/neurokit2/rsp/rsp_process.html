@@ -557,16 +557,24 @@ title="Open an issue"
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_rate</span><span class="p">,</span> <span class="n">signal_sanitize</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_rate</span>
 <span class="kn">from</span> <span class="nn">.rsp_amplitude</span> <span class="kn">import</span> <span class="n">rsp_amplitude</span>
 <span class="kn">from</span> <span class="nn">.rsp_clean</span> <span class="kn">import</span> <span class="n">rsp_clean</span>
+<span class="kn">from</span> <span class="nn">.rsp_methods</span> <span class="kn">import</span> <span class="n">rsp_methods</span>
 <span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_peaks</span>
 <span class="kn">from</span> <span class="nn">.rsp_phase</span> <span class="kn">import</span> <span class="n">rsp_phase</span>
 <span class="kn">from</span> <span class="nn">.rsp_rvt</span> <span class="kn">import</span> <span class="n">rsp_rvt</span>
 <span class="kn">from</span> <span class="nn">.rsp_symmetry</span> <span class="kn">import</span> <span class="n">rsp_symmetry</span>
 
 
-<div class="viewcode-block" id="rsp_process"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_process">[docs]</a><span class="k">def</span> <span class="nf">rsp_process</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="rsp_process"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_process">[docs]</a><span class="k">def</span> <span class="nf">rsp_process</span><span class="p">(</span>
+    <span class="n">rsp_signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span>
+    <span class="n">method_rvt</span><span class="o">=</span><span class="s2">&quot;harrison2021&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;**Process a respiration (RSP) signal**</span>
 
 <span class="sd">    Convenience function that automatically processes a respiration signal with one of the</span>
@@ -585,6 +593,12 @@ title="Open an issue"
 <span class="sd">    method : str</span>
 <span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default)</span>
 <span class="sd">        or ``&quot;biosppy&quot;``.</span>
+<span class="sd">    method_rvt : str</span>
+<span class="sd">        The rvt method to apply. Can be one of ``&quot;harrison2021&quot;`` (default), ``&quot;birn2006&quot;``</span>
+<span class="sd">        or ``&quot;power2020&quot;``.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other arguments to be passed to specific methods. For more information,</span>
+<span class="sd">        see :func:`.rsp_methods`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -628,14 +642,33 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
-    <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">signal_sanitize</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
+    <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
+    <span class="n">methods</span> <span class="o">=</span> <span class="n">rsp_methods</span><span class="p">(</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">method_rvt</span><span class="o">=</span><span class="n">method_rvt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
 
     <span class="c1"># Clean signal</span>
-    <span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span>
+    <span class="p">):</span>
+        <span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">rsp_signal</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Clean signal</span>
+        <span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">rsp_clean</span><span class="p">(</span>
+            <span class="n">rsp_signal</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;kwargs_cleaning&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="c1"># Extract, fix and format peaks</span>
     <span class="n">peak_signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">(</span>
-        <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span>
+        <span class="n">rsp_cleaned</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">],</span>
+        <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;kwargs_peaks&quot;</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
@@ -646,7 +679,12 @@ title="Open an issue"
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">symmetry</span> <span class="o">=</span> <span class="n">rsp_symmetry</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">)</span>
-    <span class="n">rvt</span> <span class="o">=</span> <span class="n">rsp_rvt</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">rvt</span> <span class="o">=</span> <span class="n">rsp_rvt</span><span class="p">(</span>
+        <span class="n">rsp_cleaned</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_rvt&quot;</span><span class="p">],</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Prepare output</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>

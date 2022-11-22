@@ -912,9 +912,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.307084           0.907316</span>
-<span class="go">2     2        10000  ...                  0.027790           0.964113</span>
-<span class="go">3     3        15000  ...                 -0.207719           0.939777</span>
+<span class="go">1     1         5000  ...                  0.636665           0.393645</span>
+<span class="go">2     2        10000  ...                  0.881819           0.967750</span>
+<span class="go">3     3        15000  ...                  0.725195           0.991108</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -1138,16 +1138,16 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1c5edfdcf70&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x24aa6269ea0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1c5edfdfe50&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x24aa626b970&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1c5edfdebf0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x24aa6269db0&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1c5e89ce830&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x24aae0a8ca0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1220,9 +1220,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.996828           0.736382</span>
-<span class="go">2     2        10000  ...                  1.815392           0.935718</span>
-<span class="go">3     3        15000  ...                 -0.812325           0.968152</span>
+<span class="go">1     1         5000  ...                  0.094100           0.987567</span>
+<span class="go">2     2        10000  ...                 -2.587577           0.847447</span>
+<span class="go">3     3        15000  ...                 -1.257740           0.489664</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1337,10 +1337,13 @@ references.</p>
 <span class="gp">In [2]: </span><span class="n">methods</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_methods</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">method_cleaning</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="nb">print</span><span class="p">(</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">])</span>
-<span class="go">The raw signal, sampled at 100 Hz, was preprocessed using a lowpass filter (with a cutoff frequency of 40 Hz, butterworth 2nd order; following Nabian et al., 2018).</span>
+<span class="go"> was preprocessed using a lowpass filter (with a cutoff frequency of 40 Hz, butterworth 2nd order; following Nabian et al., 2018).</span>
 
 <span class="gp">In [4]: </span><span class="nb">print</span><span class="p">(</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-<span class="go">Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
+<span class="go">Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013)</span>
+<span class="go">            Systolic Peak Detection in Acceleration Photoplethysmograms</span>
+<span class="go">            Measured from Emergency Responders in Tropical Conditions</span>
+<span class="go">            PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
 </pre></div>
 </div>
 </dd></dl>
