@@ -4,6 +4,7 @@ import numpy as np
 from ..misc.report import get_kwargs
 from .rsp_clean import rsp_clean
 from .rsp_findpeaks import rsp_findpeaks
+from .rsp_rvt import rsp_rvt
 
 
 def rsp_methods(
@@ -11,6 +12,7 @@ def rsp_methods(
     method="khodadad",
     method_cleaning="default",
     method_peaks="default",
+    method_rvt="power",
     **kwargs,
 ):
     """**RSP Preprocessing Methods**
@@ -36,6 +38,10 @@ def rsp_methods(
         will be set to the value of ``"method"``. Defaults to ``"default"``.
         For more information, see the ``"method"`` argument
         of :func:`.rsp_findpeaks`.
+    method_rvt: str
+        The method used to compute respiratory volume per time. Defaults to ``"harrison"``.
+        For more information, see the ``"method"`` argument
+        of :func:`.rsp_rvt`.
     **kwargs
         Other arguments to be passed to :func:`.rsp_clean` and
         :func:`.rsp_findpeaks`.
@@ -57,14 +63,9 @@ def rsp_methods(
       print(methods["references"][0])
     """
     # Sanitize inputs
-    method_cleaning = (
-        str(method).lower()
-        if method_cleaning == "default"
-        else str(method_cleaning).lower()
-    )
-    method_peaks = (
-        str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
-    )
+    method_cleaning = str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
+    method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    method_rvt = str(method_rvt).lower()
 
     # Create dictionary with all inputs
     report_info = {
@@ -72,16 +73,19 @@ def rsp_methods(
         "method": method,
         "method_cleaning": method_cleaning,
         "method_peaks": method_peaks,
+        "method_rvt": method_rvt,
         **kwargs,
     }
 
     # Get arguments to be passed to cleaning and peak finding functions
     kwargs_cleaning, report_info = get_kwargs(report_info, rsp_clean)
     kwargs_peaks, report_info = get_kwargs(report_info, rsp_findpeaks)
+    kwargs_rvt, report_info = get_kwargs(report_info, rsp_rvt)
 
     # Save keyword arguments in dictionary
     report_info["kwargs_cleaning"] = kwargs_cleaning
     report_info["kwargs_peaks"] = kwargs_peaks
+    report_info["kwargs_rvt"] = kwargs_rvt
 
     # Initialize refs list
     refs = []
@@ -119,9 +123,7 @@ def rsp_methods(
             + "Butterworth filter followed by a constant detrending."
         )
     elif method_cleaning is None or method_cleaning == "none":
-        report_info[
-            "text_cleaning"
-        ] += "was directly used for peak detection without preprocessing."
+        report_info["text_cleaning"] += "was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added
         report_info["text_cleaning"] += f"was cleaned following the {method} method."
@@ -148,8 +150,43 @@ def rsp_methods(
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
+        report_info["text_peaks"] = f"The peak detection was carried out using the method {method_peaks}."
+
+    # 3. RVT
+    # ----------
+    if method_rvt in ["harrison", "harrison2021"]:
         report_info[
-            "text_peaks"
-        ] = f"The peak detection was carried out using the method {method_peaks}."
+            "text_rvt"
+        ] = "The respiratory volume per time computation was carried out using the method described in Harrison et al. (2021)."
+        refs.append(
+            """Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., & Kasper, L. (2021).
+            A Hilbert-based method for processing respiratory timeseries.
+            Neuroimage, 230, 117787."""
+        )
+    elif method_rvt in ["birn", "birn2006"]:
+        report_info[
+            "text_rvt"
+        ] = "The respiratory volume per time computation was carried out using the method described in Birn et al. (2006)."
+        refs.append(
+            """Birn, R. M., Diamond, J. B., Smith, M. A., & Bandettini, P. A. (2006).
+            Separating respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in
+            fMRI. Neuroimage, 31(4), 1536-1548."""
+        )
+    elif method_rvt in ["power", "power2020"]:
+        report_info[
+            "text_rvt"
+        ] = "The respiratory volume per time computation was carried out using the method described in Power at al. (2020)."
+        refs.append(
+            """Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., & Jones, R. M. (2020).
+            Characteristics of respiratory measures in young adults scanned at rest, including systematic
+            changes and "missed" deep breaths. Neuroimage, 204, 116234."""
+        )
+    elif method_rvt in ["none"]:
+        report_info["text_rvt"] = "Respiratory volume per time was not computed."
+    else:
+        report_info[
+            "text_rvt"
+        ] = f"The respiratory volume per time computation was carried out using the method described in {method_rvt}."
+
     report_info["references"] = list(np.unique(refs))
     return report_info

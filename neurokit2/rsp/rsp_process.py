@@ -12,7 +12,7 @@ from .rsp_rvt import rsp_rvt
 from .rsp_symmetry import rsp_symmetry
 
 
-def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
+def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018", method_rvt="harrison2020", **kwargs):
     """**Process a respiration (RSP) signal**
 
     Convenience function that automatically processes a respiration signal with one of the
@@ -31,6 +31,9 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs)
     method : str
         The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default)
         or ``"biosppy"``.
+    method_rvt : str
+        The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"birn2006"``
+        or ``"power2020"``.
     **kwargs
         Other arguments to be passed to specific methods. For more information,
         see :func:`.rsp_methods`.
@@ -78,7 +81,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs)
     """
     # Sanitize input
     rsp_signal = as_vector(rsp_signal)
-    methods = rsp_methods(sampling_rate=sampling_rate, method=method, **kwargs)
+    methods = rsp_methods(sampling_rate=sampling_rate, method=method, method_rvt=method_rvt, **kwargs)
 
     # Clean signal
     if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
@@ -107,7 +110,12 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs)
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
     rate = signal_rate(info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal))
     symmetry = rsp_symmetry(rsp_cleaned, peak_signal)
-    rvt = rsp_rvt(rsp_cleaned, method="harrison2021", sampling_rate=sampling_rate, silent=True)
+    rvt = rsp_rvt(
+        rsp_cleaned,
+        method=methods["method_rvt"],
+        sampling_rate=sampling_rate,
+        silent=True,
+    )
 
     # Prepare output
     signals = pd.DataFrame(
