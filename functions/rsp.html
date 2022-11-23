@@ -1713,8 +1713,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
-<span class="go">     RRV_RMSSD   RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1170.143866  4045.894737  686.44324  ...    0.548301  0.057158        -inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  725.797855      3863.0  512.704285  ...    0.957544   0.14968         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1741,7 +1741,7 @@ often considered noise.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of  <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> (default for rsp_rvt), <code class="docutils literal notranslate"><span class="pre">&quot;harrison2021&quot;</span></code> or
+<li><p><strong>method</strong> (<em>str, optional</em>) – The rvt method to apply. Can be one of  <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;harrison2021&quot;</span></code> or
 <code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>.</p></li>
 <li><p><strong>boundaries</strong> (<em>list, optional</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>. Lower and upper limit of (humanly possible)
 breath frequency in Hertz.</p></li>
@@ -1858,9 +1858,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.289084     -0.026698</span>
-<span class="go">2     2        10000  ...          0.264239      0.026162</span>
-<span class="go">3     3        15000  ...          0.258040      0.011186</span>
+<span class="go">1     1         5000  ...          0.170336      0.009949</span>
+<span class="go">2     2        10000  ...          0.279106     -0.029311</span>
+<span class="go">3     3        15000  ...          0.175125      0.043188</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
