@@ -35,7 +35,7 @@ def rsp_rvt(
     sampling_rate : int, optional
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method: str, optional
-        The rvt method to apply. Can be one of  ``"power2020"`` (default for rsp_rvt), ``"harrison2021"`` or
+        The rvt method to apply. Can be one of  ``"power2020"`` (default), ``"harrison2021"`` or
         ``"birn2006"``.
     boundaries : list, optional
         Only applies if method is ``"harrison"``. Lower and upper limit of (humanly possible)
