@@ -215,19 +215,29 @@ def _hrv_rsa_p2t(
     """Peak-to-trough algorithm (P2T)"""
 
     # Find all RSP cycles and the Rpeaks within
-    cycles_rri = []
+    cycles_rri_inh = []
+    cycles_rri_exh = []
     for idx in range(len(rsp_onsets) - 1):
         cycle_init = rsp_onsets[idx]
+        rsp_peak=rsp_peaks[idx]
         cycle_end = rsp_onsets[idx + 1]
-        cycles_rri.append(rpeaks[np.logical_and(rpeaks >= cycle_init, rpeaks < cycle_end)])
+    # separately select RRI for inhalation and exhalation    
+        cycles_rri_inh.append(rpeaks[np.logical_and(rpeaks >= cycle_init, rpeaks < rsp_peak)])
+        cycles_rri_exh.append(rpeaks[np.logical_and(rpeaks >= rsp_peak, rpeaks < cycle_end)])
+       
 
     # Iterate over all cycles
-    rsa_values = np.full(len(cycles_rri), np.nan)
-    for i, cycle in enumerate(cycles_rri):
-        # Estimate of RSA during each breath
-        RRis = np.diff(cycle) / sampling_rate*1000
-        if len(RRis) > 1:
-            rsa_values[i] = np.max(RRis) - np.min(RRis)
+    rsa_values = np.full(len(cycles_rri_exh), np.nan)
+    for i in range(len(cycles_rri_exh)):
+        # Estimate of RSA during each breathing phase
+        RRis_inh = np.diff(cycles_rri_inh[i]) / sampling_rate*1000
+        RRis_exh = np.diff(cycles_rri_exh[i]) / sampling_rate*1000
+        if np.logical_and(len(RRis_inh) > 0,len(RRis_exh) > 0): # you need at least one RRI
+            rsa_value = np.max(RRis_exh) - np.min(RRis_inh)
+            if rsa_value > 0: #take into consideration only rsp cycles in which the max exh > than min inh
+                rsa_values[i]=rsa_value   
+                
+            
 
     if continuous is False:
         rsa = {"RSA_P2T_Mean": np.nanmean(rsa_values)}
@@ -242,6 +252,7 @@ def _hrv_rsa_p2t(
         )
 
     return rsa
+
 
 
 def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
