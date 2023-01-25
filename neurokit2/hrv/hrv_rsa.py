@@ -217,12 +217,15 @@ def _hrv_rsa_p2t(
     # Find all RSP cycles and the Rpeaks within
     cycles_rri_inh = []
     cycles_rri_exh = []
+    #add 750 ms offset to exh peak and end of the cycle in order to include next RRI (see Grossman 1990)
+    rsp_offset=0.75*sampling_rate
     for idx in range(len(rsp_onsets) - 1):
         cycle_init = rsp_onsets[idx]
+        rsp_peak_offset=rsp_peaks[idx]+rsp_offset
         rsp_peak=rsp_peaks[idx]
-        cycle_end = rsp_onsets[idx + 1]
+        cycle_end = rsp_onsets[idx + 1]+rsp_offset
     # separately select RRI for inhalation and exhalation    
-        cycles_rri_inh.append(rpeaks[np.logical_and(rpeaks >= cycle_init, rpeaks < rsp_peak)])
+        cycles_rri_inh.append(rpeaks[np.logical_and(rpeaks >= cycle_init, rpeaks < rsp_peak_offset)])
         cycles_rri_exh.append(rpeaks[np.logical_and(rpeaks >= rsp_peak, rpeaks < cycle_end)])
        
 
@@ -236,9 +239,9 @@ def _hrv_rsa_p2t(
             rsa_value = np.max(RRis_exh) - np.min(RRis_inh)
             if rsa_value > 0: #take into consideration only rsp cycles in which the max exh > than min inh
                 rsa_values[i]=rsa_value   
+            else:
+                rsa_values[i]= 0 #negative effect should be factor into the mean using 0 (see Grossman 1990)
                 
-            
-
     if continuous is False:
         rsa = {"RSA_P2T_Mean": np.nanmean(rsa_values)}
         rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])  # pylint: disable=E1111
