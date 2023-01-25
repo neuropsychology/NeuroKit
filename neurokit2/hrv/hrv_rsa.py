@@ -225,7 +225,7 @@ def _hrv_rsa_p2t(
     rsa_values = np.full(len(cycles_rri), np.nan)
     for i, cycle in enumerate(cycles_rri):
         # Estimate of RSA during each breath
-        RRis = np.diff(cycle) / sampling_rate
+        RRis = np.diff(cycle) / sampling_rate*1000
         if len(RRis) > 1:
             rsa_values[i] = np.max(RRis) - np.min(RRis)
 
