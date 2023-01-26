@@ -114,6 +114,8 @@ def test_ppg_clean():
 
 def test_ppg_findpeaks():
 
+    # Test Elgendi method
+
     sampling_rate = 500
 
     ppg = nk.ppg_simulate(
@@ -138,3 +140,28 @@ def test_ppg_findpeaks():
 
     assert peaks.size == 29
     assert peaks.sum() == 219764
+
+    # Test MSPTD method
+
+    sampling_rate = 100
+    ppg = nk.ppg_simulate(
+        duration=10,
+        sampling_rate=sampling_rate,
+        heart_rate=60,
+        frequency_modulation=0.01,
+        ibi_randomness=0.1,
+        drift=1,
+        motion_amplitude=0.5,
+        powerline_amplitude=0.1,
+        burst_amplitude=1,
+        burst_number=5,
+        random_state=42,
+        show=True,
+    )
+
+    info_msptd = ppg_findpeaks2(ppg, sampling_rate=sampling_rate, method = 'MSPTD', show=True)
+
+    peaks = info_msptd["PPG_Peaks"]
+
+    assert peaks.size == 9
+    assert peaks.sum() == 4636
