@@ -4,7 +4,7 @@ import scipy.spatial
 
 from ..complexity import complexity_rqa
 from ..signal import signal_detrend
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
 
 
 def hrv_rqa(
@@ -84,12 +84,8 @@ def hrv_rqa(
 
     """
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
-
-    # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, _, _ = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
     # Linear detrend (Zimatore, 2021)
     rri = signal_detrend(rri, method="polynomial", order=1)

@@ -97,7 +97,10 @@ def ppg_simulate(
     x_onset -= x_onset[0]  # make sure seconds start at zero
     # Add respiratory sinus arrythmia (frequency modulation).
     periods, x_onset = _frequency_modulation(
-        periods, x_onset, modulation_frequency=0.05, modulation_strength=frequency_modulation
+        periods,
+        x_onset,
+        modulation_frequency=0.05,
+        modulation_strength=frequency_modulation,
     )
     # Randomly modulate duration of waves by subracting a random value between
     # 0 and ibi_randomness% of the wave duration (see function definition).

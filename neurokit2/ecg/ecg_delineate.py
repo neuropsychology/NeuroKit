@@ -19,14 +19,7 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_delineate(
-    ecg_cleaned,
-    rpeaks=None,
-    sampling_rate=1000,
-    method="dwt",
-    show=False,
-    show_type="peaks",
-    check=False,
-    **kwargs
+    ecg_cleaned, rpeaks=None, sampling_rate=1000, method="dwt", show=False, show_type="peaks", check=False, **kwargs
 ):
     """**Delineate QRS complex**
 
@@ -122,10 +115,7 @@ def ecg_delineate(
         if cols:
             ecg_cleaned = ecg_cleaned[cols[0]].values
         else:
-            raise ValueError(
-                "NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract"
-                "cleaned signal."
-            )
+            raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract" "cleaned signal.")
 
     elif isinstance(ecg_cleaned, dict):
         for i in ecg_cleaned:
@@ -135,10 +125,7 @@ def ecg_delineate(
                 ecg_cleaned = signals[cols[0]].values
 
             else:
-                raise ValueError(
-                    "NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract"
-                    "cleaned signal."
-                )
+                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract" "cleaned signal.")
 
     elif isinstance(ecg_cleaned, pd.Series):
         ecg_cleaned = ecg_cleaned.values
@@ -160,9 +147,7 @@ def ecg_delineate(
         waves = _dwt_ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=sampling_rate)
 
     else:
-        raise ValueError(
-            "NeuroKit error: ecg_delineate(): 'method' should be one of 'peak'," "'cwt' or 'dwt'."
-        )
+        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be one of 'peak'," "'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
     waves_noNA = waves.copy()
@@ -246,9 +231,7 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
         speaks.append(S_index)
 
     # dwt to delineate tp waves, onsets, offsets and qrs ontsets and offsets
-    ecg = signal_resample(
-        ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate
-    )
+    ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate)
     dwtmatr = _dwt_compute_multiscales(ecg, 9)
 
     # # only for debugging
@@ -261,9 +244,7 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
     qpeaks_resampled = _dwt_resample_points(qpeaks, sampling_rate, analysis_sampling_rate)
 
-    tpeaks, ppeaks = _dwt_delineate_tp_peaks(
-        ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate
-    )
+    tpeaks, ppeaks = _dwt_delineate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate)
     qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
         rpeaks_resampled, dwtmatr, ppeaks, tpeaks, qpeaks_resampled, sampling_rate=analysis_sampling_rate
     )
@@ -280,32 +261,16 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     )
 
     return dict(
-        ECG_P_Peaks=_dwt_resample_points(
-            ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
-        ECG_P_Onsets=_dwt_resample_points(
-            ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
-        ECG_P_Offsets=_dwt_resample_points(
-            poffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
+        ECG_P_Peaks=_dwt_resample_points(ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_P_Onsets=_dwt_resample_points(ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_P_Offsets=_dwt_resample_points(poffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_Q_Peaks=qpeaks,
-        ECG_R_Onsets=_dwt_resample_points(
-            qrs_onsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
-        ECG_R_Offsets=_dwt_resample_points(
-            qrs_offsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
+        ECG_R_Onsets=_dwt_resample_points(qrs_onsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_R_Offsets=_dwt_resample_points(qrs_offsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_S_Peaks=speaks,
-        ECG_T_Peaks=_dwt_resample_points(
-            tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
-        ECG_T_Onsets=_dwt_resample_points(
-            tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
-        ECG_T_Offsets=_dwt_resample_points(
-            toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate
-        ),
+        ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_T_Onsets=_dwt_resample_points(tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_T_Offsets=_dwt_resample_points(toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
     )
 
 
@@ -363,12 +328,8 @@ def _dwt_delineate_tp_peaks(
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_adjust_parameters(rpeaks, sampling_rate, target="degree")
     # sanitize search duration by HR
-    p2r_duration = _dwt_adjust_parameters(
-        rpeaks, sampling_rate, duration=p2r_duration, target="duration"
-    )
-    rt_duration = _dwt_adjust_parameters(
-        rpeaks, sampling_rate, duration=rt_duration, target="duration"
-    )
+    p2r_duration = _dwt_adjust_parameters(rpeaks, sampling_rate, duration=p2r_duration, target="duration")
+    rt_duration = _dwt_adjust_parameters(rpeaks, sampling_rate, duration=rt_duration, target="duration")
 
     tpeaks = []
     for rpeak_ in rpeaks:
@@ -387,9 +348,7 @@ def _dwt_delineate_tp_peaks(
 
         ecg_local = ecg[srch_idx_start:srch_idx_end]
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
-        peaks = list(
-            filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks)
-        )  # pylint: disable=W0640
+        peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))  # pylint: disable=W0640
         if dwt_local[0] > 0:  # just append
             peaks = [0] + peaks
 
@@ -397,18 +356,12 @@ def _dwt_delineate_tp_peaks(
         candidate_peaks = []
         candidate_peaks_scores = []
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
-            correct_sign = (
-                dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
-            )  # pylint: disable=R1716
+            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = (
-                    signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
-                )
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
-                score = ecg_local[idx_zero] - (
-                    float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width)
-                )
+                score = ecg_local[idx_zero] - (float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
                 candidate_peaks.append(idx_zero)
                 candidate_peaks_scores.append(score)
 
@@ -444,13 +397,9 @@ def _dwt_delineate_tp_peaks(
         candidate_peaks = []
         candidate_peaks_scores = []
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
-            correct_sign = (
-                dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
-            )  # pylint: disable=R1716
+            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = (
-                    signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
-                )
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - abs(
@@ -481,12 +430,8 @@ def _dwt_delineate_tp_onsets_offsets(
     degree_offset=2,
 ):
     # sanitize search duration by HR
-    duration_onset = _dwt_adjust_parameters(
-        rpeaks, sampling_rate, duration=duration_onset, target="duration"
-    )
-    duration_offset = _dwt_adjust_parameters(
-        rpeaks, sampling_rate, duration=duration_offset, target="duration"
-    )
+    duration_onset = _dwt_adjust_parameters(rpeaks, sampling_rate, duration=duration_onset, target="duration")
+    duration_offset = _dwt_adjust_parameters(rpeaks, sampling_rate, duration=duration_offset, target="duration")
     degree = _dwt_adjust_parameters(rpeaks, sampling_rate, target="degree")
     onsets = []
     offsets = []
@@ -530,10 +475,7 @@ def _dwt_delineate_tp_onsets_offsets(
         if not (-dwt_local[offset_slope_peaks[0] :] < epsilon_offset).any():
             offsets.append(np.nan)
             continue
-        candidate_offsets = (
-            np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0]
-            + offset_slope_peaks[0]
-        )
+        candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
         offsets.append(candidate_offsets[0] + srch_idx_start)
 
         # # only for debugging
@@ -590,9 +532,7 @@ def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, qpeaks, sampling_
         if not (dwt_local[onset_slope_peaks[0] :] < epsilon_offset).any():
             offsets.append(np.nan)
             continue
-        candidate_offsets = (
-            np.where(dwt_local[onset_slope_peaks[0] :] < epsilon_offset)[0] + onset_slope_peaks[0]
-        )
+        candidate_offsets = np.where(dwt_local[onset_slope_peaks[0] :] < epsilon_offset)[0] + onset_slope_peaks[0]
         offsets.append(candidate_offsets[0] + srch_idx_start)
 
         # # only for debugging
@@ -608,8 +548,8 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
     """Return multiscales wavelet transforms."""
 
     def _apply_H_filter(signal_i, power=0):
-        zeros = np.zeros(2 ** power - 1)
-        timedelay = 2 ** power
+        zeros = np.zeros(2**power - 1)
+        timedelay = 2**power
         banks = np.r_[
             1.0 / 8,
             zeros,
@@ -624,8 +564,8 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
         return signal_f
 
     def _apply_G_filter(signal_i, power=0):
-        zeros = np.zeros(2 ** power - 1)
-        timedelay = 2 ** power
+        zeros = np.zeros(2**power - 1)
+        timedelay = 2**power
         banks = np.r_[2, zeros, -2]
         signal_f = scipy.signal.convolve(signal_i, banks, mode="full")
         signal_f[:-timedelay] = signal_f[timedelay:]  # timeshift: 1 step
@@ -651,19 +591,13 @@ def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
     tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
 
     # qrs onsets and offsets
-    qrs_onsets, qrs_offsets = _onset_offset_delineator(
-        ecg, rpeaks, peak_type="rpeaks", sampling_rate=sampling_rate
-    )
+    qrs_onsets, qrs_offsets = _onset_offset_delineator(ecg, rpeaks, peak_type="rpeaks", sampling_rate=sampling_rate)
 
     # ppeaks onsets and offsets
-    p_onsets, p_offsets = _onset_offset_delineator(
-        ecg, ppeaks, peak_type="ppeaks", sampling_rate=sampling_rate
-    )
+    p_onsets, p_offsets = _onset_offset_delineator(ecg, ppeaks, peak_type="ppeaks", sampling_rate=sampling_rate)
 
     # tpeaks onsets and offsets
-    t_onsets, t_offsets = _onset_offset_delineator(
-        ecg, tpeaks, peak_type="tpeaks", sampling_rate=sampling_rate
-    )
+    t_onsets, t_offsets = _onset_offset_delineator(ecg, tpeaks, peak_type="tpeaks", sampling_rate=sampling_rate)
 
     # No dwt defined method for Q and S peak
     # Adopting manual method from "peak" method
@@ -726,18 +660,14 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             search_window = cwtmatr[2, index_peak - half_wave_width : index_peak]
             prominence = 0.20 * max(search_window)
             height = 0.0
-            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(
-                search_window, height=height, prominence=prominence
-            )
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         elif peak_type in ["tpeaks", "ppeaks"]:
             search_window = -cwtmatr[4, index_peak - half_wave_width : index_peak]
 
             prominence = 0.10 * max(search_window)
             height = 0.0
-            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(
-                search_window, height=height, prominence=prominence
-            )
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         if len(wt_peaks) == 0:
             # print("Fail to find onset at index: %d", index_peak)
@@ -754,13 +684,9 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                 epsilon_onset = 0.25 * wt_peaks_data["peak_heights"][-1]
             leftbase = wt_peaks_data["left_bases"][-1] + index_peak - half_wave_width
             if peak_type == "rpeaks":
-                candidate_onsets = (
-                    np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
-                )
+                candidate_onsets = np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
             elif peak_type in ["tpeaks", "ppeaks"]:
-                candidate_onsets = (
-                    np.where(-cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
-                )
+                candidate_onsets = np.where(-cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
 
             candidate_onsets = candidate_onsets.tolist() + [leftbase]
             if len(candidate_onsets) == 0:
@@ -772,16 +698,12 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         if peak_type == "rpeaks":
             search_window = -cwtmatr[2, index_peak : index_peak + half_wave_width]
             prominence = 0.50 * max(search_window)
-            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(
-                search_window, height=height, prominence=prominence
-            )
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         elif peak_type in ["tpeaks", "ppeaks"]:
             search_window = cwtmatr[4, index_peak : index_peak + half_wave_width]
             prominence = 0.10 * max(search_window)
-            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(
-                search_window, height=height, prominence=prominence
-            )
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         if len(wt_peaks) == 0:
             # print("Fail to find offsets at index: %d", index_peak)
@@ -797,13 +719,9 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                 epsilon_offset = 0.4 * wt_peaks_data["peak_heights"][0]
             rightbase = wt_peaks_data["right_bases"][0] + index_peak
             if peak_type == "rpeaks":
-                candidate_offsets = (
-                    np.where((-cwtmatr[2, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
-                )
+                candidate_offsets = np.where((-cwtmatr[2, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
             elif peak_type in ["tpeaks", "ppeaks"]:
-                candidate_offsets = (
-                    np.where((cwtmatr[4, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
-                )
+                candidate_offsets = np.where((cwtmatr[4, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
 
             candidate_offsets = candidate_offsets.tolist() + [rightbase]
             if len(candidate_offsets) == 0:
@@ -844,13 +762,9 @@ def _peaks_delineator(ecg, rpeaks, sampling_rate=1000):
         # set threshold for heights of peaks to find significant peaks in wavelet
         threshold = 0.125 * max(search_window)
         significant_peaks_tp = []
-        significant_peaks_tp = [
-            peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp["peak_heights"][j] > threshold
-        ]
+        significant_peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp["peak_heights"][j] > threshold]
 
-        significant_peaks_groups.append(
-            _find_tppeaks(ecg, significant_peaks_tp, sampling_rate=sampling_rate)
-        )
+        significant_peaks_groups.append(_find_tppeaks(ecg, significant_peaks_tp, sampling_rate=sampling_rate))
 
     tpeaks, ppeaks = zip(*[(g[0], g[-1]) for g in significant_peaks_groups])
 
@@ -875,19 +789,13 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
     tppeaks = []
     for index_cur, index_next in zip(keep_tp[:-1], keep_tp[1:]):
         # limit 1
-        correct_sign = (
-            cwtmatr[4, :][index_cur] < 0 and cwtmatr[4, :][index_next] > 0
-        )  # pylint: disable=R1716
+        correct_sign = cwtmatr[4, :][index_cur] < 0 and cwtmatr[4, :][index_next] > 0  # pylint: disable=R1716
         #    near = (index_next - index_cur) < max_wv_peak_dist #limit 2
         #    if near and correct_sign:
         if correct_sign:
-            index_zero_cr = (
-                signal_zerocrossings(cwtmatr[4, :][index_cur : index_next + 1])[0] + index_cur
-            )
+            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur : index_next + 1])[0] + index_cur
             nb_idx = int(max_search_duration * sampling_rate)
-            index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (
-                index_zero_cr - nb_idx
-            )
+            index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (index_zero_cr - nb_idx)
             tppeaks.append(index_max)
     if len(tppeaks) == 0:
         tppeaks = [np.nan]
@@ -936,12 +844,8 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         # Onsets/Offsets ------
         P_onsets.append(_ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P))
         T_offsets.append(_ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T))
-        # Manual fix for T_offsets
-        if T_offsets[-1] >= len(ecg):
-            T_offsets[-1] = np.nan
 
-    # Return info dictionary
-    return {
+    info = {
         "ECG_P_Peaks": P_list,
         "ECG_Q_Peaks": Q_list,
         "ECG_S_Peaks": S_list,
@@ -949,6 +853,14 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         "ECG_P_Onsets": P_onsets,
         "ECG_T_Offsets": T_offsets,
     }
+
+    # Ensure that all indices are not larger than ECG signal indices
+    for _, value in info.items():
+        if value[-1] >= len(ecg):
+            value[-1] = np.nan
+
+    # Return info dictionary
+    return info
 
 
 # Internal
@@ -974,9 +886,7 @@ def _ecg_delineator_peak_P(rpeak, heartbeat, R, Q):
         return np.nan, None
 
     segment = heartbeat.iloc[:Q]  # Select left of Q wave
-    P = signal_findpeaks(
-        segment["Signal"], height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min())
-    )
+    P = signal_findpeaks(segment["Signal"], height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
 
     if len(P["Peaks"]) == 0:
         return np.nan, None
@@ -987,9 +897,7 @@ def _ecg_delineator_peak_P(rpeak, heartbeat, R, Q):
 
 def _ecg_delineator_peak_S(rpeak, heartbeat):
     segment = heartbeat[0:]  # Select right hand side
-    S = signal_findpeaks(
-        -segment["Signal"], height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min())
-    )
+    S = signal_findpeaks(-segment["Signal"], height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
 
     if len(S["Peaks"]) == 0:
         return np.nan, None
@@ -1002,9 +910,7 @@ def _ecg_delineator_peak_T(rpeak, heartbeat, R, S):
         return np.nan, None
 
     segment = heartbeat.iloc[R + S :]  # Select right of S wave
-    T = signal_findpeaks(
-        segment["Signal"], height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min())
-    )
+    T = signal_findpeaks(segment["Signal"], height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
 
     if len(T["Peaks"]) == 0:
         return np.nan, None

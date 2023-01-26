@@ -58,6 +58,100 @@ def test_hrv():
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
 
 
+def test_rri_input_hrv():
+
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+
+    _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
+    peaks = peaks["ECG_R_Peaks"]
+    rri = np.diff(peaks).astype(float)
+    rri_time = peaks[1:] / 1000
+
+    rri[3:5] = [np.nan, np.nan]
+
+    ecg_hrv = nk.hrv({"RRI": rri, "RRI_Time": rri_time})
+
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.2)
+
+
+@pytest.mark.parametrize("detrend", ["polynomial", "loess"])
+def test_hrv_detrended_rri(detrend):
+
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+
+    _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
+    peaks = peaks["ECG_R_Peaks"]
+    rri = np.diff(peaks).astype(float)
+    rri_time = peaks[1:] / 1000
+
+    rri_processed, rri_processed_time, _ = nk.intervals_process(
+        rri, intervals_time=rri_time, interpolate=False, interpolation_rate=None, detrend=detrend
+    )
+
+    ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
+
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
+
+
+@pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 100])
+def test_hrv_interpolated_rri(interpolation_rate):
+
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+
+    _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
+    peaks = peaks["ECG_R_Peaks"]
+    rri = np.diff(peaks).astype(float)
+    rri_time = peaks[1:] / 1000
+
+    if interpolation_rate == "from_mean_rri":
+        interpolation_rate = 1000 / np.mean(rri)
+
+    rri_processed, rri_processed_time, _ = nk.intervals_process(
+        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate
+    )
+
+    ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
+
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
+
+
+def test_hrv_missing():
+    random_state = 42
+    # Download data
+    data = nk.data("bio_resting_5min_100hz")
+    sampling_rate = 100
+    ecg = data["ECG"]
+
+    _, peaks = nk.ecg_process(ecg, sampling_rate=sampling_rate)
+    peaks = peaks["ECG_R_Peaks"]
+
+    rri = np.diff(peaks / sampling_rate).astype(float) * 1000
+    rri_time = peaks[1:] / sampling_rate
+
+    # remove some intervals and their corresponding timestamps
+    np.random.seed(random_state)
+    missing = np.random.randint(0, len(rri), size=int(len(rri) / 5))
+    rri_missing = rri[np.array([i for i in range(len(rri)) if i not in missing])]
+    rri_time_missing = rri_time[np.array([i for i in range(len(rri_time)) if i not in missing])]
+
+    orig_hrv = nk.hrv_time(peaks, sampling_rate=sampling_rate)
+    miss_only_rri_hrv = nk.hrv_time({"RRI": rri_missing})
+    # by providing the timestamps corresponding to each interval
+    # we should be able to better estimate the original RMSSD
+    # before some intervals were removed
+    # (at least for this example signal)
+    miss_rri_time_hrv = nk.hrv_time({"RRI": rri_missing, "RRI_Time": rri_time_missing})
+
+    abs_diff_only_rri = np.mean(
+        np.abs(np.diff([orig_hrv["HRV_RMSSD"].values[0], miss_only_rri_hrv["HRV_RMSSD"].values[0]]))
+    )
+    abs_diff_rri_time = np.mean(
+        np.abs(np.diff([orig_hrv["HRV_RMSSD"].values[0], miss_rri_time_hrv["HRV_RMSSD"].values[0]]))
+    )
+
+    assert abs_diff_only_rri > abs_diff_rri_time
+
+
 def test_hrv_rsa():
     data = nk.data("bio_eventrelated_100hz")
     ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
@@ -74,9 +168,7 @@ def test_hrv_rsa():
         "RSA_Gates_SD",
     ]
 
-    rsa_features = nk.hrv_rsa(
-        ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False
-    )
+    rsa_features = nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
 
     assert all(key in rsa_feature_columns for key in rsa_features.keys())
 

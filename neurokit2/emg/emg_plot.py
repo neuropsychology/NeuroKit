@@ -78,7 +78,7 @@ def emg_plot(emg_signals, sampling_rate=None):
         ax1.set_xlabel("Samples")
 
     fig.suptitle("Electromyography (EMG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.2)
+    plt.tight_layout(h_pad=0.2)
 
     # Plot cleaned and raw EMG.
     ax0.set_title("Raw and Cleaned Signal")

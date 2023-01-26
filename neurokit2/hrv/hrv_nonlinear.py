@@ -21,7 +21,8 @@ from ..complexity import (
 )
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from .hrv_utils import _hrv_format_input
+from .intervals_utils import _intervals_successive
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
@@ -127,6 +128,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
         Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
         Can be a list of indices or the output(s) of other functions such as :func:`.ecg_peaks`,
         :func:`.ppg_peaks`, :func:`.ecg_process` or :func:`.bio_process`.
+        Can also be a dict containing the keys `RRI` and `RRI_Time`
+        to directly pass the R-R intervals and their timestamps, respectively.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -203,27 +206,30 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     """
     # Sanitize input
-    peaks = _hrv_sanitize_input(peaks)
-    if isinstance(peaks, tuple):  # Detect actual sampling rate
-        peaks, sampling_rate = peaks[0], peaks[1]
+    # If given peaks, compute R-R intervals (also referred to as NN) in milliseconds
+    rri, rri_time, rri_missing = _hrv_format_input(peaks, sampling_rate=sampling_rate)
 
-    # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
-
+    if rri_missing:
+        warn(
+            "Missing interbeat intervals have been detected. "
+            "Note that missing intervals can distort some HRV features, in particular "
+            "nonlinear indices.",
+            category=NeuroKitWarning,
+        )
     # Initialize empty container for results
     out = {}
 
     # Poincaré features (SD1, SD2, etc.)
-    out = _hrv_nonlinear_poincare(rri, out)
+    out = _hrv_nonlinear_poincare(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     # Heart Rate Fragmentation
-    out = _hrv_nonlinear_fragmentation(rri, out)
+    out = _hrv_nonlinear_fragmentation(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     # Heart Rate Asymmetry
-    out = _hrv_nonlinear_poincare_hra(rri, out)
+    out = _hrv_nonlinear_poincare_hra(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     # DFA
-    out = _hrv_dfa(peaks, rri, out, **kwargs)
+    out = _hrv_dfa(rri, out, **kwargs)
 
     # Complexity
     tolerance = 0.2 * np.std(rri, ddof=1)
@@ -241,7 +247,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out["LZC"], _ = complexity_lempelziv(rri, **kwargs)
 
     if show:
-        _hrv_nonlinear_show(rri, out)
+        _hrv_nonlinear_show(rri, rri_time=rri_time, rri_missing=rri_missing, out=out)
 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
@@ -250,7 +256,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 # =============================================================================
 # Get SD1 and SD2
 # =============================================================================
-def _hrv_nonlinear_poincare(rri, out):
+def _hrv_nonlinear_poincare(rri, rri_time=None, rri_missing=False, out={}):
     """Compute SD1 and SD2.
 
     - Brennan (2001). Do existing measures of Poincare plot geometry reflect nonlinear features of
@@ -261,6 +267,12 @@ def _hrv_nonlinear_poincare(rri, out):
     # HRV and hrvanalysis
     rri_n = rri[:-1]
     rri_plus = rri[1:]
+
+    if rri_missing:
+        # Only include successive differences
+        rri_plus = rri_plus[_intervals_successive(rri, intervals_time=rri_time)]
+        rri_n = rri_n[_intervals_successive(rri, intervals_time=rri_time)]
+
     x1 = (rri_n - rri_plus) / np.sqrt(2)  # Eq.7
     x2 = (rri_n + rri_plus) / np.sqrt(2)
     sd1 = np.std(x1, ddof=1)
@@ -285,7 +297,7 @@ def _hrv_nonlinear_poincare(rri, out):
     return out
 
 
-def _hrv_nonlinear_poincare_hra(rri, out):
+def _hrv_nonlinear_poincare_hra(rri, rri_time=None, rri_missing=False, out={}):
     """Heart Rate Asymmetry Indices.
 
     - Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
@@ -296,6 +308,12 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     N = len(rri) - 1
     x = rri[:-1]  # rri_n, x-axis
     y = rri[1:]  # rri_plus, y-axis
+
+    if rri_missing:
+        # Only include successive differences
+        x = x[_intervals_successive(rri, intervals_time=rri_time)]
+        y = y[_intervals_successive(rri, intervals_time=rri_time)]
+        N = len(x)
 
     diff = y - x
     decelerate_indices = np.where(diff > 0)[0]  # set of points above IL where y > x
@@ -375,17 +393,22 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     return out
 
 
-def _hrv_nonlinear_fragmentation(rri, out):
+def _hrv_nonlinear_fragmentation(rri, rri_time=None, rri_missing=False, out={}):
     """Heart Rate Fragmentation Indices - Costa (2017)
 
     The more fragmented a time series is, the higher the PIP, IALS, PSS, and PAS indices will be.
     """
 
     diff_rri = np.diff(rri)
+    if rri_missing:
+        # Only include successive differences
+        diff_rri = diff_rri[_intervals_successive(rri, intervals_time=rri_time)]
+
     zerocrossings = signal_zerocrossings(diff_rri)
 
     # Percentage of inflection points (PIP)
-    out["PIP"] = len(zerocrossings) / len(rri)
+    N = len(diff_rri) + 1
+    out["PIP"] = len(zerocrossings) / N
 
     # Inverse of the average length of the acceleration/deceleration segments (IALS)
     accelerations = np.where(diff_rri > 0)[0]
@@ -413,7 +436,7 @@ def _hrv_nonlinear_fragmentation(rri, out):
 # =============================================================================
 # DFA
 # =============================================================================
-def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
+def _hrv_dfa(rri, out, n_windows="default", **kwargs):
 
     # if "dfa_windows" in kwargs:
     #    dfa_windows = kwargs["dfa_windows"]
@@ -424,7 +447,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
     # Determine max beats
     if dfa_windows[1][1] is None:
-        max_beats = len(peaks) / 10
+        max_beats = (len(rri) + 1) / 10  # Number of peaks divided by 10
     else:
         max_beats = dfa_windows[1][1]
 
@@ -441,9 +464,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # For monofractal
     out["DFA_alpha1"], _ = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)
     # For multifractal
-    mdfa_alpha1, _ = fractal_dfa(
-        rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs
-    )
+    mdfa_alpha1, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs)
     for k in mdfa_alpha1.columns:
         out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
@@ -463,9 +484,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         # For monofractal
         out["DFA_alpha2"], _ = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)
         # For multifractal
-        mdfa_alpha2, _ = fractal_dfa(
-            rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs
-        )
+        mdfa_alpha2, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs)
         for k in mdfa_alpha2.columns:
             out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
 
@@ -475,9 +494,9 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 # =============================================================================
 # Plot
 # =============================================================================
-def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
+def _hrv_nonlinear_show(rri, rri_time=None, rri_missing=False, out={}, ax=None, ax_marg_x=None, ax_marg_y=None):
 
-    mean_heart_period = np.mean(rri)
+    mean_heart_period = np.nanmean(rri)
     sd1 = out["SD1"]
     sd2 = out["SD2"]
     if isinstance(sd1, pd.Series):
@@ -488,6 +507,11 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     # Poincare values
     ax1 = rri[:-1]
     ax2 = rri[1:]
+
+    if rri_missing:
+        # Only include successive differences
+        ax1 = ax1[_intervals_successive(rri, intervals_time=rri_time)]
+        ax2 = ax2[_intervals_successive(rri, intervals_time=rri_time)]
 
     # Set grid boundaries
     ax1_lim = (max(ax1) - min(ax1)) / 10
@@ -523,9 +547,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     ax.imshow(np.rot90(f), extent=[ax1_min, ax1_max, ax2_min, ax2_max], aspect="auto")
 
     # Marginal densities
-    ax_marg_x.hist(
-        ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none"
-    )
+    ax_marg_x.hist(ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none")
     ax_marg_y.hist(
         ax2,
         bins=int(len(ax2) / 10),
@@ -544,9 +566,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     kde2 = scipy.stats.gaussian_kde(ax2)
     x2_plot = np.linspace(ax2_min, ax2_max, len(ax2))
     x2_dens = kde2.evaluate(x2_plot)
-    ax_marg_y.fill_betweenx(
-        x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2
-    )
+    ax_marg_y.fill_betweenx(x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2)
 
     # Turn off marginal axes labels
     ax_marg_x.axis("off")
@@ -557,9 +577,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     width = 2 * sd2 + 1
     height = 2 * sd1 + 1
     xy = (mean_heart_period, mean_heart_period)
-    ellipse = matplotlib.patches.Ellipse(
-        xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False
-    )
+    ellipse = matplotlib.patches.Ellipse(xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False)
     ellipse.set_alpha(0.5)
     ellipse.set_facecolor("#2196F3")
     ax.add_patch(ellipse)
