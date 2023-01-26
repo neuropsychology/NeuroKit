@@ -27,13 +27,12 @@ from .microstates import *
 from .misc import *
 from .ppg import *
 from .rsp import *
-
-# Export functions
 from .signal import *
 from .stats import *
+from .video import *
 
 # Info
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 
 # Maintainer info

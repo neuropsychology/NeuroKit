@@ -33,6 +33,8 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
 
     Examples
     ---------
+    .. ipython:: python
+
       import neurokit2 as nk
 
       eeg = nk.mne_data("filt-0-40_raw")
@@ -41,14 +43,15 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
       peaks1 = nk.microstates_peaks(eeg, distance_between=0.01)
       peaks2 = nk.microstates_peaks(eeg, distance_between=0.05)
       peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
-      @savefig p_microstates_peaks_png scale=100%
+
+      @savefig p_microstates_peaks1.png scale=100%
       nk.events_plot([peaks1[peaks1 < 500], peaks2[peaks2 < 500], peaks3[peaks3 < 500]], gfp[0:500])
       @suppress
       plt.close()
 
     See Also
     --------
-    eeg_gfp
+    .eeg_gfp
 
     """
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
@@ -61,21 +64,30 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
             "for this function to run. Please provide it as an argument.",
         )
 
-    # If we want ALL the indices
-    if gfp is False:
-        return np.arange(len(eeg))
-
-    # If we don't want to rely on peaks but take uniformly spaced samples (used in microstates_clustering)
-    if isinstance(gfp, (int, float, str)):
-        if isinstance(gfp, str):  # If gfp = 'all'
-            gfp = len(eeg[0, :])
+    # If we don't want to rely on peaks but take uniformly spaced samples
+    # (used in microstates_clustering)
+    if isinstance(gfp, (int, float)):
         if gfp <= 1:  # If fraction
             gfp = int(gfp * len(eeg[0, :]))
         return np.linspace(0, len(eeg[0, :]), gfp, endpoint=False, dtype=int)
 
-    # If GFP peaks
-    if gfp is None:
-        gfp = eeg_gfp(eeg, **kwargs)
+    # Deal with string inputs
+    if isinstance(gfp, str):
+        if gfp == "all":
+            gfp = False
+        elif gfp == "gfp":
+            gfp = True
+        else:
+            raise ValueError(
+                "The `gfp` argument was not understood.",
+            )
+
+    # If we want ALL the indices
+    if gfp is False:
+        return np.arange(len(eeg))
+
+    # if gfp is True or gfp is None:
+    gfp = eeg_gfp(eeg, **kwargs)
 
     peaks = _microstates_peaks_gfp(
         gfp=gfp, sampling_rate=sampling_rate, distance_between=distance_between

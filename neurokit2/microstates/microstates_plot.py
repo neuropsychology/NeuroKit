@@ -80,7 +80,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
 
     # Plot topomaps -----------------------------------------------------------
     for i, map in enumerate(microstates):
-        _, _ = mne.viz.plot_topomap(map, info, axes=ax[i], show=False)
+        _, _ = mne.viz.plot_topomap(map, info, axes=ax[i], ch_type="eeg", show=False)
         ax[i].set_title(f"{i}")
 
     # Plot GFP ---------------------------------------------------------------

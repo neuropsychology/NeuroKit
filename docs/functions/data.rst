@@ -18,6 +18,10 @@ I/O
 """"""""""""""""""
 .. autofunction:: neurokit2.data.read_bitalino
 
+*read_video()*
+""""""""""""""""""
+.. autofunction:: neurokit2.data.read_video
+
 *write_csv()*
 """""""""""""""
 .. autofunction:: neurokit2.data.write_csv
@@ -27,4 +31,4 @@ I/O
 
 .. automodule:: neurokit2.data
    :members:
-   :exclude-members: data, read_acqknowledge, read_bitalino, write_csv
+   :exclude-members: data, read_acqknowledge, read_bitalino, write_csv, read_video

@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..signal import signal_rate, signal_sanitize
+from ..misc import as_vector
+from ..signal import signal_rate
 from .rsp_amplitude import rsp_amplitude
 from .rsp_clean import rsp_clean
+from .rsp_methods import rsp_methods
 from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
+from .rsp_rvt import rsp_rvt
+from .rsp_symmetry import rsp_symmetry
 
 
-def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
+def rsp_process(
+    rsp_signal,
+    sampling_rate=1000,
+    method="khodadad2018",
+    method_rvt="harrison2021",
+    **kwargs
+):
     """**Process a respiration (RSP) signal**
 
     Convenience function that automatically processes a respiration signal with one of the
@@ -27,6 +37,12 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     method : str
         The processing pipeline to apply. Can be one of ``"khodadad2018"`` (default)
         or ``"biosppy"``.
+    method_rvt : str
+        The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"birn2006"``
+        or ``"power2020"``.
+    **kwargs
+        Other arguments to be passed to specific methods. For more information,
+        see :func:`.rsp_methods`.
 
     Returns
     -------
@@ -44,6 +60,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
         * ``"RSP_PhaseCompletion"``: breathing phase completion, expressed in percentage (from 0 to
           1), representing the stage of the current respiratory phase.
+         * ``"RSP_RVT"``: respiratory volume per time (RVT).
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
         accessible with the keys ``"RSP_Peaks"``, and ``"RSP_Troughs"`` respectively, as well as the
@@ -51,7 +68,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, signal_rate, rsp_amplitude, rsp_plot
+    rsp_clean, rsp_findpeaks, .signal_rate, rsp_amplitude, rsp_plot, rsp_phase, rsp_rvt, rsp_symmetry
 
     Examples
     --------
@@ -61,31 +78,68 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
       signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+
       @savefig p_rsp_process_1.png scale=100%
-      fig = nk.rsp_plot(signals)
+      fig = nk.rsp_plot(signals, sampling_rate=1000)
       @suppress
       plt.close()
 
     """
     # Sanitize input
-    rsp_signal = signal_sanitize(rsp_signal)
+    rsp_signal = as_vector(rsp_signal)
+    methods = rsp_methods(
+        sampling_rate=sampling_rate, method=method, method_rvt=method_rvt, **kwargs
+    )
 
     # Clean signal
-    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
+    if (
+        methods["method_cleaning"] is None
+        or methods["method_cleaning"].lower() == "none"
+    ):
+        rsp_cleaned = rsp_signal
+    else:
+        # Clean signal
+        rsp_cleaned = rsp_clean(
+            rsp_signal,
+            sampling_rate=sampling_rate,
+            method=methods["method_cleaning"],
+            **methods["kwargs_cleaning"],
+        )
 
     # Extract, fix and format peaks
-    peak_signal, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    peak_signal, info = rsp_peaks(
+        rsp_cleaned,
+        sampling_rate=sampling_rate,
+        method=methods["method_peaks"],
+        amplitude_min=0.3,
+        **methods["kwargs_peaks"],
+    )
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Get additional parameters
     phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = signal_rate(info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal))
+    rate = signal_rate(
+        info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal)
+    )
+    symmetry = rsp_symmetry(rsp_cleaned, peak_signal)
+    rvt = rsp_rvt(
+        rsp_cleaned,
+        method=methods["method_rvt"],
+        sampling_rate=sampling_rate,
+        silent=True,
+    )
 
     # Prepare output
     signals = pd.DataFrame(
-        {"RSP_Raw": rsp_signal, "RSP_Clean": rsp_cleaned, "RSP_Amplitude": amplitude, "RSP_Rate": rate}
+        {
+            "RSP_Raw": rsp_signal,
+            "RSP_Clean": rsp_cleaned,
+            "RSP_Amplitude": amplitude,
+            "RSP_Rate": rate,
+            "RSP_RVT": rvt,
+        }
     )
-    signals = pd.concat([signals, phase, peak_signal], axis=1)
+    signals = pd.concat([signals, phase, symmetry, peak_signal], axis=1)
 
     return signals, info

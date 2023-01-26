@@ -1,5 +1,5 @@
 Epochs
--------
+--------
 
 Main
 ^^^^^^^^^^^^^^^^
@@ -12,7 +12,7 @@ Main
 .. autofunction:: neurokit2.epochs.epochs_plot
 
 *epochs_average()*
-"""""""""""""""""
+"""""""""""""""""""
 .. autofunction:: neurokit2.epochs.epochs_average
 
 *epochs_to_array()*

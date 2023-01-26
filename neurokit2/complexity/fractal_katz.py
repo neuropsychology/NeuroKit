@@ -10,9 +10,8 @@ def fractal_katz(signal):
     the signal are summed and averaged, and the maximum distance between the starting point and any
     other point in the sample.
 
-    Here, fractal dimensions range from 1.0 for straight lines, through
-    approximately 1.15 for random-walk waveforms, to approaching 1.5 for the most
-    convoluted waveforms.
+    Fractal dimensions range from 1.0 for straight lines, through approximately 1.15 for
+    random-walks, to approaching 1.5 for the most convoluted waveforms.
 
     Parameters
     ----------

@@ -29,7 +29,9 @@ def microstates_segment(
     random initializations.The run that resulted in the best segmentation, as measured by global
     explained variance (GEV), is used.
 
-    * **kmod**: Modified k-means algorithm.
+    * **kmod**: Modified k-means algorithm. It differs from a traditional k-means in that it is
+      *polarity-invariant*, which means that samples with EEG potential distribution maps that are
+      similar but have opposite polarity will be assigned the *same* microstate class.
     * **kmeans**: Normal k-means.
     * **kmedoids**: k-medoids clustering, a more stable version of k-means.
     * **pca**: Principal Component Analysis.

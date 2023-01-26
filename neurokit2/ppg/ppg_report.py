@@ -1,12 +1,35 @@
 import numpy as np
 import pandas as pd
 
-from ..misc.report import html_combine, text_combine
+from ..misc.report import html_save, text_combine
 from .ppg_plot import ppg_plot
 
 
 def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000}):
-    """Create report containing description and figures of processing.
+    """**PPG Reports**
+
+    Create report containing description and figures of processing.
+    This function is meant to be used via the `ppg_process()` function.
+
+    Parameters
+    ----------
+    file : str
+        Name of the file to save the report to. Can also be ``"text"`` to simply print the text in
+        the console.
+    signals : pd.DataFrame
+        A DataFrame of signals. Usually obtained from :func:`.ppg_process`.
+    info : dict
+        A dictionary containing the information of peaks and the signals' sampling rate. Usually
+        obtained from :func:`.ppg_process`.
+
+    Returns
+    -------
+    str
+        The report as a string.
+
+    See Also
+    --------
+    ppg_process
 
     Examples
     --------
@@ -14,12 +37,25 @@ def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000})
 
       import neurokit2 as nk
 
-      ppg_report(file="myreport.html")
+      ppg = nk.ppg_simulate(duration=10, sampling_rate=200, heart_rate=70)
+      signals, info = nk.ppg_process(ppg, sampling_rate=200, report="console_only")
 
     """
 
     description, ref = text_combine(info)
-    summary_table = ppg_table(signals)
+    table_html, table_md = ppg_table(signals)
+
+    # Print text in the console
+    for key in ["text_cleaning", "text_peaks"]:
+        print(info[key] + "\n")
+
+    print(table_md)
+
+    print("\nReferences")
+    for s in info["references"]:
+        print("- " + s)
+
+    # Make figures
     fig = '<h2 style="background-color: #FB661C">Visualization</h1>'
     fig += (
         ppg_plot(signals, sampling_rate=info["sampling_rate"], static=False)
@@ -27,23 +63,34 @@ def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000})
         .split("<body>")[1]
         .split("</body>")[0]
     )
-    contents = [description, summary_table, fig, ref]
-    html_combine(contents=contents, file=file)
+
+    # Save report
+    if ".html" in file:
+        print(f"The report has been saved to {file}")
+        contents = [description, table_html, fig, ref]
+        html_save(contents=contents, file=file)
 
 
+# =============================================================================
+# Internals
+# =============================================================================
 def ppg_table(signals):
     """Create table to summarize statistics of a PPG signal."""
 
+    # TODO: add more features
     summary = {}
-    # currently only implemented for PPG
+
     summary["PPG_Rate_Mean"] = np.mean(signals["PPG_Rate"])
     summary["PPG_Rate_SD"] = np.std(signals["PPG_Rate"])
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
-    try:
-        print(summary_table.to_markdown(index=None))
-    except ImportError:
-        print(summary_table)  # in case printing markdown export fails
-    return (
-        '<h2 style="background-color: #D60574">Summary table</h1>'
-        + summary_table.to_html(index=None)
+
+    # Make HTML and Markdown versions
+    html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
+        index=None
     )
+
+    try:
+        md = summary_table.to_markdown(index=None)
+    except ImportError:
+        md = summary_table  # in case printing markdown export fails
+    return html, md
