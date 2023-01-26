@@ -259,12 +259,13 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     # plt.grid(True)
     # plt.show()
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
+    qpeaks_resampled = _dwt_resample_points(qpeaks, sampling_rate, analysis_sampling_rate)
 
     tpeaks, ppeaks = _dwt_delineate_tp_peaks(
         ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate
     )
     qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
-        rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate
+        rpeaks_resampled, dwtmatr, ppeaks, tpeaks, qpeaks_resampled, sampling_rate=analysis_sampling_rate
     )
     ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(
         ppeaks, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate
@@ -543,13 +544,13 @@ def _dwt_delineate_tp_onsets_offsets(
     return onsets, offsets
 
 
-def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250):
+def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, qpeaks, sampling_rate=250):
     degree = _dwt_adjust_parameters(rpeaks, sampling_rate, target="degree")
     onsets = []
-    for i in range(len(rpeaks)):  # pylint: disable=C0200
+    for i in range(len(qpeaks)):  # pylint: disable=C0200
         # look for onsets
         srch_idx_start = ppeaks[i]
-        srch_idx_end = rpeaks[i]
+        srch_idx_end = qpeaks[i]
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
             continue
