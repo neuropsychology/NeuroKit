@@ -27,7 +27,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
 
     Returns
     -------
-    signals : DataFrame
+    pd.DataFrame
         A DataFrame of same length as :func:`.rsp_signal` containing the following columns:
 
         * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
@@ -71,6 +71,4 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     # Phase Completion
     completion = signal_phase(inspiration, method="percent")
 
-    out = pd.DataFrame({"RSP_Phase": inspiration, "RSP_Phase_Completion": completion})
-
-    return out
+    return pd.DataFrame({"RSP_Phase": inspiration, "RSP_Phase_Completion": completion})

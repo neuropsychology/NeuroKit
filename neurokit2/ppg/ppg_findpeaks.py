@@ -7,7 +7,7 @@ import scipy.signal
 from ..signal import signal_smooth
 
 
-def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False):
+def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **kwargs):
     """**Find systolic peaks in a photoplethysmogram (PPG) signal**
 
     Parameters
@@ -65,7 +65,7 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
     """
     method = method.lower()
     if method in ["elgendi"]:
-        peaks = _ppg_findpeaks_elgendi(ppg_cleaned, sampling_rate, show=show)
+        peaks = _ppg_findpeaks_elgendi(ppg_cleaned, sampling_rate, show=show, **kwargs)
     elif method in ["msptd"]:
         peaks = _ppg_findpeaks_msptd(ppg_cleaned, sampling_rate, show=show, **kwargs)
     else:
@@ -78,7 +78,13 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
 
 
 def _ppg_findpeaks_elgendi(
-    signal, sampling_rate=1000, peakwindow=0.111, beatwindow=0.667, beatoffset=0.02, mindelay=0.3, show=False
+    signal,
+    sampling_rate=1000,
+    peakwindow=0.111,
+    beatwindow=0.667,
+    beatoffset=0.02,
+    mindelay=0.3,
+    show=False,
 ):
     """Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
     Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585.
@@ -122,7 +128,9 @@ def _ppg_findpeaks_elgendi(
 
     # Identify systolic peaks within waves (ignore waves that are too short).
     num_waves = min(beg_waves.size, end_waves.size)
-    min_len = int(np.rint(peakwindow * sampling_rate))  # this is threshold 2 in the paper
+    min_len = int(
+        np.rint(peakwindow * sampling_rate)
+    )  # this is threshold 2 in the paper
     min_delay = int(np.rint(mindelay * sampling_rate))
     peaks = [0]
 

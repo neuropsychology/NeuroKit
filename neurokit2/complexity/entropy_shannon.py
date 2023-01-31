@@ -23,8 +23,8 @@ def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, 
     Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B",
     "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
     the signal into a number of bins using for instance ``pd.cut(signal, bins=100, labels=False)``.
-    This can be done automatically using the ``method`` argument, which will be transferred to :
-    func:`complexity_symbolize`.
+    This can be done automatically using the ``method`` argument, which will be transferred to
+    :func:`complexity_symbolize`.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 

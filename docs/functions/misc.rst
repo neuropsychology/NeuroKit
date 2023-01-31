@@ -33,10 +33,6 @@ Misc
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.find_knee
 
-*intervals_to_peaks()*
-""""""""""""""""""""""""""
-.. autofunction:: neurokit2.misc.intervals_to_peaks
-
 *listify()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.listify
@@ -44,6 +40,10 @@ Misc
 *parallel_run()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.parallel_run
+
+*progress_bar()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.misc.progress_bar
 
 *replace()*
 """"""""""""""""""""""""""
@@ -58,5 +58,5 @@ Misc
 
 .. automodule:: neurokit2.misc
    :members:
-   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, intervals_to_peaks, listify, parallel_run, replace, as_vector, find_knee
+   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, intervals_to_peaks, listify, parallel_run, progress_bar, replace, as_vector, find_knee
 

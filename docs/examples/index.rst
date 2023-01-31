@@ -20,6 +20,7 @@ Physiological
    rsp_rrv/rsp_rrv
    eog_analyze/eog_analyze
    signal_simulation/signal_simulation
+   ppg_report/ppg_report
 
 EEG
 =============
@@ -29,6 +30,7 @@ EEG
 
    eeg_power/eeg_power
    eeg_complexity/eeg_complexity
+   eeg_microstates/eeg_microstates
 
 Misc
 =============

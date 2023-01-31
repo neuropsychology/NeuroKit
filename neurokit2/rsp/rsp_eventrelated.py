@@ -68,6 +68,7 @@ def rsp_eventrelated(epochs, silent=False):
       # Analyze
       nk.rsp_eventrelated(epochs)
 
+    .. ipython:: python
 
       # Example with real data
       data = nk.data("bio_eventrelated_100hz")
@@ -100,6 +101,9 @@ def rsp_eventrelated(epochs, silent=False):
 
         # Inspiration
         data[i] = _rsp_eventrelated_inspiration(epochs[i], data[i])
+
+        # RVT
+        data[i] = _rsp_eventrelated_rvt(epochs[i], data[i])
 
         # Fill with more info
         data[i] = _eventrelated_addinfo(epochs[i], data[i])
@@ -134,7 +138,8 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
     output["RSP_Amplitude_Baseline"] = baseline
     output["RSP_Amplitude_Max"] = np.max(signal) - baseline
     output["RSP_Amplitude_Min"] = np.min(signal) - baseline
-    output["RSP_Amplitude_Mean"] = np.mean(signal) - baseline
+    output["RSP_Amplitude_MeanRaw"] = np.mean(signal)
+    output["RSP_Amplitude_Mean"] = output["RSP_Amplitude_MeanRaw"] - baseline
     output["RSP_Amplitude_SD"] = np.std(signal)
 
     return output
@@ -154,5 +159,55 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
     # Indication of inspiration
     output["RSP_Phase"] = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
     output["RSP_Phase_Completion"] = epoch["RSP_Phase_Completion"][epoch.index > 0].iloc[0]
+
+    return output
+
+
+def _rsp_eventrelated_rvt(epoch, output={}):
+
+    # Sanitize input
+    if "RSP_RVT" not in epoch:
+        warn(
+            "Input does not have an `RSP_RVT` column. Will skip all RVT-related features.",
+            category=NeuroKitWarning,
+        )
+        return output
+
+    # Get baseline
+    zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
+    baseline = epoch["RSP_RVT"].iloc[zero]
+    signal = epoch["RSP_RVT"].values[zero + 1 : :]
+
+    # Mean
+    output["RSP_RVT_Baseline"] = baseline
+    output["RSP_RVT_Mean"] = np.mean(signal) - baseline
+
+    return output
+
+
+def _rsp_eventrelated_symmetry(epoch, output={}):
+
+    # Sanitize input
+    if "RSP_Symmetry_PeakTrough" not in epoch:
+        warn(
+            "Input does not have an `RSP_Symmetry_PeakTrough` column."
+            + " Will skip all symmetry-related features.",
+            category=NeuroKitWarning,
+        )
+        return output
+
+    # Get baseline
+    zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
+    baseline1 = epoch["RSP_Symmetry_PeakTrough"].iloc[zero]
+    signal1 = epoch["RSP_Symmetry_PeakTrough"].values[zero + 1 : :]
+
+    baseline2 = epoch["RSP_Symmetry_RiseDecay"].iloc[zero]
+    signal2 = epoch["RSP_Symmetry_RiseDecay"].values[zero + 1 : :]
+
+    # Mean
+    output["RSP_Symmetry_PeakTrough_Baseline"] = baseline1
+    output["RSP_Symmetry_RiseDecay_Baseline"] = baseline2
+    output["RSP_Symmetry_PeakTrough_Mean"] = np.mean(signal1) - baseline1
+    output["RSP_Symmetry_RiseDecay_Mean"] = np.mean(signal2) - baseline2
 
     return output

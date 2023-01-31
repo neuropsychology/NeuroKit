@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import pickle
+import urllib
 
 import pandas as pd
 from sklearn import datasets as sklearn_datasets
@@ -58,7 +60,8 @@ def data(dataset="bio_eventrelated_100hz"):
         order was: ``["Negative", "Neutral", "Neutral", "Negative"]``)
       * ``sampling_rate=100``
 
-
+    * **eeg_1min_200hz**: Returns an MNE raw object containing 1 min of EEG
+      data (from the MNE-sample dataset).
 
     Parameters
     ----------
@@ -155,6 +158,14 @@ def data(dataset="bio_eventrelated_100hz"):
       @suppress
       plt.close()
 
+    .. ipython:: python
+
+      raw = nk.data("eeg_1min_200hz")
+      @savefig p_data9.png scale=100%
+      nk.signal_plot(raw.get_data()[0:3, 0:2000], sampling_rate=200)
+      @suppress
+      plt.close()
+
     """
     # TODO: one could further improve this function with like
     # selectors 'ecg=True, eda=True, restingstate=True' that would
@@ -212,7 +223,14 @@ def data(dataset="bio_eventrelated_100hz"):
 
         return df
 
-    # TODO: Add EEG (fif and edf datasets)
+    # TODO: Add more EEG (fif and edf datasets)
+    if dataset in ["eeg_1min_200hz"]:
+
+        return pickle.load(
+            urllib.request.urlopen(
+                "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
+            )
+        )
 
     # General case
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable

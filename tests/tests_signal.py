@@ -156,8 +156,34 @@ def test_signal_filter():
     # ax0.plot(signal_corrupted)
     # ax1.plot(signal)
     # ax2.plot(signal_clean * 100)
+    # plt.suptitle("Powerline")
+    # plt.show()
 
     assert np.allclose(sum(signal_clean - signal), -2, atol=0.2)
+
+    lowcut = 60
+    highcut = 40
+    order = 2
+
+    signal_bandstop = nk.signal_filter(
+        signal_corrupted, sampling_rate=sampling_rate, lowcut=lowcut, highcut=highcut, method="butterworth",
+        order=order
+    )
+
+    freqs = [highcut, lowcut]
+    filter_type = "bandstop"
+    sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
+    signal_bandstop_scipy = scipy.signal.sosfiltfilt(sos, signal_corrupted)
+
+    # figure, (ax0, ax1, ax2, ax3) = plt.subplots(nrows=4, ncols=1, sharex=True)
+    # ax0.plot(signal_corrupted)
+    # ax1.plot(signal)
+    # ax2.plot(signal_bandstop * 100)
+    # ax3.plot(signal_bandstop_scipy * 100)
+    # plt.suptitle("Bandstop")
+    # plt.show()
+
+    assert np.allclose(signal_bandstop, signal_bandstop_scipy, atol=0.2)
 
 
 def test_signal_interpolate():

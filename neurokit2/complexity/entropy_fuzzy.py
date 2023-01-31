@@ -28,6 +28,8 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
+    approximate : bool
+        If ``True``, will compute the fuzzy approximate entropy (FuzzyApEn).
     **kwargs
         Other arguments.
 
@@ -38,8 +40,6 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute fuzzy entropy.
-    approximate : bool
-        If ``True``, will compute the fuzzy approximate entropy (FuzzyApEn).
 
     See Also
     --------
@@ -61,6 +61,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
 
       fuzzycapen, parameters = nk.entropy_fuzzy(signal, approximate=True, corrected=True)
       fuzzycapen
+
 
     References
     ----------

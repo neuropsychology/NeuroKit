@@ -60,9 +60,9 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
 
     References
     ----------
-    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S.
-      (2018). An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological
-      Data. IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
+    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018).
+      An open-source feature extraction tool for the analysis of peripheral physiological data.
+      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.
 
     """
     ppg_signal = as_vector(ppg_signal)
@@ -117,7 +117,7 @@ def _ppg_clean_elgendi(ppg_signal, sampling_rate):
 
 
 def _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=None):
-    """Low-pass filter for continuous BP signal preprocessing, adaopted from Nabian et al. (2018)."""
+    """Low-pass filter for continuous BP signal preprocessing, adapted from Nabian et al. (2018)."""
 
     # Determine low-pass filter value
     highcut = 40

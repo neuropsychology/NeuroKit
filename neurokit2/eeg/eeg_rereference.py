@@ -141,7 +141,11 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
                 "for this function to run. Please install it first (`pip install mne`).",
             ) from e
         old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
-        eeg = mne.preprocessing.compute_current_source_density(eeg)
+        eeg = mne.preprocessing.compute_current_source_density(eeg, **kwargs)
+
+        # Reconvert CSD type to EEG (https://github.com/mne-tools/mne-python/issues/11426)
+        # channels = np.array(eeg.ch_names)[mne.pick_types(eeg.info, csd=True)]
+        # eeg.set_channel_types(dict(zip(channels, ["eeg"] * len(channels))))
         mne.set_log_level(old_verbosity_level)
     else:
         eeg = eeg.set_eeg_reference(reference, verbose=False, **kwargs)

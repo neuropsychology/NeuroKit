@@ -163,10 +163,10 @@ def test_ecg_findpeaks():
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
     assert np.allclose(info_kalidas["ECG_R_Peaks"].size, 68, atol=1)
 
-    # Test martinez2003 method
+    # Test martinez2004 method
     ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0, random_state=42)
     ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
-    info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2003")
+    info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2004")
     assert np.allclose(info_martinez["ECG_R_Peaks"].size, 69, atol=1)
 
 
@@ -244,6 +244,17 @@ def test_ecg_delineate():
     assert np.allclose(len(waves_cwt["ECG_P_Offsets"]), 22, atol=1)
     assert np.allclose(len(waves_cwt["ECG_T_Onsets"]), 22, atol=1)
     assert np.allclose(len(waves_cwt["ECG_T_Offsets"]), 22, atol=1)
+
+
+def test_ecg_invert():
+
+    sampling_rate = 500
+    noise = 0.05
+
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=3)
+    ecg_inverted = ecg * -1 + 2 * np.nanmean(ecg)
+    ecg_fixed, _ = nk.ecg_invert(ecg_inverted)
+    assert np.allclose((ecg - ecg_fixed).mean(), 0, atol=1e-6)
 
 
 def test_ecg_intervalrelated():

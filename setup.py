@@ -44,6 +44,8 @@ test_requirements = requirements + [
     "PyWavelets",
     "EMD-signal",
     "astropy",
+    "plotly",
+    "ts2vg",
 ]
 
 # Setup

@@ -2,42 +2,41 @@ name: 🏭Tests
 
 # on: [push, pull_request]
 on:
-  # Trigger the workflow on push to master branch or pull request
-  push:
-    branches:
-      - master
-  pull_request:
+    # Trigger the workflow on push to master branch or pull request
+    push:
+        branches:
+            - master
+    pull_request:
 
 jobs:
-  build:
-    runs-on: ${{ matrix.platform }}
-    strategy:
-      max-parallel: 4
-      matrix:
-        # https://help.github.com/articles/virtual-environments-for-github-actions
-        platform:
-          - ubuntu-latest  # ubuntu-18.04
-        #  - macos-latest  # macOS-10.14
-        #  - windows-latest  # windows-2019
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    build:
+        runs-on: ${{ matrix.platform }}
+        strategy:
+            max-parallel: 4
+            matrix:
+                # https://help.github.com/articles/virtual-environments-for-github-actions
+                platform:
+                    - ubuntu-latest # ubuntu-18.04
+                #  - macos-latest  # macOS-10.14
+                #  - windows-latest  # windows-2019
+                python-version: ["3.7", "3.8", "3.9", "3.10"]
 
-    steps:
-    - uses: actions/checkout@master
+        steps:
+            - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade setuptools pip wheel
-        python -m pip install tox
+            - name: Install dependencies
+              run: |
+                  python -m pip install --upgrade setuptools pip wheel
+                  python -m pip install tox
 
-    - name: Test with tox
-      run: |
-        cd $GITHUB_WORKSPACE && python -m tox -e py
+            - name: Test with tox
+              run: |
+                  cd $GITHUB_WORKSPACE && python -m tox -e py
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v3
