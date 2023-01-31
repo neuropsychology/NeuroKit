@@ -242,7 +242,9 @@ def entropy_multiscale(
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
     # Prevent multiple arguments error in case 'delay' is passed in kwargs
     if "delay" in kwargs:
         kwargs.pop("delay")
