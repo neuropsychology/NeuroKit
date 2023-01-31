@@ -227,7 +227,7 @@ def _ppg_findpeaks_bishop(
         _, ax0 = plt.subplots(nrows=1, ncols=1, sharex=True)
         ax0.plot(signal, label="signal")
         ax0.scatter(peaks, signal[peaks], c="r")
-        ax0.scatter(peaks, signal[onsets], c="b")
+        ax0.scatter(onsets, signal[onsets], c="b")
         ax0.set_title("PPG Peaks (Method by Bishop et al., 2018)")
 
     return peaks, onsets
