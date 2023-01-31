@@ -8,8 +8,13 @@ import scipy.linalg
 from ..ecg.ecg_rsp import ecg_rsp
 from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
-from ..signal import (signal_filter, signal_interpolate, signal_rate,
-                      signal_resample, signal_timefrequency)
+from ..signal import (
+    signal_filter,
+    signal_interpolate,
+    signal_rate,
+    signal_resample,
+    signal_timefrequency,
+)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .hrv_utils import _hrv_format_input, _hrv_get_rri
 from .intervals_process import intervals_process
@@ -215,19 +220,37 @@ def _hrv_rsa_p2t(
     """Peak-to-trough algorithm (P2T)"""
 
     # Find all RSP cycles and the Rpeaks within
-    cycles_rri = []
+    cycles_rri_inh = []
+    cycles_rri_exh = []
+    # Add 750 ms offset to exhalation peak and end of the cycle in order to include next RRI
+    # (see Grossman, 1990)
+    rsp_offset = 0.75 * sampling_rate
+
     for idx in range(len(rsp_onsets) - 1):
         cycle_init = rsp_onsets[idx]
-        cycle_end = rsp_onsets[idx + 1]
-        cycles_rri.append(rpeaks[np.logical_and(rpeaks >= cycle_init, rpeaks < cycle_end)])
+        rsp_peak_offset = rsp_peaks[idx] + rsp_offset
+        rsp_peak = rsp_peaks[idx]
+        cycle_end = rsp_onsets[idx + 1] + rsp_offset
+        # Separately select RRI for inhalation and exhalation
+        cycles_rri_inh.append(
+            rpeaks[np.logical_and(rpeaks >= cycle_init, rpeaks < rsp_peak_offset)]
+        )
+        cycles_rri_exh.append(rpeaks[np.logical_and(rpeaks >= rsp_peak, rpeaks < cycle_end)])
 
     # Iterate over all cycles
-    rsa_values = np.full(len(cycles_rri), np.nan)
-    for i, cycle in enumerate(cycles_rri):
-        # Estimate of RSA during each breath
-        RRis = np.diff(cycle) / sampling_rate
-        if len(RRis) > 1:
-            rsa_values[i] = np.max(RRis) - np.min(RRis)
+    rsa_values = np.full(len(cycles_rri_exh), np.nan)
+    for i in range(len(cycles_rri_exh)):
+        # Estimate of RSA during each breathing phase
+        RRis_inh = np.diff(cycles_rri_inh[i]) / sampling_rate * 1000
+        RRis_exh = np.diff(cycles_rri_exh[i]) / sampling_rate * 1000
+        if np.logical_and(len(RRis_inh) > 0, len(RRis_exh) > 0):  # you need at least one RRI
+            rsa_value = np.max(RRis_exh) - np.min(RRis_inh)
+            if rsa_value > 0:
+                # Take into consideration only rsp cycles in which the max exh > than min inh
+                rsa_values[i] = rsa_value
+            else:
+                # Negative effect should be factor into the mean using 0 (see Grossman 1990)
+                rsa_values[i] = 0
 
     if continuous is False:
         rsa = {"RSA_P2T_Mean": np.nanmean(rsa_values)}
@@ -445,7 +468,7 @@ def _get_multipeak_window(nperseg, window_number=8):
         2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length * np.sin(np.pi * B * length)
     )
 
-    r_den = C ** 2 + (2 * np.pi * length) ** 2
+    r_den = C**2 + (2 * np.pi * length) ** 2
     r = np.divide(r_num, r_den)
 
     rpeak = np.append(r0, r)  # Covariance function peaked spectrum
@@ -509,7 +532,9 @@ def _hrv_rsa_cycles(signals):
 
 def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
 
-    rpeaks, sampling_rate = _hrv_format_input(rpeaks, sampling_rate=sampling_rate, output_format="peaks")
+    rpeaks, sampling_rate = _hrv_format_input(
+        rpeaks, sampling_rate=sampling_rate, output_format="peaks"
+    )
 
     # Sanity Checks
     if isinstance(ecg_signals, tuple):
