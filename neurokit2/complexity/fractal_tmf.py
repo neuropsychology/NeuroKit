@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
+from packaging import version
 
 from ..signal import signal_surrogate
 from .fractal_dfa import fractal_dfa
@@ -11,8 +12,8 @@ def fractal_tmf(signal, n=40, show=False, **kwargs):
     """**Multifractal Nonlinearity (tMF)**
 
     The Multifractal Nonlinearity index (*t*\\MF) is the *t*\\-value resulting from the comparison
-    between the multifractality of the signal (measured by the spectrum width, see
-    :func:`.fractal_dfa`) and the multifractality of linearized
+    of the multifractality of the signal (measured by the spectrum width, see
+    :func:`.fractal_dfa`) with the multifractality of linearized
     :func:`surrogates <.signal_surrogate>` obtained by the IAAFT method (i.e., reshuffled series
     with comparable linear structure).
 
@@ -111,9 +112,14 @@ def fractal_tmf(signal, n=40, show=False, **kwargs):
         w[i] = fractal_dfa(surro, multifractal=True, show=False)[0]["Width"]
 
     # Run t-test
-    t, p = scipy.stats.ttest_1samp(w, w0)
-    t = t[0]
-    info["p"] = p[0]
+    # TODO: adjust in the future
+    if version.parse(scipy.__version__) < version.parse("1.10.0"):
+        t, p = scipy.stats.ttest_1samp(w, w0)
+        t = t[0]
+        t = t.item()
+        info["p"] = p[0]
+    else:
+        t, info["p"] = scipy.stats.ttest_1samp(w, w0)
 
     if show is True:
         pd.Series(w).plot(kind="density", label="Width of surrogates")
