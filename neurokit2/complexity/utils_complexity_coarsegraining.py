@@ -120,7 +120,6 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
       plt.close()
 
     **Benchmarking**
-
     .. ipython:: python
 
       signal = nk.signal_simulate(duration=10, frequency=5)
