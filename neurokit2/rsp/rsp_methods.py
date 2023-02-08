@@ -16,10 +16,12 @@ def rsp_methods(
     **kwargs,
 ):
     """**RSP Preprocessing Methods**
+
     This function analyzes and specifies the methods used in the preprocessing, and create a
     textual description of the methods used. It is used by :func:`rsp_process()` to dispatch the
     correct methods to each subroutine of the pipeline and :func:`rsp_report()` to create a
     preprocessing report.
+
     Parameters
     ----------
     sampling_rate : int
@@ -45,25 +47,31 @@ def rsp_methods(
     **kwargs
         Other arguments to be passed to :func:`.rsp_clean` and
         :func:`.rsp_findpeaks`.
+
     Returns
     -------
     report_info : dict
         A dictionary containing the keyword arguments passed to the cleaning
         and peak finding functions, text describing the methods, and the corresponding
         references.
+
     See Also
     --------
     rsp_process, rsp_clean, rsp_findpeaks
+
     Examples
     --------
     .. ipython:: python
+
       import neurokit2 as nk
       methods = nk.rsp_methods(sampling_rate=100, method="Khodadad", method_cleaning="hampel")
       print(methods["text_cleaning"])
       print(methods["references"][0])
     """
     # Sanitize inputs
-    method_cleaning = str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
+    method_cleaning = (
+        str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
+    )
     method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
     method_rvt = str(method_rvt).lower()
 
@@ -123,7 +131,9 @@ def rsp_methods(
             + "Butterworth filter followed by a constant detrending."
         )
     elif method_cleaning is None or method_cleaning == "none":
-        report_info["text_cleaning"] += "was directly used for peak detection without preprocessing."
+        report_info[
+            "text_cleaning"
+        ] += "was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added
         report_info["text_cleaning"] += f"was cleaned following the {method} method."
@@ -150,7 +160,9 @@ def rsp_methods(
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
-        report_info["text_peaks"] = f"The peak detection was carried out using the method {method_peaks}."
+        report_info[
+            "text_peaks"
+        ] = f"The peak detection was carried out using the method {method_peaks}."
 
     # 3. RVT
     # ----------

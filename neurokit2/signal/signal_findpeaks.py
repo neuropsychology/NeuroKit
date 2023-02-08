@@ -81,10 +81,10 @@ def signal_findpeaks(
 
     .. ipython:: python
 
-      import scipy.misc
+      import scipy.datasets
 
       # Load actual ECG Signal
-      ecg = scipy.misc.electrocardiogram()
+      ecg = scipy.datasets.electrocardiogram
       signal = ecg[0:1000]
 
       # Find Unfiltered and Filtered Peaks
