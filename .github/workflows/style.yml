@@ -22,8 +22,6 @@ jobs:
             - name: Install dependencies
               run: |
                   python -m pip install --upgrade setuptools pip wheel
-                  # python -m pip install tox-gh-actions
-                  # tox
 
             - name: Fix code style with isort (import calls)
               run: |
