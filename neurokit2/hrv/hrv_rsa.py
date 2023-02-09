@@ -158,9 +158,11 @@ def hrv_rsa(
         rsp_peaks = rsp_peaks[:-1]
     if len(rsp_peaks) - len(rsp_onsets) != -1:
         warn(
-            "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
+            "Couldn't find rsp cycles onsets and centers. Check your RSP signal."
+            + " Returning empty dict.",
             category=NeuroKitWarning,
         )
+        return {}
 
     # Methods ------------------------
 
