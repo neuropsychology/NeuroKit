@@ -105,15 +105,15 @@ def signal_detrend(
       # Visualize different methods
       @savefig signal_detrend1.png scale=100%
       axes = pd.DataFrame({"Original signal": signal,
-                           "Baseline": baseline,
-                           "Linear": linear,
-                           "Quadratic": quadratic,
-                           "Cubic": cubic,
-                           "Polynomial (10th)": poly10,
-                           "Tarvainen": tarvainen,
-                           "LOESS": loess,
-                           "Local Regression": locreg,
-                           "EMD": emd}).plot(subplots=True)
+                          "Baseline": baseline,
+                          "Linear": linear,
+                          "Quadratic": quadratic,
+                          "Cubic": cubic,
+                          "Polynomial (10th)": poly10,
+                          "Tarvainen": tarvainen,
+                          "LOESS": loess,
+                          "Local Regression": locreg,
+                          "EMD": emd}).plot(subplots=True)
       # Plot horizontal lines to better visualize the detrending
       for subplot in axes:
           subplot.axhline(y=0, color="k", linestyle="--")

@@ -46,7 +46,7 @@ jobs:
               run: |
                   pip install flake8
                   # The GitHub editor is 127 chars wide. See https://flake8.pycqa.org/en/latest/user/configuration.html
-                  flake8 neurokit2 --exclude neurokit2/__init__.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503
+                  flake8 neurokit2 --exclude neurokit2/__init__.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503,E712
 
             - name: Detect remaining style errors with Pylint (fail under)
               run: |
