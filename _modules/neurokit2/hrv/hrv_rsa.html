@@ -714,9 +714,11 @@ title="Open an issue"
         <span class="n">rsp_peaks</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_onsets</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Couldn&#39;t find rsp cycles onsets and centers. Check your RSP signal.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Couldn&#39;t find rsp cycles onsets and centers. Check your RSP signal.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Returning empty dict.&quot;</span><span class="p">,</span>
             <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{}</span>
 
     <span class="c1"># Methods ------------------------</span>
 
