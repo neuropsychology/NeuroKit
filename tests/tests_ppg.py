@@ -145,8 +145,8 @@ def test_ppg_findpeaks():
 
     peaks = info_msptd["PPG_Peaks"]
 
-    assert peaks.size == 9
-    assert peaks.sum() == 4636
+    assert peaks.size == 29
+    assert peaks.sum() == 219665
 
 
 @pytest.mark.parametrize(
