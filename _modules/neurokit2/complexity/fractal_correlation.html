@@ -565,7 +565,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="fractal_correlation"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.fractal_correlation">[docs]</a><span class="k">def</span> <span class="nf">fractal_correlation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Correlation Dimension (CD)**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Correlation Dimension (CD)**</span>
 
 <span class="sd">    The Correlation Dimension (CD, also denoted *D2*) is a lower bound estimate of the fractal</span>
 <span class="sd">    dimension of a signal.</span>
@@ -682,7 +682,7 @@ title="Open an issue"
 
         <span class="n">fit</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">((</span><span class="n">cd</span><span class="p">,</span> <span class="n">intercept</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">r_vals</span><span class="p">))</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="s2">&quot;bo&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$CD$ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$CD$ = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cd</span><span class="p">,</span> <span class="n">info</span></div>
@@ -734,9 +734,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

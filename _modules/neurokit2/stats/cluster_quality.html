@@ -565,7 +565,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="cluster_quality"><a class="viewcode-back" href="../../../functions/stats.html#neurokit2.cluster_quality">[docs]</a><span class="k">def</span> <span class="nf">cluster_quality</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">clusters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_random</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Assess Clustering Quality**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Assess Clustering Quality**</span>
 
 <span class="sd">    Compute quality of the clustering using several metrics.</span>
 
@@ -666,7 +666,7 @@ title="Open an issue"
 <span class="c1"># Utils</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_cluster_quality_sklearn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">clusters</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Metrics from sklearn&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Metrics from sklearn&quot;&quot;&quot;</span>
     <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span>
 
     <span class="c1"># Individual scores</span>
@@ -691,7 +691,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Distance between samples and clusters&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Distance between samples and clusters&quot;&quot;&quot;</span>
     <span class="n">distance</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">to_dataframe</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">distance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;Distance_&quot;</span><span class="p">)</span>
@@ -699,7 +699,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_sumsquares</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">clustering</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sumsquares of the distance of each data point to its respective cluster&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sumsquares of the distance of each data point to its respective cluster&quot;&quot;&quot;</span>
     <span class="n">distance</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">)</span>
     <span class="n">min_distance</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># distance from each sample to the centroid of its cluster</span>
     <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
@@ -710,7 +710,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_dispersion</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sumsquares of the distances between samples within each clusters.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sumsquares of the distances between samples within each clusters.</span>
 <span class="sd">    An error measure for a n_clusters cluster where the lower the better.</span>
 <span class="sd">    Can be used to compare and find the optimal number of clusters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -733,14 +733,14 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_variance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">clustering</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Variance explained by clustering&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Variance explained by clustering&quot;&quot;&quot;</span>
     <span class="n">sum_squares_within</span> <span class="o">=</span> <span class="n">_cluster_quality_sumsquares</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">clustering</span><span class="p">)</span>
     <span class="n">sum_squares_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">pdist</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">sum_squares_total</span> <span class="o">-</span> <span class="n">sum_squares_within</span><span class="p">)</span> <span class="o">/</span> <span class="n">sum_squares_total</span>
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_gap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">n_random</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;GAP statistic and modified GAP statistic by Mohajer (2011).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GAP statistic and modified GAP statistic by Mohajer (2011).</span>
 
 <span class="sd">    The GAP statistic compares the total within intra-cluster variation for different values of k</span>
 <span class="sd">    with their expected values under null reference distribution of the data.</span>
@@ -790,7 +790,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_crossvalidation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">clustering</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Cross-validation index</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross-validation index</span>
 
 <span class="sd">    The original code by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L600</span>
 <span class="sd">    leads to an error when the denominator is 0.</span>
@@ -831,7 +831,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_quality_gev</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Global Variance Explained (GEV)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Global Variance Explained (GEV)&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">sd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">map_corr</span> <span class="o">=</span> <span class="n">_correlate_vectors</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">clusters</span><span class="p">[</span><span class="n">clustering</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -847,7 +847,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_correlate_vectors</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute pairwise correlation of multiple pairs of vectors.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute pairwise correlation of multiple pairs of vectors.</span>
 <span class="sd">    Fast way to compute correlation of multiple pairs of vectors without</span>
 <span class="sd">    computing all pairs as would with corr(A,B). Borrowed from Oli at Stack</span>
 <span class="sd">    overflow.</span>
@@ -893,9 +893,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

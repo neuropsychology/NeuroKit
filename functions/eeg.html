@@ -1077,7 +1077,7 @@ smoothing is requested.</p></li>
 <span class="gp">In [3]: </span><span class="n">by_channel</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_power</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">by_channel</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="gh">Out[4]: </span>
 <span class="go">   Channel     Gamma      Beta     Alpha     Theta     Delta</span>
 <span class="go">0  EEG 001  0.007912  0.003845  0.001344  0.005561  0.027990</span>
 <span class="go">1  EEG 002  0.003008  0.001429  0.001318  0.005474  0.025051</span>
@@ -1318,7 +1318,7 @@ is stored in the <code class="docutils literal notranslate"><span class="pre">&q
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
-<span class="gh">Out[3]: </span><span class="go"></span>
+<span class="gh">Out[3]: </span>
 <span class="go">             Time    EEG 001    EEG 002  ...    EEG 058    EEG 059    EEG 060</span>
 <span class="go">0        0.000000  -4.276182  -0.614833  ...   0.172054   0.142613   0.177187</span>
 <span class="go">1        0.006660 -13.719613  -2.243887  ...   0.598532  -0.210385   0.867487</span>
@@ -1340,7 +1340,7 @@ is stored in the <code class="docutils literal notranslate"><span class="pre">&q
 <span class="gp">In [4]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;epochs&quot;</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="gh">Out[5]: </span>
 <span class="go">           Time     Condition  Epoch  ...   EEG 058   EEG 059   EEG 060</span>
 <span class="go">0     -0.199795   audio/right      0  ... -0.252893 -2.647777 -0.990753</span>
 <span class="go">1     -0.193135   audio/right      0  ... -1.866898 -2.966418 -1.344063</span>
@@ -1362,7 +1362,7 @@ is stored in the <code class="docutils literal notranslate"><span class="pre">&q
 <span class="gp">In [6]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;evoked&quot;</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="gh">Out[7]: </span>
 <span class="go">         Time                                 Condition  ...   EEG 059   EEG 060</span>
 <span class="go">0   -0.199795    0.50 × audio/left + 0.50 × audio/right  ...  0.072215  0.376835</span>
 <span class="go">1   -0.193135    0.50 × audio/left + 0.50 × audio/right  ...  0.133655  0.524040</span>
@@ -1603,7 +1603,7 @@ is stored in the ‘Time’ column.</p>
 <span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_dict</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="gh">Out[4]: </span>
 <span class="go">{&#39;Time&#39;: [0.0,</span>
 <span class="go">  0.006659840438612929,</span>
 <span class="go">  0.013319680877225858,</span>
@@ -61669,7 +61669,7 @@ is stored in the ‘Time’ column.</p>
 <span class="gp">In [5]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;epochs&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_dict</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="gh">Out[6]: </span>
 <span class="go">{0:          Time    Condition  Epoch  ...   EEG 058   EEG 059   EEG 060</span>
 <span class="go"> 0   -0.199795  audio/right      0  ... -0.252893 -2.647777 -0.990753</span>
 <span class="go"> 1   -0.193135  audio/right      0  ... -1.866898 -2.966418 -1.344063</span>
@@ -65707,7 +65707,7 @@ is stored in the ‘Time’ column.</p>
 <span class="gp">In [7]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;evoked&quot;</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">mne_to_dict</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="gh">Out[8]: </span>
 <span class="go">{&#39;0.50 × audio/left + 0.50 × audio/right&#39;:          Time                               Condition  ...   EEG 059   EEG 060</span>
 <span class="go"> 0   -0.199795  0.50 × audio/left + 0.50 × audio/right  ...  0.072215  0.376835</span>
 <span class="go"> 1   -0.193135  0.50 × audio/left + 0.50 × audio/right  ...  0.133655  0.524040</span>
@@ -65773,9 +65773,9 @@ is stored in the ‘Time’ column.</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

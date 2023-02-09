@@ -575,7 +575,7 @@ title="Open an issue"
     <span class="n">powerline</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Signal filtering**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Signal filtering**</span>
 
 <span class="sd">    Filter a signal using different methods such as &quot;butterworth&quot;, &quot;fir&quot;, &quot;savgol&quot; or &quot;powerline&quot;</span>
 <span class="sd">    filters.</span>
@@ -739,7 +739,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_filter_savgol</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter a signal using the Savitzky-Golay method.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a signal using the Savitzky-Golay method.</span>
 
 <span class="sd">    Default window size is chosen based on `Sadeghi, M., &amp; Behnia, F. (2018). Optimum window length of</span>
 <span class="sd">    Savitzky-Golay filters with arbitrary order. arXiv preprint arXiv:1808.10489.</span>
@@ -758,7 +758,7 @@ title="Open an issue"
 <span class="c1"># FIR</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_signal_filter_fir</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter a signal using a FIR filter.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a signal using a FIR filter.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">mne</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -794,7 +794,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_filter_butterworth</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth SOS method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth SOS method.&quot;&quot;&quot;</span>
     <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">filter_type</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
@@ -802,7 +802,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_filter_butterworth_ba</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth B/A method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth B/A method.&quot;&quot;&quot;</span>
     <span class="c1"># Get coefficients</span>
     <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
@@ -816,7 +816,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_filter_butterworth_zi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth SOS method, given initial state (zi).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a signal using IIR Butterworth SOS method, given initial state (zi).&quot;&quot;&quot;</span>
 
     <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
@@ -847,7 +847,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_filter_powerline</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">powerline</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter out 50 Hz powerline noise by smoothing the signal with a moving average kernel with the width of one</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter out 50 Hz powerline noise by smoothing the signal with a moving average kernel with the width of one</span>
 <span class="sd">    period of 50Hz.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
@@ -870,7 +870,7 @@ title="Open an issue"
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The sampling rate is too low. Sampling rate&quot;</span>
                 <span class="s2">&quot; must exceed the Nyquist rate to avoid aliasing problem.&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; In this analysis, the sampling rate has to be higher than </span><span class="si">{</span><span class="mi">2</span> <span class="o">*</span> <span class="n">highcut</span><span class="si">}</span><span class="s2"> Hz&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot; In this analysis, the sampling rate has to be higher than </span><span class="si">{</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">highcut</span><span class="si">}</span><span class="s2"> Hz&quot;</span><span class="p">,</span>
                 <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -925,9 +925,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

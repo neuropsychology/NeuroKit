@@ -575,9 +575,16 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="ecg_delineate"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_delineate">[docs]</a><span class="k">def</span> <span class="nf">ecg_delineate</span><span class="p">(</span>
-    <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_type</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">ecg_cleaned</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show_type</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">,</span>
+    <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Delineate QRS complex**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Delineate QRS complex**</span>
 
 <span class="sd">    Function to delineate the QRS complex, i.e., the different waves of the cardiac cycles. A</span>
 <span class="sd">    typical ECG heartbeat consists of a P wave, a QRS complex and a T wave. The P wave represents</span>
@@ -671,7 +678,10 @@ title="Open an issue"
         <span class="k">if</span> <span class="n">cols</span><span class="p">:</span>
             <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: ecg_delineate(): Wrong input, we couldn&#39;t extract&quot;</span> <span class="s2">&quot;cleaned signal.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: ecg_delineate(): Wrong input, we couldn&#39;t extract&quot;</span>
+                <span class="s2">&quot;cleaned signal.&quot;</span>
+            <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ecg_cleaned</span><span class="p">:</span>
@@ -681,7 +691,10 @@ title="Open an issue"
                 <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="n">cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: ecg_delineate(): Wrong input, we couldn&#39;t extract&quot;</span> <span class="s2">&quot;cleaned signal.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;NeuroKit error: ecg_delineate(): Wrong input, we couldn&#39;t extract&quot;</span>
+                    <span class="s2">&quot;cleaned signal.&quot;</span>
+                <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
         <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="o">.</span><span class="n">values</span>
@@ -703,7 +716,9 @@ title="Open an issue"
         <span class="n">waves</span> <span class="o">=</span> <span class="n">_dwt_ecg_delineator</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: ecg_delineate(): &#39;method&#39; should be one of &#39;peak&#39;,&quot;</span> <span class="s2">&quot;&#39;cwt&#39; or &#39;dwt&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineate(): &#39;method&#39; should be one of &#39;peak&#39;,&quot;</span> <span class="s2">&quot;&#39;cwt&#39; or &#39;dwt&#39;.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># Remove NaN in Peaks, Onsets, and Offsets</span>
     <span class="n">waves_noNA</span> <span class="o">=</span> <span class="n">waves</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -737,7 +752,7 @@ title="Open an issue"
 <span class="c1"># WAVELET METHOD (DWT)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_dwt_resample_points</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Resample given points to a different sampling rate.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resample given points to a different sampling rate.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>  <span class="c1"># peaks are passed in from previous processing steps</span>
         <span class="c1"># Prevent overflow by converting to np.int64 (peaks might be passed in containing np.int32).</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
@@ -750,7 +765,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_dwt_ecg_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Delinate ecg signal using discrete wavelet transforms.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delinate ecg signal using discrete wavelet transforms.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -787,7 +802,9 @@ title="Open an issue"
         <span class="n">speaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_index</span><span class="p">)</span>
 
     <span class="c1"># dwt to delineate tp waves, onsets, offsets and qrs ontsets and offsets</span>
-    <span class="n">ecg</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span><span class="p">)</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+    <span class="p">)</span>
     <span class="n">dwtmatr</span> <span class="o">=</span> <span class="n">_dwt_compute_multiscales</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
 
     <span class="c1"># # only for debugging</span>
@@ -799,7 +816,9 @@ title="Open an issue"
     <span class="c1"># plt.show()</span>
     <span class="n">rpeaks_resampled</span> <span class="o">=</span> <span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">)</span>
 
-    <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span><span class="p">)</span>
+    <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_peaks</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+    <span class="p">)</span>
     <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">qrs_offsets</span> <span class="o">=</span> <span class="n">_dwt_delineate_qrs_bounds</span><span class="p">(</span>
         <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
     <span class="p">)</span>
@@ -816,16 +835,32 @@ title="Open an issue"
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">ECG_P_Peaks</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">ppeaks</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
-        <span class="n">ECG_P_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">ponsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
-        <span class="n">ECG_P_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">poffsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
+        <span class="n">ECG_P_Peaks</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">ppeaks</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_P_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">ponsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_P_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">poffsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
         <span class="n">ECG_Q_Peaks</span><span class="o">=</span><span class="n">qpeaks</span><span class="p">,</span>
-        <span class="n">ECG_R_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
-        <span class="n">ECG_R_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">qrs_offsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
+        <span class="n">ECG_R_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_R_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">qrs_offsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
         <span class="n">ECG_S_Peaks</span><span class="o">=</span><span class="n">speaks</span><span class="p">,</span>
-        <span class="n">ECG_T_Peaks</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">tpeaks</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
-        <span class="n">ECG_T_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">tonsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
-        <span class="n">ECG_T_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">toffsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">),</span>
+        <span class="n">ECG_T_Peaks</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">tpeaks</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_T_Onsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">tonsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
+        <span class="n">ECG_T_Offsets</span><span class="o">=</span><span class="n">_dwt_resample_points</span><span class="p">(</span>
+            <span class="n">toffsets</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">),</span>
     <span class="p">)</span>
 
 
@@ -853,7 +888,7 @@ title="Open an issue"
     <span class="n">epsilon_T_weight</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
     <span class="n">epsilon_P_weight</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ecg : Union[list, np.array, pd.Series]</span>
@@ -883,8 +918,12 @@ title="Open an issue"
     <span class="n">srch_bndry</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">qrs_width</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="n">degree_add</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
     <span class="c1"># sanitize search duration by HR</span>
-    <span class="n">p2r_duration</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">p2r_duration</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span><span class="p">)</span>
-    <span class="n">rt_duration</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">rt_duration</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span><span class="p">)</span>
+    <span class="n">p2r_duration</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">p2r_duration</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
+    <span class="n">rt_duration</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">rt_duration</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">tpeaks</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">rpeak_</span> <span class="ow">in</span> <span class="n">rpeaks</span><span class="p">:</span>
@@ -903,7 +942,9 @@ title="Open an issue"
 
         <span class="n">ecg_local</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">peaks</span><span class="p">))</span>  <span class="c1"># pylint: disable=W0640</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">peaks</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=W0640</span>
         <span class="k">if</span> <span class="n">dwt_local</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># just append</span>
             <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">peaks</span>
 
@@ -911,12 +952,18 @@ title="Open an issue"
         <span class="n">candidate_peaks</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">candidate_peaks_scores</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx_peak</span><span class="p">,</span> <span class="n">idx_peak_nxt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">peaks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-            <span class="n">correct_sign</span> <span class="o">=</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak_nxt</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>  <span class="c1"># pylint: disable=R1716</span>
+            <span class="n">correct_sign</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak_nxt</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+            <span class="p">)</span>  <span class="c1"># pylint: disable=R1716</span>
             <span class="k">if</span> <span class="n">correct_sign</span><span class="p">:</span>
-                <span class="n">idx_zero</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span> <span class="p">:</span> <span class="n">idx_peak_nxt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx_peak</span>
+                <span class="n">idx_zero</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span> <span class="p">:</span> <span class="n">idx_peak_nxt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx_peak</span>
+                <span class="p">)</span>
                 <span class="c1"># This is the score assigned to each peak. The peak with the highest score will be</span>
                 <span class="c1"># selected.</span>
-                <span class="n">score</span> <span class="o">=</span> <span class="n">ecg_local</span><span class="p">[</span><span class="n">idx_zero</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="o">-</span> <span class="p">(</span><span class="n">rt_duration</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qrs_width</span><span class="p">))</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">ecg_local</span><span class="p">[</span><span class="n">idx_zero</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="o">-</span> <span class="p">(</span><span class="n">rt_duration</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">qrs_width</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">candidate_peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_zero</span><span class="p">)</span>
                 <span class="n">candidate_peaks_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
 
@@ -952,9 +999,13 @@ title="Open an issue"
         <span class="n">candidate_peaks</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">candidate_peaks_scores</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx_peak</span><span class="p">,</span> <span class="n">idx_peak_nxt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">peaks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-            <span class="n">correct_sign</span> <span class="o">=</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak_nxt</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>  <span class="c1"># pylint: disable=R1716</span>
+            <span class="n">correct_sign</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak_nxt</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+            <span class="p">)</span>  <span class="c1"># pylint: disable=R1716</span>
             <span class="k">if</span> <span class="n">correct_sign</span><span class="p">:</span>
-                <span class="n">idx_zero</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span> <span class="p">:</span> <span class="n">idx_peak_nxt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx_peak</span>
+                <span class="n">idx_zero</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">idx_peak</span> <span class="p">:</span> <span class="n">idx_peak_nxt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">idx_peak</span>
+                <span class="p">)</span>
                 <span class="c1"># This is the score assigned to each peak. The peak with the highest score will be</span>
                 <span class="c1"># selected.</span>
                 <span class="n">score</span> <span class="o">=</span> <span class="n">ecg_local</span><span class="p">[</span><span class="n">idx_zero</span><span class="p">]</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span>
@@ -985,8 +1036,12 @@ title="Open an issue"
     <span class="n">degree_offset</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="c1"># sanitize search duration by HR</span>
-    <span class="n">duration_onset</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration_onset</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span><span class="p">)</span>
-    <span class="n">duration_offset</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration_offset</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span><span class="p">)</span>
+    <span class="n">duration_onset</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration_onset</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
+    <span class="n">duration_offset</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration_offset</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;duration&quot;</span>
+    <span class="p">)</span>
     <span class="n">degree</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
     <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1030,7 +1085,10 @@ title="Open an issue"
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">continue</span>
-        <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="o">+</span> <span class="n">offset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
 
         <span class="c1"># # only for debugging</span>
@@ -1087,7 +1145,9 @@ title="Open an issue"
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">continue</span>
-        <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">onset_slope_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">srch_idx_start</span><span class="p">)</span>
 
         <span class="c1"># # only for debugging</span>
@@ -1100,7 +1160,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_dwt_compute_multiscales</span><span class="p">(</span><span class="n">ecg</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_degree</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return multiscales wavelet transforms.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return multiscales wavelet transforms.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_apply_H_filter</span><span class="p">(</span><span class="n">signal_i</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">power</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
@@ -1146,13 +1206,19 @@ title="Open an issue"
     <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">_peaks_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="c1"># qrs onsets and offsets</span>
-    <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">qrs_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;rpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">qrs_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;rpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="c1"># ppeaks onsets and offsets</span>
-    <span class="n">p_onsets</span><span class="p">,</span> <span class="n">p_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;ppeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">p_onsets</span><span class="p">,</span> <span class="n">p_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;ppeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="c1"># tpeaks onsets and offsets</span>
-    <span class="n">t_onsets</span><span class="p">,</span> <span class="n">t_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">t_onsets</span><span class="p">,</span> <span class="n">t_offsets</span> <span class="o">=</span> <span class="n">_onset_offset_delineator</span><span class="p">(</span>
+        <span class="n">ecg</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="c1"># No dwt defined method for Q and S peak</span>
     <span class="c1"># Adopting manual method from &quot;peak&quot; method</span>
@@ -1195,7 +1261,8 @@ title="Open an issue"
         <span class="kn">import</span> <span class="nn">pywt</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;method to run. &quot;</span><span class="p">,</span>
             <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="c1"># first derivative of the Gaissian signal</span>
@@ -1215,14 +1282,18 @@ title="Open an issue"
             <span class="n">search_window</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span> <span class="p">:</span> <span class="n">index_peak</span><span class="p">]</span>
             <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
             <span class="n">height</span> <span class="o">=</span> <span class="mf">0.0</span>
-            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span><span class="p">)</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
             <span class="n">search_window</span> <span class="o">=</span> <span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span> <span class="p">:</span> <span class="n">index_peak</span><span class="p">]</span>
 
             <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
             <span class="n">height</span> <span class="o">=</span> <span class="mf">0.0</span>
-            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span><span class="p">)</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wt_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># print(&quot;Fail to find onset at index: %d&quot;, index_peak)</span>
@@ -1239,9 +1310,13 @@ title="Open an issue"
                 <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">leftbase</span> <span class="o">=</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;left_bases&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span>
             <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
-                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
+                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
+                <span class="p">)</span>
             <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
-                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
+                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
+                <span class="p">)</span>
 
             <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">candidate_onsets</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">leftbase</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_onsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1253,18 +1328,23 @@ title="Open an issue"
         <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
             <span class="n">search_window</span> <span class="o">=</span> <span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">index_peak</span> <span class="p">:</span> <span class="n">index_peak</span> <span class="o">+</span> <span class="n">half_wave_width</span><span class="p">]</span>
             <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.50</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
-            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span><span class="p">)</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
             <span class="n">search_window</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">index_peak</span> <span class="p">:</span> <span class="n">index_peak</span> <span class="o">+</span> <span class="n">half_wave_width</span><span class="p">]</span>
             <span class="n">prominence</span> <span class="o">=</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
-            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span><span class="p">)</span>
+            <span class="n">wt_peaks</span><span class="p">,</span> <span class="n">wt_peaks_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+                <span class="n">search_window</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">prominence</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wt_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># print(&quot;Fail to find offsets at index: %d&quot;, index_peak)</span>
             <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">nlast</span> <span class="o">=</span> <span class="n">wt_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span>
+            <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Default value</span>
             <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mf">0.125</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -1274,9 +1354,13 @@ title="Open an issue"
                 <span class="n">epsilon_offset</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">rightbase</span> <span class="o">=</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;right_bases&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span>
             <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
-                <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nlast</span> <span class="p">:</span> <span class="n">nlast</span> <span class="o">+</span> <span class="mi">100</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nlast</span>
+                <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nlast</span> <span class="p">:</span> <span class="n">nlast</span> <span class="o">+</span> <span class="mi">100</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nlast</span>
+                <span class="p">)</span>
             <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
-                <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nlast</span> <span class="p">:</span> <span class="n">nlast</span> <span class="o">+</span> <span class="mi">100</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nlast</span>
+                <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nlast</span> <span class="p">:</span> <span class="n">nlast</span> <span class="o">+</span> <span class="mi">100</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">epsilon_offset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nlast</span>
+                <span class="p">)</span>
 
             <span class="n">candidate_offsets</span> <span class="o">=</span> <span class="n">candidate_offsets</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">rightbase</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_offsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1317,9 +1401,13 @@ title="Open an issue"
         <span class="c1"># set threshold for heights of peaks to find significant peaks in wavelet</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.125</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">search_window</span><span class="p">)</span>
         <span class="n">significant_peaks_tp</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">significant_peaks_tp</span> <span class="o">=</span> <span class="p">[</span><span class="n">peaks_tp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks_tp</span><span class="p">))</span> <span class="k">if</span> <span class="n">heights_tp</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">]</span>
+        <span class="n">significant_peaks_tp</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">peaks_tp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks_tp</span><span class="p">))</span> <span class="k">if</span> <span class="n">heights_tp</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+        <span class="p">]</span>
 
-        <span class="n">significant_peaks_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_find_tppeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">significant_peaks_tp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">))</span>
+        <span class="n">significant_peaks_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">_find_tppeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">significant_peaks_tp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[(</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">significant_peaks_groups</span><span class="p">])</span>
 
@@ -1344,13 +1432,19 @@ title="Open an issue"
     <span class="n">tppeaks</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">index_cur</span><span class="p">,</span> <span class="n">index_next</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keep_tp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">keep_tp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
         <span class="c1"># limit 1</span>
-        <span class="n">correct_sign</span> <span class="o">=</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_cur</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_next</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># pylint: disable=R1716</span>
+        <span class="n">correct_sign</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_cur</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_next</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=R1716</span>
         <span class="c1">#    near = (index_next - index_cur) &lt; max_wv_peak_dist #limit 2</span>
         <span class="c1">#    if near and correct_sign:</span>
         <span class="k">if</span> <span class="n">correct_sign</span><span class="p">:</span>
-            <span class="n">index_zero_cr</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_cur</span> <span class="p">:</span> <span class="n">index_next</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_cur</span>
+            <span class="n">index_zero_cr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:][</span><span class="n">index_cur</span> <span class="p">:</span> <span class="n">index_next</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_cur</span>
+            <span class="p">)</span>
             <span class="n">nb_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_search_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
-            <span class="n">index_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">index_zero_cr</span> <span class="o">-</span> <span class="n">nb_idx</span> <span class="p">:</span> <span class="n">index_zero_cr</span> <span class="o">+</span> <span class="n">nb_idx</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">index_zero_cr</span> <span class="o">-</span> <span class="n">nb_idx</span><span class="p">)</span>
+            <span class="n">index_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">index_zero_cr</span> <span class="o">-</span> <span class="n">nb_idx</span> <span class="p">:</span> <span class="n">index_zero_cr</span> <span class="o">+</span> <span class="n">nb_idx</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span>
+                <span class="n">index_zero_cr</span> <span class="o">-</span> <span class="n">nb_idx</span>
+            <span class="p">)</span>
             <span class="n">tppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index_max</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tppeaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">tppeaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
@@ -1441,7 +1535,9 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">Q</span><span class="p">]</span>  <span class="c1"># Select left of Q wave</span>
-    <span class="n">P</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()))</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
@@ -1452,7 +1548,9 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_ecg_delineator_peak_S</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">):</span>
     <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="p">[</span><span class="mi">0</span><span class="p">:]</span>  <span class="c1"># Select right hand side</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="o">-</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()))</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="o">-</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
@@ -1465,7 +1563,9 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">R</span> <span class="o">+</span> <span class="n">S</span> <span class="p">:]</span>  <span class="c1"># Select right of S wave</span>
-    <span class="n">T</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()))</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
+        <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span> <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">None</span>
@@ -1527,7 +1627,7 @@ title="Open an issue"
     <span class="n">window_end</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
 <span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    import neurokit2 as nk</span>
 <span class="sd">    import numpy as np</span>
 <span class="sd">    import pandas as pd</span>
@@ -1617,7 +1717,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ecg_delineate_check</span><span class="p">(</span><span class="n">waves</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than</span>
 <span class="sd">    3.&quot;&quot;&quot;</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">waves</span><span class="p">)</span>
     <span class="n">features_columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
@@ -1641,7 +1741,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_calculate_abs_z</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves</span>
 <span class="sd">    features by `ecg_delineate()`&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
         <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Dist_R_&quot;</span> <span class="o">+</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">standardize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
@@ -1662,9 +1762,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

@@ -572,7 +572,7 @@ title="Open an issue"
     <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Compute the power of a signal in a given frequency band**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Compute the power of a signal in a given frequency band**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -708,7 +708,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_power_instant_compute</span><span class="p">(</span><span class="n">psd</span><span class="p">,</span> <span class="n">band</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Also used in other instances&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Also used in other instances&quot;&quot;&quot;</span>
     <span class="n">where</span> <span class="o">=</span> <span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">band</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">band</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">][</span><span class="n">where</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">][</span><span class="n">where</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">power</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="n">power</span>
@@ -832,9 +832,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

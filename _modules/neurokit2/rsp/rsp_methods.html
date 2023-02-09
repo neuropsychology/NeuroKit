@@ -571,11 +571,13 @@ title="Open an issue"
     <span class="n">method_rvt</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**RSP Preprocessing Methods**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**RSP Preprocessing Methods**</span>
+
 <span class="sd">    This function analyzes and specifies the methods used in the preprocessing, and create a</span>
 <span class="sd">    textual description of the methods used. It is used by :func:`rsp_process()` to dispatch the</span>
 <span class="sd">    correct methods to each subroutine of the pipeline and :func:`rsp_report()` to create a</span>
 <span class="sd">    preprocessing report.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    sampling_rate : int</span>
@@ -601,25 +603,31 @@ title="Open an issue"
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed to :func:`.rsp_clean` and</span>
 <span class="sd">        :func:`.rsp_findpeaks`.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    report_info : dict</span>
 <span class="sd">        A dictionary containing the keyword arguments passed to the cleaning</span>
 <span class="sd">        and peak finding functions, text describing the methods, and the corresponding</span>
 <span class="sd">        references.</span>
+
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
 <span class="sd">    rsp_process, rsp_clean, rsp_findpeaks</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
+
 <span class="sd">      import neurokit2 as nk</span>
 <span class="sd">      methods = nk.rsp_methods(sampling_rate=100, method=&quot;Khodadad&quot;, method_cleaning=&quot;hampel&quot;)</span>
 <span class="sd">      print(methods[&quot;text_cleaning&quot;])</span>
 <span class="sd">      print(methods[&quot;references&quot;][0])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize inputs</span>
-    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
     <span class="n">method_peaks</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">method_rvt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_rvt</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
@@ -656,19 +664,19 @@ title="Open an issue"
         <span class="p">)</span>
 
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T.,... &amp; Bayford, R. (2018).</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T.,... &amp; Bayford, R. (2018).</span>
 <span class="sd">            Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="sd">            Physiological measurement, 39(9), 094001.&quot;&quot;&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hampel&quot;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;power2020&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="s2">&quot; was preprocessed using a median-based Hampel filter by replacing values which&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; are </span><span class="si">{</span><span class="n">report_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;threshold&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1"> median absolute deviation away from the rolling median;&#39;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; are </span><span class="si">{</span><span class="n">report_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;threshold&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1"> median absolute deviation away from the rolling median;&#39;</span>
             <span class="o">+</span> <span class="s2">&quot;following Power et al. 2020.&quot;</span>
         <span class="p">)</span>
 
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;Power, J., Lynch, C., Dubin, M., Silver, B., Martin, A., Jones, R.,(2020)</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Power, J., Lynch, C., Dubin, M., Silver, B., Martin, A., Jones, R.,(2020)</span>
 <span class="sd">            Characteristics of respiratory measures in young adults scanned at rest,</span>
 <span class="sd">            including systematic changes and “missed” deep breaths.</span>
 <span class="sd">            NeuroImage, Volume 204, 116234&quot;&quot;&quot;</span>
@@ -679,7 +687,9 @@ title="Open an issue"
             <span class="o">+</span> <span class="s2">&quot;Butterworth filter followed by a constant detrending.&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;was directly used for peak detection without preprocessing.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_cleaning&quot;</span>
+        <span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;was directly used for peak detection without preprocessing.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># just in case more methods are added</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;was cleaned following the </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> method.&quot;</span>
@@ -691,7 +701,7 @@ title="Open an issue"
             <span class="s2">&quot;text_peaks&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The peak detection was carried out using the method described in Khoadadad et al. (2018).&quot;</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford, R. (2018).</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford, R. (2018).</span>
 <span class="sd">            Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="sd">            Physiological measurement, 39(9), 094001.&quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -706,7 +716,9 @@ title="Open an issue"
     <span class="k">elif</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;There was no peak detection carried out.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_peaks&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="c1"># 3. RVT</span>
     <span class="c1"># ----------</span>
@@ -715,7 +727,7 @@ title="Open an issue"
             <span class="s2">&quot;text_rvt&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The respiratory volume per time computation was carried out using the method described in Harrison et al. (2021).&quot;</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
 <span class="sd">            A Hilbert-based method for processing respiratory timeseries.</span>
 <span class="sd">            Neuroimage, 230, 117787.&quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -724,7 +736,7 @@ title="Open an issue"
             <span class="s2">&quot;text_rvt&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The respiratory volume per time computation was carried out using the method described in Birn et al. (2006).&quot;</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;Birn, R. M., Diamond, J. B., Smith, M. A., &amp; Bandettini, P. A. (2006).</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Birn, R. M., Diamond, J. B., Smith, M. A., &amp; Bandettini, P. A. (2006).</span>
 <span class="sd">            Separating respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in</span>
 <span class="sd">            fMRI. Neuroimage, 31(4), 1536-1548.&quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -733,7 +745,7 @@ title="Open an issue"
             <span class="s2">&quot;text_rvt&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The respiratory volume per time computation was carried out using the method described in Power at al. (2020).&quot;</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., &amp; Jones, R. M. (2020).</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., &amp; Jones, R. M. (2020).</span>
 <span class="sd">            Characteristics of respiratory measures in young adults scanned at rest, including systematic</span>
 <span class="sd">            changes and &quot;missed&quot; deep breaths. Neuroimage, 204, 116234.&quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -762,9 +774,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

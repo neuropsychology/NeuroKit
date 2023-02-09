@@ -578,7 +578,7 @@ title="Open an issue"
 <div class="viewcode-block" id="complexity_delay"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_delay">[docs]</a><span class="k">def</span> <span class="nf">complexity_delay</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fraser1986&quot;</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Automated selection of the optimal Delay (Tau)**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Automated selection of the optimal Delay (Tau)**</span>
 
 <span class="sd">    The time delay (Tau :math:`\\tau`, also referred to as *Lag*) is one of the two critical</span>
 <span class="sd">    parameters (the other being the :func:`Dimension &lt;complexity_dimension&gt;` *m*) involved in the</span>
@@ -948,7 +948,7 @@ title="Open an issue"
     <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
     <span class="n">r_vals</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Iterating through dimensions and r values is relevant only if metric used is Correlation Integral.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterating through dimensions and r values is relevant only if metric used is Correlation Integral.</span>
 <span class="sd">    For this method, either first zero crossing of the statistic averages or the first local</span>
 <span class="sd">    minimum of deviations to obtain optimal tau. This implementation takes the latter since in practice,</span>
 <span class="sd">    they are both in close proximity.</span>
@@ -1015,7 +1015,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_delay_cc_integral_sum</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Correlation integral is a cumulative distribution function, which denotes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Correlation integral is a cumulative distribution function, which denotes</span>
 <span class="sd">    the probability of distance between any pairs of points in phase space</span>
 <span class="sd">    not greater than the specified `r`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1048,7 +1048,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_delay_cc_statistic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The dependence statistic as the serial correlation of a nonlinear time series.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The dependence statistic as the serial correlation of a nonlinear time series.&quot;&quot;&quot;</span>
 
     <span class="c1"># create disjoint time series</span>
     <span class="n">series</span> <span class="o">=</span> <span class="p">[</span><span class="n">signal</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">::</span> <span class="n">delay</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">delay</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
@@ -1064,7 +1064,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_embedding_delay_cc_deviation_max</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">r_vals</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">delay</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A measure of the variation of the dependence statistic with r using</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A measure of the variation of the dependence statistic with r using</span>
 <span class="sd">    several representative values of r.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">vectorized_deviation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span>
@@ -1194,7 +1194,7 @@ title="Open an issue"
     <span class="n">surrogate_method</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Joint-optimization using Entropy Ratio method.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Joint-optimization using Entropy Ratio method.</span>
 
 <span class="sd">    * Gautama, T., Mandic, D. P., &amp; Van Hulle, M. M. (2003, April). A differential entropy based</span>
 <span class="sd">      method for determining the optimal embedding parameters of a signal. In 2003 IEEE</span>
@@ -1351,9 +1351,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

@@ -918,7 +918,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;event-related&quot;</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
-<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
 <span class="go">1     1         3000  ...                1.736918         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
@@ -930,7 +930,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [8]: </span><span class="n">analyze_df</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_analyze</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interval-related&quot;</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
-<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
 <span class="go">0               3.0            0.245107</span>
 </pre></div>
@@ -1280,7 +1280,7 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
 <span class="go">1     1         3000  ...                1.736918         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
@@ -1325,14 +1325,14 @@ separately processed DataFrames.</p>
 
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
 <span class="go">0               3.0             0.24434</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
 <span class="go">1     1                 2            0.251160</span>
 <span class="go">2     2                 1            0.237548</span>
@@ -1375,9 +1375,9 @@ separately processed DataFrames.</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

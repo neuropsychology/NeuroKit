@@ -565,7 +565,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="entropy_rate"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_rate">[docs]</a><span class="k">def</span> <span class="nf">entropy_rate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">kmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Entropy Rate (RatEn)**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Entropy Rate (RatEn)**</span>
 
 <span class="sd">    The Entropy Rate (RatEn or ER) quantifies the amount of information needed to describe the</span>
 <span class="sd">    signal given observations of signal(k). In other words, it is the entropy of the time series</span>
@@ -734,7 +734,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_selfentropy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Shannon&#39;s Self joint entropy with k as the length of k-history&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shannon&#39;s Self joint entropy with k as the length of k-history&quot;&quot;&quot;</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span> <span class="o">/</span> <span class="n">freq</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -755,9 +755,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

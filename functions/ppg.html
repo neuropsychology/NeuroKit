@@ -910,11 +910,11 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [5]: </span><span class="n">analyze_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
-<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.303297           0.758530</span>
-<span class="go">2     2        10000  ...                  2.508741           0.962904</span>
-<span class="go">3     3        15000  ...                 -0.226182           0.918745</span>
+<span class="go">1     1         5000  ...                  1.341007           0.548851</span>
+<span class="go">2     2        10000  ...                 -2.057713           0.916212</span>
+<span class="go">3     3        15000  ...                 -0.134621           0.579954</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -928,7 +928,7 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [9]: </span><span class="n">analyze_df</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [10]: </span><span class="n">analyze_df</span>
-<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="gh">Out[10]: </span>
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
 
@@ -1110,7 +1110,8 @@ IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</p></
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG channel as returned by <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_clean()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bishop&quot;</span></code>. The default is
+<code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a plot of the thresholds used during peak detection. Useful for
 debugging. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
@@ -1129,33 +1130,26 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="gp">In [3]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">heart_rate</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">heart_rate</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">ppg_clean</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">ppg_clean</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">)</span>
+<span class="gp">In [5]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
-
-<span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;raw PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26eb87fd4e0&gt;]</span>
-
-<span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;clean PPG&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26eb87fd3c0&gt;]</span>
-
-<span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">ppg</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;systolic peaks&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x26eb87fe380&gt;</span>
-
-<span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26eb36058d0&gt;</span>
+<span class="go"># Method by Bishop et al., (2018)</span>
+<span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks2.png"><img alt="../_images/p_ppg_findpeaks2.png" src="../_images/p_ppg_findpeaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
-<li><p>Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
-Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.
-PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</p></li>
+<li><p>Elgendi, M., Norton, I., Brearley, M., Abbott, D., &amp; Schuurmans, D. (2013). Systolic peak
+detection in acceleration photoplethysmograms measured from emergency responders in tropical
+conditions. PloS one, 8(10), e76585.</p></li>
+<li><p>Bishop, S. M., &amp; Ercole, A. (2018). Multi-scale peak and trough detection optimised for
+periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Neuromonitoring XVI
+(pp. 189-195). Springer International Publishing.</p></li>
 </ul>
 </dd></dl>
 
@@ -1218,11 +1212,11 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.640250           0.813895</span>
-<span class="go">2     2        10000  ...                  2.150875           0.942715</span>
-<span class="go">3     3        15000  ...                  0.635165           0.985068</span>
+<span class="go">1     1         5000  ...                 -0.700914           0.797036</span>
+<span class="go">2     2        10000  ...                  0.222762           0.894044</span>
+<span class="go">3     3        15000  ...                  0.249679           0.732029</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1271,7 +1265,7 @@ separately processed DataFrames.</p></li>
 
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="gh">Out[4]: </span>
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
 
@@ -1282,7 +1276,7 @@ separately processed DataFrames.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="gh">Out[6]: </span>
 <span class="go">  Label  PPG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">1     1      86.483842   69.395349  ...  1.808904  2.306391  0.792838</span>
 <span class="go">2     2      86.318983   69.488372  ...  1.867149  3.207983  0.973029</span>
@@ -1381,9 +1375,9 @@ references.</p>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

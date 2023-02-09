@@ -562,7 +562,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="signal_recompose"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_recompose">[docs]</a><span class="k">def</span> <span class="nf">signal_recompose</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;wcorr&quot;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">keep_sd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Combine signal sources after decomposition**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Combine signal sources after decomposition**</span>
 
 <span class="sd">    Combine and reconstruct meaningful signal sources after signal decomposition.</span>
 
@@ -652,7 +652,7 @@ title="Open an issue"
 <span class="c1"># Weighted Correlation</span>
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="k">def</span> <span class="nf">_signal_recompose_wcorr</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;chebyshev&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
     <span class="c1"># Calculate the w-correlation matrix.</span>
     <span class="n">wcorr</span> <span class="o">=</span> <span class="n">_signal_recompose_get_wcorr</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -666,7 +666,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_recompose_get_wcorr</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculates the weighted correlation matrix for the time series.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the weighted correlation matrix for the time series.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -720,14 +720,14 @@ title="Open an issue"
 <span class="c1"># Filter method</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_signal_recompose_filter_sd</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Filter by standard deviation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter by standard deviation.&quot;&quot;&quot;</span>
     <span class="n">SDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">components</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">))]</span>
     <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">SDs</span> <span class="o">&gt;=</span> <span class="n">threshold</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">SDs</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">components</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_signal_recompose_meanfreq</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get the mean frequency of components.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the mean frequency of components.&quot;&quot;&quot;</span>
     <span class="n">duration</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">sampling_rate</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
     <span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -751,9 +751,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

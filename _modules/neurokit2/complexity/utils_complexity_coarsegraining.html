@@ -563,7 +563,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="complexity_coarsegraining"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_coarsegraining">[docs]</a><span class="k">def</span> <span class="nf">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nonoverlapping&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Coarse-graining of a signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Coarse-graining of a signal**</span>
 
 <span class="sd">    The goal of coarse-graining is to represent the signal at a different &quot;scale&quot;. The</span>
 <span class="sd">    coarse-grained time series for a scale factor Tau (:math:`\\tau`) are obtained by averaging</span>
@@ -671,7 +671,7 @@ title="Open an issue"
 <span class="sd">      signal = nk.signal_simulate(duration=0.5, frequency=[5, 20])</span>
 
 <span class="sd">      @savefig p_complexity_coarsegraining4.png scale=100%</span>
-<span class="sd">      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method=&quot;timeshift&quot;, show=True)</span>
+<span class="sd">      coarsegrained = nk.complexity_coarsegraining(signal, scale=30, method=&quot;timeshift&quot;, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -779,7 +779,7 @@ title="Open an issue"
 <span class="c1"># Get Scale Factor</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_get_scales</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Select scale factors&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select scale factors&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
         <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Set to max</span>
     <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
@@ -805,9 +805,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

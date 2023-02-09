@@ -567,7 +567,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="rsp_clean"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_clean">[docs]</a><span class="k">def</span> <span class="nf">rsp_clean</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Preprocess a respiration (RSP) signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Preprocess a respiration (RSP) signal**</span>
 
 <span class="sd">    Clean a respiration signal using different sets of parameters, such as:</span>
 
@@ -673,7 +673,7 @@ title="Open an issue"
 <span class="c1"># Khodadad et al. (2018)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_rsp_clean_khodadad2018</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The algorithm is based on (but not an exact implementation of) the &quot;Zero-crossing algorithm with amplitude</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The algorithm is based on (but not an exact implementation of) the &quot;Zero-crossing algorithm with amplitude</span>
 <span class="sd">    threshold&quot; by `Khodadad et al. (2018)</span>
 
 <span class="sd">    &lt;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&gt;`_.</span>
@@ -703,7 +703,7 @@ title="Open an issue"
 <span class="c1"># BioSPPy</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_rsp_clean_biosppy</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Uses the same defaults as `BioSPPy.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses the same defaults as `BioSPPy.</span>
 
 <span class="sd">    &lt;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&gt;`_.</span>
 
@@ -728,7 +728,7 @@ title="Open an issue"
 <span class="c1"># Hampel filter</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_rsp_clean_hampel</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Explanation MatLabs&#39; https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Explanation MatLabs&#39; https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From</span>
 <span class="sd">    https://stackoverflow.com/a/51731332.</span>
 
 <span class="sd">    Parameters</span>
@@ -773,9 +773,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

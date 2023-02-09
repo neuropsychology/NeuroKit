@@ -570,7 +570,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="ecg_quality"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_quality">[docs]</a><span class="k">def</span> <span class="nf">ecg_quality</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;averageQRS&quot;</span><span class="p">,</span> <span class="n">approach</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**ECG Signal Quality Assessment**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**ECG Signal Quality Assessment**</span>
 
 <span class="sd">    Assess the quality of the ECG Signal using various methods:</span>
 
@@ -726,7 +726,7 @@ title="Open an issue"
     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return ECG quality classification of based on Zhao et al. (2018),</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ECG quality classification of based on Zhao et al. (2018),</span>
 <span class="sd">    based on three indices: pSQI, kSQI, basSQI (qSQI not included here).</span>
 
 <span class="sd">    If &quot;Excellent&quot;, the ECG signal quality is good.</span>
@@ -906,7 +906,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ecg_quality_kSQI</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fisher&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the kurtosis of the signal, with Fisher&#39;s or Pearson&#39;s method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the kurtosis of the signal, with Fisher&#39;s or Pearson&#39;s method.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fisher&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">kurtosis</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">fisher</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -922,7 +922,7 @@ title="Open an issue"
     <span class="n">dem_spectrum</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Power Spectrum Distribution of QRS Wave.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Power Spectrum Distribution of QRS Wave.&quot;&quot;&quot;</span>
 
     <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_power</span><span class="p">(</span>
         <span class="n">ecg_cleaned</span><span class="p">,</span>
@@ -948,7 +948,7 @@ title="Open an issue"
     <span class="n">dem_spectrum</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Relative Power in the Baseline.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Relative Power in the Baseline.&quot;&quot;&quot;</span>
     <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_power</span><span class="p">(</span>
         <span class="n">ecg_cleaned</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
@@ -979,9 +979,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

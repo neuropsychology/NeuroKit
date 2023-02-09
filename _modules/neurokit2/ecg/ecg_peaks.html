@@ -561,18 +561,13 @@ title="Open an issue"
 <div class="viewcode-block" id="ecg_peaks"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_peaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_peaks</span><span class="p">(</span>
     <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Find R-peaks in an ECG signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find R-peaks in an ECG signal**</span>
 
 <span class="sd">    Find R-peaks in an ECG signal using the specified method. The method accepts unfiltered ECG</span>
 <span class="sd">    signals as input, although it is expected that a filtered (cleaned) ECG will result in better</span>
 <span class="sd">    results.</span>
 
 <span class="sd">    Different algorithms for peak-detection include:</span>
-
-<span class="sd">    .. note::</span>
-
-<span class="sd">      Please help us improve the methods&#39; documentation by adding a small description.</span>
-
 
 <span class="sd">    * **neurokit** (default): QRS complexes are detected based on the steepness of the absolute</span>
 <span class="sd">      gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in</span>
@@ -598,6 +593,11 @@ title="Open an issue"
 <span class="sd">      signals are accumulated. Finally, a threshold is used to accept or reject the peak locations.</span>
 <span class="sd">      See this discussion for more information on the origins of the method:</span>
 <span class="sd">      https://github.com/neuropsychology/NeuroKit/issues/222</span>
+
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">      Please help us improve the methods&#39; documentation by adding a small description.</span>
 
 
 <span class="sd">    Parameters</span>
@@ -837,9 +837,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

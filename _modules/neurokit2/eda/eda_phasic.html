@@ -562,7 +562,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="eda_phasic"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_phasic">[docs]</a><span class="k">def</span> <span class="nf">eda_phasic</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Decompose Electrodermal Activity (EDA) into Phasic and Tonic Components**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Decompose Electrodermal Activity (EDA) into Phasic and Tonic Components**</span>
 
 <span class="sd">    Decompose the Electrodermal Activity (EDA) into two components, namely **Phasic** and</span>
 <span class="sd">    **Tonic**, using different methods including cvxEDA (Greco, 2016) or Biopac&#39;s Acqknowledge</span>
@@ -661,7 +661,7 @@ title="Open an issue"
 <span class="c1"># Acqknowledge</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">smoothing_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
 <span class="sd">    issue/)&quot;&quot;&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">smoothing_factor</span> <span class="o">*</span> <span class="n">sampling_rate</span>
     <span class="n">tonic</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
@@ -673,7 +673,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
 <span class="sd">    issue/)&quot;&quot;&quot;</span>
     <span class="n">phasic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
     <span class="n">tonic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
@@ -697,7 +697,7 @@ title="Open an issue"
     <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">reltol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A convex optimization approach to electrodermal activity processing (CVXEDA).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A convex optimization approach to electrodermal activity processing (CVXEDA).</span>
 
 <span class="sd">    This function implements the cvxEDA algorithm described in &quot;cvxEDA: a</span>
 <span class="sd">    Convex Optimization Approach to Electrodermal Activity Processing&quot; (Greco et al., 2015).</span>
@@ -882,9 +882,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

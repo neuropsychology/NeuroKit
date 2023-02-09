@@ -1589,57 +1589,55 @@ by the sampling rate. By default 1000.</p></li>
 <span class="gp">In [4]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="go"># Simulate signal with low and high frequency</span>
-<span class="gp">In [5]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">amplitude</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">amplitude</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-
-<span class="gp">In [7]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)))</span>  <span class="c1"># Add baseline and linear trend</span>
+<span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)))</span>  <span class="c1"># Add baseline and linear trend</span>
 
 <span class="go"># Apply detrending algorithms</span>
 <span class="go"># ---------------------------</span>
 <span class="go"># Method 1: Default Polynomial Detrending of a Given Order</span>
 <span class="go"># Constant detrend (removes the mean)</span>
-<span class="gp">In [8]: </span><span class="n">baseline</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">In [7]: </span><span class="n">baseline</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="go"># Linear Detrend (removes the linear trend)</span>
-<span class="gp">In [9]: </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">In [8]: </span><span class="n">linear</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="go"># Polynomial Detrend (removes the polynomial trend)</span>
-<span class="gp">In [10]: </span><span class="n">quadratic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Quadratic detrend</span>
+<span class="gp">In [9]: </span><span class="n">quadratic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Quadratic detrend</span>
 
-<span class="gp">In [11]: </span><span class="n">cubic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Cubic detrend</span>
+<span class="gp">In [10]: </span><span class="n">cubic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Cubic detrend</span>
 
-<span class="gp">In [12]: </span><span class="n">poly10</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Linear detrend (10th order)</span>
+<span class="gp">In [11]: </span><span class="n">poly10</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Linear detrend (10th order)</span>
 
 <span class="go"># Method 2: Tarvainen&#39;s smoothness priors approach (Tarvainen et al., 2002)</span>
-<span class="gp">In [13]: </span><span class="n">tarvainen</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;tarvainen2002&quot;</span><span class="p">)</span>
+<span class="gp">In [12]: </span><span class="n">tarvainen</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;tarvainen2002&quot;</span><span class="p">)</span>
 
 <span class="go"># Method 3: LOESS smoothing trend removal</span>
-<span class="gp">In [14]: </span><span class="n">loess</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;loess&quot;</span><span class="p">)</span>
+<span class="gp">In [13]: </span><span class="n">loess</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;loess&quot;</span><span class="p">)</span>
 
 <span class="go"># Method 4: Local linear regression (100Hz)</span>
-<span class="gp">In [15]: </span><span class="n">locreg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;locreg&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                           <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+<span class="gp">In [14]: </span><span class="n">locreg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;locreg&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                           <span class="n">window</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 
 <span class="go"># Method 5: EMD</span>
-<span class="gp">In [16]: </span><span class="n">emd</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;EMD&quot;</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">In [15]: </span><span class="n">emd</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;EMD&quot;</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="go"># Visualize different methods</span>
-<span class="gp">In [17]: </span><span class="n">axes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Original signal&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Baseline&quot;</span><span class="p">:</span> <span class="n">baseline</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Linear&quot;</span><span class="p">:</span> <span class="n">linear</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Quadratic&quot;</span><span class="p">:</span> <span class="n">quadratic</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Cubic&quot;</span><span class="p">:</span> <span class="n">cubic</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Polynomial (10th)&quot;</span><span class="p">:</span> <span class="n">poly10</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Tarvainen&quot;</span><span class="p">:</span> <span class="n">tarvainen</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;LOESS&quot;</span><span class="p">:</span> <span class="n">loess</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;Local Regression&quot;</span><span class="p">:</span> <span class="n">locreg</span><span class="p">,</span>
-<span class="gp">   ....: </span>                     <span class="s2">&quot;EMD&quot;</span><span class="p">:</span> <span class="n">emd</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [16]: </span><span class="n">axes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Original signal&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Baseline&quot;</span><span class="p">:</span> <span class="n">baseline</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Linear&quot;</span><span class="p">:</span> <span class="n">linear</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Quadratic&quot;</span><span class="p">:</span> <span class="n">quadratic</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Cubic&quot;</span><span class="p">:</span> <span class="n">cubic</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Polynomial (10th)&quot;</span><span class="p">:</span> <span class="n">poly10</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Tarvainen&quot;</span><span class="p">:</span> <span class="n">tarvainen</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;LOESS&quot;</span><span class="p">:</span> <span class="n">loess</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;Local Regression&quot;</span><span class="p">:</span> <span class="n">locreg</span><span class="p">,</span>
+<span class="gp">   ....: </span>                    <span class="s2">&quot;EMD&quot;</span><span class="p">:</span> <span class="n">emd</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 
 <span class="go"># Plot horizontal lines to better visualize the detrending</span>
-<span class="gp">In [18]: </span><span class="k">for</span> <span class="n">subplot</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+<span class="gp">In [17]: </span><span class="k">for</span> <span class="n">subplot</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
 <span class="gp">   ....: </span>    <span class="n">subplot</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 </pre></div>
@@ -1825,7 +1823,7 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x26ebdac9cc0&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x229a0ad5570&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1942,19 +1940,19 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec508a230&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a941d030&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec4e12800&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a92fcbe0&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec4e13b80&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a92fd390&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec4e11db0&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a92fd570&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec4e11e10&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a92fc490&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" src="../_images/p_signal_noise2.png" style="width: 1200.0px; height: 1200.0px;" /></a>
@@ -2001,32 +1999,32 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec316c880&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a94e02e0&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec316c5b0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a94fead0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec316c250&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a94fe140&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26eb6b6c7c0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x229a94fe5f0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate1.png"><img alt="../_images/p_signal_surrogate1.png" src="../_images/p_signal_surrogate1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec3207a60&gt;]</span>
+<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a9438af0&gt;]</span>
 
 <span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ec3207ac0&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a9438d90&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26ebc3cb190&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x229a92fe050&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26ec3207fd0&gt;</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x229a94fd450&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" src="../_images/p_signal_surrogate2.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -2113,10 +2111,10 @@ See <code class="xref py py-func docutils literal notranslate"><span class="pre"
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_findpeaks1.png"><img alt="../_images/p_signal_findpeaks1.png" src="../_images/p_signal_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="kn">import</span> <span class="nn">scipy.misc</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="kn">import</span> <span class="nn">scipy.datasets</span>
 
 <span class="go"># Load actual ECG Signal</span>
-<span class="gp">In [6]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">electrocardiogram</span><span class="p">()</span>
+<span class="gp">In [6]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">electrocardiogram</span><span class="p">()</span>
 
 <span class="gp">In [7]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]</span>
 
@@ -3100,9 +3098,9 @@ down the rows.</p></li>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

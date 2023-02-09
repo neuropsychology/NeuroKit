@@ -570,7 +570,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="cluster"><a class="viewcode-back" href="../../../functions/stats.html#neurokit2.cluster">[docs]</a><span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Data Clustering**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Data Clustering**</span>
 
 <span class="sd">    Performs clustering of data using different algorithms.</span>
 
@@ -739,10 +739,11 @@ title="Open an issue"
 <span class="c1"># Kmeans</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_cluster_kmeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;K-means clustering algorithm&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;K-means clustering algorithm&quot;&quot;&quot;</span>
+
     <span class="c1"># Initialize clustering function</span>
     <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">KMeans</span><span class="p">(</span>
-        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="c1"># Fit</span>
@@ -778,7 +779,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_kmedoids</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Peforms k-medoids clustering which is based on the most centrally located object in a cluster.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Peforms k-medoids clustering which is based on the most centrally located object in a cluster.</span>
 <span class="sd">    Less sensitive to outliers than K-means clustering.</span>
 
 <span class="sd">    Adapted from https://github.com/rakeshvar/kmedoids/. Original proposed algorithm from Park &amp; Jun (2009).</span>
@@ -867,7 +868,7 @@ title="Open an issue"
     <span class="n">optimize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The modified K-means clustering algorithm,</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The modified K-means clustering algorithm,</span>
 
 <span class="sd">    adapted from Marijn van Vliet and Frederic von Wegner.</span>
 
@@ -907,7 +908,7 @@ title="Open an issue"
     <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_channels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="c1"># Cache this value for later to compute residual</span>
-    <span class="n">data_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">data_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Select random timepoints for our initial topographic maps</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
@@ -1006,7 +1007,7 @@ title="Open an issue"
 <span class="c1"># PCA</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_cluster_pca</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Principal Component Analysis (PCA) for clustering.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Principal Component Analysis (PCA) for clustering.&quot;&quot;&quot;</span>
     <span class="c1"># Fit PCA</span>
     <span class="n">pca</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">PCA</span><span class="p">(</span>
         <span class="n">n_components</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span>
@@ -1053,7 +1054,7 @@ title="Open an issue"
 <span class="c1"># ICA</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_cluster_ica</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Independent Component Analysis (ICA) for clustering.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Independent Component Analysis (ICA) for clustering.&quot;&quot;&quot;</span>
     <span class="c1"># Fit ICA</span>
     <span class="n">ica</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">FastICA</span><span class="p">(</span>
         <span class="n">n_components</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span>
@@ -1097,7 +1098,7 @@ title="Open an issue"
 <span class="c1"># SKLEARN</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_cluster_sklearn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;spectral&quot;</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Spectral clustering&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spectral clustering&quot;&quot;&quot;</span>
     <span class="c1"># Initialize clustering function</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;spectral&quot;</span><span class="p">]:</span>
         <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">SpectralClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1134,7 +1135,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_mixture</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bayesian</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Mixture model&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixture model&quot;&quot;&quot;</span>
     <span class="c1"># Initialize clustering function</span>
     <span class="k">if</span> <span class="n">bayesian</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">mixture</span><span class="o">.</span><span class="n">GaussianMixture</span><span class="p">(</span>
@@ -1187,7 +1188,7 @@ title="Open an issue"
     <span class="n">use_peaks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),</span>
 <span class="sd">    implemented by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518</span>
 
 <span class="sd">    Preprocessing steps of GFP computation are necessary for the algorithm to run. If gfp arguments are specified,</span>
@@ -1207,7 +1208,7 @@ title="Open an issue"
         <span class="k">return</span> <span class="n">A_</span><span class="p">,</span> <span class="n">a</span>
 
     <span class="k">def</span> <span class="nf">locmax</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get local maxima of 1D-array</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get local maxima of 1D-array</span>
 <span class="sd">        Args:</span>
 <span class="sd">            x: numeric sequence</span>
 <span class="sd">        Returns:</span>
@@ -1227,7 +1228,7 @@ title="Open an issue"
     <span class="k">if</span> <span class="n">gfp</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gfp_peaks</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">gfp_sum_sq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">gfp</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">gfp_peaks</span> <span class="o">=</span> <span class="n">locmax</span><span class="p">(</span><span class="n">gfp</span><span class="p">)</span>
-        <span class="n">gfp_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gfp</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># normalizing constant in GEV</span>
+        <span class="n">gfp_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">gfp</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># normalizing constant in GEV</span>
         <span class="k">if</span> <span class="n">use_peaks</span><span class="p">:</span>
             <span class="n">maps</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">gfp_peaks</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># initialize clusters</span>
             <span class="n">cluster_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">gfp_peaks</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># store original gfp peak indices</span>
@@ -1253,7 +1254,7 @@ title="Open an issue"
         <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">m_x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">maps</span> <span class="o">-</span> <span class="n">m_y</span><span class="p">))</span> <span class="o">/</span> <span class="n">s_xy</span>
 
         <span class="c1"># microstate sequence, ignore polarity</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">C</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># GEV (global explained variance) of cluster k</span>
         <span class="n">gev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_maps</span><span class="p">)</span>
@@ -1274,7 +1275,7 @@ title="Open an issue"
             <span class="n">m_y</span><span class="p">,</span> <span class="n">s_y</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">c</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
             <span class="n">s_xy</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">nch</span> <span class="o">*</span> <span class="n">s_x</span> <span class="o">*</span> <span class="n">s_y</span>
             <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">maps</span> <span class="o">-</span> <span class="n">m_x</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="n">m_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">s_xy</span>
-            <span class="n">inew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">C</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># ignore polarity</span>
+            <span class="n">inew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># ignore polarity</span>
             <span class="n">re_cluster</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inew</span><span class="p">)</span>
             <span class="n">Ci</span><span class="p">[</span><span class="n">inew</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="n">n_maps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ci</span><span class="p">)</span>
@@ -1290,7 +1291,7 @@ title="Open an issue"
             <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">Sk</span><span class="p">)</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">evecs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">evals</span><span class="p">))]</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-            <span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
     <span class="c1"># Get distance</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">_cluster_quality_distance</span><span class="p">(</span><span class="n">cluster_data</span><span class="p">,</span> <span class="n">maps</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1322,7 +1323,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_cluster_getclusters</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">clustering</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get average representatives of clusters&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get average representatives of clusters&quot;&quot;&quot;</span>
     <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clustering</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">clustering</span> <span class="o">==</span> <span class="n">i</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">)])</span>
 </pre></div>
@@ -1341,9 +1342,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

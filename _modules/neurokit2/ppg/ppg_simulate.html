@@ -577,7 +577,7 @@ title="Open an issue"
     <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Simulate a photoplethysmogram (PPG) signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate a photoplethysmogram (PPG) signal**</span>
 
 <span class="sd">    Phenomenological approximation of PPG. The PPG wave is described with four landmarks: wave</span>
 <span class="sd">    onset, location of the systolic peak, location of the dicrotic notch and location of the</span>
@@ -757,7 +757,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_frequency_modulation</span><span class="p">(</span><span class="n">periods</span><span class="p">,</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">modulation_frequency</span><span class="p">,</span> <span class="n">modulation_strength</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;modulator_frequency determines the frequency at which respiratory sinus arrhythmia occurs (in Hz).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;modulator_frequency determines the frequency at which respiratory sinus arrhythmia occurs (in Hz).</span>
 
 <span class="sd">    modulator_strength must be between 0 and 1.</span>
 
@@ -770,7 +770,7 @@ title="Open an issue"
         <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;Skipping frequency modulation, since the modulation_strength&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">modulation_strength</span><span class="si">}</span><span class="s2"> leads to physiologically implausible&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot; wave durations of </span><span class="si">{</span><span class="p">((</span><span class="n">modulation_mean</span> <span class="o">-</span> <span class="n">modulation_strength</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">1000</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; wave durations of </span><span class="si">{</span><span class="p">((</span><span class="n">modulation_mean</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">modulation_strength</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">periods</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; milliseconds.&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">periods</span><span class="p">,</span> <span class="n">seconds</span>
@@ -797,7 +797,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_random_x_offset</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">offset_weight</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is</span>
 <span class="sd">    the wave onset preceding xi. offset_weight must be between 0 and 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize offset to min 0 and max .99</span>
@@ -811,7 +811,7 @@ title="Open an issue"
         <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;Skipping random IBI modulation, since the offset_weight&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">offset_weight</span><span class="si">}</span><span class="s2"> leads to physiologically implausible wave&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot; durations of </span><span class="si">{</span><span class="p">(</span><span class="n">min_x_diff</span> <span class="o">-</span> <span class="p">(</span><span class="n">min_x_diff</span> <span class="o">*</span> <span class="n">offset_weight</span><span class="p">))</span> <span class="o">*</span> <span class="mi">1000</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; durations of </span><span class="si">{</span><span class="p">(</span><span class="n">min_x_diff</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">min_x_diff</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">offset_weight</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; milliseconds.&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
@@ -844,9 +844,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

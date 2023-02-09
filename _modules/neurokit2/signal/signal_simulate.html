@@ -565,7 +565,7 @@ title="Open an issue"
 <div class="viewcode-block" id="signal_simulate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_simulate">[docs]</a><span class="k">def</span> <span class="nf">signal_simulate</span><span class="p">(</span>
     <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Simulate a continuous signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate a continuous signal**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -624,7 +624,7 @@ title="Open an issue"
                     <span class="sa">f</span><span class="s2">&quot;Skipping requested frequency&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; of </span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s2"> Hz since it cannot be resolved at the&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; sampling rate of </span><span class="si">{</span><span class="n">sampling_rate</span><span class="si">}</span><span class="s2"> Hz. Please increase&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; sampling rate to </span><span class="si">{</span><span class="n">freq</span> <span class="o">*</span> <span class="mi">10</span><span class="si">}</span><span class="s2"> Hz or choose frequencies&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; sampling rate to </span><span class="si">{</span><span class="n">freq</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2"> Hz or choose frequencies&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; smaller than or equal to </span><span class="si">{</span><span class="n">nyquist</span><span class="si">}</span><span class="s2"> Hz.&quot;</span><span class="p">,</span>
                     <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -635,11 +635,11 @@ title="Open an issue"
             <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Skipping requested frequency&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; of </span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s2"> Hz since its period of </span><span class="si">{</span><span class="mi">1</span> <span class="o">/</span> <span class="n">freq</span><span class="si">}</span><span class="s2"> seconds&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; of </span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s2"> Hz since its period of </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">freq</span><span class="si">}</span><span class="s2"> seconds&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; exceeds the signal duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> seconds.&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; Please choose frequencies larger than&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="mi">1</span> <span class="o">/</span> <span class="n">duration</span><span class="si">}</span><span class="s2"> Hz or increase the duration of the&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; signal above </span><span class="si">{</span><span class="mi">1</span> <span class="o">/</span> <span class="n">freq</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">duration</span><span class="si">}</span><span class="s2"> Hz or increase the duration of the&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; signal above </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">freq</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">,</span>
                     <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">continue</span>
@@ -676,9 +676,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

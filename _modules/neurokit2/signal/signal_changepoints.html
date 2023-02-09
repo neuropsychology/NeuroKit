@@ -562,7 +562,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="signal_changepoints"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_changepoints">[docs]</a><span class="k">def</span> <span class="nf">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;meanvar&quot;</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Change Point Detection**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Change Point Detection**</span>
 
 <span class="sd">    Only the PELT method is implemented for now.</span>
 
@@ -616,7 +616,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_changepoints_pelt</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;meanvar&quot;</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;PELT algorithm to find change points in a signal.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PELT algorithm to find change points in a signal.</span>
 
 <span class="sd">    Adapted from: https://github.com/ruipgil/changepy https://github.com/deepcharles/ruptures</span>
 <span class="sd">    https://github.com/STOR-i/Changepoints.jl https://github.com/rkillick/changepoint/</span>
@@ -663,7 +663,7 @@ title="Open an issue"
 <span class="c1"># Cost functions</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_signal_changepoints_cost_mean</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Cost function for a normally distributed signal with a changing mean.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost function for a normally distributed signal with a changing mean.&quot;&quot;&quot;</span>
     <span class="n">i_variance_2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">cmm</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
     <span class="n">cmm</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
@@ -682,7 +682,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_changepoints_cost_var</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Cost function for a normally distributed signal with a changing variance.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost function for a normally distributed signal with a changing variance.&quot;&quot;&quot;</span>
     <span class="n">cumm</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
     <span class="n">cumm</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)))</span>
 
@@ -695,7 +695,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_changepoints_cost_meanvar</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Cost function for a normally distributed signal with a changing mean and variance.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost function for a normally distributed signal with a changing mean and variance.&quot;&quot;&quot;</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">signal</span><span class="p">)))</span>
 
     <span class="n">cumm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
@@ -734,9 +734,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

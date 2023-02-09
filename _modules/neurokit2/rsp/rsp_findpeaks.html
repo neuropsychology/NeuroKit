@@ -568,7 +568,7 @@ title="Open an issue"
     <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
     <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Extract extrema in a respiration (RSP) signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Extract extrema in a respiration (RSP) signal**</span>
 
 <span class="sd">    Low-level function used by :func:`.rsp_peaks` to identify inhalation and exhalation onsets</span>
 <span class="sd">    (troughs and peaks respectively) in a preprocessed respiration signal using different sets of</span>
@@ -658,7 +658,7 @@ title="Open an issue"
 <span class="c1"># Methods</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_rsp_findpeaks_biosppy</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py&quot;&quot;&quot;</span>
 
     <span class="n">extrema</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_extrema</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
     <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_outliers</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -677,7 +677,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_rsp_findpeaks_khodadad</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta&quot;&quot;&quot;</span>
 
     <span class="n">extrema</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_extrema</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
     <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_outliers</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="n">amplitude_min</span><span class="p">)</span>
@@ -688,7 +688,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_rsp_findpeaks_scipy</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">peak_distance</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">peak_prominence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html&quot;&quot;&quot;</span>
     <span class="n">peak_distance</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="n">peak_distance</span>
     <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
         <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">peak_prominence</span>
@@ -805,9 +805,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

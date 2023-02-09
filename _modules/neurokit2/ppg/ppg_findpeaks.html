@@ -564,7 +564,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="ppg_findpeaks"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Find systolic peaks in a photoplethysmogram (PPG) signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find systolic peaks in a photoplethysmogram (PPG) signal**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -573,7 +573,8 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``. The default is ``&quot;elgendi&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;bishop&quot;``. The default is</span>
+<span class="sd">        ``&quot;elgendi&quot;``.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, returns a plot of the thresholds used during peak detection. Useful for</span>
 <span class="sd">        debugging. The default is ``False``.</span>
@@ -595,32 +596,38 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 <span class="sd">      import matplotlib.pyplot as plt</span>
 
-<span class="sd">      ppg = nk.ppg_simulate(heart_rate=75, duration=30)</span>
-<span class="sd">      ppg_clean = nk.ppg_clean(ppg)</span>
-<span class="sd">      info = nk.ppg_findpeaks(ppg_clean)</span>
-<span class="sd">      peaks = info[&quot;PPG_Peaks&quot;]</span>
+<span class="sd">      ppg = nk.ppg_simulate(heart_rate=75, duration=20, sampling_rate=50)</span>
+<span class="sd">      ppg_clean = nk.ppg_clean(ppg, sampling_rate=50)</span>
 
 <span class="sd">      @savefig p_ppg_findpeaks1.png scale=100%</span>
-<span class="sd">      plt.plot(ppg, label=&quot;raw PPG&quot;)</span>
-<span class="sd">      plt.plot(ppg_clean, label=&quot;clean PPG&quot;)</span>
-<span class="sd">      plt.scatter(peaks, ppg[peaks], c=&quot;r&quot;, label=&quot;systolic peaks&quot;)</span>
-<span class="sd">      plt.legend()</span>
+<span class="sd">      peaks = nk.ppg_findpeaks(ppg_clean, sampling_rate=100, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      # Method by Bishop et al., (2018)</span>
+<span class="sd">      @savefig p_ppg_findpeaks2.png scale=100%</span>
+<span class="sd">      peaks = nk.ppg_findpeaks(ppg, method=&quot;bishop&quot;, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    * Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in</span>
-<span class="sd">      Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.</span>
-<span class="sd">      PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
+<span class="sd">    * Elgendi, M., Norton, I., Brearley, M., Abbott, D., &amp; Schuurmans, D. (2013). Systolic peak</span>
+<span class="sd">      detection in acceleration photoplethysmograms measured from emergency responders in tropical</span>
+<span class="sd">      conditions. PloS one, 8(10), e76585.</span>
+<span class="sd">    * Bishop, S. M., &amp; Ercole, A. (2018). Multi-scale peak and trough detection optimised for</span>
+<span class="sd">      periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Neuromonitoring XVI</span>
+<span class="sd">      (pp. 189-195). Springer International Publishing.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptd&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop2018&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop&quot;</span><span class="p">]:</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_bishop</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;, &#39;bishop&#39;.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Prepare output.</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">}</span>
@@ -637,7 +644,7 @@ title="Open an issue"
     <span class="n">mindelay</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in</span>
 <span class="sd">    Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585.</span>
 <span class="sd">    doi:10.1371/journal.pone.0076585.</span>
 
@@ -646,14 +653,14 @@ title="Open an issue"
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-        <span class="n">__</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;filtered&quot;</span><span class="p">)</span>
 
     <span class="c1"># Ignore the samples with negative amplitudes and square the samples with</span>
     <span class="c1"># values larger than zero.</span>
     <span class="n">signal_abs</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">signal_abs</span><span class="p">[</span><span class="n">signal_abs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">sqrd</span> <span class="o">=</span> <span class="n">signal_abs</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">sqrd</span> <span class="o">=</span> <span class="n">signal_abs</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># Compute the thresholds for peak detection. Call with show=True in order</span>
     <span class="c1"># to visualize thresholds.</span>
@@ -679,9 +686,7 @@ title="Open an issue"
 
     <span class="c1"># Identify systolic peaks within waves (ignore waves that are too short).</span>
     <span class="n">num_waves</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">beg_waves</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">end_waves</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">min_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">peakwindow</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="p">)</span>  <span class="c1"># this is threshold 2 in the paper</span>
+    <span class="n">min_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">peakwindow</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>  <span class="c1"># this is threshold 2 in the paper</span>
     <span class="n">min_delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">mindelay</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -713,9 +718,75 @@ title="Open an issue"
 
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal_abs</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PPG Peaks (Method by Elgendi et al., 2013)&quot;</span><span class="p">)</span>
 
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">peaks</span>
+
+
+<span class="k">def</span> <span class="nf">_ppg_findpeaks_bishop</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Bishop SM, Ercole A (2018) Multi-scale peak and trough detection optimised</span>
+<span class="sd">    for periodic and quasi-periodic neuroscience data. doi:10.1007/978-3-319-65798-1_39.</span>
+
+<span class="sd">    Currently designed for short signals of relatively low sampling frequencies (e.g. 6 seconds at</span>
+<span class="sd">    100 Hz). Also, the function currently only returns peaks, but it does identify pulse onsets too.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: create ppg_peaks() that also returns onsets and stuff</span>
+
+    <span class="c1"># Setup</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Step 1: calculate local maxima and local minima scalograms</span>
+
+    <span class="c1"># - detrend: this removes the best-fit straight line</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+
+    <span class="c1"># - initialise LMS matrices</span>
+    <span class="n">m_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">m_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">L</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># - populate LMS matrices</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>  <span class="c1"># scalogram scales</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">m_max</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">m_min</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># Step 2: find the scale with the most local maxima (or local minima)</span>
+    <span class="c1"># - row-wise summation (i.e. sum each row)</span>
+    <span class="n">gamma_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_max</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># the &quot;axis=1&quot; option makes it row-wise</span>
+    <span class="n">gamma_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_min</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># - find scale with the most local maxima (or local minima)</span>
+    <span class="n">lambda_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">gamma_max</span><span class="p">)</span>
+    <span class="n">lambda_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">gamma_min</span><span class="p">)</span>
+
+    <span class="c1"># Step 3: Use lambda to remove all elements of m for which k&gt;lambda</span>
+    <span class="n">m_max</span> <span class="o">=</span> <span class="n">m_max</span><span class="p">[:</span> <span class="p">(</span><span class="n">lambda_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:]</span>
+    <span class="n">m_min</span> <span class="o">=</span> <span class="n">m_min</span><span class="p">[:</span> <span class="p">(</span><span class="n">lambda_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:]</span>
+
+    <span class="c1"># Step 4: Find peaks (and onsets)</span>
+    <span class="c1"># - column-wise summation</span>
+    <span class="n">m_max_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_max</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">m_min_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_min</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">m_max_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">m_min_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax0</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;signal&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">onsets</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PPG Peaks (Method by Bishop et al., 2018)&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
 </pre></div>
 
               </div>
@@ -732,9 +803,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

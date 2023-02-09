@@ -576,7 +576,7 @@ title="Open an issue"
     <span class="n">analytical_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Quantify changes of a nonstationary signal’s frequency over time**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Quantify changes of a nonstationary signal’s frequency over time**</span>
 <span class="sd">    The objective of time-frequency analysis is to offer a more informative description of the</span>
 <span class="sd">    signal which reveals the temporal variation of its frequency contents.</span>
 
@@ -786,7 +786,7 @@ title="Open an issue"
     <span class="n">window_type</span><span class="o">=</span><span class="s2">&quot;hann&quot;</span><span class="p">,</span>
     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Short-term Fourier Transform.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Short-term Fourier Transform.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">nperseg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -817,7 +817,7 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">continuous_wt</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nfreqbin</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Continuous Wavelet Transform**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Continuous Wavelet Transform**</span>
 
 <span class="sd">     References</span>
 <span class="sd">     ----------</span>
@@ -855,7 +855,7 @@ title="Open an issue"
 <span class="c1"># Wigner-Ville Distribution</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">wvd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_freqbins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">analytical_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;WignerVille&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Wigner Ville Distribution and Pseudo-Wigner Ville Distribution.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wigner Ville Distribution and Pseudo-Wigner Ville Distribution.&quot;&quot;&quot;</span>
     <span class="c1"># Compute the analytical signal</span>
     <span class="k">if</span> <span class="n">analytical_signal</span><span class="p">:</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">hilbert</span><span class="p">(</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
@@ -942,7 +942,7 @@ title="Open an issue"
     <span class="n">nfreqbin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">window_method</span><span class="o">=</span><span class="s2">&quot;hamming&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Smoothed Pseudo Wigner Ville Distribution**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Smoothed Pseudo Wigner Ville Distribution**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1103,7 +1103,7 @@ title="Open an issue"
 <span class="c1"># Plot function</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">plot_timefrequency</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;stft&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Visualize a time-frequency matrix.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize a time-frequency matrix.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;stft&quot;</span><span class="p">:</span>
         <span class="n">figure_title</span> <span class="o">=</span> <span class="s2">&quot;Short-time Fourier Transform Magnitude&quot;</span>
@@ -1150,9 +1150,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

@@ -560,7 +560,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="eeg_rereference"><a class="viewcode-back" href="../../../functions/eeg.html#neurokit2.eeg.eeg_rereference">[docs]</a><span class="k">def</span> <span class="nf">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**EEG Rereferencing**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**EEG Rereferencing**</span>
 
 <span class="sd">    This function can be used for arrays as well as MNE objects.</span>
 
@@ -697,7 +697,11 @@ title="Open an issue"
                 <span class="s2">&quot;for this function to run. Please install it first (`pip install mne`).&quot;</span><span class="p">,</span>
             <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
         <span class="n">old_verbosity_level</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">set_log_level</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="n">return_old_level</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">compute_current_source_density</span><span class="p">(</span><span class="n">eeg</span><span class="p">)</span>
+        <span class="n">eeg</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">compute_current_source_density</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Reconvert CSD type to EEG (https://github.com/mne-tools/mne-python/issues/11426)</span>
+        <span class="c1"># channels = np.array(eeg.ch_names)[mne.pick_types(eeg.info, csd=True)]</span>
+        <span class="c1"># eeg.set_channel_types(dict(zip(channels, [&quot;eeg&quot;] * len(channels))))</span>
         <span class="n">mne</span><span class="o">.</span><span class="n">set_log_level</span><span class="p">(</span><span class="n">old_verbosity_level</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">eeg</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">set_eeg_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -719,9 +723,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

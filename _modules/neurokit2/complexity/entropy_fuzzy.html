@@ -560,7 +560,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="entropy_fuzzy"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.entropy_fuzzy">[docs]</a><span class="k">def</span> <span class="nf">entropy_fuzzy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">approximate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Fuzzy Entropy (FuzzyEn)**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Fuzzy Entropy (FuzzyEn)**</span>
 
 <span class="sd">    Fuzzy entropy (FuzzyEn) of a signal stems from the combination between information theory and</span>
 <span class="sd">    fuzzy set theory (Zadeh, 1965). A fuzzy set is a set containing elements with varying degrees of</span>
@@ -584,6 +584,8 @@ title="Open an issue"
 <span class="sd">        Tolerance (often denoted as *r*), distance to consider two data points as similar. If</span>
 <span class="sd">        ``&quot;sd&quot;`` (default), will be set to :math:`0.2 * SD_{signal}`. See</span>
 <span class="sd">        :func:`complexity_tolerance` to estimate the optimal value for this parameter.</span>
+<span class="sd">    approximate : bool</span>
+<span class="sd">        If ``True``, will compute the fuzzy approximate entropy (FuzzyApEn).</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments.</span>
 
@@ -594,8 +596,6 @@ title="Open an issue"
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information regarding the parameters used</span>
 <span class="sd">        to compute fuzzy entropy.</span>
-<span class="sd">    approximate : bool</span>
-<span class="sd">        If ``True``, will compute the fuzzy approximate entropy (FuzzyApEn).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -617,6 +617,7 @@ title="Open an issue"
 
 <span class="sd">      fuzzycapen, parameters = nk.entropy_fuzzy(signal, approximate=True, corrected=True)</span>
 <span class="sd">      fuzzycapen</span>
+
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -661,9 +662,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

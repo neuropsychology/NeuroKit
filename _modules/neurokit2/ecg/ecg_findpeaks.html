@@ -565,7 +565,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="ecg_findpeaks"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Locate R-peaks**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Locate R-peaks**</span>
 
 <span class="sd">    Low-level function used by :func:`ecg_peaks` to identify R-peaks in an ECG signal using a</span>
 <span class="sd">    different set of algorithms. Use the main function and see its documentation for details.</span>
@@ -680,7 +680,7 @@ title="Open an issue"
     <span class="n">gaussian_sd</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Probabilistic Methods-Agreement via Convolution (ProMAC).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probabilistic Methods-Agreement via Convolution (ProMAC).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -771,7 +771,7 @@ title="Open an issue"
     <span class="n">mindelay</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;All tune-able parameters are specified as keyword arguments.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All tune-able parameters are specified as keyword arguments.</span>
 
 <span class="sd">    The `signal` must be the highpass-filtered raw ECG with a lowcut of .5 Hz.</span>
 
@@ -843,7 +843,7 @@ title="Open an issue"
 <span class="c1"># Pan &amp; Tompkins (1985)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_pantompkins</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - Pan, J., &amp; Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions</span>
 <span class="sd">      on biomedical engineering, (3), 230-236.</span>
@@ -867,7 +867,7 @@ title="Open an issue"
 <span class="c1"># Nabian et al. (2018)</span>
 <span class="c1"># ===========================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_nabian2018</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.</span>
 
 <span class="sd">    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).</span>
 <span class="sd">      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.</span>
@@ -896,7 +896,7 @@ title="Open an issue"
 <span class="c1"># Hamilton (2002)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_hamilton</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.</span>
 
@@ -977,7 +977,7 @@ title="Open an issue"
 <span class="c1"># Slope Sum Function (SSF) - Zong et al. (2003)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_ssf</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
 <span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1024,7 +1024,7 @@ title="Open an issue"
 <span class="c1"># Zong (2003) - WQRS</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_zong</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - Zong, W., Moody, G. B., &amp; Jiang, D. (2003, September). A robust open-source algorithm to</span>
 <span class="sd">      detect onset and duration of QRS complexes. In Computers in Cardiology, 2003 (pp. 737-740).</span>
@@ -1076,7 +1076,7 @@ title="Open an issue"
 <span class="c1"># Christov (2004)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_christov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive</span>
 <span class="sd">      threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</span>
@@ -1208,7 +1208,7 @@ title="Open an issue"
 <span class="c1"># Gamboa (2008)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_gamboa</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/PIA-</span>
 <span class="sd">    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.</span>
 
 <span class="sd">    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on HCI and electrophysiology</span>
@@ -1253,7 +1253,7 @@ title="Open an issue"
 <span class="c1"># Engzee Modified (2012)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_engzee</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.</span>
 <span class="sd">      in Cardiology, vol. 6, pp. 37-42, 1979</span>
@@ -1378,7 +1378,7 @@ title="Open an issue"
 <span class="c1"># Stationary Wavelet Transform  (SWT) - Kalidas and Tamil (2017)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_kalidas</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform</span>
 <span class="sd">      for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and</span>
@@ -1433,7 +1433,7 @@ title="Open an issue"
 <span class="c1"># Elgendi et al. (2010)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_elgendi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;From https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    - Elgendi, Mohamed &amp; Jonkman, Mirjam &amp; De Boer, Friso. (2010). Frequency Bands Effects on QRS</span>
 <span class="sd">      Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing</span>
@@ -1544,7 +1544,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_rodrigues</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -1613,7 +1613,7 @@ title="Open an issue"
 <span class="c1"># Visibility graph transformation - by Koka and Muma (2022)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_vgraph</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;R-Peak Detector Using Visibility Graphs by Taulant Koka and Michael Muma (2022).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;R-Peak Detector Using Visibility Graphs by Taulant Koka and Michael Muma (2022).</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -1683,7 +1683,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_MWA</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Based on https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Based on https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    Optimized for vectorized computation.</span>
 
@@ -1712,7 +1712,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ecg_findpeaks_peakdetect</span><span class="p">(</span><span class="n">detection</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Based on https://github.com/berndporr/py-ecg-detectors/</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Based on https://github.com/berndporr/py-ecg-detectors/</span>
 
 <span class="sd">    Optimized for vectorized computation.</span>
 
@@ -1783,9 +1783,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

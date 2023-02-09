@@ -561,7 +561,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="ecg_invert"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_invert">[docs]</a><span class="k">def</span> <span class="nf">ecg_invert</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**ECG signal inversion**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**ECG signal inversion**</span>
 
 <span class="sd">    Checks whether an ECG signal is inverted, and if so, corrects for this inversion.</span>
 <span class="sd">    To automatically detect the inversion, the ECG signal is cleaned, the mean is subtracted,</span>
@@ -626,7 +626,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_ecg_inverted</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window_time</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Checks whether an ECG signal is inverted.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks whether an ECG signal is inverted.&quot;&quot;&quot;</span>
     <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="c1"># mean should already be close to zero after filtering but just in case, subtract</span>
     <span class="n">ecg_cleaned_meanzero</span> <span class="o">=</span> <span class="n">ecg_cleaned</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span>
@@ -640,7 +640,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_roll_orig_max_squared</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;With a rolling window, takes the original value corresponding to the maximum of the squared signal.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;With a rolling window, takes the original value corresponding to the maximum of the squared signal.&quot;&quot;&quot;</span>
     <span class="n">x_rolled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">stride_tricks</span><span class="o">.</span><span class="n">sliding_window_view</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># https://stackoverflow.com/questions/61703879/in-numpy-how-to-select-elements-based-on-the-maximum-of-their-absolute-values</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_rolled</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -662,9 +662,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

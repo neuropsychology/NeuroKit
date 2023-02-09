@@ -563,7 +563,7 @@ title="Open an issue"
 <div class="viewcode-block" id="complexity_simulate"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_simulate">[docs]</a><span class="k">def</span> <span class="nf">complexity_simulate</span><span class="p">(</span>
     <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ornstein&quot;</span><span class="p">,</span> <span class="n">hurst_exponent</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Simulate chaotic time series**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate chaotic time series**</span>
 
 <span class="sd">    This function generates a chaotic signal using different algorithms and complex systems.</span>
 
@@ -691,7 +691,7 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_complexity_simulate_mackeyglass</span><span class="p">(</span>
     <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">discard</span><span class="o">=</span><span class="mi">250</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate time series using the Mackey-Glass equation. Generates time series using the discrete approximation of</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate time series using the Mackey-Glass equation. Generates time series using the discrete approximation of</span>
 <span class="sd">    the Mackey-Glass delay differential equation described by Grassberger &amp; Procaccia (1983).</span>
 
 <span class="sd">    Taken from nolitsa (https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/data.py#L223).</span>
@@ -753,7 +753,7 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_complexity_simulate_ornstein</span><span class="p">(</span>
     <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">hurst_exponent</span><span class="o">=</span><span class="mf">0.7</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This is based on https://github.com/LRydin/MFDFA.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This is based on https://github.com/LRydin/MFDFA.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -792,7 +792,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_complexity_simulate_fractionalnoise</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hurst_exponent</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates fractional Gaussian noise.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates fractional Gaussian noise.</span>
 
 <span class="sd">    Generates fractional Gaussian noise with a Hurst index H in (0,1). If H = 1/2 this is simply</span>
 <span class="sd">    Gaussian noise. The current method employed is the Davies-Harte method, which fails for H ≈ 0.</span>
@@ -856,7 +856,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_complexity_simulate_randomwalk</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Random walk.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Random walk.&quot;&quot;&quot;</span>
     <span class="n">steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">steps</span><span class="p">])</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -875,9 +875,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

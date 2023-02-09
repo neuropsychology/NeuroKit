@@ -566,7 +566,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="eog_clean"><a class="viewcode-back" href="../../../functions/eog.html#neurokit2.eog.eog_clean">[docs]</a><span class="k">def</span> <span class="nf">eog_clean</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Clean an EOG signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Clean an EOG signal**</span>
 
 <span class="sd">    Prepare a raw EOG signal for eye blinks detection.</span>
 
@@ -677,7 +677,7 @@ title="Open an issue"
 <span class="c1"># Methods</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eog_clean_neurokit</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">signal_filter</span><span class="p">(</span>
         <span class="n">eog_signal</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
@@ -689,7 +689,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eog_clean_agarwal2019</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Agarwal, M., &amp; Sivakumar, R.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agarwal, M., &amp; Sivakumar, R.</span>
 
 <span class="sd">    (2019). Blink: A Fully Automated Unsupervised Algorithm for Eye-Blink Detection in EEG Signals. In 2019 57th</span>
 <span class="sd">    Annual Allerton Conference on Communication, Control, and Computing (Allerton) (pp. 1113-1121). IEEE.</span>
@@ -706,7 +706,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eog_clean_brainstorm</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;EOG cleaning implemented by default in Brainstorm.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EOG cleaning implemented by default in Brainstorm.</span>
 
 <span class="sd">    https://neuroimage.usc.edu/brainstorm/Tutorials/TutRawSsp</span>
 
@@ -722,7 +722,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eog_clean_blinker</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Kleifges, K., Bigdely-Shamlo, N., Kerick, S.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kleifges, K., Bigdely-Shamlo, N., Kerick, S.</span>
 
 <span class="sd">    E., &amp; Robbins, K. A. (2017). BLINKER: automated extraction of ocular indices from EEG enabling large-scale</span>
 <span class="sd">    analysis. Frontiers in neuroscience, 11, 12.</span>
@@ -736,7 +736,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eog_clean_mne</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;EOG cleaning implemented by default in MNE.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EOG cleaning implemented by default in MNE.</span>
 
 <span class="sd">    https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py</span>
 
@@ -769,7 +769,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eog_clean_kong1998</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Kong, X., &amp; Wilson, G.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kong, X., &amp; Wilson, G.</span>
 
 <span class="sd">    F. (1998). A new EOG-based eyeblink detection algorithm. Behavior Research Methods, Instruments, &amp; Computers,</span>
 <span class="sd">    30(4), 713-719.</span>
@@ -809,9 +809,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

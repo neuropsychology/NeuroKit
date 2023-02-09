@@ -567,7 +567,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="eog_findpeaks"><a class="viewcode-back" href="../../../functions/eog.html#neurokit2.eog.eog_findpeaks">[docs]</a><span class="k">def</span> <span class="nf">eog_findpeaks</span><span class="p">(</span><span class="n">veog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mne&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Locate EOG eye blinks**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Locate EOG eye blinks**</span>
 
 <span class="sd">    Low-level function used by :func:`.eog_peaks` to identify blinks in an EOG signal using a</span>
 <span class="sd">    different set of algorithms. See :func:`.eog_peaks` for details.</span>
@@ -685,7 +685,7 @@ title="Open an issue"
 <span class="c1"># Method - NeuroKit</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eog_findpeaks_neurokit</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;In-house EOG blink detection.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;In-house EOG blink detection.&quot;&quot;&quot;</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="mf">1.25</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
         <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span>
@@ -699,7 +699,7 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_eog_findpeaks_neurokit_filterblinks</span><span class="p">(</span>
     <span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compare each detected event to blink template and reject it if too different.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare each detected event to blink template and reject it if too different.&quot;&quot;&quot;</span>
     <span class="c1"># Get epoch around each blink</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
         <span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.6</span>
@@ -771,7 +771,7 @@ title="Open an issue"
 <span class="c1"># Method - MNE</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eog_findpeaks_mne</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;EOG blink detection based on MNE.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EOG blink detection based on MNE.</span>
 
 <span class="sd">    https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py</span>
 
@@ -795,7 +795,7 @@ title="Open an issue"
 <span class="c1"># Method - Brainstorm</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eog_findpeaks_brainstorm</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;EOG blink detection implemented in brainstorm.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EOG blink detection implemented in brainstorm.</span>
 
 <span class="sd">    https://neuroimage.usc.edu/brainstorm/Tutorials/ArtifactsDetect#Detection:_Blinks</span>
 
@@ -812,7 +812,7 @@ title="Open an issue"
 <span class="c1"># Method - blinker</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eog_findpeaks_blinker</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;EOG blink detection based on BLINKER algorithm.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EOG blink detection based on BLINKER algorithm.</span>
 
 <span class="sd">    Detects only potential blink landmarks and does not separate blinks from other artifacts yet.</span>
 <span class="sd">    https://www.frontiersin.org/articles/10.3389/fnins.2017.00012/full</span>
@@ -862,9 +862,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

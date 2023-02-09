@@ -559,7 +559,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="fit_error"><a class="viewcode-back" href="../../../functions/stats.html#neurokit2.fit_error">[docs]</a><span class="k">def</span> <span class="nf">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Calculate the fit error for a model**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Calculate the fit error for a model**</span>
 
 <span class="sd">    Also specific and direct access functions can be used, such as :func:`.fit_mse`,</span>
 <span class="sd">    :func:`.fit_rmse` and :func:`.fit_r2`.</span>
@@ -636,17 +636,17 @@ title="Open an issue"
 <span class="c1"># Direct accessors</span>
 <span class="c1"># =============================================================================</span>
 <div class="viewcode-block" id="fit_mse"><a class="viewcode-back" href="../../../functions/stats.html#neurokit2.fit_mse">[docs]</a><span class="k">def</span> <span class="nf">fit_mse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute Mean Square Error (MSE).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Mean Square Error (MSE).&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)[</span><span class="s2">&quot;MSE&quot;</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="fit_rmse"><a class="viewcode-back" href="../../../functions/stats.html#neurokit2.fit_rmse">[docs]</a><span class="k">def</span> <span class="nf">fit_rmse</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute Root Mean Square Error (RMSE).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Root Mean Square Error (RMSE).&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">)[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="fit_r2"><a class="viewcode-back" href="../../../functions/stats.html#neurokit2.fit_r2">[docs]</a><span class="k">def</span> <span class="nf">fit_r2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">adjusted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Compute R2.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute R2.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">adjusted</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="n">n_parameters</span><span class="p">)[</span><span class="s2">&quot;R2_adjusted&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">fit_error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_predicted</span><span class="p">,</span> <span class="n">n_parameters</span><span class="o">=</span><span class="n">n_parameters</span><span class="p">)[</span><span class="s2">&quot;R2&quot;</span><span class="p">]</span></div>
@@ -689,9 +689,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

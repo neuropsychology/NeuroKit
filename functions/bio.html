@@ -767,20 +767,20 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [6]: </span><span class="n">bio_df</span><span class="p">,</span> <span class="n">bio_info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rsp</span><span class="o">=</span><span class="n">rsp</span><span class="p">,</span> <span class="n">eda</span><span class="o">=</span><span class="n">eda</span><span class="p">,</span> <span class="n">emg</span><span class="o">=</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.088527  -0.075281  70.064355  ...            0     0.04   7.921382</span>
-<span class="go">1  1.036217  -0.198092  70.064355  ...            0     0.04   7.921382</span>
-<span class="go">2  0.900434  -0.334022  70.064355  ...            0     0.04   7.921382</span>
-<span class="go">3  0.706642  -0.487859  70.064355  ...            0     0.04   7.921382</span>
-<span class="go">4  0.482074  -0.656780  70.064355  ...            0     0.04   7.921382</span>
+<span class="go">0  1.080839  -0.066188  70.020747  ...            0     12.0   7.949158</span>
+<span class="go">1  1.031442  -0.181707  70.020747  ...            0     12.0   7.949158</span>
+<span class="go">2  0.903438  -0.309204  70.020747  ...            0     12.0   7.949158</span>
+<span class="go">3  0.721442  -0.452849  70.020747  ...            0     12.0   7.949158</span>
+<span class="go">4  0.511702  -0.609724  70.020747  ...            0     12.0   7.949158</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize a subset of signals</span>
 <span class="gp">In [8]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go"></span>
+<span class="gh">Out[8]: </span>
 <span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
 <span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
 <span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
@@ -802,7 +802,7 @@ as well as the signals’ sampling rate.</p></li>
 
 <span class="go"># Visualize all signals</span>
 <span class="gp">In [12]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go"></span>
+<span class="gh">Out[12]: </span>
 <span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
 <span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
 <span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
@@ -876,12 +876,12 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 
 <span class="go"># Analyze</span>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go"></span>
-<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime   RSA_P2T     RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN  0.012143 -1.776357e-15</span>
-<span class="go">2     2   Neutral         4957  ...               NaN -0.001503  1.203761e-02</span>
-<span class="go">3     3   Neutral         9224  ...               NaN -0.003509  2.738234e-02</span>
-<span class="go">4     4  Negative        12984  ...               NaN  0.002043 -5.451553e-03</span>
+<span class="gh">Out[6]: </span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T     RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN   7.111969 -1.776357e-15</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -15.476818  1.203761e-02</span>
+<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871  2.738234e-02</span>
+<span class="go">4     4  Negative        12984  ...               NaN  -0.397892 -5.451553e-03</span>
 
 <span class="go">[4 rows x 46 columns]</span>
 </pre></div>
@@ -895,7 +895,7 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 
 <span class="go"># Analyze</span>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="gh">Out[9]: </span>
 <span class="go">   ECG_Rate_Mean  HRV_MeanNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
 <span class="go">0      86.392105  694.756381  ...            2.045955      0.156187</span>
 
@@ -937,9 +937,9 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

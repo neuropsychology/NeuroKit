@@ -563,7 +563,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="fractal_hurst"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.fractal_hurst">[docs]</a><span class="k">def</span> <span class="nf">fractal_hurst</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Hurst Exponent (H)**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Hurst Exponent (H)**</span>
 
 <span class="sd">    This function estimates the Hurst exponent via the standard rescaled range (R/S) approach, but</span>
 <span class="sd">    other methods exist, such as Detrended Fluctuation Analysis (DFA, see :func:`fractal_dfa`).</span>
@@ -668,7 +668,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">expected_rs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculates the expected (R/S)_n for white noise for a given n.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the expected (R/S)_n for white noise for a given n.</span>
 <span class="sd">    This is used as a correction factor in the function hurst_rs. It uses the</span>
 <span class="sd">    formula of Anis-Lloyd-Peters.</span>
 
@@ -686,7 +686,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_fractal_hurst_rs</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculates an individual R/S value in the rescaled range approach for</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates an individual R/S value in the rescaled range approach for</span>
 <span class="sd">    a given window size (the size of the subseries in which data should be split).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
@@ -752,7 +752,7 @@ title="Open an issue"
 <span class="c1"># Generalized Hurst Exponent</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_fractal_hurst_generalized</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;TO BE DONE.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TO BE DONE.</span>
 
 <span class="sd">    The Generalized Hurst exponent method is assesses directly the scaling properties of the time series</span>
 <span class="sd">    via the qth-order moments of the distribution of the increments.</span>
@@ -815,9 +815,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

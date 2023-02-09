@@ -566,7 +566,7 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="ecg_process"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_process">[docs]</a><span class="k">def</span> <span class="nf">ecg_process</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Automated pipeline for preprocessing an ECG signal**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Automated pipeline for preprocessing an ECG signal**</span>
 
 <span class="sd">    This function runs different preprocessing steps. **Help us improve the documentation of</span>
 <span class="sd">    this function by making it more tidy and useful!**</span>
@@ -578,7 +578,9 @@ title="Open an issue"
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Defaults to ``&quot;neurokit&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Defaults to ``&quot;neurokit&quot;``. We aim at improving this</span>
+<span class="sd">        aspect to make the available methods more transparent, and be able to generate specific</span>
+<span class="sd">        reports. Please get in touch if you are interested in helping out with this.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -644,16 +646,17 @@ title="Open an issue"
 
     <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
     <span class="c1"># R-peaks</span>
-    <span class="p">(</span>
-        <span class="n">instant_peaks</span><span class="p">,</span>
-        <span class="n">rpeaks</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">instant_peaks</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
 
     <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">))</span>
 
     <span class="n">quality</span> <span class="o">=</span> <span class="n">ecg_quality</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;ECG_Raw&quot;</span><span class="p">:</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">:</span> <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span> <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">})</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;ECG_Raw&quot;</span><span class="p">:</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">:</span> <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span> <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">}</span>
+    <span class="p">)</span>
 
     <span class="c1"># Additional info of the ecg signal</span>
     <span class="n">delineate_signal</span><span class="p">,</span> <span class="n">delineate_info</span> <span class="o">=</span> <span class="n">ecg_delineate</span><span class="p">(</span>
@@ -685,9 +688,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

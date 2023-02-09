@@ -581,7 +581,7 @@ title="Open an issue"
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Kubios&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Correct Erroneous Peak Placements**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Correct Erroneous Peak Placements**</span>
 
 <span class="sd">    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences</span>
 <span class="sd">    (period).</span>
@@ -730,7 +730,7 @@ title="Open an issue"
     <span class="n">relative_interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
 
     <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_remove_small</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="p">,</span> <span class="n">robust</span><span class="p">)</span>
     <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_interpolate_big</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">,</span> <span class="n">relative_interval_max</span><span class="p">,</span> <span class="n">robust</span><span class="p">,)</span>
@@ -747,7 +747,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_signal_fixpeaks_kubios</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;kubios method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;kubios method.&quot;&quot;&quot;</span>
 
     <span class="c1"># Get corrected peaks and normal-to-normal intervals.</span>
     <span class="n">artifacts</span><span class="p">,</span> <span class="n">subspaces</span> <span class="o">=</span> <span class="n">_find_artifacts</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1012,7 +1012,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_update_indices</span><span class="p">(</span><span class="n">source_idcs</span><span class="p">,</span> <span class="n">update_idcs</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger</span>
 <span class="sd">    than s.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">update_idcs</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">update_idcs</span>
@@ -1181,9 +1181,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

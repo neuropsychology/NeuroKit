@@ -564,8 +564,13 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">..ecg.ecg_rsp</span> <span class="kn">import</span> <span class="n">ecg_rsp</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..rsp</span> <span class="kn">import</span> <span class="n">rsp_process</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span>
-                      <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_timefrequency</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_filter</span><span class="p">,</span>
+    <span class="n">signal_interpolate</span><span class="p">,</span>
+    <span class="n">signal_rate</span><span class="p">,</span>
+    <span class="n">signal_resample</span><span class="p">,</span>
+    <span class="n">signal_timefrequency</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_formatpeaks_sanitize</span>
 <span class="kn">from</span> <span class="nn">.hrv_utils</span> <span class="kn">import</span> <span class="n">_hrv_format_input</span><span class="p">,</span> <span class="n">_hrv_get_rri</span>
 <span class="kn">from</span> <span class="nn">.intervals_process</span> <span class="kn">import</span> <span class="n">intervals_process</span>
@@ -580,7 +585,7 @@ title="Open an issue"
     <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">window_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;**Respiratory Sinus Arrhythmia (RSA)**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Respiratory Sinus Arrhythmia (RSA)**</span>
 
 <span class="sd">    Respiratory sinus arrhythmia (RSA), also referred to as &#39;cardiac coherence&#39; or &#39;physiological</span>
 <span class="sd">    coherence&#39; (though these terms are often encompassing a wider meaning), is the naturally</span>
@@ -768,22 +773,40 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_hrv_rsa_p2t</span><span class="p">(</span>
     <span class="n">rsp_onsets</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ecg_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rsp_peaks</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Peak-to-trough algorithm (P2T)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Peak-to-trough algorithm (P2T)&quot;&quot;&quot;</span>
 
     <span class="c1"># Find all RSP cycles and the Rpeaks within</span>
-    <span class="n">cycles_rri</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cycles_rri_inh</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cycles_rri_exh</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Add 750 ms offset to exhalation peak and end of the cycle in order to include next RRI</span>
+    <span class="c1"># (see Grossman, 1990)</span>
+    <span class="n">rsp_offset</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+
     <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_onsets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">cycle_init</span> <span class="o">=</span> <span class="n">rsp_onsets</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-        <span class="n">cycle_end</span> <span class="o">=</span> <span class="n">rsp_onsets</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">cycles_rri</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rpeaks</span> <span class="o">&gt;=</span> <span class="n">cycle_init</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">&lt;</span> <span class="n">cycle_end</span><span class="p">)])</span>
+        <span class="n">rsp_peak_offset</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">rsp_offset</span>
+        <span class="n">rsp_peak</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">cycle_end</span> <span class="o">=</span> <span class="n">rsp_onsets</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">rsp_offset</span>
+        <span class="c1"># Separately select RRI for inhalation and exhalation</span>
+        <span class="n">cycles_rri_inh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">rpeaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rpeaks</span> <span class="o">&gt;=</span> <span class="n">cycle_init</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">&lt;</span> <span class="n">rsp_peak_offset</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="n">cycles_rri_exh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rpeaks</span> <span class="o">&gt;=</span> <span class="n">rsp_peak</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">&lt;</span> <span class="n">cycle_end</span><span class="p">)])</span>
 
     <span class="c1"># Iterate over all cycles</span>
-    <span class="n">rsa_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cycles_rri</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cycles_rri</span><span class="p">):</span>
-        <span class="c1"># Estimate of RSA during each breath</span>
-        <span class="n">RRis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">RRis</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">rsa_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">RRis</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">RRis</span><span class="p">)</span>
+    <span class="n">rsa_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cycles_rri_exh</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cycles_rri_exh</span><span class="p">)):</span>
+        <span class="c1"># Estimate of RSA during each breathing phase</span>
+        <span class="n">RRis_inh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cycles_rri_inh</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="n">RRis_exh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cycles_rri_exh</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">RRis_inh</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">RRis_exh</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>  <span class="c1"># you need at least one RRI</span>
+            <span class="n">rsa_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">RRis_exh</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">RRis_inh</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rsa_value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Take into consideration only rsp cycles in which the max exh &gt; than min inh</span>
+                <span class="n">rsa_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsa_value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Negative effect should be factor into the mean using 0 (see Grossman 1990)</span>
+                <span class="n">rsa_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">rsa</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSA_P2T_Mean&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">rsa_values</span><span class="p">)}</span>
@@ -801,7 +824,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_hrv_rsa_pb</span><span class="p">(</span><span class="n">ecg_period</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Porges-Bohrer method.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Porges-Bohrer method.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">continuous</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
 
@@ -982,7 +1005,7 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_get_multipeak_window</span><span class="p">(</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">window_number</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get Peak Matched Multiple Window</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get Peak Matched Multiple Window</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Hansson, M., &amp; Salomonsson, G. (1997). A multiple window method for estimation of peaked spectra.</span>
@@ -1001,7 +1024,7 @@ title="Open an issue"
         <span class="mi">2</span> <span class="o">*</span> <span class="n">C</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">r_den</span> <span class="o">=</span> <span class="n">C</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">r_den</span> <span class="o">=</span> <span class="n">C</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">length</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">r_num</span><span class="p">,</span> <span class="n">r_den</span><span class="p">)</span>
 
     <span class="n">rpeak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>  <span class="c1"># Covariance function peaked spectrum</span>
@@ -1041,7 +1064,7 @@ title="Open an issue"
 <span class="c1"># Internals</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_hrv_rsa_cycles</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Extract respiratory cycles.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract respiratory cycles.&quot;&quot;&quot;</span>
     <span class="n">inspiration_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
         <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
@@ -1065,7 +1088,9 @@ title="Open an issue"
 
 <span class="k">def</span> <span class="nf">_hrv_rsa_formatinput</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
 
-    <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">)</span>
+    <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># Sanity Checks</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
@@ -1138,9 +1163,9 @@ title="Open an issue"
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>

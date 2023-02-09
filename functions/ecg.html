@@ -943,7 +943,9 @@ this function by making it more tidy and useful!</strong></p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ecg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw ECG channel.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code>. We aim at improving this
+aspect to make the available methods more transparent, and be able to generate specific
+reports. Please get in touch if you are interested in helping out with this.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1064,7 +1066,7 @@ by the <code class="docutils literal notranslate"><span class="pre">Label</span>
 
 <span class="go"># Get a dataframe with all the results</span>
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
-<span class="gh">Out[7]: </span><span class="go"></span>
+<span class="gh">Out[7]: </span>
 <span class="go">  Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
 <span class="go">1     1  Negative  ...                          0.400000          0.978231</span>
 <span class="go">2     2   Neutral  ...                          0.553846          0.912938</span>
@@ -1090,7 +1092,7 @@ by the <code class="docutils literal notranslate"><span class="pre">Label</span>
 
 <span class="go"># Get results</span>
 <span class="gp">In [12]: </span><span class="n">analyze_df</span>
-<span class="gh">Out[12]: </span><span class="go"></span>
+<span class="gh">Out[12]: </span>
 <span class="go">   ECG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.392105  694.756381  49.036043  ...  1.846507  2.722348  0.873124</span>
 
@@ -1484,10 +1486,6 @@ meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
 signals as input, although it is expected that a filtered (cleaned) ECG will result in better
 results.</p>
 <p>Different algorithms for peak-detection include:</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Please help us improve the methods’ documentation by adding a small description.</p>
-</div>
 <ul class="simple">
 <li><p><strong>neurokit</strong> (default): QRS complexes are detected based on the steepness of the absolute
 gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in
@@ -1514,6 +1512,10 @@ signals are accumulated. Finally, a threshold is used to accept or reject the pe
 See this discussion for more information on the origins of the method:
 <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues/222">https://github.com/neuropsychology/NeuroKit/issues/222</a></p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please help us improve the methods’ documentation by adding a small description.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2046,11 +2048,11 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.719078          0.943437</span>
-<span class="go">2     2        10000  ...                          0.413721          0.964516</span>
-<span class="go">3     3        15000  ...                          0.178862          0.986898</span>
+<span class="go">1     1         5000  ...                          0.781633          0.978655</span>
+<span class="go">2     2        10000  ...                          0.460251          0.965760</span>
+<span class="go">3     3        15000  ...                          0.181087          0.973013</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -2075,7 +2077,7 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="gh">Out[10]: </span>
 <span class="go">  Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
 <span class="go">1     1  Negative  ...                          0.400000          0.978231</span>
 <span class="go">2     2   Neutral  ...                          0.553846          0.912938</span>
@@ -2130,7 +2132,7 @@ separately processed DataFrames.</p></li>
 
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="gh">Out[4]: </span>
 <span class="go">   ECG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.392105  694.756381  49.036043  ...  1.846507  2.722348  0.873124</span>
 
@@ -2139,7 +2141,7 @@ separately processed DataFrames.</p></li>
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="gh">Out[6]: </span>
 <span class="go">  Label  ECG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD  HRV_KFD   HRV_LZC</span>
 <span class="go">1     1      86.389814   69.497674  ...  1.803504  2.33683  0.828876</span>
 <span class="go">2     2      86.394396   69.460465  ...  1.895279  3.09411  0.973029</span>
@@ -2260,9 +2262,9 @@ detected as inverted. The default is False.</p></li>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
   
-      &copy; Copyright 2020–2022.<br/>
+      &copy; Copyright 2020–2023.<br/>
 </p>
         </footer>
     </div>
