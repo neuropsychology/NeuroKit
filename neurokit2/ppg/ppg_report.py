@@ -11,6 +11,26 @@ def ppg_report(file="myreport.html", signals=None, info={"sampling_rate": 1000})
     Create report containing description and figures of processing.
     This function is meant to be used via the `ppg_process()` function.
 
+    Parameters
+    ----------
+    file : str
+        Name of the file to save the report to. Can also be ``"text"`` to simply print the text in
+        the console.
+    signals : pd.DataFrame
+        A DataFrame of signals. Usually obtained from :func:`.ppg_process`.
+    info : dict
+        A dictionary containing the information of peaks and the signals' sampling rate. Usually
+        obtained from :func:`.ppg_process`.
+
+    Returns
+    -------
+    str
+        The report as a string.
+
+    See Also
+    --------
+    ppg_process
+
     Examples
     --------
     .. ipython:: python
@@ -65,9 +85,8 @@ def ppg_table(signals):
     summary_table = pd.DataFrame(summary, index=[0])  # .transpose()
 
     # Make HTML and Markdown versions
-    html = (
-        '<h2 style="background-color: #D60574">Summary table</h1>'
-        + summary_table.to_html(index=None)
+    html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
+        index=None
     )
 
     try:

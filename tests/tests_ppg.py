@@ -116,6 +116,7 @@ def test_ppg_findpeaks():
 
     sampling_rate = 500
 
+    # Test Elgendi method
     ppg = nk.ppg_simulate(
         duration=30,
         sampling_rate=sampling_rate,
@@ -138,8 +139,16 @@ def test_ppg_findpeaks():
 
     assert peaks.size == 29
     assert peaks.sum() == 219764
-    
-    
+
+    # Test MSPTD method
+    info_msptd = nk.ppg_findpeaks(ppg, sampling_rate=sampling_rate, method="bishop", show=True)
+
+    peaks = info_msptd["PPG_Peaks"]
+
+    assert peaks.size == 29
+    assert peaks.sum() == 219665
+
+
 @pytest.mark.parametrize(
     "method_cleaning, method_peaks",
     [("elgendi", "elgendi"), ("nabian2018", "elgendi")],
@@ -167,9 +176,11 @@ def test_ppg_report(tmp_path, method_cleaning, method_peaks):
     d.mkdir()
     p = d / "myreport.html"
 
-    signals, _ = nk.ppg_process(ppg, 
-    	sampling_rate=sampling_rate, 
-    	report=str(p), 
-    	method_cleaning=method_cleaning, 
-    	method_peaks=method_peaks)
+    signals, _ = nk.ppg_process(
+        ppg,
+        sampling_rate=sampling_rate,
+        report=str(p),
+        method_cleaning=method_cleaning,
+        method_peaks=method_peaks,
+    )
     assert p.is_file()

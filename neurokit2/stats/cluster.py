@@ -184,9 +184,10 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
 # =============================================================================
 def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     """K-means clustering algorithm"""
+
     # Initialize clustering function
     clustering_model = sklearn.cluster.KMeans(
-        n_clusters=n_clusters, random_state=random_state, **kwargs
+        n_clusters=n_clusters, random_state=random_state, n_init="auto", **kwargs
     )
 
     # Fit
@@ -351,7 +352,7 @@ def _cluster_kmod(
     n_samples, n_channels = data.shape
 
     # Cache this value for later to compute residual
-    data_sum_sq = np.sum(data ** 2)
+    data_sum_sq = np.sum(data**2)
 
     # Select random timepoints for our initial topographic maps
     if not isinstance(random_state, np.random.RandomState):
@@ -671,7 +672,7 @@ def _cluster_aahc(
     if gfp is None and gfp_peaks is None and gfp_sum_sq is None:
         gfp = data.std(axis=1)
         gfp_peaks = locmax(gfp)
-        gfp_sum_sq = np.sum(gfp ** 2)  # normalizing constant in GEV
+        gfp_sum_sq = np.sum(gfp**2)  # normalizing constant in GEV
         if use_peaks:
             maps = data[gfp_peaks, :]  # initialize clusters
             cluster_data = data[gfp_peaks, :]  # store original gfp peak indices
@@ -697,7 +698,7 @@ def _cluster_aahc(
         C = np.dot(data - m_x, np.transpose(maps - m_y)) / s_xy
 
         # microstate sequence, ignore polarity
-        L = np.argmax(C ** 2, axis=1)
+        L = np.argmax(C**2, axis=1)
 
         # GEV (global explained variance) of cluster k
         gev = np.zeros(n_maps)
@@ -718,7 +719,7 @@ def _cluster_aahc(
             m_y, s_y = c.mean(), c.std()
             s_xy = 1.0 * nch * s_x * s_y
             C = np.dot(maps - m_x, c - m_y) / s_xy
-            inew = np.argmax(C ** 2)  # ignore polarity
+            inew = np.argmax(C**2)  # ignore polarity
             re_cluster.append(inew)
             Ci[inew].append(k)
         n_maps = len(Ci)
@@ -734,7 +735,7 @@ def _cluster_aahc(
             evals, evecs = np.linalg.eig(Sk)
             c = evecs[:, np.argmax(np.abs(evals))]
             c = np.real(c)
-            maps[i] = c / np.sqrt(np.sum(c ** 2))
+            maps[i] = c / np.sqrt(np.sum(c**2))
 
     # Get distance
     prediction = _cluster_quality_distance(cluster_data, maps, to_dataframe=True)

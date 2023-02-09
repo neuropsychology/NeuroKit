@@ -115,7 +115,7 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
       signal = nk.signal_simulate(duration=0.5, frequency=[5, 20])
 
       @savefig p_complexity_coarsegraining4.png scale=100%
-      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method="timeshift", show=True)
+      coarsegrained = nk.complexity_coarsegraining(signal, scale=30, method="timeshift", show=True)
       @suppress
       plt.close()
 

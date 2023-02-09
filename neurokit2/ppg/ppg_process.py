@@ -27,7 +27,8 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
     report : str
         The filename of a report containing description and figures of processing
         (e.g. ``"myreport.html"``). Needs to be supplied if a report file
-        should be generated. Defaults to ``None``.
+        should be generated. Defaults to ``None``. Can also be ``"text"`` to
+        just print the text in the console without saving anything.
     **kwargs
         Other arguments to be passed to specific methods. For more information,
         see :func:`.ppg_methods`.

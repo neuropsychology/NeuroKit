@@ -90,7 +90,11 @@ def test_hrv_detrended_rri(detrend):
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
 
-    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
+    assert np.isclose(
+        ecg_hrv["HRV_RMSSD"].values[0],
+        np.sqrt(np.mean(np.square(np.diff(rri_processed)))),
+        atol=0.1,
+    )
 
 
 @pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 100])
@@ -112,7 +116,11 @@ def test_hrv_interpolated_rri(interpolation_rate):
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
 
-    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], np.sqrt(np.mean(np.square(np.diff(rri_processed)))), atol=0.1)
+    assert np.isclose(
+        ecg_hrv["HRV_RMSSD"].values[0],
+        np.sqrt(np.mean(np.square(np.diff(rri_processed)))),
+        atol=0.1,
+    )
 
 
 def test_hrv_missing():
@@ -168,7 +176,9 @@ def test_hrv_rsa():
         "RSA_Gates_SD",
     ]
 
-    rsa_features = nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
+    rsa_features = nk.hrv_rsa(
+        ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False
+    )
 
     assert all(key in rsa_feature_columns for key in rsa_features.keys())
 
@@ -182,7 +192,7 @@ def test_hrv_rsa():
     # Test missing rsp onsets/centers
     with pytest.warns(misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
         rsp_signals["RSP_Peaks"] = 0
-        nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
+        _ = nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
 
 
 def test_hrv_nonlinear_fragmentation():
