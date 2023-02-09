@@ -36,11 +36,11 @@ jobs:
                   # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
                   black neurokit2 --line-length 120 .
 
-            - name: Fix code style with docformatter (docstrings)
-              run: |
-                  pip install docformatter
-                  # See https://github.com/myint/docformatter
-                  docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --make-summary-multi-line --recursive
+            # - name: Fix code style with docformatter (docstrings)
+            #   run: |
+            #       pip install docformatter
+            #       # See https://github.com/myint/docformatter
+            #       docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --make-summary-multi-line --recursive
 
             - name: Detect remaining style errors with flake8
               run: |

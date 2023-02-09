@@ -788,11 +788,10 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             offsets.append(np.nan)
         else:
             nlast = wt_peaks[0] + index_peak
+            epsilon_offset = 0  # Default value
             if peak_type == "rpeaks":
                 if wt_peaks_data["peak_heights"][0] > 0:
                     epsilon_offset = 0.125 * wt_peaks_data["peak_heights"][0]
-                else:
-                    epsilon_offset = 0 #This is where the error occurs 
             elif peak_type == "ppeaks":
                 epsilon_offset = 0.9 * wt_peaks_data["peak_heights"][0]
             elif peak_type == "tpeaks":
