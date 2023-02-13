@@ -58,6 +58,12 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
         epochs_start=epochs_start,
         epochs_end=epochs_end,
     )
+    
+    # remove appended zeros from last heartbeat
+    last_heartbeat_key = str(np.max(np.array(list(heartbeats.keys()), dtype=int)))
+    heartbeats[last_heartbeat_key] = heartbeats[last_heartbeat_key][
+        heartbeats[last_heartbeat_key]["Index"] < len(ecg_cleaned)
+    ]
 
     if show:
         heartbeats_plot = epochs_to_df(heartbeats)
