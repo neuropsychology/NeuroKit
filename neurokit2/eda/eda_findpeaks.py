@@ -323,7 +323,10 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 def _eda_findpeaks_nabian2018(eda_phasic):
     """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et
-    al. (2018).
+    al. (2018). The amplitude of the SCR is obtained by finding the maximum value between these two zero-crossings,
+    and calculating the difference between the initial zero crossing and the maximum value. 
+    Detected SCRs with amplitudes smaller than 10 percent of the maximum SCR amplitudes that are already detected 
+    on the differentiated signal will be eliminated. It is crucial that artifacts are removed before finding peaks
 
     Parameters
     ----------
@@ -348,12 +351,15 @@ def _eda_findpeaks_nabian2018(eda_phasic):
 
     """
 
+    # differentiation
+    eda_phasic_diff = np.diff(eda_phasic)
+
     # smooth
-    eda_phasic = signal_smooth(eda_phasic, kernel="bartlett", size=20)
+    eda_phasic_smoothed = signal_smooth(eda_phasic_diff, kernel="bartlett", size=20)
 
     # zero crossings
-    pos_crossings = signal_zerocrossings(eda_phasic, direction="positive")
-    neg_crossings = signal_zerocrossings(eda_phasic, direction="negative")
+    pos_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="positive")
+    neg_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="negative")
 
     # Sanitize consecutive crossings
     if len(pos_crossings) > len(neg_crossings):
@@ -366,15 +372,31 @@ def _eda_findpeaks_nabian2018(eda_phasic):
     amps_list = []
     for i, j in zip(pos_crossings, neg_crossings):
         window = eda_phasic[i:j]
-        amp = np.max(window)
+        # The amplitude of the SCR is obtained by finding the maximum value
+        # between these two zero-crossings and calculating the difference 
+        # between the initial zero crossing and the maximum value.
+        amp = np.max(window) # amplitude defined in neurokit2
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
-        diff = amp - eda_phasic[i]
-        if not diff < (0.1 * amp):
+        # we append the first SCR
+        if len(amps_list) == 0:
+        # be careful, if two peaks have the same amplitude, np.where will return a list
             peaks = np.where(eda_phasic == amp)[0]
-            peaks_list.append(peaks)
+            # make sure that the peak is within the window
+            peaks = [peak for peak in [peaks] if peak > i and peak < j] 
+            peaks_list.append(peaks[0])
             onsets_list.append(i)
             amps_list.append(amp)
+        else:
+        # we have a list of peaks
+            diff = amp - eda_phasic[i] # amplitude defined in the paper
+            if not diff < (0.1 * max(amps_list)):
+                peaks = np.where(eda_phasic == amp)[0]
+                # make sure that the peak is within the window
+                peaks = [peak for peak in [peaks] if peak > i and peak < j] 
+                peaks_list.append(peaks[0])
+                onsets_list.append(i)
+                amps_list.append(amp)
 
     # output
     info = {
