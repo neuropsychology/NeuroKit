@@ -225,7 +225,7 @@ def test_eda_intervalrelated():
     assert all(elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
     assert features_dict.shape[0] == 2  # Number of rows
 
-def eda_sympathetic():
+def test_eda_sympathetic():
     eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
     indexes_posada = nk.eda_sympathetic(eda_signal, sampling_rate=100, method='posada')
     # Test value is float
