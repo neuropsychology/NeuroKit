@@ -368,7 +368,8 @@ def _eda_findpeaks_nabian2018(eda_phasic):
         # The amplitude of the SCR is obtained by finding the maximum value
         # between these two zero-crossings and calculating the difference
         # between the initial zero crossing and the maximum value.
-        amp = np.max(window)  # amplitude defined in neurokit2
+        # amplitude defined in neurokit2
+        amp = np.max(window)  
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
         # we append the first SCR
@@ -382,7 +383,8 @@ def _eda_findpeaks_nabian2018(eda_phasic):
             amps_list.append(amp)
         else:
             # we have a list of peaks
-            diff = amp - eda_phasic[i]  # amplitude defined in the paper
+            # amplitude defined in the paper
+            diff = amp - eda_phasic[i]  
             if not diff < (0.1 * max(amps_list)):
                 peaks = np.where(eda_phasic == amp)[0]
                 # make sure that the peak is within the window
