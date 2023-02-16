@@ -82,17 +82,13 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         try:
             eda_phasic = eda_phasic["EDA_Phasic"]
         except KeyError:
-            raise KeyError(
-                "NeuroKit error: eda_findpeaks(): Please provide an array as the input signal."
-            )
+            raise KeyError("NeuroKit error: eda_findpeaks(): Please provide an array as the input signal.")
 
     method = method.lower()  # remove capitalised letters
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", "biosppy"]:
-        info = _eda_findpeaks_kim2004(
-            eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min
-        )
+        info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
     elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     elif method in ["vanhalem2020", "vanhalem", "halem2020"]:
@@ -114,7 +110,6 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 
 
 def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
-
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
     info = {
@@ -222,9 +217,7 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     # sanity check
     if len(pi) == 0 or len(ni) == 0:
-        raise ValueError(
-            "NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method."
-        )
+        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
 
     # pair vectors
     if ni[0] < pi[0]:
@@ -323,10 +316,10 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 def _eda_findpeaks_nabian2018(eda_phasic):
     """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et
-    al. (2018). The amplitude of the SCR is obtained by finding the maximum value between these two zero-crossings,
-    and calculating the difference between the initial zero crossing and the maximum value. 
-    Detected SCRs with amplitudes smaller than 10 percent of the maximum SCR amplitudes that are already detected 
-    on the differentiated signal will be eliminated. It is crucial that artifacts are removed before finding peaks
+    al. (2018). The amplitude of the SCR is obtained by finding the maximum value between these two zero-crossings, and
+    calculating the difference between the initial zero crossing and the maximum value. Detected SCRs with amplitudes
+    smaller than 10 percent of the maximum SCR amplitudes that are already detected on the differentiated signal will be
+    eliminated. It is crucial that artifacts are removed before finding peaks.
 
     Parameters
     ----------
@@ -373,27 +366,27 @@ def _eda_findpeaks_nabian2018(eda_phasic):
     for i, j in zip(pos_crossings, neg_crossings):
         window = eda_phasic[i:j]
         # The amplitude of the SCR is obtained by finding the maximum value
-        # between these two zero-crossings and calculating the difference 
+        # between these two zero-crossings and calculating the difference
         # between the initial zero crossing and the maximum value.
-        amp = np.max(window) # amplitude defined in neurokit2
+        amp = np.max(window)  # amplitude defined in neurokit2
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
         # we append the first SCR
         if len(amps_list) == 0:
-        # be careful, if two peaks have the same amplitude, np.where will return a list
+            # be careful, if two peaks have the same amplitude, np.where will return a list
             peaks = np.where(eda_phasic == amp)[0]
             # make sure that the peak is within the window
-            peaks = [peak for peak in [peaks] if peak > i and peak < j] 
+            peaks = [peak for peak in [peaks] if peak > i and peak < j]
             peaks_list.append(peaks[0])
             onsets_list.append(i)
             amps_list.append(amp)
         else:
-        # we have a list of peaks
-            diff = amp - eda_phasic[i] # amplitude defined in the paper
+            # we have a list of peaks
+            diff = amp - eda_phasic[i]  # amplitude defined in the paper
             if not diff < (0.1 * max(amps_list)):
                 peaks = np.where(eda_phasic == amp)[0]
                 # make sure that the peak is within the window
-                peaks = [peak for peak in [peaks] if peak > i and peak < j] 
+                peaks = [peak for peak in [peaks] if peak > i and peak < j]
                 peaks_list.append(peaks[0])
                 onsets_list.append(i)
                 amps_list.append(amp)
