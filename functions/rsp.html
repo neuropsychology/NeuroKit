@@ -1107,7 +1107,7 @@ trigonometric sine wave that roughly approximates a single respiratory cycle. If
 <span class="gp">In [4]: </span><span class="n">rsp2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RSP_Simple&quot;</span><span class="p">:</span> <span class="n">rsp1</span><span class="p">,</span> <span class="s2">&quot;RSP_Complex&quot;</span><span class="p">:</span> <span class="n">rsp2</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[5]: </span><span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;], dtype=object)</span>
+<span class="gh">Out[5]: </span><span class="go">array([&lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_simulate1.png"><img alt="../_images/p_rsp_simulate1.png" src="../_images/p_rsp_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1218,7 +1218,7 @@ changed via <code class="docutils literal notranslate"><span class="pre">thresho
 <span class="gp">   ...: </span>
 
 <span class="gp">In [5]: </span><span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="gh">Out[5]: </span><span class="go">&lt;AxesSubplot: &gt;</span>
+<span class="gh">Out[5]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_clean1.png"><img alt="../_images/p_rsp_clean1.png" src="../_images/p_rsp_clean1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1713,8 +1713,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">     RRV_RMSSD  RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1008.121755     4029.05  625.53173  ...    0.677951  0.018896         inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  819.391623      3866.4  574.207408  ...    0.929912  0.054067        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1858,9 +1858,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.266883     -0.017075</span>
-<span class="go">2     2        10000  ...          0.199326      0.029424</span>
-<span class="go">3     3        15000  ...          0.271837     -0.001147</span>
+<span class="go">1     1         5000  ...          0.207425      0.038094</span>
+<span class="go">2     2        10000  ...          0.217753     -0.059178</span>
+<span class="go">3     3        15000  ...          0.259858      0.013574</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>

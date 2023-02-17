@@ -720,6 +720,11 @@ title="Open an issue"
             <span class="s2">&quot;NeuroKit error: ecg_delineate(): &#39;method&#39; should be one of &#39;peak&#39;,&quot;</span> <span class="s2">&quot;&#39;cwt&#39; or &#39;dwt&#39;.&quot;</span>
         <span class="p">)</span>
 
+    <span class="c1"># Ensure that all indices are not larger than ECG signal indices</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">waves</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">):</span>
+            <span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
     <span class="c1"># Remove NaN in Peaks, Onsets, and Offsets</span>
     <span class="n">waves_noNA</span> <span class="o">=</span> <span class="n">waves</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">waves_noNA</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1502,11 +1507,6 @@ title="Open an issue"
         <span class="s2">&quot;ECG_P_Onsets&quot;</span><span class="p">:</span> <span class="n">P_onsets</span><span class="p">,</span>
         <span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">:</span> <span class="n">T_offsets</span><span class="p">,</span>
     <span class="p">}</span>
-
-    <span class="c1"># Ensure that all indices are not larger than ECG signal indices</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">):</span>
-            <span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="c1"># Return info dictionary</span>
     <span class="k">return</span> <span class="n">info</span>

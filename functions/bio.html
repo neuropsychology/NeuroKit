@@ -769,11 +769,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.050295  -0.074129  70.013484  ...            0      0.0   7.893501</span>
-<span class="go">1  0.998380  -0.195819  70.013484  ...            0      0.0   7.893501</span>
-<span class="go">2  0.863742  -0.330309  70.013484  ...            0      0.0   7.893501</span>
-<span class="go">3  0.671951  -0.482163  70.013484  ...            0      0.0   7.893501</span>
-<span class="go">4  0.450314  -0.648440  70.013484  ...            0      0.0   7.893501</span>
+<span class="go">0  1.077122  -0.070415  69.998963  ...            0     16.0   7.926606</span>
+<span class="go">1  1.023711  -0.195292  69.998963  ...            0     16.0   7.926606</span>
+<span class="go">2  0.885316  -0.333101  69.998963  ...            0     16.0   7.926606</span>
+<span class="go">3  0.688577  -0.488336  69.998963  ...            0     16.0   7.926606</span>
+<span class="go">4  0.461898  -0.657828  69.998963  ...            0     16.0   7.926606</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -781,11 +781,9 @@ as well as the signals’ sampling rate.</p></li>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize a subset of signals</span>
 <span class="gp">In [8]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[8]: </span>
-<span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
-<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
-<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
-<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;],</span>
-<span class="go">      dtype=object)</span>
+<span class="go">array([&lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;,</span>
+<span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;,</span>
+<span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -803,11 +801,9 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go"># Visualize all signals</span>
 <span class="gp">In [12]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[12]: </span>
-<span class="go">array([&lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
-<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
-<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;,</span>
-<span class="go">       &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;, &lt;AxesSubplot: &gt;],</span>
-<span class="go">      dtype=object)</span>
+<span class="go">array([&lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;,</span>
+<span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;,</span>
+<span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_bio_process2.png"><img alt="../_images/p_bio_process2.png" src="../_images/p_bio_process2.png" style="width: 640.0px; height: 480.0px;" /></a>
