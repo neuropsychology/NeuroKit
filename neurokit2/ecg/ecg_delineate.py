@@ -164,6 +164,11 @@ def ecg_delineate(
             "NeuroKit error: ecg_delineate(): 'method' should be one of 'peak'," "'cwt' or 'dwt'."
         )
 
+    # Ensure that all indices are not larger than ECG signal indices
+    for _, value in waves.items():
+        if value[-1] >= len(ecg_cleaned):
+            value[-1] = np.nan
+
     # Remove NaN in Peaks, Onsets, and Offsets
     waves_noNA = waves.copy()
     for feature in waves_noNA.keys():
@@ -946,11 +951,6 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         "ECG_P_Onsets": P_onsets,
         "ECG_T_Offsets": T_offsets,
     }
-
-    # Ensure that all indices are not larger than ECG signal indices
-    for _, value in info.items():
-        if value[-1] >= len(ecg):
-            value[-1] = np.nan
 
     # Return info dictionary
     return info
