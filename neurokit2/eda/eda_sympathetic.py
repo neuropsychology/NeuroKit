@@ -52,12 +52,12 @@ def eda_sympathetic(
       eda = nk.data('bio_resting_8min_100hz')['EDA']
 
       @savefig p_eda_sympathetic1.png scale=100%
-      indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
+      nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
       @suppress
       plt.close()
 
-      indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi')
-      indexes_ghiasi
+      results = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi')
+      results
 
     References
     ----------
