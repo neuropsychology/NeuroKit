@@ -89,9 +89,9 @@ def test_eda_peaks():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(
-        duration=30*20,
+        duration=30 * 20,
         sampling_rate=sampling_rate,
-        scr_number=6*20,
+        scr_number=6 * 20,
         noise=0,
         drift=0.01,
         random_state=42,
@@ -208,13 +208,13 @@ def test_eda_eventrelated():
 def test_eda_intervalrelated():
 
     data = nk.data("bio_resting_8min_100hz")
-    df, info = nk.eda_process(data["EDA"], sampling_rate=100)
+    df, _ = nk.eda_process(data["EDA"], sampling_rate=100)
     columns = ["SCR_Peaks_N", "SCR_Peaks_Amplitude_Mean"]
 
     # Test with signal dataframe
     features_df = nk.eda_intervalrelated(df)
 
-    assert all(elem in columns for elem in np.array(features_df.columns.values, dtype=str))
+    assert all([i in features_df.columns.values for i in columns])
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
@@ -222,26 +222,25 @@ def test_eda_intervalrelated():
     epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
     features_dict = nk.eda_intervalrelated(epochs)
 
-    assert all(elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
+    assert all([i in features_df.columns.values for i in columns])
     assert features_dict.shape[0] == 2  # Number of rows
+
 
 def test_eda_sympathetic():
     eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
-    indexes_posada = nk.eda_sympathetic(eda_signal, sampling_rate=100, method='posada')
+    indexes_posada = nk.eda_sympathetic(eda_signal, sampling_rate=100, method="posada")
     # Test value is float
-    assert(isinstance(indexes_posada["EDA_Symp"], float))
-    assert(isinstance(indexes_posada["EDA_SympN"], float))
+    assert isinstance(indexes_posada["EDA_Sympathetic"], float)
+    assert isinstance(indexes_posada["EDA_SympatheticN"], float)
 
 def test__eda_findpeaks_nabian2018():
     eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
-
     eda_cleaned = nk.eda_clean(eda_signal)
-
     eda = nk.eda_phasic(eda_cleaned)
-
     eda_phasic = eda["EDA_Phasic"].values
 
     # Find peaks
     nabian2018 = _eda_findpeaks_nabian2018(eda_phasic)
     assert(len(nabian2018["SCR_Peaks"])==9)
-   
+
+
