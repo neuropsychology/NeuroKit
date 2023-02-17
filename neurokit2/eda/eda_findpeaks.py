@@ -165,7 +165,8 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     threshold = 0.5 * sampling_rate
 
     # Define each peak as a consistent increase of 0.5s
-    peaks = peaks[info["Width"] > threshold]
+    increase = info["Peaks"] - info["Onsets"]
+    peaks = peaks[increase > threshold]
     idx = np.where(peaks[:, None] == info["Peaks"][None, :])[1]
 
     # Check if each peak is followed by consistent decrease of 0.5s
@@ -179,7 +180,7 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     info = {
         "SCR_Onsets": info["Onsets"][idx],
         "SCR_Peaks": info["Peaks"][idx],
-        "SCR_Height": info["Height"][idx],
+        "SCR_Height": eda_phasic[info["Peaks"][idx]],
     }
 
     return info
@@ -369,7 +370,7 @@ def _eda_findpeaks_nabian2018(eda_phasic):
         # between these two zero-crossings and calculating the difference
         # between the initial zero crossing and the maximum value.
         # amplitude defined in neurokit2
-        amp = np.max(window)  
+        amp = np.max(window)
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
         # we append the first SCR
@@ -384,7 +385,7 @@ def _eda_findpeaks_nabian2018(eda_phasic):
         else:
             # we have a list of peaks
             # amplitude defined in the paper
-            diff = amp - eda_phasic[i]  
+            diff = amp - eda_phasic[i]
             if not diff < (0.1 * max(amps_list)):
                 peaks = np.where(eda_phasic == amp)[0]
                 # make sure that the peak is within the window

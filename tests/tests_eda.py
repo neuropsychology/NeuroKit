@@ -8,13 +8,13 @@ import pytest
 
 import neurokit2 as nk
 
+
 # =============================================================================
 # EDA
 # =============================================================================
 
 
 def test_eda_simulate():
-
     eda1 = nk.eda_simulate(duration=10, length=None, scr_number=1, random_state=333)
     assert len(nk.signal_findpeaks(eda1, height_min=0.6)["Peaks"]) == 1
 
@@ -28,7 +28,6 @@ def test_eda_simulate():
 
 
 def test_eda_clean():
-
     sampling_rate = 1000
     eda = nk.eda_simulate(
         duration=30,
@@ -54,16 +53,13 @@ def test_eda_clean():
         sampling_rate=sampling_rate,
     )
 
-    original, _ = biosppy.tools.smoother(
-        signal=original, kernel="boxzen", size=int(0.75 * sampling_rate), mirror=True
-    )
+    original, _ = biosppy.tools.smoother(signal=original, kernel="boxzen", size=int(0.75 * sampling_rate), mirror=True)
 
     #    pd.DataFrame({"our":eda_biosppy, "biosppy":original}).plot()
     assert np.allclose((eda_biosppy - original).mean(), 0, atol=1e-5)
 
 
 def test_eda_phasic():
-
     sampling_rate = 1000
     eda = nk.eda_simulate(
         duration=30,
@@ -86,7 +82,6 @@ def test_eda_phasic():
 
 
 def test_eda_peaks():
-
     sampling_rate = 1000
     eda = nk.eda_simulate(
         duration=30 * 20,
@@ -117,7 +112,6 @@ def test_eda_peaks():
 
 
 def test_eda_process():
-
     eda = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
     signals, info = nk.eda_process(eda, sampling_rate=250)
 
@@ -149,7 +143,6 @@ def test_eda_process():
 
 
 def test_eda_plot():
-
     sampling_rate = 1000
     eda = nk.eda_simulate(
         duration=30,
@@ -171,12 +164,10 @@ def test_eda_plot():
         "Skin Conductance Response (SCR)",
         "Skin Conductance Level (SCL)",
     ]
-    for (ax, title) in zip(fig.get_axes(), titles):
+    for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[2].get_xlabel() == "Samples"
-    np.testing.assert_array_equal(
-        fig.axes[0].get_xticks(), fig.axes[1].get_xticks(), fig.axes[2].get_xticks()
-    )
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks(), fig.axes[2].get_xticks())
     plt.close(fig)
 
     # Plot data over seconds.
@@ -187,7 +178,6 @@ def test_eda_plot():
 
 
 def test_eda_eventrelated():
-
     eda = nk.eda_simulate(duration=15, scr_number=3)
     eda_signals, _ = nk.eda_process(eda, sampling_rate=1000)
     epochs = nk.epochs_create(
@@ -206,7 +196,6 @@ def test_eda_eventrelated():
 
 
 def test_eda_intervalrelated():
-
     data = nk.data("bio_resting_8min_100hz")
     df, _ = nk.eda_process(data["EDA"], sampling_rate=100)
     columns = ["SCR_Peaks_N", "SCR_Peaks_Amplitude_Mean"]
@@ -233,14 +222,17 @@ def test_eda_sympathetic():
     assert isinstance(indexes_posada["EDA_Sympathetic"], float)
     assert isinstance(indexes_posada["EDA_SympatheticN"], float)
 
-def test__eda_findpeaks_nabian2018():
+
+def test_eda_findpeaks():
     eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
     eda_cleaned = nk.eda_clean(eda_signal)
     eda = nk.eda_phasic(eda_cleaned)
     eda_phasic = eda["EDA_Phasic"].values
 
     # Find peaks
-    nabian2018 = _eda_findpeaks_nabian2018(eda_phasic)
-    assert(len(nabian2018["SCR_Peaks"])==9)
+    nabian2018 = nk.eda_findpeaks(eda_phasic, sampling_rate=100, method="nabian2018")
+    assert len(nabian2018["SCR_Peaks"]) == 9
 
-
+    vanhalem2020 = nk.eda_findpeaks(eda_phasic, sampling_rate=100, method="vanhalem2020")
+    min_n_peaks = min(len(vanhalem2020), len(nabian2018))
+    assert any(nabian2018["SCR_Peaks"][:min_n_peaks] - vanhalem2020["SCR_Peaks"][:min_n_peaks]) < np.mean(eda_signal)
