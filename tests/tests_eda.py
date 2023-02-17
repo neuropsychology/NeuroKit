@@ -231,4 +231,17 @@ def test_eda_sympathetic():
     # Test value is float
     assert(isinstance(indexes_posada["EDA_Symp"], float))
     assert(isinstance(indexes_posada["EDA_SympN"], float))
+
+def test__eda_findpeaks_nabian2018():
+    eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
+
+    eda_cleaned = nk.eda_clean(eda_signal)
+
+    eda = nk.eda_phasic(eda_cleaned)
+
+    eda_phasic = eda["EDA_Phasic"].values
+
+    # Find peaks
+    nabian2018 = _eda_findpeaks_nabian2018(eda_phasic)
+    assert(len(nabian2018["SCR_Peaks"])==9)
    
