@@ -39,8 +39,9 @@ def eda_sympathetic(
     Returns
     -------
     dict
-        A dictionary containing the EDA symptathetic indexes, accessible by keys ``"EDA_Symp"`` and
-        ``"EDA_SympN"`` (normalized, obtained by dividing EDA_Symp by total power).
+        A dictionary containing the EDA sympathetic indexes, accessible by keys
+        ``"EDA_Sympathetic"`` and ``"EDA_SympatheticN"`` (normalized, obtained by dividing EDA_Symp
+        by total power).
 
     Examples
     --------
@@ -139,7 +140,7 @@ def _eda_sympathetic_posada(
         ax = psd_plot.plot(x="Frequency", y="Power", title="EDA Power Spectral Density (us^2/Hz)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
-    out = {"EDA_Symp": eda_symp, "EDA_SympN": eda_symp_normalized}
+    out = {"EDA_Sympathetic": eda_symp, "EDA_SympatheticN": eda_symp_normalized}
 
     return out
 
@@ -183,6 +184,6 @@ def _eda_sympathetic_ghiasi(
     eda_symp = np.mean(bins)
     eda_symp_normalized = eda_symp / np.max(bins)
 
-    out = {"EDA_Symp": eda_symp, "EDA_SympN": eda_symp_normalized}
+    out = {"EDA_Sympathetic": eda_symp, "EDA_SympatheticN": eda_symp_normalized}
 
     return out
