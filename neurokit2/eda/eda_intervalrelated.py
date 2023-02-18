@@ -113,7 +113,7 @@ def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic
 
     # EDA Sympathetic
     output.update({"EDA_Sympathetic": np.nan, "EDA_SympatheticN": np.nan})  # Default values
-    if len(data) > sampling_rate * 60:
+    if len(data) > sampling_rate * 64:
         if "EDA_Clean" in colnames:
             output.update(
                 eda_sympathetic(

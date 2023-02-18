@@ -19,7 +19,7 @@ def eda_sympathetic(
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
     of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
-    requires a signal of a least 60 seconds.
+    requires a signal of a least 64 seconds.
 
     Parameters
     ----------
@@ -103,8 +103,8 @@ def _eda_sympathetic_posada(
     eda_signal, frequency_band=[0.045, 0.25], sampling_rate=1000, show=True, out={}
 ):
 
-    # This method assumes signal longer than 60 s
-    if len(eda_signal) <= sampling_rate * 60:
+    # This method assumes signal longer than 64 s
+    if len(eda_signal) <= sampling_rate * 64:
         warn(
             "The 'posada2016' method requires a signal of length > 60 s. Try with"
             + " `method='ghiasi2018'`. Returning NaN values for now.",
