@@ -93,6 +93,7 @@ def eda_simulate(
             noise_frequency=[5, 10, 100],
             noise_shape="laplace",
             silent=True,
+            random_state=np.random.randint(np.iinfo(np.uint32).max)
         )
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
