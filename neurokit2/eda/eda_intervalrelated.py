@@ -81,7 +81,7 @@ def eda_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _eda_intervalrelated(data, output={}, sampling_rate=1000):
+def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic="posada"):
     """Format input for dictionary."""
     # Sanitize input
     colnames = data.columns.values
@@ -111,10 +111,20 @@ def _eda_intervalrelated(data, output={}, sampling_rate=1000):
         output["EDA_Tonic_SD"] = np.nanstd(data["EDA_Tonic"].values)
 
     # EDA Sympathetic
-    if "EDA_Clean" in colnames:
-        output.update(eda_sympathetic(data["EDA_Clean"], sampling_rate=sampling_rate))
-    elif "EDA_Raw" in colnames:
-        # If not clean signal, use raw
-        output.update(eda_sympathetic(data["EDA_Raw"], sampling_rate=sampling_rate))
+    output.update({"EDA_Sympathetic": np.nan, "EDA_SympatheticN": np.nan})  # Default values
+    if len(data) > sampling_rate * 60:
+        if "EDA_Clean" in colnames:
+            output.update(
+                eda_sympathetic(
+                    data["EDA_Clean"], sampling_rate=sampling_rate, method=method_sympathetic
+                )
+            )
+        elif "EDA_Raw" in colnames:
+            # If not clean signal, use raw
+            output.update(
+                eda_sympathetic(
+                    data["EDA_Raw"], sampling_rate=sampling_rate, method=method_sympathetic
+                )
+            )
 
     return output

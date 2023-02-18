@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_filter, signal_resample, signal_timefrequency
 from ..signal.signal_power import _signal_power_instant_compute
 from ..signal.signal_psd import _signal_psd_welch
@@ -15,7 +18,7 @@ def eda_sympathetic(
     """**Sympathetic Nervous System Index from Electrodermal activity (EDA)**
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
-    of EDA signal is represented in the frequency band of 0.045-0.25Hz.
+    of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method requires a signal of a least 60 seconds.
 
     Parameters
     ----------
@@ -74,11 +77,11 @@ def eda_sympathetic(
 
     out = {}
 
-    if method.lower() in ["ghiasi"]:
+    if method.lower() in ["ghiasi", "ghiasi2018"]:
         out = _eda_sympathetic_ghiasi(
             eda_signal, sampling_rate=sampling_rate, frequency_band=frequency_band, show=show
         )
-    elif method.lower() in ["posada", "posada-quintero", "quintero"]:
+    elif method.lower() in ["posada", "posada-quintero", "quintero", "posada2016"]:
         out = _eda_sympathetic_posada(
             eda_signal, sampling_rate=sampling_rate, frequency_band=frequency_band, show=show
         )
@@ -96,8 +99,18 @@ def eda_sympathetic(
 
 
 def _eda_sympathetic_posada(
-    eda_signal, frequency_band=[0.045, 0.25], sampling_rate=400, show=True, out={}
+    eda_signal, frequency_band=[0.045, 0.25], sampling_rate=1000, show=True, out={}
 ):
+
+    # This method assumes signal longer than 60 s
+    if len(eda_signal) <= sampling_rate * 60:
+        warn(
+            "The 'posada2016' method requires a signal of length > 60 s. Try with"
+            + " `method='ghiasi2018'`. Returning NaN values for now.",
+            category=NeuroKitWarning,
+        )
+        return {"EDA_Sympathetic": np.nan, "EDA_SympatheticN": np.nan}
+
     # Resample the eda signal before calculate the synpathetic index based on Posada (2016)
     eda_signal_400hz = signal_resample(
         eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=400
