@@ -11,7 +11,8 @@ from .eda_sympathetic import eda_sympathetic
 def eda_intervalrelated(data, sampling_rate=1000):
     """**EDA Analysis on Interval-Related Data**
 
-    Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
+    Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state
+    data.
 
     Parameters
     ----------

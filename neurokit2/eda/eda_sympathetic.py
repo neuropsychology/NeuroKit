@@ -18,7 +18,8 @@ def eda_sympathetic(
     """**Sympathetic Nervous System Index from Electrodermal activity (EDA)**
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
-    of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method requires a signal of a least 60 seconds.
+    of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
+    requires a signal of a least 60 seconds.
 
     Parameters
     ----------
