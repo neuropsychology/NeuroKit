@@ -670,7 +670,6 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eda_findpeaks_neurokit</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="n">amplitude_min</span><span class="p">,</span> <span class="n">relative_max</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
@@ -685,27 +684,9 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_eda_findpeaks_vanhalem2020</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Follows approach of van Halem et al. (2020).</span>
 
-<span class="sd">    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent decrease</span>
-<span class="sd">    of 0.5 seconds.</span>
+<span class="sd">    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent</span>
+<span class="sd">    decrease of 0.5 seconds.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    eda_phasic : array</span>
-<span class="sd">        Input filterd EDA signal.</span>
-<span class="sd">    sampling_rate : int</span>
-<span class="sd">        Sampling frequency (Hz). Defaults to 1000Hz.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    onsets : array</span>
-<span class="sd">        Indices of the SCR onsets.</span>
-<span class="sd">    peaks : array</span>
-<span class="sd">        Indices of the SRC peaks.</span>
-<span class="sd">    amplitudes : array</span>
-<span class="sd">        SCR pulse amplitudes.</span>
-
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
 <span class="sd">    * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., &amp; Denissen, J. (2020).</span>
 <span class="sd">      Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample</span>
 <span class="sd">      Arousing Events Within an Experience Sampling Framework. European Journal of Personality.</span>
@@ -726,7 +707,8 @@ title="Open an issue"
     <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span>
 
     <span class="c1"># Define each peak as a consistent increase of 0.5s</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Width&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">]</span>
+    <span class="n">increase</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Onsets&quot;</span><span class="p">]</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">increase</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">]</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">peaks</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">==</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Check if each peak is followed by consistent decrease of 0.5s</span>
@@ -740,32 +722,16 @@ title="Open an issue"
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;SCR_Onsets&quot;</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Onsets&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span>
         <span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span>
-        <span class="s2">&quot;SCR_Height&quot;</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Height&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span>
+        <span class="s2">&quot;SCR_Height&quot;</span><span class="p">:</span> <span class="n">eda_phasic</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]],</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">info</span>
 
 
 <span class="k">def</span> <span class="nf">_eda_findpeaks_gamboa2008</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis</span>
-<span class="sd">    by Gamboa (2008).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the</span>
+<span class="sd">    approach in the thesis by Gamboa (2008).</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    eda_phasic : array</span>
-<span class="sd">        Input filterd EDA signal.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    onsets : array</span>
-<span class="sd">        Indices of the SCR onsets.</span>
-<span class="sd">    peaks : array</span>
-<span class="sd">        Indices of the SRC peaks.</span>
-<span class="sd">    amplitudes : array</span>
-<span class="sd">        SCR pulse amplitudes.</span>
-
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
 <span class="sd">    * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.</span>
 <span class="sd">      PhD Thesis Universidade.</span>
 
@@ -811,26 +777,6 @@ title="Open an issue"
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et</span>
 <span class="sd">    al.(2004).</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    eda_phasic : array</span>
-<span class="sd">        Input filterd EDA signal.</span>
-<span class="sd">    sampling_rate : int</span>
-<span class="sd">        Sampling frequency (Hz). Defaults to 1000Hz.</span>
-<span class="sd">    amplitude_min : float</span>
-<span class="sd">        Minimum treshold by which to exclude SCRs. Defaults to 0.1.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    onsets : array</span>
-<span class="sd">        Indices of the SCR onsets.</span>
-<span class="sd">    peaks : array</span>
-<span class="sd">        Indices of the SRC peaks.</span>
-<span class="sd">    amplitudes : array</span>
-<span class="sd">        SCR pulse amplitudes.</span>
-
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
 <span class="sd">    * Kim, K. H., Bang, S. W., &amp; Kim, S. R. (2004). Emotion recognition system using short-term</span>
 <span class="sd">      monitoring of physiological signals. Medical and biological engineering and computing, 42(3),</span>
 <span class="sd">      419-427.</span>
@@ -878,40 +824,36 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eda_findpeaks_nabian2018</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et</span>
-<span class="sd">    al. (2018).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the</span>
+<span class="sd">    approach by Nabian et al. (2018). The amplitude of the SCR is obtained by finding the maximum</span>
+<span class="sd">    value between these two zero-crossings, and calculating the difference between the initial zero</span>
+<span class="sd">    crossing and the maximum value. Detected SCRs with amplitudes smaller than 10 percent of the</span>
+<span class="sd">    maximum SCR amplitudes that are already detected on the differentiated signal will be</span>
+<span class="sd">    eliminated. It is crucial that artifacts are removed before finding peaks.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    eda_phasic : array</span>
-<span class="sd">        Input filterd EDA signal.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    onsets : array</span>
-<span class="sd">        Indices of the SCR onsets.</span>
-<span class="sd">    peaks : array</span>
-<span class="sd">        Indices of the SRC peaks.</span>
-<span class="sd">    amplitudes : array</span>
-<span class="sd">        SCR pulse amplitudes.</span>
-
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
-<span class="sd">    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018). An</span>
-<span class="sd">    Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE</span>
-<span class="sd">    journal of translational engineering in health and medicine, 6, 2800711.</span>
-<span class="sd">    https://doi.org/10.1109/JTEHM.2018.2878000</span>
+<span class="sd">    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018). An</span>
+<span class="sd">      Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE</span>
+<span class="sd">      journal of translational engineering in health and medicine, 6, 2800711.</span>
+<span class="sd">      https://doi.org/10.1109/JTEHM.2018.2878000</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># differentiation</span>
+    <span class="n">eda_phasic_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">)</span>
+
     <span class="c1"># smooth</span>
-    <span class="n">eda_phasic</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;bartlett&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">eda_phasic_smoothed</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">eda_phasic_diff</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;bartlett&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
     <span class="c1"># zero crossings</span>
-    <span class="n">pos_crossings</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">)</span>
-    <span class="n">neg_crossings</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">)</span>
+    <span class="n">pos_crossings</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">eda_phasic_smoothed</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">)</span>
+    <span class="n">neg_crossings</span> <span class="o">=</span> <span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">eda_phasic_smoothed</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">)</span>
 
+    <span class="c1"># if negative crossing happens before the positive crossing</span>
+    <span class="c1"># delete first negative crossing because we want to identify peaks</span>
+    <span class="k">if</span> <span class="n">neg_crossings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pos_crossings</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">neg_crossings</span> <span class="o">=</span> <span class="n">neg_crossings</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="c1"># Sanitize consecutive crossings</span>
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos_crossings</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">neg_crossings</span><span class="p">):</span>
         <span class="n">pos_crossings</span> <span class="o">=</span> <span class="n">pos_crossings</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">neg_crossings</span><span class="p">)]</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos_crossings</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">neg_crossings</span><span class="p">):</span>
@@ -922,15 +864,33 @@ title="Open an issue"
     <span class="n">amps_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pos_crossings</span><span class="p">,</span> <span class="n">neg_crossings</span><span class="p">):</span>
         <span class="n">window</span> <span class="o">=</span> <span class="n">eda_phasic</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">]</span>
-        <span class="n">amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+        <span class="c1"># The amplitude of the SCR is obtained by finding the maximum value</span>
+        <span class="c1"># between these two zero-crossings and calculating the difference</span>
+        <span class="c1"># between the initial zero crossing and the maximum value.</span>
+        <span class="c1"># amplitude defined in neurokit2</span>
+        <span class="n">amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
 
         <span class="c1"># Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated</span>
-        <span class="n">diff</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">-</span> <span class="n">eda_phasic</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">amp</span><span class="p">):</span>
+        <span class="c1"># we append the first SCR</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">amps_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># be careful, if two peaks have the same amplitude, np.where will return a list</span>
             <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_phasic</span> <span class="o">==</span> <span class="n">amp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">peaks_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+            <span class="c1"># make sure that the peak is within the window</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">peak</span> <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="p">[</span><span class="n">peaks</span><span class="p">]</span> <span class="k">if</span> <span class="n">peak</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">peak</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">peaks_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">onsets_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="n">amps_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># we have a list of peaks</span>
+            <span class="c1"># amplitude defined in the paper</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">-</span> <span class="n">eda_phasic</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">amps_list</span><span class="p">)):</span>
+                <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_phasic</span> <span class="o">==</span> <span class="n">amp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># make sure that the peak is within the window</span>
+                <span class="n">peaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">peak</span> <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="p">[</span><span class="n">peaks</span><span class="p">]</span> <span class="k">if</span> <span class="n">peak</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="ow">and</span> <span class="n">peak</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">]</span>
+                <span class="n">peaks_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">onsets_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">amps_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amp</span><span class="p">)</span>
 
     <span class="c1"># output</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>

@@ -602,8 +602,6 @@ title="Open an issue"
 <span class="sd">    --------</span>
 <span class="sd">    eda_simulate, eda_clean, eda_phasic, eda_process, eda_plot</span>
 
-
-
 <span class="sd">    Examples</span>
 <span class="sd">    ---------</span>
 <span class="sd">    .. ipython:: python</span>
@@ -617,9 +615,9 @@ title="Open an issue"
 <span class="sd">      eda_phasic = eda[&quot;EDA_Phasic&quot;].values</span>
 
 <span class="sd">      # Find peaks</span>
-<span class="sd">      _, kim2004 = nk.eda_peaks(eda_phasic, method=&quot;kim2004&quot;)</span>
-<span class="sd">      _, neurokit = nk.eda_peaks(eda_phasic, method=&quot;neurokit&quot;)</span>
-<span class="sd">      _, nabian2018 = nk.eda_peaks(eda_phasic, method=&quot;nabian2018&quot;)</span>
+<span class="sd">      _, kim2004 = nk.eda_peaks(eda_phasic, sampling_rate=100, method=&quot;kim2004&quot;)</span>
+<span class="sd">      _, neurokit = nk.eda_peaks(eda_phasic, sampling_rate=100, method=&quot;neurokit&quot;)</span>
+<span class="sd">      _, nabian2018 = nk.eda_peaks(eda_phasic, sampling_rate=100, method=&quot;nabian2018&quot;)</span>
 
 <span class="sd">      @savefig p_eda_peaks.png scale=100%</span>
 <span class="sd">      nk.events_plot([</span>
@@ -678,7 +676,6 @@ title="Open an issue"
 
 
 <span class="k">def</span> <span class="nf">_eda_peaks_getfeatures</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">recovery_percentage</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-
     <span class="c1"># Sanity checks -----------------------------------------------------------</span>
 
     <span class="c1"># Peaks (remove peaks before first onset)</span>

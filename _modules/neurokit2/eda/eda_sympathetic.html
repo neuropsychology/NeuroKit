@@ -555,10 +555,13 @@ title="Open an issue"
                 
   <h1>Source code for neurokit2.eda.eda_sympathetic</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_timefrequency</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_power</span> <span class="kn">import</span> <span class="n">_signal_power_instant_compute</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_psd</span> <span class="kn">import</span> <span class="n">_signal_psd_welch</span>
@@ -571,7 +574,8 @@ title="Open an issue"
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Sympathetic Nervous System Index from Electrodermal activity (EDA)**</span>
 
 <span class="sd">    Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component</span>
-<span class="sd">    of EDA signal is represented in the frequency band of 0.045-0.25Hz.</span>
+<span class="sd">    of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method</span>
+<span class="sd">    requires a signal of a least 64 seconds.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -595,8 +599,9 @@ title="Open an issue"
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
-<span class="sd">        A dictionary containing the EDA symptathetic indexes, accessible by keys ``&quot;EDA_Symp&quot;`` and</span>
-<span class="sd">        ``&quot;EDA_SympN&quot;`` (normalized, obtained by dividing EDA_Symp by total power).</span>
+<span class="sd">        A dictionary containing the EDA sympathetic indexes, accessible by keys</span>
+<span class="sd">        ``&quot;EDA_Sympathetic&quot;`` and ``&quot;EDA_SympatheticN&quot;`` (normalized, obtained by dividing EDA_Symp</span>
+<span class="sd">        by total power).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -605,8 +610,14 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      eda = nk.data(&#39;bio_resting_8min_100hz&#39;)[&#39;EDA&#39;]</span>
-<span class="sd">      indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method=&#39;posada&#39;, show=True)</span>
-<span class="sd">      indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method=&#39;ghiasi&#39;, show=True)</span>
+
+<span class="sd">      @savefig p_eda_sympathetic1.png scale=100%</span>
+<span class="sd">      nk.eda_sympathetic(eda, sampling_rate=100, method=&#39;posada&#39;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      results = nk.eda_sympathetic(eda, sampling_rate=100, method=&#39;ghiasi&#39;)</span>
+<span class="sd">      results</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -623,12 +634,14 @@ title="Open an issue"
 
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ghiasi&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ghiasi&quot;</span><span class="p">,</span> <span class="s2">&quot;ghiasi2018&quot;</span><span class="p">]:</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">_eda_sympathetic_ghiasi</span><span class="p">(</span>
             <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="n">frequency_band</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;posada&quot;</span><span class="p">,</span> <span class="s2">&quot;posada-quintero&quot;</span><span class="p">,</span> <span class="s2">&quot;quintero&quot;</span><span class="p">]:</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">_eda_sympathetic_posada</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="n">frequency_band</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;posada&quot;</span><span class="p">,</span> <span class="s2">&quot;posada-quintero&quot;</span><span class="p">,</span> <span class="s2">&quot;quintero&quot;</span><span class="p">,</span> <span class="s2">&quot;posada2016&quot;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">_eda_sympathetic_posada</span><span class="p">(</span>
+            <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="n">frequency_band</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: eda_sympathetic(): &#39;method&#39; should be &quot;</span> <span class="s2">&quot;one of &#39;ghiasi&#39;, &#39;posada&#39;.&quot;</span>
@@ -642,10 +655,30 @@ title="Open an issue"
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_eda_sympathetic_posada</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{}):</span>
+<span class="k">def</span> <span class="nf">_eda_sympathetic_posada</span><span class="p">(</span>
+    <span class="n">eda_signal</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{}</span>
+<span class="p">):</span>
+
+    <span class="c1"># This method assumes signal longer than 64 s</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">64</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;posada2016&#39; method requires a signal of length &gt; 60 s. Try with&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; `method=&#39;ghiasi2018&#39;`. Returning NaN values for now.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;EDA_Sympathetic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s2">&quot;EDA_SympatheticN&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">}</span>
+
+    <span class="c1"># Resample the eda signal before calculate the synpathetic index based on Posada (2016)</span>
+    <span class="n">eda_signal_400hz</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
+        <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">400</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 8-th order Chebyshev Type I low-pass filter</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">cheby1</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
+    <span class="n">eda_signal_filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">eda_signal_400hz</span><span class="p">)</span>
 
     <span class="c1"># First step of downsampling</span>
-    <span class="n">downsampled_1</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">decimate</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>  <span class="c1"># Keep every 10th sample</span>
+    <span class="n">downsampled_1</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">decimate</span><span class="p">(</span><span class="n">eda_signal_filtered</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>  <span class="c1"># Keep every 10th sample</span>
     <span class="n">downsampled_2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">decimate</span><span class="p">(</span><span class="n">downsampled_1</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>  <span class="c1"># Keep every 20th sample</span>
 
     <span class="c1"># High pass filter</span>
@@ -674,10 +707,10 @@ title="Open an issue"
     <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">psd_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EDA Power Spectral Density (ms^2/Hz)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">psd_plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EDA Power Spectral Density (us^2/Hz)&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spectrum&quot;</span><span class="p">)</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EDA_Symp&quot;</span><span class="p">:</span> <span class="n">eda_symp</span><span class="p">,</span> <span class="s2">&quot;EDA_SympN&quot;</span><span class="p">:</span> <span class="n">eda_symp_normalized</span><span class="p">}</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EDA_Sympathetic&quot;</span><span class="p">:</span> <span class="n">eda_symp</span><span class="p">,</span> <span class="s2">&quot;EDA_SympatheticN&quot;</span><span class="p">:</span> <span class="n">eda_symp_normalized</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">out</span>
 
@@ -685,7 +718,6 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">_eda_sympathetic_ghiasi</span><span class="p">(</span>
     <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{}</span>
 <span class="p">):</span>
-
     <span class="n">min_frequency</span> <span class="o">=</span> <span class="n">frequency_band</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">max_frequency</span> <span class="o">=</span> <span class="n">frequency_band</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -706,6 +738,7 @@ title="Open an issue"
     <span class="c1"># Divide the signal into segments and obtain the timefrequency representation</span>
     <span class="n">overlap</span> <span class="o">=</span> <span class="mi">59</span> <span class="o">*</span> <span class="mi">50</span>  <span class="c1"># overlap of 59s in samples</span>
 
+    <span class="c1"># TODO: the plot should be improved for this specific case</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">signal_timefrequency</span><span class="p">(</span>
         <span class="n">filtered</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span><span class="p">,</span>
@@ -721,7 +754,7 @@ title="Open an issue"
     <span class="n">eda_symp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span>
     <span class="n">eda_symp_normalized</span> <span class="o">=</span> <span class="n">eda_symp</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EDA_Symp&quot;</span><span class="p">:</span> <span class="n">eda_symp</span><span class="p">,</span> <span class="s2">&quot;EDA_SympN&quot;</span><span class="p">:</span> <span class="n">eda_symp_normalized</span><span class="p">}</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EDA_Sympathetic&quot;</span><span class="p">:</span> <span class="n">eda_symp</span><span class="p">,</span> <span class="s2">&quot;EDA_SympatheticN&quot;</span><span class="p">:</span> <span class="n">eda_symp_normalized</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">out</span>
 </pre></div>

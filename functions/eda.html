@@ -1046,8 +1046,10 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 <span class="gp">In [12]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[12]: </span>
-<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean</span>
-<span class="go">0          2.0                  0.936103</span>
+<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean  ...  EDA_Sympathetic  EDA_SympatheticN</span>
+<span class="go">0          2.0                  0.000037  ...              NaN               NaN</span>
+
+<span class="go">[1 rows x 5 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1292,7 +1294,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.23350283607975786</span>
+<span class="gh">Out[5]: </span><span class="go">-0.16538551898447654</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1343,7 +1345,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">8</span>
+<span class="gh">Out[4]: </span><span class="go">26</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1408,11 +1410,11 @@ as “1” in lists of zeros with the same length as <code class="docutils liter
 <span class="gp">In [5]: </span><span class="n">eda_phasic</span> <span class="o">=</span> <span class="n">eda</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
 <span class="go"># Find peaks</span>
-<span class="gp">In [6]: </span><span class="n">_</span><span class="p">,</span> <span class="n">kim2004</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kim2004&quot;</span><span class="p">)</span>
+<span class="gp">In [6]: </span><span class="n">_</span><span class="p">,</span> <span class="n">kim2004</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kim2004&quot;</span><span class="p">)</span>
 
-<span class="gp">In [7]: </span><span class="n">_</span><span class="p">,</span> <span class="n">neurokit</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+<span class="gp">In [7]: </span><span class="n">_</span><span class="p">,</span> <span class="n">neurokit</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
 
-<span class="gp">In [8]: </span><span class="n">_</span><span class="p">,</span> <span class="n">nabian2018</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
+<span class="gp">In [8]: </span><span class="n">_</span><span class="p">,</span> <span class="n">nabian2018</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_peaks</span><span class="p">(</span><span class="n">eda_phasic</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span>
 <span class="gp">   ...: </span>    <span class="n">nabian2018</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
@@ -1500,7 +1502,8 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <span class="sig-name descname"><span class="pre">eda_sympathetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.045,</span> <span class="pre">0.25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'posada'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_sympathetic.html#eda_sympathetic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_sympathetic" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Sympathetic Nervous System Index from Electrodermal activity (EDA)</strong></p>
 <p>Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
-of EDA signal is represented in the frequency band of 0.045-0.25Hz.</p>
+of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
+requires a signal of a least 64 seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1520,8 +1523,9 @@ frequency band.</p></li>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>dict</em> – A dictionary containing the EDA symptathetic indexes, accessible by keys <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Symp&quot;</span></code> and
-<code class="docutils literal notranslate"><span class="pre">&quot;EDA_SympN&quot;</span></code> (normalized, obtained by dividing EDA_Symp by total power).</p>
+<dd class="field-odd"><p><em>dict</em> – A dictionary containing the EDA sympathetic indexes, accessible by keys
+<code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;EDA_SympatheticN&quot;</span></code> (normalized, obtained by dividing EDA_Symp
+by total power).</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1529,11 +1533,20 @@ frequency band.</p></li>
 
 <span class="gp">In [2]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_resting_8min_100hz&#39;</span><span class="p">)[</span><span class="s1">&#39;EDA&#39;</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">indexes_posada</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;posada&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;posada&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gh">Out[3]: </span>
+<span class="go">{&#39;EDA_Sympathetic&#39;: 0.000663898004521976,</span>
+<span class="go"> &#39;EDA_SympatheticN&#39;: 3.73683253276358e-05}</span>
 
-<span class="gp">In [4]: </span><span class="n">indexes_ghiasi</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ghiasi&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">results</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ghiasi&#39;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">results</span>
+<span class="gh">Out[5]: </span>
+<span class="go">{&#39;EDA_Sympathetic&#39;: 5.654495435013689e-05,</span>
+<span class="go"> &#39;EDA_SympatheticN&#39;: 0.001904476429572143}</span>
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../_images/p_eda_sympathetic1.png"><img alt="../_images/p_eda_sympathetic1.png" src="../_images/p_eda_sympathetic1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., &amp; Valenza,
@@ -1610,8 +1623,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.363            1857.0</span>
-<span class="go">2     2        10000  ...         0.364            1065.0</span>
+<span class="go">1     1         5000  ...         0.362               NaN</span>
+<span class="go">2     2        10000  ...         0.362            1580.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1653,21 +1666,24 @@ for SCR to decrease to half amplitude.</p></li>
 <h3><em>eda_intervalrelated()</em><a class="headerlink" href="#eda-intervalrelated" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_intervalrelated">
-<span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>EDA Analysis on Interval-Related Data</strong></p>
-<p>Performs EDA analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state data.</p>
+<p>Performs EDA analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
+data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A DataFrame containing the different processed signal(s) as
-different columns, typically generated by <code class="docutils literal notranslate"><span class="pre">&quot;eda_process()&quot;</span></code> or
-<code class="docutils literal notranslate"><span class="pre">&quot;bio_process()&quot;</span></code>. Can also take a dict containing sets of
+different columns, typically generated by <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_process()</span></code></a> or
+<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code>. Can also take a dict containing sets of
 separately processed DataFrames.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. The analyzed
 features consist of the following:
 * <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_N&quot;</span></code>: the number of occurrences of Skin Conductance Response (SCR).
-* <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_Amplitude_Mean&quot;</span></code>: the mean amplitude of the SCR peak occurrences.</p>
+* <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_Amplitude_Mean&quot;</span></code>: the mean amplitude of the SCR peak occurrences.
+* <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Tonic_SD&quot;</span></code>: the mean amplitude of the SCR peak occurrences.
+* <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_sympathetic" title="neurokit2.eda.eda_sympathetic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a>.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1684,18 +1700,22 @@ features consist of the following:
 <span class="gp">In [3]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="go"># Single dataframe is passed</span>
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean</span>
-<span class="go">0          2.0                  0.936103</span>
+<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean  ...  EDA_Sympathetic  EDA_SympatheticN</span>
+<span class="go">0          2.0                  0.000037  ...         0.000664          0.000037</span>
+
+<span class="go">[1 rows x 5 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25300</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
-<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label  SCR_Peaks_N  SCR_Peaks_Amplitude_Mean</span>
-<span class="go">1     1            2                       NaN</span>
-<span class="go">2     2            0                       NaN</span>
+<span class="go">  Label  SCR_Peaks_N  ...  EDA_Sympathetic  EDA_SympatheticN</span>
+<span class="go">1     1            2  ...              NaN               NaN</span>
+<span class="go">2     2            0  ...              NaN               NaN</span>
+
+<span class="go">[2 rows x 6 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
