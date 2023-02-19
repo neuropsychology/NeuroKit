@@ -82,13 +82,17 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         try:
             eda_phasic = eda_phasic["EDA_Phasic"]
         except KeyError:
-            raise KeyError("NeuroKit error: eda_findpeaks(): Please provide an array as the input signal.")
+            raise KeyError(
+                "NeuroKit error: eda_findpeaks(): Please provide an array as the input signal."
+            )
 
     method = method.lower()  # remove capitalised letters
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", "biosppy"]:
-        info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
+        info = _eda_findpeaks_kim2004(
+            eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min
+        )
     elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     elif method in ["vanhalem2020", "vanhalem", "halem2020"]:
@@ -124,27 +128,9 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     """Follows approach of van Halem et al. (2020).
 
-    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent decrease
-    of 0.5 seconds.
+    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent
+    decrease of 0.5 seconds.
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-    sampling_rate : int
-        Sampling frequency (Hz). Defaults to 1000Hz.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
     * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
       Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
@@ -187,25 +173,9 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
 
 
 def _eda_findpeaks_gamboa2008(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis
-    by Gamboa (2008).
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
+    approach in the thesis by Gamboa (2008).
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
     * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
       PhD Thesis Universidade.
 
@@ -218,7 +188,9 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     # sanity check
     if len(pi) == 0 or len(ni) == 0:
-        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
+        raise ValueError(
+            "NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method."
+        )
 
     # pair vectors
     if ni[0] < pi[0]:
@@ -249,26 +221,6 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et
     al.(2004).
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-    sampling_rate : int
-        Sampling frequency (Hz). Defaults to 1000Hz.
-    amplitude_min : float
-        Minimum treshold by which to exclude SCRs. Defaults to 0.1.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
     * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
       monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
       419-427.
@@ -316,32 +268,17 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 
 def _eda_findpeaks_nabian2018(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et
-    al. (2018). The amplitude of the SCR is obtained by finding the maximum value between these two zero-crossings, and
-    calculating the difference between the initial zero crossing and the maximum value. Detected SCRs with amplitudes
-    smaller than 10 percent of the maximum SCR amplitudes that are already detected on the differentiated signal will be
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
+    approach by Nabian et al. (2018). The amplitude of the SCR is obtained by finding the maximum
+    value between these two zero-crossings, and calculating the difference between the initial zero
+    crossing and the maximum value. Detected SCRs with amplitudes smaller than 10 percent of the
+    maximum SCR amplitudes that are already detected on the differentiated signal will be
     eliminated. It is crucial that artifacts are removed before finding peaks.
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
-    Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
-    journal of translational engineering in health and medicine, 6, 2800711.
-    https://doi.org/10.1109/JTEHM.2018.2878000
+    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
+      Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
+      journal of translational engineering in health and medicine, 6, 2800711.
+      https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
 
@@ -370,7 +307,7 @@ def _eda_findpeaks_nabian2018(eda_phasic):
         # between these two zero-crossings and calculating the difference
         # between the initial zero crossing and the maximum value.
         # amplitude defined in neurokit2
-        amp = np.max(window)
+        amp = np.nanmax(window)
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
         # we append the first SCR
