@@ -292,7 +292,12 @@ def _eda_findpeaks_nabian2018(eda_phasic):
     pos_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="positive")
     neg_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="negative")
 
+    # if negative crossing happens before the positive crossing
+    # delete first negative crossing because we want to identify peaks
+    if neg_crossings[0] < pos_crossings[0]: 
+        neg_crossings.pop(0)
     # Sanitize consecutive crossings
+
     if len(pos_crossings) > len(neg_crossings):
         pos_crossings = pos_crossings[0 : len(neg_crossings)]
     elif len(pos_crossings) < len(neg_crossings):
