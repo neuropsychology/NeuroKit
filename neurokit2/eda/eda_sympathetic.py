@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_filter, signal_resample, signal_timefrequency
 from ..signal.signal_power import _signal_power_instant_compute
 from ..signal.signal_psd import _signal_psd_welch
@@ -15,7 +18,8 @@ def eda_sympathetic(
     """**Sympathetic Nervous System Index from Electrodermal activity (EDA)**
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
-    of EDA signal is represented in the frequency band of 0.045-0.25Hz.
+    of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
+    requires a signal of a least 64 seconds.
 
     Parameters
     ----------
@@ -39,8 +43,9 @@ def eda_sympathetic(
     Returns
     -------
     dict
-        A dictionary containing the EDA symptathetic indexes, accessible by keys ``"EDA_Symp"`` and
-        ``"EDA_SympN"`` (normalized, obtained by dividing EDA_Symp by total power).
+        A dictionary containing the EDA sympathetic indexes, accessible by keys
+        ``"EDA_Sympathetic"`` and ``"EDA_SympatheticN"`` (normalized, obtained by dividing EDA_Symp
+        by total power).
 
     Examples
     --------
@@ -49,8 +54,14 @@ def eda_sympathetic(
       import neurokit2 as nk
 
       eda = nk.data('bio_resting_8min_100hz')['EDA']
-      indexes_posada = nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
-      indexes_ghiasi = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi', show=True)
+
+      @savefig p_eda_sympathetic1.png scale=100%
+      nk.eda_sympathetic(eda, sampling_rate=100, method='posada', show=True)
+      @suppress
+      plt.close()
+
+      results = nk.eda_sympathetic(eda, sampling_rate=100, method='ghiasi')
+      results
 
     References
     ----------
@@ -67,12 +78,14 @@ def eda_sympathetic(
 
     out = {}
 
-    if method.lower() in ["ghiasi"]:
+    if method.lower() in ["ghiasi", "ghiasi2018"]:
         out = _eda_sympathetic_ghiasi(
             eda_signal, sampling_rate=sampling_rate, frequency_band=frequency_band, show=show
         )
-    elif method.lower() in ["posada", "posada-quintero", "quintero"]:
-        out = _eda_sympathetic_posada(eda_signal, frequency_band=frequency_band, show=show)
+    elif method.lower() in ["posada", "posada-quintero", "quintero", "posada2016"]:
+        out = _eda_sympathetic_posada(
+            eda_signal, sampling_rate=sampling_rate, frequency_band=frequency_band, show=show
+        )
     else:
         raise ValueError(
             "NeuroKit error: eda_sympathetic(): 'method' should be " "one of 'ghiasi', 'posada'."
@@ -86,10 +99,30 @@ def eda_sympathetic(
 # =============================================================================
 
 
-def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True, out={}):
+def _eda_sympathetic_posada(
+    eda_signal, frequency_band=[0.045, 0.25], sampling_rate=1000, show=True, out={}
+):
+
+    # This method assumes signal longer than 64 s
+    if len(eda_signal) <= sampling_rate * 64:
+        warn(
+            "The 'posada2016' method requires a signal of length > 60 s. Try with"
+            + " `method='ghiasi2018'`. Returning NaN values for now.",
+            category=NeuroKitWarning,
+        )
+        return {"EDA_Sympathetic": np.nan, "EDA_SympatheticN": np.nan}
+
+    # Resample the eda signal before calculate the synpathetic index based on Posada (2016)
+    eda_signal_400hz = signal_resample(
+        eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=400
+    )
+
+    # 8-th order Chebyshev Type I low-pass filter
+    sos = scipy.signal.cheby1(8, 1, 0.8, "lowpass", fs=400, output="sos")
+    eda_signal_filtered = scipy.signal.sosfilt(sos, eda_signal_400hz)
 
     # First step of downsampling
-    downsampled_1 = scipy.signal.decimate(eda_signal, q=10, n=8)  # Keep every 10th sample
+    downsampled_1 = scipy.signal.decimate(eda_signal_filtered, q=10, n=8)  # Keep every 10th sample
     downsampled_2 = scipy.signal.decimate(downsampled_1, q=20, n=8)  # Keep every 20th sample
 
     # High pass filter
@@ -118,10 +151,10 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
     ]
 
     if show is True:
-        ax = psd_plot.plot(x="Frequency", y="Power", title="EDA Power Spectral Density (ms^2/Hz)")
+        ax = psd_plot.plot(x="Frequency", y="Power", title="EDA Power Spectral Density (us^2/Hz)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
-    out = {"EDA_Symp": eda_symp, "EDA_SympN": eda_symp_normalized}
+    out = {"EDA_Sympathetic": eda_symp, "EDA_SympatheticN": eda_symp_normalized}
 
     return out
 
@@ -129,7 +162,6 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
 def _eda_sympathetic_ghiasi(
     eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], show=True, out={}
 ):
-
     min_frequency = frequency_band[0]
     max_frequency = frequency_band[1]
 
@@ -150,6 +182,7 @@ def _eda_sympathetic_ghiasi(
     # Divide the signal into segments and obtain the timefrequency representation
     overlap = 59 * 50  # overlap of 59s in samples
 
+    # TODO: the plot should be improved for this specific case
     _, _, bins = signal_timefrequency(
         filtered,
         sampling_rate=desired_sampling_rate,
@@ -165,6 +198,6 @@ def _eda_sympathetic_ghiasi(
     eda_symp = np.mean(bins)
     eda_symp_normalized = eda_symp / np.max(bins)
 
-    out = {"EDA_Symp": eda_symp, "EDA_SympN": eda_symp_normalized}
+    out = {"EDA_Sympathetic": eda_symp, "EDA_SympatheticN": eda_symp_normalized}
 
     return out
