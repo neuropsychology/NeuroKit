@@ -8,7 +8,6 @@ import pytest
 
 import neurokit2 as nk
 
-
 # =============================================================================
 # EDA
 # =============================================================================
@@ -53,7 +52,9 @@ def test_eda_clean():
         sampling_rate=sampling_rate,
     )
 
-    original, _ = biosppy.tools.smoother(signal=original, kernel="boxzen", size=int(0.75 * sampling_rate), mirror=True)
+    original, _ = biosppy.tools.smoother(
+        signal=original, kernel="boxzen", size=int(0.75 * sampling_rate), mirror=True
+    )
 
     #    pd.DataFrame({"our":eda_biosppy, "biosppy":original}).plot()
     assert np.allclose((eda_biosppy - original).mean(), 0, atol=1e-5)
@@ -167,7 +168,9 @@ def test_eda_plot():
     for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[2].get_xlabel() == "Samples"
-    np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks(), fig.axes[2].get_xticks())
+    np.testing.assert_array_equal(
+        fig.axes[0].get_xticks(), fig.axes[1].get_xticks(), fig.axes[2].get_xticks()
+    )
     plt.close(fig)
 
     # Plot data over seconds.
@@ -201,18 +204,18 @@ def test_eda_intervalrelated():
     columns = ["SCR_Peaks_N", "SCR_Peaks_Amplitude_Mean"]
 
     # Test with signal dataframe
-    features_df = nk.eda_intervalrelated(df)
+    rez = nk.eda_intervalrelated(df)
 
-    assert all([i in features_df.columns.values for i in columns])
-    assert features_df.shape[0] == 1  # Number of rows
+    assert all([i in rez.columns.values for i in columns])
+    assert rez.shape[0] == 1  # Number of rows
 
     # Test with dict
     columns.append("Label")
     epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
-    features_dict = nk.eda_intervalrelated(epochs)
+    rez = nk.eda_intervalrelated(epochs)
 
-    assert all([i in features_df.columns.values for i in columns])
-    assert features_dict.shape[0] == 2  # Number of rows
+    assert all([i in rez.columns.values for i in columns])
+    assert rez.shape[0] == 2  # Number of rows
 
 
 def test_eda_sympathetic():
@@ -235,4 +238,6 @@ def test_eda_findpeaks():
 
     vanhalem2020 = nk.eda_findpeaks(eda_phasic, sampling_rate=100, method="vanhalem2020")
     min_n_peaks = min(len(vanhalem2020), len(nabian2018))
-    assert any(nabian2018["SCR_Peaks"][:min_n_peaks] - vanhalem2020["SCR_Peaks"][:min_n_peaks]) < np.mean(eda_signal)
+    assert any(
+        nabian2018["SCR_Peaks"][:min_n_peaks] - vanhalem2020["SCR_Peaks"][:min_n_peaks]
+    ) < np.mean(eda_signal)
