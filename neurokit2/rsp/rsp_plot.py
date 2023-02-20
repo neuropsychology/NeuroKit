@@ -96,9 +96,16 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
         ax[0].set_title("Raw and Cleaned Signal")
         fig.suptitle("Respiration (RSP)", fontweight="bold")
 
-        ax[0].plot(x_axis, rsp_signals["RSP_Raw"], color="#B0BEC5", label="Raw", zorder=1)
         ax[0].plot(
-            x_axis, rsp_signals["RSP_Clean"], color="#2196F3", label="Cleaned", zorder=2, linewidth=1.5
+            x_axis, rsp_signals["RSP_Raw"], color="#B0BEC5", label="Raw", zorder=1
+        )
+        ax[0].plot(
+            x_axis,
+            rsp_signals["RSP_Clean"],
+            color="#2196F3",
+            label="Cleaned",
+            zorder=2,
+            linewidth=1.5,
         )
 
         ax[0].scatter(
@@ -140,7 +147,13 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
 
         # Plot rate and optionally amplitude.
         ax[1].set_title("Breathing Rate")
-        ax[1].plot(x_axis, rsp_signals["RSP_Rate"], color="#4CAF50", label="Rate", linewidth=1.5)
+        ax[1].plot(
+            x_axis,
+            rsp_signals["RSP_Rate"],
+            color="#4CAF50",
+            label="Rate",
+            linewidth=1.5,
+        )
         ax[1].axhline(y=rate_mean, label="Mean", linestyle="--", color="#4CAF50")
         ax[1].legend(loc="upper right")
 
@@ -148,15 +161,27 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
             ax[2].set_title("Breathing Amplitude")
 
             ax[2].plot(
-                x_axis, rsp_signals["RSP_Amplitude"], color="#009688", label="Amplitude", linewidth=1.5
+                x_axis,
+                rsp_signals["RSP_Amplitude"],
+                color="#009688",
+                label="Amplitude",
+                linewidth=1.5,
             )
-            ax[2].axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#009688")
+            ax[2].axhline(
+                y=amplitude_mean, label="Mean", linestyle="--", color="#009688"
+            )
             ax[2].legend(loc="upper right")
 
         if "RSP_RVT" in list(rsp_signals.columns):
             ax[3].set_title("Respiratory Volume per Time")
 
-            ax[3].plot(x_axis, rsp_signals["RSP_RVT"], color="#00BCD4", label="RVT", linewidth=1.5)
+            ax[3].plot(
+                x_axis,
+                rsp_signals["RSP_RVT"],
+                color="#00BCD4",
+                label="RVT",
+                linewidth=1.5,
+            )
             ax[3].axhline(y=rvt_mean, label="Mean", linestyle="--", color="#009688")
             ax[3].legend(loc="upper right")
 
@@ -207,12 +232,47 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
         )
 
         # Plot cleaned and raw RSP
-        fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_Raw"], name="Raw", marker_color="#B0BEC5"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_Clean"], name="Cleaned", marker_color="#2196F3"), row=1, col=1)
+        fig.add_trace(
+            go.Scatter(
+                x=x_axis, y=rsp_signals["RSP_Raw"], name="Raw", marker_color="#B0BEC5"
+            ),
+            row=1,
+            col=1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=x_axis,
+                y=rsp_signals["RSP_Clean"],
+                name="Cleaned",
+                marker_color="#2196F3",
+            ),
+            row=1,
+            col=1,
+        )
 
         # Plot peaks and troughs.
-        fig.add_trace(go.Scatter(x=x_axis[peaks], y=rsp_signals["RSP_Clean"][peaks], name="Exhalation Onsets", marker_color="red", mode="markers"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=x_axis[troughs], y=rsp_signals["RSP_Clean"][troughs], name="Inhalation Onsets", marker_color="orange", mode="markers"), row=1, col=1)
+        fig.add_trace(
+            go.Scatter(
+                x=x_axis[peaks],
+                y=rsp_signals["RSP_Clean"][peaks],
+                name="Exhalation Onsets",
+                marker_color="red",
+                mode="markers",
+            ),
+            row=1,
+            col=1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=x_axis[troughs],
+                y=rsp_signals["RSP_Clean"][troughs],
+                name="Inhalation Onsets",
+                marker_color="orange",
+                mode="markers",
+            ),
+            row=1,
+            col=1,
+        )
 
         # Shade region to mark inspiration and expiration.
         # fig.add_trace(go.Scatter(x=x_axis[exhale], y=exhale_signal[exhale], name="Exhalation", marker_color="#CFD8DC", fill="tonexty", mode="none"), row=1, col=1)
@@ -220,31 +280,104 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
         # TODO: Fix shading
 
         # Plot rate and optionally amplitude.
-        fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_Rate"], name="Rate", marker_color="#4CAF50"), row=2, col=1)
-        fig.add_trace(go.Scatter(x=x_axis, y=[rate_mean] * len(x_axis), name="Mean Rate", marker_color="#4CAF50", line=dict(dash="dash")), row=2, col=1)
+        fig.add_trace(
+            go.Scatter(
+                x=x_axis, y=rsp_signals["RSP_Rate"], name="Rate", marker_color="#4CAF50"
+            ),
+            row=2,
+            col=1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=x_axis,
+                y=[rate_mean] * len(x_axis),
+                name="Mean Rate",
+                marker_color="#4CAF50",
+                line=dict(dash="dash"),
+            ),
+            row=2,
+            col=1,
+        )
 
         if "RSP_Amplitude" in list(rsp_signals.columns):
-            fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_Amplitude"], name="Amplitude", marker_color="#009688"), row=3, col=1)
-            fig.add_trace(go.Scatter(x=x_axis, y=[amplitude_mean] * len(x_axis), name="Mean Amplitude", marker_color="#009688", line=dict(dash="dash")), row=3, col=1)
+            fig.add_trace(
+                go.Scatter(
+                    x=x_axis,
+                    y=rsp_signals["RSP_Amplitude"],
+                    name="Amplitude",
+                    marker_color="#009688",
+                ),
+                row=3,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x_axis,
+                    y=[amplitude_mean] * len(x_axis),
+                    name="Mean Amplitude",
+                    marker_color="#009688",
+                    line=dict(dash="dash"),
+                ),
+                row=3,
+                col=1,
+            )
 
         if "RSP_RVT" in list(rsp_signals.columns):
-            fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_RVT"], name="RVT", marker_color="#00BCD4"), row=4, col=1)
-            fig.add_trace(go.Scatter(x=x_axis, y=[rvt_mean] * len(x_axis), name="Mean RVT", marker_color="#00BCD4", line=dict(dash="dash")), row=4, col=1)
+            fig.add_trace(
+                go.Scatter(
+                    x=x_axis,
+                    y=rsp_signals["RSP_RVT"],
+                    name="RVT",
+                    marker_color="#00BCD4",
+                ),
+                row=4,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x_axis,
+                    y=[rvt_mean] * len(x_axis),
+                    name="Mean RVT",
+                    marker_color="#00BCD4",
+                    line=dict(dash="dash"),
+                ),
+                row=4,
+                col=1,
+            )
 
         if "RSP_Symmetry_PeakTrough" in list(rsp_signals.columns):
-            fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_Symmetry_PeakTrough"], name="Peak-Trough Symmetry", marker_color="green"), row=5, col=1)
-            fig.add_trace(go.Scatter(x=x_axis, y=rsp_signals["RSP_Symmetry_RiseDecay"], name="Rise-Decay Symmetry", marker_color="purple"), row=5, col=1)
+            fig.add_trace(
+                go.Scatter(
+                    x=x_axis,
+                    y=rsp_signals["RSP_Symmetry_PeakTrough"],
+                    name="Peak-Trough Symmetry",
+                    marker_color="green",
+                ),
+                row=5,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x_axis,
+                    y=rsp_signals["RSP_Symmetry_RiseDecay"],
+                    name="Rise-Decay Symmetry",
+                    marker_color="purple",
+                ),
+                row=5,
+                col=1,
+            )
 
         fig.update_layout(title_text="Respiration (RSP)", height=1250, width=750)
         for i in range(1, nrow + 1):
             fig.update_xaxes(title_text=x_label, row=i, col=1)
 
         return fig
+
+
 # =============================================================================
 # Internals
 # =============================================================================
 def _rsp_plot_phase(rsp_signals, troughs, peaks):
-
     exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
     exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
     exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
