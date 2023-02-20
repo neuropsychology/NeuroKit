@@ -10,6 +10,7 @@ from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
 from .rsp_rvt import rsp_rvt
 from .rsp_symmetry import rsp_symmetry
+from .rsp_report import rsp_report
 
 
 def rsp_process(

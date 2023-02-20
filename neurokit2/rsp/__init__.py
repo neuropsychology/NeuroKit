@@ -38,4 +38,5 @@ __all__ = [
     "rsp_rate",
     "rsp_symmetry",
     "rsp_methods",
+    "rsp_report",
 ]
