@@ -274,10 +274,7 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
             col=1,
         )
 
-        # Shade region to mark inspiration and expiration.
-        # fig.add_trace(go.Scatter(x=x_axis[exhale], y=exhale_signal[exhale], name="Exhalation", marker_color="#CFD8DC", fill="tonexty", mode="none"), row=1, col=1)
-        # fig.add_trace(go.Scatter(x=x_axis[inhale], y=inhale_signal[inhale], name="Inhalation", marker_color="#ECEFF1", fill="tonexty", mode="none"), row=1, col=1)
-        # TODO: Fix shading
+        # TODO: Shade region to mark inspiration and expiration.
 
         # Plot rate and optionally amplitude.
         fig.add_trace(
