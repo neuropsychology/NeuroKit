@@ -17,6 +17,7 @@ def rsp_process(
     sampling_rate=1000,
     method="khodadad2018",
     method_rvt="harrison2021",
+    report=None,
     **kwargs
 ):
     """**Process a respiration (RSP) signal**
@@ -40,6 +41,11 @@ def rsp_process(
     method_rvt : str
         The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"birn2006"``
         or ``"power2020"``.
+    report : str
+        The filename of a report containing description and figures of processing
+        (e.g. ``"myreport.html"``). Needs to be supplied if a report file
+        should be generated. Defaults to ``None``. Can also be ``"text"`` to
+        just print the text in the console without saving anything.
     **kwargs
         Other arguments to be passed to specific methods. For more information,
         see :func:`.rsp_methods`.
@@ -141,5 +147,9 @@ def rsp_process(
         }
     )
     signals = pd.concat([signals, phase, symmetry, peak_signal], axis=1)
+
+    if report is not None:
+        # Generate report containing description and figures of processing
+        rsp_report(file=report, signals=signals, info=methods)
 
     return signals, info
