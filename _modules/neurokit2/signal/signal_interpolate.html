@@ -653,10 +653,16 @@ title="Open an issue"
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">x_new</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">y_values</span>
+        <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_new</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># if x_values is identical to x_new, no need for interpolation</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x_values</span> <span class="o">==</span> <span class="n">x_new</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">y_values</span>
+
+    <span class="c1"># If only one value, return a constant signal</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_new</span><span class="p">))</span> <span class="o">*</span> <span class="n">y_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;monotone_cubic&quot;</span><span class="p">:</span>
         <span class="n">interpolation_function</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">PchipInterpolator</span><span class="p">(</span>
             <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">extrapolate</span><span class="o">=</span><span class="kc">True</span>
@@ -671,8 +677,7 @@ title="Open an issue"
             <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_new</span><span class="p">)</span>
+
     <span class="n">interpolated</span> <span class="o">=</span> <span class="n">interpolation_function</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;monotone_cubic&quot;</span> <span class="ow">and</span> <span class="n">fill_value</span> <span class="o">!=</span> <span class="s2">&quot;extrapolate&quot;</span><span class="p">:</span>

@@ -634,7 +634,7 @@ title="Open an issue"
     <span class="c1"># Format input.</span>
     <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span> <span class="o">=</span> <span class="n">_rsp_fixpeaks_retrieve</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="p">)</span>
 
-    <span class="c1"># To consistenty calculate amplitude, peaks and troughs must have the same</span>
+    <span class="c1"># To consistently calculate amplitude, peaks and troughs must have the same</span>
     <span class="c1"># number of elements, and the first trough must precede the first peak.</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">troughs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">troughs</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>

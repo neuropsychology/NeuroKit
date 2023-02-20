@@ -697,6 +697,12 @@ title="Open an issue"
         <span class="o">-</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span> <span class="n">prominence</span><span class="o">=</span><span class="n">peak_prominence</span>
     <span class="p">)</span>
 
+    <span class="c1"># Combine peaks and troughs and sort them.</span>
+    <span class="n">extrema</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="p">)))</span>
+    <span class="c1"># Sanitize.</span>
+    <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitudes</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_outliers</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">amplitude_min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_sanitize</span><span class="p">(</span><span class="n">extrema</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">)</span>
+
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">,</span> <span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">:</span> <span class="n">troughs</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">info</span>
 
