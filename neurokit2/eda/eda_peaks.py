@@ -46,8 +46,6 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     --------
     eda_simulate, eda_clean, eda_phasic, eda_process, eda_plot
 
-
-
     Examples
     ---------
     .. ipython:: python
@@ -61,9 +59,9 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
       eda_phasic = eda["EDA_Phasic"].values
 
       # Find peaks
-      _, kim2004 = nk.eda_peaks(eda_phasic, method="kim2004")
-      _, neurokit = nk.eda_peaks(eda_phasic, method="neurokit")
-      _, nabian2018 = nk.eda_peaks(eda_phasic, method="nabian2018")
+      _, kim2004 = nk.eda_peaks(eda_phasic, sampling_rate=100, method="kim2004")
+      _, neurokit = nk.eda_peaks(eda_phasic, sampling_rate=100, method="neurokit")
+      _, nabian2018 = nk.eda_peaks(eda_phasic, sampling_rate=100, method="nabian2018")
 
       @savefig p_eda_peaks.png scale=100%
       nk.events_plot([
@@ -122,7 +120,6 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 
 
 def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percentage=0.5):
-
     # Sanity checks -----------------------------------------------------------
 
     # Peaks (remove peaks before first onset)
