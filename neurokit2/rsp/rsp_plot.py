@@ -84,7 +84,6 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
         x_axis = np.linspace(0, len(rsp_signals) / sampling_rate, len(rsp_signals))
     else:
         x_label = "Samples"
-        last_ax.set_xlabel("Samples")
         x_axis = np.arange(0, len(rsp_signals))
 
     if static:
