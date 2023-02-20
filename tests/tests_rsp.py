@@ -290,7 +290,7 @@ def test_rsp_rvt():
 
 
 @pytest.mark.parametrize(
-    "method_cleaning, method_peaks", "method_rvt"
+    "method_cleaning, method_peaks, method_rvt"
     [("none", "biossppy", "power2020", "khodadad2018"),
         ("none", "scipy", "biosppy", "khodadad2018"),
         ("none", "power2020", "birn2006", "harrison2021")],
