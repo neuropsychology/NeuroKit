@@ -101,6 +101,11 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
         # if x_values is identical to x_new, no need for interpolation
         if np.all(x_values == x_new):
             return y_values
+
+    # If only one value, return a constant signal
+    if len(x_values) == 1:
+        return np.ones(len(x_new)) * y_values[0]
+
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
             x_values, y_values, extrapolate=True
