@@ -2,13 +2,13 @@
 import pandas as pd
 
 from ..misc import as_vector
+from ..misc.report import create_report
 from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
 from .ppg_methods import ppg_methods
-from .ppg_report import ppg_report
-
+from .ppg_plot import ppg_plot
 
 def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs):
     """**Process a photoplethysmogram (PPG)  signal**
@@ -109,6 +109,6 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
 
     if report is not None:
         # Generate report containing description and figures of processing
-        ppg_report(file=report, signals=signals, info=methods)
+        create_report(ppg_plot, file=report, signals=signals, info=methods)
 
     return signals, info

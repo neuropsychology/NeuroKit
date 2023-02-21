@@ -1,6 +1,98 @@
 # -*- coding: utf-8 -*-
 import inspect
 
+import numpy as np
+import pandas as pd
+
+def create_report(plot_func, file="myreport.html", signals=None, info={"sampling_rate": 1000}):
+    """**Reports**
+
+    Create report containing description and figures of processing.
+    This function is meant to be used via the `rsp_process()` or `ppg_process()` functions.
+
+    Parameters
+    ----------
+    plot_func : function to plot the signals, such as :func:`.rsp_plot`.
+    file : str
+        Name of the file to save the report to. Can also be ``"text"`` to simply print the text in
+        the console.
+    signals : pd.DataFrame
+        A DataFrame of signals. Usually obtained from :func:`.rsp_process` or :func:`.ppg_process`
+    info : dict
+        A dictionary containing the information of peaks and the signals' sampling rate. Usually
+        obtained from :func:`.rsp_process` or :func:`.ppg_process`.
+
+    Returns
+    -------
+    str
+        The report as a string.
+
+    See Also
+    --------
+    rsp_process, ppg_process
+
+    Examples
+    --------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=10, sampling_rate=200)
+      signals, info = nk.rsp_process(rsp, sampling_rate=200, report="console_only")
+
+    """
+
+    description, ref = text_combine(info)
+    table_html, table_md = summarize_table(signals)
+
+    # Print text in the console
+    for key in [k for k in info.keys() if "text_" in k]:
+        print(info[key] + "\n")
+
+    print(table_md)
+
+    print("\nReferences")
+    for s in info["references"]:
+        print("- " + s)
+
+    # Make figures
+    fig = '<h2 style="background-color: #FB661C">Visualization</h1>'
+    fig += (
+        plot_func(signals, sampling_rate=info["sampling_rate"], static=False)
+        .to_html()
+        .split("<body>")[1]
+        .split("</body>")[0]
+    )
+
+    # Save report
+    if ".html" in file:
+        print(f"The report has been saved to {file}")
+        contents = [description, table_html, fig, ref]
+        html_save(contents=contents, file=file)
+
+
+def summarize_table(signals):
+    """Create table to summarize statistics of a RSP signal."""
+
+    # TODO: add more features
+    summary = {}
+
+    rate_cols = [col for col in signals.columns if "Rate" in col]
+    if len(rate_col) > 0:
+        rate_col = rate_cols[0]
+        summary[rate_col + "_Mean"] = np.mean(signals[rate_col])
+        summary[rate_col + "_SD"] = np.std(signals[rate_col])
+        summary_table = pd.DataFrame(summary, index=[0])
+        # Make HTML and Markdown versions
+        html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
+            index=None
+        )
+
+        try:
+            md = summary_table.to_markdown(index=None)
+        except ImportError:
+            md = summary_table  # in case printing markdown export fails
+        return html, md
 
 def text_combine(info):
     """Reformat dictionary describing processing methods as strings to be inserted into HTML file."""

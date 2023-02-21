@@ -2,6 +2,7 @@
 import pandas as pd
 
 from ..misc import as_vector
+from ..misc.report import create_report
 from ..signal import signal_rate
 from .rsp_amplitude import rsp_amplitude
 from .rsp_clean import rsp_clean
@@ -10,7 +11,7 @@ from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
 from .rsp_rvt import rsp_rvt
 from .rsp_symmetry import rsp_symmetry
-from .rsp_report import rsp_report
+from .rsp_plot import rsp_plot
 
 
 def rsp_process(
@@ -151,6 +152,6 @@ def rsp_process(
 
     if report is not None:
         # Generate report containing description and figures of processing
-        rsp_report(file=report, signals=signals, info=methods)
+        create_report(rsp_plot, file=report, signals=signals, info=methods)
 
     return signals, info

@@ -32,4 +32,5 @@ __all__ = [
     "progress_bar",
     "find_plateau",
     "copyfunction",
+    "create_report",
 ]
