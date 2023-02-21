@@ -55,17 +55,16 @@ def create_report(plot_func, file="myreport.html", signals=None, info={"sampling
     for s in info["references"]:
         print("- " + s)
 
-    # Make figures
-    fig = '<h2 style="background-color: #FB661C">Visualization</h1>'
-    fig += (
-        plot_func(signals, sampling_rate=info["sampling_rate"], static=False)
-        .to_html()
-        .split("<body>")[1]
-        .split("</body>")[0]
-    )
-
     # Save report
     if ".html" in file:
+        # Make figures
+        fig = '<h2 style="background-color: #FB661C">Visualization</h1>'
+        fig += (
+            plot_func(signals, sampling_rate=info["sampling_rate"], static=False)
+            .to_html()
+            .split("<body>")[1]
+            .split("</body>")[0]
+        )
         print(f"The report has been saved to {file}")
         contents = [description, table_html, fig, ref]
         html_save(contents=contents, file=file)
