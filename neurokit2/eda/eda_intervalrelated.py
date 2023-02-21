@@ -139,14 +139,15 @@ def _eda_intervalrelated(
 
     # EDA autocorrelation
     output.update({"EDA_Autocorrelation": np.nan})  # Default values
-    if "EDA_Clean" in colnames:
-        output["EDA_Autocorrelation"] = eda_autocor(
-            data["EDA_Clean"], sampling_rate=sampling_rate, **kwargs
-        )
-    elif "EDA_Raw" in colnames:
-        # If not clean signal, use raw
-        output["EDA_Autocorrelation"] = eda_autocor(
-            data["EDA_Raw"], sampling_rate=sampling_rate, **kwargs
-        )
+    if len(data) > sampling_rate * 30:  # 30 seconds minimum (NOTE: somewhat arbitrary)
+        if "EDA_Clean" in colnames:
+            output["EDA_Autocorrelation"] = eda_autocor(
+                data["EDA_Clean"], sampling_rate=sampling_rate, **kwargs
+            )
+        elif "EDA_Raw" in colnames:
+            # If not clean signal, use raw
+            output["EDA_Autocorrelation"] = eda_autocor(
+                data["EDA_Raw"], sampling_rate=sampling_rate, **kwargs
+            )
 
     return output
