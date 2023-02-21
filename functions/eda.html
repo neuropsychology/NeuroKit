@@ -672,20 +672,6 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-autocor">
-     <em>
-      eda_autocor()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-changepoints">
-     <em>
-      eda_changepoints()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#eda-peaks">
      <em>
       eda_peaks()
@@ -696,13 +682,6 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#eda-fixpeaks">
      <em>
       eda_fixpeaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-sympathetic">
-     <em>
-      eda_sympathetic()
      </em>
     </a>
    </li>
@@ -724,6 +703,27 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#eda-intervalrelated">
      <em>
       eda_intervalrelated()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eda-sympathetic">
+     <em>
+      eda_sympathetic()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eda-autocor">
+     <em>
+      eda_autocor()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eda-changepoints">
+     <em>
+      eda_changepoints()
      </em>
     </a>
    </li>
@@ -817,20 +817,6 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-autocor">
-     <em>
-      eda_autocor()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-changepoints">
-     <em>
-      eda_changepoints()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#eda-peaks">
      <em>
       eda_peaks()
@@ -841,13 +827,6 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#eda-fixpeaks">
      <em>
       eda_fixpeaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-sympathetic">
-     <em>
-      eda_sympathetic()
      </em>
     </a>
    </li>
@@ -869,6 +848,27 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#eda-intervalrelated">
      <em>
       eda_intervalrelated()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eda-sympathetic">
+     <em>
+      eda_sympathetic()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eda-autocor">
+     <em>
+      eda_autocor()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#eda-changepoints">
+     <em>
+      eda_changepoints()
      </em>
     </a>
    </li>
@@ -1046,10 +1046,10 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 <span class="gp">In [12]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[12]: </span>
-<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean  ...  EDA_Sympathetic  EDA_SympatheticN</span>
-<span class="go">0          2.0                  0.000037  ...              NaN               NaN</span>
+<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean  ...  EDA_SympatheticN  EDA_Autocorrelation</span>
+<span class="go">0          2.0                  0.000037  ...               NaN             0.719531</span>
 
-<span class="go">[1 rows x 5 columns]</span>
+<span class="go">[1 rows x 6 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1258,106 +1258,6 @@ Engineering, 63(4), 797-804.</p></li>
 </dd></dl>
 
 </section>
-<section id="eda-autocor">
-<h3><em>eda_autocor()</em><a class="headerlink" href="#eda-autocor" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.eda.eda_autocor">
-<span class="sig-name descname"><span class="pre">eda_autocor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_autocor.html#eda_autocor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_autocor" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>EDA Autocorrelation</strong></p>
-<p>Compute autocorrelation measure of raw EDA signal i.e., the correlation between the time
-series data and a specified time-lagged version of itself.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>eda_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned EDA signal.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
-<li><p><strong>lag</strong> (<em>int</em>) – Time lag in seconds. Defaults to 4 seconds to avoid autoregressive
-correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>float</em> – Autocorrelation index of the eda signal.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># Simulate EDA signal</span>
-<span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.22466471969747506</span>
-</pre></div>
-</div>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Halem, S., van Roekel, E., Kroencke, L., Kuper, N., &amp; Denissen, J. (2020). Moments That Matter?
-On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing Events Within
-an Experience Sampling Framework. European Journal of Personality.</p></li>
-</ul>
-</dd></dl>
-
-</section>
-<section id="eda-changepoints">
-<h3><em>eda_changepoints()</em><a class="headerlink" href="#eda-changepoints" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.eda.eda_changepoints">
-<span class="sig-name descname"><span class="pre">eda_changepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_changepoints.html#eda_changepoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_changepoints" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Calculate Number of Change Points</strong></p>
-<p>Calculate the number of change points using of the skin conductance signal in terms of mean
-and variance.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is somewhat experimental, and improvements or discussions about it are
-welcome.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>eda_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned EDA signal.</p></li>
-<li><p><strong>penalty</strong> (<em>int</em>) – Defaults to an algorithm penalty of 10000, as recommended by Halem et al. (2020). See
-<a class="reference internal" href="signal.html#neurokit2.signal_changepoints" title="neurokit2.signal_changepoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_changepoints()</span></code></a>.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – Show the signal with the change points.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>float</em> – Number of changepoints in the</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_changepoints" title="neurokit2.signal_changepoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_changepoints</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># Simulate EDA signal</span>
-<span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">21</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Halem, S., van Roekel, E., Kroencke, L., Kuper, N., &amp; Denissen, J. (2020). Moments That
-Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing
-Events Within an Experience Sampling Framework. European Journal of Personality.</p></li>
-</ul>
-</dd></dl>
-
-</section>
 <section id="eda-peaks">
 <h3><em>eda_peaks()</em><a class="headerlink" href="#eda-peaks" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -1495,72 +1395,6 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 </dd></dl>
 
 </section>
-<section id="eda-sympathetic">
-<h3><em>eda_sympathetic()</em><a class="headerlink" href="#eda-sympathetic" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.eda.eda_sympathetic">
-<span class="sig-name descname"><span class="pre">eda_sympathetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.045,</span> <span class="pre">0.25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'posada'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_sympathetic.html#eda_sympathetic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_sympathetic" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Sympathetic Nervous System Index from Electrodermal activity (EDA)</strong></p>
-<p>Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
-of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
-requires a signal of a least 64 seconds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The EDA signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>frequency_band</strong> (<em>list</em>) – List indicating the frequency range to compute the the power spectral density in.
-Defaults to [0.045, 0.25].</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;ghiasi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;posada&quot;</span></code>.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If True, will return a plot of the power spectrum of the EDA signal within the specified
-frequency band.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="signal.html#neurokit2.signal_filter" title="neurokit2.signal_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_filter</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_power" title="neurokit2.signal_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_power</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_psd" title="neurokit2.signal_psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_psd</span></code></a></p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>dict</em> – A dictionary containing the EDA sympathetic indexes, accessible by keys
-<code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;EDA_SympatheticN&quot;</span></code> (normalized, obtained by dividing EDA_Symp
-by total power).</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [2]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_resting_8min_100hz&#39;</span><span class="p">)[</span><span class="s1">&#39;EDA&#39;</span><span class="p">]</span>
-
-<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;posada&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span>
-<span class="go">{&#39;EDA_Sympathetic&#39;: 0.0006638980045219654,</span>
-<span class="go"> &#39;EDA_SympatheticN&#39;: 3.7368325327637346e-05}</span>
-
-<span class="gp">In [4]: </span><span class="n">results</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ghiasi&#39;</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">results</span>
-<span class="gh">Out[5]: </span>
-<span class="go">{&#39;EDA_Sympathetic&#39;: 5.6544954350427365e-05,</span>
-<span class="go"> &#39;EDA_SympatheticN&#39;: 0.0019044764295758339}</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_eda_sympathetic1.png"><img alt="../_images/p_eda_sympathetic1.png" src="../_images/p_eda_sympathetic1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., &amp; Valenza,
-G. (2018). A New Sympathovagal Balance Index from Electrodermal Activity and Instantaneous
-Vagal Dynamics: A Preliminary Cold Pressor Study. 2018 40th Annual International Conference
-of the IEEE Engineering in Medicine and Biology Society (EMBC). doi:10.1109/embc.2018.8512932</p></li>
-<li><p>Posada-Quintero, H. F., Florian, J. P., Orjuela-Cañón, A. D., Aljama-Corrales, T.,
-Charleston-Villalobos, S., &amp; Chon, K. H. (2016). Power spectral density analysis of
-electrodermal activity for sympathetic function assessment. Annals of biomedical engineering,
-44(10), 3124-3135.</p></li>
-</ul>
-</dd></dl>
-
-</section>
 </section>
 <section id="analysis">
 <h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">#</a></h2>
@@ -1623,8 +1457,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.360            1552.0</span>
-<span class="go">2     2        10000  ...         0.366            1146.0</span>
+<span class="go">1     1         5000  ...         0.361            1356.0</span>
+<span class="go">2     2        10000  ...         0.368            1080.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1666,24 +1500,37 @@ for SCR to decrease to half amplitude.</p></li>
 <h3><em>eda_intervalrelated()</em><a class="headerlink" href="#eda-intervalrelated" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_intervalrelated">
-<span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>EDA Analysis on Interval-Related Data</strong></p>
 <p>Performs EDA analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
 data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A DataFrame containing the different processed signal(s) as
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A DataFrame containing the different processed signal(s) as
 different columns, typically generated by <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_process()</span></code></a> or
 <code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code>. Can also take a dict containing sets of
-separately processed DataFrames.</p>
+separately processed DataFrames.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).
+Defaults to 1000Hz.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to the functions.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. The analyzed
+<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. The analyzed
 features consist of the following:
 * <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_N&quot;</span></code>: the number of occurrences of Skin Conductance Response (SCR).
 * <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_Amplitude_Mean&quot;</span></code>: the mean amplitude of the SCR peak occurrences.
 * <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Tonic_SD&quot;</span></code>: the mean amplitude of the SCR peak occurrences.
-* <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_sympathetic" title="neurokit2.eda.eda_sympathetic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a>.</p>
+* <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_sympathetic" title="neurokit2.eda.eda_sympathetic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a> (only computed if signal duration</p>
+<blockquote>
+<div><p>&gt; 64 sec).</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Autocorrelation&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_autocor" title="neurokit2.eda.eda_autocor"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_autocor()</span></code></a> (only computed if signal duration
+&gt; 30 sec).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1702,22 +1549,190 @@ features consist of the following:
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean  ...  EDA_Sympathetic  EDA_SympatheticN</span>
-<span class="go">0          2.0                  0.000037  ...         0.000664          0.000037</span>
+<span class="go">   SCR_Peaks_N  SCR_Peaks_Amplitude_Mean  ...  EDA_SympatheticN  EDA_Autocorrelation</span>
+<span class="go">0          2.0                  0.000037  ...          0.000037             0.974848</span>
 
-<span class="go">[1 rows x 5 columns]</span>
+<span class="go">[1 rows x 6 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25300</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label  SCR_Peaks_N  ...  EDA_Sympathetic  EDA_SympatheticN</span>
-<span class="go">1     1            2  ...              NaN               NaN</span>
-<span class="go">2     2            0  ...              NaN               NaN</span>
+<span class="go">  Label  SCR_Peaks_N  ...  EDA_SympatheticN  EDA_Autocorrelation</span>
+<span class="go">1     1            2  ...               NaN                  NaN</span>
+<span class="go">2     2            0  ...               NaN                  NaN</span>
 
-<span class="go">[2 rows x 6 columns]</span>
+<span class="go">[2 rows x 7 columns]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</section>
+<section id="eda-sympathetic">
+<h3><em>eda_sympathetic()</em><a class="headerlink" href="#eda-sympathetic" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eda.eda_sympathetic">
+<span class="sig-name descname"><span class="pre">eda_sympathetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.045,</span> <span class="pre">0.25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'posada'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_sympathetic.html#eda_sympathetic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_sympathetic" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Sympathetic Nervous System Index from Electrodermal activity (EDA)</strong></p>
+<p>Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
+of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
+requires a signal of a least 64 seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The EDA signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>frequency_band</strong> (<em>list</em>) – List indicating the frequency range to compute the the power spectral density in.
+Defaults to [0.045, 0.25].</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;ghiasi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;posada&quot;</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If True, will return a plot of the power spectrum of the EDA signal within the specified
+frequency band.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="signal.html#neurokit2.signal_filter" title="neurokit2.signal_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_filter</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_power" title="neurokit2.signal_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_power</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_psd" title="neurokit2.signal_psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_psd</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>dict</em> – A dictionary containing the EDA sympathetic indexes, accessible by keys
+<code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;EDA_SympatheticN&quot;</span></code> (normalized, obtained by dividing EDA_Symp
+by total power).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_resting_8min_100hz&#39;</span><span class="p">)[</span><span class="s1">&#39;EDA&#39;</span><span class="p">]</span>
+
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;posada&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gh">Out[3]: </span>
+<span class="go">{&#39;EDA_Sympathetic&#39;: 0.000663898004521976,</span>
+<span class="go"> &#39;EDA_SympatheticN&#39;: 3.73683253276358e-05}</span>
+
+<span class="gp">In [4]: </span><span class="n">results</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ghiasi&#39;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">results</span>
+<span class="gh">Out[5]: </span>
+<span class="go">{&#39;EDA_Sympathetic&#39;: 5.654495435013689e-05,</span>
+<span class="go"> &#39;EDA_SympatheticN&#39;: 0.001904476429572143}</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eda_sympathetic1.png"><img alt="../_images/p_eda_sympathetic1.png" src="../_images/p_eda_sympathetic1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Ghiasi, S., Grecol, A., Nardelli, M., Catrambonel, V., Barbieri, R., Scilingo, E., &amp; Valenza,
+G. (2018). A New Sympathovagal Balance Index from Electrodermal Activity and Instantaneous
+Vagal Dynamics: A Preliminary Cold Pressor Study. 2018 40th Annual International Conference
+of the IEEE Engineering in Medicine and Biology Society (EMBC). doi:10.1109/embc.2018.8512932</p></li>
+<li><p>Posada-Quintero, H. F., Florian, J. P., Orjuela-Cañón, A. D., Aljama-Corrales, T.,
+Charleston-Villalobos, S., &amp; Chon, K. H. (2016). Power spectral density analysis of
+electrodermal activity for sympathetic function assessment. Annals of biomedical engineering,
+44(10), 3124-3135.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="eda-autocor">
+<h3><em>eda_autocor()</em><a class="headerlink" href="#eda-autocor" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eda.eda_autocor">
+<span class="sig-name descname"><span class="pre">eda_autocor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_autocor.html#eda_autocor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_autocor" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>EDA Autocorrelation</strong></p>
+<p>Compute the autocorrelation measure of raw EDA signal i.e., the correlation between the time
+series data and a specified time-lagged version of itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eda_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned EDA signal.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
+<li><p><strong>lag</strong> (<em>int</em>) – Time lag in seconds. Defaults to 4 seconds to avoid autoregressive
+correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>float</em> – Autocorrelation index of the eda signal.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate EDA signal</span>
+<span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">cor</span>
+<span class="gh">Out[5]: </span><span class="go">-0.14196570973438738</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., &amp; Denissen, J. (2020). Moments that
+matter? On the complexity of using triggers based on skin conductance to sample arousing
+events within an experience sampling framework. European Journal of Personality, 34(5),
+794-807.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="eda-changepoints">
+<h3><em>eda_changepoints()</em><a class="headerlink" href="#eda-changepoints" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.eda.eda_changepoints">
+<span class="sig-name descname"><span class="pre">eda_changepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_changepoints.html#eda_changepoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_changepoints" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Calculate Number of Change Points</strong></p>
+<p>Calculate the number of change points using of the skin conductance signal in terms of mean
+and variance.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is somewhat experimental, and improvements or discussions about it are
+welcome.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eda_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned EDA signal.</p></li>
+<li><p><strong>penalty</strong> (<em>int</em>) – Defaults to an algorithm penalty of 10000, as recommended by Halem et al. (2020). See
+<a class="reference internal" href="signal.html#neurokit2.signal_changepoints" title="neurokit2.signal_changepoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_changepoints()</span></code></a>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Show the signal with the change points.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>float</em> – Number of changepoints in the</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_changepoints" title="neurokit2.signal_changepoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_changepoints</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate EDA signal</span>
+<span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">22</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., &amp; Denissen, J. (2020). Moments that
+matter? On the complexity of using triggers based on skin conductance to sample arousing
+events within an experience sampling framework. European Journal of Personality, 34(5),
+794-807.</p></li>
+</ul>
 </dd></dl>
 
 </section>
