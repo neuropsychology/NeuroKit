@@ -78,7 +78,7 @@ def summarize_table(signals):
     summary = {}
 
     rate_cols = [col for col in signals.columns if "Rate" in col]
-    if len(rate_col) > 0:
+    if len(rate_cols) > 0:
         rate_col = rate_cols[0]
         summary[rate_col + "_Mean"] = np.mean(signals[rate_col])
         summary[rate_col + "_SD"] = np.std(signals[rate_col])
