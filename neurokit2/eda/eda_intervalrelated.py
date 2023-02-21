@@ -36,8 +36,10 @@ def eda_intervalrelated(data, sampling_rate=1000, **kwargs):
         * ``"SCR_Peaks_N"``: the number of occurrences of Skin Conductance Response (SCR).
         * ``"SCR_Peaks_Amplitude_Mean"``: the mean amplitude of the SCR peak occurrences.
         * ``"EDA_Tonic_SD"``: the mean amplitude of the SCR peak occurrences.
-        * ``"EDA_Sympathetic"``: see :func:`eda_sympathetic`.
-        * ``"EDA_Autocorrelation"``: see :func:`eda_autocor`.
+        * ``"EDA_Sympathetic"``: see :func:`eda_sympathetic` (only computed if signal duration
+          > 64 sec).
+        * ``"EDA_Autocorrelation"``: see :func:`eda_autocor` (only computed if signal duration
+          > 30 sec).
 
     See Also
     --------
