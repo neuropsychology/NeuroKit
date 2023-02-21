@@ -29,7 +29,7 @@ def rsp_report(file="myreport.html", signals=None, info={"sampling_rate": 1000})
 
     See Also
     --------
-    ppg_process
+    rsp_process
 
     Examples
     --------
