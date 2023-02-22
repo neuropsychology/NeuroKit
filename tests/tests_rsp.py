@@ -287,3 +287,36 @@ def test_rsp_rvt():
         assert len(rsp20) == len(rvt20)
         assert min(rvt10[~np.isnan(rvt10)]) >= 0
         assert min(rvt20[~np.isnan(rvt20)]) >= 0
+
+
+@pytest.mark.parametrize(
+    "method_cleaning, method_peaks, method_rvt",
+    [("none", "scipy", "power2020"),
+     ("biosppy", "biosppy", "power2020"),
+     ("khodadad2018", "khodadad2018", "birn2006"),
+     ("power2020", "scipy", "harrison2021"),
+     ],
+)
+def test_rsp_report(tmp_path, method_cleaning, method_peaks, method_rvt):
+
+    sampling_rate = 100
+
+    rsp = nk.rsp_simulate(
+        duration=30,
+        sampling_rate=sampling_rate,
+        random_state=0,
+    )
+
+    d = tmp_path / "sub"
+    d.mkdir()
+    p = d / "myreport.html"
+
+    signals, _ = nk.rsp_process(
+        rsp,
+        sampling_rate=sampling_rate,
+        report=str(p),
+        method_cleaning=method_cleaning,
+        method_peaks=method_peaks,
+        method_rvt=method_rvt,
+    )
+    assert p.is_file()

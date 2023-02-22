@@ -2,12 +2,14 @@
 import pandas as pd
 
 from ..misc import as_vector
+from ..misc.report import create_report
 from ..signal import signal_rate
 from .rsp_amplitude import rsp_amplitude
 from .rsp_clean import rsp_clean
 from .rsp_methods import rsp_methods
 from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
+from .rsp_plot import rsp_plot
 from .rsp_rvt import rsp_rvt
 from .rsp_symmetry import rsp_symmetry
 
@@ -17,6 +19,7 @@ def rsp_process(
     sampling_rate=1000,
     method="khodadad2018",
     method_rvt="harrison2021",
+    report=None,
     **kwargs
 ):
     """**Process a respiration (RSP) signal**
@@ -40,6 +43,11 @@ def rsp_process(
     method_rvt : str
         The rvt method to apply. Can be one of ``"harrison2021"`` (default), ``"birn2006"``
         or ``"power2020"``.
+    report : str
+        The filename of a report containing description and figures of processing
+        (e.g. ``"myreport.html"``). Needs to be supplied if a report file
+        should be generated. Defaults to ``None``. Can also be ``"text"`` to
+        just print the text in the console without saving anything.
     **kwargs
         Other arguments to be passed to specific methods. For more information,
         see :func:`.rsp_methods`.
@@ -77,7 +85,7 @@ def rsp_process(
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-      signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+      signals, info = nk.rsp_process(rsp, sampling_rate=1000, report="text")
 
       @savefig p_rsp_process_1.png scale=100%
       fig = nk.rsp_plot(signals, sampling_rate=1000)
@@ -92,10 +100,7 @@ def rsp_process(
     )
 
     # Clean signal
-    if (
-        methods["method_cleaning"] is None
-        or methods["method_cleaning"].lower() == "none"
-    ):
+    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
         rsp_cleaned = rsp_signal
     else:
         # Clean signal
@@ -141,5 +146,13 @@ def rsp_process(
         }
     )
     signals = pd.concat([signals, phase, symmetry, peak_signal], axis=1)
+
+    if report is not None:
+        # Generate report containing description and figures of processing
+        if ".html" in report:
+            fig = rsp_plot(signals, sampling_rate=sampling_rate)
+        else:
+            fig = None
+        create_report(file=report, signals=signals, info=methods, fig=fig)
 
     return signals, info
