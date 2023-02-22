@@ -15,6 +15,7 @@ from .parallel_run import parallel_run
 from .progress_bar import progress_bar
 from .replace import replace
 from .type_converters import as_vector
+from .report import create_report
 
 __all__ = [
     "listify",
@@ -32,4 +33,5 @@ __all__ = [
     "progress_bar",
     "find_plateau",
     "copyfunction",
+    "create_report",
 ]

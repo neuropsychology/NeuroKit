@@ -125,7 +125,7 @@ def rsp_methods(
             including systematic changes and “missed” deep breaths.
             NeuroImage, Volume 204, 116234"""
         )
-    elif method_cleaning in ["biossppy"]:
+    elif method_cleaning in ["biosppy"]:
         report_info["text_cleaning"] += (
             " was preprocessed using a second order 0.1-0.35 Hz bandpass "
             + "Butterworth filter followed by a constant detrending."
