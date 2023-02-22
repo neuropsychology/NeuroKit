@@ -37,7 +37,7 @@ def create_report(plot_func, file="myreport.html", signals=None, info={"sampling
 
       import neurokit2 as nk
 
-      rsp = nk.rsp_simulate(duration=10, sampling_rate=200)
+      rsp = nk.rsp_simulate(duration=30, sampling_rate=200, random_state=0)
       signals, info = nk.rsp_process(rsp, sampling_rate=200, report="console_only")
 
     """
