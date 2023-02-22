@@ -558,12 +558,14 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span>
+<span class="kn">from</span> <span class="nn">..misc.report</span> <span class="kn">import</span> <span class="n">create_report</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_rate</span>
 <span class="kn">from</span> <span class="nn">.rsp_amplitude</span> <span class="kn">import</span> <span class="n">rsp_amplitude</span>
 <span class="kn">from</span> <span class="nn">.rsp_clean</span> <span class="kn">import</span> <span class="n">rsp_clean</span>
 <span class="kn">from</span> <span class="nn">.rsp_methods</span> <span class="kn">import</span> <span class="n">rsp_methods</span>
 <span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_peaks</span>
 <span class="kn">from</span> <span class="nn">.rsp_phase</span> <span class="kn">import</span> <span class="n">rsp_phase</span>
+<span class="kn">from</span> <span class="nn">.rsp_plot</span> <span class="kn">import</span> <span class="n">rsp_plot</span>
 <span class="kn">from</span> <span class="nn">.rsp_rvt</span> <span class="kn">import</span> <span class="n">rsp_rvt</span>
 <span class="kn">from</span> <span class="nn">.rsp_symmetry</span> <span class="kn">import</span> <span class="n">rsp_symmetry</span>
 
@@ -573,6 +575,7 @@ title="Open an issue"
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span>
     <span class="n">method_rvt</span><span class="o">=</span><span class="s2">&quot;harrison2021&quot;</span><span class="p">,</span>
+    <span class="n">report</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Process a respiration (RSP) signal**</span>
@@ -596,6 +599,11 @@ title="Open an issue"
 <span class="sd">    method_rvt : str</span>
 <span class="sd">        The rvt method to apply. Can be one of ``&quot;harrison2021&quot;`` (default), ``&quot;birn2006&quot;``</span>
 <span class="sd">        or ``&quot;power2020&quot;``.</span>
+<span class="sd">    report : str</span>
+<span class="sd">        The filename of a report containing description and figures of processing</span>
+<span class="sd">        (e.g. ``&quot;myreport.html&quot;``). Needs to be supplied if a report file</span>
+<span class="sd">        should be generated. Defaults to ``None``. Can also be ``&quot;text&quot;`` to</span>
+<span class="sd">        just print the text in the console without saving anything.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed to specific methods. For more information,</span>
 <span class="sd">        see :func:`.rsp_methods`.</span>
@@ -633,7 +641,7 @@ title="Open an issue"
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)</span>
-<span class="sd">      signals, info = nk.rsp_process(rsp, sampling_rate=1000)</span>
+<span class="sd">      signals, info = nk.rsp_process(rsp, sampling_rate=1000, report=&quot;text&quot;)</span>
 
 <span class="sd">      @savefig p_rsp_process_1.png scale=100%</span>
 <span class="sd">      fig = nk.rsp_plot(signals, sampling_rate=1000)</span>
@@ -648,10 +656,7 @@ title="Open an issue"
     <span class="p">)</span>
 
     <span class="c1"># Clean signal</span>
-    <span class="k">if</span> <span class="p">(</span>
-        <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
-        <span class="ow">or</span> <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span>
-    <span class="p">):</span>
+    <span class="k">if</span> <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_cleaning&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
         <span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">rsp_signal</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Clean signal</span>
@@ -697,6 +702,14 @@ title="Open an issue"
         <span class="p">}</span>
     <span class="p">)</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">symmetry</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">report</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Generate report containing description and figures of processing</span>
+        <span class="k">if</span> <span class="s2">&quot;.html&quot;</span> <span class="ow">in</span> <span class="n">report</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">create_report</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">signals</span><span class="o">=</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">methods</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
 </pre></div>

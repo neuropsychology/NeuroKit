@@ -853,6 +853,7 @@ see <a class="reference internal" href="#neurokit2.ppg.ppg_methods" title="neuro
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_process1.png"><img alt="../_images/p_ppg_process1.png" src="../_images/p_ppg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -912,9 +913,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.325671           0.900945</span>
-<span class="go">2     2        10000  ...                  2.430038           0.881914</span>
-<span class="go">3     3        15000  ...                  0.362433           0.952359</span>
+<span class="go">1     1         5000  ...                 -0.490756           0.945178</span>
+<span class="go">2     2        10000  ...                  0.164437           0.995801</span>
+<span class="go">3     3        15000  ...                 -1.205660           0.959257</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -1026,6 +1027,7 @@ Defaults to True.</p></li>
 
 <span class="go"># Plot</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" src="../_images/p_ppg_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1214,9 +1216,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.510004           0.686418</span>
-<span class="go">2     2        10000  ...                  0.525782           0.988398</span>
-<span class="go">3     3        15000  ...                 -0.104839           0.945504</span>
+<span class="go">1     1         5000  ...                  0.465856           0.954442</span>
+<span class="go">2     2        10000  ...                 -0.178197           0.950538</span>
+<span class="go">3     3        15000  ...                 -1.075271           0.900350</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>

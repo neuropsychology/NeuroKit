@@ -920,7 +920,7 @@ title="Print to PDF"
 <h3><em>rsp_process()</em><a class="headerlink" href="#rsp-process" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_process">
-<span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Process a respiration (RSP) signal</strong></p>
 <p>Convenience function that automatically processes a respiration signal with one of the
 following methods:</p>
@@ -937,6 +937,10 @@ following methods:</p>
 or <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>.</p></li>
 <li><p><strong>method_rvt</strong> (<em>str</em>) – The rvt method to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;harrison2021&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;birn2006&quot;</span></code>
 or <code class="docutils literal notranslate"><span class="pre">&quot;power2020&quot;</span></code>.</p></li>
+<li><p><strong>report</strong> (<em>str</em>) – The filename of a report containing description and figures of processing
+(e.g. <code class="docutils literal notranslate"><span class="pre">&quot;myreport.html&quot;</span></code>). Needs to be supplied if a report file
+should be generated. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can also be <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code> to
+just print the text in the console without saving anything.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed to specific methods. For more information,
 see <a class="reference internal" href="#neurokit2.rsp.rsp_methods" title="neurokit2.rsp.rsp_methods"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a>.</p></li>
 </ul>
@@ -979,7 +983,27 @@ signals’ sampling rate.</p></li>
 
 <span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+<span class="go">The raw signal, sampled at 1000 Hz, linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter; following Khoadadad et al., 2018.</span>
+
+<span class="go">The peak detection was carried out using the method described in Khoadadad et al. (2018).</span>
+
+<span class="go">The respiratory volume per time computation was carried out using the method described in Harrison et al. (2021).</span>
+
+<span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
+<span class="go">|----------------:|--------------:|</span>
+<span class="go">|         15.3667 |       4.10362 |</span>
+
+<span class="go">References</span>
+<span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
+<span class="go">            A Hilbert-based method for processing respiratory timeseries.</span>
+<span class="go">            Neuroimage, 230, 117787.</span>
+<span class="go">- Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford, R. (2018).</span>
+<span class="go">            Optimized breath detection algorithm in electrical impedance tomography.</span>
+<span class="go">            Physiological measurement, 39(9), 094001.</span>
+<span class="go">- Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T.,... &amp; Bayford, R. (2018).</span>
+<span class="go">            Optimized breath detection algorithm in electrical impedance tomography.</span>
+<span class="go">            Physiological measurement, 39(9), 094001.</span>
 
 <span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
@@ -1123,7 +1147,7 @@ breathing waveforms using BreathMetrics: A respiratory signal processing toolbox
 <h3><em>rsp_plot()</em><a class="headerlink" href="#rsp-plot" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_plot">
-<span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">10)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize respiration (RSP) data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1131,6 +1155,9 @@ breathing waveforms using BreathMetrics: A respiratory signal processing toolbox
 <li><p><strong>rsp_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>figsize</strong> (<em>tuple</em>) – The size of the figure (width, height) in inches.</p></li>
+<li><p><strong>static</strong> (<em>bool</em>) – If True, a static plot will be generated with matplotlib.
+If False, an interactive plot will be generated with plotly.
+Defaults to True.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1140,13 +1167,7 @@ breathing waveforms using BreathMetrics: A respiratory signal processing toolbox
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><em>Though the function returns nothing, the figure can be retrieved and saved as follows</em></p></li>
-<li><p><em>.. code-block:: console</em> – # To be run after rsp_plot()
-fig = plt.gcf()
-fig.savefig(“myfig.png”)</p></li>
-</ul>
-</p>
+<dd class="field-odd"><p><em>fig</em> – Figure representing a plot of the processed RSP signals.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1160,6 +1181,7 @@ fig.savefig(“myfig.png”)</p></li>
 
 <span class="go"># Plot</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 1000x1000 with 5 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_plot1.png"><img alt="../_images/p_rsp_plot1.png" src="../_images/p_rsp_plot1.png" style="width: 1000.0px; height: 1000.0px;" /></a>
@@ -1713,8 +1735,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  666.279537     3945.55  577.47048  ...     1.36839  0.054067        -inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  697.009326     3925.55  414.726603  ...    0.585159  0.091859         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1858,9 +1880,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.189295      0.025533</span>
-<span class="go">2     2        10000  ...          0.292776     -0.011525</span>
-<span class="go">3     3        15000  ...          0.221948      0.014616</span>
+<span class="go">1     1         5000  ...          0.197578      0.014321</span>
+<span class="go">2     2        10000  ...          0.157916     -0.007081</span>
+<span class="go">3     3        15000  ...          0.236420     -0.003447</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
