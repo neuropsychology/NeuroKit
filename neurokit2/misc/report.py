@@ -4,7 +4,10 @@ import inspect
 import numpy as np
 import pandas as pd
 
-def create_report(plot_func, file="myreport.html", signals=None, info={"sampling_rate": 1000}):
+
+def create_report(
+    file="myreport.html", signals=None, info={"sampling_rate": 1000}, fig=None
+):
     """**Reports**
 
     Create report containing description and figures of processing.
@@ -12,7 +15,6 @@ def create_report(plot_func, file="myreport.html", signals=None, info={"sampling
 
     Parameters
     ----------
-    plot_func : function to plot the signals, such as :func:`.rsp_plot`.
     file : str
         Name of the file to save the report to. Can also be ``"text"`` to simply print the text in
         the console.
@@ -21,6 +23,8 @@ def create_report(plot_func, file="myreport.html", signals=None, info={"sampling
     info : dict
         A dictionary containing the information of peaks and the signals' sampling rate. Usually
         obtained from :func:`.rsp_process` or :func:`.ppg_process`.
+    fig : matplotlib.figure.Figure or plotly.graph_objects.Figure
+        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot` or :func:`.ppg_plot`.
 
     Returns
     -------
@@ -38,7 +42,7 @@ def create_report(plot_func, file="myreport.html", signals=None, info={"sampling
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=30, sampling_rate=200, random_state=0)
-      signals, info = nk.rsp_process(rsp, sampling_rate=200, report="console_only")
+      signals, info = nk.rsp_process(rsp, sampling_rate=200, report="text")
 
     """
 
@@ -58,15 +62,10 @@ def create_report(plot_func, file="myreport.html", signals=None, info={"sampling
     # Save report
     if ".html" in file:
         # Make figures
-        fig = '<h2 style="background-color: #FB661C">Visualization</h1>'
-        fig += (
-            plot_func(signals, sampling_rate=info["sampling_rate"], static=False)
-            .to_html()
-            .split("<body>")[1]
-            .split("</body>")[0]
-        )
+        fig_html = '<h2 style="background-color: #FB661C">Visualization</h1>'
+        fig_html += fig_to_html(fig)
         print(f"The report has been saved to {file}")
-        contents = [description, table_html, fig, ref]
+        contents = [description, table_html, fig_html, ref]
         html_save(contents=contents, file=file)
 
 
@@ -83,8 +82,9 @@ def summarize_table(signals):
         summary[rate_col + "_SD"] = np.std(signals[rate_col])
         summary_table = pd.DataFrame(summary, index=[0])
         # Make HTML and Markdown versions
-        html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
-            index=None
+        html = (
+            '<h2 style="background-color: #D60574">Summary table</h1>'
+            + summary_table.to_html(index=None)
         )
 
         try:
@@ -92,6 +92,7 @@ def summarize_table(signals):
         except ImportError:
             md = summary_table  # in case printing markdown export fails
         return html, md
+
 
 def text_combine(info):
     """Reformat dictionary describing processing methods as strings to be inserted into HTML file."""
@@ -106,6 +107,24 @@ def text_combine(info):
             ref += "<li>" + reference + "</li>" + "\n"
         ref += "\n </ul> \n"
     return preprocessing, ref
+
+
+def fig_to_html(fig):
+    """Convert a figure to HTML."""
+    if isinstance(fig, str):
+        return fig
+    elif isinstance(fig, matplotlib.pyplot.Figure):
+        # https://stackoverflow.com/questions/48717794/matplotlib-embed-figures-in-auto-generated-html
+        import base64
+        from io import BytesIO
+
+        temp_file = BytesIO()
+        fig.savefig(temp_file, format="png")
+        encoded = base64.b64encode(temp_file.getvalue()).decode("utf-8")
+        return "<img src='data:image/png;base64,{}'>".format(encoded)
+    elif isinstance(fig, plotly.graph_objs._figure.Figure):
+        # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
+        return fig.to_html().split("<body>")[1].split("</body>")[0]
 
 
 def html_save(contents=[], file="myreport.html"):
@@ -157,7 +176,11 @@ def get_default_args(func):
     """Get the default values of a function's arguments."""
     # https://stackoverflow.com/questions/12627118/get-a-function-arguments-default-value
     signature = inspect.signature(func)
-    return {k: v.default for k, v in signature.parameters.items() if v.default is not inspect.Parameter.empty}
+    return {
+        k: v.default
+        for k, v in signature.parameters.items()
+        if v.default is not inspect.Parameter.empty
+    }
 
 
 def get_kwargs(report_info, func):
