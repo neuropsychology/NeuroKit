@@ -304,6 +304,7 @@ def test_rsp_report(tmp_path, method_cleaning, method_peaks, method_rvt):
     rsp = nk.rsp_simulate(
         duration=30,
         sampling_rate=sampling_rate,
+        random_state=0,
     )
 
     d = tmp_path / "sub"
