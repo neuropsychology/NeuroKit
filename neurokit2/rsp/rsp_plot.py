@@ -26,13 +26,8 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
 
     Returns
     -------
-    Though the function returns nothing, the figure can be retrieved and saved as follows:
-
-    .. code-block:: console
-
-        # To be run after rsp_plot()
-        fig = plt.gcf()
-        fig.savefig("myfig.png")
+    fig
+        Figure representing a plot of the processed RSP signals.
 
     Examples
     --------
@@ -203,6 +198,7 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
                 linewidth=1.5,
             )
             ax[4].legend(loc="upper right")
+            return fig
     else:
         # Generate interactive plot with plotly.
         try:
