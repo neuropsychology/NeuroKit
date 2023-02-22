@@ -68,7 +68,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     )
     ax0.legend(loc="upper right")
 
-    # Plot skin cnoductance response.
+    # Plot skin conductance response.
     ax1.set_title("Skin Conductance Response (SCR)")
 
     # Plot Phasic.
