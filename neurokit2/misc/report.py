@@ -3,6 +3,7 @@ import inspect
 
 import numpy as np
 import pandas as pd
+import matplotlib
 
 
 def create_report(
@@ -122,9 +123,16 @@ def fig_to_html(fig):
         fig.savefig(temp_file, format="png")
         encoded = base64.b64encode(temp_file.getvalue()).decode("utf-8")
         return "<img src='data:image/png;base64,{}'>".format(encoded)
-    elif isinstance(fig, plotly.graph_objs._figure.Figure):
-        # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
-        return fig.to_html().split("<body>")[1].split("</body>")[0]
+    else:
+        try:
+            import plotly
+            if isinstance(fig, plotly.graph_objs._figure.Figure):
+                # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
+                return fig.to_html().split("<body>")[1].split("</body>")[0]
+            else:
+                return ""
+        except ImportError:
+            return ""
 
 
 def html_save(contents=[], file="myreport.html"):
