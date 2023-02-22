@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 import inspect
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 
-def create_report(
-    file="myreport.html", signals=None, info={"sampling_rate": 1000}, fig=None
-):
+def create_report(file="myreport.html", signals=None, info={"sampling_rate": 1000}, fig=None):
     """**Reports**
 
     Create report containing description and figures of processing.
-    This function is meant to be used via the `rsp_process()` or `ppg_process()` functions.
+    This function is meant to be used via the :func:`.rsp_process` or :func:`.ppg_process`
+    functions.
 
     Parameters
     ----------
@@ -25,7 +24,8 @@ def create_report(
         A dictionary containing the information of peaks and the signals' sampling rate. Usually
         obtained from :func:`.rsp_process` or :func:`.ppg_process`.
     fig : matplotlib.figure.Figure or plotly.graph_objects.Figure
-        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot` or :func:`.ppg_plot`.
+        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot` or
+        :func:`.ppg_plot`.
 
     Returns
     -------
@@ -83,9 +83,8 @@ def summarize_table(signals):
         summary[rate_col + "_SD"] = np.std(signals[rate_col])
         summary_table = pd.DataFrame(summary, index=[0])
         # Make HTML and Markdown versions
-        html = (
-            '<h2 style="background-color: #D60574">Summary table</h1>'
-            + summary_table.to_html(index=None)
+        html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
+            index=None
         )
 
         try:
@@ -126,6 +125,7 @@ def fig_to_html(fig):
     else:
         try:
             import plotly
+
             if isinstance(fig, plotly.graph_objs._figure.Figure):
                 # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
                 return fig.to_html().split("<body>")[1].split("</body>")[0]

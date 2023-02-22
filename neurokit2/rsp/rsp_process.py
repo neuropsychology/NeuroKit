@@ -9,9 +9,9 @@ from .rsp_clean import rsp_clean
 from .rsp_methods import rsp_methods
 from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
+from .rsp_plot import rsp_plot
 from .rsp_rvt import rsp_rvt
 from .rsp_symmetry import rsp_symmetry
-from .rsp_plot import rsp_plot
 
 
 def rsp_process(
@@ -85,7 +85,7 @@ def rsp_process(
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-      signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+      signals, info = nk.rsp_process(rsp, sampling_rate=1000, report="text")
 
       @savefig p_rsp_process_1.png scale=100%
       fig = nk.rsp_plot(signals, sampling_rate=1000)
@@ -100,10 +100,7 @@ def rsp_process(
     )
 
     # Clean signal
-    if (
-        methods["method_cleaning"] is None
-        or methods["method_cleaning"].lower() == "none"
-    ):
+    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
         rsp_cleaned = rsp_signal
     else:
         # Clean signal
