@@ -243,11 +243,13 @@ def _eda_plot_dashedsegments(
         end = (peak_x_values[i], onset_y_values[i])
         risetime_coord.append((start, end))
 
+    for i in range(len(peaks)):
         # SCR Amplitude.
         start = (peak_x_values[i], onset_y_values[i])
         end = (peak_x_values[i], peak_y_values[i])
         amplitude_coord.append((start, end))
 
+    for i in range(len(half_recovery)):
         # Half recovery.
         end = (halfr_x_values[i], halfr_y_values[i])
         peak_x_idx = np.where(peak_x_values < halfr_x_values[i])[0][-1]
