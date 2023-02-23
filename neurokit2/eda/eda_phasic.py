@@ -93,11 +93,12 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
         data = _eda_phasic_cvxeda(eda_signal, sampling_rate)
     elif method in ["median", "smoothmedian"]:
         data = _eda_phasic_mediansmooth(eda_signal, sampling_rate)
-    elif method in ["highpass", "biopac", "acqknowledge"]:
+    elif method in ["neurokit", "highpass", "biopac", "acqknowledge"]:
         data = _eda_phasic_highpass(eda_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: eda_phasic(): 'method' should be one of "
-                         "'cvxeda', 'median', 'smoothmedian', 'highpass', 'biopac', 'acqknowledge'.")
+                         "'cvxeda', 'median', 'smoothmedian', 'neurokit', 'highpass', "
+                         "'biopac', 'acqknowledge'.")
 
     return data
 
