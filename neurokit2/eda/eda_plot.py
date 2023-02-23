@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import find_closest
-
 
 def eda_plot(eda_signals, sampling_rate=None, static=True):
     """**Visualize electrodermal activity (EDA) data**
@@ -70,7 +68,12 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
 
         ax0.plot(x_axis, eda_signals["EDA_Raw"], color="#B0BEC5", label="Raw", zorder=1)
         ax0.plot(
-            x_axis, eda_signals["EDA_Clean"], color="#9C27B0", label="Cleaned", linewidth=1.5, zorder=1
+            x_axis,
+            eda_signals["EDA_Clean"],
+            color="#9C27B0",
+            label="Cleaned",
+            linewidth=1.5,
+            zorder=1,
         )
         ax0.legend(loc="upper right")
 
@@ -111,7 +114,11 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
         # Plot Tonic.
         ax2.set_title("Skin Conductance Level (SCL)")
         ax2.plot(
-            x_axis, eda_signals["EDA_Tonic"], color="#673AB7", label="Tonic Component", linewidth=1.5
+            x_axis,
+            eda_signals["EDA_Tonic"],
+            color="#673AB7",
+            label="Tonic Component",
+            linewidth=1.5,
         )
         ax2.legend(loc="upper right")
         return fig
@@ -133,7 +140,11 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
             cols=1,
             shared_xaxes=True,
             vertical_spacing=0.05,
-            subplot_titles=("Raw and Cleaned Signal", "Skin Conductance Response (SCR)", "Skin Conductance Level (SCL)"),
+            subplot_titles=(
+                "Raw and Cleaned Signal",
+                "Skin Conductance Response (SCR)",
+                "Skin Conductance Level (SCL)",
+            ),
         )
 
         # Plot cleaned and raw electrodermal activity.
@@ -204,11 +215,12 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
         return fig
 
 
-
 # =============================================================================
 # Internals
 # =============================================================================
-def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recovery, static=True):
+def _eda_plot_dashedsegments(
+    eda_signals, ax, x_axis, onsets, peaks, half_recovery, static=True
+):
     # Mark onsets, peaks, and half-recovery.
     onset_x_values = x_axis[onsets]
     onset_y_values = eda_signals["EDA_Phasic"][onsets].values
@@ -269,6 +281,16 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
 
         scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
     else:
+        # Create interactive plot with plotly.
+        try:
+            import plotly.graph_objects as go
+
+        except ImportError as e:
+            raise ImportError(
+                "NeuroKit error: ppg_plot(): the 'plotly'",
+                " module is required when 'static' is False.",
+                " Please install it first (`pip install plotly`).",
+            ) from e
         # Plot with plotly.
         # Mark onsets, peaks, and half-recovery.
         ax.add_trace(
