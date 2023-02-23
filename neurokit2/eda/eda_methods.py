@@ -93,10 +93,21 @@ def eda_methods(
         report_info["text_cleaning"] += " was cleaned using the biosppy package."
     elif method_cleaning in ["default", "neurokit", "nk"]:
         report_info["text_cleaning"] += " was cleaned using the default method of the neurokit2 package."
+    elif method_peaks is None or method_peaks in ["none"]:
+        report_info["text_cleaning"] += "was directly used without cleaning."
     else:
         report_info["text_cleaning"] += " was cleaned using the method described in " + method_cleaning + "."
 
-    # 2. Peak detection
+    # 2. Phasic decomposition
+    # -----------------------
+    # TODO: add descriptions of individual methods
+    report_info["text_phasic"] = f"The signal was decomposed into phasic and tonic components using"
+    if method_phasic is None or method_phasic in ["none"]:
+        report_info["text_phasic"] = "There was no phasic decomposition carried out."
+    else:
+        report_info["text_phasic"] += " the method described in " + method_phasic + "."
+
+    # 3. Peak detection
     # -----------------
     report_info["text_peaks"] = f"The cleaned signal was used to detect peaks using"
     if method_peaks in ["gamboa2008", "gamboa"]:
@@ -121,21 +132,10 @@ def eda_methods(
         refs.append("""Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
       Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
       journal of translational engineering in health and medicine, 6, 2800711.""")
-    elif method_peaks in ["none"]:
-        report_info["text_peaks"] = "There was no peak detection carried out."
     else:
         report_info[
             "text_peaks"
         ] = f"The peak detection was carried out using the method {method_peaks}."
-
-    # 3. Phasic decomposition
-    # -----------------------
-    # TODO: add descriptions of individual methods
-    report_info["text_phasic"] = f"The signal was decomposed into phasic and tonic components using"
-    if method_phasic in ["none"]:
-        report_info["text_phasic"] = "There was no phasic decomposition carried out."
-    else:
-        report_info["text_phasic"] += " the method described in " + method_phasic + "."
 
     # References
     report_info["references"] = list(np.unique(refs))
