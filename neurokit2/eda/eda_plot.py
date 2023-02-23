@@ -182,44 +182,7 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
             eda_signals, fig, x_axis, onsets, peaks, half_recovery, static=static
         )
 
-        fig.add_trace(
-            go.Scatter(
-                x=risetime_coord[0],
-                y=risetime_coord[1],
-                mode="lines",
-                name="Rise Time",
-                line=dict(color="#FFA726", dash="dash"),
-                showlegend=True,
-            ),
-            row=2,
-            col=1,
-        )
-
-        fig.add_trace(
-            go.Scatter(
-                x=amplitude_coord[0],
-                y=amplitude_coord[1],
-                mode="lines",
-                name="SCR Amplitude",
-                line=dict(color="#1976D2", dash="solid"),
-                showlegend=True,
-            ),
-            row=2,
-            col=1,
-        )
-
-        fig.add_trace(
-            go.Scatter(
-                x=halfr_coord[0],
-                y=halfr_coord[1],
-                mode="lines",
-                name="Half Recovery",
-                line=dict(color="#FDD835", dash="dash"),
-                showlegend=True,
-            ),
-            row=2,
-            col=1,
-        )
+        # TODO add dashed segments to plotly version
 
         # Plot skin conductance level.
         fig.add_trace(
@@ -235,6 +198,9 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
             col=1,
         )
 
+        # Add title to entire figure.
+        fig.update_layout(title_text="Electrodermal Activity (EDA)", title_x=0.5)
+
         return fig
 
 
@@ -243,22 +209,38 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
 # Internals
 # =============================================================================
 def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recovery, static=True):
+    # Mark onsets, peaks, and half-recovery.
+    onset_x_values = x_axis[onsets]
+    onset_y_values = eda_signals["EDA_Phasic"][onsets].values
+    peak_x_values = x_axis[peaks]
+    peak_y_values = eda_signals["EDA_Phasic"][peaks].values
+    halfr_x_values = x_axis[half_recovery]
+    halfr_y_values = eda_signals["EDA_Phasic"][half_recovery].values
+
     end_onset = pd.Series(
         eda_signals["EDA_Phasic"][onsets].values, eda_signals["EDA_Phasic"][peaks].index
     )
 
-    # Rise time
-    risetime_start = eda_signals["EDA_Phasic"][onsets]
-    risetime_end = eda_signals["EDA_Phasic"][peaks]
-    risetime_coord = np.array([list(zip(risetime_start, risetime_end))])
+    risetime_coord = []
+    amplitude_coord = []
+    halfr_coord = []
 
-    # SCR Amplitude
-    peak_top = eda_signals["EDA_Phasic"][peaks]
-    amplitude_coord = np.array([list(zip(end_onset, peak_top))])
+    for i in range(len(onsets)):
+        # Rise time.
+        start = (onset_x_values[i], onset_y_values[i])
+        end = (peak_x_values[i], onset_y_values[i])
+        risetime_coord.append((start, end))
 
-    # Half recovery
-    peak_x_values = x_axis[peaks]
-    recovery_x_values = x_axis[half_recovery]
+        # SCR Amplitude.
+        start = (peak_x_values[i], onset_y_values[i])
+        end = (peak_x_values[i], peak_y_values[i])
+        amplitude_coord.append((start, end))
+
+        # Half recovery.
+        end = (halfr_x_values[i], halfr_y_values[i])
+        peak_x_idx = np.where(peak_x_values < halfr_x_values[i])[0][-1]
+        start = (peak_x_values[peak_x_idx], halfr_y_values[i])
+        halfr_coord.append((start, end))
 
     if static:
         # Plot with matplotlib.
@@ -286,37 +268,6 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
         )
 
         scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
-        """
-        # Rise time.
-        risetime_start = scat_onset.get_offsets()
-        risetime_end = scat_endonset.get_offsets()
-        risetime_coord = [(risetime_start[i], risetime_end[i]) for i in range(0, len(onsets))]
-
-        # SCR Amplitude.
-        peak_top = scat_peak.get_offsets()
-        amplitude_coord = [(peak_top[i], risetime_end[i]) for i in range(0, len(onsets))]
-
-        # Half recovery.
-        peak_x_values = peak_top.data[:, 0]
-        recovery_x_values = x_axis[half_recovery]
-
-        peak_list = []
-        for i, index in enumerate(half_recovery):
-            value = find_closest(
-                recovery_x_values[i], peak_x_values, direction="smaller", strictly=False
-            )
-            peak_list.append(value)
-
-        peak_index = []
-        for i in np.array(peak_list):
-            index = np.where(i == peak_x_values)[0][0]
-            peak_index.append(index)
-
-        halfr_index = list(range(0, len(half_recovery)))
-        halfr_end = scat_halfr.get_offsets()
-        halfr_start = [(peak_top[i, 0], halfr_end[x, 1]) for i, x in zip(peak_index, halfr_index)]
-        halfr_coord = [(halfr_start[i], halfr_end[i]) for i in halfr_index]
-        """
     else:
         # Plot with plotly.
         # Mark onsets, peaks, and half-recovery.
@@ -363,57 +314,9 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
                 mode="markers",
                 marker=dict(color="#FDD835", opacity=0),
                 showlegend=False,
-            )
+            ),
             row=2,
             col=1,
         )
-        """
-        # Rise time.
-        risetime_start = ax.data[0].x
-        risetime_end = ax.data[3].x
-        risetime_coord = [(risetime_start[i], risetime_end[i]) for i in range(0, len(onsets))]
-
-        # SCR Amplitude.
-        peak_top = ax.data[1].x
-        amplitude_coord = [(peak_top[i], risetime_end[i]) for i in range(0, len(onsets))]
-
-        # Half recovery.
-        peak_x_values = peak_top
-        recovery_x_values = x_axis[half_recovery]
-
-        peak_list = []
-        for i, index in enumerate(half_recovery):
-            value = find_closest(
-                recovery_x_values[i], peak_x_values, direction="smaller", strictly=False
-            )
-            peak_list.append(value)
-
-        peak_index = []
-        for i in np.array(peak_list):
-            index = np.where(i == peak_x_values)[0][0]
-            peak_index.append(index)
-
-        halfr_index = list(range(0, len(half_recovery)))
-        halfr_end = ax.data[2].x
-        halfr_start = [(peak_top[i], halfr_end[x]) for i, x in zip(peak_index, halfr_index)]
-        halfr_coord = [(halfr_start[i], halfr_end[i]) for i in halfr_index]
-    """
-
-    peak_list = []
-    for i, index in enumerate(half_recovery):
-        value = find_closest(
-            recovery_x_values[i], peak_x_values, direction="smaller", strictly=False
-        )
-        peak_list.append(value)
-
-    peak_index = []
-    for i in np.array(peak_list):
-        index = np.where(i == peak_x_values)[0][0]
-        peak_index.append(index)
-
-    halfr_index = list(range(0, len(half_recovery)))
-    halfr_end = eda_signals["EDA_Phasic"][half_recovery]
-    halfr_start = [(peak_top[i], halfr_end[x]) for i, x in zip(peak_index, halfr_index)]
-    halfr_coord = [(halfr_start[i], halfr_end[i]) for i in halfr_index]
 
     return risetime_coord, amplitude_coord, halfr_coord
