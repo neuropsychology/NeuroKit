@@ -96,7 +96,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     elif method in ["highpass", "biopac", "acqknowledge"]:
         data = _eda_phasic_highpass(eda_signal, sampling_rate)
     else:
-        raise ValueError("NeuroKit error: eda_clean(): 'method' should be one of 'biosppy'.")
+        raise ValueError("NeuroKit error: eda_phasic(): 'method' should be one of "
+                         "'cvxeda', 'median', 'smoothmedian', 'highpass', 'biopac', 'acqknowledge'.")
 
     return data
 
