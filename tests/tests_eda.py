@@ -241,3 +241,37 @@ def test_eda_findpeaks():
     assert any(
         nabian2018["SCR_Peaks"][:min_n_peaks] - vanhalem2020["SCR_Peaks"][:min_n_peaks]
     ) < np.mean(eda_signal)
+
+@pytest.mark.parametrize(
+    "method_cleaning, method_phasic, method_peaks",
+    [("none", "cvxeda", "gamboa2008"),
+        ("neurokit", "median", "nabian2018"),
+     ]
+)
+def test_eda_report(tmp_path, method_cleaning, method_phasic, method_peaks):
+
+    sampling_rate = 100
+
+    eda = nk.eda_simulate(
+        duration=30,
+        sampling_rate=sampling_rate,
+        scr_number=6,
+        noise=0,
+        drift=0.01,
+        random_state=0,
+    )
+
+    d = tmp_path / "sub"
+    d.mkdir()
+    p = d / "myreport.html"
+
+    signals, _ = nk.eda_process(
+        eda,
+        sampling_rate=sampling_rate,
+        method_cleaning=method_cleaning,
+        method_phasic=method_phasic,
+        method_peaks=method_peaks,
+        report=p,
+    )
+
+    assert p.is_file()
