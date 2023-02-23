@@ -3,7 +3,7 @@ import numpy as np
 
 from ..misc.report import get_kwargs
 from .rsp_clean import rsp_clean
-from .rsp_findpeaks import rsp_findpeaks
+from .rsp_peaks import rsp_peaks
 from .rsp_rvt import rsp_rvt
 
 
@@ -39,14 +39,14 @@ def rsp_methods(
         The method used to find peaks. If ``"default"``,
         will be set to the value of ``"method"``. Defaults to ``"default"``.
         For more information, see the ``"method"`` argument
-        of :func:`.rsp_findpeaks`.
+        of :func:`.rsp_peaks`.
     method_rvt: str
         The method used to compute respiratory volume per time. Defaults to ``"harrison"``.
         For more information, see the ``"method"`` argument
         of :func:`.rsp_rvt`.
     **kwargs
-        Other arguments to be passed to :func:`.rsp_clean` and
-        :func:`.rsp_findpeaks`.
+        Other arguments to be passed to :func:`.rsp_clean`,
+        :func:`.rsp_peaks`, and :func:`.rsp_rvt`.
 
     Returns
     -------
@@ -87,7 +87,7 @@ def rsp_methods(
 
     # Get arguments to be passed to cleaning and peak finding functions
     kwargs_cleaning, report_info = get_kwargs(report_info, rsp_clean)
-    kwargs_peaks, report_info = get_kwargs(report_info, rsp_findpeaks)
+    kwargs_peaks, report_info = get_kwargs(report_info, rsp_peaks)
     kwargs_rvt, report_info = get_kwargs(report_info, rsp_rvt)
 
     # Save keyword arguments in dictionary
