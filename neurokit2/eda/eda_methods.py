@@ -101,7 +101,7 @@ def eda_methods(
     # 2. Phasic decomposition
     # -----------------------
     # TODO: add descriptions of individual methods
-    report_info["text_phasic"] = f"The signal was decomposed into phasic and tonic components using"
+    report_info["text_phasic"] = "The signal was decomposed into phasic and tonic components using"
     if method_phasic is None or method_phasic in ["none"]:
         report_info["text_phasic"] = "There was no phasic decomposition carried out."
     else:
@@ -109,7 +109,7 @@ def eda_methods(
 
     # 3. Peak detection
     # -----------------
-    report_info["text_peaks"] = f"The cleaned signal was used to detect peaks using"
+    report_info["text_peaks"] = "The cleaned signal was used to detect peaks using"
     if method_peaks in ["gamboa2008", "gamboa"]:
         report_info["text_peaks"] += " the method described in Gamboa et al. (2008)."
         refs.append("""Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci

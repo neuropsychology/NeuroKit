@@ -189,7 +189,7 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
         )
 
         # Mark segments.
-        risetime_coord, amplitude_coord, halfr_coord = _eda_plot_dashedsegments(
+        _, _, _ = _eda_plot_dashedsegments(
             eda_signals, fig, x_axis, onsets, peaks, half_recovery, static=static
         )
 
