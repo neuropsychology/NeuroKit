@@ -992,7 +992,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.3667 |       4.10362 |</span>
+<span class="go">|         15.0173 |       1.96144 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1736,7 +1736,7 @@ than 640 breath cycles in the signal.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  697.009326     3925.55  414.726603  ...    0.585159  0.091859         inf</span>
+<span class="go">0  1132.59841      4028.6  688.781945  ...    0.633724  0.091859         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1880,9 +1880,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.197578      0.014321</span>
-<span class="go">2     2        10000  ...          0.157916     -0.007081</span>
-<span class="go">3     3        15000  ...          0.236420     -0.003447</span>
+<span class="go">1     1         5000  ...          0.270437     -0.011830</span>
+<span class="go">2     2        10000  ...          0.201201     -0.006854</span>
+<span class="go">3     3        15000  ...          0.159515      0.063632</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -2002,12 +2002,12 @@ of <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit
 <li><p><strong>method_peaks</strong> (<em>str</em>) – The method used to find peaks. If <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>,
 will be set to the value of <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.
 For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
-of <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
+of <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a>.</p></li>
 <li><p><strong>method_rvt</strong> (<em>str</em>) – The method used to compute respiratory volume per time. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;harrison&quot;</span></code>.
 For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
 of <a class="reference internal" href="#neurokit2.rsp.rsp_rvt" title="neurokit2.rsp.rsp_rvt"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rvt()</span></code></a>.</p></li>
-<li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a> and
-<a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>,
+<a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a>, and <a class="reference internal" href="#neurokit2.rsp.rsp_rvt" title="neurokit2.rsp.rsp_rvt"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rvt()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

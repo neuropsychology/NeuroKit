@@ -559,7 +559,7 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">..misc.report</span> <span class="kn">import</span> <span class="n">get_kwargs</span>
 <span class="kn">from</span> <span class="nn">.rsp_clean</span> <span class="kn">import</span> <span class="n">rsp_clean</span>
-<span class="kn">from</span> <span class="nn">.rsp_findpeaks</span> <span class="kn">import</span> <span class="n">rsp_findpeaks</span>
+<span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_peaks</span>
 <span class="kn">from</span> <span class="nn">.rsp_rvt</span> <span class="kn">import</span> <span class="n">rsp_rvt</span>
 
 
@@ -595,14 +595,14 @@ title="Open an issue"
 <span class="sd">        The method used to find peaks. If ``&quot;default&quot;``,</span>
 <span class="sd">        will be set to the value of ``&quot;method&quot;``. Defaults to ``&quot;default&quot;``.</span>
 <span class="sd">        For more information, see the ``&quot;method&quot;`` argument</span>
-<span class="sd">        of :func:`.rsp_findpeaks`.</span>
+<span class="sd">        of :func:`.rsp_peaks`.</span>
 <span class="sd">    method_rvt: str</span>
 <span class="sd">        The method used to compute respiratory volume per time. Defaults to ``&quot;harrison&quot;``.</span>
 <span class="sd">        For more information, see the ``&quot;method&quot;`` argument</span>
 <span class="sd">        of :func:`.rsp_rvt`.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Other arguments to be passed to :func:`.rsp_clean` and</span>
-<span class="sd">        :func:`.rsp_findpeaks`.</span>
+<span class="sd">        Other arguments to be passed to :func:`.rsp_clean`,</span>
+<span class="sd">        :func:`.rsp_peaks`, and :func:`.rsp_rvt`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -643,7 +643,7 @@ title="Open an issue"
 
     <span class="c1"># Get arguments to be passed to cleaning and peak finding functions</span>
     <span class="n">kwargs_cleaning</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">rsp_clean</span><span class="p">)</span>
-    <span class="n">kwargs_peaks</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">rsp_findpeaks</span><span class="p">)</span>
+    <span class="n">kwargs_peaks</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">rsp_peaks</span><span class="p">)</span>
     <span class="n">kwargs_rvt</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">rsp_rvt</span><span class="p">)</span>
 
     <span class="c1"># Save keyword arguments in dictionary</span>
