@@ -92,6 +92,8 @@ def summarize_table(signals):
         except ImportError:
             md = summary_table  # in case printing markdown export fails
         return html, md
+    else:
+        return "", ""
 
 
 def text_combine(info):
