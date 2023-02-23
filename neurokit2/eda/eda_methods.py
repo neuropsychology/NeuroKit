@@ -61,27 +61,27 @@ def eda_methods(
     """
     # Sanitize inputs
     method_cleaning = str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
-    method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
     method_phasic = str(method).lower() if method_phasic == "default" else str(method_phasic).lower()
+    method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
 
     # Create dictionary with all inputs
     report_info = {
         "sampling_rate": sampling_rate,
         "method_cleaning": method_cleaning,
-        "method_peaks": method_peaks,
         "method_phasic": method_phasic,
+        "method_peaks": method_peaks,
         "kwargs": kwargs,
     }
 
     # Get arguments to be passed to underlying functions
     kwargs_cleaning, report_info = get_kwargs(report_info, eda_clean)
-    kwargs_peaks, report_info = get_kwargs(report_info, eda_peaks)
     kwargs_phasic, report_info = get_kwargs(report_info, eda_phasic)
+    kwargs_peaks, report_info = get_kwargs(report_info, eda_peaks)
 
     # Save keyword arguments in dictionary
     report_info["kwargs_cleaning"] = kwargs_cleaning
-    report_info["kwargs_peaks"] = kwargs_peaks
     report_info["kwargs_phasic"] = kwargs_phasic
+    report_info["kwargs_peaks"] = kwargs_peaks
 
     # Initialize refs list
     refs = []
