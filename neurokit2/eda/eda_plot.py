@@ -257,21 +257,21 @@ def _eda_plot_dashedsegments(
     if static:
         # Plot with matplotlib.
         # Mark onsets, peaks, and half-recovery.
-        scat_onset = ax.scatter(
+        ax.scatter(
             x_axis[onsets],
             eda_signals["EDA_Phasic"][onsets],
             color="#FFA726",
             label="SCR - Onsets",
             zorder=2,
         )
-        scat_peak = ax.scatter(
+        ax.scatter(
             x_axis[peaks],
             eda_signals["EDA_Phasic"][peaks],
             color="#1976D2",
             label="SCR - Peaks",
             zorder=2,
         )
-        scat_halfr = ax.scatter(
+        ax.scatter(
             x_axis[half_recovery],
             eda_signals["EDA_Phasic"][half_recovery],
             color="#FDD835",
@@ -279,7 +279,7 @@ def _eda_plot_dashedsegments(
             zorder=2,
         )
 
-        scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
+        ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
     else:
         # Create interactive plot with plotly.
         try:
