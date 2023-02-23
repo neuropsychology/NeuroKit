@@ -271,7 +271,7 @@ def test_eda_report(tmp_path, method_cleaning, method_phasic, method_peaks):
         method_cleaning=method_cleaning,
         method_phasic=method_phasic,
         method_peaks=method_peaks,
-        report=p,
+        report=str(p),
     )
 
     assert p.is_file()

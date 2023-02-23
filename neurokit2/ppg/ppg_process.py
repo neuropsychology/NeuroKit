@@ -109,7 +109,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
 
     if report is not None:
         # Generate report containing description and figures of processing
-        if ".html" in report:
+        if ".html" in str(report):
             fig = ppg_plot(signals, sampling_rate=sampling_rate)
         else:
             fig = None

@@ -149,7 +149,7 @@ def rsp_process(
 
     if report is not None:
         # Generate report containing description and figures of processing
-        if ".html" in report:
+        if ".html" in str(report):
             fig = rsp_plot(signals, sampling_rate=sampling_rate)
         else:
             fig = None
