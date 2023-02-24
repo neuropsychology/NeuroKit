@@ -3,7 +3,7 @@ from warnings import warn
 
 import numpy as np
 
-from ..misc import NeuroKitWarning, listify
+from ..misc import NeuroKitWarning, listify, check_rng
 from .signal_resample import signal_resample
 from .signal_simulate import signal_simulate
 
@@ -103,7 +103,8 @@ def signal_distort(
 
     """
     # Seed the random generator for reproducible results.
-    np.random.seed(random_state)
+    rng = check_rng(random_state)
+    print(type(rng))
 
     # Make sure that noise_amplitude is a list.
     if isinstance(noise_amplitude, (int, float)):
@@ -125,6 +126,7 @@ def signal_distort(
             noise_frequency=noise_frequency,
             noise_shape=noise_shape,
             silent=silent,
+            rng=rng,
         )
 
     # Powerline noise.
@@ -148,15 +150,13 @@ def signal_distort(
             artifacts_amplitude=artifacts_amplitude,
             artifacts_number=artifacts_number,
             silent=silent,
+            rng=rng,
         )
 
     if linear_drift:
         noise += _signal_linear_drift(signal)
 
     distorted = signal + noise
-
-    # Reset random seed (so it doesn't affect global)
-    np.random.seed(None)
 
     return distorted
 
@@ -183,6 +183,7 @@ def _signal_distort_artifacts(
     artifacts_number=5,
     artifacts_shape="laplace",
     silent=False,
+    rng=None,
 ):
 
     # Generate artifact burst with random onset and random duration.
@@ -193,15 +194,16 @@ def _signal_distort_artifacts(
         noise_amplitude=artifacts_amplitude,
         noise_shape=artifacts_shape,
         silent=silent,
+        rng=rng,
     )
     if artifacts.sum() == 0:
         return artifacts
 
     min_duration = int(np.rint(len(artifacts) * 0.001))
     max_duration = int(np.rint(len(artifacts) * 0.01))
-    artifact_durations = np.random.randint(min_duration, max_duration, artifacts_number)
+    artifact_durations = min_duration + rng.choice(max_duration, size=artifacts_number)
 
-    artifact_onsets = np.random.randint(0, len(artifacts) - max_duration, artifacts_number)
+    artifact_onsets = rng.choice(len(artifacts) - max_duration, size=artifacts_number)
     artifact_offsets = artifact_onsets + artifact_durations
 
     artifact_idcs = np.array([False] * len(artifacts))
@@ -251,6 +253,7 @@ def _signal_distort_noise_multifrequency(
     noise_frequency=100,
     noise_shape="laplace",
     silent=False,
+    rng=None,
 ):
     base_noise = np.zeros(len(signal))
     params = listify(
@@ -274,6 +277,7 @@ def _signal_distort_noise_multifrequency(
             noise_amplitude=amp,
             noise_shape=shape,
             silent=silent,
+            rng=rng,
         )
         base_noise += _base_noise
 
@@ -287,6 +291,7 @@ def _signal_distort_noise(
     noise_amplitude=0.1,
     noise_shape="laplace",
     silent=False,
+    rng=None,
 ):
 
     _noise = np.zeros(n_samples)
@@ -323,9 +328,9 @@ def _signal_distort_noise(
     noise_duration = int(duration * noise_frequency)
 
     if noise_shape in ["normal", "gaussian"]:
-        _noise = np.random.normal(0, noise_amplitude, noise_duration)
+        _noise = rng.normal(0, noise_amplitude, noise_duration)
     elif noise_shape == "laplace":
-        _noise = np.random.laplace(0, noise_amplitude, noise_duration)
+        _noise = rng.laplace(0, noise_amplitude, noise_duration)
     else:
         raise ValueError(
             "NeuroKit error: signal_distort(): 'noise_shape' should be one of 'gaussian' or 'laplace'."

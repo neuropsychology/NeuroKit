@@ -3,6 +3,7 @@
 from ._warnings import NeuroKitWarning
 from .check_type import check_type
 from .copyfunction import copyfunction
+from .random import check_rng, spawn_rng, get_children_rng
 from .expspace import expspace
 from .find_closest import find_closest
 from .find_consecutive import find_consecutive
@@ -32,4 +33,7 @@ __all__ = [
     "progress_bar",
     "find_plateau",
     "copyfunction",
+    "check_rng",
+    "get_children_rng",
+    "spawn_rng",
 ]

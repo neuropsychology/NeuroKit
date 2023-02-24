@@ -125,6 +125,7 @@ def test_hrv_interpolated_rri(interpolation_rate):
 
 def test_hrv_missing():
     random_state = 42
+    rng = misc.check_rng(random_state)
     # Download data
     data = nk.data("bio_resting_5min_100hz")
     sampling_rate = 100
@@ -137,8 +138,7 @@ def test_hrv_missing():
     rri_time = peaks[1:] / sampling_rate
 
     # remove some intervals and their corresponding timestamps
-    np.random.seed(random_state)
-    missing = np.random.randint(0, len(rri), size=int(len(rri) / 5))
+    missing = rng.choice(len(rri), size=int(len(rri) / 5))
     rri_missing = rri[np.array([i for i in range(len(rri)) if i not in missing])]
     rri_time_missing = rri_time[np.array([i for i in range(len(rri_time)) if i not in missing])]
 

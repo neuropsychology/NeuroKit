@@ -2,6 +2,7 @@
 import numpy as np
 
 from ..signal import signal_resample
+from ..misc import check_rng
 
 
 def emg_simulate(
@@ -11,7 +12,7 @@ def emg_simulate(
     noise=0.01,
     burst_number=1,
     burst_duration=1.0,
-    random_state=42,
+    random_state=None,
 ):
     """**Simulate an EMG signal**
 
@@ -65,7 +66,7 @@ def emg_simulate(
 
     """
     # Seed the random generator for reproducible results
-    np.random.seed(random_state)
+    rng = check_rng(random_state)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -89,14 +90,14 @@ def emg_simulate(
     # Generate bursts
     bursts = []
     for burst in range(burst_number):
-        bursts += [list(np.random.uniform(-1, 1, size=int(1000 * burst_duration[burst])) + 0.08)]
+        bursts += [list(rng.uniform(-1, 1, size=int(1000 * burst_duration[burst])) + 0.08)]
 
     # Generate quiet
     n_quiet = burst_number + 1  # number of quiet periods (in between bursts)
     duration_quiet = (duration - total_duration_bursts) / n_quiet  # duration of each quiet period
     quiets = []
     for quiet in range(n_quiet):  # pylint: disable=W0612
-        quiets += [list(np.random.uniform(-0.05, 0.05, size=int(1000 * duration_quiet)) + 0.08)]
+        quiets += [list(rng.uniform(-0.05, 0.05, size=int(1000 * duration_quiet)) + 0.08)]
 
     # Merge the two
     emg = []
@@ -107,7 +108,7 @@ def emg_simulate(
     emg = np.array(emg)
 
     # Add random (gaussian distributed) noise
-    emg += np.random.normal(0, noise, len(emg))
+    emg += rng.normal(0, noise, len(emg))
 
     # Resample
     emg = signal_resample(

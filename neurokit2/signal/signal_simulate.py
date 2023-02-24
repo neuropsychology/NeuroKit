@@ -3,11 +3,11 @@ from warnings import warn
 
 import numpy as np
 
-from ..misc import NeuroKitWarning, listify
+from ..misc import NeuroKitWarning, listify, check_rng
 
 
 def signal_simulate(
-    duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False
+    duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False, random_state=None,
 ):
     """**Simulate a continuous signal**
 
@@ -91,7 +91,8 @@ def signal_simulate(
         signal += _signal_simulate_sinusoidal(x=seconds, frequency=freq, amplitude=amp)
         # Add random noise
         if noise > 0:
-            signal += np.random.laplace(0, noise, len(signal))
+            rng = check_rng(random_state)
+            signal += rng.laplace(0, noise, len(signal))
 
     return signal
 

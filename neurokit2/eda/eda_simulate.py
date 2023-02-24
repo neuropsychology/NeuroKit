@@ -2,10 +2,18 @@
 import numpy as np
 
 from ..signal import signal_distort, signal_merge
+from ..misc import check_rng, get_children_rng
 
 
 def eda_simulate(
-    duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
+    duration=10,
+    length=None,
+    sampling_rate=1000,
+    noise=0.01,
+    scr_number=1,
+    drift=-0.01,
+    random_state=None,
+    random_state_distort="legacy",
 ):
     """**Simulate Electrodermal Activity (EDA) signal**
 
@@ -59,7 +67,8 @@ def eda_simulate(
 
     """
     # Seed the random generator for reproducible results
-    np.random.seed(random_state)
+    rng = check_rng(random_state)
+    random_state_distort = get_children_rng(random_state, random_state_distort, n_children=1)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -72,7 +81,7 @@ def eda_simulate(
     start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
 
     for start_peak in start_peaks:
-        relative_time_peak = np.abs(np.random.normal(0, 5, size=1)) + 3.0745
+        relative_time_peak = np.abs(rng.normal(0, 5, size=1)) + 3.0745
         scr = _eda_simulate_scr(sampling_rate=sampling_rate, time_peak=relative_time_peak)
         time_scr = [start_peak, start_peak + 9]
         if time_scr[0] < 0:
@@ -93,10 +102,9 @@ def eda_simulate(
             noise_frequency=[5, 10, 100],
             noise_shape="laplace",
             silent=True,
-            random_state=np.random.randint(np.iinfo(np.uint32).max)
+            random_state=random_state_distort[0],
         )
-    # Reset random seed (so it doesn't affect global)
-    np.random.seed(None)
+
     return eda
 
 

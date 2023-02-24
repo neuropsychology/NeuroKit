@@ -31,6 +31,51 @@ def test_rsp_simulate():
     )
 
 
+def test_rsp_simulate_legacy_rng():
+
+    rsp = nk.rsp_simulate(
+        duration=10,
+        sampling_rate=100,
+        noise=0.03,
+        respiratory_rate=12,
+        method='breathmetrics',
+        random_state=123,
+        random_state_distort='legacy',
+        )
+
+    # Run simple checks to verify that the signal is the same as that generated with version 0.2.3
+    # before the introduction of the new random number generation approach
+    assert np.allclose(np.mean(rsp), 0.03869389548166346)
+    assert np.allclose(np.std(rsp), 0.3140022628657376)
+    assert np.allclose(np.mean(np.reshape(rsp, (-1, 200)), axis=1),
+                       [0.2948574728, -0.2835745073, 0.2717568165, -0.2474764970, 0.1579061923])
+
+
+@pytest.mark.parametrize(
+    "random_state, random_state_distort",
+    [(13579, "legacy"), (13579, "spawn"), (13579, 24680), (13579, None),
+    (np.random.RandomState(33), "spawn"), (np.random.SeedSequence(33), "spawn"),
+    (np.random.Generator(np.random.Philox(33)), "spawn"), (None, "spawn")]
+)
+def test_ppg_simulate_all_rng_types(random_state, random_state_distort):
+
+    # Run rsp_simulate to test for errors (e.g. using methods like randint that are only
+    # implemented for RandomState but not Generator, or vice versa)
+    rsp = nk.rsp_simulate(
+        duration=10,
+        sampling_rate=100,
+        noise=0.03,
+        respiratory_rate=12,
+        method='breathmetrics',
+        random_state=random_state,
+        random_state_distort=random_state_distort,
+        )
+
+    # Double check the signal is finite and of the right length
+    assert np.all(np.isfinite(rsp))
+    assert len(rsp) == 10 * 100
+
+
 def test_rsp_clean():
 
     sampling_rate = 100
@@ -43,7 +88,7 @@ def test_rsp_clean():
         random_state=42,
     )
     # Add linear drift (to test baseline removal).
-    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True)
+    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True, random_state=42)
 
     for method in ["khodadad2018", "biosppy", "hampel"]:
         cleaned = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method=method)

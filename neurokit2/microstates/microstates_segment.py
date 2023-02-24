@@ -5,6 +5,7 @@ from ..stats import cluster
 from ..stats.cluster_quality import _cluster_quality_gev
 from .microstates_classify import microstates_classify
 from .microstates_clean import microstates_clean
+from ..misc import check_rng
 
 
 def microstates_segment(
@@ -186,12 +187,11 @@ def microstates_segment(
     # Run clustering algorithm
     if method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
 
-        # If no random state specified, generate a random state
-        if not isinstance(random_state, np.random.RandomState):
-            random_state = np.random.RandomState(random_state)
+        # Seed the random generator for reproducible results
+        rng = check_rng(random_state)
 
         # Generate one random integer for each run
-        random_state = random_state.choice(range(n_runs * 1000), n_runs, replace=False)
+        random_state = rng.choice(n_runs * 1000, n_runs, replace=False)
 
         # Initialize values
         gev = 0

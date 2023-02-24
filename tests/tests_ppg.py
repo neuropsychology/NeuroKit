@@ -80,6 +80,30 @@ def test_ppg_simulate_ibi(ibi_randomness, std_heart_rate):
     # TODO: test influence of different noise configurations
 
 
+def test_ppg_simulate_legacy_rng():
+
+    ppg = nk.ppg_simulate(
+        duration=30,
+        sampling_rate=250,
+        heart_rate=70,
+        frequency_modulation=0.2,
+        ibi_randomness=0.1,
+        drift=0.1,
+        motion_amplitude=0.1,
+        powerline_amplitude=0.01,
+        random_state=654,
+        random_state_distort='legacy',
+        show=False,
+        )
+
+    # Run simple checks to verify that the signal is the same as that generated with version 0.2.3
+    # before the introduction of the new random number generation approach
+    assert np.allclose(np.mean(ppg), 0.6598246992405254)
+    assert np.allclose(np.std(ppg), 0.4542274696384863)
+    assert np.allclose(np.mean(np.reshape(ppg, (-1, 1500)), axis=1),
+                       [0.630608661400, 0.63061887029, 0.60807993168, 0.65731025466, 0.77250577818])
+
+
 def test_ppg_clean():
 
     sampling_rate = 500

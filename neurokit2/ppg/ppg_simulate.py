@@ -5,6 +5,7 @@ import numpy as np
 import scipy.interpolate
 
 from ..signal import signal_distort
+from ..misc import check_rng, get_children_rng
 
 
 def ppg_simulate(
@@ -19,6 +20,7 @@ def ppg_simulate(
     burst_number=0,
     burst_amplitude=1,
     random_state=None,
+    random_state_distort="legacy",
     show=False,
 ):
     """**Simulate a photoplethysmogram (PPG) signal**
@@ -83,7 +85,9 @@ def ppg_simulate(
       ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)
 
     """
-    np.random.seed(random_state)
+    # Seed the random generator for reproducible results
+    rng = check_rng(random_state)
+    random_state_distort = get_children_rng(random_state, random_state_distort, n_children=4)
 
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
@@ -104,24 +108,24 @@ def ppg_simulate(
     )
     # Randomly modulate duration of waves by subracting a random value between
     # 0 and ibi_randomness% of the wave duration (see function definition).
-    x_onset = _random_x_offset(x_onset, ibi_randomness)
+    x_onset = _random_x_offset(x_onset, ibi_randomness, rng)
     # Corresponding signal amplitudes.
-    y_onset = np.random.normal(0, 0.1, n_period)
+    y_onset = rng.normal(0, 0.1, n_period)
 
     # Seconds at which the systolic peaks occur within the waves.
-    x_sys = x_onset + np.random.normal(0.175, 0.01, n_period) * periods
+    x_sys = x_onset + rng.normal(0.175, 0.01, n_period) * periods
     # Corresponding signal amplitudes.
-    y_sys = y_onset + np.random.normal(1.5, 0.15, n_period)
+    y_sys = y_onset + rng.normal(1.5, 0.15, n_period)
 
     # Seconds at which the dicrotic notches occur within the waves.
-    x_notch = x_onset + np.random.normal(0.4, 0.001, n_period) * periods
+    x_notch = x_onset + rng.normal(0.4, 0.001, n_period) * periods
     # Corresponding signal amplitudes (percentage of systolic peak height).
-    y_notch = y_sys * np.random.normal(0.49, 0.01, n_period)
+    y_notch = y_sys * rng.normal(0.49, 0.01, n_period)
 
     # Seconds at which the diastolic peaks occur within the waves.
-    x_dia = x_onset + np.random.normal(0.45, 0.001, n_period) * periods
+    x_dia = x_onset + rng.normal(0.45, 0.001, n_period) * periods
     # Corresponding signal amplitudes (percentage of systolic peak height).
-    y_dia = y_sys * np.random.normal(0.51, 0.01, n_period)
+    y_dia = y_sys * rng.normal(0.51, 0.01, n_period)
 
     x_all = np.concatenate((x_onset, x_sys, x_notch, x_dia))
     x_all.sort(kind="mergesort")
@@ -158,7 +162,7 @@ def ppg_simulate(
             sampling_rate=sampling_rate,
             noise_amplitude=drift,
             noise_frequency=drift_freq,
-            random_state=random_state,
+            random_state=random_state_distort[0],
             silent=True,
         )
     # Add motion artifacts.
@@ -169,7 +173,7 @@ def ppg_simulate(
             sampling_rate=sampling_rate,
             noise_amplitude=motion_amplitude,
             noise_frequency=motion_freq,
-            random_state=random_state,
+            random_state=random_state_distort[1],
             silent=True,
         )
     # Add high frequency bursts.
@@ -180,7 +184,7 @@ def ppg_simulate(
             artifacts_amplitude=burst_amplitude,
             artifacts_frequency=100,
             artifacts_number=burst_number,
-            random_state=random_state,
+            random_state=random_state_distort[2],
             silent=True,
         )
     # Add powerline noise.
@@ -190,7 +194,7 @@ def ppg_simulate(
             sampling_rate=sampling_rate,
             powerline_amplitude=powerline_amplitude,
             powerline_frequency=50,
-            random_state=random_state,
+            random_state=random_state_distort[3],
             silent=True,
         )
 
@@ -240,7 +244,7 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     return periods_modulated, seconds_modulated
 
 
-def _random_x_offset(x, offset_weight):
+def _random_x_offset(x, offset_weight, rng):
     """From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is
     the wave onset preceding xi. offset_weight must be between 0 and 1.
     """
@@ -261,7 +265,7 @@ def _random_x_offset(x, offset_weight):
         return x
 
     max_offsets = offset_weight * x_diff
-    offsets = [np.random.uniform(0, i) for i in max_offsets]
+    offsets = [rng.uniform(0, i) for i in max_offsets]
 
     x_offset = x.copy()
     x_offset[1:] -= offsets

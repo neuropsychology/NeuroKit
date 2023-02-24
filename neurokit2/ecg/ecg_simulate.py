@@ -6,6 +6,7 @@ import pandas as pd
 import scipy
 
 from ..signal import signal_distort, signal_resample
+from ..misc import check_rng, get_children_rng
 
 
 def ecg_simulate(
@@ -17,6 +18,7 @@ def ecg_simulate(
     heart_rate_std=1,
     method="ecgsyn",
     random_state=None,
+    random_state_distort="legacy",
     **kwargs,
 ):
     """**Simulate an ECG/EKG signal**
@@ -101,7 +103,7 @@ def ecg_simulate(
 
     """
     # Seed the random generator for reproducible results
-    np.random.seed(random_state)
+    rng = check_rng(random_state)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -142,6 +144,7 @@ def ecg_simulate(
                 hrstd=heart_rate_std,
                 sfint=sampling_rate,
                 gamma=gamma,
+                rng=rng,
                 **kwargs,
             )
         else:
@@ -152,6 +155,7 @@ def ecg_simulate(
                 hrstd=heart_rate_std,
                 sfint=sampling_rate,
                 gamma=np.ones((1, 5)),
+                rng=rng,
                 **kwargs,
             )
         # Cut to match expected length
@@ -160,6 +164,12 @@ def ecg_simulate(
 
     # Add random noise
     if noise > 0:
+        # Seed for random noise
+        random_state_distort = get_children_rng(
+            random_state,
+            random_state_distort,
+            n_children=len(signals))
+        # Call signal_distort on each signal
         for i in range(len(signals)):
             signals[i] = signal_distort(
                 signals[i],
@@ -167,7 +177,7 @@ def ecg_simulate(
                 noise_amplitude=noise,
                 noise_frequency=[5, 10, 100],
                 noise_shape="laplace",
-                random_state=random_state,
+                random_state=random_state_distort[i],
                 silent=True,
             )
 
@@ -180,8 +190,6 @@ def ecg_simulate(
             columns=["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
         )
 
-    # Reset random seed (so it doesn't affect global)
-    np.random.seed(None)
     return ecg
 
 
@@ -237,6 +245,7 @@ def _ecg_simulate_ecgsyn(
     ai=(1.2, -5, 30, -7.5, 0.75),
     bi=(0.25, 0.1, 0.1, 0.1, 0.4),
     gamma=np.ones((1, 5)),
+    rng=None,
     **kwargs,
 ):
     """
@@ -329,7 +338,7 @@ def _ecg_simulate_ecgsyn(
     rrmean = 60 / hrmean
     n = 2 ** (np.ceil(np.log2(N * rrmean / trr)))
 
-    rr0 = _ecg_simulate_rrprocess(flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n)
+    rr0 = _ecg_simulate_rrprocess(flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n, rng)
 
     # Upsample rr time series from 1 Hz to sfint Hz
     rr = signal_resample(rr0, sampling_rate=1, desired_sampling_rate=sfint)
@@ -418,7 +427,8 @@ def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
 
 
 def _ecg_simulate_rrprocess(
-    flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfratio=0.5, hrmean=60, hrstd=1, sfrr=1, n=256
+    flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfratio=0.5,
+    hrmean=60, hrstd=1, sfrr=1, n=256, rng=None,
 ):
     w1 = 2 * np.pi * flo
     w2 = 2 * np.pi * fhi
@@ -440,7 +450,7 @@ def _ecg_simulate_rrprocess(
     Hw0 = np.concatenate((Hw[0 : int(n / 2)], Hw[int(n / 2) - 1 :: -1]))
     Sw = (sfrr / 2) * np.sqrt(Hw0)
 
-    ph0 = 2 * np.pi * np.random.uniform(size=int(n / 2 - 1))
+    ph0 = 2 * np.pi * rng.uniform(size=int(n / 2 - 1))
     ph = np.concatenate([[0], ph0, [0], -np.flipud(ph0)])
     SwC = Sw * np.exp(1j * ph)
     x = (1 / n) * np.real(np.fft.ifft(SwC))
