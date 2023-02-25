@@ -20,6 +20,7 @@ from .parallel_run import parallel_run
 from .progress_bar import progress_bar
 from .replace import replace
 from .type_converters import as_vector
+from .report import create_report
 
 
 __all__ = [
@@ -41,4 +42,5 @@ __all__ = [
     "check_rng",
     "get_children_rng",
     "spawn_rng",
+    "create_report",
 ]

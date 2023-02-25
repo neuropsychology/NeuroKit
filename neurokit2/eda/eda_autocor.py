@@ -7,7 +7,7 @@ from ..signal import signal_autocor
 def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
     """**EDA Autocorrelation**
 
-    Compute autocorrelation measure of raw EDA signal i.e., the correlation between the time
+    Compute the autocorrelation measure of raw EDA signal i.e., the correlation between the time
     series data and a specified time-lagged version of itself.
 
     Parameters
@@ -44,9 +44,10 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
 
     References
     -----------
-    - Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That Matter?
-      On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing Events Within
-      an Experience Sampling Framework. European Journal of Personality.
+    * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments that
+      matter? On the complexity of using triggers based on skin conductance to sample arousing
+      events within an experience sampling framework. European Journal of Personality, 34(5),
+      794-807.
 
     """
     # Sanity checks

@@ -78,7 +78,7 @@ def rsp_amplitude(
     # Format input.
     peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
-    # To consistenty calculate amplitude, peaks and troughs must have the same
+    # To consistently calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
     if (peaks.size != troughs.size) or (peaks[0] <= troughs[0]):
         raise TypeError(

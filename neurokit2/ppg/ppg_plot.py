@@ -110,6 +110,7 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         )
         ax1.axhline(y=ppg_rate_mean, label="Mean", linestyle="--", color="#FBB41C")
         ax1.legend(loc="upper right")
+        return fig
     else:
         try:
             import plotly.graph_objects as go

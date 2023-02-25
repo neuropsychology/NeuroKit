@@ -1,7 +1,16 @@
 News
 =====
 
+0.2.4
+-------------------
+Fixes
++++++++++++++
 
+* `eda_sympathetic()` has been reviewed: low-pass filter and resampling have been added to be in
+  line with the original paper
+* `eda_findpeaks()` using methods proposed in nabian2018 is reviewed and improved. Differentiation
+  has been added before smoothing. Skin conductance response criteria have been revised based on
+  the original paper.
 
 
 

@@ -141,6 +141,12 @@ def _rsp_findpeaks_scipy(rsp_cleaned, sampling_rate, peak_distance=0.8, peak_pro
         -rsp_cleaned, distance=peak_distance, prominence=peak_prominence
     )
 
+    # Combine peaks and troughs and sort them.
+    extrema = np.sort(np.concatenate((peaks, troughs)))
+    # Sanitize.
+    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0)
+    peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
+
     info = {"RSP_Peaks": peaks, "RSP_Troughs": troughs}
     return info
 

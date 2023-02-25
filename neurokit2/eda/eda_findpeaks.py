@@ -114,7 +114,6 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 
 
 def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
-
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
     info = {
@@ -129,27 +128,9 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     """Follows approach of van Halem et al. (2020).
 
-    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent decrease
-    of 0.5 seconds.
+    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent
+    decrease of 0.5 seconds.
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-    sampling_rate : int
-        Sampling frequency (Hz). Defaults to 1000Hz.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
     * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
       Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
@@ -170,7 +151,8 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     threshold = 0.5 * sampling_rate
 
     # Define each peak as a consistent increase of 0.5s
-    peaks = peaks[info["Width"] > threshold]
+    increase = info["Peaks"] - info["Onsets"]
+    peaks = peaks[increase > threshold]
     idx = np.where(peaks[:, None] == info["Peaks"][None, :])[1]
 
     # Check if each peak is followed by consistent decrease of 0.5s
@@ -184,32 +166,16 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
     info = {
         "SCR_Onsets": info["Onsets"][idx],
         "SCR_Peaks": info["Peaks"][idx],
-        "SCR_Height": info["Height"][idx],
+        "SCR_Height": eda_phasic[info["Peaks"][idx]],
     }
 
     return info
 
 
 def _eda_findpeaks_gamboa2008(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis
-    by Gamboa (2008).
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
+    approach in the thesis by Gamboa (2008).
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
     * Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
       PhD Thesis Universidade.
 
@@ -255,26 +221,6 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et
     al.(2004).
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-    sampling_rate : int
-        Sampling frequency (Hz). Defaults to 1000Hz.
-    amplitude_min : float
-        Minimum treshold by which to exclude SCRs. Defaults to 0.1.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
     * Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term
       monitoring of physiological signals. Medical and biological engineering and computing, 42(3),
       419-427.
@@ -322,40 +268,36 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 
 def _eda_findpeaks_nabian2018(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et
-    al. (2018).
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
+    approach by Nabian et al. (2018). The amplitude of the SCR is obtained by finding the maximum
+    value between these two zero-crossings, and calculating the difference between the initial zero
+    crossing and the maximum value. Detected SCRs with amplitudes smaller than 10 percent of the
+    maximum SCR amplitudes that are already detected on the differentiated signal will be
+    eliminated. It is crucial that artifacts are removed before finding peaks.
 
-    Parameters
-    ----------
-    eda_phasic : array
-        Input filterd EDA signal.
-
-    Returns
-    -------
-    onsets : array
-        Indices of the SCR onsets.
-    peaks : array
-        Indices of the SRC peaks.
-    amplitudes : array
-        SCR pulse amplitudes.
-
-    References
-    ----------
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
-    Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
-    journal of translational engineering in health and medicine, 6, 2800711.
-    https://doi.org/10.1109/JTEHM.2018.2878000
+    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
+      Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
+      journal of translational engineering in health and medicine, 6, 2800711.
+      https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
 
+    # differentiation
+    eda_phasic_diff = np.diff(eda_phasic)
+
     # smooth
-    eda_phasic = signal_smooth(eda_phasic, kernel="bartlett", size=20)
+    eda_phasic_smoothed = signal_smooth(eda_phasic_diff, kernel="bartlett", size=20)
 
     # zero crossings
-    pos_crossings = signal_zerocrossings(eda_phasic, direction="positive")
-    neg_crossings = signal_zerocrossings(eda_phasic, direction="negative")
+    pos_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="positive")
+    neg_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="negative")
 
+    # if negative crossing happens before the positive crossing
+    # delete first negative crossing because we want to identify peaks
+    if neg_crossings[0] < pos_crossings[0]:
+        neg_crossings = neg_crossings[1:]
     # Sanitize consecutive crossings
+
     if len(pos_crossings) > len(neg_crossings):
         pos_crossings = pos_crossings[0 : len(neg_crossings)]
     elif len(pos_crossings) < len(neg_crossings):
@@ -366,15 +308,33 @@ def _eda_findpeaks_nabian2018(eda_phasic):
     amps_list = []
     for i, j in zip(pos_crossings, neg_crossings):
         window = eda_phasic[i:j]
-        amp = np.max(window)
+        # The amplitude of the SCR is obtained by finding the maximum value
+        # between these two zero-crossings and calculating the difference
+        # between the initial zero crossing and the maximum value.
+        # amplitude defined in neurokit2
+        amp = np.nanmax(window)
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
-        diff = amp - eda_phasic[i]
-        if not diff < (0.1 * amp):
+        # we append the first SCR
+        if len(amps_list) == 0:
+            # be careful, if two peaks have the same amplitude, np.where will return a list
             peaks = np.where(eda_phasic == amp)[0]
-            peaks_list.append(peaks)
+            # make sure that the peak is within the window
+            peaks = [peak for peak in [peaks] if peak > i and peak < j]
+            peaks_list.append(peaks[0])
             onsets_list.append(i)
             amps_list.append(amp)
+        else:
+            # we have a list of peaks
+            # amplitude defined in the paper
+            diff = amp - eda_phasic[i]
+            if not diff < (0.1 * max(amps_list)):
+                peaks = np.where(eda_phasic == amp)[0]
+                # make sure that the peak is within the window
+                peaks = [peak for peak in [peaks] if peak > i and peak < j]
+                peaks_list.append(peaks[0])
+                onsets_list.append(i)
+                amps_list.append(amp)
 
     # output
     info = {

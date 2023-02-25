@@ -53,9 +53,10 @@ def eda_changepoints(eda_cleaned, penalty=10000, show=False):
 
     References
     -----------
-    * Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That
-      Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing
-      Events Within an Experience Sampling Framework. European Journal of Personality.
+    * van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments that
+      matter? On the complexity of using triggers based on skin conductance to sample arousing
+      events within an experience sampling framework. European Journal of Personality, 34(5),
+      794-807.
 
     """
     # Sanity checks
