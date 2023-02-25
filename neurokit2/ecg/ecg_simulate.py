@@ -18,7 +18,7 @@ def ecg_simulate(
     heart_rate_std=1,
     method="ecgsyn",
     random_state=None,
-    random_state_distort="legacy",
+    random_state_distort="spawn",
     **kwargs,
 ):
     """**Simulate an ECG/EKG signal**

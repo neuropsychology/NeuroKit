@@ -12,7 +12,7 @@ def rsp_simulate(
     respiratory_rate=15,
     method="breathmetrics",
     random_state=None,
-    random_state_distort="legacy",
+    random_state_distort="spawn",
 ):
     """**Simulate a respiratory signal**
 

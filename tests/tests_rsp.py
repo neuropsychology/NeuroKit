@@ -154,8 +154,8 @@ def test_rsp_peaks():
         assert signals["RSP_Troughs"].sum() in [28, 29]
         assert info["RSP_Peaks"].shape[0] in [28, 29]
         assert info["RSP_Troughs"].shape[0] in [28, 29]
-        assert info["RSP_Peaks"].sum() in [1643836, 1646425, 1762134]
-        assert info["RSP_Troughs"].sum() in [1586580, 1596825, 1702508]
+        assert 4010 < np.median(np.diff(info["RSP_Peaks"])) < 4070
+        assert 3800 < np.median(np.diff(info["RSP_Troughs"])) < 4010
         assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
         assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
 

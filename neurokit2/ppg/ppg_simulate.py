@@ -20,7 +20,7 @@ def ppg_simulate(
     burst_number=0,
     burst_amplitude=1,
     random_state=None,
-    random_state_distort="legacy",
+    random_state_distort="spawn",
     show=False,
 ):
     """**Simulate a photoplethysmogram (PPG) signal**

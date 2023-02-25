@@ -13,7 +13,7 @@ def eda_simulate(
     scr_number=1,
     drift=-0.01,
     random_state=None,
-    random_state_distort="legacy",
+    random_state_distort="spawn",
 ):
     """**Simulate Electrodermal Activity (EDA) signal**
 

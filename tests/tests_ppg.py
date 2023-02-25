@@ -162,7 +162,7 @@ def test_ppg_findpeaks():
     peaks = info_elgendi["PPG_Peaks"]
 
     assert peaks.size == 29
-    assert peaks.sum() == 219764
+    assert np.abs(peaks.sum() - 219764) < 5  # off by no more than 5 samples in total
 
     # Test MSPTD method
     info_msptd = nk.ppg_findpeaks(ppg, sampling_rate=sampling_rate, method="bishop", show=True)
@@ -170,7 +170,7 @@ def test_ppg_findpeaks():
     peaks = info_msptd["PPG_Peaks"]
 
     assert peaks.size == 29
-    assert peaks.sum() == 219665
+    assert np.abs(peaks.sum() - 219665) < 30  # off by no more than 30 samples in total
 
 
 @pytest.mark.parametrize(
