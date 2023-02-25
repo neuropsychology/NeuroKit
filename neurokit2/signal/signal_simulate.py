@@ -3,11 +3,17 @@ from warnings import warn
 
 import numpy as np
 
-from ..misc import NeuroKitWarning, listify, check_rng
+from ..misc import NeuroKitWarning, check_rng, listify
 
 
 def signal_simulate(
-    duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False, random_state=None,
+    duration=10,
+    sampling_rate=1000,
+    frequency=1,
+    amplitude=0.5,
+    noise=0,
+    silent=False,
+    random_state=None,
 ):
     """**Simulate a continuous signal**
 

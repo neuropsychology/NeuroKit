@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..signal import signal_distort, signal_simulate, signal_smooth
 from ..misc import check_rng, get_children_rng
+from ..signal import signal_distort, signal_simulate, signal_smooth
+
 
 def rsp_simulate(
     duration=10,
@@ -83,7 +84,10 @@ def rsp_simulate(
         )
     else:
         rsp = _rsp_simulate_breathmetrics(
-            duration=duration, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate, rng=rng,
+            duration=duration,
+            sampling_rate=sampling_rate,
+            respiratory_rate=respiratory_rate,
+            rng=rng,
         )
         rsp = rsp[0:length]
 
@@ -196,9 +200,7 @@ def _rsp_simulate_breathmetrics_original(
 
     # Normalize phase by average breath length
     phase_variance_normed = phase_variance * sample_phase
-    phases_with_noise = np.round(
-        rng.standard_normal(nCycles) * phase_variance_normed + sample_phase
-    ).astype(int)
+    phases_with_noise = np.round(rng.standard_normal(nCycles) * phase_variance_normed + sample_phase).astype(int)
     phases_with_noise[phases_with_noise < 0] = 0
 
     # Normalize pause lengths by phase and variation
@@ -241,9 +243,7 @@ def _rsp_simulate_breathmetrics_original(
         # Determine length of inhale pause for this cycle
         if rng.uniform() < inhale_pause_percent:
             this_inhale_pauseLength = inhale_pauseLengths_with_noise[c]
-            this_inhale_pause = (
-                rng.standard_normal(this_inhale_pauseLength) * pause_amplitude_variance_normed
-            )
+            this_inhale_pause = rng.standard_normal(this_inhale_pauseLength) * pause_amplitude_variance_normed
             this_inhale_pause[this_inhale_pause < 0] = 0
         else:
             this_inhale_pauseLength = 0
@@ -252,9 +252,7 @@ def _rsp_simulate_breathmetrics_original(
         # Determine length of exhale pause for this cycle
         if rng.uniform() < exhale_pause_percent:
             this_exhale_pauseLength = exhale_pauseLengths_with_noise[c]
-            this_exhale_pause = (
-                rng.standard_normal(this_exhale_pauseLength) * pause_amplitude_variance_normed
-            )
+            this_exhale_pause = rng.standard_normal(this_exhale_pauseLength) * pause_amplitude_variance_normed
             this_exhale_pause[this_exhale_pause < 0] = 0
         else:
             this_exhale_pauseLength = 0

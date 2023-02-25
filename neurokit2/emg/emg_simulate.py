@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..signal import signal_resample
 from ..misc import check_rng
+from ..signal import signal_resample
 
 
 def emg_simulate(

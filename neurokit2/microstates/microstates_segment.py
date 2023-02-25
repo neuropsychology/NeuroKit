@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ..misc import check_rng
 from ..stats import cluster
 from ..stats.cluster_quality import _cluster_quality_gev
 from .microstates_classify import microstates_classify
 from .microstates_clean import microstates_clean
-from ..misc import check_rng
 
 
 def microstates_segment(
@@ -244,11 +244,7 @@ def microstates_segment(
     else:
         # Run clustering algorithm on subset
         _, microstates, info = cluster(
-            data[:, indices].T,
-            method=method,
-            n_clusters=n_microstates,
-            random_state=random_state,
-            **kwargs
+            data[:, indices].T, method=method, n_clusters=n_microstates, random_state=random_state, **kwargs
         )
 
         # Run segmentation on the whole dataset

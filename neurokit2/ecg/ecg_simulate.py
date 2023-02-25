@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 import scipy
 
-from ..signal import signal_distort, signal_resample
 from ..misc import check_rng, get_children_rng
+from ..signal import signal_distort, signal_resample
 
 
 def ecg_simulate(
@@ -165,10 +165,7 @@ def ecg_simulate(
     # Add random noise
     if noise > 0:
         # Seed for random noise
-        random_state_distort = get_children_rng(
-            random_state,
-            random_state_distort,
-            n_children=len(signals))
+        random_state_distort = get_children_rng(random_state, random_state_distort, n_children=len(signals))
         # Call signal_distort on each signal
         for i in range(len(signals)):
             signals[i] = signal_distort(
@@ -427,8 +424,16 @@ def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
 
 
 def _ecg_simulate_rrprocess(
-    flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfratio=0.5,
-    hrmean=60, hrstd=1, sfrr=1, n=256, rng=None,
+    flo=0.1,
+    fhi=0.25,
+    flostd=0.01,
+    fhistd=0.01,
+    lfhfratio=0.5,
+    hrmean=60,
+    hrstd=1,
+    sfrr=1,
+    n=256,
+    rng=None,
 ):
     w1 = 2 * np.pi * flo
     w2 = 2 * np.pi * fhi

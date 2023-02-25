@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from .transition_matrix import _sanitize_tm_input
 from ..misc import check_rng
+from .transition_matrix import _sanitize_tm_input
 
 
 def markov_simulate(tm, n=10, random_state=None):

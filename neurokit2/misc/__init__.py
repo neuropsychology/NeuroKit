@@ -1,9 +1,13 @@
-"""Submodule for NeuroKit."""
+"""Submodule for NeuroKit.
+
+isort:skip_file (since isort-ing the imports generates circular imports)
+
+"""
 
 from ._warnings import NeuroKitWarning
+from .random import check_rng, get_children_rng, spawn_rng
 from .check_type import check_type
 from .copyfunction import copyfunction
-from .random import check_rng, spawn_rng, get_children_rng
 from .expspace import expspace
 from .find_closest import find_closest
 from .find_consecutive import find_consecutive
@@ -16,6 +20,7 @@ from .parallel_run import parallel_run
 from .progress_bar import progress_bar
 from .replace import replace
 from .type_converters import as_vector
+
 
 __all__ = [
     "listify",

@@ -81,16 +81,17 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_
     times = raw.times[: int(raw.info["sfreq"] * 2)]
     fwd = mne.read_forward_solution(fwd_file, verbose=False)
     stc = mne.simulation.simulate_sparse_stc(
-        fwd["src"], n_dipoles=n_dipoles, times=times, data_fun=data_fun, random_state=rng,
+        fwd["src"],
+        n_dipoles=n_dipoles,
+        times=times,
+        data_fun=data_fun,
+        random_state=rng,
     )
 
     # Repeat the source activation multiple times.
-    raw_sim = mne.simulation.simulate_raw(
-        raw.info, [stc] * int(np.ceil(duration / 2)), forward=fwd, verbose=False
-    )
+    raw_sim = mne.simulation.simulate_raw(raw.info, [stc] * int(np.ceil(duration / 2)), forward=fwd, verbose=False)
     cov = mne.make_ad_hoc_cov(raw_sim.info, std=noise / 1000000)
-    raw_sim = mne.simulation.add_noise(raw_sim, cov, iir_filter=[0.2, -0.2, 0.04], verbose=False,
-                                       random_state=rng)
+    raw_sim = mne.simulation.add_noise(raw_sim, cov, iir_filter=[0.2, -0.2, 0.04], verbose=False, random_state=rng)
 
     # Resample
     raw_sim = raw_sim.resample(sampling_rate, verbose=False)

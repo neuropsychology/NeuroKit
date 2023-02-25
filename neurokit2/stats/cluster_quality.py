@@ -10,8 +10,7 @@ import sklearn.model_selection
 from ..misc import check_rng
 
 
-def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, random_state=None,
-                    **kwargs):
+def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, random_state=None, **kwargs):
     """**Assess Clustering Quality**
 
     Compute quality of the clustering using several metrics.
@@ -98,8 +97,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, ran
     general["Dispersion"] = _cluster_quality_dispersion(data, clustering, **kwargs)
 
     # Gap statistic
-    general.update(_cluster_quality_gap(data, clusters, clustering, info,
-                                        n_random=n_random, rng=rng))
+    general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random, rng=rng))
 
     # Mixture models
     if "sklearn_model" in info:

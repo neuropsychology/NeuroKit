@@ -10,8 +10,8 @@ import sklearn.cluster
 import sklearn.decomposition
 import sklearn.mixture
 
-from .cluster_quality import _cluster_quality_distance
 from ..misc import check_rng
+from .cluster_quality import _cluster_quality_distance
 
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):

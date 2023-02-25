@@ -9,6 +9,7 @@ import pytest
 
 import neurokit2 as nk
 
+
 random.seed(a=13, version=2)
 
 
@@ -38,24 +39,33 @@ def test_rsp_simulate_legacy_rng():
         sampling_rate=100,
         noise=0.03,
         respiratory_rate=12,
-        method='breathmetrics',
+        method="breathmetrics",
         random_state=123,
-        random_state_distort='legacy',
-        )
+        random_state_distort="legacy",
+    )
 
     # Run simple checks to verify that the signal is the same as that generated with version 0.2.3
     # before the introduction of the new random number generation approach
     assert np.allclose(np.mean(rsp), 0.03869389548166346)
     assert np.allclose(np.std(rsp), 0.3140022628657376)
-    assert np.allclose(np.mean(np.reshape(rsp, (-1, 200)), axis=1),
-                       [0.2948574728, -0.2835745073, 0.2717568165, -0.2474764970, 0.1579061923])
+    assert np.allclose(
+        np.mean(np.reshape(rsp, (-1, 200)), axis=1),
+        [0.2948574728, -0.2835745073, 0.2717568165, -0.2474764970, 0.1579061923],
+    )
 
 
 @pytest.mark.parametrize(
     "random_state, random_state_distort",
-    [(13579, "legacy"), (13579, "spawn"), (13579, 24680), (13579, None),
-    (np.random.RandomState(33), "spawn"), (np.random.SeedSequence(33), "spawn"),
-    (np.random.Generator(np.random.Philox(33)), "spawn"), (None, "spawn")]
+    [
+        (13579, "legacy"),
+        (13579, "spawn"),
+        (13579, 24680),
+        (13579, None),
+        (np.random.RandomState(33), "spawn"),
+        (np.random.SeedSequence(33), "spawn"),
+        (np.random.Generator(np.random.Philox(33)), "spawn"),
+        (None, "spawn"),
+    ],
 )
 def test_ppg_simulate_all_rng_types(random_state, random_state_distort):
 
@@ -66,10 +76,10 @@ def test_ppg_simulate_all_rng_types(random_state, random_state_distort):
         sampling_rate=100,
         noise=0.03,
         respiratory_rate=12,
-        method='breathmetrics',
+        method="breathmetrics",
         random_state=random_state,
         random_state_distort=random_state_distort,
-        )
+    )
 
     # Double check the signal is finite and of the right length
     assert np.all(np.isfinite(rsp))

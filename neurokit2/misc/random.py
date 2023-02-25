@@ -1,5 +1,5 @@
-import numbers
 import copy
+import numbers
 
 import numpy as np
 
@@ -31,8 +31,7 @@ def spawn_rng(rng, n_children=1):
         if rng._bit_generator._seed_seq is not None:
             rng_class = type(rng)
             bit_generator_class = type(rng._bit_generator)
-            return [rng_class(bit_generator_class(seed=s))
-                    for s in rng._bit_generator._seed_seq.spawn(n_children)]
+            return [rng_class(bit_generator_class(seed=s)) for s in rng._bit_generator._seed_seq.spawn(n_children)]
     except TypeError:
         # The rng does not support spawning through SeedSequence, see below
         pass

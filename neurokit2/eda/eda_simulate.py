@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..signal import signal_distort, signal_merge
 from ..misc import check_rng, get_children_rng
+from ..signal import signal_distort, signal_merge
 
 
 def eda_simulate(

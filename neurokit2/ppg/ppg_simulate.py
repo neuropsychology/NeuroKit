@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.interpolate
 
-from ..signal import signal_distort
 from ..misc import check_rng, get_children_rng
+from ..signal import signal_distort
 
 
 def ppg_simulate(

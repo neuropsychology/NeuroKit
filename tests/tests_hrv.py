@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 import neurokit2 as nk
-import neurokit2.misc as misc
+from neurokit2 import misc
 
 
 def test_hrv_time():
