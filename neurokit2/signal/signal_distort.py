@@ -201,7 +201,7 @@ def _signal_distort_artifacts(
 
     min_duration = int(np.rint(len(artifacts) * 0.001))
     max_duration = int(np.rint(len(artifacts) * 0.01))
-    artifact_durations = min_duration + rng.choice(max_duration, size=artifacts_number)
+    artifact_durations = rng.choice(range(min_duration, max_duration), size=artifacts_number)
 
     artifact_onsets = rng.choice(len(artifacts) - max_duration, size=artifacts_number)
     artifact_offsets = artifact_onsets + artifact_durations
