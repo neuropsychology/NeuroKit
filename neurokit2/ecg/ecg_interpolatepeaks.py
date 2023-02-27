@@ -49,7 +49,7 @@ def ecg_interpolatepeaks(ecg_peaks):
         x1 = rpeaks_idx[i]
         x2 = rpeaks_idx[i+1]
         T = x2-x1
-        f = lambda x: cosine(x, x1, x2)
+        def f(x): return cosine(x, x1, x2)
         # span interval with corresponding number of time steps
         x = np.linspace(x1, x2, T)
         y = [f(x) for x in x]
