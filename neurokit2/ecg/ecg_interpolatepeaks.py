@@ -9,8 +9,8 @@ def ecg_interpolatepeaks(ecg_peaks):
     Trigonometrically interpolates between R-peaks. This approach considers the intrinsic 
     periodical property of heartbeats, instead of a mere linear interpolation between IBIs.
     As a period can only be calculated with a known start and ending, the entries before the
-    first R-peak and the entries after the last R-peak will be np.NaNs. The length of the 
-    original time series is preserved.
+    first R-peak and the entries after the last R-peak will be NaN. The length of the orginal
+    time series is preserved.
 
     Parameters
     ----------
@@ -42,6 +42,7 @@ def ecg_interpolatepeaks(ecg_peaks):
     num_rpeaks = len(rpeaks_idx)
 
     # Interpolation
+    # add NaNs for the time steps before the first R-peak
     rpeaks_cip = [np.nan]*(rpeaks_idx[0])
     for i in range(num_rpeaks):
         if i == num_rpeaks-1:
@@ -50,11 +51,14 @@ def ecg_interpolatepeaks(ecg_peaks):
         x2 = rpeaks_idx[i+1]
         T = x2-x1
         def f(x): return cosine(x, x1, x2)
-        # span interval with corresponding number of time steps
-        x = np.linspace(x1, x2, T)
+        # span interval with corresponding number of time steps (see next comment why T+1)
+        x = np.linspace(x1, x2, T+1)
         y = [f(x) for x in x]
-        rpeaks_cip = rpeaks_cip + y
-    rpeaks_cip = rpeaks_cip + [np.nan]*(length-rpeaks_idx[-1])
-    # keep in mind: there are nans at the start and end
+        # period must not end with y=1 as it also starts with a 1 and we want only one R-peak
+        rpeaks_cip = rpeaks_cip + y[:-1]
+    # the last period ends with a 1
+    rpeaks_cip.append(1)
+    # add NaNs for the time steps after the last R-peak
+    rpeaks_cip = rpeaks_cip + [np.nan]*(length-rpeaks_idx[-1]-1)
 
     return pd.Series(rpeaks_cip)
