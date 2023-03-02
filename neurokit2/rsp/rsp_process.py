@@ -100,16 +100,12 @@ def rsp_process(
     )
 
     # Clean signal
-    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
-        rsp_cleaned = rsp_signal
-    else:
-        # Clean signal
-        rsp_cleaned = rsp_clean(
-            rsp_signal,
-            sampling_rate=sampling_rate,
-            method=methods["method_cleaning"],
-            **methods["kwargs_cleaning"],
-        )
+    rsp_cleaned = rsp_clean(
+        rsp_signal,
+        sampling_rate=sampling_rate,
+        method=methods["method_cleaning"],
+        **methods["kwargs_cleaning"],
+    )
 
     # Extract, fix and format peaks
     peak_signal, info = rsp_peaks(

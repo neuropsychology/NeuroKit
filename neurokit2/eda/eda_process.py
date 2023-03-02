@@ -91,13 +91,10 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
 
     # Preprocess
     # Clean signal
-    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
-        eda_cleaned = eda_signal
-    else:
-        eda_cleaned = eda_clean(eda_signal,
-                                sampling_rate=sampling_rate,
-                                method=methods["method_cleaning"],
-                                **methods["kwargs_cleaning"])
+    eda_cleaned = eda_clean(eda_signal,
+                            sampling_rate=sampling_rate,
+                            method=methods["method_cleaning"],
+                            **methods["kwargs_cleaning"])
     if methods["method_phasic"] is None or methods["method_phasic"].lower() == "none":
         eda_decomposed = pd.DataFrame({"EDA_Phasic": eda_cleaned})
     else:

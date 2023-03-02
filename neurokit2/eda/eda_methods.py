@@ -93,7 +93,7 @@ def eda_methods(
         report_info["text_cleaning"] += " was cleaned using the biosppy package."
     elif method_cleaning in ["default", "neurokit", "nk"]:
         report_info["text_cleaning"] += " was cleaned using the default method of the neurokit2 package."
-    elif method_cleaning is None or method_cleaning in ["none"]:
+    elif method_cleaning in ["none"]:
         report_info["text_cleaning"] += "was directly used without cleaning."
     else:
         report_info["text_cleaning"] += " was cleaned using the method described in " + method_cleaning + "."

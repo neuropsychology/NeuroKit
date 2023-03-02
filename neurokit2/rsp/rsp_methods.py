@@ -130,7 +130,7 @@ def rsp_methods(
             " was preprocessed using a second order 0.1-0.35 Hz bandpass "
             + "Butterworth filter followed by a constant detrending."
         )
-    elif method_cleaning is None or method_cleaning == "none":
+    elif method_cleaning in ["none"]:
         report_info[
             "text_cleaning"
         ] += "was directly used for peak detection without preprocessing."
