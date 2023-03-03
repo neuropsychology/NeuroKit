@@ -67,7 +67,7 @@ def test_rsp_simulate_legacy_rng():
         (None, "spawn"),
     ],
 )
-def test_ppg_simulate_all_rng_types(random_state, random_state_distort):
+def test_rsp_simulate_all_rng_types(random_state, random_state_distort):
 
     # Run rsp_simulate to test for errors (e.g. using methods like randint that are only
     # implemented for RandomState but not Generator, or vice versa)
