@@ -265,12 +265,19 @@ def _hrv_frequency_show(
         __, ax = plt.subplots()
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
+
+    # Compute sampling rate for plot windows
+    if sampling_rate is None:
+        med_sampling_rate = np.median(np.diff(t))
+    else:
+        med_sampling_rate = sampling_rate
+
     for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
             min_frequency = 0.001  # sanitize lowest frequency
 
-        window_length = int((2 / min_frequency) * sampling_rate)
+        window_length = int((2 / min_frequency) * med_sampling_rate)
         if window_length <= len(rri) / 2:
             break
 
