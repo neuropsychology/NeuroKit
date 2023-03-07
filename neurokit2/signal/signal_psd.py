@@ -137,7 +137,10 @@ def signal_psd(
     # Sanitize min_frequency
     N = len(signal)
     if isinstance(min_frequency, str):
-        min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
+        if sampling_rate is None:
+            min_frequency = (2 * np.median(np.diff(t))) / (N / 2)  # for high frequency resolution
+        else:
+            min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
 
     # MNE
     if method in ["multitaper", "multitapers", "mne"]:
