@@ -138,6 +138,7 @@ def signal_psd(
     N = len(signal)
     if isinstance(min_frequency, str):
         if sampling_rate is None:
+            # This is to compute min_frequency if both min_frequency and sampling_rate are not provided (#800)
             min_frequency = (2 * np.median(np.diff(t))) / (N / 2)  # for high frequency resolution
         else:
             min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
