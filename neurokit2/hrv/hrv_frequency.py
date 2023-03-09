@@ -268,7 +268,7 @@ def _hrv_frequency_show(
 
     # Compute sampling rate for plot windows
     if sampling_rate is None:
-        med_sampling_rate = np.median(np.diff(t))
+        med_sampling_rate = np.median(np.diff(t))  # This is just for visualization purposes (#800)
     else:
         med_sampling_rate = sampling_rate
 
