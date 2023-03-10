@@ -4,7 +4,7 @@ import pandas as pd
 import neurokit2 as nk
 from neurokit2.ecg.ecg_interpolatepeaks import ecg_interpolatepeaks
 
-def test_ecg_findpeaks():
+def test_ecg_interpolatepeaks():
     # simulate data
     ecg_clean_peaks = nk.ecg_peaks(
         nk.ecg_clean(
@@ -17,9 +17,9 @@ def test_ecg_findpeaks():
     # interpolate R-peaks
     rpeaks_interpolated = ecg_interpolatepeaks(ecg_clean_peaks)
 
-    # test if the time series have the same number or R-peaks
+    # test if the time series have the same number of R-peaks
     np.testing.assert_array_equal(
-        pd.Series.sum(rpeaks_interpolated==1), 
+        pd.Series.sum(rpeaks_interpolated==1),
         pd.Series.sum(ecg_clean_peaks[0]))
     
     # test if the time series have the same length
@@ -30,5 +30,5 @@ def test_ecg_findpeaks():
     # test if the interpolated time series reduced back to a binary
     # time series is equal to the output of ecg_peaks()[0]
     np.testing.assert_array_equal(
-        np.array([x==1 for x in rpeaks_interpolated==1]).astype(int), 
+        np.array([x for x in rpeaks_interpolated==1],int),
         ecg_clean_peaks[0].to_numpy(int).flatten())
