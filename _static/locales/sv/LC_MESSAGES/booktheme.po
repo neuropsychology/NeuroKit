@@ -8,41 +8,38 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "By"
+msgstr "Förbi"
+
 msgid "repository"
 msgstr "förvar"
-
-msgid "open issue"
-msgstr "öppet problem"
-
-msgid "Contents"
-msgstr "Innehåll"
 
 msgid "Fullscreen mode"
 msgstr "Fullskärmsläge"
 
-msgid "Download this page"
-msgstr "Ladda ner den här sidan"
+msgid "Contents"
+msgstr "Innehåll"
 
 msgid "Download source file"
 msgstr "Ladda ner källfil"
 
-msgid "Launch"
-msgstr "Lansera"
-
 msgid "Edit this page"
 msgstr "Redigera den här sidan"
 
-msgid "Toggle navigation"
-msgstr "Växla navigering"
-
-msgid "Theme by the"
-msgstr "Tema av"
-
-msgid "Source repository"
-msgstr "Källförvar"
-
 msgid "Last updated on"
 msgstr "Senast uppdaterad den"
+
+msgid "Print to PDF"
+msgstr "Skriv ut till PDF"
+
+msgid "suggest edit"
+msgstr "föreslå redigering"
+
+msgid "Download this page"
+msgstr "Ladda ner den här sidan"
+
+msgid "Toggle navigation"
+msgstr "Växla navigering"
 
 msgid "By the"
 msgstr "Vid"
@@ -50,32 +47,29 @@ msgstr "Vid"
 msgid "Sphinx Book Theme"
 msgstr "Sphinx boktema"
 
+msgid "previous page"
+msgstr "föregående sida"
+
+msgid "Source repository"
+msgstr "Källförvar"
+
+msgid "open issue"
+msgstr "öppet problem"
+
+msgid "Download notebook file"
+msgstr "Ladda ner anteckningsbokfilen"
+
+msgid "Copyright"
+msgstr "upphovsrätt"
+
+msgid "Theme by the"
+msgstr "Tema av"
+
 msgid "Open an issue"
 msgstr "Öppna ett problem"
 
 msgid "next page"
 msgstr "nästa sida"
 
-msgid "Copyright"
-msgstr "upphovsrätt"
-
-msgid "Search this book..."
-msgstr "Sök i den här boken ..."
-
-msgid "Print to PDF"
-msgstr "Skriv ut till PDF"
-
-msgid "By"
-msgstr "Förbi"
-
-msgid "previous page"
-msgstr "föregående sida"
-
-msgid "Search the docs ..."
-msgstr "Sök i dokumenten ..."
-
-msgid "Download notebook file"
-msgstr "Ladda ner anteckningsbokfilen"
-
-msgid "suggest edit"
-msgstr "föreslå redigering"
+msgid "Launch"
+msgstr "Lansera"

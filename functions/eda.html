@@ -1,923 +1,519 @@
 
+
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>EDA &#8212; NeuroKit2 0.2.4 documentation</title>
-    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'functions/eda';</script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="EMG" href="emg.html" />
     <link rel="prev" title="RSP" href="rsp.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/neurokit.png" class="logo" alt="logo">
-      
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Menu
- </span>
-</p>
+    
+    
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction.html">
-   Overview
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../installation.html">
-   Installation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../authors.html">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../cite_us.html">
-   Cite us
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../examples/index.html">
-   Examples
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
-     Event-related Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">
-     Interval-related Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_custom/bio_custom.html">
-     Customize your Processing Pipeline
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
-     Heart Rate Varability (HRV)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">
-     Extract and Visualize Individual Heartbeats
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">
-     Locate P, Q, S and T waves in ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">
-     ECG-Derived Respiration (EDR)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
-     Generating Abnormal 12-leads ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
-     Analyze Electrodermal Activity (EDA)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">
-     Respiratory Rate Variability (RRV)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography (EOG)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">
-     Simulate Artificial Physiological Signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ppg_report/ppg_report.html">
-     Save Preprocessing Reports
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
-     EEG Power in Frequency Bands
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
-     EEG Complexity Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
-     EEG Microstates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
-     Fit a function to a non-linear pattern
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
-     Create epochs
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
-   Functions
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="bio.html">
-     Bio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="ecg.html">
-     ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="ppg.html">
-     PPG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="hrv.html">
-     HRV
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="rsp.html">
-     RSP
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     EDA
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="emg.html">
-     EMG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="eog.html">
-     EOG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="eeg.html">
-     EEG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="video.html">
-     Video Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="microstates.html">
-     Microstates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="signal.html">
-     Signal
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="events.html">
-     Events
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="epochs.html">
-     Epochs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="data.html">
-     Data
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="complexity.html">
-     Complexity
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="markov.html">
-     Markov Chains
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="stats.html">
-     Stats
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="misc.html">
-     Misc
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="benchmark.html">
-     Benchmarking
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../resources/index.html">
-   Resources
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/learn_python.html">
-     Learn Python in 10 minutes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/contributing.html">
-     Contributing guide
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/recording.html">
-     Recording good quality signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/resources.html">
-     Additional Resources
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../studies/index.html">
-   Studies
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
-     HRV Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
-     HRV Indices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">
-     HRV Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">
-     Complexity Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">
-     Complexity Indices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/complexity_eeg.html">
-     EEG Complexity: Parameters Selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/erp_gam.html">
-     EEG Analysis with GAMs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/ecg_benchmark.html">
-     ECG Benchmark
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/eog_blinktemplate.html">
-     EOG blink template
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
-   Repository
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">Generating Abnormal 12-leads ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">Analyze Electrodermal Activity (EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">Respiratory Rate Variability (RRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">Analyze Electrooculography (EOG)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">Simulate Artificial Physiological Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ppg_report/ppg_report.html">Save Preprocessing Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_power/eeg_power.html">EEG Power in Frequency Bands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">EEG Complexity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">EEG Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">Fit a function to a non-linear pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">Create epochs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Functions</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bio.html">Bio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ecg.html">ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ppg.html">PPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrv.html">HRV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rsp.html">RSP</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">EDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emg.html">EMG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eog.html">EOG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eeg.html">EEG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="microstates.html">Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complexity.html">Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="markov.html">Markov Chains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats.html">Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmark.html">Benchmarking</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../resources/index.html">Resources</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../resources/learn_python.html">Learn Python in 10 minutes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resources/contributing.html">Contributing guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resources/recording.html">Recording good quality signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resources/resources.html">Additional Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../studies/index.html">Studies</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">HRV Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://psyarxiv.com/mwa6x/">HRV Indices</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">HRV Tutorial</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">Complexity Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">Complexity Indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/complexity_eeg.html">EEG Complexity: Parameters Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/erp_gam.html">EEG Analysis with GAMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/ecg_benchmark.html">ECG Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/eog_blinktemplate.html">EOG blink template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/neuropsychology/NeuroKit">Repository</a></li>
 </ul>
 
     </div>
 </nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
-        </div>
     </div>
-    <div id="rtd-footer-container"></div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/functions/eda.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/eda.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
 
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
 
 
 
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/functions/eda.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
   </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
   <i class="fas fa-expand"></i>
   </span>
 
 </button>
 
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
+`);
+</script>
 
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/eda.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/functions/eda.rst"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Edit this page"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="headerbtn__text-container">suggest edit</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../_sources/functions/eda.rst.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.rst</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
 </label>
-
+</div></div>
+      
     </div>
+  
 </div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#main">
-   Main
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-process">
-     <em>
-      eda_process()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-analyze">
-     <em>
-      eda_analyze()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-plot">
-     <em>
-      eda_plot()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-simulate">
-     <em>
-      eda_simulate()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#preprocessing">
-   Preprocessing
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-clean">
-     <em>
-      eda_clean()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-phasic">
-     <em>
-      eda_phasic()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-peaks">
-     <em>
-      eda_peaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-fixpeaks">
-     <em>
-      eda_fixpeaks()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analysis">
-   Analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-eventrelated">
-     <em>
-      eda_eventrelated()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-intervalrelated">
-     <em>
-      eda_intervalrelated()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-sympathetic">
-     <em>
-      eda_sympathetic()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-autocor">
-     <em>
-      eda_autocor()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-changepoints">
-     <em>
-      eda_changepoints()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#miscellaneous">
-   Miscellaneous
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-findpeaks">
-     <em>
-      eda_findpeaks()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </nav>
 </div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>EDA</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#main">
-   Main
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-process">
-     <em>
-      eda_process()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-analyze">
-     <em>
-      eda_analyze()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-plot">
-     <em>
-      eda_plot()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-simulate">
-     <em>
-      eda_simulate()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#preprocessing">
-   Preprocessing
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-clean">
-     <em>
-      eda_clean()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-phasic">
-     <em>
-      eda_phasic()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-peaks">
-     <em>
-      eda_peaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-fixpeaks">
-     <em>
-      eda_fixpeaks()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analysis">
-   Analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-eventrelated">
-     <em>
-      eda_eventrelated()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-intervalrelated">
-     <em>
-      eda_intervalrelated()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-sympathetic">
-     <em>
-      eda_sympathetic()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-autocor">
-     <em>
-      eda_autocor()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-changepoints">
-     <em>
-      eda_changepoints()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#miscellaneous">
-   Miscellaneous
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#eda-findpeaks">
-     <em>
-      eda_findpeaks()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
+              
+              
 
-                        </nav>
-                    </div>
-                </div>
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>EDA</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
             </div>
-            <main id="main-content" role="main">
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main">Main</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-process"><em>eda_process()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_process"><code class="docutils literal notranslate"><span class="pre">eda_process()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-analyze"><em>eda_analyze()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_analyze"><code class="docutils literal notranslate"><span class="pre">eda_analyze()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-plot"><em>eda_plot()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_plot"><code class="docutils literal notranslate"><span class="pre">eda_plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-simulate"><em>eda_simulate()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_simulate"><code class="docutils literal notranslate"><span class="pre">eda_simulate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-clean"><em>eda_clean()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_clean"><code class="docutils literal notranslate"><span class="pre">eda_clean()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-phasic"><em>eda_phasic()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_phasic"><code class="docutils literal notranslate"><span class="pre">eda_phasic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-peaks"><em>eda_peaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_peaks"><code class="docutils literal notranslate"><span class="pre">eda_peaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-fixpeaks"><em>eda_fixpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_fixpeaks"><code class="docutils literal notranslate"><span class="pre">eda_fixpeaks()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-eventrelated"><em>eda_eventrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_eventrelated"><code class="docutils literal notranslate"><span class="pre">eda_eventrelated()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-intervalrelated"><em>eda_intervalrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_intervalrelated"><code class="docutils literal notranslate"><span class="pre">eda_intervalrelated()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-sympathetic"><em>eda_sympathetic()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_sympathetic"><code class="docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-autocor"><em>eda_autocor()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_autocor"><code class="docutils literal notranslate"><span class="pre">eda_autocor()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-changepoints"><em>eda_changepoints()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_changepoints"><code class="docutils literal notranslate"><span class="pre">eda_changepoints()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-findpeaks"><em>eda_findpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_findpeaks"><code class="docutils literal notranslate"><span class="pre">eda_findpeaks()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
                 
-              <div>
-                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="eda">
-<h1>EDA<a class="headerlink" href="#eda" title="Permalink to this headline">#</a></h1>
+<h1>EDA<a class="headerlink" href="#eda" title="Permalink to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
 <section id="eda-process">
-<h3><em>eda_process()</em><a class="headerlink" href="#eda-process" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_process()</em><a class="headerlink" href="#eda-process" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_process">
 <span class="sig-name descname"><span class="pre">eda_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_process.html#eda_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Process Electrodermal Activity (EDA)</strong></p>
 <p>Convenience function that automatically processes electrodermal activity (EDA) signal.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">&quot;rsp_signal&quot;</span></code> (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code> (default).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="docutils literal notranslate"><span class="pre">&quot;eda_signal&quot;</span></code> containing the following
 columns:</p>
@@ -965,7 +561,7 @@ as well as the signals’ sampling rate.</p></li>
 
 </section>
 <section id="eda-analyze">
-<h3><em>eda_analyze()</em><a class="headerlink" href="#eda-analyze" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_analyze()</em><a class="headerlink" href="#eda-analyze" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_analyze">
 <span class="sig-name descname"><span class="pre">eda_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_analyze.html#eda_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_analyze" title="Permalink to this definition">#</a></dt>
@@ -973,7 +569,7 @@ as well as the signals’ sampling rate.</p></li>
 <p>Perform EDA analysis on either epochs (event-related analysis) or on longer periods of data
 such as resting-state data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dictionary of epochs, containing one DataFrame per epoch, usually obtained via
 <cite>epochs_create</cite>, or a DataFrame containing all epochs, usually obtained via
@@ -988,7 +584,7 @@ the right method will be chosen based on the mean duration of the data (<code cl
 for duration under 10s).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. If event-related analysis is conducted,
 each epoch is indicated by the <cite>Label</cite> column. See <a class="reference internal" href="#neurokit2.eda.eda_eventrelated" title="neurokit2.eda.eda_eventrelated"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_eventrelated()</span></code></a> and
 <a class="reference internal" href="#neurokit2.eda.eda_intervalrelated" title="neurokit2.eda.eda_intervalrelated"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_intervalrelated()</span></code></a> docstrings for details.</p>
@@ -1056,19 +652,19 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 </section>
 <section id="eda-plot">
-<h3><em>eda_plot()</em><a class="headerlink" href="#eda-plot" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_plot()</em><a class="headerlink" href="#eda-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_plot">
 <span class="sig-name descname"><span class="pre">eda_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_plot.html#eda_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize electrodermal activity (EDA) data</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second). Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed EDA signals.</p>
 </dd>
 </dl>
@@ -1091,14 +687,14 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 </section>
 <section id="eda-simulate">
-<h3><em>eda_simulate()</em><a class="headerlink" href="#eda-simulate" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_simulate()</em><a class="headerlink" href="#eda-simulate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_simulate">
-<span class="sig-name descname"><span class="pre">eda_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scr_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_simulate.html#eda_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scr_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_simulate.html#eda_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_simulate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Simulate Electrodermal Activity (EDA) signal</strong></p>
 <p>Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>duration</strong> (<em>int</em>) – Desired recording length in seconds.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
@@ -1109,7 +705,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>array</em> – Vector containing the EDA signal.</p>
 </dd>
 </dl>
@@ -1138,22 +734,22 @@ conductance responses. International Journal of Psychophysiology, 75(3), 349-356
 </section>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
 <section id="eda-clean">
-<h3><em>eda_clean()</em><a class="headerlink" href="#eda-clean" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_clean()</em><a class="headerlink" href="#eda-clean" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_clean">
 <span class="sig-name descname"><span class="pre">eda_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_clean.html#eda_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_clean" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Preprocess Electrodermal Activity (EDA) signal</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <cite>rsp_signal</cite> (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>array</em> – Vector containing the cleaned EDA signal.</p>
 </dd>
 </dl>
@@ -1182,7 +778,7 @@ conductance responses. International Journal of Psychophysiology, 75(3), 349-356
 
 </section>
 <section id="eda-phasic">
-<h3><em>eda_phasic()</em><a class="headerlink" href="#eda-phasic" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_phasic()</em><a class="headerlink" href="#eda-phasic" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_phasic">
 <span class="sig-name descname"><span class="pre">eda_phasic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'highpass'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_phasic.html#eda_phasic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_phasic" title="Permalink to this definition">#</a></dt>
@@ -1195,7 +791,7 @@ algorithms.</p>
 <p>cvxEDA algorithm seems broken. Help is needed to investigate.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
@@ -1203,7 +799,7 @@ algorithms.</p>
 <code class="docutils literal notranslate"><span class="pre">&quot;smoothmedian&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;highpass&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;biopac&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;acqknowledge&quot;</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>DataFrame</em> – DataFrame containing the <code class="docutils literal notranslate"><span class="pre">&quot;Tonic&quot;</span></code> and the <code class="docutils literal notranslate"><span class="pre">&quot;Phasic&quot;</span></code> components as columns.</p>
 </dd>
 </dl>
@@ -1259,7 +855,7 @@ Engineering, 63(4), 797-804.</p></li>
 
 </section>
 <section id="eda-peaks">
-<h3><em>eda_peaks()</em><a class="headerlink" href="#eda-peaks" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_peaks()</em><a class="headerlink" href="#eda-peaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_peaks">
 <span class="sig-name descname"><span class="pre">eda_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_phasic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_peaks.html#eda_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_peaks" title="Permalink to this definition">#</a></dt>
@@ -1271,7 +867,7 @@ Electrodermal Activity (EDA) with different possible methods, such as:</p>
 <li><p><a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.7385&amp;rep=rep1&amp;type=pdf">Kim et al. (2004)</a></p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_phasic</strong> (<em>Union[list, np.array, pd.Series]</em>) – The phasic component of the EDA signal (from <a class="reference internal" href="#neurokit2.eda.eda_phasic" title="neurokit2.eda.eda_phasic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_phasic()</span></code></a>).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EDA signal (in Hz, i.e., samples/second).</p></li>
@@ -1281,7 +877,7 @@ Electrodermal Activity (EDA) with different possible methods, such as:</p>
 exclude SCRs (peaks) as relative to the largest amplitude in the signal.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the aplitude of the SCR, the
 samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
@@ -1343,7 +939,7 @@ journal of translational engineering in health and medicine, 6, 2800711.</p></li
 
 </section>
 <section id="eda-fixpeaks">
-<h3><em>eda_fixpeaks()</em><a class="headerlink" href="#eda-fixpeaks" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_fixpeaks()</em><a class="headerlink" href="#eda-fixpeaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_fixpeaks">
 <span class="sig-name descname"><span class="pre">eda_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_fixpeaks.html#eda_fixpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_fixpeaks" title="Permalink to this definition">#</a></dt>
@@ -1351,7 +947,7 @@ journal of translational engineering in health and medicine, 6, 2800711.</p></li
 <p>Low-level function used by <code class="docutils literal notranslate"><span class="pre">&quot;eda_peaks()&quot;</span></code> to correct the peaks found by
 <code class="docutils literal notranslate"><span class="pre">&quot;eda_findpeaks()&quot;</span></code>. Doesn’t do anything for now for EDA. See <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_peaks()</span></code></a> for details.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the SCR peaks occur. If a dict or a DataFrame is passed,
 it is assumed that these containers were obtained with <code class="docutils literal notranslate"><span class="pre">&quot;eda_findpeaks()&quot;</span></code>.</p></li>
@@ -1361,7 +957,7 @@ it is assumed that these containers were obtained with <code class="docutils lit
 passed, it is assumed that these containers were obtained with <code class="docutils literal notranslate"><span class="pre">&quot;eda_findpeaks()&quot;</span></code>. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the aplitude of the SCR, the
 samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Amplitude&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Onsets&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks&quot;</span></code> respectively.</p>
@@ -1397,15 +993,15 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 </section>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">#</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
 <section id="eda-eventrelated">
-<h3><em>eda_eventrelated()</em><a class="headerlink" href="#eda-eventrelated" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_eventrelated()</em><a class="headerlink" href="#eda-eventrelated" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_eventrelated">
 <span class="sig-name descname"><span class="pre">eda_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_eventrelated.html#eda_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_eventrelated" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Performs event-related EDA analysis on epochs</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>epochs</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dict containing one DataFrame per event/trial,
 usually obtained via <code class="docutils literal notranslate"><span class="pre">&quot;epochs_create()&quot;</span></code>, or a DataFrame
@@ -1413,7 +1009,7 @@ containing all epochs, usually obtained via <code class="docutils literal notran
 <li><p><strong>silent</strong> (<em>bool</em>) – If True, silence possible warnings.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features for each epoch, with each epoch indicated
 by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features consist
 the following:</p>
@@ -1457,8 +1053,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.360            1558.0</span>
-<span class="go">2     2        10000  ...         0.369            1206.0</span>
+<span class="go">1     1         5000  ...         0.361            1333.0</span>
+<span class="go">2     2        10000  ...         0.368             974.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1497,7 +1093,7 @@ for SCR to decrease to half amplitude.</p></li>
 
 </section>
 <section id="eda-intervalrelated">
-<h3><em>eda_intervalrelated()</em><a class="headerlink" href="#eda-intervalrelated" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_intervalrelated()</em><a class="headerlink" href="#eda-intervalrelated" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_intervalrelated">
 <span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Permalink to this definition">#</a></dt>
@@ -1505,7 +1101,7 @@ for SCR to decrease to half amplitude.</p></li>
 <p>Performs EDA analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
 data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>Union[dict, pd.DataFrame]</em>) – A DataFrame containing the different processed signal(s) as different columns, typically
 generated by <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_process()</span></code></a> or <code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code>. Can also take a dict containing
@@ -1514,7 +1110,7 @@ sets of separately processed DataFrames.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed to the functions.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. The analyzed
 features consist of the following:
 * <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_N&quot;</span></code>: the number of occurrences of Skin Conductance Response (SCR).
@@ -1567,7 +1163,7 @@ features consist of the following:
 
 </section>
 <section id="eda-sympathetic">
-<h3><em>eda_sympathetic()</em><a class="headerlink" href="#eda-sympathetic" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_sympathetic()</em><a class="headerlink" href="#eda-sympathetic" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_sympathetic">
 <span class="sig-name descname"><span class="pre">eda_sympathetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.045,</span> <span class="pre">0.25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'posada'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_sympathetic.html#eda_sympathetic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_sympathetic" title="Permalink to this definition">#</a></dt>
@@ -1576,7 +1172,7 @@ features consist of the following:
 of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
 requires a signal of a least 64 seconds.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The EDA signal (i.e., a time series) in the form of a vector of values.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
@@ -1593,7 +1189,7 @@ frequency band.</p></li>
 <p><a class="reference internal" href="signal.html#neurokit2.signal_filter" title="neurokit2.signal_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_filter</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_power" title="neurokit2.signal_power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_power</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_psd" title="neurokit2.signal_psd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_psd</span></code></a></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>dict</em> – A dictionary containing the EDA sympathetic indexes, accessible by keys
 <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;EDA_SympatheticN&quot;</span></code> (normalized, obtained by dividing EDA_Symp
 by total power).</p>
@@ -1633,7 +1229,7 @@ electrodermal activity for sympathetic function assessment. Annals of biomedical
 
 </section>
 <section id="eda-autocor">
-<h3><em>eda_autocor()</em><a class="headerlink" href="#eda-autocor" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_autocor()</em><a class="headerlink" href="#eda-autocor" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_autocor">
 <span class="sig-name descname"><span class="pre">eda_autocor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_autocor.html#eda_autocor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_autocor" title="Permalink to this definition">#</a></dt>
@@ -1641,7 +1237,7 @@ electrodermal activity for sympathetic function assessment. Annals of biomedical
 <p>Compute the autocorrelation measure of raw EDA signal i.e., the correlation between the time
 series data and a specified time-lagged version of itself.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned EDA signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.</p></li>
@@ -1649,7 +1245,7 @@ series data and a specified time-lagged version of itself.</p>
 correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>float</em> – Autocorrelation index of the eda signal.</p>
 </dd>
 </dl>
@@ -1668,7 +1264,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.044741774626634034</span>
+<span class="gh">Out[5]: </span><span class="go">-0.2042517857114532</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1682,7 +1278,7 @@ events within an experience sampling framework. European Journal of Personality,
 
 </section>
 <section id="eda-changepoints">
-<h3><em>eda_changepoints()</em><a class="headerlink" href="#eda-changepoints" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_changepoints()</em><a class="headerlink" href="#eda-changepoints" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_changepoints">
 <span class="sig-name descname"><span class="pre">eda_changepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_changepoints.html#eda_changepoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_changepoints" title="Permalink to this definition">#</a></dt>
@@ -1695,7 +1291,7 @@ and variance.</p>
 welcome.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned EDA signal.</p></li>
 <li><p><strong>penalty</strong> (<em>int</em>) – Defaults to an algorithm penalty of 10000, as recommended by Halem et al. (2020). See
@@ -1703,7 +1299,7 @@ welcome.</p>
 <li><p><strong>show</strong> (<em>bool</em>) – Show the signal with the change points.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>float</em> – Number of changepoints in the</p>
 </dd>
 </dl>
@@ -1720,7 +1316,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">7</span>
+<span class="gh">Out[4]: </span><span class="go">17</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1736,9 +1332,9 @@ events within an experience sampling framework. European Journal of Personality,
 </section>
 </section>
 <section id="miscellaneous">
-<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">#</a></h2>
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this heading">#</a></h2>
 <section id="eda-findpeaks">
-<h3><em>eda_findpeaks()</em><a class="headerlink" href="#eda-findpeaks" title="Permalink to this headline">#</a></h3>
+<h3><em>eda_findpeaks()</em><a class="headerlink" href="#eda-findpeaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_findpeaks">
 <span class="sig-name descname"><span class="pre">eda_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_phasic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_findpeaks.html#eda_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_findpeaks" title="Permalink to this definition">#</a></dt>
@@ -1747,7 +1343,7 @@ events within an experience sampling framework. European Journal of Personality,
 the phasic component of Electrodermal Activity (EDA) with different possible methods. See
 <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_peaks()</span></code></a> for details.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_phasic</strong> (<em>Union[list, np.array, pd.Series]</em>) – The phasic component of the EDA signal (from <a class="reference internal" href="#neurokit2.eda.eda_phasic" title="neurokit2.eda.eda_phasic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_phasic()</span></code></a>).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EDA signal (in Hz, i.e., samples/second).</p></li>
@@ -1757,7 +1353,7 @@ the phasic component of Electrodermal Activity (EDA) with different possible met
 exclude SCRs (peaks) as relative to the largest amplitude in the signal.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the aplitude of the SCR, the
 samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Amplitude&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Onsets&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks&quot;</span></code> respectively.</p>
@@ -1819,50 +1415,166 @@ journal of translational engineering in health and medicine, 6, 2800711.</p></li
 </section>
 
 
-              </div>
+                </article>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="rsp.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">RSP</p>
-        </div>
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="rsp.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">RSP</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="emg.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="emg.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">EMG</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main">Main</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-process"><em>eda_process()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_process"><code class="docutils literal notranslate"><span class="pre">eda_process()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-analyze"><em>eda_analyze()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_analyze"><code class="docutils literal notranslate"><span class="pre">eda_analyze()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-plot"><em>eda_plot()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_plot"><code class="docutils literal notranslate"><span class="pre">eda_plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-simulate"><em>eda_simulate()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_simulate"><code class="docutils literal notranslate"><span class="pre">eda_simulate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-clean"><em>eda_clean()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_clean"><code class="docutils literal notranslate"><span class="pre">eda_clean()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-phasic"><em>eda_phasic()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_phasic"><code class="docutils literal notranslate"><span class="pre">eda_phasic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-peaks"><em>eda_peaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_peaks"><code class="docutils literal notranslate"><span class="pre">eda_peaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-fixpeaks"><em>eda_fixpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_fixpeaks"><code class="docutils literal notranslate"><span class="pre">eda_fixpeaks()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-eventrelated"><em>eda_eventrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_eventrelated"><code class="docutils literal notranslate"><span class="pre">eda_eventrelated()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-intervalrelated"><em>eda_intervalrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_intervalrelated"><code class="docutils literal notranslate"><span class="pre">eda_intervalrelated()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-sympathetic"><em>eda_sympathetic()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_sympathetic"><code class="docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-autocor"><em>eda_autocor()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_autocor"><code class="docutils literal notranslate"><span class="pre">eda_autocor()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-changepoints"><em>eda_changepoints()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_changepoints"><code class="docutils literal notranslate"><span class="pre">eda_changepoints()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-findpeaks"><em>eda_findpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.eda.eda_findpeaks"><code class="docutils literal notranslate"><span class="pre">eda_findpeaks()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
-  
-      &copy; Copyright 2020–2023.<br/>
-</p>
-        </footer>
-    </div>
+  <div class="footer-item">
     
-</div>
+<p class="component-author">
+By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2020–2023.
+      <br/>
+    
+  </p>
 
-      </div>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
     </div>
+  </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

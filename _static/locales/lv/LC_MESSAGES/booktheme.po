@@ -8,41 +8,38 @@ msgstr ""
 "Language: lv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "By"
+msgstr "Autors"
+
 msgid "repository"
 msgstr "krātuve"
-
-msgid "open issue"
-msgstr "atklāts jautājums"
-
-msgid "Contents"
-msgstr "Saturs"
 
 msgid "Fullscreen mode"
 msgstr "Pilnekrāna režīms"
 
-msgid "Download this page"
-msgstr "Lejupielādējiet šo lapu"
+msgid "Contents"
+msgstr "Saturs"
 
 msgid "Download source file"
 msgstr "Lejupielādēt avota failu"
 
-msgid "Launch"
-msgstr "Uzsākt"
-
 msgid "Edit this page"
 msgstr "Rediģēt šo lapu"
 
-msgid "Toggle navigation"
-msgstr "Pārslēgt navigāciju"
-
-msgid "Theme by the"
-msgstr "Autora tēma"
-
-msgid "Source repository"
-msgstr "Avota krātuve"
-
 msgid "Last updated on"
 msgstr "Pēdējoreiz atjaunināts"
+
+msgid "Print to PDF"
+msgstr "Drukāt PDF formātā"
+
+msgid "suggest edit"
+msgstr "ieteikt rediģēt"
+
+msgid "Download this page"
+msgstr "Lejupielādējiet šo lapu"
+
+msgid "Toggle navigation"
+msgstr "Pārslēgt navigāciju"
 
 msgid "By the"
 msgstr "Ar"
@@ -50,32 +47,29 @@ msgstr "Ar"
 msgid "Sphinx Book Theme"
 msgstr "Sfinksa grāmatas tēma"
 
+msgid "previous page"
+msgstr "iepriekšējā lapa"
+
+msgid "Source repository"
+msgstr "Avota krātuve"
+
+msgid "open issue"
+msgstr "atklāts jautājums"
+
+msgid "Download notebook file"
+msgstr "Lejupielādēt piezīmju grāmatiņu"
+
+msgid "Copyright"
+msgstr "Autortiesības"
+
+msgid "Theme by the"
+msgstr "Autora tēma"
+
 msgid "Open an issue"
 msgstr "Atveriet problēmu"
 
 msgid "next page"
 msgstr "nākamā lapaspuse"
 
-msgid "Copyright"
-msgstr "Autortiesības"
-
-msgid "Search this book..."
-msgstr "Meklēt šajā grāmatā ..."
-
-msgid "Print to PDF"
-msgstr "Drukāt PDF formātā"
-
-msgid "By"
-msgstr "Autors"
-
-msgid "previous page"
-msgstr "iepriekšējā lapa"
-
-msgid "Search the docs ..."
-msgstr "Meklēt dokumentos ..."
-
-msgid "Download notebook file"
-msgstr "Lejupielādēt piezīmju grāmatiņu"
-
-msgid "suggest edit"
-msgstr "ieteikt rediģēt"
+msgid "Launch"
+msgstr "Uzsākt"

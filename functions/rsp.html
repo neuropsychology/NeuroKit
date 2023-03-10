@@ -1,923 +1,511 @@
 
+
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>RSP &#8212; NeuroKit2 0.2.4 documentation</title>
-    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'functions/rsp';</script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="EDA" href="eda.html" />
     <link rel="prev" title="HRV" href="hrv.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/neurokit.png" class="logo" alt="logo">
-      
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Menu
- </span>
-</p>
+    
+    
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction.html">
-   Overview
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../installation.html">
-   Installation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../authors.html">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../cite_us.html">
-   Cite us
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../examples/index.html">
-   Examples
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
-     Event-related Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">
-     Interval-related Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_custom/bio_custom.html">
-     Customize your Processing Pipeline
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
-     Heart Rate Varability (HRV)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">
-     Extract and Visualize Individual Heartbeats
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">
-     Locate P, Q, S and T waves in ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">
-     ECG-Derived Respiration (EDR)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
-     Generating Abnormal 12-leads ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
-     Analyze Electrodermal Activity (EDA)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">
-     Respiratory Rate Variability (RRV)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography (EOG)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">
-     Simulate Artificial Physiological Signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ppg_report/ppg_report.html">
-     Save Preprocessing Reports
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
-     EEG Power in Frequency Bands
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
-     EEG Complexity Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
-     EEG Microstates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
-     Fit a function to a non-linear pattern
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
-     Create epochs
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
-   Functions
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="bio.html">
-     Bio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="ecg.html">
-     ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="ppg.html">
-     PPG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="hrv.html">
-     HRV
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     RSP
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="eda.html">
-     EDA
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="emg.html">
-     EMG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="eog.html">
-     EOG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="eeg.html">
-     EEG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="video.html">
-     Video Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="microstates.html">
-     Microstates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="signal.html">
-     Signal
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="events.html">
-     Events
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="epochs.html">
-     Epochs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="data.html">
-     Data
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="complexity.html">
-     Complexity
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="markov.html">
-     Markov Chains
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="stats.html">
-     Stats
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="misc.html">
-     Misc
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="benchmark.html">
-     Benchmarking
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../resources/index.html">
-   Resources
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/learn_python.html">
-     Learn Python in 10 minutes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/contributing.html">
-     Contributing guide
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/recording.html">
-     Recording good quality signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../resources/resources.html">
-     Additional Resources
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../studies/index.html">
-   Studies
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
-     HRV Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
-     HRV Indices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">
-     HRV Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">
-     Complexity Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">
-     Complexity Indices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/complexity_eeg.html">
-     EEG Complexity: Parameters Selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/erp_gam.html">
-     EEG Analysis with GAMs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/ecg_benchmark.html">
-     ECG Benchmark
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/eog_blinktemplate.html">
-     EOG blink template
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
-   Repository
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">Generating Abnormal 12-leads ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">Analyze Electrodermal Activity (EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">Respiratory Rate Variability (RRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">Analyze Electrooculography (EOG)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">Simulate Artificial Physiological Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ppg_report/ppg_report.html">Save Preprocessing Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_power/eeg_power.html">EEG Power in Frequency Bands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">EEG Complexity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">EEG Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">Fit a function to a non-linear pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">Create epochs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Functions</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bio.html">Bio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ecg.html">ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ppg.html">PPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrv.html">HRV</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">RSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda.html">EDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emg.html">EMG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eog.html">EOG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eeg.html">EEG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="microstates.html">Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complexity.html">Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="markov.html">Markov Chains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats.html">Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmark.html">Benchmarking</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../resources/index.html">Resources</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../resources/learn_python.html">Learn Python in 10 minutes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resources/contributing.html">Contributing guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resources/recording.html">Recording good quality signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../resources/resources.html">Additional Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../studies/index.html">Studies</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">HRV Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://psyarxiv.com/mwa6x/">HRV Indices</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">HRV Tutorial</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">Complexity Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">Complexity Indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/complexity_eeg.html">EEG Complexity: Parameters Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/erp_gam.html">EEG Analysis with GAMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/ecg_benchmark.html">ECG Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/eog_blinktemplate.html">EOG blink template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/neuropsychology/NeuroKit">Repository</a></li>
 </ul>
 
     </div>
 </nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
-        </div>
     </div>
-    <div id="rtd-footer-container"></div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/functions/rsp.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/rsp.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
 
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
 
 
 
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/functions/rsp.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
   </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
   <i class="fas fa-expand"></i>
   </span>
 
 </button>
 
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
+`);
+</script>
 
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/rsp.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/functions/rsp.rst"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Edit this page"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="headerbtn__text-container">suggest edit</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../_sources/functions/rsp.rst.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.rst</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
 </label>
-
+</div></div>
+      
     </div>
+  
 </div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#main">
-   Main
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-process">
-     <em>
-      rsp_process()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-analyze">
-     <em>
-      rsp_analyze()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-simulate">
-     <em>
-      rsp_simulate()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-plot">
-     <em>
-      rsp_plot()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#preprocessing">
-   Preprocessing
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-clean">
-     <em>
-      rsp_clean()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-amplitude">
-     <em>
-      rsp_amplitude()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-peaks">
-     <em>
-      rsp_peaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-findpeaks">
-     <em>
-      rsp_findpeaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-fixpeaks">
-     <em>
-      rsp_fixpeaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-phase">
-     <em>
-      rsp_phase()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-rate">
-     <em>
-      rsp_rate()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-symmetry">
-     <em>
-      rsp_symmetry()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-rrv">
-     <em>
-      rsp_rrv()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-rvt">
-     <em>
-      rsp_rvt()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analysis">
-   Analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-eventrelated">
-     <em>
-      rsp_eventrelated()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-intervalrelated">
-     <em>
-      rsp_intervalrelated()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </nav>
 </div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>RSP</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#main">
-   Main
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-process">
-     <em>
-      rsp_process()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-analyze">
-     <em>
-      rsp_analyze()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-simulate">
-     <em>
-      rsp_simulate()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-plot">
-     <em>
-      rsp_plot()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#preprocessing">
-   Preprocessing
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-clean">
-     <em>
-      rsp_clean()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-amplitude">
-     <em>
-      rsp_amplitude()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-peaks">
-     <em>
-      rsp_peaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-findpeaks">
-     <em>
-      rsp_findpeaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-fixpeaks">
-     <em>
-      rsp_fixpeaks()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-phase">
-     <em>
-      rsp_phase()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-rate">
-     <em>
-      rsp_rate()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-symmetry">
-     <em>
-      rsp_symmetry()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-rrv">
-     <em>
-      rsp_rrv()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-rvt">
-     <em>
-      rsp_rvt()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analysis">
-   Analysis
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-eventrelated">
-     <em>
-      rsp_eventrelated()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rsp-intervalrelated">
-     <em>
-      rsp_intervalrelated()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
+              
+              
 
-                        </nav>
-                    </div>
-                </div>
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>RSP</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
             </div>
-            <main id="main-content" role="main">
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main">Main</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-process"><em>rsp_process()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_process"><code class="docutils literal notranslate"><span class="pre">rsp_process()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-analyze"><em>rsp_analyze()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_analyze"><code class="docutils literal notranslate"><span class="pre">rsp_analyze()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-simulate"><em>rsp_simulate()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_simulate"><code class="docutils literal notranslate"><span class="pre">rsp_simulate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-plot"><em>rsp_plot()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_plot"><code class="docutils literal notranslate"><span class="pre">rsp_plot()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-clean"><em>rsp_clean()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_clean"><code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-amplitude"><em>rsp_amplitude()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_amplitude"><code class="docutils literal notranslate"><span class="pre">rsp_amplitude()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-peaks"><em>rsp_peaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_peaks"><code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-findpeaks"><em>rsp_findpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_findpeaks"><code class="docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-fixpeaks"><em>rsp_fixpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_fixpeaks"><code class="docutils literal notranslate"><span class="pre">rsp_fixpeaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-phase"><em>rsp_phase()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_phase"><code class="docutils literal notranslate"><span class="pre">rsp_phase()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-rate"><em>rsp_rate()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rate"><code class="docutils literal notranslate"><span class="pre">rsp_rate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-symmetry"><em>rsp_symmetry()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_symmetry"><code class="docutils literal notranslate"><span class="pre">rsp_symmetry()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-rrv"><em>rsp_rrv()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rrv"><code class="docutils literal notranslate"><span class="pre">rsp_rrv()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-rvt"><em>rsp_rvt()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rvt"><code class="docutils literal notranslate"><span class="pre">rsp_rvt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-eventrelated"><em>rsp_eventrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_eventrelated"><code class="docutils literal notranslate"><span class="pre">rsp_eventrelated()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-intervalrelated"><em>rsp_intervalrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_intervalrelated"><code class="docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_methods"><code class="docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
                 
-              <div>
-                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="rsp">
-<h1>RSP<a class="headerlink" href="#rsp" title="Permalink to this headline">#</a></h1>
+<h1>RSP<a class="headerlink" href="#rsp" title="Permalink to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
 <section id="rsp-process">
-<h3><em>rsp_process()</em><a class="headerlink" href="#rsp-process" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_process()</em><a class="headerlink" href="#rsp-process" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_process">
 <span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Permalink to this definition">#</a></dt>
@@ -929,7 +517,7 @@ following methods:</p>
 <li><p><a class="reference external" href="https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py">BioSPPy</a></p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw respiration channel (as measured, for instance, by a respiration belt).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> (in Hz, i.e., samples/second).</p></li>
@@ -945,7 +533,7 @@ just print the text in the console without saving anything.</p></li>
 see <a class="reference internal" href="#neurokit2.rsp.rsp_methods" title="neurokit2.rsp.rsp_methods"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul>
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> containing the following columns:</p>
 <ul class="simple">
@@ -992,7 +580,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.0173 |       1.96144 |</span>
+<span class="go">|         15.1796 |       2.12058 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1013,14 +601,14 @@ signals’ sampling rate.</p></li>
 
 </section>
 <section id="rsp-analyze">
-<h3><em>rsp_analyze()</em><a class="headerlink" href="#rsp-analyze" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_analyze()</em><a class="headerlink" href="#rsp-analyze" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_analyze">
 <span class="sig-name descname"><span class="pre">rsp_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_analyze.html#rsp_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_analyze" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>RSP Analysis</strong></p>
 <p>Performs RSP analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>dict or DataFrame</em>) – A dictionary of epochs, containing one DataFrame per epoch, usually obtained via
 <a class="reference internal" href="epochs.html#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-func docutils literal notranslate"><span class="pre">epochs_create()</span></code></a>, or a DataFrame containing all epochs, usually obtained via
@@ -1034,7 +622,7 @@ the right method will be chosen based on the mean duration of the data (<code cl
 for duration under 10s).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed RSP features. If event-related analysis is conducted,
 each epoch is indicated by the <cite>Label</cite> column. See <a class="reference internal" href="#neurokit2.rsp.rsp_eventrelated" title="neurokit2.rsp.rsp_eventrelated"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_eventrelated()</span></code></a> and
 <a class="reference internal" href="#neurokit2.rsp.rsp_intervalrelated" title="neurokit2.rsp.rsp_intervalrelated"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a> docstrings for details.</p>
@@ -1089,7 +677,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 </section>
 <section id="rsp-simulate">
-<h3><em>rsp_simulate()</em><a class="headerlink" href="#rsp-simulate" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_simulate()</em><a class="headerlink" href="#rsp-simulate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_simulate">
 <span class="sig-name descname"><span class="pre">rsp_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">respiratory_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'breathmetrics'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_simulate.html#rsp_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_simulate" title="Permalink to this definition">#</a></dt>
@@ -1097,7 +685,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <p>Generate an artificial (synthetic) respiratory signal of a given duration
 and rate.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>duration</strong> (<em>int</em>) – Desired length of duration (s).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
@@ -1117,7 +705,7 @@ trigonometric sine wave that roughly approximates a single respiratory cycle. If
 <p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></a></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>array</em> – Vector containing the respiratory signal.</p>
 </dd>
 </dl>
@@ -1144,13 +732,13 @@ breathing waveforms using BreathMetrics: A respiratory signal processing toolbox
 
 </section>
 <section id="rsp-plot">
-<h3><em>rsp_plot()</em><a class="headerlink" href="#rsp-plot" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_plot()</em><a class="headerlink" href="#rsp-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_plot">
 <span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize respiration (RSP) data</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
@@ -1166,7 +754,7 @@ Defaults to True.</p></li>
 <p><a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code></a></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>fig</em> – Figure representing a plot of the processed RSP signals.</p>
 </dd>
 </dl>
@@ -1190,9 +778,9 @@ Defaults to True.</p></li>
 </section>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
 <section id="rsp-clean">
-<h3><em>rsp_clean()</em><a class="headerlink" href="#rsp-clean" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_clean()</em><a class="headerlink" href="#rsp-clean" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_clean">
 <span class="sig-name descname"><span class="pre">rsp_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_clean.html#rsp_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_clean" title="Permalink to this definition">#</a></dt>
@@ -1207,7 +795,7 @@ detrending).</p></li>
 changed via <code class="docutils literal notranslate"><span class="pre">threshold</span></code>) <a class="reference internal" href="stats.html#neurokit2.mad" title="neurokit2.mad"><code class="xref py py-func docutils literal notranslate"><span class="pre">mad()</span></code></a> away from the rolling median.</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw respiration channel (as measured, for instance, by a respiration belt).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> (in Hz, i.e., samples/second).</p></li>
@@ -1216,7 +804,7 @@ changed via <code class="docutils literal notranslate"><span class="pre">thresho
 <li><p><strong>**kwargs</strong> – Other arguments to pass to the cleaning method.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>array</em> – Vector containing the cleaned respiratory signal.</p>
 </dd>
 </dl>
@@ -1258,7 +846,7 @@ NeuroImage, Volume 204, 116234</p></li>
 
 </section>
 <section id="rsp-amplitude">
-<h3><em>rsp_amplitude()</em><a class="headerlink" href="#rsp-amplitude" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_amplitude()</em><a class="headerlink" href="#rsp-amplitude" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_amplitude">
 <span class="sig-name descname"><span class="pre">rsp_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_amplitude.html#rsp_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_amplitude" title="Permalink to this definition">#</a></dt>
@@ -1268,7 +856,7 @@ NeuroImage, Volume 204, 116234</p></li>
 trough, while the <strong>prepost</strong> method computes the amplitude as the average of the differences
 of peak to its preceding and succeeding troughs (Cole, 2019).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the respiration peaks (exhalation onsets) occur. If a dict or a
@@ -1284,7 +872,7 @@ or “undershoots” in the y-direction). In contrast, the widely used cubic spl
 ‘interpolation does not ensure monotonicity.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>array</em> – A vector containing the respiratory amplitude.</p>
 </dd>
 </dl>
@@ -1322,7 +910,7 @@ neurophysiology, 122(2), 849-861.</p></li>
 
 </section>
 <section id="rsp-peaks">
-<h3><em>rsp_peaks()</em><a class="headerlink" href="#rsp-peaks" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_peaks()</em><a class="headerlink" href="#rsp-peaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_peaks">
 <span class="sig-name descname"><span class="pre">rsp_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_peaks.html#rsp_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_peaks" title="Permalink to this definition">#</a></dt>
@@ -1338,7 +926,7 @@ using different sets of parameters, such as:</p>
 peak-detection function.</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_cleaned()</span></code> (in Hz, i.e., samples/second).</p></li>
@@ -1348,7 +936,7 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot
 <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which peaks
 (exhalation onsets) and troughs (inhalation onsets) occur, accessible with the keys
@@ -1392,7 +980,7 @@ Physiological measurement, 39(9), 094001.</p></li>
 
 </section>
 <section id="rsp-findpeaks">
-<h3><em>rsp_findpeaks()</em><a class="headerlink" href="#rsp-findpeaks" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_findpeaks()</em><a class="headerlink" href="#rsp-findpeaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_findpeaks">
 <span class="sig-name descname"><span class="pre">rsp_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_prominence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_findpeaks.html#rsp_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_findpeaks" title="Permalink to this definition">#</a></dt>
@@ -1401,7 +989,7 @@ Physiological measurement, 39(9), 094001.</p></li>
 (troughs and peaks respectively) in a preprocessed respiration signal using different sets of
 parameters. See <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a> for details.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_cleaned()</span></code> (in Hz, i.e., samples/second).</p></li>
@@ -1417,7 +1005,7 @@ seconds.</p></li>
 <li><p><strong>peak_prominence</strong> (<em>float</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code>. Minimal prominence between peaks. Default is 0.5.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which inhalation
 onsets and exhalation onsets occur, accessible with the keys <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Troughs&quot;</span></code> and
 <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks&quot;</span></code>, respectively.</p>
@@ -1444,7 +1032,7 @@ onsets and exhalation onsets occur, accessible with the keys <code class="docuti
 
 </section>
 <section id="rsp-fixpeaks">
-<h3><em>rsp_fixpeaks()</em><a class="headerlink" href="#rsp-fixpeaks" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_fixpeaks()</em><a class="headerlink" href="#rsp-fixpeaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_fixpeaks">
 <span class="sig-name descname"><span class="pre">rsp_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_fixpeaks.html#rsp_fixpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_fixpeaks" title="Permalink to this definition">#</a></dt>
@@ -1453,7 +1041,7 @@ onsets and exhalation onsets occur, accessible with the keys <code class="docuti
 by <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>. Doesn’t do anything for now for RSP.
 See <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a> for details.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which respiration peaks (exhalation onsets) occur. If a dict or a DataFrame
 is passed, it is assumed that these containers were obtained with <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
@@ -1462,7 +1050,7 @@ DataFrame is passed, it is assumed that these containers were obtained
 with <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which
 inhalation onsets and exhalation onsets occur, accessible with the keys <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Troughs&quot;</span></code>
 and <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks&quot;</span></code>, respectively.</p>
@@ -1491,14 +1079,14 @@ and <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks
 
 </section>
 <section id="rsp-phase">
-<h3><em>rsp_phase()</em><a class="headerlink" href="#rsp-phase" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_phase()</em><a class="headerlink" href="#rsp-phase" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_phase">
 <span class="sig-name descname"><span class="pre">rsp_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_phase.html#rsp_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_phase" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Compute respiratory phase (inspiration and expiration)</strong></p>
 <p>Finds the respiratory phase, labelled as 1 for inspiration and 0 for expiration.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
 assumed that these containers were obtained with <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
@@ -1510,7 +1098,7 @@ set to an integer, the returned rate will be interpolated between <code class="d
 argument.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>pd.DataFrame</em> – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> containing the following columns:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase&quot;</span></code>: breathing phase, marked by “1” for inspiration and “0” for expiration.</p></li>
@@ -1543,13 +1131,13 @@ to 1), representing the stage of the current respiratory phase.</p></li>
 
 </section>
 <section id="rsp-rate">
-<h3><em>rsp_rate()</em><a class="headerlink" href="#rsp-rate" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_rate()</em><a class="headerlink" href="#rsp-rate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rate">
 <span class="sig-name descname"><span class="pre">rsp_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trough'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rate.html#rsp_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Find respiration rate</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>troughs</strong> (<em>Union[list, np.array, pd.Series, pd.DataFrame]</em>) – The respiration troughs (inhalation onsets) as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a>.
@@ -1573,7 +1161,7 @@ y-direction). In contrast, the widely used cubic spline interpolation does not e
 monotonicity.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>rsp_rate</strong> (<em>np.ndarray</em>) – Instantenous respiration rate.</p>
 </dd>
 </dl>
@@ -1593,7 +1181,7 @@ monotonicity.</p></li>
 
 </section>
 <section id="rsp-symmetry">
-<h3><em>rsp_symmetry()</em><a class="headerlink" href="#rsp-symmetry" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_symmetry()</em><a class="headerlink" href="#rsp-symmetry" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_symmetry">
 <span class="sig-name descname"><span class="pre">rsp_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_symmetry.html#rsp_symmetry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_symmetry" title="Permalink to this definition">#</a></dt>
@@ -1606,7 +1194,7 @@ symmetry characteristics, are padded).</p>
 <a class="reference external image-reference" href="https://journals.physiology.org/doi/full/10.1152/jn.00273.2019"><img alt="Figure from Cole and Voytek (2019)." src="../_images/cole2019.png" /></a>
 </figure>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
@@ -1621,7 +1209,7 @@ or “undershoots” in the y-direction). In contrast, the widely used cubic spl
 <li><p><strong>show</strong> (<em>bool</em>) – If True, show a plot of the symmetry features.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>pd.DataFrame</em> – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> containing the following columns:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Symmetry_PeakTrough&quot;</span></code></p></li>
@@ -1656,7 +1244,7 @@ neurophysiology, 122(2), 849-861.</p></li>
 
 </section>
 <section id="rsp-rrv">
-<h3><em>rsp_rrv()</em><a class="headerlink" href="#rsp-rrv" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_rrv()</em><a class="headerlink" href="#rsp-rrv" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rrv">
 <span class="sig-name descname"><span class="pre">rsp_rrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rrv.html#rsp_rrv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rrv" title="Permalink to this definition">#</a></dt>
@@ -1664,7 +1252,7 @@ neurophysiology, 122(2), 849-861.</p></li>
 <p>Computes time domain and frequency domain features for Respiratory Rate Variability (RRV)
 analysis.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_rate</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
 <li><p><strong>troughs</strong> (<em>dict</em>) – The samples at which the inhalation onsets occur.
@@ -1677,7 +1265,7 @@ breath-to-breath interval. Defaults to <code class="docutils literal notranslate
 <li><p><strong>silent</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, warnings will be printed. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – DataFrame consisting of the computed RRV metrics, which includes:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SDBB&quot;</span></code>: the standard deviation of the breath-to-breath intervals.</p></li>
@@ -1735,8 +1323,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1132.59841      4028.6  688.781945  ...    0.633724  0.091859         inf</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1438.312498     4062.65  885.163635  ...    0.660521  0.091859         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1750,7 +1338,7 @@ meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
 
 </section>
 <section id="rsp-rvt">
-<h3><em>rsp_rvt()</em><a class="headerlink" href="#rsp-rvt" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_rvt()</em><a class="headerlink" href="#rsp-rvt" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rvt">
 <span class="sig-name descname"><span class="pre">rsp_rvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2.0,</span> <span class="pre">0.03333333333333333]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rvt.html#rsp_rvt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rvt" title="Permalink to this definition">#</a></dt>
@@ -1759,7 +1347,7 @@ meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
 breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is
 often considered noise.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signal</strong> (<em>array</em>) – Array containing the respiratory rate, produced by <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
@@ -1774,7 +1362,7 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 <li><p><strong>**kwargs</strong> – Arguments to be passed to the underlying peak detection algorithm.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>array</em> – Array containing the current RVT at every timestep.</p>
 </dd>
 </dl>
@@ -1820,15 +1408,15 @@ A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 1
 </section>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">#</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
 <section id="rsp-eventrelated">
-<h3><em>rsp_eventrelated()</em><a class="headerlink" href="#rsp-eventrelated" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_eventrelated()</em><a class="headerlink" href="#rsp-eventrelated" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_eventrelated">
 <span class="sig-name descname"><span class="pre">rsp_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_eventrelated.html#rsp_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_eventrelated" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Performs event-related RSP analysis on epochs</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>epochs</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dict containing one DataFrame per event/trial, usually obtained via
 <a class="reference internal" href="epochs.html#neurokit2.epochs.epochs_create" title="neurokit2.epochs.epochs_create"><code class="xref py py-func docutils literal notranslate"><span class="pre">epochs_create()</span></code></a>, or a DataFrame containing all epochs, usually obtained
@@ -1836,7 +1424,7 @@ via <a class="reference internal" href="epochs.html#neurokit2.epochs.epochs_to_d
 <li><p><strong>silent</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, silence possible warnings.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed RSP features for each epoch, with each epoch indicated
 by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features
 consist of the following:</p>
@@ -1880,9 +1468,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.270437     -0.011830</span>
-<span class="go">2     2        10000  ...          0.201201     -0.006854</span>
-<span class="go">3     3        15000  ...          0.159515      0.063632</span>
+<span class="go">1     1         5000  ...          0.254385     -0.051175</span>
+<span class="go">2     2        10000  ...          0.266919      0.032647</span>
+<span class="go">3     3        15000  ...          0.218687      0.005623</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1915,13 +1503,13 @@ inspiration (1) or expiration (0).</p></li>
 
 </section>
 <section id="rsp-intervalrelated">
-<h3><em>rsp_intervalrelated()</em><a class="headerlink" href="#rsp-intervalrelated" title="Permalink to this headline">#</a></h3>
+<h3><em>rsp_intervalrelated()</em><a class="headerlink" href="#rsp-intervalrelated" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_intervalrelated">
 <span class="sig-name descname"><span class="pre">rsp_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_intervalrelated.html#rsp_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_intervalrelated" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Performs RSP analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state data</strong></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>DataFrame or dict</em>) – A DataFrame containing the different processed signal(s) as different columns, typically
 generated by <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a> or <a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></a>. Can also take a dict containing
@@ -1929,7 +1517,7 @@ sets of separately processed DataFrames.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed RSP features.
 The analyzed features consist of the following:</p>
 <ul class="simple">
@@ -1989,7 +1577,7 @@ textual description of the methods used. It is used by <a class="reference inter
 correct methods to each subroutine of the pipeline and <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_report()</span></code> to create a
 preprocessing report.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the raw RSP signal (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The method used for cleaning and peak finding if <code class="docutils literal notranslate"><span class="pre">&quot;method_cleaning&quot;</span></code>
@@ -2010,7 +1598,7 @@ of <a class="reference internal" href="#neurokit2.rsp.rsp_rvt" title="neurokit2.
 <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a>, and <a class="reference internal" href="#neurokit2.rsp.rsp_rvt" title="neurokit2.rsp.rsp_rvt"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rvt()</span></code></a>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>report_info</strong> (<em>dict</em>) – A dictionary containing the keyword arguments passed to the cleaning
 and peak finding functions, text describing the methods, and the corresponding
 references.</p>
@@ -2041,50 +1629,172 @@ references.</p>
 </section>
 
 
-              </div>
+                </article>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="hrv.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">HRV</p>
-        </div>
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="hrv.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">HRV</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="eda.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="eda.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">EDA</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main">Main</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-process"><em>rsp_process()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_process"><code class="docutils literal notranslate"><span class="pre">rsp_process()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-analyze"><em>rsp_analyze()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_analyze"><code class="docutils literal notranslate"><span class="pre">rsp_analyze()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-simulate"><em>rsp_simulate()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_simulate"><code class="docutils literal notranslate"><span class="pre">rsp_simulate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-plot"><em>rsp_plot()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_plot"><code class="docutils literal notranslate"><span class="pre">rsp_plot()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-clean"><em>rsp_clean()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_clean"><code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-amplitude"><em>rsp_amplitude()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_amplitude"><code class="docutils literal notranslate"><span class="pre">rsp_amplitude()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-peaks"><em>rsp_peaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_peaks"><code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-findpeaks"><em>rsp_findpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_findpeaks"><code class="docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-fixpeaks"><em>rsp_fixpeaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_fixpeaks"><code class="docutils literal notranslate"><span class="pre">rsp_fixpeaks()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-phase"><em>rsp_phase()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_phase"><code class="docutils literal notranslate"><span class="pre">rsp_phase()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-rate"><em>rsp_rate()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rate"><code class="docutils literal notranslate"><span class="pre">rsp_rate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-symmetry"><em>rsp_symmetry()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_symmetry"><code class="docutils literal notranslate"><span class="pre">rsp_symmetry()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-rrv"><em>rsp_rrv()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rrv"><code class="docutils literal notranslate"><span class="pre">rsp_rrv()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-rvt"><em>rsp_rvt()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rvt"><code class="docutils literal notranslate"><span class="pre">rsp_rvt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-eventrelated"><em>rsp_eventrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_eventrelated"><code class="docutils literal notranslate"><span class="pre">rsp_eventrelated()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-intervalrelated"><em>rsp_intervalrelated()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_intervalrelated"><code class="docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_methods"><code class="docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
-  
-      &copy; Copyright 2020–2023.<br/>
-</p>
-        </footer>
-    </div>
+  <div class="footer-item">
     
-</div>
+<p class="component-author">
+By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2020–2023.
+      <br/>
+    
+  </p>
 
-      </div>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
     </div>
+  </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

@@ -8,74 +8,68 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "By"
+msgstr "作者："
+
 msgid "repository"
-msgstr "資料庫"
-
-msgid "open issue"
-msgstr "公開的問題"
-
-msgid "Contents"
-msgstr "內容"
+msgstr "儲存庫"
 
 msgid "Fullscreen mode"
-msgstr "全屏模式"
+msgstr "全螢幕模式"
+
+msgid "Contents"
+msgstr "目錄"
+
+msgid "Download source file"
+msgstr "下載原始檔"
+
+msgid "Edit this page"
+msgstr "編輯此頁面"
+
+msgid "Last updated on"
+msgstr "最後更新時間："
+
+msgid "Print to PDF"
+msgstr "列印成 PDF"
+
+msgid "suggest edit"
+msgstr "提出修改建議"
 
 msgid "Download this page"
 msgstr "下載此頁面"
 
-msgid "Download source file"
-msgstr "下載源文件"
-
-msgid "Launch"
-msgstr "發射"
-
-msgid "Edit this page"
-msgstr "編輯這個頁面"
-
 msgid "Toggle navigation"
-msgstr "切換導航"
-
-msgid "Theme by the"
-msgstr "主題由"
-
-msgid "Source repository"
-msgstr "源庫"
-
-msgid "Last updated on"
-msgstr "上次更新時間："
+msgstr "顯示或隱藏導覽列"
 
 msgid "By the"
-msgstr "由"
+msgstr "作者："
 
 msgid "Sphinx Book Theme"
-msgstr "獅身人面像書主題"
-
-msgid "Open an issue"
-msgstr "打開一個問題"
-
-msgid "next page"
-msgstr "下一頁"
-
-msgid "Copyright"
-msgstr "版權"
-
-msgid "Search this book..."
-msgstr "搜索這本書..."
-
-msgid "Print to PDF"
-msgstr "列印成PDF"
-
-msgid "By"
-msgstr "通過"
+msgstr "Sphinx Book 佈景主題"
 
 msgid "previous page"
 msgstr "上一頁"
 
-msgid "Search the docs ..."
-msgstr "搜索文檔..."
+msgid "Source repository"
+msgstr "來源儲存庫"
+
+msgid "open issue"
+msgstr "公開的問題"
 
 msgid "Download notebook file"
-msgstr "下載筆記本文件"
+msgstr "下載 Notebook 檔案"
 
-msgid "suggest edit"
-msgstr "建議編輯"
+msgid "Copyright"
+msgstr "Copyright"
+
+msgid "Theme by the"
+msgstr "佈景主題作者："
+
+msgid "Open an issue"
+msgstr "開啟議題"
+
+msgid "next page"
+msgstr "下一頁"
+
+msgid "Launch"
+msgstr "啟動"

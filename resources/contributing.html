@@ -1,897 +1,463 @@
 
+
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Contributing guide &#8212; NeuroKit2 0.2.4 documentation</title>
-    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'resources/contributing';</script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Recording good quality signals" href="recording.html" />
     <link rel="prev" title="Learn Python in 10 minutes" href="learn_python.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      <div class="bd-sidebar-primary bd-sidebar">
         
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
       
-      
-      <img src="../_static/neurokit.png" class="logo" alt="logo">
-      
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Menu
- </span>
-</p>
+    
+    
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction.html">
-   Overview
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../installation.html">
-   Installation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../authors.html">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../cite_us.html">
-   Cite us
-  </a>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../examples/index.html">
-   Examples
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">
-     Event-related Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">
-     Interval-related Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/bio_custom/bio_custom.html">
-     Customize your Processing Pipeline
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">
-     Heart Rate Varability (HRV)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">
-     Extract and Visualize Individual Heartbeats
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">
-     Locate P, Q, S and T waves in ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">
-     ECG-Derived Respiration (EDR)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">
-     Generating Abnormal 12-leads ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">
-     Analyze Electrodermal Activity (EDA)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">
-     Respiratory Rate Variability (RRV)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">
-     Analyze Electrooculography (EOG)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">
-     Simulate Artificial Physiological Signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/ppg_report/ppg_report.html">
-     Save Preprocessing Reports
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_power/eeg_power.html">
-     EEG Power in Frequency Bands
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">
-     EEG Complexity Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">
-     EEG Microstates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">
-     Fit a function to a non-linear pattern
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">
-     Create epochs
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../functions/index.html">
-   Functions
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/bio.html">
-     Bio
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/ecg.html">
-     ECG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/ppg.html">
-     PPG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/hrv.html">
-     HRV
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/rsp.html">
-     RSP
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/eda.html">
-     EDA
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/emg.html">
-     EMG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/eog.html">
-     EOG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/eeg.html">
-     EEG
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/video.html">
-     Video Analysis
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/microstates.html">
-     Microstates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/signal.html">
-     Signal
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/events.html">
-     Events
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/epochs.html">
-     Epochs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/data.html">
-     Data
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/complexity.html">
-     Complexity
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/markov.html">
-     Markov Chains
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/stats.html">
-     Stats
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/misc.html">
-     Misc
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/benchmark.html">
-     Benchmarking
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
-   Resources
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="learn_python.html">
-     Learn Python in 10 minutes
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Contributing guide
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="recording.html">
-     Recording good quality signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="resources.html">
-     Additional Resources
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../studies/index.html">
-   Studies
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">
-     HRV Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://psyarxiv.com/mwa6x/">
-     HRV Indices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">
-     HRV Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">
-     Complexity Review
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">
-     Complexity Indices
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/complexity_eeg.html">
-     EEG Complexity: Parameters Selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/erp_gam.html">
-     EEG Analysis with GAMs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/ecg_benchmark.html">
-     ECG Benchmark
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../studies/eog_blinktemplate.html">
-     EOG blink template
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">
-   Repository
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_generate_12leads/ecg_generate_12leads.html">Generating Abnormal 12-leads ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eda_peaks/eda_peaks.html">Analyze Electrodermal Activity (EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/rsp_rrv/rsp_rrv.html">Respiratory Rate Variability (RRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eog_analyze/eog_analyze.html">Analyze Electrooculography (EOG)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/signal_simulation/signal_simulation.html">Simulate Artificial Physiological Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ppg_report/ppg_report.html">Save Preprocessing Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_power/eeg_power.html">EEG Power in Frequency Bands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_complexity/eeg_complexity.html">EEG Complexity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/eeg_microstates/eeg_microstates.html">EEG Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/misc_fit_function/misc_fit_function.html">Fit a function to a non-linear pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/misc_epochs_create/misc_epochs_create.html">Create epochs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../functions/index.html">Functions</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../functions/bio.html">Bio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/ecg.html">ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/ppg.html">PPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/hrv.html">HRV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/rsp.html">RSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/eda.html">EDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/emg.html">EMG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/eog.html">EOG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/eeg.html">EEG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/video.html">Video Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/microstates.html">Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/signal.html">Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/epochs.html">Epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/complexity.html">Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/markov.html">Markov Chains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/stats.html">Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../functions/benchmark.html">Benchmarking</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Resources</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="learn_python.html">Learn Python in 10 minutes</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Contributing guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recording.html">Recording good quality signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Additional Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../studies/index.html">Studies</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">HRV Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://psyarxiv.com/mwa6x/">HRV Indices</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">HRV Tutorial</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">Complexity Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">Complexity Indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/complexity_eeg.html">EEG Complexity: Parameters Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/erp_gam.html">EEG Analysis with GAMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/ecg_benchmark.html">ECG Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../studies/eog_blinktemplate.html">EOG blink template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/neuropsychology/NeuroKit">Repository</a></li>
 </ul>
 
     </div>
 </nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
-        </div>
     </div>
-    <div id="rtd-footer-container"></div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/resources/contributing.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fresources/contributing.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
 
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
 
 
 
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/resources/contributing.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
   </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
   <i class="fas fa-expand"></i>
   </span>
 
 </button>
 
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
+`);
+</script>
 
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fresources/contributing.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/edit/dev/docs/resources/contributing.rst"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Edit this page"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="headerbtn__text-container">suggest edit</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../_sources/resources/contributing.rst.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.rst</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
 </label>
-
+</div></div>
+      
     </div>
+  
 </div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#why-contribute-to-neurokit">
-   Why contribute to NeuroKit?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#neurokit-s-style">
-   NeuroKit’s style
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#structure-and-code">
-     Structure and code
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#naming-conventions">
-     Naming conventions
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#run-code-checks">
-     Run code checks
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#development-workflow">
-     Development workflow
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#understanding-neurokit">
-   Understanding NeuroKit
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#documentation-website">
-     1. Documentation website
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-source-on-github">
-     2. The source on Github
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-use-github-to-contribute">
-   How to use GitHub to contribute
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-1-fork-the-repo">
-     Step 1: Fork the repo
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-2-clone-it">
-     Step 2: Clone it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-3-improve-it">
-     Step 3: Improve it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-4-commit-it-and-push-it">
-     Step 4: Commit it and push it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-4-create-pull-request">
-     Step 4: Create pull request
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-5-let-s-do-it">
-     Step 5: Let’s do it
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#ideas-for-contributions">
-   Ideas for contributions
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#talk-about-it">
-     Talk about it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#look-for-good-first-contribution-issues">
-     Look for
-     <em>
-      “good first contribution”
-     </em>
-     issues
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#improving-documentation">
-     Improving documentation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-tests">
-     Adding tests
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-examples-and-tutorials">
-     Adding examples and tutorials
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </nav>
 </div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Contributing guide</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#why-contribute-to-neurokit">
-   Why contribute to NeuroKit?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#neurokit-s-style">
-   NeuroKit’s style
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#structure-and-code">
-     Structure and code
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#naming-conventions">
-     Naming conventions
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#run-code-checks">
-     Run code checks
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#development-workflow">
-     Development workflow
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#understanding-neurokit">
-   Understanding NeuroKit
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#documentation-website">
-     1. Documentation website
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-source-on-github">
-     2. The source on Github
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-use-github-to-contribute">
-   How to use GitHub to contribute
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-1-fork-the-repo">
-     Step 1: Fork the repo
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-2-clone-it">
-     Step 2: Clone it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-3-improve-it">
-     Step 3: Improve it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-4-commit-it-and-push-it">
-     Step 4: Commit it and push it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-4-create-pull-request">
-     Step 4: Create pull request
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-5-let-s-do-it">
-     Step 5: Let’s do it
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#ideas-for-contributions">
-   Ideas for contributions
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#talk-about-it">
-     Talk about it
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#look-for-good-first-contribution-issues">
-     Look for
-     <em>
-      “good first contribution”
-     </em>
-     issues
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#improving-documentation">
-     Improving documentation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-tests">
-     Adding tests
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-examples-and-tutorials">
-     Adding examples and tutorials
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
+              
+              
 
-                        </nav>
-                    </div>
-                </div>
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Contributing guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
             </div>
-            <main id="main-content" role="main">
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-contribute-to-neurokit">Why contribute to NeuroKit?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit-s-style">NeuroKit’s style</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-code">Structure and code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-conventions">Naming conventions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-code-checks">Run code checks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">Development workflow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-neurokit">Understanding NeuroKit</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-website">1. Documentation website</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-source-on-github">2. The source on Github</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-github-to-contribute">How to use GitHub to contribute</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-fork-the-repo">Step 1: Fork the repo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-clone-it">Step 2: Clone it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-improve-it">Step 3: Improve it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-commit-it-and-push-it">Step 4: Commit it and push it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-create-pull-request">Step 4: Create pull request</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-let-s-do-it">Step 5: Let’s do it</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ideas-for-contributions">Ideas for contributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#talk-about-it">Talk about it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#look-for-good-first-contribution-issues">Look for <em>“good first contribution”</em> issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-documentation">Improving documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-tests">Adding tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-examples-and-tutorials">Adding examples and tutorials</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
                 
-              <div>
-                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="contributing-guide">
-<h1>Contributing guide<a class="headerlink" href="#contributing-guide" title="Permalink to this headline">#</a></h1>
+<h1>Contributing guide<a class="headerlink" href="#contributing-guide" title="Permalink to this heading">#</a></h1>
 <p><strong>NeuroKit2 welcomes everyone to contribute to code, documentation, testing and suggestions.</strong></p>
 <p>This package aims at being beginner-friendly. And if you’re not yet familiar with how open-source  contributions work, or with <strong>how to use GitHub</strong>, this guide is for you!</p>
 <div class="admonition tip">
@@ -901,7 +467,7 @@ others, creating content (youtube videos, tweets, tiktoks…), tipping in a <a c
 package.</p>
 </div>
 <section id="why-contribute-to-neurokit">
-<h2>Why contribute to NeuroKit?<a class="headerlink" href="#why-contribute-to-neurokit" title="Permalink to this headline">#</a></h2>
+<h2>Why contribute to NeuroKit?<a class="headerlink" href="#why-contribute-to-neurokit" title="Permalink to this heading">#</a></h2>
 <p>Contributing is the best way to learn programming, to meet new people, to grow your professional network, to get known in the game and to have a lot of fun. But <strong>street cred</strong> only is often not enough, and it’s particularly important for young academics and students to get some “legit” rewards. We are fully aware of that. As such, <strong>we are committed to crediting and rewarding contributors to the best of our abilities</strong>.</p>
 <p>For instance, authors of significant contributions (features, tough bug fixes etc.) will be listed as official <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/authors.html">Contributors</a> section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g,participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be included in as package maintainers, in which case they’ll be expected to be more generally involved in the general development direction. Finally, we expect this project (the development of the package <em>per se</em> and all of the discussions/experiments that are around it) to result in several <strong>publications</strong> (could be about some features of the package, but also some tutorial papers, validation studies or whatnot. Obviously, people that contributed and allowed for a paper to be written will be included as authors.</p>
 <div class="admonition tip">
@@ -914,7 +480,7 @@ development.</p>
 <p>Long story short, we want this project to be helpful to you, whether you’re a user, a contributor, or anything else in between :) And as always, do not hesitate to ask us if you have any questions.</p>
 </section>
 <section id="neurokit-s-style">
-<h2>NeuroKit’s style<a class="headerlink" href="#neurokit-s-style" title="Permalink to this headline">#</a></h2>
+<h2>NeuroKit’s style<a class="headerlink" href="#neurokit-s-style" title="Permalink to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you feel overwhelmed by all the “requirements” so that it drives you away from
@@ -922,7 +488,7 @@ contributing, please keep in mind that you can always open a PR with whatever yo
 then step by step we will help you making it up-to-standards.</p>
 </div>
 <section id="structure-and-code">
-<h3>Structure and code<a class="headerlink" href="#structure-and-code" title="Permalink to this headline">#</a></h3>
+<h3>Structure and code<a class="headerlink" href="#structure-and-code" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The NeuroKit package is organized into submodules, such as <em>ecg</em>, <em>signal</em>, <em>statistics</em>, etc. New functions should be created within at the appropriate places.</p></li>
 <li><p>The API (the functions) should be consistent, with functions starting with a prefix (<cite>plot_</cite>, <cite>ecg_</cite>, <cite>eda_</cite>, etc.) so that the user can easily find them by typing the “intuitive” prefix.</p></li>
@@ -936,7 +502,7 @@ then step by step we will help you making it up-to-standards.</p>
 </ul>
 </section>
 <section id="naming-conventions">
-<h3>Naming conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">#</a></h3>
+<h3>Naming conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this heading">#</a></h3>
 <p>We like consistency for the names of functions and arguments.</p>
 <p>Also, when you create a <strong>new branch</strong>, consider naming it with a pattern corresponding to the content of your additions. For instance, <code class="docutils literal notranslate"><span class="pre">fix_this_bug</span></code>, <code class="docutils literal notranslate"><span class="pre">add_that</span></code>, <code class="docutils literal notranslate"><span class="pre">add_info_on_this</span></code>, <code class="docutils literal notranslate"><span class="pre">changed_default_arg</span></code>, <code class="docutils literal notranslate"><span class="pre">make_function_faster</span></code>. Likewise, when you make a <strong>pull request</strong> (PR), name it accordingly with the main type between brackets, example:</p>
 <ul class="simple">
@@ -948,7 +514,7 @@ then step by step we will help you making it up-to-standards.</p>
 </ul>
 </section>
 <section id="run-code-checks">
-<h3>Run code checks<a class="headerlink" href="#run-code-checks" title="Permalink to this headline">#</a></h3>
+<h3>Run code checks<a class="headerlink" href="#run-code-checks" title="Permalink to this heading">#</a></h3>
 <p>Once you’re satisfied by the code you’ve written, you will need to run some checks to make sure it is up-to-standards. These checks will be run automatically when you open a PR, so you might want to run them locally if you to fix things upfront.</p>
 <p>You will need to open the command line and install the following packages:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">isort</span> <span class="n">black</span> <span class="n">docformatter</span> <span class="n">flake8</span> <span class="n">pylint</span>
@@ -966,7 +532,7 @@ then step by step we will help you making it up-to-standards.</p>
 <p>The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!</p>
 </section>
 <section id="development-workflow">
-<h3>Development workflow<a class="headerlink" href="#development-workflow" title="Permalink to this headline">#</a></h3>
+<h3>Development workflow<a class="headerlink" href="#development-workflow" title="Permalink to this heading">#</a></h3>
 <p>The NeuroKit GitHub repository has two main branches, <strong>master</strong> (the stable “official” version) and <strong>dev</strong>. The typical workflow is to work and make changes <strong>on the dev branch</strong>. This dev branch has a pull request (PR) opened (<code class="docutils literal notranslate"><span class="pre">dev</span> <span class="pre">-&gt;</span> <span class="pre">master</span></code>) to track individual commits (changes). And every now and then (when a sufficient number of changes have been made), the dev branch is <strong>merged into master</strong>, leading to an update of the version number and an upload to PyPI.</p>
 <p>The important thing is that you should <strong>not directly make changes on the master branch</strong>, because <em>master</em> is usually behind <em>dev</em> (which means for instance, maybe the the things you are changing on <em>master</em> have already been changed on <em>dev</em>). The <em>master</em> should be a stable, tested branch, and <em>dev</em> is the place to experiment.</p>
 <p>This is a summary of the typical workflow for contributing using GitHub (a detailed guide is available below):</p>
@@ -990,13 +556,13 @@ then step by step we will help you making it up-to-standards.</p>
 </section>
 </section>
 <section id="understanding-neurokit">
-<h2>Understanding NeuroKit<a class="headerlink" href="#understanding-neurokit" title="Permalink to this headline">#</a></h2>
+<h2>Understanding NeuroKit<a class="headerlink" href="#understanding-neurokit" title="Permalink to this heading">#</a></h2>
 <p><strong>Let’s start by reviewing some basic coding principles that might help you get familiar with NeuroKit</strong></p>
 <p>If you are reading this, it could be because you don’t feel comfortable enough with Python and NeuroKit <em>(yet)</em>, and you impatiently want to get to know it in order to start looking at your data.</p>
 <p><strong>“Tous les chemins mènent à Rome”</strong> <em>(all roads lead to Rome)</em></p>
 <p>Let me start by saying that there are multiple ways you’ll be able to access the documentation in order to get to know different functions, follow examples and other tutorials. So keep in mind that you will eventually find your own workflow, and that these tricks are shared simply to help you get to know your options.</p>
 <section id="documentation-website">
-<h3>1. Documentation website<a class="headerlink" href="#documentation-website" title="Permalink to this headline">#</a></h3>
+<h3>1. Documentation website<a class="headerlink" href="#documentation-website" title="Permalink to this heading">#</a></h3>
 <p>You probably already saw the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/README.rst">README</a> file that shows up on NeuroKit’s Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. <em>But, most importantly, there are the links that will take you to the Documentation</em>.</p>
 <p>The documentation contains a description of the API (or Application Program Interface), which you can access from <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/index.html">this page</a>. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. <strong>That’s why it’s important to structure your code in a standard manner</strong>.</p>
 <p>The API is organized by types of signals. You’ll find that each function has a <strong>description</strong>, and that most of them refer to peer-reviewed papers or other GitHub repositories. Also, for each function, <strong>parameters</strong> are described in order. Some of them will take many different <strong>options</strong> and all of them should be described as well.</p>
@@ -1004,14 +570,14 @@ then step by step we will help you making it up-to-standards.</p>
 <p>For instance, in the <strong>ECG section</strong>, the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks function</a> takes <strong>4 parameters</strong>. One of them is <strong>method</strong>: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function <strong>returns</strong> and what <strong>type of data</strong> has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find <strong>related functions</strong> in the <strong>See also</strong> part.  An small <strong>example</strong> of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.</p>
 </section>
 <section id="the-source-on-github">
-<h3>2. The source on Github<a class="headerlink" href="#the-source-on-github" title="Permalink to this headline">#</a></h3>
+<h3>2. The source on Github<a class="headerlink" href="#the-source-on-github" title="Permalink to this heading">#</a></h3>
 <p>Now that you’re familiar with the documentation website, let’s go back to the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">repo</a>. What you have to keep in mind is that <em>everything you saw in the previous section is</em> <strong>in the Github repository</strong>. The website pages, the lines that you are currently reading, are stored in the repository, which is then automatically uploaded to the website.</p>
 <p>Ready for inception? let’s try to find the location of the file you’re currently reading. Go under <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/tree/master/docs">docs folder</a>, where the documentation source lives.</p>
 <p>As you can see, there are several sections on the website (see the Table of Content on the left, and we are in the <strong>resources</strong> section. So you might want to look into the <strong>resources</strong> subfolder… However, a surprise waits for you. The <code class="docutils literal notranslate"><span class="pre">contributing.rst</span></code> file that should contain the page that is on the website is actually almost empty! Well not really, because it imports (<code class="docutils literal notranslate"><span class="pre">includes</span></code>) <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst">another file</a> located upstream.</p>
 </section>
 </section>
 <section id="how-to-use-github-to-contribute">
-<h2>How to use GitHub to contribute<a class="headerlink" href="#how-to-use-github-to-contribute" title="Permalink to this headline">#</a></h2>
+<h2>How to use GitHub to contribute<a class="headerlink" href="#how-to-use-github-to-contribute" title="Permalink to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You might notice that many people use, and many tutorials online are about using GitHub via the
@@ -1020,7 +586,7 @@ learn that!</strong> We use the <a class="reference external" href="https://desk
 much easier.</p>
 </div>
 <section id="step-1-fork-the-repo">
-<h3>Step 1: Fork the repo<a class="headerlink" href="#step-1-fork-the-repo" title="Permalink to this headline">#</a></h3>
+<h3>Step 1: Fork the repo<a class="headerlink" href="#step-1-fork-the-repo" title="Permalink to this heading">#</a></h3>
 <p>A <em>fork</em> is a copy of a repository. Working with the fork allows you to freely experiment with changes without affecting the original project.</p>
 <p>Hit the <strong>Fork</strong> button in the top right corner of the page and in a few seconds, you will have a copy of the repository in your own GitHub account.</p>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/fork.png" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/fork.png" />
@@ -1028,14 +594,14 @@ much easier.</p>
 <p>While you can explore Git to manage your Github developments, we recommend downloading <a class="reference external" href="https://desktop.github.com/">Github Desktop</a> instead. It makes the process way easier and more straightforward.</p>
 </section>
 <section id="step-2-clone-it">
-<h3>Step 2: Clone it<a class="headerlink" href="#step-2-clone-it" title="Permalink to this headline">#</a></h3>
+<h3>Step 2: Clone it<a class="headerlink" href="#step-2-clone-it" title="Permalink to this heading">#</a></h3>
 <p>Cloning allows you to make a <em>local</em> copy of any repositories on Github.</p>
 <p>Go to <strong>File</strong> menu, click <strong>Clone Repository</strong> and since you have forked NeuroKit2, you should be able to find it easily under <strong>Your repositories</strong>.</p>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/clone_nk.PNG" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/clone_nk.PNG" />
 <p>Choose the local path of where you want to save your <em>local</em> copy and as simple as that, you have a working repository in your computer.</p>
 </section>
 <section id="step-3-improve-it">
-<h3>Step 3: Improve it<a class="headerlink" href="#step-3-improve-it" title="Permalink to this headline">#</a></h3>
+<h3>Step 3: Improve it<a class="headerlink" href="#step-3-improve-it" title="Permalink to this heading">#</a></h3>
 <p>And here is where the fun begins. You can start contributing by fixing a bug (or even a typo in the code) that has been annoying you. Or you can go to the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues/">issue section</a> to hunt for issues that you can address.</p>
 <p>For example, here, as I tried to run the example in <cite>ecg_fixpeaks()</cite> file, I ran into a bug! A typo error!</p>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/fix_typo.gif" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/fix_typo.gif" />
@@ -1043,45 +609,45 @@ much easier.</p>
 <p>To save the changes you made (e.g. the typo that was just fixed) to your <em>local</em> copy of the repository, the next step is to <em>commit</em> it.</p>
 </section>
 <section id="step-4-commit-it-and-push-it">
-<h3>Step 4: Commit it and push it<a class="headerlink" href="#step-4-commit-it-and-push-it" title="Permalink to this headline">#</a></h3>
+<h3>Step 4: Commit it and push it<a class="headerlink" href="#step-4-commit-it-and-push-it" title="Permalink to this heading">#</a></h3>
 <p>In your Github Desktop, you will now find the changes that you made highlighted in <strong>red</strong> (removed) or <strong>green</strong> (added).</p>
 <p>The first thing that you have to do is to switch from the default - <em>Commit to Master</em> to <em>Commit to dev</em>. Always commit to your dev branch as it is the branch with the latest changes. Then give the changes you made a good and succinct title and hit the <em>Commit</em> button.</p>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/commit.png" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/commit.png" />
 <p><strong>Committing</strong> allows your changes to be saved in your <em>local</em> copy of the repository and in order to have the changes saved in your <strong>remote</strong> copy, you have to <strong>push</strong> the commit that you just made.</p>
 </section>
 <section id="step-4-create-pull-request">
-<h3>Step 4: Create pull request<a class="headerlink" href="#step-4-create-pull-request" title="Permalink to this headline">#</a></h3>
+<h3>Step 4: Create pull request<a class="headerlink" href="#step-4-create-pull-request" title="Permalink to this heading">#</a></h3>
 <p>The last step to make your contribution official is to create a pull request.</p>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/pr.png" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/pr.png" />
 <p>Go to your <em>remote</em> repository on Github page, the <em>New Pull Request</em> button is located right on top of the folders. Do remember to change your branch to <em>dev</em> since your commits were pushed to the dev branch previously.</p>
 <p>And now, all that is left is for the maintainers of the package to review your work and they can either request additional changes or merge it to the original repository.</p>
 </section>
 <section id="step-5-let-s-do-it">
-<h3>Step 5: Let’s do it<a class="headerlink" href="#step-5-let-s-do-it" title="Permalink to this headline">#</a></h3>
+<h3>Step 5: Let’s do it<a class="headerlink" href="#step-5-let-s-do-it" title="Permalink to this heading">#</a></h3>
 <p>Let’s do it for real! If you have a particular feature in mind that you would want to add, we would recommend first opening an <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues">issue</a> to let us know, so we can eventually guide you and give you some advice. And if you don’t know where to start or what to do, read on. Good luck 💪</p>
 </section>
 </section>
 <section id="ideas-for-contributions">
-<h2>Ideas for contributions<a class="headerlink" href="#ideas-for-contributions" title="Permalink to this headline">#</a></h2>
+<h2>Ideas for contributions<a class="headerlink" href="#ideas-for-contributions" title="Permalink to this heading">#</a></h2>
 <p>Now that you’re familiar with how to use GitHub, time to get your hands dirty and contribute to open-science. Not sure <strong>where to start or what to do</strong>?</p>
 <p>In this guide, we will discuss the two best types of contributions for beginners, as they are easy to make, super useful and safe (you cannot break the package 😏).</p>
 <section id="talk-about-it">
-<h3>Talk about it<a class="headerlink" href="#talk-about-it" title="Permalink to this headline">#</a></h3>
+<h3>Talk about it<a class="headerlink" href="#talk-about-it" title="Permalink to this heading">#</a></h3>
 <p>Contributing to the development of a package also means helping to popularize it, so that more people hear about it and use it. So do not hesitate to <strong>talk about it on social media</strong> (twitter, reddit, research gate, …) and present it to your students or colleagues. Also, do not hesitate to write blogposts about it (or even make some videos if you’re a YouTube influencer 😎). And let us know if you do that, we’ll try to boost your outreach by retweeting, sharing and spreading it.</p>
 </section>
 <section id="look-for-good-first-contribution-issues">
-<h3>Look for <em>“good first contribution”</em> issues<a class="headerlink" href="#look-for-good-first-contribution-issues" title="Permalink to this headline">#</a></h3>
+<h3>Look for <em>“good first contribution”</em> issues<a class="headerlink" href="#look-for-good-first-contribution-issues" title="Permalink to this heading">#</a></h3>
 <p>If you know how to code a bit, you can check out the issues that have been flagged as <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/labels/good%20first%20contribution%20%3Asun_with_face%3A">good for first contribution</a>. This means that they are issue or features ideas that we believe are accessible to beginners. If you’re interested, do not hesitate to comment on these issues to know more, have more info or ask for guidance! We’ll be really happy to help in any way we can ☺️.</p>
 </section>
 <section id="improving-documentation">
-<h3>Improving documentation<a class="headerlink" href="#improving-documentation" title="Permalink to this headline">#</a></h3>
+<h3>Improving documentation<a class="headerlink" href="#improving-documentation" title="Permalink to this heading">#</a></h3>
 <p>One of the easiest thing is to improve, complete or fix the documentation for functions. For instance the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-simulate">ecg_simulate()</a> function has a documentation with a general description, a description of the arguments, some example etc. As you’ve surely noticed, sometimes more details would be needed, some typos are present, or some references could be added.</p>
 <p>The documentation for functions is located alongside the function <em>definition</em> (the code of the function). The code of the <cite>ecg_simulate()</cite> function is <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_simulate.py">here</a>. And as you can see, just below the function name, there is a big <em>string</em> (starting and ending with <cite>“””</cite>) containing the documentation.</p>
 <p>This thing is called the <em>docstring</em>.</p>
 <p>If you modify it here, then it will be updated automatically on the website!</p>
 </section>
 <section id="adding-tests">
-<h3>Adding tests<a class="headerlink" href="#adding-tests" title="Permalink to this headline">#</a></h3>
+<h3>Adding tests<a class="headerlink" href="#adding-tests" title="Permalink to this heading">#</a></h3>
 <p>Tests are super important for programmers to make sure that the changes that we make at one location don’t create unexpected changes at another place.</p>
 <p>Adding them is a good first issue for new contributors, as it takes little time, doesn’t require advanced programming skills and is a good occasion to discover functions and how they work.</p>
 <p>By clicking on the <a class="reference external" href="https://codecov.io/gh/neuropsychology/NeuroKit">“coverage” badge</a> under the logo on the README page, then on the “neurokit2” folder button at the bottom, you can see the <a class="reference external" href="https://codecov.io/gh/neuropsychology/NeuroKit/tree/master/neurokit2">breakdown of testing coverage</a> for each submodules (folders), and if you click on one of them, the coverage for each individual file/function (<a class="reference external" href="https://codecov.io/gh/neuropsychology/NeuroKit/tree/master/neurokit2/stats">example here</a>).</p>
@@ -1118,7 +684,7 @@ much easier.</p>
 <p>And if you want to deepen your understanding of the topic, check-out this very accessible <a class="reference external" href="https://github.com/poldrack/pytest_tutorial">pytest tutorial for data science</a>.</p>
 </section>
 <section id="adding-examples-and-tutorials">
-<h3>Adding examples and tutorials<a class="headerlink" href="#adding-examples-and-tutorials" title="Permalink to this headline">#</a></h3>
+<h3>Adding examples and tutorials<a class="headerlink" href="#adding-examples-and-tutorials" title="Permalink to this heading">#</a></h3>
 <p>The documentation that is on the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/">website</a> is automatically built by a <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/.github/workflows/docs-build.yml">GitHub action</a>, from <a class="reference external" href="https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html">reStructured Text (RST) files</a> (a syntax similar to markdown) or from <a class="reference external" href="https://jupyter.org/">jupyter notebooks (.ipynb)</a> Notebooks are preferred if your example contains code and images.</p>
 <p>These documentation files that we need to write are located in the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/tree/master/docs">/docs/</a> folder. For instance, if you want to add an example, you need to create a new file, for instance <cite>myexample.rst</cite>, in the <cite>docs/examples/</cite> folder.</p>
 <p>If you want to add images to an <cite>.rst</cite> file, best is to put them in the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/tree/master/docs/img">/docs/img/</a> folder and to reference their link.</p>
@@ -1129,50 +695,128 @@ much easier.</p>
 </section>
 
 
-              </div>
+                </article>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="learn_python.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Learn Python in 10 minutes</p>
-        </div>
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="learn_python.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Learn Python in 10 minutes</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="recording.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="recording.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Recording good quality signals</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-contribute-to-neurokit">Why contribute to NeuroKit?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit-s-style">NeuroKit’s style</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-code">Structure and code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-conventions">Naming conventions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-code-checks">Run code checks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development-workflow">Development workflow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-neurokit">Understanding NeuroKit</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-website">1. Documentation website</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-source-on-github">2. The source on Github</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-github-to-contribute">How to use GitHub to contribute</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-fork-the-repo">Step 1: Fork the repo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-clone-it">Step 2: Clone it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-improve-it">Step 3: Improve it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-commit-it-and-push-it">Step 4: Commit it and push it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-create-pull-request">Step 4: Create pull request</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-let-s-do-it">Step 5: Let’s do it</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ideas-for-contributions">Ideas for contributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#talk-about-it">Talk about it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#look-for-good-first-contribution-issues">Look for <em>“good first contribution”</em> issues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-documentation">Improving documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-tests">Adding tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-examples-and-tutorials">Adding examples and tutorials</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
   
-    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.<br/>
-  
-      &copy; Copyright 2020–2023.<br/>
-</p>
-        </footer>
-    </div>
+  <div class="footer-item">
     
-</div>
+<p class="component-author">
+By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2020–2023.
+      <br/>
+    
+  </p>
 
-      </div>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
     </div>
+  </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>

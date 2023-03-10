@@ -8,41 +8,38 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "By"
+msgstr "Par"
+
 msgid "repository"
 msgstr "dépôt"
-
-msgid "open issue"
-msgstr "signaler un problème"
-
-msgid "Contents"
-msgstr "Contenu"
 
 msgid "Fullscreen mode"
 msgstr "Mode plein écran"
 
-msgid "Download this page"
-msgstr "Téléchargez cette page"
+msgid "Contents"
+msgstr "Contenu"
 
 msgid "Download source file"
 msgstr "Télécharger le fichier source"
 
-msgid "Launch"
-msgstr "lancement"
-
 msgid "Edit this page"
 msgstr "Modifier cette page"
 
-msgid "Toggle navigation"
-msgstr "Basculer la navigation"
-
-msgid "Theme by the"
-msgstr "Thème par le"
-
-msgid "Source repository"
-msgstr "Dépôt source"
-
 msgid "Last updated on"
 msgstr "Dernière mise à jour le"
+
+msgid "Print to PDF"
+msgstr "Imprimer au format PDF"
+
+msgid "suggest edit"
+msgstr "suggestion de modification"
+
+msgid "Download this page"
+msgstr "Téléchargez cette page"
+
+msgid "Toggle navigation"
+msgstr "Basculer la navigation"
 
 msgid "By the"
 msgstr "Par le"
@@ -50,32 +47,29 @@ msgstr "Par le"
 msgid "Sphinx Book Theme"
 msgstr "Thème du livre Sphinx"
 
+msgid "previous page"
+msgstr "page précédente"
+
+msgid "Source repository"
+msgstr "Dépôt source"
+
+msgid "open issue"
+msgstr "signaler un problème"
+
+msgid "Download notebook file"
+msgstr "Télécharger le fichier notebook"
+
+msgid "Copyright"
+msgstr "droits d'auteur"
+
+msgid "Theme by the"
+msgstr "Thème par le"
+
 msgid "Open an issue"
 msgstr "Ouvrez un problème"
 
 msgid "next page"
 msgstr "page suivante"
 
-msgid "Copyright"
-msgstr "droits d'auteur"
-
-msgid "Search this book..."
-msgstr "Rechercher dans ce livre ..."
-
-msgid "Print to PDF"
-msgstr "Imprimer au format PDF"
-
-msgid "By"
-msgstr "Par"
-
-msgid "previous page"
-msgstr "page précédente"
-
-msgid "Search the docs ..."
-msgstr "Rechercher dans les documents ..."
-
-msgid "Download notebook file"
-msgstr "Télécharger le fichier notebook"
-
-msgid "suggest edit"
-msgstr "suggestion de modification"
+msgid "Launch"
+msgstr "lancement"
