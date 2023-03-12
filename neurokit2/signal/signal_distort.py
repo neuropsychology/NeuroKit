@@ -103,7 +103,6 @@ def signal_distort(
     """
     # Seed the random generator for reproducible results.
     rng = check_random_state(random_state)
-    print(type(rng))
 
     # Make sure that noise_amplitude is a list.
     if isinstance(noise_amplitude, (int, float)):
