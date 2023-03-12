@@ -33,8 +33,8 @@ def emg_simulate(
     burst_duration : float or list
         Duration of the bursts. Can be a float (each burst will have the same duration) or a list of
         durations for each bursts.
-    random_state : int
-        Seed for the random number generator.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Returns
     ----------

@@ -19,6 +19,8 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_
         The desired sampling rate (in Hz, i.e., samples/second).
     noise : float
         Noise level.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Examples
     ----------

@@ -31,6 +31,8 @@ def signal_simulate(
         Noise level (amplitude of the laplace noise).
     silent : bool
         If ``False`` (default), might print warnings if impossible frequencies are queried.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Returns
     -------

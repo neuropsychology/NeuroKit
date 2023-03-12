@@ -64,8 +64,14 @@ def ppg_simulate(
         Determines how many high frequency burst artifacts occur. The default is 0.
     show : bool
         If ``True``, returns a plot of the landmarks and interpolated PPG. Useful for debugging.
-    random_state : int
-        Seed for the random number generator. Keep it fixed for reproducible results.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
+    random_state_distort : {'legacy', 'spawn'}, None, int, numpy.random.RandomState or numpy.random.Generator
+        Random state to be used to distort the signal. If ``"legacy"``, use the same random state used to
+        generate the signal (discouraged as it creates dependent random streams). If ``"spawn"``, spawn
+        independent children random number generators from the random_state argument. If any of the other types,
+        generate independent children random number generators from the random_state_distort provided (this
+        allows generating multiple version of the same signal distorted by different random noise realizations).
 
     Returns
     -------

@@ -51,8 +51,14 @@ def ecg_simulate(
         <https://physionet.org/content/ecgsyn/>`_. If
         ``"multileads"``, will return a DataFrame containing 12-leads (see `12-leads ECG simulation
         <https://neuropsychology.github.io/NeuroKit/examples/ecg_generate_12leads/ecg_generate_12leads.html>`_).
-    random_state : int
-        Seed for the random number generator.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
+    random_state_distort : {'legacy', 'spawn'}, None, int, numpy.random.RandomState or numpy.random.Generator
+        Random state to be used to distort the signal. If ``"legacy"``, use the same random state used to
+        generate the signal (discouraged as it creates dependent random streams). If ``"spawn"``, spawn
+        independent children random number generators from the random_state argument. If any of the other types,
+        generate independent children random number generators from the random_state_distort provided (this
+        allows generating multiple version of the same signal distorted by different random noise realizations).
     **kwargs
         Other keywords parameters for ECGSYN algorithm, such as ``"lfhfratio"``, ``"ti"``, ``"ai"``, ``"bi"``.
 

@@ -56,9 +56,8 @@ def signal_distort(
         between 1 and 10% of the signal duration.
     linear_drift : bool
         Whether or not to add linear drift to the signal.
-    random_state : int
-        Seed for the random number generator. Keep it fixed for reproducible
-        results.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
     silent : bool
         Whether or not to display warning messages.
 

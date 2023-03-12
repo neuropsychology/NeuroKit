@@ -413,10 +413,10 @@ def test_signal_surrogate():
     assert np.allclose(
         np.histogram(x, 10, (0, 1))[0],
         np.histogram(surrogate, 10, (0, 1))[0],
-	atol=1
+        atol=1
     )
     # Check spectrum
     assert (
-        np.mean(np.abs(np.abs(np.fft.rfft(surrogate - np.mean(surrogate))) -
-	               np.abs(np.fft.rfft(x - np.mean(x))))) < 0.1
+        np.mean(np.abs(np.abs(np.fft.rfft(surrogate - np.mean(surrogate)))
+                       - np.abs(np.fft.rfft(x - np.mean(x))))) < 0.1
     )

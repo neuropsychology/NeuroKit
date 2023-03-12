@@ -31,6 +31,8 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, ran
     n_random : int
         The number of random initializations to cluster random data for calculating the GAP
         statistic.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
     **kwargs
         Other argument to be passed on, for instance ``GFP`` as ``'sd'`` in microstates.
 

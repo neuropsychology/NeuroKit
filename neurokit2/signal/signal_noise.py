@@ -24,7 +24,8 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1, random_state=None):
         The desired sampling rate (in Hz, i.e., samples/second).
     beta : float
         The noise exponent.
-
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Returns
     -------

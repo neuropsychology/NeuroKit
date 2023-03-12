@@ -37,8 +37,14 @@ def rsp_simulate(
         trigonometric sine wave that roughly approximates a single respiratory cycle. If
         ``"breathmetrics"`` (default), will use an advanced model desbribed by
         `Noto, et al. (2018) <https://github.com/zelanolab/breathmetrics>`_.
-    random_state : int
-        Seed for the random number generator.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
+    random_state_distort : {'legacy', 'spawn'}, None, int, numpy.random.RandomState or numpy.random.Generator
+        Random state to be used to distort the signal. If ``"legacy"``, use the same random state used to
+        generate the signal (discouraged as it creates dependent random streams). If ``"spawn"``, spawn
+        independent children random number generators from the random_state argument. If any of the other types,
+        generate independent children random number generators from the random_state_distort provided (this
+        allows generating multiple version of the same signal distorted by different random noise realizations).
 
     See Also
     --------

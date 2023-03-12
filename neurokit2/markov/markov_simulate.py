@@ -17,6 +17,8 @@ def markov_simulate(tm, n=10, random_state=None):
         A probability matrix obtained from :func:`transition_matrix`.
     n : int
         Length of the simulated sequence.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Returns
     -------

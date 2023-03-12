@@ -33,8 +33,14 @@ def eda_simulate(
         Desired number of skin conductance responses (SCRs), i.e., peaks. Defaults to 1.
     drift : float or list
         The slope of a linear drift of the signal. Defaults to -0.01.
-    random_state : int
-        Seed for the random number generator. Defaults to None.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
+    random_state_distort : {'legacy', 'spawn'}, None, int, numpy.random.RandomState or numpy.random.Generator
+        Random state to be used to distort the signal. If ``"legacy"``, use the same random state used to
+        generate the signal (discouraged as it creates dependent random streams). If ``"spawn"``, spawn
+        independent children random number generators from the random_state argument. If any of the other types,
+        generate independent children random number generators from the random_state_distort provided (this
+        allows generating multiple version of the same signal distorted by different random noise realizations).
 
     Returns
     ----------

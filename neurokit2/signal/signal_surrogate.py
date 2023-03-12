@@ -22,6 +22,8 @@ def signal_surrogate(signal, method="IAAFT", random_state=None, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Can be ``"random"`` or ``"IAAFT"``.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
     **kwargs
         Other keywords arguments, such as ``max_iter`` (by default 1000).
 
