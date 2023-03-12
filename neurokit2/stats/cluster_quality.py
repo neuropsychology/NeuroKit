@@ -7,7 +7,7 @@ import sklearn.metrics
 import sklearn.mixture
 import sklearn.model_selection
 
-from ..misc import check_rng
+from ..misc import check_random_state
 
 
 def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, random_state=None, **kwargs):
@@ -68,7 +68,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, ran
 
     """
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     # Sanity checks
     if isinstance(clustering, tuple):

@@ -46,7 +46,7 @@ def test_mad():
 
 def create_sample_cluster_data(random_state):
 
-    rng = nk.misc.check_rng(random_state)
+    rng = nk.misc.check_random_state(random_state)
 
     # generate simple sample data
     K = 5

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.interpolate
 
-from ..misc import check_rng, get_children_rng
+from ..misc import check_random_state, check_random_state_children
 from ..signal import signal_distort
 
 
@@ -86,8 +86,8 @@ def ppg_simulate(
 
     """
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
-    random_state_distort = get_children_rng(random_state, random_state_distort, n_children=4)
+    rng = check_random_state(random_state)
+    random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=4)
 
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested

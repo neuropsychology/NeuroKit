@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..misc import check_rng
+from ..misc import check_random_state
 
 
 def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_state=None):
@@ -47,7 +47,7 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_
         ) from e
 
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:

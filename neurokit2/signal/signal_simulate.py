@@ -3,7 +3,7 @@ from warnings import warn
 
 import numpy as np
 
-from ..misc import NeuroKitWarning, check_rng, listify
+from ..misc import NeuroKitWarning, check_random_state, listify
 
 
 def signal_simulate(
@@ -97,7 +97,7 @@ def signal_simulate(
         signal += _signal_simulate_sinusoidal(x=seconds, frequency=freq, amplitude=amp)
         # Add random noise
         if noise > 0:
-            rng = check_rng(random_state)
+            rng = check_random_state(random_state)
             signal += rng.laplace(0, noise, len(signal))
 
     return signal

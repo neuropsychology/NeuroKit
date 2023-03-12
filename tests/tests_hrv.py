@@ -125,7 +125,7 @@ def test_hrv_interpolated_rri(interpolation_rate):
 
 def test_hrv_missing():
     random_state = 42
-    rng = misc.check_rng(random_state)
+    rng = misc.check_random_state(random_state)
     # Download data
     data = nk.data("bio_resting_5min_100hz")
     sampling_rate = 100

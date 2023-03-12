@@ -3,7 +3,7 @@ from warnings import warn
 
 import numpy as np
 
-from ..misc import NeuroKitWarning, check_rng, listify
+from ..misc import NeuroKitWarning, check_random_state, listify
 from .signal_resample import signal_resample
 from .signal_simulate import signal_simulate
 
@@ -103,7 +103,7 @@ def signal_distort(
 
     """
     # Seed the random generator for reproducible results.
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
     print(type(rng))
 
     # Make sure that noise_amplitude is a list.

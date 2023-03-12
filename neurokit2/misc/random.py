@@ -4,7 +4,7 @@ import numbers
 import numpy as np
 
 
-def check_rng(seed=None):
+def check_random_state(seed=None):
     # If seed is an integer, use the legacy RandomState generator, which has better compatibililty
     # guarantees but worse statistical "randomness" properties and higher computational cost
     # See: https://numpy.org/doc/stable/reference/random/legacy.html
@@ -15,12 +15,12 @@ def check_rng(seed=None):
         return seed
     # If seed is something else, use the new Generator class
     # Note: to initialise the new generator class with an integer seed, use, e.g.:
-    # check_rng(np.random.SeedSequence(123))
+    # check_random_state(np.random.SeedSequence(123))
     return np.random.default_rng(seed)
 
 
-def spawn_rng(rng, n_children=1):
-    rng = check_rng(rng)
+def spawn_random_state(rng, n_children=1):
+    rng = check_random_state(rng)
 
     try:
         # Try to spawn the rng by using the new API
@@ -48,10 +48,10 @@ def spawn_rng(rng, n_children=1):
     return [np.random.RandomState(seed=s) for s in temp_rng.random_raw(n_children)]
 
 
-def get_children_rng(parent_random_state, children_random_state, n_children=1):
-    if children_random_state == "legacy":
-        return [copy.copy(parent_random_state) for _ in range(n_children)]
-    elif children_random_state == "spawn":
-        return spawn_rng(parent_random_state, n_children)
+def check_random_state_children(random_state_parent, random_state_children, n_children=1):
+    if random_state_children == "legacy":
+        return [copy.copy(random_state_parent) for _ in range(n_children)]
+    elif random_state_children == "spawn":
+        return spawn_random_state(random_state_parent, n_children)
     else:
-        return spawn_rng(children_random_state, n_children)
+        return spawn_random_state(random_state_children, n_children)

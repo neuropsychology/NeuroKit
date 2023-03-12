@@ -10,7 +10,7 @@ import sklearn.cluster
 import sklearn.decomposition
 import sklearn.mixture
 
-from ..misc import check_rng
+from ..misc import check_random_state
 from .cluster_quality import _cluster_quality_distance
 
 
@@ -235,7 +235,7 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
     n_samples = data.shape[0]
 
     # Step 1: Initialize random medoids
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
     ids_of_medoids = rng.choice(n_samples, n_clusters, replace=False)
 
     # Find distance between objects to their medoids, can be euclidean or manhatten
@@ -353,7 +353,7 @@ def _cluster_kmod(
     data_sum_sq = np.sum(data**2)
 
     # Select random timepoints for our initial topographic maps
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
     init_times = rng.choice(n_samples, size=n_clusters, replace=False)
 
     # Initialize random cluster centroids

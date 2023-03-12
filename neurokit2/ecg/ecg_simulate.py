@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy
 
-from ..misc import check_rng, get_children_rng
+from ..misc import check_random_state, check_random_state_children
 from ..signal import signal_distort, signal_resample
 
 
@@ -103,7 +103,7 @@ def ecg_simulate(
 
     """
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -165,7 +165,7 @@ def ecg_simulate(
     # Add random noise
     if noise > 0:
         # Seed for random noise
-        random_state_distort = get_children_rng(random_state, random_state_distort, n_children=len(signals))
+        random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=len(signals))
         # Call signal_distort on each signal
         for i in range(len(signals)):
             signals[i] = signal_distort(

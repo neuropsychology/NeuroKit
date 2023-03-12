@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..misc import check_rng
+from ..misc import check_random_state
 from ..signal import signal_resample
 
 
@@ -66,7 +66,7 @@ def emg_simulate(
 
     """
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:

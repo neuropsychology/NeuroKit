@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..misc import check_rng
+from ..misc import check_random_state
 from .transition_matrix import _sanitize_tm_input
 
 
@@ -52,7 +52,7 @@ def markov_simulate(tm, n=10, random_state=None):
     seq[0] = _start
 
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     # simulation procedure
     for i in range(1, n):

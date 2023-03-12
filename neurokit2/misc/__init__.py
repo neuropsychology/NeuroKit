@@ -5,7 +5,7 @@ isort:skip_file (since isort-ing the imports generates circular imports)
 """
 
 from ._warnings import NeuroKitWarning
-from .random import check_rng, get_children_rng, spawn_rng
+from .random import check_random_state, check_random_state_children, spawn_random_state
 from .check_type import check_type
 from .copyfunction import copyfunction
 from .expspace import expspace
@@ -39,8 +39,8 @@ __all__ = [
     "progress_bar",
     "find_plateau",
     "copyfunction",
-    "check_rng",
-    "get_children_rng",
-    "spawn_rng",
+    "check_random_state",
+    "check_random_state_children",
+    "spawn_random_state",
     "create_report",
 ]

@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..misc import check_rng
+from ..misc import check_random_state
 
 
 def signal_surrogate(signal, method="IAAFT", random_state=None, **kwargs):
@@ -88,7 +88,7 @@ def signal_surrogate(signal, method="IAAFT", random_state=None, **kwargs):
     # Or markov_simulate()
 
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     method = method.lower()
     if method == "random":

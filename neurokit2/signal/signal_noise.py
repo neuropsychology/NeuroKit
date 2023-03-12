@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..misc import check_rng
+from ..misc import check_random_state
 
 
 def signal_noise(duration=10, sampling_rate=1000, beta=1, random_state=None):
@@ -80,7 +80,7 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1, random_state=None):
 
     """
     # Seed the random generator for reproducible results
-    rng = check_rng(random_state)
+    rng = check_random_state(random_state)
 
     # The number of samples in the time series
     n = int(duration * sampling_rate)
