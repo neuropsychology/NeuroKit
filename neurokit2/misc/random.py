@@ -60,7 +60,7 @@ def spawn_random_state(rng, n_children=1):
       import neurokit2 as nk
 
       master_seed = 42
-      participants_RNGs = nk.misc.spawn_rng(master_seed, n_children=n_participants)
+      participants_RNGs = nk.misc.spawn_random_state(master_seed, n_children=n_participants)
       PPGs = []
       for i in range(n_participants):
           PPGs.append(nk.ppg_simulate(..., random_state=participants_RNGs[i]))
