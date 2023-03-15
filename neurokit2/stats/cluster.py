@@ -183,12 +183,12 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
 # =============================================================================
 # Kmeans
 # =============================================================================
-def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
+def _cluster_kmeans(data, n_clusters=2, random_state=None, n_init="auto", **kwargs):
     """K-means clustering algorithm"""
 
     # Initialize clustering function
     clustering_model = sklearn.cluster.KMeans(
-        n_clusters=n_clusters, random_state=random_state, n_init="auto", **kwargs
+        n_clusters=n_clusters, random_state=random_state, n_init=n_init, **kwargs
     )
 
     # Fit
@@ -204,7 +204,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
     # Copy function with given parameters
     clustering_function = functools.partial(
-        _cluster_kmeans, n_clusters=n_clusters, random_state=random_state, **kwargs
+        _cluster_kmeans, n_clusters=n_clusters, random_state=random_state, n_init=n_init, **kwargs
     )
 
     # Info dump

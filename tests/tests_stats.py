@@ -98,7 +98,7 @@ def test_kmeans():
     K = len(centres)
 
     # run kmedoids
-    res = nk.cluster(data, method='kmeans', n_clusters=K, random_state=random_state_clustering)
+    res = nk.cluster(data, method='kmeans', n_clusters=K, n_init=1, random_state=random_state_clustering)
 
     # check results (sort, then compare rows of res[1] and points)
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])
