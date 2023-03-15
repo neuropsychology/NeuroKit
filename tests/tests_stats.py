@@ -97,7 +97,7 @@ def test_kmeans():
     data, centres = create_sample_cluster_data(random_state_data)
     K = len(centres)
 
-    # run kmedoids
+    # run kmeans
     res = nk.cluster(data, method='kmeans', n_clusters=K, n_init=1, random_state=random_state_clustering)
 
     # check results (sort, then compare rows of res[1] and points)
