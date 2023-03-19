@@ -10,6 +10,7 @@ import sklearn.cluster
 import sklearn.decomposition
 import sklearn.mixture
 
+from ..misc import check_random_state
 from .cluster_quality import _cluster_quality_distance
 
 
@@ -182,12 +183,12 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
 # =============================================================================
 # Kmeans
 # =============================================================================
-def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
+def _cluster_kmeans(data, n_clusters=2, random_state=None, n_init="auto", **kwargs):
     """K-means clustering algorithm"""
 
     # Initialize clustering function
     clustering_model = sklearn.cluster.KMeans(
-        n_clusters=n_clusters, random_state=random_state, n_init="auto", **kwargs
+        n_clusters=n_clusters, random_state=random_state, n_init=n_init, **kwargs
     )
 
     # Fit
@@ -203,7 +204,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
     # Copy function with given parameters
     clustering_function = functools.partial(
-        _cluster_kmeans, n_clusters=n_clusters, random_state=random_state, **kwargs
+        _cluster_kmeans, n_clusters=n_clusters, random_state=random_state, n_init=n_init, **kwargs
     )
 
     # Info dump
@@ -234,9 +235,8 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
     n_samples = data.shape[0]
 
     # Step 1: Initialize random medoids
-    if not isinstance(random_state, np.random.RandomState):
-        random_state = np.random.RandomState(random_state)
-    ids_of_medoids = np.random.choice(n_samples, n_clusters, replace=False)
+    rng = check_random_state(random_state)
+    ids_of_medoids = rng.choice(n_samples, n_clusters, replace=False)
 
     # Find distance between objects to their medoids, can be euclidean or manhatten
     def find_distance(x, y, dist_method="euclidean"):
@@ -254,12 +254,10 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
 
     # Step 2: Update medoids
     for i in range(max_iterations):
-        # Find new random medoids
+        # Find new medoids
         ids_of_medoids = np.full(n_clusters, -1, dtype=int)
-        subset = np.random.choice(n_samples, n_samples, replace=False)
-
         for i in range(n_clusters):
-            indices = np.intersect1d(np.where(segmentation == i)[0], subset)
+            indices = np.where(segmentation == i)[0]
             distances = find_distance(data[indices, None, :], data[None, indices, :]).sum(axis=0)
             ids_of_medoids[i] = indices[np.argmin(distances)]
 
@@ -355,9 +353,8 @@ def _cluster_kmod(
     data_sum_sq = np.sum(data**2)
 
     # Select random timepoints for our initial topographic maps
-    if not isinstance(random_state, np.random.RandomState):
-        random_state = np.random.RandomState(random_state)
-    init_times = random_state.choice(n_samples, size=n_clusters, replace=False)
+    rng = check_random_state(random_state)
+    init_times = rng.choice(n_samples, size=n_clusters, replace=False)
 
     # Initialize random cluster centroids
     clusters = data[init_times, :]

@@ -1,7 +1,9 @@
 import numpy as np
 
+from ..misc import check_random_state
 
-def signal_surrogate(signal, method="IAAFT", **kwargs):
+
+def signal_surrogate(signal, method="IAAFT", random_state=None, **kwargs):
     """**Create Signal Surrogates**
 
     Generate a surrogate version of a signal. Different methods are available, such as:
@@ -20,6 +22,8 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Can be ``"random"`` or ``"IAAFT"``.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
     **kwargs
         Other keywords arguments, such as ``max_iter`` (by default 1000).
 
@@ -85,16 +89,19 @@ def signal_surrogate(signal, method="IAAFT", **kwargs):
     # https://github.com/Frederic-vW/eeg_microstates/blob/eeg_microstates3.py#L861
     # Or markov_simulate()
 
+    # Seed the random generator for reproducible results
+    rng = check_random_state(random_state)
+
     method = method.lower()
     if method == "random":
-        surrogate = np.random.permutation(signal)
+        surrogate = rng.permutation(signal)
     elif method == "iaaft":
-        surrogate, _, _ = _signal_surrogate_iaaft(signal, **kwargs)
+        surrogate, _, _ = _signal_surrogate_iaaft(signal, rng=rng, **kwargs)
 
     return surrogate
 
 
-def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, **kwargs):
+def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, rng=None):
     """IAAFT
     max_iter : int
         Maximum iterations to be performed while checking for convergence. Convergence can be
@@ -125,7 +132,7 @@ def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, **kwar
     previous_error, current_error = (-1, 1)
 
     # Start with a random permutation
-    t = np.fft.rfft(np.random.permutation(signal))
+    t = np.fft.rfft(rng.permutation(signal))
 
     for i in range(max_iter):
         # Match power spectrum

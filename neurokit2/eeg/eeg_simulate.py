@@ -1,7 +1,9 @@
 import numpy as np
 
+from ..misc import check_random_state
 
-def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1):
+
+def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_state=None):
     """**EEG Signal Simulation**
 
     Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw
@@ -17,6 +19,8 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1):
         The desired sampling rate (in Hz, i.e., samples/second).
     noise : float
         Noise level.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Examples
     ----------
@@ -43,6 +47,9 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1):
             "The 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
         ) from e
+
+    # Seed the random generator for reproducible results
+    rng = check_random_state(random_state)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -76,15 +83,17 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1):
     times = raw.times[: int(raw.info["sfreq"] * 2)]
     fwd = mne.read_forward_solution(fwd_file, verbose=False)
     stc = mne.simulation.simulate_sparse_stc(
-        fwd["src"], n_dipoles=n_dipoles, times=times, data_fun=data_fun
+        fwd["src"],
+        n_dipoles=n_dipoles,
+        times=times,
+        data_fun=data_fun,
+        random_state=rng,
     )
 
     # Repeat the source activation multiple times.
-    raw_sim = mne.simulation.simulate_raw(
-        raw.info, [stc] * int(np.ceil(duration / 2)), forward=fwd, verbose=False
-    )
+    raw_sim = mne.simulation.simulate_raw(raw.info, [stc] * int(np.ceil(duration / 2)), forward=fwd, verbose=False)
     cov = mne.make_ad_hoc_cov(raw_sim.info, std=noise / 1000000)
-    raw_sim = mne.simulation.add_noise(raw_sim, cov, iir_filter=[0.2, -0.2, 0.04], verbose=False)
+    raw_sim = mne.simulation.add_noise(raw_sim, cov, iir_filter=[0.2, -0.2, 0.04], verbose=False, random_state=rng)
 
     # Resample
     raw_sim = raw_sim.resample(sampling_rate, verbose=False)

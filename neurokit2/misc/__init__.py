@@ -1,6 +1,11 @@
-"""Submodule for NeuroKit."""
+"""Submodule for NeuroKit.
+
+isort:skip_file (since isort-ing the imports generates circular imports)
+
+"""
 
 from ._warnings import NeuroKitWarning
+from .random import check_random_state, check_random_state_children, spawn_random_state
 from .check_type import check_type
 from .copyfunction import copyfunction
 from .expspace import expspace
@@ -16,6 +21,7 @@ from .progress_bar import progress_bar
 from .replace import replace
 from .type_converters import as_vector
 from .report import create_report
+
 
 __all__ = [
     "listify",
@@ -33,5 +39,8 @@ __all__ = [
     "progress_bar",
     "find_plateau",
     "copyfunction",
+    "check_random_state",
+    "check_random_state_children",
+    "spawn_random_state",
     "create_report",
 ]

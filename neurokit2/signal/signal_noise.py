@@ -1,7 +1,9 @@
 import numpy as np
 
+from ..misc import check_random_state
 
-def signal_noise(duration=10, sampling_rate=1000, beta=1):
+
+def signal_noise(duration=10, sampling_rate=1000, beta=1, random_state=None):
     """**Simulate noise**
 
     This function generates pure Gaussian ``(1/f)**beta`` noise. The power-spectrum of the generated
@@ -22,7 +24,8 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
         The desired sampling rate (in Hz, i.e., samples/second).
     beta : float
         The noise exponent.
-
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Returns
     -------
@@ -77,6 +80,8 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
       plt.close()
 
     """
+    # Seed the random generator for reproducible results
+    rng = check_random_state(random_state)
 
     # The number of samples in the time series
     n = int(duration * sampling_rate)
@@ -97,8 +102,8 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
 
     # Generate scaled random power + phase, adjusting size to
     # generate one Fourier component per frequency
-    sr = np.random.normal(scale=f, size=len(f))
-    si = np.random.normal(scale=f, size=len(f))
+    sr = rng.normal(scale=f, size=len(f))
+    si = rng.normal(scale=f, size=len(f))
 
     # If the signal length is even, frequencies +/- 0.5 are equal
     # so the coefficient must be real.
