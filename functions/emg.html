@@ -577,9 +577,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.736918         1.0</span>
+<span class="go">1     1         3000  ...                1.500800         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.922511         1.0</span>
+<span class="go">3     3         9000  ...                0.813457         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -589,7 +589,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.245107</span>
+<span class="go">0               3.0            0.239951</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -599,7 +599,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <h3><em>emg_simulate()</em><a class="headerlink" href="#emg-simulate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_simulate">
-<span class="sig-name descname"><span class="pre">emg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_simulate.html#emg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_simulate.html#emg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_simulate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Simulate an EMG signal</strong></p>
 <p>Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.</p>
 <dl class="field-list simple">
@@ -612,7 +612,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <li><p><strong>burst_number</strong> (<em>int</em>) – Desired number of bursts of activity (active muscle periods).</p></li>
 <li><p><strong>burst_duration</strong> (<em>float or list</em>) – Duration of the bursts. Can be a float (each burst will have the same duration) or a list of
 durations for each bursts.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -939,9 +939,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.736918         1.0</span>
+<span class="go">1     1         3000  ...                1.652876         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.922511         1.0</span>
+<span class="go">3     3         9000  ...                1.443772         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -984,15 +984,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0             0.24434</span>
+<span class="go">0               3.0            0.239598</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.251160</span>
-<span class="go">2     2                 1            0.237548</span>
+<span class="go">1     1                 2            0.241677</span>
+<span class="go">2     2                 1            0.237518</span>
 </pre></div>
 </div>
 </dd></dl>

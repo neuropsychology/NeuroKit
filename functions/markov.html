@@ -546,7 +546,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <h2><em>markov_simulate()</em><a class="headerlink" href="#markov-simulate" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.markov.markov_simulate">
-<span class="sig-name descname"><span class="pre">markov_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_simulate.html#markov_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">markov_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/markov/markov_simulate.html#markov_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.markov.markov_simulate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Markov Chain Simulation</strong></p>
 <p>Given a <a class="reference internal" href="#neurokit2.markov.transition_matrix" title="neurokit2.markov.transition_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">transition_matrix()</span></code></a>, this function simulates the corresponding sequence of states
 (also known as a discrete Markov chain).</p>
@@ -555,6 +555,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tm</strong> (<em>pd.DataFrame</em>) – A probability matrix obtained from <a class="reference internal" href="#neurokit2.markov.transition_matrix" title="neurokit2.markov.transition_matrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">transition_matrix()</span></code></a>.</p></li>
 <li><p><strong>n</strong> (<em>int</em>) – Length of the simulated sequence.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -575,7 +576,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 2, 2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 1, 0], dtype=int64)</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 3, 0, 3, 2, 1, 0, 0, 0, 0, 3, 1, 0, 0, 3], dtype=int64)</span>
 </pre></div>
 </div>
 </dd></dl>

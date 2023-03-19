@@ -353,11 +353,19 @@ document.write(`
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_random_state_children</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span><span class="p">,</span> <span class="n">signal_merge</span>
 
 
 <div class="viewcode-block" id="eda_simulate"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_simulate">[docs]</a><span class="k">def</span> <span class="nf">eda_simulate</span><span class="p">(</span>
-    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">drift</span><span class="o">=-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">scr_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">drift</span><span class="o">=-</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">random_state_distort</span><span class="o">=</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate Electrodermal Activity (EDA) signal**</span>
 
@@ -377,8 +385,14 @@ document.write(`
 <span class="sd">        Desired number of skin conductance responses (SCRs), i.e., peaks. Defaults to 1.</span>
 <span class="sd">    drift : float or list</span>
 <span class="sd">        The slope of a linear drift of the signal. Defaults to -0.01.</span>
-<span class="sd">    random_state : int</span>
-<span class="sd">        Seed for the random number generator. Defaults to None.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
+<span class="sd">    random_state_distort : {&#39;legacy&#39;, &#39;spawn&#39;}, None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Random state to be used to distort the signal. If ``&quot;legacy&quot;``, use the same random state used to</span>
+<span class="sd">        generate the signal (discouraged as it creates dependent random streams). If ``&quot;spawn&quot;``, spawn</span>
+<span class="sd">        independent children random number generators from the random_state argument. If any of the other types,</span>
+<span class="sd">        generate independent children random number generators from the random_state_distort provided (this</span>
+<span class="sd">        allows generating multiple version of the same signal distorted by different random noise realizations).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
@@ -411,7 +425,8 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Seed the random generator for reproducible results</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">random_state_distort</span> <span class="o">=</span> <span class="n">check_random_state_children</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">random_state_distort</span><span class="p">,</span> <span class="n">n_children</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Generate number of samples automatically if length is unspecified</span>
     <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -424,7 +439,7 @@ document.write(`
     <span class="n">start_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">scr_number</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">start_peak</span> <span class="ow">in</span> <span class="n">start_peaks</span><span class="p">:</span>
-        <span class="n">relative_time_peak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="mf">3.0745</span>
+        <span class="n">relative_time_peak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="mf">3.0745</span>
         <span class="n">scr</span> <span class="o">=</span> <span class="n">_eda_simulate_scr</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">time_peak</span><span class="o">=</span><span class="n">relative_time_peak</span><span class="p">)</span>
         <span class="n">time_scr</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_peak</span><span class="p">,</span> <span class="n">start_peak</span> <span class="o">+</span> <span class="mi">9</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">time_scr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -445,9 +460,9 @@ document.write(`
             <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
             <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
         <span class="p">)</span>
-    <span class="c1"># Reset random seed (so it doesn&#39;t affect global)</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">eda</span></div>
 
 

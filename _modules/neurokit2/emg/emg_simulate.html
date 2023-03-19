@@ -353,6 +353,7 @@ document.write(`
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_resample</span>
 
 
@@ -363,7 +364,7 @@ document.write(`
     <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
     <span class="n">burst_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">burst_duration</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate an EMG signal**</span>
 
@@ -384,8 +385,8 @@ document.write(`
 <span class="sd">    burst_duration : float or list</span>
 <span class="sd">        Duration of the bursts. Can be a float (each burst will have the same duration) or a list of</span>
 <span class="sd">        durations for each bursts.</span>
-<span class="sd">    random_state : int</span>
-<span class="sd">        Seed for the random number generator.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
@@ -417,7 +418,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Seed the random generator for reproducible results</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="c1"># Generate number of samples automatically if length is unspecified</span>
     <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -441,14 +442,14 @@ document.write(`
     <span class="c1"># Generate bursts</span>
     <span class="n">bursts</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">burst</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">burst_number</span><span class="p">):</span>
-        <span class="n">bursts</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">burst_duration</span><span class="p">[</span><span class="n">burst</span><span class="p">]))</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">)]</span>
+        <span class="n">bursts</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">burst_duration</span><span class="p">[</span><span class="n">burst</span><span class="p">]))</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">)]</span>
 
     <span class="c1"># Generate quiet</span>
     <span class="n">n_quiet</span> <span class="o">=</span> <span class="n">burst_number</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># number of quiet periods (in between bursts)</span>
     <span class="n">duration_quiet</span> <span class="o">=</span> <span class="p">(</span><span class="n">duration</span> <span class="o">-</span> <span class="n">total_duration_bursts</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_quiet</span>  <span class="c1"># duration of each quiet period</span>
     <span class="n">quiets</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">quiet</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_quiet</span><span class="p">):</span>  <span class="c1"># pylint: disable=W0612</span>
-        <span class="n">quiets</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">duration_quiet</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">)]</span>
+        <span class="n">quiets</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">duration_quiet</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">)]</span>
 
     <span class="c1"># Merge the two</span>
     <span class="n">emg</span> <span class="o">=</span> <span class="p">[]</span>
@@ -459,7 +460,7 @@ document.write(`
     <span class="n">emg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">emg</span><span class="p">)</span>
 
     <span class="c1"># Add random (gaussian distributed) noise</span>
-    <span class="n">emg</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">emg</span><span class="p">))</span>
+    <span class="n">emg</span> <span class="o">+=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">emg</span><span class="p">))</span>
 
     <span class="c1"># Resample</span>
     <span class="n">emg</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>

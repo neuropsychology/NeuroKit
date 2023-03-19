@@ -352,8 +352,10 @@ document.write(`
   <h1>Source code for neurokit2.eeg.eeg_simulate</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 
-<div class="viewcode-block" id="eeg_simulate"><a class="viewcode-back" href="../../../functions/eeg.html#neurokit2.eeg.eeg_simulate">[docs]</a><span class="k">def</span> <span class="nf">eeg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="eeg_simulate"><a class="viewcode-back" href="../../../functions/eeg.html#neurokit2.eeg.eeg_simulate">[docs]</a><span class="k">def</span> <span class="nf">eeg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**EEG Signal Simulation**</span>
 
 <span class="sd">    Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw</span>
@@ -369,6 +371,8 @@ document.write(`
 <span class="sd">        The desired sampling rate (in Hz, i.e., samples/second).</span>
 <span class="sd">    noise : float</span>
 <span class="sd">        Noise level.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>
@@ -395,6 +399,9 @@ document.write(`
             <span class="s2">&quot;The &#39;mne&#39; module is required for this function to run. &quot;</span><span class="p">,</span>
             <span class="s2">&quot;Please install it first (`pip install mne`).&quot;</span><span class="p">,</span>
         <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="c1"># Generate number of samples automatically if length is unspecified</span>
     <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -428,15 +435,17 @@ document.write(`
     <span class="n">times</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)]</span>
     <span class="n">fwd</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_forward_solution</span><span class="p">(</span><span class="n">fwd_file</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">stc</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">simulate_sparse_stc</span><span class="p">(</span>
-        <span class="n">fwd</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span> <span class="n">n_dipoles</span><span class="o">=</span><span class="n">n_dipoles</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">data_fun</span><span class="o">=</span><span class="n">data_fun</span>
+        <span class="n">fwd</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span>
+        <span class="n">n_dipoles</span><span class="o">=</span><span class="n">n_dipoles</span><span class="p">,</span>
+        <span class="n">times</span><span class="o">=</span><span class="n">times</span><span class="p">,</span>
+        <span class="n">data_fun</span><span class="o">=</span><span class="n">data_fun</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Repeat the source activation multiple times.</span>
-    <span class="n">raw_sim</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">simulate_raw</span><span class="p">(</span>
-        <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="p">[</span><span class="n">stc</span><span class="p">]</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">forward</span><span class="o">=</span><span class="n">fwd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span>
+    <span class="n">raw_sim</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">simulate_raw</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="p">[</span><span class="n">stc</span><span class="p">]</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">forward</span><span class="o">=</span><span class="n">fwd</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">cov</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">make_ad_hoc_cov</span><span class="p">(</span><span class="n">raw_sim</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">noise</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">)</span>
-    <span class="n">raw_sim</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">add_noise</span><span class="p">(</span><span class="n">raw_sim</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">iir_filter</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">raw_sim</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">add_noise</span><span class="p">(</span><span class="n">raw_sim</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">iir_filter</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 
     <span class="c1"># Resample</span>
     <span class="n">raw_sim</span> <span class="o">=</span> <span class="n">raw_sim</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

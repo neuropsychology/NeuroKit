@@ -353,6 +353,7 @@ document.write(`
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_random_state_children</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span><span class="p">,</span> <span class="n">signal_simulate</span><span class="p">,</span> <span class="n">signal_smooth</span>
 
 
@@ -364,6 +365,7 @@ document.write(`
     <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">random_state_distort</span><span class="o">=</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate a respiratory signal**</span>
 
@@ -387,8 +389,14 @@ document.write(`
 <span class="sd">        trigonometric sine wave that roughly approximates a single respiratory cycle. If</span>
 <span class="sd">        ``&quot;breathmetrics&quot;`` (default), will use an advanced model desbribed by</span>
 <span class="sd">        `Noto, et al. (2018) &lt;https://github.com/zelanolab/breathmetrics&gt;`_.</span>
-<span class="sd">    random_state : int</span>
-<span class="sd">        Seed for the random number generator.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
+<span class="sd">    random_state_distort : {&#39;legacy&#39;, &#39;spawn&#39;}, None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Random state to be used to distort the signal. If ``&quot;legacy&quot;``, use the same random state used to</span>
+<span class="sd">        generate the signal (discouraged as it creates dependent random streams). If ``&quot;spawn&quot;``, spawn</span>
+<span class="sd">        independent children random number generators from the random_state argument. If any of the other types,</span>
+<span class="sd">        generate independent children random number generators from the random_state_distort provided (this</span>
+<span class="sd">        allows generating multiple version of the same signal distorted by different random noise realizations).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -421,7 +429,8 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Seed the random generator for reproducible results</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">random_state_distort</span> <span class="o">=</span> <span class="n">check_random_state_children</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">random_state_distort</span><span class="p">,</span> <span class="n">n_children</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Generate number of samples automatically if length is unspecified</span>
     <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -433,7 +442,10 @@ document.write(`
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">rsp</span> <span class="o">=</span> <span class="n">_rsp_simulate_breathmetrics</span><span class="p">(</span>
-            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="n">respiratory_rate</span>
+            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">respiratory_rate</span><span class="o">=</span><span class="n">respiratory_rate</span><span class="p">,</span>
+            <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">rsp</span> <span class="o">=</span> <span class="n">rsp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="p">]</span>
 
@@ -445,12 +457,10 @@ document.write(`
             <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
             <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
             <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="c1"># Reset random seed (so it doesn&#39;t affect global)</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rsp</span></div>
 
 
@@ -490,6 +500,7 @@ document.write(`
     <span class="n">pause_amplitude</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
     <span class="n">pause_amplitude_variance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">signal_noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulates a recording of human airflow data by appending individually constructed sin waves and pauses in</span>
 <span class="sd">    sequence. This is translated from the matlab code available `here.</span>
@@ -542,25 +553,23 @@ document.write(`
 
     <span class="c1"># Normalize variance by average breath amplitude</span>
     <span class="n">amplitude_variance_normed</span> <span class="o">=</span> <span class="n">average_amplitude</span> <span class="o">*</span> <span class="n">amplitude_variance</span>
-    <span class="n">amplitudes_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">amplitude_variance_normed</span> <span class="o">+</span> <span class="n">average_amplitude</span>
+    <span class="n">amplitudes_with_noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">amplitude_variance_normed</span> <span class="o">+</span> <span class="n">average_amplitude</span>
     <span class="n">amplitudes_with_noise</span><span class="p">[</span><span class="n">amplitudes_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># Normalize phase by average breath length</span>
     <span class="n">phase_variance_normed</span> <span class="o">=</span> <span class="n">phase_variance</span> <span class="o">*</span> <span class="n">sample_phase</span>
-    <span class="n">phases_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">phase_variance_normed</span> <span class="o">+</span> <span class="n">sample_phase</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">phases_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">phase_variance_normed</span> <span class="o">+</span> <span class="n">sample_phase</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">phases_with_noise</span><span class="p">[</span><span class="n">phases_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># Normalize pause lengths by phase and variation</span>
     <span class="n">inhale_pauseLength_variance_normed</span> <span class="o">=</span> <span class="n">inhale_pause_phase</span> <span class="o">*</span> <span class="n">inhale_pauseLength_variance</span>
     <span class="n">inhale_pauseLengths_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">inhale_pauseLength_variance_normed</span> <span class="o">+</span> <span class="n">inhale_pause_phase</span>
+        <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">inhale_pauseLength_variance_normed</span> <span class="o">+</span> <span class="n">inhale_pause_phase</span>
     <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">inhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">inhale_pauseLengths_with_noise</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">exhale_pauseLength_variance_normed</span> <span class="o">=</span> <span class="n">exhale_pause_phase</span> <span class="o">*</span> <span class="n">exhale_pauseLength_variance</span>
     <span class="n">exhale_pauseLengths_with_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">exhale_pauseLength_variance_normed</span> <span class="o">+</span> <span class="n">inhale_pause_phase</span>
+        <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">nCycles</span><span class="p">)</span> <span class="o">*</span> <span class="n">exhale_pauseLength_variance_normed</span> <span class="o">+</span> <span class="n">inhale_pause_phase</span>
     <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="c1"># why inhale pause phase?</span>
@@ -590,22 +599,18 @@ document.write(`
     <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nCycles</span><span class="p">):</span>
         <span class="c1"># Determine length of inhale pause for this cycle</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">inhale_pause_percent</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">inhale_pause_percent</span><span class="p">:</span>
             <span class="n">this_inhale_pauseLength</span> <span class="o">=</span> <span class="n">inhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
-            <span class="n">this_inhale_pause</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">this_inhale_pauseLength</span><span class="p">)</span> <span class="o">*</span> <span class="n">pause_amplitude_variance_normed</span>
-            <span class="p">)</span>
+            <span class="n">this_inhale_pause</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">this_inhale_pauseLength</span><span class="p">)</span> <span class="o">*</span> <span class="n">pause_amplitude_variance_normed</span>
             <span class="n">this_inhale_pause</span><span class="p">[</span><span class="n">this_inhale_pause</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">this_inhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">this_inhale_pause</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Determine length of exhale pause for this cycle</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">exhale_pause_percent</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">exhale_pause_percent</span><span class="p">:</span>
             <span class="n">this_exhale_pauseLength</span> <span class="o">=</span> <span class="n">exhale_pauseLengths_with_noise</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
-            <span class="n">this_exhale_pause</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">this_exhale_pauseLength</span><span class="p">)</span> <span class="o">*</span> <span class="n">pause_amplitude_variance_normed</span>
-            <span class="p">)</span>
+            <span class="n">this_exhale_pause</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">this_exhale_pauseLength</span><span class="p">)</span> <span class="o">*</span> <span class="n">pause_amplitude_variance_normed</span>
             <span class="n">this_exhale_pause</span><span class="p">[</span><span class="n">this_exhale_pause</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">this_exhale_pauseLength</span> <span class="o">=</span> <span class="mi">0</span>
@@ -677,7 +682,7 @@ document.write(`
     <span class="k">if</span> <span class="n">signal_noise</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">signal_noise</span> <span class="o">=</span> <span class="mf">0.0001</span>
 
-    <span class="n">noise_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">simulated_respiration</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">average_amplitude</span>
+    <span class="n">noise_vector</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">simulated_respiration</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">average_amplitude</span>
     <span class="n">simulated_respiration</span> <span class="o">=</span> <span class="n">simulated_respiration</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">signal_noise</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise_vector</span> <span class="o">*</span> <span class="n">signal_noise</span>
     <span class="n">raw_features</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Inhale Onsets&quot;</span><span class="p">:</span> <span class="n">inhale_onsets</span><span class="p">,</span>
@@ -713,7 +718,7 @@ document.write(`
     <span class="k">return</span> <span class="n">simulated_respiration</span><span class="p">,</span> <span class="n">raw_features</span><span class="p">,</span> <span class="n">feature_stats</span>
 
 
-<span class="k">def</span> <span class="nf">_rsp_simulate_breathmetrics</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_rsp_simulate_breathmetrics</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
     <span class="n">n_cycles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">respiratory_rate</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">duration</span><span class="p">)</span>
 
@@ -726,6 +731,7 @@ document.write(`
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">breathing_rate</span><span class="o">=</span><span class="n">respiratory_rate</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span>
             <span class="n">signal_noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">rsp</span>
 </pre></div>

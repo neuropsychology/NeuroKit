@@ -355,11 +355,17 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">listify</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">listify</span>
 
 
 <div class="viewcode-block" id="signal_simulate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_simulate">[docs]</a><span class="k">def</span> <span class="nf">signal_simulate</span><span class="p">(</span>
-    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">amplitude</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate a continuous signal**</span>
 
@@ -377,6 +383,8 @@ document.write(`
 <span class="sd">        Noise level (amplitude of the laplace noise).</span>
 <span class="sd">    silent : bool</span>
 <span class="sd">        If ``False`` (default), might print warnings if impossible frequencies are queried.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -443,7 +451,8 @@ document.write(`
         <span class="n">signal</span> <span class="o">+=</span> <span class="n">_signal_simulate_sinusoidal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amp</span><span class="p">)</span>
         <span class="c1"># Add random noise</span>
         <span class="k">if</span> <span class="n">noise</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">signal</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+            <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+            <span class="n">signal</span> <span class="o">+=</span> <span class="n">rng</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">signal</span></div>
 

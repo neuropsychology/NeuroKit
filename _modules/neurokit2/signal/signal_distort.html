@@ -355,7 +355,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">listify</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">listify</span>
 <span class="kn">from</span> <span class="nn">.signal_resample</span> <span class="kn">import</span> <span class="n">signal_resample</span>
 <span class="kn">from</span> <span class="nn">.signal_simulate</span> <span class="kn">import</span> <span class="n">signal_simulate</span>
 
@@ -408,9 +408,8 @@ document.write(`
 <span class="sd">        between 1 and 10% of the signal duration.</span>
 <span class="sd">    linear_drift : bool</span>
 <span class="sd">        Whether or not to add linear drift to the signal.</span>
-<span class="sd">    random_state : int</span>
-<span class="sd">        Seed for the random number generator. Keep it fixed for reproducible</span>
-<span class="sd">        results.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 <span class="sd">    silent : bool</span>
 <span class="sd">        Whether or not to display warning messages.</span>
 
@@ -455,7 +454,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Seed the random generator for reproducible results.</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="c1"># Make sure that noise_amplitude is a list.</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noise_amplitude</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
@@ -477,6 +476,7 @@ document.write(`
             <span class="n">noise_frequency</span><span class="o">=</span><span class="n">noise_frequency</span><span class="p">,</span>
             <span class="n">noise_shape</span><span class="o">=</span><span class="n">noise_shape</span><span class="p">,</span>
             <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+            <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># Powerline noise.</span>
@@ -500,15 +500,13 @@ document.write(`
             <span class="n">artifacts_amplitude</span><span class="o">=</span><span class="n">artifacts_amplitude</span><span class="p">,</span>
             <span class="n">artifacts_number</span><span class="o">=</span><span class="n">artifacts_number</span><span class="p">,</span>
             <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+            <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">linear_drift</span><span class="p">:</span>
         <span class="n">noise</span> <span class="o">+=</span> <span class="n">_signal_linear_drift</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
     <span class="n">distorted</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">+</span> <span class="n">noise</span>
-
-    <span class="c1"># Reset random seed (so it doesn&#39;t affect global)</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">distorted</span></div>
 
@@ -535,6 +533,7 @@ document.write(`
     <span class="n">artifacts_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="n">artifacts_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
     <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="c1"># Generate artifact burst with random onset and random duration.</span>
@@ -545,15 +544,16 @@ document.write(`
         <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">artifacts_amplitude</span><span class="p">,</span>
         <span class="n">noise_shape</span><span class="o">=</span><span class="n">artifacts_shape</span><span class="p">,</span>
         <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+        <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">artifacts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">artifacts</span>
 
     <span class="n">min_duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">artifacts</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.001</span><span class="p">))</span>
     <span class="n">max_duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">artifacts</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span><span class="p">))</span>
-    <span class="n">artifact_durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">min_duration</span><span class="p">,</span> <span class="n">max_duration</span><span class="p">,</span> <span class="n">artifacts_number</span><span class="p">)</span>
+    <span class="n">artifact_durations</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">min_duration</span><span class="p">,</span> <span class="n">max_duration</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">artifacts_number</span><span class="p">)</span>
 
-    <span class="n">artifact_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">artifacts</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_duration</span><span class="p">,</span> <span class="n">artifacts_number</span><span class="p">)</span>
+    <span class="n">artifact_onsets</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">artifacts</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_duration</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">artifacts_number</span><span class="p">)</span>
     <span class="n">artifact_offsets</span> <span class="o">=</span> <span class="n">artifact_onsets</span> <span class="o">+</span> <span class="n">artifact_durations</span>
 
     <span class="n">artifact_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">artifacts</span><span class="p">))</span>
@@ -603,6 +603,7 @@ document.write(`
     <span class="n">noise_frequency</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
     <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">base_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span>
@@ -626,6 +627,7 @@ document.write(`
             <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">amp</span><span class="p">,</span>
             <span class="n">noise_shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
             <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+            <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">base_noise</span> <span class="o">+=</span> <span class="n">_base_noise</span>
 
@@ -639,6 +641,7 @@ document.write(`
     <span class="n">noise_amplitude</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
     <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
     <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="n">_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
@@ -675,9 +678,9 @@ document.write(`
     <span class="n">noise_duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">noise_frequency</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">noise_shape</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">]:</span>
-        <span class="n">_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="p">,</span> <span class="n">noise_duration</span><span class="p">)</span>
+        <span class="n">_noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="p">,</span> <span class="n">noise_duration</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">noise_shape</span> <span class="o">==</span> <span class="s2">&quot;laplace&quot;</span><span class="p">:</span>
-        <span class="n">_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="p">,</span> <span class="n">noise_duration</span><span class="p">)</span>
+        <span class="n">_noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="p">,</span> <span class="n">noise_duration</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: signal_distort(): &#39;noise_shape&#39; should be one of &#39;gaussian&#39; or &#39;laplace&#39;.&quot;</span>

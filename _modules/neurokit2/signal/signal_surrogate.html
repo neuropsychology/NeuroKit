@@ -352,8 +352,10 @@ document.write(`
   <h1>Source code for neurokit2.signal.signal_surrogate</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 
-<div class="viewcode-block" id="signal_surrogate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_surrogate">[docs]</a><span class="k">def</span> <span class="nf">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;IAAFT&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="signal_surrogate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_surrogate">[docs]</a><span class="k">def</span> <span class="nf">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;IAAFT&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Create Signal Surrogates**</span>
 
 <span class="sd">    Generate a surrogate version of a signal. Different methods are available, such as:</span>
@@ -372,6 +374,8 @@ document.write(`
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Can be ``&quot;random&quot;`` or ``&quot;IAAFT&quot;``.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other keywords arguments, such as ``max_iter`` (by default 1000).</span>
 
@@ -437,16 +441,19 @@ document.write(`
     <span class="c1"># https://github.com/Frederic-vW/eeg_microstates/blob/eeg_microstates3.py#L861</span>
     <span class="c1"># Or markov_simulate()</span>
 
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
-        <span class="n">surrogate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">surrogate</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;iaaft&quot;</span><span class="p">:</span>
-        <span class="n">surrogate</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_signal_surrogate_iaaft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">surrogate</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_signal_surrogate_iaaft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">surrogate</span></div>
 
 
-<span class="k">def</span> <span class="nf">_signal_surrogate_iaaft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_surrogate_iaaft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;IAAFT</span>
 <span class="sd">    max_iter : int</span>
 <span class="sd">        Maximum iterations to be performed while checking for convergence. Convergence can be</span>
@@ -477,7 +484,7 @@ document.write(`
     <span class="n">previous_error</span><span class="p">,</span> <span class="n">current_error</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Start with a random permutation</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
         <span class="c1"># Match power spectrum</span>

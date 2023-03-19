@@ -559,7 +559,7 @@ document.write(`
 <h3><em>signal_simulate()</em><a class="headerlink" href="#signal-simulate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal_simulate">
-<span class="sig-name descname"><span class="pre">signal_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_simulate.html#signal_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">signal_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_simulate.html#signal_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_simulate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Simulate a continuous signal</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -570,6 +570,7 @@ document.write(`
 <li><p><strong>amplitude</strong> (<em>float or list</em>) – Amplitude of the oscillations.</p></li>
 <li><p><strong>noise</strong> (<em>float</em>) – Noise level (amplitude of the laplace noise).</p></li>
 <li><p><strong>silent</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), might print warnings if impossible frequencies are queried.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1135,8 +1136,7 @@ the signal).</p></li>
 <li><p><strong>artifacts_number</strong> (<em>int</em>) – The number of artifact bursts. The bursts have a random duration
 between 1 and 10% of the signal duration.</p></li>
 <li><p><strong>linear_drift</strong> (<em>bool</em>) – Whether or not to add linear drift to the signal.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator. Keep it fixed for reproducible
-results.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
 <li><p><strong>silent</strong> (<em>bool</em>) – Whether or not to display warning messages.</p></li>
 </ul>
 </dd>
@@ -1280,7 +1280,7 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x26e157caa10&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1fe5a71f0a0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1330,7 +1330,7 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 <h3><em>signal_noise()</em><a class="headerlink" href="#signal-noise" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal_noise">
-<span class="sig-name descname"><span class="pre">signal_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_noise.html#signal_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_noise" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">signal_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_noise.html#signal_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_noise" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Simulate noise</strong></p>
 <p>This function generates pure Gaussian <code class="docutils literal notranslate"><span class="pre">(1/f)**beta</span></code> noise. The power-spectrum of the generated
 noise is proportional to <code class="docutils literal notranslate"><span class="pre">S(f)</span> <span class="pre">=</span> <span class="pre">(1</span> <span class="pre">/</span> <span class="pre">f)**beta</span></code>. The following categories of noise have been
@@ -1348,6 +1348,7 @@ described:</p>
 <li><p><strong>duration</strong> (<em>float</em>) – Desired length of duration (s).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>beta</strong> (<em>float</em>) – The noise exponent.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1397,19 +1398,19 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e131bb010&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe4e809de0&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e132080d0&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b91a950&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e13209e70&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b91bb80&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e1320a6b0&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b91a980&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e1320ab90&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b91a680&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" src="../_images/p_signal_noise2.png" style="width: 1200.0px; height: 1200.0px;" /></a>
@@ -1420,7 +1421,7 @@ described:</p>
 <h3><em>signal_surrogate()</em><a class="headerlink" href="#signal-surrogate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal_surrogate">
-<span class="sig-name descname"><span class="pre">signal_surrogate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IAAFT'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_surrogate.html#signal_surrogate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_surrogate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">signal_surrogate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IAAFT'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_surrogate.html#signal_surrogate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal_surrogate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Create Signal Surrogates</strong></p>
 <p>Generate a surrogate version of a signal. Different methods are available, such as:</p>
 <ul class="simple">
@@ -1436,6 +1437,7 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;IAAFT&quot;</span></code>.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
 <li><p><strong>**kwargs</strong> – Other keywords arguments, such as <code class="docutils literal notranslate"><span class="pre">max_iter</span></code> (by default 1000).</p></li>
 </ul>
 </dd>
@@ -1456,32 +1458,32 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e05d7e8c0&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b442350&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e05d7eaa0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b442530&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e05d7d8a0&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b4428f0&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26e1320b9a0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1fe5b989810&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate1.png"><img alt="../_images/p_signal_surrogate1.png" src="../_images/p_signal_surrogate1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e05cd40d0&gt;]</span>
+<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe592e51b0&gt;]</span>
 
 <span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e05d5f640&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5b3a47f0&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26e08bc4a30&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1fe5691bdf0&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26e05cd4340&gt;</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1fe592e5360&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" src="../_images/p_signal_surrogate2.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1789,7 +1791,7 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span><span class="go">array([1750, 2750, 4500, 5500, 7250, 8250])</span>
+<span class="gh">Out[3]: </span><span class="go">array([1750, 2750, 3615, 3617, 4139, 4500, 5500, 7250, 8250])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_changepoints1.png"><img alt="../_images/p_signal_changepoints1.png" src="../_images/p_signal_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>

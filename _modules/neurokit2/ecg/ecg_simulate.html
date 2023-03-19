@@ -357,6 +357,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_random_state_children</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span><span class="p">,</span> <span class="n">signal_resample</span>
 
 
@@ -369,6 +370,7 @@ document.write(`
     <span class="n">heart_rate_std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ecgsyn&quot;</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">random_state_distort</span><span class="o">=</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate an ECG/EKG signal**</span>
@@ -401,8 +403,14 @@ document.write(`
 <span class="sd">        &lt;https://physionet.org/content/ecgsyn/&gt;`_. If</span>
 <span class="sd">        ``&quot;multileads&quot;``, will return a DataFrame containing 12-leads (see `12-leads ECG simulation</span>
 <span class="sd">        &lt;https://neuropsychology.github.io/NeuroKit/examples/ecg_generate_12leads/ecg_generate_12leads.html&gt;`_).</span>
-<span class="sd">    random_state : int</span>
-<span class="sd">        Seed for the random number generator.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
+<span class="sd">    random_state_distort : {&#39;legacy&#39;, &#39;spawn&#39;}, None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Random state to be used to distort the signal. If ``&quot;legacy&quot;``, use the same random state used to</span>
+<span class="sd">        generate the signal (discouraged as it creates dependent random streams). If ``&quot;spawn&quot;``, spawn</span>
+<span class="sd">        independent children random number generators from the random_state argument. If any of the other types,</span>
+<span class="sd">        generate independent children random number generators from the random_state_distort provided (this</span>
+<span class="sd">        allows generating multiple version of the same signal distorted by different random noise realizations).</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other keywords parameters for ECGSYN algorithm, such as ``&quot;lfhfratio&quot;``, ``&quot;ti&quot;``, ``&quot;ai&quot;``, ``&quot;bi&quot;``.</span>
 
@@ -453,7 +461,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Seed the random generator for reproducible results</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="c1"># Generate number of samples automatically if length is unspecified</span>
     <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -494,6 +502,7 @@ document.write(`
                 <span class="n">hrstd</span><span class="o">=</span><span class="n">heart_rate_std</span><span class="p">,</span>
                 <span class="n">sfint</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
                 <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+                <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -504,6 +513,7 @@ document.write(`
                 <span class="n">hrstd</span><span class="o">=</span><span class="n">heart_rate_std</span><span class="p">,</span>
                 <span class="n">sfint</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
                 <span class="n">gamma</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
+                <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="c1"># Cut to match expected length</span>
@@ -512,6 +522,9 @@ document.write(`
 
     <span class="c1"># Add random noise</span>
     <span class="k">if</span> <span class="n">noise</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Seed for random noise</span>
+        <span class="n">random_state_distort</span> <span class="o">=</span> <span class="n">check_random_state_children</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">random_state_distort</span><span class="p">,</span> <span class="n">n_children</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">))</span>
+        <span class="c1"># Call signal_distort on each signal</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">)):</span>
             <span class="n">signals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_distort</span><span class="p">(</span>
                 <span class="n">signals</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
@@ -519,7 +532,7 @@ document.write(`
                 <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
                 <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
                 <span class="n">noise_shape</span><span class="o">=</span><span class="s2">&quot;laplace&quot;</span><span class="p">,</span>
-                <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
                 <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -532,8 +545,6 @@ document.write(`
             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;II&quot;</span><span class="p">,</span> <span class="s2">&quot;III&quot;</span><span class="p">,</span> <span class="s2">&quot;aVR&quot;</span><span class="p">,</span> <span class="s2">&quot;aVL&quot;</span><span class="p">,</span> <span class="s2">&quot;aVF&quot;</span><span class="p">,</span> <span class="s2">&quot;V1&quot;</span><span class="p">,</span> <span class="s2">&quot;V2&quot;</span><span class="p">,</span> <span class="s2">&quot;V3&quot;</span><span class="p">,</span> <span class="s2">&quot;V4&quot;</span><span class="p">,</span> <span class="s2">&quot;V5&quot;</span><span class="p">,</span> <span class="s2">&quot;V6&quot;</span><span class="p">],</span>
         <span class="p">)</span>
 
-    <span class="c1"># Reset random seed (so it doesn&#39;t affect global)</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ecg</span></div>
 
 
@@ -589,6 +600,7 @@ document.write(`
     <span class="n">ai</span><span class="o">=</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="o">-</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
     <span class="n">bi</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">),</span>
     <span class="n">gamma</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
+    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -681,7 +693,7 @@ document.write(`
     <span class="n">rrmean</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">hrmean</span>
     <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="n">rrmean</span> <span class="o">/</span> <span class="n">trr</span><span class="p">)))</span>
 
-    <span class="n">rr0</span> <span class="o">=</span> <span class="n">_ecg_simulate_rrprocess</span><span class="p">(</span><span class="n">flo</span><span class="p">,</span> <span class="n">fhi</span><span class="p">,</span> <span class="n">flostd</span><span class="p">,</span> <span class="n">fhistd</span><span class="p">,</span> <span class="n">lfhfratio</span><span class="p">,</span> <span class="n">hrmean</span><span class="p">,</span> <span class="n">hrstd</span><span class="p">,</span> <span class="n">sfrr</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">rr0</span> <span class="o">=</span> <span class="n">_ecg_simulate_rrprocess</span><span class="p">(</span><span class="n">flo</span><span class="p">,</span> <span class="n">fhi</span><span class="p">,</span> <span class="n">flostd</span><span class="p">,</span> <span class="n">fhistd</span><span class="p">,</span> <span class="n">lfhfratio</span><span class="p">,</span> <span class="n">hrmean</span><span class="p">,</span> <span class="n">hrstd</span><span class="p">,</span> <span class="n">sfrr</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
 
     <span class="c1"># Upsample rr time series from 1 Hz to sfint Hz</span>
     <span class="n">rr</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">rr0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sfint</span><span class="p">)</span>
@@ -770,7 +782,16 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_ecg_simulate_rrprocess</span><span class="p">(</span>
-    <span class="n">flo</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">fhi</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">flostd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">fhistd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lfhfratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">hrmean</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">hrstd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sfrr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">256</span>
+    <span class="n">flo</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">fhi</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">flostd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">fhistd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">lfhfratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">hrmean</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">hrstd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">sfrr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">w1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">flo</span>
     <span class="n">w2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">fhi</span>
@@ -792,7 +813,7 @@ document.write(`
     <span class="n">Hw0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Hw</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)],</span> <span class="n">Hw</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">::</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">Sw</span> <span class="o">=</span> <span class="p">(</span><span class="n">sfrr</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Hw0</span><span class="p">)</span>
 
-    <span class="n">ph0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">ph0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ph0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">ph0</span><span class="p">)])</span>
     <span class="n">SwC</span> <span class="o">=</span> <span class="n">Sw</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ph</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">SwC</span><span class="p">))</span>

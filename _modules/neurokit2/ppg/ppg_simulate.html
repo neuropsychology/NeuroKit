@@ -356,6 +356,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.interpolate</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_random_state_children</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span>
 
 
@@ -371,6 +372,7 @@ document.write(`
     <span class="n">burst_number</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">burst_amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">random_state_distort</span><span class="o">=</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate a photoplethysmogram (PPG) signal**</span>
@@ -414,8 +416,14 @@ document.write(`
 <span class="sd">        Determines how many high frequency burst artifacts occur. The default is 0.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, returns a plot of the landmarks and interpolated PPG. Useful for debugging.</span>
-<span class="sd">    random_state : int</span>
-<span class="sd">        Seed for the random number generator. Keep it fixed for reproducible results.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
+<span class="sd">    random_state_distort : {&#39;legacy&#39;, &#39;spawn&#39;}, None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Random state to be used to distort the signal. If ``&quot;legacy&quot;``, use the same random state used to</span>
+<span class="sd">        generate the signal (discouraged as it creates dependent random streams). If ``&quot;spawn&quot;``, spawn</span>
+<span class="sd">        independent children random number generators from the random_state argument. If any of the other types,</span>
+<span class="sd">        generate independent children random number generators from the random_state_distort provided (this</span>
+<span class="sd">        allows generating multiple version of the same signal distorted by different random noise realizations).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -435,7 +443,9 @@ document.write(`
 <span class="sd">      ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">random_state_distort</span> <span class="o">=</span> <span class="n">check_random_state_children</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">random_state_distort</span><span class="p">,</span> <span class="n">n_children</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
     <span class="c1"># At the requested sampling rate, how long is a period at the requested</span>
     <span class="c1"># heart-rate and how often does that period fit into the requested</span>
@@ -456,24 +466,24 @@ document.write(`
     <span class="p">)</span>
     <span class="c1"># Randomly modulate duration of waves by subracting a random value between</span>
     <span class="c1"># 0 and ibi_randomness% of the wave duration (see function definition).</span>
-    <span class="n">x_onset</span> <span class="o">=</span> <span class="n">_random_x_offset</span><span class="p">(</span><span class="n">x_onset</span><span class="p">,</span> <span class="n">ibi_randomness</span><span class="p">)</span>
+    <span class="n">x_onset</span> <span class="o">=</span> <span class="n">_random_x_offset</span><span class="p">(</span><span class="n">x_onset</span><span class="p">,</span> <span class="n">ibi_randomness</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
     <span class="c1"># Corresponding signal amplitudes.</span>
-    <span class="n">y_onset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
+    <span class="n">y_onset</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
 
     <span class="c1"># Seconds at which the systolic peaks occur within the waves.</span>
-    <span class="n">x_sys</span> <span class="o">=</span> <span class="n">x_onset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.175</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span>
+    <span class="n">x_sys</span> <span class="o">=</span> <span class="n">x_onset</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.175</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span>
     <span class="c1"># Corresponding signal amplitudes.</span>
-    <span class="n">y_sys</span> <span class="o">=</span> <span class="n">y_onset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
+    <span class="n">y_sys</span> <span class="o">=</span> <span class="n">y_onset</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
 
     <span class="c1"># Seconds at which the dicrotic notches occur within the waves.</span>
-    <span class="n">x_notch</span> <span class="o">=</span> <span class="n">x_onset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span>
+    <span class="n">x_notch</span> <span class="o">=</span> <span class="n">x_onset</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span>
     <span class="c1"># Corresponding signal amplitudes (percentage of systolic peak height).</span>
-    <span class="n">y_notch</span> <span class="o">=</span> <span class="n">y_sys</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.49</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
+    <span class="n">y_notch</span> <span class="o">=</span> <span class="n">y_sys</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.49</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
 
     <span class="c1"># Seconds at which the diastolic peaks occur within the waves.</span>
-    <span class="n">x_dia</span> <span class="o">=</span> <span class="n">x_onset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span>
+    <span class="n">x_dia</span> <span class="o">=</span> <span class="n">x_onset</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span> <span class="o">*</span> <span class="n">periods</span>
     <span class="c1"># Corresponding signal amplitudes (percentage of systolic peak height).</span>
-    <span class="n">y_dia</span> <span class="o">=</span> <span class="n">y_sys</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.51</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
+    <span class="n">y_dia</span> <span class="o">=</span> <span class="n">y_sys</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.51</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">n_period</span><span class="p">)</span>
 
     <span class="n">x_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x_onset</span><span class="p">,</span> <span class="n">x_sys</span><span class="p">,</span> <span class="n">x_notch</span><span class="p">,</span> <span class="n">x_dia</span><span class="p">))</span>
     <span class="n">x_all</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;mergesort&quot;</span><span class="p">)</span>
@@ -510,7 +520,7 @@ document.write(`
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">drift</span><span class="p">,</span>
             <span class="n">noise_frequency</span><span class="o">=</span><span class="n">drift_freq</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="c1"># Add motion artifacts.</span>
@@ -521,7 +531,7 @@ document.write(`
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">noise_amplitude</span><span class="o">=</span><span class="n">motion_amplitude</span><span class="p">,</span>
             <span class="n">noise_frequency</span><span class="o">=</span><span class="n">motion_freq</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="c1"># Add high frequency bursts.</span>
@@ -532,7 +542,7 @@ document.write(`
             <span class="n">artifacts_amplitude</span><span class="o">=</span><span class="n">burst_amplitude</span><span class="p">,</span>
             <span class="n">artifacts_frequency</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
             <span class="n">artifacts_number</span><span class="o">=</span><span class="n">burst_number</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="c1"># Add powerline noise.</span>
@@ -542,7 +552,7 @@ document.write(`
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">powerline_amplitude</span><span class="o">=</span><span class="n">powerline_amplitude</span><span class="p">,</span>
             <span class="n">powerline_frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_distort</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -592,7 +602,7 @@ document.write(`
     <span class="k">return</span> <span class="n">periods_modulated</span><span class="p">,</span> <span class="n">seconds_modulated</span>
 
 
-<span class="k">def</span> <span class="nf">_random_x_offset</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">offset_weight</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_random_x_offset</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">offset_weight</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is</span>
 <span class="sd">    the wave onset preceding xi. offset_weight must be between 0 and 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -613,7 +623,7 @@ document.write(`
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="n">max_offsets</span> <span class="o">=</span> <span class="n">offset_weight</span> <span class="o">*</span> <span class="n">x_diff</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">max_offsets</span><span class="p">]</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">max_offsets</span><span class="p">]</span>
 
     <span class="n">x_offset</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">x_offset</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-=</span> <span class="n">offsets</span>

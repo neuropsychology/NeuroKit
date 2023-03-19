@@ -352,12 +352,12 @@ document.write(`
   <h1>Source code for neurokit2.markov.markov_simulate</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">.transition_matrix</span> <span class="kn">import</span> <span class="n">_sanitize_tm_input</span>
 
 
-<div class="viewcode-block" id="markov_simulate"><a class="viewcode-back" href="../../../functions/markov.html#neurokit2.markov.markov_simulate">[docs]</a><span class="k">def</span> <span class="nf">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="markov_simulate"><a class="viewcode-back" href="../../../functions/markov.html#neurokit2.markov.markov_simulate">[docs]</a><span class="k">def</span> <span class="nf">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Markov Chain Simulation**</span>
 
 <span class="sd">    Given a :func:`transition_matrix`, this function simulates the corresponding sequence of states</span>
@@ -369,6 +369,8 @@ document.write(`
 <span class="sd">        A probability matrix obtained from :func:`transition_matrix`.</span>
 <span class="sd">    n : int</span>
 <span class="sd">        Length of the simulated sequence.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -403,13 +405,13 @@ document.write(`
     <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_start</span>
 
-    <span class="c1"># random seeds</span>
-    <span class="n">random_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="c1"># simulation procedure</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="n">_ps</span> <span class="o">=</span> <span class="n">tm</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span>
-        <span class="n">_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">multinomial</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">_ps</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_states</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="n">_sample</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_ps</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">_ps</span><span class="p">)</span>
         <span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sample</span>
 
     <span class="k">return</span> <span class="n">states</span><span class="p">[</span><span class="n">seq</span><span class="p">]</span></div>

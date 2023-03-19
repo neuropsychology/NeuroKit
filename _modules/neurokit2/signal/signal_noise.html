@@ -352,8 +352,10 @@ document.write(`
   <h1>Source code for neurokit2.signal.signal_noise</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 
-<div class="viewcode-block" id="signal_noise"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_noise">[docs]</a><span class="k">def</span> <span class="nf">signal_noise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="signal_noise"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_noise">[docs]</a><span class="k">def</span> <span class="nf">signal_noise</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Simulate noise**</span>
 
 <span class="sd">    This function generates pure Gaussian ``(1/f)**beta`` noise. The power-spectrum of the generated</span>
@@ -374,7 +376,8 @@ document.write(`
 <span class="sd">        The desired sampling rate (in Hz, i.e., samples/second).</span>
 <span class="sd">    beta : float</span>
 <span class="sd">        The noise exponent.</span>
-
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See for ``misc.check_random_state`` for further information.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -429,6 +432,8 @@ document.write(`
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="c1"># The number of samples in the time series</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -449,8 +454,8 @@ document.write(`
 
     <span class="c1"># Generate scaled random power + phase, adjusting size to</span>
     <span class="c1"># generate one Fourier component per frequency</span>
-    <span class="n">sr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
-    <span class="n">si</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+    <span class="n">sr</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+    <span class="n">si</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
 
     <span class="c1"># If the signal length is even, frequencies +/- 0.5 are equal</span>
     <span class="c1"># so the coefficient must be real.</span>

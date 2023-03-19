@@ -690,7 +690,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <h3><em>eda_simulate()</em><a class="headerlink" href="#eda-simulate" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_simulate">
-<span class="sig-name descname"><span class="pre">eda_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scr_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_simulate.html#eda_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scr_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_distort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spawn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_simulate.html#eda_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_simulate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Simulate Electrodermal Activity (EDA) signal</strong></p>
 <p>Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.</p>
 <dl class="field-list simple">
@@ -702,7 +702,12 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <li><p><strong>noise</strong> (<em>float</em>) – Noise level (amplitude of the laplace noise). Defaults to 0.01.</p></li>
 <li><p><strong>scr_number</strong> (<em>int</em>) – Desired number of skin conductance responses (SCRs), i.e., peaks. Defaults to 1.</p></li>
 <li><p><strong>drift</strong> (<em>float or list</em>) – The slope of a linear drift of the signal. Defaults to -0.01.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – Seed for the random number generator. Defaults to None.</p></li>
+<li><p><strong>random_state</strong> (<em>None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Seed for the random number generator. See for <code class="docutils literal notranslate"><span class="pre">misc.check_random_state</span></code> for further information.</p></li>
+<li><p><strong>random_state_distort</strong> (<em>{‘legacy’, ‘spawn’}, None, int, numpy.random.RandomState or numpy.random.Generator</em>) – Random state to be used to distort the signal. If <code class="docutils literal notranslate"><span class="pre">&quot;legacy&quot;</span></code>, use the same random state used to
+generate the signal (discouraged as it creates dependent random streams). If <code class="docutils literal notranslate"><span class="pre">&quot;spawn&quot;</span></code>, spawn
+independent children random number generators from the random_state argument. If any of the other types,
+generate independent children random number generators from the random_state_distort provided (this
+allows generating multiple version of the same signal distorted by different random noise realizations).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1053,8 +1058,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.361            1333.0</span>
-<span class="go">2     2        10000  ...         0.368             974.0</span>
+<span class="go">1     1         5000  ...         0.367            1044.0</span>
+<span class="go">2     2        10000  ...         0.365            1566.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1264,7 +1269,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.2042517857114532</span>
+<span class="gh">Out[5]: </span><span class="go">-0.04248651541106187</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1316,7 +1321,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">17</span>
+<span class="gh">Out[4]: </span><span class="go">16</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>

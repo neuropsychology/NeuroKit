@@ -362,6 +362,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">sklearn.decomposition</span>
 <span class="kn">import</span> <span class="nn">sklearn.mixture</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">.cluster_quality</span> <span class="kn">import</span> <span class="n">_cluster_quality_distance</span>
 
 
@@ -534,12 +535,12 @@ document.write(`
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Kmeans</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_cluster_kmeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_cluster_kmeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;K-means clustering algorithm&quot;&quot;&quot;</span>
 
     <span class="c1"># Initialize clustering function</span>
     <span class="n">clustering_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">KMeans</span><span class="p">(</span>
-        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="n">n_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="c1"># Fit</span>
@@ -555,7 +556,7 @@ document.write(`
 
     <span class="c1"># Copy function with given parameters</span>
     <span class="n">clustering_function</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
-        <span class="n">_cluster_kmeans</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">_cluster_kmeans</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="n">n_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="c1"># Info dump</span>
@@ -586,9 +587,8 @@ document.write(`
     <span class="n">n_samples</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Step 1: Initialize random medoids</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
-        <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
-    <span class="n">ids_of_medoids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">ids_of_medoids</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># Find distance between objects to their medoids, can be euclidean or manhatten</span>
     <span class="k">def</span> <span class="nf">find_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dist_method</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
@@ -606,12 +606,10 @@ document.write(`
 
     <span class="c1"># Step 2: Update medoids</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
-        <span class="c1"># Find new random medoids</span>
+        <span class="c1"># Find new medoids</span>
         <span class="n">ids_of_medoids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">):</span>
-            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">segmentation</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">subset</span><span class="p">)</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">segmentation</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">distances</span> <span class="o">=</span> <span class="n">find_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">data</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">ids_of_medoids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distances</span><span class="p">)]</span>
 
@@ -707,9 +705,8 @@ document.write(`
     <span class="n">data_sum_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Select random timepoints for our initial topographic maps</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
-        <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
-    <span class="n">init_times</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">init_times</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># Initialize random cluster centroids</span>
     <span class="n">clusters</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">init_times</span><span class="p">,</span> <span class="p">:]</span>
