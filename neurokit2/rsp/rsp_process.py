@@ -100,16 +100,12 @@ def rsp_process(
     )
 
     # Clean signal
-    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
-        rsp_cleaned = rsp_signal
-    else:
-        # Clean signal
-        rsp_cleaned = rsp_clean(
-            rsp_signal,
-            sampling_rate=sampling_rate,
-            method=methods["method_cleaning"],
-            **methods["kwargs_cleaning"],
-        )
+    rsp_cleaned = rsp_clean(
+        rsp_signal,
+        sampling_rate=sampling_rate,
+        method=methods["method_cleaning"],
+        **methods["kwargs_cleaning"],
+    )
 
     # Extract, fix and format peaks
     peak_signal, info = rsp_peaks(
@@ -149,8 +145,8 @@ def rsp_process(
 
     if report is not None:
         # Generate report containing description and figures of processing
-        if ".html" in report:
-            fig = rsp_plot(signals, sampling_rate=sampling_rate, static=False)
+        if ".html" in str(report):
+            fig = rsp_plot(signals, sampling_rate=sampling_rate)
         else:
             fig = None
         create_report(file=report, signals=signals, info=methods, fig=fig)

@@ -68,16 +68,13 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
     ppg_signal = as_vector(ppg_signal)
     methods = ppg_methods(sampling_rate=sampling_rate, method=method, **kwargs)
 
-    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
-        ppg_cleaned = ppg_signal
-    else:
-        # Clean signal
-        ppg_cleaned = ppg_clean(
-            ppg_signal,
-            sampling_rate=sampling_rate,
-            method=methods["method_cleaning"],
-            **methods["kwargs_cleaning"]
-        )
+    # Clean signal
+    ppg_cleaned = ppg_clean(
+        ppg_signal,
+        sampling_rate=sampling_rate,
+        method=methods["method_cleaning"],
+        **methods["kwargs_cleaning"]
+    )
 
     # Find peaks
     info = ppg_findpeaks(
@@ -109,8 +106,8 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
 
     if report is not None:
         # Generate report containing description and figures of processing
-        if ".html" in report:
-            fig = ppg_plot(signals, sampling_rate=sampling_rate, static=False)
+        if ".html" in str(report):
+            fig = ppg_plot(signals, sampling_rate=sampling_rate)
         else:
             fig = None
         create_report(file=report, signals=signals, info=methods, fig=fig)

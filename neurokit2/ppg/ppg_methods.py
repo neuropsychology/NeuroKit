@@ -120,7 +120,7 @@ def ppg_methods(
             An open-source feature extraction tool for the analysis of peripheral physiological data.
             IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11."""
         )
-    elif method_cleaning == "none":
+    elif method_cleaning in ["none"]:
         report_info["text_cleaning"] += " was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added

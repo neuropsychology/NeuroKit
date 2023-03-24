@@ -95,6 +95,8 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
             rsp_signal,
             **kwargs,
         )
+    elif method is None or method == "none":
+        clean = rsp_signal
     else:
         raise ValueError(
             "NeuroKit error: rsp_clean(): 'method' should be one of 'khodadad2018', 'biosppy' or 'hampel'."

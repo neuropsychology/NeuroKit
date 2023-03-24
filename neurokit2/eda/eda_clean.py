@@ -65,6 +65,8 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
         clean = _eda_clean_biosppy(eda_signal, sampling_rate)
     elif method in ["default", "neurokit", "nk"]:
         clean = _eda_clean_neurokit(eda_signal, sampling_rate)
+    elif method is None or method == "none":
+        clean = eda_signal
     else:
         raise ValueError("NeuroKit error: eda_clean(): 'method' should be one of 'biosppy'.")
 

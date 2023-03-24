@@ -82,6 +82,8 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
         clean = _ppg_clean_elgendi(ppg_signal, sampling_rate)
     elif method in ["nabian2018"]:
         clean = _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=heart_rate)
+    elif method is None or method == "none":
+        clean = ppg_signal
     else:
         raise ValueError("`method` not found. Must be one of 'elgendi' or 'nabian2018'.")
 
