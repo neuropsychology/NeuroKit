@@ -447,6 +447,8 @@ document.write(`
             <span class="n">rsp_signal</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">rsp_signal</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: rsp_clean(): &#39;method&#39; should be one of &#39;khodadad2018&#39;, &#39;biosppy&#39; or &#39;hampel&#39;.&quot;</span>

@@ -472,7 +472,7 @@ document.write(`
 <span class="sd">            An open-source feature extraction tool for the analysis of peripheral physiological data.</span>
 <span class="sd">            IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.&quot;&quot;&quot;</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; was directly used for peak detection without preprocessing.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># just in case more methods are added</span>

@@ -356,10 +356,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">find_closest</span>
 
-
-<div class="viewcode-block" id="eda_plot"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_plot">[docs]</a><span class="k">def</span> <span class="nf">eda_plot</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="eda_plot"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_plot">[docs]</a><span class="k">def</span> <span class="nf">eda_plot</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Visualize electrodermal activity (EDA) data**</span>
 
 <span class="sd">    Parameters</span>
@@ -368,6 +366,10 @@ document.write(`
 <span class="sd">        DataFrame obtained from :func:`eda_process()`.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The desired sampling rate (in Hz, i.e., samples/second). Defaults to None.</span>
+<span class="sd">    static : bool</span>
+<span class="sd">        If True, a static plot will be generated with matplotlib.</span>
+<span class="sd">        If False, an interactive plot will be generated with plotly.</span>
+<span class="sd">        Defaults to True.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -397,131 +399,301 @@ document.write(`
     <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Onsets&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">half_recovery</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Recovery&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
     <span class="c1"># Determine unit of x-axis.</span>
-    <span class="n">last_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">last_ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Seconds&quot;</span><span class="p">)</span>
+        <span class="n">x_label</span> <span class="o">=</span> <span class="s2">&quot;Seconds&quot;</span>
         <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">last_ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+        <span class="n">x_label</span> <span class="o">=</span> <span class="s2">&quot;Samples&quot;</span>
         <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">))</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">static</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># Plot cleaned and raw respiration as well as peaks and troughs.</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Electrodermal Activity (EDA)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+        <span class="n">last_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">last_ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
-    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">,</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C27B0&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span>
-    <span class="p">)</span>
-    <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="c1"># Plot cleaned and raw electrodermal activity.</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Electrodermal Activity (EDA)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Plot skin cnoductance response.</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Skin Conductance Response (SCR)&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C27B0&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Plot Phasic.</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">,</span>
-        <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Phasic Component&quot;</span><span class="p">,</span>
-        <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="p">)</span>
+        <span class="c1"># Plot skin conductance response.</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Skin Conductance Response (SCR)&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Mark segments.</span>
-    <span class="n">risetime_coord</span><span class="p">,</span> <span class="n">amplitude_coord</span><span class="p">,</span> <span class="n">halfr_coord</span> <span class="o">=</span> <span class="n">_eda_plot_dashedsegments</span><span class="p">(</span>
-        <span class="n">eda_signals</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">half_recovery</span>
-    <span class="p">)</span>
+        <span class="c1"># Plot Phasic.</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Phasic Component&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="n">risetime</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span>
-        <span class="n">risetime_coord</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;#FFA726&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span>
-    <span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">risetime</span><span class="p">)</span>
+        <span class="c1"># Mark segments.</span>
+        <span class="n">risetime_coord</span><span class="p">,</span> <span class="n">amplitude_coord</span><span class="p">,</span> <span class="n">halfr_coord</span> <span class="o">=</span> <span class="n">_eda_plot_dashedsegments</span><span class="p">(</span>
+            <span class="n">eda_signals</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">half_recovery</span>
+        <span class="p">)</span>
 
-    <span class="n">amplitude</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span>
-        <span class="n">amplitude_coord</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;#1976D2&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span>
-    <span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="n">risetime</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span>
+            <span class="n">risetime_coord</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;#FFA726&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">risetime</span><span class="p">)</span>
 
-    <span class="n">halfr</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span>
-        <span class="n">halfr_coord</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;#FDD835&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span>
-    <span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">halfr</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span>
+            <span class="n">amplitude_coord</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;#1976D2&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>
 
-    <span class="c1"># Plot Tonic.</span>
-    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Skin Conductance Level (SCL)&quot;</span><span class="p">)</span>
-    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">,</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#673AB7&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tonic Component&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
-    <span class="p">)</span>
-    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
+        <span class="n">halfr</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">LineCollection</span><span class="p">(</span>
+            <span class="n">halfr_coord</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;#FDD835&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">halfr</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Plot Tonic.</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Skin Conductance Level (SCL)&quot;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#673AB7&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tonic Component&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Create interactive plot with plotly.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+            <span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
+
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: ppg_plot(): the &#39;plotly&#39;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; module is required when &#39;static&#39; is False.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; Please install it first (`pip install plotly`).&quot;</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span>
+            <span class="n">rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">shared_xaxes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">vertical_spacing</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="n">subplot_titles</span><span class="o">=</span><span class="p">(</span>
+                <span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Skin Conductance Response (SCR)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Skin Conductance Level (SCL)&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Plot cleaned and raw electrodermal activity.</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C27B0&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Plot skin conductance response.</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Phasic Component&quot;</span><span class="p">,</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Mark segments.</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_eda_plot_dashedsegments</span><span class="p">(</span>
+            <span class="n">eda_signals</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">half_recovery</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="n">static</span>
+        <span class="p">)</span>
+
+        <span class="c1"># TODO add dashed segments to plotly version</span>
+
+        <span class="c1"># Plot skin conductance level.</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Tonic Component&quot;</span><span class="p">,</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#673AB7&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add title to entire figure.</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Electrodermal Activity (EDA)&quot;</span><span class="p">,</span> <span class="n">title_x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
 
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Internals</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_eda_plot_dashedsegments</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">half_recovery</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_eda_plot_dashedsegments</span><span class="p">(</span>
+    <span class="n">eda_signals</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">half_recovery</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
     <span class="c1"># Mark onsets, peaks, and half-recovery.</span>
-    <span class="n">scat_onset</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span>
-        <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFA726&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SCR - Onsets&quot;</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">scat_peak</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span>
-        <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1976D2&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SCR - Peaks&quot;</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">scat_halfr</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">[</span><span class="n">half_recovery</span><span class="p">],</span>
-        <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">half_recovery</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FDD835&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SCR - Half recovery&quot;</span><span class="p">,</span>
-        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">onset_x_values</span> <span class="o">=</span> <span class="n">x_axis</span><span class="p">[</span><span class="n">onsets</span><span class="p">]</span>
+    <span class="n">onset_y_values</span> <span class="o">=</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">peak_x_values</span> <span class="o">=</span> <span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">]</span>
+    <span class="n">peak_y_values</span> <span class="o">=</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">halfr_x_values</span> <span class="o">=</span> <span class="n">x_axis</span><span class="p">[</span><span class="n">half_recovery</span><span class="p">]</span>
+    <span class="n">halfr_y_values</span> <span class="o">=</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">half_recovery</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
     <span class="n">end_onset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
         <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
     <span class="p">)</span>
-    <span class="n">scat_endonset</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="n">end_onset</span><span class="o">.</span><span class="n">index</span><span class="p">],</span> <span class="n">end_onset</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="c1"># Rise time.</span>
-    <span class="n">risetime_start</span> <span class="o">=</span> <span class="n">scat_onset</span><span class="o">.</span><span class="n">get_offsets</span><span class="p">()</span>
-    <span class="n">risetime_end</span> <span class="o">=</span> <span class="n">scat_endonset</span><span class="o">.</span><span class="n">get_offsets</span><span class="p">()</span>
-    <span class="n">risetime_coord</span> <span class="o">=</span> <span class="p">[(</span><span class="n">risetime_start</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">risetime_end</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">))]</span>
+    <span class="n">risetime_coord</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">amplitude_coord</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">halfr_coord</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># SCR Amplitude.</span>
-    <span class="n">peak_top</span> <span class="o">=</span> <span class="n">scat_peak</span><span class="o">.</span><span class="n">get_offsets</span><span class="p">()</span>
-    <span class="n">amplitude_coord</span> <span class="o">=</span> <span class="p">[(</span><span class="n">peak_top</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">risetime_end</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">))]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">)):</span>
+        <span class="c1"># Rise time.</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="n">onset_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">onset_y_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">peak_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">onset_y_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">risetime_coord</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
 
-    <span class="c1"># Half recovery.</span>
-    <span class="n">peak_x_values</span> <span class="o">=</span> <span class="n">peak_top</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">recovery_x_values</span> <span class="o">=</span> <span class="n">x_axis</span><span class="p">[</span><span class="n">half_recovery</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)):</span>
+        <span class="c1"># SCR Amplitude.</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="n">peak_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">onset_y_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">peak_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">peak_y_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">amplitude_coord</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
 
-    <span class="n">peak_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">half_recovery</span><span class="p">):</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">find_closest</span><span class="p">(</span>
-            <span class="n">recovery_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">peak_x_values</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;smaller&quot;</span><span class="p">,</span> <span class="n">strictly</span><span class="o">=</span><span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">half_recovery</span><span class="p">)):</span>
+        <span class="c1"># Half recovery.</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">halfr_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">halfr_y_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">peak_x_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">peak_x_values</span> <span class="o">&lt;</span> <span class="n">halfr_x_values</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="n">peak_x_values</span><span class="p">[</span><span class="n">peak_x_idx</span><span class="p">],</span> <span class="n">halfr_y_values</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">halfr_coord</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">static</span><span class="p">:</span>
+        <span class="c1"># Plot with matplotlib.</span>
+        <span class="c1"># Mark onsets, peaks, and half-recovery.</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span>
+            <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFA726&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SCR - Onsets&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">peak_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span>
+            <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1976D2&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SCR - Peaks&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">[</span><span class="n">half_recovery</span><span class="p">],</span>
+            <span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">half_recovery</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FDD835&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SCR - Half recovery&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="n">peak_index</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">peak_list</span><span class="p">):</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">peak_x_values</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">peak_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="n">end_onset</span><span class="o">.</span><span class="n">index</span><span class="p">],</span> <span class="n">end_onset</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Create interactive plot with plotly.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
 
-    <span class="n">halfr_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">half_recovery</span><span class="p">)))</span>
-    <span class="n">halfr_end</span> <span class="o">=</span> <span class="n">scat_halfr</span><span class="o">.</span><span class="n">get_offsets</span><span class="p">()</span>
-    <span class="n">halfr_start</span> <span class="o">=</span> <span class="p">[(</span><span class="n">peak_top</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">halfr_end</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">peak_index</span><span class="p">,</span> <span class="n">halfr_index</span><span class="p">)]</span>
-    <span class="n">halfr_coord</span> <span class="o">=</span> <span class="p">[(</span><span class="n">halfr_start</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">halfr_end</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">halfr_index</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: ppg_plot(): the &#39;plotly&#39;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; module is required when &#39;static&#39; is False.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; Please install it first (`pip install plotly`).&quot;</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="c1"># Plot with plotly.</span>
+        <span class="c1"># Mark onsets, peaks, and half-recovery.</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">onsets</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SCR - Onsets&quot;</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFA726&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SCR - Peaks&quot;</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1976D2&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">[</span><span class="n">half_recovery</span><span class="p">],</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">][</span><span class="n">half_recovery</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SCR - Half recovery&quot;</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FDD835&quot;</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">[</span><span class="n">end_onset</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">end_onset</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FDD835&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">risetime_coord</span><span class="p">,</span> <span class="n">amplitude_coord</span><span class="p">,</span> <span class="n">halfr_coord</span>
 </pre></div>
