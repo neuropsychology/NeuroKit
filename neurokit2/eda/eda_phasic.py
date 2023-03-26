@@ -5,12 +5,24 @@ import pandas as pd
 from ..signal import signal_filter, signal_smooth
 
 
-def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
-    """**Decompose Electrodermal Activity (EDA) into Phasic and Tonic Components**
+def eda_phasic(eda_signal, sampling_rate=1000, method="highpass", **kwargs):
+    """**Electrodermal Activity (EDA) Decomposition into Phasic and Tonic Components**
 
     Decompose the Electrodermal Activity (EDA) into two components, namely **Phasic** and
     **Tonic**, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge
     algorithms.
+
+    * **High-pass filtering**: Method implemented in Biopac's Acqknowledge. The raw EDA signal
+      is passed through a high pass filter with a cutoff frequency of 0.05 Hz
+      (cutoff frequency can be adjusted by the ``cutoff`` argument).
+    * **Median smoothing**: Method implemented in Biopac's Acqknowledge. The raw EDA signal is
+      passed through a median value smoothing filter, which removes areas of rapid change. The
+      phasic component is then calculated by subtracting the smoothed signal from the original.
+      This method is computationally intensive and the processing time depends on the smoothing
+      factor, which can be controlled by the as ``smoothing_factor`` argument, set by default to
+      ``4`` seconds. Higher values will produce results more rapidly.
+    * **cvxEDA**: Convex optimization approach to EDA processing (Greco, 2016).
+
 
     .. warning::
 
@@ -24,8 +36,10 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
     method : str
-        The processing pipeline to apply. Can be one of ``"cvxEDA"``, ``"median"``,
-        ``"smoothmedian"``, ``"highpass"``, ``"biopac"``, or ``"acqknowledge"``.
+        The processing pipeline to apply. Can be one of ``"cvxEDA"``, ``"smoothmedian"``,
+        ``"highpass"``. Defaults to ``"highpass"``.
+    **kwargs : dict
+        Additional arguments to pass to the specific method.
 
     Returns
     -------
@@ -92,13 +106,15 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     if method == "cvxeda":
         data = _eda_phasic_cvxeda(eda_signal, sampling_rate)
     elif method in ["median", "smoothmedian"]:
-        data = _eda_phasic_mediansmooth(eda_signal, sampling_rate)
+        data = _eda_phasic_mediansmooth(eda_signal, sampling_rate, **kwargs)
     elif method in ["neurokit", "highpass", "biopac", "acqknowledge"]:
-        data = _eda_phasic_highpass(eda_signal, sampling_rate)
+        data = _eda_phasic_highpass(eda_signal, sampling_rate, **kwargs)
     else:
-        raise ValueError("NeuroKit error: eda_phasic(): 'method' should be one of "
-                         "'cvxeda', 'median', 'smoothmedian', 'neurokit', 'highpass', "
-                         "'biopac', 'acqknowledge'.")
+        raise ValueError(
+            "NeuroKit error: eda_phasic(): 'method' should be one of "
+            "'cvxeda', 'median', 'smoothmedian', 'neurokit', 'highpass', "
+            "'biopac', 'acqknowledge'."
+        )
 
     return data
 
@@ -118,11 +134,11 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
     return out
 
 
-def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
+def _eda_phasic_highpass(eda_signal, sampling_rate=1000, cutoff=0.05):
     """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-
     issue/)"""
-    phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
-    tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")
+    phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=cutoff, method="butter")
+    tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=cutoff, method="butter")
 
     out = pd.DataFrame({"EDA_Tonic": np.array(tonic), "EDA_Phasic": np.array(phasic)})
 
@@ -199,10 +215,10 @@ def _eda_phasic_cvxeda(
     ar = np.array(
         [
             (a1 * frequency + 2.0) * (a0 * frequency + 2.0),
-            2.0 * a1 * a0 * frequency ** 2 - 8.0,
+            2.0 * a1 * a0 * frequency**2 - 8.0,
             (a1 * frequency - 2.0) * (a0 * frequency - 2.0),
         ]
-    ) / ((a1 - a0) * frequency ** 2)
+    ) / ((a1 - a0) * frequency**2)
     ma = np.array([1.0, 2.0, 1.0])
 
     # matrices for ARMA model
@@ -216,7 +232,10 @@ def _eda_phasic_cvxeda(
     spl = np.convolve(spl, spl, "full")
     spl /= max(spl)
     # matrix of spline regressors
-    i = np.c_[np.arange(-(len(spl) // 2), (len(spl) + 1) // 2)] + np.r_[np.arange(0, n, delta_knot_s)]
+    i = (
+        np.c_[np.arange(-(len(spl) // 2), (len(spl) + 1) // 2)]
+        + np.r_[np.arange(0, n, delta_knot_s)]
+    )
     nB = i.shape[1]
     j = np.tile(np.arange(nB), (len(spl), 1))
     p = np.tile(spl, (nB, 1)).T
@@ -244,7 +263,9 @@ def _eda_phasic_cvxeda(
             ]
         )
         h = cvxopt.matrix([_cvx(n, 1), 0.5, 0.5, eda, 0.5, 0.5, _cvx(nB, 1)])
-        c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)])
+        c = cvxopt.matrix(
+            [(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)]
+        )
         res = cvxopt.solvers.conelp(c, G, h, dims={"l": n, "q": [n + 2, nB + 2], "s": []})
     else:
         # Use qp
@@ -256,9 +277,15 @@ def _eda_phasic_cvxeda(
                 [Mt * B, Ct * B, Bt * B + gamma * cvxopt.spmatrix(1.0, range(nB), range(nB))],
             ]
         )
-        f = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T - Mt * eda, -(Ct * eda), -(Bt * eda)])
+        f = cvxopt.matrix(
+            [(cvxopt.matrix(alpha, (1, n)) * A).T - Mt * eda, -(Ct * eda), -(Bt * eda)]
+        )
         res = cvxopt.solvers.qp(
-            H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))), cvxopt.matrix(0.0, (n, 1)), kktsolver='chol2'
+            H,
+            f,
+            cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))),
+            cvxopt.matrix(0.0, (n, 1)),
+            kktsolver="chol2",
         )
     cvxopt.solvers.options.clear()
 
