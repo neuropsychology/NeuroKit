@@ -357,12 +357,22 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
 
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span><span class="p">,</span> <span class="n">NeuroKitWarning</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">as_vector</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_smooth</span>
 
 
 <div class="viewcode-block" id="eda_clean"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_clean">[docs]</a><span class="k">def</span> <span class="nf">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Preprocess Electrodermal Activity (EDA) signal**</span>
+
+<span class="sd">    This function cleans the EDA signal by removing noise and smoothing the signal with different methods.</span>
+
+<span class="sd">    * **NeuroKit**: Default methods. Low-pass filter with a 3 Hz cutoff frequency and a 4th order</span>
+<span class="sd">      Butterworth filter. Note thaht if the sampling rate is lower than 7 Hz (as it is the case</span>
+<span class="sd">      with some signals recorded by wearables such as Empatica), the filtering is skipped (as there</span>
+<span class="sd">      is no high enough frequency to remove).</span>
+<span class="sd">    * **BioSPPy**: More aggresive filtering than NeuroKit&#39;s default method. Low-pass filter with a</span>
+<span class="sd">      5 Hz cutoff frequency and a 4th order Butterworth filter.</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -371,7 +381,8 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;neurokit&quot;`` (default) or ``&quot;biosppy&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;neurokit&quot;`` (default), ``&quot;biosppy&quot;``, or</span>
+<span class="sd">        ``&quot;none&quot;``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -389,13 +400,15 @@ document.write(`
 <span class="sd">      import pandas as pd</span>
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      eda = nk.eda_simulate(duration=30, sampling_rate=100, scr_number=10, noise=0.01, drift=0.02)</span>
-<span class="sd">      signals = pd.DataFrame({&quot;EDA_Raw&quot;: eda,</span>
-<span class="sd">                              &quot;EDA_BioSPPy&quot;: nk.eda_clean(eda, sampling_rate=100,method=&#39;biosppy&#39;),</span>
-<span class="sd">                              &quot;EDA_NeuroKit&quot;: nk.eda_clean(eda, sampling_rate=100,</span>
-<span class="sd">                              method=&#39;neurokit&#39;)})</span>
+<span class="sd">      # Simulate raw signal</span>
+<span class="sd">      eda = nk.eda_simulate(duration=15, sampling_rate=100, scr_number=10, noise=0.01, drift=0.02)</span>
+
+<span class="sd">      # Clean</span>
+<span class="sd">      eda_clean1 = nk.eda_clean(eda, sampling_rate=100, method=&#39;neurokit&#39;)</span>
+<span class="sd">      eda_clean2 = nk.eda_clean(eda, sampling_rate=100, method=&#39;biosppy&#39;)</span>
+
 <span class="sd">      @savefig p_eda_clean.png scale=100%</span>
-<span class="sd">      fig = signals.plot()</span>
+<span class="sd">      nk.signal_plot([eda, eda_clean1, eda_clean2], labels=[&quot;Raw&quot;, &quot;NeuroKit&quot;, &quot;BioSPPy&quot;])</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -408,7 +421,7 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;There are &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_missing</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; missing data points in your signal.&quot;</span>
             <span class="s2">&quot; Filling missing values by using the forward filling method.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">eda_signal</span> <span class="o">=</span> <span class="n">_eda_clean_missing</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>
 
@@ -434,13 +447,23 @@ document.write(`
 
     <span class="k">return</span> <span class="n">eda_signal</span>
 
+
 <span class="c1"># =============================================================================</span>
 <span class="c1"># NK</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eda_clean_neurokit</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
 
+    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;EDA signal is sampled at very low frequency. Skipping filtering.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">eda_signal</span>
+
     <span class="c1"># Filtering</span>
-    <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">filtered</span>
 
@@ -457,14 +480,18 @@ document.write(`
     <span class="c1"># Parameters</span>
     <span class="n">order</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">frequency</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+    <span class="p">)</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
 
     <span class="c1"># Filtering</span>
     <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="n">frequency</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;ba&quot;</span><span class="p">)</span>
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">eda_signal</span><span class="p">)</span>
 
     <span class="c1"># Smoothing</span>
-    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;convolution&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;boxzen&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.75</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span>
+        <span class="n">filtered</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;convolution&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;boxzen&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.75</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span>
 </pre></div>

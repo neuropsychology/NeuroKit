@@ -757,12 +757,22 @@ conductance responses. International Journal of Psychophysiology, 75(3), 349-356
 <dt class="sig sig-object py" id="neurokit2.eda.eda_clean">
 <span class="sig-name descname"><span class="pre">eda_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_clean.html#eda_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_clean" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Preprocess Electrodermal Activity (EDA) signal</strong></p>
+<p>This function cleans the EDA signal by removing noise and smoothing the signal with different methods.</p>
+<ul class="simple">
+<li><p><strong>NeuroKit</strong>: Default methods. Low-pass filter with a 3 Hz cutoff frequency and a 4th order
+Butterworth filter. Note thaht if the sampling rate is lower than 7 Hz (as it is the case
+with some signals recorded by wearables such as Empatica), the filtering is skipped (as there
+is no high enough frequency to remove).</p></li>
+<li><p><strong>BioSPPy</strong>: More aggresive filtering than NeuroKit’s default method. Low-pass filter with a
+5 Hz cutoff frequency and a 4th order Butterworth filter.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eda_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EDA signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <cite>rsp_signal</cite> (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -778,15 +788,15 @@ conductance responses. International Journal of Psychophysiology, 75(3), 349-356
 
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [3]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="go"># Simulate raw signal</span>
+<span class="gp">In [3]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">:</span> <span class="n">eda</span><span class="p">,</span>
-<span class="gp">   ...: </span>                        <span class="s2">&quot;EDA_BioSPPy&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;biosppy&#39;</span><span class="p">),</span>
-<span class="gp">   ...: </span>                        <span class="s2">&quot;EDA_NeuroKit&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-<span class="gp">   ...: </span>                        <span class="n">method</span><span class="o">=</span><span class="s1">&#39;neurokit&#39;</span><span class="p">)})</span>
-<span class="gp">   ...: </span>
+<span class="go"># Clean</span>
+<span class="gp">In [4]: </span><span class="n">eda_clean1</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;neurokit&#39;</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">In [5]: </span><span class="n">eda_clean2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;biosppy&#39;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">eda</span><span class="p">,</span> <span class="n">eda_clean1</span><span class="p">,</span> <span class="n">eda_clean2</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;NeuroKit&quot;</span><span class="p">,</span> <span class="s2">&quot;BioSPPy&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_clean.png"><img alt="../_images/p_eda_clean.png" src="../_images/p_eda_clean.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1082,8 +1092,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.361            1130.0</span>
-<span class="go">2     2        10000  ...         0.367            1816.0</span>
+<span class="go">1     1         5000  ...         0.362            1139.0</span>
+<span class="go">2     2        10000  ...         0.366            1695.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1293,7 +1303,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.2574324182078478</span>
+<span class="gh">Out[5]: </span><span class="go">-0.22196361869554324</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1345,7 +1355,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">24</span>
+<span class="gh">Out[4]: </span><span class="go">38</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" /></a>
