@@ -9,7 +9,11 @@ from .utils_complexity_embedding import complexity_embedding
 def entropy_angular(signal, delay=1, dimension=2, show=False, **kwargs):
     """**Angular entropy (AngEn)**
 
-    The Angular Entropy (AngEn) is the name that we use in NeuroKit to refer to the complexity method described in Nardelli et al. (2022), referred as comEDA due to its application to EDA signal. The method comprises the following steps: 1) Phase space reconstruction, 2) Calculation of the angular distances between all the pairs of points in the phase space; 3) Computation of the probability density function (PDF) of the distances; 4) Quadratic Rényi entropy of the PDF.
+    The Angular Entropy (AngEn) is the name that we use in NeuroKit to refer to the complexity
+    method described in Nardelli et al. (2022), referred as comEDA due to its application to EDA
+    signal. The method comprises the following steps: 1) Phase space reconstruction, 2) Calculation
+    of the angular distances between all the pairs of points in the phase space; 3) Computation of
+    the probability density function (PDF) of the distances; 4) Quadratic Rényi entropy of the PDF.
 
     Parameters
     ----------
