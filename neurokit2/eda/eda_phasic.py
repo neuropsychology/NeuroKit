@@ -327,10 +327,6 @@ def _eda_phasic_sparsEDA(
 
     Parameters
     ----------
-    signal
-        galvanic skin response
-    sampling_rate
-        sample rate
     epsilon
         step remainder
     maxIters
@@ -376,7 +372,7 @@ def _eda_phasic_sparsEDA(
 
     pointerS = 20 * new_sr
     pointerE = pointerS + Nss
-    signalRs = signalAdd[pointerS:pointerE]
+    # signalRs = signalAdd[pointerS:pointerE]
 
     # overlap Save
     durationR = 70
@@ -431,7 +427,7 @@ def _eda_phasic_sparsEDA(
             b0 = signalCut[0]
 
         signalCutIn = signalCut - b0
-        beta, _, activationHist, _, _, _ = lasso(R, signalCutIn, sampling_rate, Kmax, epsilon)
+        beta, _, _, _, _, _ = lasso(R, signalCutIn, sampling_rate, Kmax, epsilon)
 
         signalEst = (np.matmul(R, beta) + b0).reshape(-1)
 
@@ -508,10 +504,10 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
     lmbdaStop = 0
 
     # Global var for linsolve functions..
+    # optsUT = True
+    # opts_trUT = True
+    # opts_trTRANSA = True
 
-    optsUT = True
-    opts_trUT = True
-    opts_trTRANSA = True
     zeroTol = 1e-5
 
     x = np.zeros(W)
@@ -713,7 +709,6 @@ def updateChol(R_I, n, N, R, explicitA, activeSet, newIndex, zeroTol):
             # p = linsolve(R_I,AnewVec,opts_tr);
             raise Exception("This part is not written. Need some works done")
 
-            pass
         q = np.sum(newVec**2) - np.sum(p**2)
         if q <= zeroTol:
             flag = 1
@@ -748,7 +743,7 @@ def downdateChol(R, j):
     R1 = np.zeros([R.shape[0], R.shape[1] - 1])
     R1[:, :j] = R[:, :j]
     R1[:, j:] = R[:, j + 1 :]
-    m = R1.shape[0]
+    # m = R1.shape[0]
     n = R1.shape[1]
 
     for k in range(j, n):
