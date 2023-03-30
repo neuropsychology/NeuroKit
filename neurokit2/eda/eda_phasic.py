@@ -610,7 +610,7 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
 
             gammaArr[gammaArr < zeroTol] = np.Inf
             gammaIc = np.min(gammaArr)
-            Imin = np.argmin(gammaArr)
+            # Imin = np.argmin(gammaArr)
             newIndices = inactiveSet[(np.abs(gammaArr - gammaIc) < zeroTol)]
 
         gammaMin = min(gammaIc, gammaI)
