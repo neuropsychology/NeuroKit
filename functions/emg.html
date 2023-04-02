@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -577,9 +577,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.330715         1.0</span>
+<span class="go">1     1         3000  ...                1.317709         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                1.115608         1.0</span>
+<span class="go">3     3         9000  ...                1.257679         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -589,7 +589,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.243889</span>
+<span class="go">0               3.0            0.244491</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -939,9 +939,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.570835         1.0</span>
+<span class="go">1     1         3000  ...                1.615858         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.860480         1.0</span>
+<span class="go">3     3         9000  ...                0.771436         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -984,15 +984,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.244137</span>
+<span class="go">0               3.0            0.239365</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.249946</span>
-<span class="go">2     2                 1            0.238349</span>
+<span class="go">1     1                 2            0.244027</span>
+<span class="go">2     2                 1            0.234792</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1010,7 +1010,10 @@ separately processed DataFrames.</p>
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="eda.html"
@@ -1030,7 +1033,10 @@ separately processed DataFrames.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1098,7 +1104,7 @@ separately processed DataFrames.</p>
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -1128,7 +1134,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -1137,8 +1143,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

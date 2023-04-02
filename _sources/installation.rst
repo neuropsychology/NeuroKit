@@ -23,7 +23,7 @@ Then, at the top of each of your Python script, you should be able to import the
 
     .. code-block:: console
 
-        pip install https://github.com/neuropsychology/neurokit/zipball/dev
+        pip install https://github.com/neuropsychology/neurokit/zipball/dev --upgrade
 
 
 

@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -34,8 +34,8 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -353,8 +353,10 @@ document.write(`
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_smooth</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_smooth</span>
 
 
 <div class="viewcode-block" id="eda_phasic"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_phasic">[docs]</a><span class="k">def</span> <span class="nf">eda_phasic</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -373,12 +375,17 @@ document.write(`
 <span class="sd">      This method is computationally intensive and the processing time depends on the smoothing</span>
 <span class="sd">      factor, which can be controlled by the as ``smoothing_factor`` argument, set by default to</span>
 <span class="sd">      ``4`` seconds. Higher values will produce results more rapidly.</span>
-<span class="sd">    * **cvxEDA**: Convex optimization approach to EDA processing (Greco, 2016).</span>
-
+<span class="sd">    * **cvxEDA**: Convex optimization approach to EDA processing (Greco, 2016). Requires the</span>
+<span class="sd">      ``cvxopt`` package (`&gt; 1.3.0.1 &lt;https://github.com/neuropsychology/NeuroKit/issues/781&gt;`_) to</span>
+<span class="sd">      be installed.</span>
+<span class="sd">    * **SparsEDA**: Sparse non-negative deconvolution (Hernando-Gallego et al., 2017).</span>
 
 <span class="sd">    .. warning::</span>
 
-<span class="sd">      cvxEDA algorithm seems broken. Help is needed to investigate.</span>
+<span class="sd">      sparsEDA was newly added thanks to</span>
+<span class="sd">      `this implementation &lt;https://github.com/yskong224/SparsEDA-python&gt;`_. Help is needed to</span>
+<span class="sd">      double-check it, improve it and make it more concise and efficient. Also, sometimes it errors</span>
+<span class="sd">      for unclear reasons. Please help.</span>
 
 
 <span class="sd">    Parameters</span>
@@ -415,21 +422,27 @@ document.write(`
 <span class="sd">      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)</span>
 
 <span class="sd">      # Decompose using different algorithms</span>
-<span class="sd">      # cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;cvxeda&#39;)</span>
-<span class="sd">      smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;smoothmedian&#39;)</span>
-<span class="sd">      highpass = nk.eda_phasic(nk.standardize(eda_signal), method=&#39;highpass&#39;)</span>
+<span class="sd">      # cvxEDA = nk.eda_phasic(eda_signal, method=&#39;cvxeda&#39;)</span>
+<span class="sd">      smoothMedian = nk.eda_phasic(eda_signal, method=&#39;smoothmedian&#39;)</span>
+<span class="sd">      highpass = nk.eda_phasic(eda_signal, method=&#39;highpass&#39;)</span>
+<span class="sd">      sparse = nk.eda_phasic(eda_signal, method=&#39;smoothmedian&#39;)</span>
 
-<span class="sd">      data = pd.concat([</span>
-<span class="sd">          # cvxEDA.add_suffix(&#39;_cvxEDA&#39;),</span>
-<span class="sd">          smoothMedian.add_suffix(&#39;_SmoothMedian&#39;),</span>
-<span class="sd">          highpass.add_suffix(&#39;_Highpass&#39;)], axis=1)</span>
-<span class="sd">      data[&quot;EDA_Raw&quot;] = eda_signal</span>
+<span class="sd">      # Extract tonic and phasic components for plotting</span>
+<span class="sd">      t1, p1 = smoothMedian[&quot;EDA_Tonic&quot;].values, smoothMedian[&quot;EDA_Phasic&quot;].values</span>
+<span class="sd">      t2, p2 = highpass[&quot;EDA_Tonic&quot;].values, highpass[&quot;EDA_Phasic&quot;].values</span>
+<span class="sd">      t3, p3 = sparse[&quot;EDA_Tonic&quot;].values, sparse[&quot;EDA_Phasic&quot;].values</span>
 
+<span class="sd">      # Plot tonic</span>
 <span class="sd">      @savefig p_eda_phasic1.png scale=100%</span>
-<span class="sd">      fig = data.plot()</span>
+<span class="sd">      nk.signal_plot([t1, t2, t3], labels=[&quot;SmoothMedian&quot;, &quot;Highpass&quot;, &quot;Sparse&quot;])</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">      # Plot phasic</span>
+<span class="sd">      @savefig p_eda_phasic2.png scale=100%</span>
+<span class="sd">      nk.signal_plot([p1, p2, p3], labels=[&quot;SmoothMedian&quot;, &quot;Highpass&quot;, &quot;Sparse&quot;])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    **Example 2**: Real data.</span>
 
@@ -452,15 +465,20 @@ document.write(`
 <span class="sd">    * Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., &amp; Citi, L. (2016). cvxEDA: A convex</span>
 <span class="sd">      optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical</span>
 <span class="sd">      Engineering, 63(4), 797-804.</span>
+<span class="sd">    * Hernando-Gallego, F., Luengo, D., &amp; Artés-Rodríguez, A. (2017). Feature extraction of</span>
+<span class="sd">      galvanic skin responses by nonnegative sparse deconvolution. IEEE journal of biomedical and</span>
+<span class="sd">      shealth informatics, 22(5), 1385-1394.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;cvxeda&quot;</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_eda_phasic_cvxeda</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cvxeda&quot;</span><span class="p">,</span> <span class="s2">&quot;convex&quot;</span><span class="p">]:</span>
+        <span class="n">tonic</span><span class="p">,</span> <span class="n">phasic</span> <span class="o">=</span> <span class="n">_eda_phasic_cvxeda</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sparse&quot;</span><span class="p">,</span> <span class="s2">&quot;sparseda&quot;</span><span class="p">]:</span>
+        <span class="n">tonic</span><span class="p">,</span> <span class="n">phasic</span> <span class="o">=</span> <span class="n">_eda_phasic_sparsEDA</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothmedian&quot;</span><span class="p">]:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">tonic</span><span class="p">,</span> <span class="n">phasic</span> <span class="o">=</span> <span class="n">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s2">&quot;highpass&quot;</span><span class="p">,</span> <span class="s2">&quot;biopac&quot;</span><span class="p">,</span> <span class="s2">&quot;acqknowledge&quot;</span><span class="p">]:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">tonic</span><span class="p">,</span> <span class="n">phasic</span> <span class="o">=</span> <span class="n">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: eda_phasic(): &#39;method&#39; should be one of &quot;</span>
@@ -468,7 +486,7 @@ document.write(`
             <span class="s2">&quot;&#39;biopac&#39;, &#39;acqknowledge&#39;.&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">data</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">tonic</span><span class="p">,</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">phasic</span><span class="p">})</span></div>
 
 
 <span class="c1"># =============================================================================</span>
@@ -481,9 +499,7 @@ document.write(`
     <span class="n">tonic</span> <span class="o">=</span> <span class="n">signal_smooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
     <span class="n">phasic</span> <span class="o">=</span> <span class="n">eda_signal</span> <span class="o">-</span> <span class="n">tonic</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">),</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)})</span>
-
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
@@ -492,13 +508,11 @@ document.write(`
     <span class="n">phasic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
     <span class="n">tonic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">),</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)})</span>
-
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="k">return</span> <span class="n">tonic</span><span class="p">,</span> <span class="n">phasic</span>
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># cvxEDA</span>
+<span class="c1"># cvxEDA (Greco et al., 2016)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_eda_phasic_cvxeda</span><span class="p">(</span>
     <span class="n">eda_signal</span><span class="p">,</span>
@@ -647,50 +661,456 @@ document.write(`
     <span class="n">q</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][:</span><span class="n">n</span><span class="p">]</span>
     <span class="n">phasic</span> <span class="o">=</span> <span class="n">M</span> <span class="o">*</span> <span class="n">q</span>
 
-    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EDA_Tonic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;EDA_Phasic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]})</span>
-
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="c1"># Return tonic and phasic components</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># pyphysio</span>
+<span class="c1"># sparsEDA (Hernando-Gallego et al., 2017)</span>
 <span class="c1"># =============================================================================</span>
-<span class="c1"># def _eda_phasic_pyphysio(eda_signal, sampling_rate=1000):</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-<span class="c1">#    Try to implement this: https://github.com/MPBA/pyphysio/blob/master/pyphysio/estimators/Estimators.py#L190</span>
-<span class="c1">#</span>
-<span class="c1">#    Examples</span>
-<span class="c1">#    ---------</span>
-<span class="c1">#      import neurokit2 as nk</span>
-<span class="c1">#    &gt;&gt;&gt;</span>
-<span class="c1">#      eda_signal = nk.data(&quot;bio_eventrelated_100hz&quot;)[&quot;EDA&quot;].values</span>
-<span class="c1">#      sampling_rate = 100</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-<span class="c1">#    bateman = _eda_simulate_bateman(sampling_rate=sampling_rate)</span>
-<span class="c1">#    bateman_peak = np.argmax(bateman)</span>
-<span class="c1">#</span>
-<span class="c1">#    # Prepare the input signal to avoid starting/ending peaks in the driver</span>
-<span class="c1">#    bateman_first_half = bateman[0:bateman_peak + 1]</span>
-<span class="c1">#    bateman_first_half = eda_signal[0] * (bateman_first_half - np.min(bateman_first_half)) / (</span>
-<span class="c1">#        np.max(bateman_first_half) - np.min(bateman_first_half))</span>
-<span class="c1">#</span>
-<span class="c1">#    bateman_second_half = bateman[bateman_peak:]</span>
-<span class="c1">#    bateman_second_half = eda_signal[-1] * (bateman_second_half - np.min(bateman_second_half)) / (</span>
-<span class="c1">#        np.max(bateman_second_half) - np.min(bateman_second_half))</span>
-<span class="c1">#</span>
-<span class="c1">#    signal = np.r_[bateman_first_half, eda_signal, bateman_second_half]</span>
-<span class="c1">#</span>
-<span class="c1">#    def deconvolve(signal, irf):</span>
-<span class="c1">#        # normalize:</span>
-<span class="c1">#        irf = irf / np.sum(irf)</span>
-<span class="c1">#        # FFT method</span>
-<span class="c1">#        fft_signal = np.fft.fft(signal, n=len(signal))</span>
-<span class="c1">#        fft_irf = np.fft.fft(irf, n=len(signal))</span>
-<span class="c1">#        out = np.fft.ifft(fft_signal / fft_irf)</span>
-<span class="c1">#        return out</span>
-<span class="c1">#</span>
-<span class="c1">#    out = deconvolve(signal, bateman)</span>
-<span class="c1">#    nk.signal_plot(out)</span>
+
+
+<span class="k">def</span> <span class="nf">_eda_phasic_sparsEDA</span><span class="p">(</span>
+    <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">Kmax</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Nmin</span><span class="o">=</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.025</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;</span>
+<span class="sd">    Credits go to:</span>
+<span class="sd">    - https://github.com/fhernandogallego/sparsEDA (Matlab original implementation)</span>
+<span class="sd">    - https://github.com/yskong224/SparsEDA-python (Python implementation)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    epsilon</span>
+<span class="sd">        step remainder</span>
+<span class="sd">    maxIters</span>
+<span class="sd">        maximum number of LARS iterations</span>
+<span class="sd">    dmin</span>
+<span class="sd">        maximum distance between sparse reactions</span>
+<span class="sd">    rho</span>
+<span class="sd">        minimun threshold of sparse reactions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    driver</span>
+<span class="sd">        driver responses, tonic component</span>
+<span class="sd">    SCL</span>
+<span class="sd">        low component</span>
+<span class="sd">    MSE</span>
+<span class="sd">        reminder of the signal fitting</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dmin</span> <span class="o">=</span> <span class="n">Nmin</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="n">original_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>  <span class="c1"># Used for resampling at the end</span>
+
+    <span class="c1"># Exceptions</span>
+    <span class="c1"># if len(eda_signal) / sampling_rate &lt; 80:</span>
+    <span class="c1">#     raise AssertionError(&quot;Signal not enough large. longer than 80 seconds&quot;)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Signal contains NaN&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Preprocessing</span>
+    <span class="n">signalAdd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">signalAdd</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_signal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">signalAdd</span><span class="p">[</span><span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)]</span> <span class="o">=</span> <span class="n">eda_signal</span>
+    <span class="n">signalAdd</span><span class="p">[</span><span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eda_signal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Resample to 8 Hz</span>
+    <span class="n">eda_signal</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">new_sr</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="n">Nss</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">)</span>
+    <span class="n">Ns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signalAdd</span><span class="p">)</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">pointerS</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">new_sr</span>
+    <span class="n">pointerE</span> <span class="o">=</span> <span class="n">pointerS</span> <span class="o">+</span> <span class="n">Nss</span>
+    <span class="c1"># signalRs = signalAdd[pointerS:pointerE]</span>
+
+    <span class="c1"># overlap Save</span>
+    <span class="n">durationR</span> <span class="o">=</span> <span class="mi">70</span>
+    <span class="n">Lreg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">20</span> <span class="o">*</span> <span class="n">new_sr</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">new_sr</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">durationR</span> <span class="o">*</span> <span class="n">new_sr</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="n">Rzeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">N</span> <span class="o">+</span> <span class="n">L</span><span class="p">,</span> <span class="n">Lreg</span> <span class="o">*</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">srF</span> <span class="o">=</span> <span class="n">new_sr</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">srF</span><span class="p">)):</span>
+        <span class="n">t_rf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">srF</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>  <span class="c1"># 10 sec</span>
+        <span class="n">taus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">rf_biexp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t_rf</span> <span class="o">/</span> <span class="n">taus</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t_rf</span> <span class="o">/</span> <span class="n">taus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rf_est</span> <span class="o">=</span> <span class="n">taus</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">rf_biexp</span>
+        <span class="n">rf_est</span> <span class="o">=</span> <span class="n">rf_est</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rf_est</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="n">rf_est_zeropad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rf_est</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">rf_est</span><span class="p">)))</span>
+        <span class="n">rf_est_zeropad</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">rf_est</span><span class="p">)]</span> <span class="o">=</span> <span class="n">rf_est</span>
+        <span class="n">Rzeros</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">j</span> <span class="o">*</span> <span class="n">Lreg</span> <span class="p">:</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Lreg</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">toeplitz</span><span class="p">(</span>
+            <span class="n">rf_est_zeropad</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Lreg</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">R0</span> <span class="o">=</span> <span class="n">Rzeros</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">Lreg</span><span class="p">]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">N</span><span class="p">,</span> <span class="n">T</span> <span class="o">+</span> <span class="n">Lreg</span> <span class="o">*</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">T</span><span class="p">:]</span> <span class="o">=</span> <span class="n">R0</span>
+
+    <span class="c1"># SCL</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Lreg</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Lreg</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Lreg</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Lreg</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Lreg</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">Lreg</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Lreg</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">R</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Lreg</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">Lreg</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Lreg</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">R</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Lreg</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">Lreg</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">Lreg</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">R</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">Lreg</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">Lreg</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">Lreg</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">Cte</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Cte</span><span class="p">)</span>
+
+    <span class="c1"># Loop</span>
+    <span class="n">cutS</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cutE</span> <span class="o">=</span> <span class="n">N</span>
+    <span class="n">slcAux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+    <span class="n">driverAux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+    <span class="n">resAux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+    <span class="n">aux</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">cutE</span> <span class="o">&lt;</span> <span class="n">Ns</span><span class="p">:</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">aux</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">signalCut</span> <span class="o">=</span> <span class="n">signalAdd</span><span class="p">[</span><span class="n">cutS</span><span class="p">:</span><span class="n">cutE</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">b0</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">b0</span> <span class="o">=</span> <span class="n">signalCut</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">signalCutIn</span> <span class="o">=</span> <span class="n">signalCut</span> <span class="o">-</span> <span class="n">b0</span>
+        <span class="n">beta</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lasso</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">signalCutIn</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">Kmax</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">)</span>
+
+        <span class="n">signalEst</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span> <span class="o">+</span> <span class="n">b0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># remAout = (signalCut - signalEst).^2;</span>
+        <span class="c1"># res2 = sum(remAout(20*sampling_rate+1:(40*sampling_rate)));</span>
+        <span class="c1"># res3 = sum(remAout(40*sampling_rate+1:(60*sampling_rate)));</span>
+
+        <span class="n">remAout</span> <span class="o">=</span> <span class="p">(</span><span class="n">signalCut</span> <span class="o">-</span> <span class="n">signalEst</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">res2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">remAout</span><span class="p">[</span><span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="p">:</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">])</span>
+        <span class="n">res3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">remAout</span><span class="p">[</span><span class="mi">40</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="p">:</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">])</span>
+
+        <span class="n">jump</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">res2</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">jump</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">res3</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">jump</span> <span class="o">=</span> <span class="mi">3</span>
+
+        <span class="n">SCL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="p">:])</span> <span class="o">+</span> <span class="n">b0</span>
+
+        <span class="n">SCRline</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">6</span><span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="n">SCRaux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">Lreg</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+        <span class="n">SCRaux</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">SCRline</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">Lreg</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">SCRaux</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">b0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">jump</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="p">:])</span> <span class="o">+</span> <span class="n">b0</span>
+
+        <span class="n">driverAux</span><span class="p">[</span><span class="n">cutS</span> <span class="p">:</span> <span class="n">cutS</span> <span class="o">+</span> <span class="p">(</span><span class="n">jump</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span> <span class="o">=</span> <span class="n">driver</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">jump</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">20</span><span class="p">]</span>
+        <span class="n">slcAux</span><span class="p">[</span><span class="n">cutS</span> <span class="p">:</span> <span class="n">cutS</span> <span class="o">+</span> <span class="p">(</span><span class="n">jump</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span> <span class="o">=</span> <span class="n">SCL</span><span class="p">[</span>
+            <span class="mi">0</span> <span class="p">:</span> <span class="n">jump</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">20</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">resAux</span><span class="p">[</span><span class="n">cutS</span> <span class="p">:</span> <span class="n">cutS</span> <span class="o">+</span> <span class="p">(</span><span class="n">jump</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)]</span> <span class="o">=</span> <span class="n">remAout</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">jump</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">20</span><span class="p">]</span>
+        <span class="n">cutS</span> <span class="o">=</span> <span class="n">cutS</span> <span class="o">+</span> <span class="n">jump</span> <span class="o">*</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+        <span class="n">cutE</span> <span class="o">=</span> <span class="n">cutS</span> <span class="o">+</span> <span class="n">N</span>
+
+    <span class="n">SCRaux</span> <span class="o">=</span> <span class="n">driverAux</span><span class="p">[</span><span class="n">pointerS</span><span class="p">:</span><span class="n">pointerE</span><span class="p">]</span>
+    <span class="n">SCL</span> <span class="o">=</span> <span class="n">slcAux</span><span class="p">[</span><span class="n">pointerS</span><span class="p">:</span><span class="n">pointerE</span><span class="p">]</span>
+    <span class="n">MSE</span> <span class="o">=</span> <span class="n">resAux</span><span class="p">[</span><span class="n">pointerS</span><span class="p">:</span><span class="n">pointerE</span><span class="p">]</span>
+
+    <span class="c1"># PP</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">SCRaux</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">scr_temp</span> <span class="o">=</span> <span class="n">SCRaux</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+    <span class="n">ind2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scr_temp</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">scr_ord</span> <span class="o">=</span> <span class="n">scr_temp</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span>
+    <span class="n">scr_fin</span> <span class="o">=</span> <span class="p">[</span><span class="n">scr_ord</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">ind_fin</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="n">ind2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind2</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">ind2</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="n">ind_fin</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">dmin</span><span class="p">):</span>
+            <span class="n">scr_fin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scr_ord</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">ind_fin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">ind2</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">SCRaux</span><span class="p">))</span>
+    <span class="n">driver</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ind_fin</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scr_fin</span><span class="p">)</span>
+
+    <span class="n">scr_max</span> <span class="o">=</span> <span class="n">scr_fin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">scr_max</span>
+    <span class="n">driver</span><span class="p">[</span><span class="n">driver</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Resample</span>
+    <span class="n">SCL</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">SCL</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">original_length</span><span class="p">)</span>
+    <span class="n">MSE</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">MSE</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">original_length</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">driver</span><span class="p">,</span> <span class="n">SCL</span><span class="p">,</span> <span class="n">MSE</span>
+
+
+<span class="k">def</span> <span class="nf">lasso</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">maxIters</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">OptTol</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+    <span class="n">solFreq</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">resStop2</span> <span class="o">=</span> <span class="mf">0.0005</span>
+    <span class="n">lmbdaStop</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">zeroTol</span> <span class="o">=</span> <span class="mf">1e-5</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="n">x_old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">lmbda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lmbda</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;y is not expressible as a non-negative linear combination of the columns of X&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">newIndices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">lmbda</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="n">collinearIndices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">duals</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">s</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">lmbdaStop</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">lmbda</span> <span class="o">&lt;</span> <span class="n">lmbdaStop</span><span class="p">)</span> <span class="ow">or</span> <span class="p">((</span><span class="n">epsilon</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">)):</span>
+        <span class="n">activationHist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">numIters</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">R_I</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">activeSet</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">newIndices</span><span class="p">)):</span>
+        <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">R_I</span><span class="p">,</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">updateChol</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">activeSet</span><span class="p">,</span> <span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">zeroTol</span><span class="p">)</span>
+        <span class="n">activeSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="n">activationHist</span> <span class="o">=</span> <span class="n">activeSet</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Loop</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">done</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">activationHist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">lmbda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">newIndices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">lmbda</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">activeSet</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">newIndices</span><span class="p">)):</span>
+                <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">R_I</span><span class="p">,</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">updateChol</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">activeSet</span><span class="p">,</span> <span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">zeroTol</span><span class="p">)</span>
+                <span class="n">activeSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="p">[</span><span class="n">activationHist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">activeSet</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lmbda</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">activeSet</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R_I</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+                <span class="n">R_I</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+                <span class="n">R_I</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R_I</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+                <span class="n">R_I</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">z</span><span class="p">,</span> <span class="n">transposed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+                <span class="n">R_I</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">transposed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span>
+            <span class="n">R</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()],</span> <span class="n">dx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">ATv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="n">gammaI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>
+        <span class="n">removeIndices</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">inactiveSet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">inactiveSet</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">collinearIndices</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">inactiveSet</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">collinearIndices</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">inactiveSet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">inactiveSet</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inactiveSet</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">gammaIc</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">newIndices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>
+            <span class="n">gammaArr</span> <span class="o">=</span> <span class="p">(</span><span class="n">lmbda</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="n">inactiveSet</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ATv</span><span class="p">[</span><span class="n">inactiveSet</span><span class="p">]</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span>
+
+            <span class="n">gammaArr</span><span class="p">[</span><span class="n">gammaArr</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>
+            <span class="n">gammaIc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gammaArr</span><span class="p">)</span>
+            <span class="c1"># Imin = np.argmin(gammaArr)</span>
+            <span class="n">newIndices</span> <span class="o">=</span> <span class="n">inactiveSet</span><span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">gammaArr</span> <span class="o">-</span> <span class="n">gammaIc</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">)]</span>
+
+        <span class="n">gammaMin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gammaIc</span><span class="p">,</span> <span class="n">gammaI</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">gammaMin</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">-</span> <span class="n">gammaMin</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="n">gammaMin</span> <span class="o">*</span> <span class="n">ATv</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">((</span><span class="n">lmbda</span> <span class="o">-</span> <span class="n">gammaMin</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">OptTol</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="p">((</span><span class="n">lmbdaStop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lmbda</span> <span class="o">&lt;=</span> <span class="n">lmbdaStop</span><span class="p">))</span>
+            <span class="ow">or</span> <span class="p">((</span><span class="n">epsilon</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">))</span>
+        <span class="p">):</span>
+            <span class="n">newIndices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">removeIndices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">lmbda</span> <span class="o">-</span> <span class="n">gammaMin</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">OptTol</span><span class="p">:</span>
+                <span class="c1"># print(lmbda-gammaMin)</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">20</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">resStop2</span><span class="p">:</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">20</span> <span class="p">:</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">40</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">resStop2</span><span class="p">:</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">40</span> <span class="p">:</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">60</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">resStop2</span><span class="p">:</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">gammaIc</span> <span class="o">&lt;=</span> <span class="n">gammaI</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">newIndices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">newIndices</span><span class="p">)):</span>
+                <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">R_I</span><span class="p">,</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">updateChol</span><span class="p">(</span>
+                    <span class="n">R_I</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">zeroTol</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+                    <span class="n">collinearIndices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">activeSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                    <span class="n">activationHist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newIndices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">gammaI</span> <span class="o">&lt;=</span> <span class="n">gammaIc</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">removeIndices</span><span class="p">)):</span>
+                <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">==</span> <span class="n">removeIndices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+                <span class="n">R_I</span> <span class="o">=</span> <span class="n">downdateChol</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="n">activeSet</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+                <span class="n">collinearIndices</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">removeIndices</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">activationHist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">removeIndices</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">iter</span> <span class="o">&gt;=</span> <span class="n">maxIters</span><span class="p">:</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x_old</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x_old</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">done</span> <span class="ow">or</span> <span class="p">((</span><span class="n">solFreq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">iter</span> <span class="o">%</span> <span class="n">solFreq</span><span class="p">)):</span>
+            <span class="n">beta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">duals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">numIters</span> <span class="o">=</span> <span class="nb">iter</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">numIters</span><span class="p">,</span> <span class="n">activationHist</span><span class="p">,</span> <span class="n">duals</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">updateChol</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">explicitA</span><span class="p">,</span> <span class="n">activeSet</span><span class="p">,</span> <span class="n">newIndex</span><span class="p">,</span> <span class="n">zeroTol</span><span class="p">):</span>
+    <span class="c1"># global opts_tr, zeroTol</span>
+
+    <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">newVec</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:,</span> <span class="n">newIndex</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">R_I0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">newVec</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">explicitA</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R_I</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_I</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">[:,</span> <span class="n">activeSet</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">R</span><span class="p">[:,</span> <span class="n">newIndex</span><span class="p">]),</span>
+                    <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span>
+                    <span class="n">R_I</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">[:,</span> <span class="n">activeSet</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">R</span><span class="p">[:,</span> <span class="n">newIndex</span><span class="p">]),</span>
+                    <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Original matlab code:</span>
+
+            <span class="c1"># Global var for linsolve functions..</span>
+            <span class="c1"># optsUT = True</span>
+            <span class="c1"># opts_trUT = True</span>
+            <span class="c1"># opts_trTRANSA = True</span>
+            <span class="c1"># AnewVec = feval(R,2,n,length(activeSet),newVec,activeSet,N);</span>
+            <span class="c1"># p = linsolve(R_I,AnewVec,opts_tr);</span>
+
+            <span class="c1"># Translation by chatGPT-3, might be wrong</span>
+            <span class="n">AnewVec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">activeSet</span><span class="p">)):</span>
+                <span class="n">AnewVec</span> <span class="o">+=</span> <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="n">activeSet</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">newVec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">AnewVec</span><span class="p">,</span> <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">newVec</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">zeroTol</span><span class="p">:</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">R_I0</span> <span class="o">=</span> <span class="n">R_I</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R_I</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">R_I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R_I</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># print(R_I)</span>
+            <span class="n">R_I0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R_I</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">R_I</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">R_I0</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">R_I</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">R_I</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">R_I</span>
+            <span class="n">R_I0</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">R_I</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="n">R_I0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">R_I0</span><span class="p">,</span> <span class="n">flag</span>
+
+
+<span class="k">def</span> <span class="nf">downdateChol</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="c1"># global opts_tr, zeroTol</span>
+
+    <span class="k">def</span> <span class="nf">planerot</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="c1"># http://statweb.stanford.edu/~susan/courses/b494/index/node30.html</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">G</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">r</span>
+            <span class="n">G</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">r</span>
+            <span class="n">G</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">G</span><span class="p">,</span> <span class="n">x</span>
+
+    <span class="n">R1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">R1</span><span class="p">[:,</span> <span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:,</span> <span class="p">:</span><span class="n">j</span><span class="p">]</span>
+    <span class="n">R1</span><span class="p">[:,</span> <span class="n">j</span><span class="p">:]</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+    <span class="c1"># m = R1.shape[0]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">R1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">G</span><span class="p">,</span> <span class="n">R</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">planerot</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">R</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">R</span><span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">n</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">R</span><span class="p">[:</span><span class="n">n</span><span class="p">,</span> <span class="p">:]</span>
 </pre></div>
 
                 </article>
@@ -699,9 +1119,15 @@ document.write(`
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -711,7 +1137,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -741,7 +1167,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -750,8 +1176,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>

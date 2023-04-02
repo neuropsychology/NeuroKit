@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -1420,7 +1420,7 @@ to compute optimal kmax.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_k1.png"><img alt="../_images/p_complexity_k1.png" src="../_images/p_complexity_k1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">k_max</span>
-<span class="gh">Out[4]: </span><span class="go">21</span>
+<span class="gh">Out[4]: </span><span class="go">19</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1505,7 +1505,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.7019669424249906</span>
+<span class="gh">Out[12]: </span><span class="go">2.006235351513159</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1515,7 +1515,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.812340776390337</span>
+<span class="gh">Out[16]: </span><span class="go">3.799167249562562</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1772,7 +1772,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.6070279257642159</span>
+<span class="gh">Out[10]: </span><span class="go">0.5857620816158494</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -1849,7 +1849,7 @@ to perform PSD slope analysis.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_psdslope1.png"><img alt="../_images/p_fractal_psdslope1.png" src="../_images/p_fractal_psdslope1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.5718927124093196</span>
+<span class="gh">Out[4]: </span><span class="go">2.853121960329401</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1913,7 +1913,7 @@ to compute Higuchi’s fractal dimension.</p></li>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi1.png"><img alt="../_images/p_fractal_higuchi1.png" src="../_images/p_fractal_higuchi1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi2.png"><img alt="../_images/p_fractal_higuchi2.png" src="../_images/p_fractal_higuchi2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hfd</span>
-<span class="gh">Out[5]: </span><span class="go">1.9720287700279655</span>
+<span class="gh">Out[5]: </span><span class="go">1.951036418200513</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1998,7 +1998,7 @@ value based on the <code class="docutils literal notranslate"><span class="pre">
 <span class="gp">In [11]: </span><span class="n">D</span> <span class="o">=</span> <span class="n">info1</span><span class="p">[</span><span class="s2">&quot;Average&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">info2</span><span class="p">[</span><span class="s2">&quot;Average&quot;</span><span class="p">]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu&#39;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x1e001632e00&gt;</span>
+<span class="gh">Out[12]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x20acbbd0460&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_density3.png"><img alt="../_images/p_fractal_density3.png" src="../_images/p_fractal_density3.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -2259,7 +2259,7 @@ parameters of the singularity spectrum.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_dfa1.png"><img alt="../_images/p_fractal_dfa1.png" src="../_images/p_fractal_dfa1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">dfa</span>
-<span class="gh">Out[4]: </span><span class="go">0.6525184580177303</span>
+<span class="gh">Out[4]: </span><span class="go">0.6513755088367837</span>
 </pre></div>
 </div>
 <p>As we can see from the plot, the final value, corresponding to the slope of the red line,
@@ -2279,7 +2279,7 @@ fractality of short-term fluctuations.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">mfdfa</span>
 <span class="gh">Out[8]: </span>
 <span class="go">      Width      Peak      Mean  ...  Asymmetry  Fluctuation  Increment</span>
-<span class="go">0  0.824997  0.778645  0.884425  ...   -0.37178     0.000253   0.040705</span>
+<span class="go">0  0.824114  0.777453  0.883204  ...  -0.371678     0.000251   0.040582</span>
 
 <span class="go">[1 rows x 8 columns]</span>
 </pre></div>
@@ -2370,10 +2370,10 @@ wether it is correct or not.</p>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_tmf.png"><img alt="../_images/p_fractal_tmf.png" src="../_images/p_fractal_tmf.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">tMF</span>  <span class="c1"># t-value</span>
-<span class="gh">Out[4]: </span><span class="go">-3.595106554915076</span>
+<span class="gh">Out[4]: </span><span class="go">8.700803653870956</span>
 
 <span class="gp">In [5]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">]</span>  <span class="c1"># p-value</span>
-<span class="gh">Out[5]: </span><span class="go">0.0005076233137946827</span>
+<span class="gh">Out[5]: </span><span class="go">7.398019797729914e-14</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2463,7 +2463,7 @@ to compute Shannon entropy.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">shanen</span>
-<span class="gh">Out[7]: </span><span class="go">1.5561358450989138</span>
+<span class="gh">Out[7]: </span><span class="go">1.5550317370890696</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -2473,12 +2473,12 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [9]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [10]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[10]: </span><span class="go">1.07863117359858</span>
+<span class="gh">Out[10]: </span><span class="go">1.077865864244523</span>
 
 <span class="gp">In [11]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">shanen</span>
-<span class="gh">Out[12]: </span><span class="go">1.0786311735985799</span>
+<span class="gh">Out[12]: </span><span class="go">1.0778658642445227</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2544,15 +2544,15 @@ distribution).</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>base</strong> (<em>float</em>) – The logarithmic base to use, defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>, giving a unit in <em>bits</em>. Note that <code class="docutils literal notranslate"><span class="pre">scipy.</span>
+<span class="pre">stats.entropy()</span></code> uses Euler’s number (<code class="docutils literal notranslate"><span class="pre">np.e</span></code>) as default (the natural logarithm), giving
+a measure of information expressed in <em>nats</em>.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Other arguments passed to <code class="docutils literal notranslate"><span class="pre">scipy.stats.differential_entropy()</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>diffen</strong> (<em>float</em>) – The Differential entropy of the signal.</p></li>
-<li><p><strong>base</strong> (<em>float</em>) – The logarithmic base to use, defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>, giving a unit in <em>bits</em>. Note that <code class="docutils literal notranslate"><span class="pre">scipy.</span>
-<span class="pre">stats.entropy()</span></code> uses Euler’s number (<code class="docutils literal notranslate"><span class="pre">np.e</span></code>) as default (the natural logarithm), giving
-a measure of information expressed in <em>nats</em>.</p></li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
 to compute Differential entropy.</p></li>
 </ul>
@@ -2573,7 +2573,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.5126421557088503</span>
+<span class="gh">Out[4]: </span><span class="go">0.49353048917378595</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2626,11 +2626,11 @@ helping us by double-checking the code against the formulas in the references.</
 <span class="gp">In [4]: </span><span class="n">powen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_power</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">powen</span>
-<span class="gh">Out[5]: </span><span class="go">0.05855915454444594</span>
+<span class="gh">Out[5]: </span><span class="go">0.05855920847131612</span>
 
 <span class="go"># Visualize the distribution that the entropy power is based on</span>
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Values&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Density&quot;</span><span class="p">])</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e000790070&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x20acd0d0d30&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/entropy_power2.png"><img alt="../_images/entropy_power2.png" src="../_images/entropy_power2.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -2638,7 +2638,7 @@ helping us by double-checking the code against the formulas in the references.</
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">powen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_power</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">powen</span>
-<span class="gh">Out[8]: </span><span class="go">0.05855883543832484</span>
+<span class="gh">Out[8]: </span><span class="go">0.05855891718265091</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3022,7 +3022,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">klen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_kl</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">klen</span>
-<span class="gh">Out[4]: </span><span class="go">1.6329833179331854</span>
+<span class="gh">Out[4]: </span><span class="go">1.6332637176056903</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3086,7 +3086,7 @@ noise) produces the greatest entropy.</p>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_spectral1.png"><img alt="../_images/p_entropy_spectral1.png" src="../_images/p_entropy_spectral1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.6052243736346722</span>
+<span class="gh">Out[4]: </span><span class="go">0.6162300348674922</span>
 </pre></div>
 </div>
 <p>Bin the frequency spectrum.</p>
@@ -3154,7 +3154,7 @@ multiples of 4) partitions for sake of symmetry.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_phase1.png"><img alt="../_images/p_entropy_phase1.png" src="../_images/p_entropy_phase1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">1.1572710009367808</span>
+<span class="gh">Out[4]: </span><span class="go">1.1516065026427331</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3219,14 +3219,14 @@ graining parameter that defines how fine the grid is.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_grid1.png"><img alt="../_images/p_entropy_grid1.png" src="../_images/p_entropy_grid1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">1.9794335835737429</span>
+<span class="gh">Out[4]: </span><span class="go">2.2389970610073595</span>
 
 <span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_grid</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_grid2.png"><img alt="../_images/p_entropy_grid2.png" src="../_images/p_entropy_grid2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;GDR&quot;</span><span class="p">]</span>
-<span class="gh">Out[6]: </span><span class="go">0.58</span>
+<span class="gh">Out[6]: </span><span class="go">0.6</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3292,7 +3292,7 @@ algorithm, can help.</p>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_attention1.png"><img alt="../_images/p_entropy_attention1.png" src="../_images/p_entropy_attention1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">atten</span>
-<span class="gh">Out[4]: </span><span class="go">1.1502319330072024</span>
+<span class="gh">Out[4]: </span><span class="go">1.1738521464060276</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3360,7 +3360,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">incren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_increment</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">incren</span>
-<span class="gh">Out[4]: </span><span class="go">2.7812894538338817</span>
+<span class="gh">Out[4]: </span><span class="go">2.7135517298896548</span>
 
 <span class="go"># Multiscale IncrEn (MSIncrEn)</span>
 <span class="gp">In [5]: </span><span class="n">msincren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSIncrEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3427,12 +3427,12 @@ range [0, 90] degrees.</p></li>
 <span class="gp">In [3]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">45</span><span class="p">])</span>
 
 <span class="gp">In [4]: </span><span class="n">slopen</span>
-<span class="gh">Out[4]: </span><span class="go">3.88278343742065</span>
+<span class="gh">Out[4]: </span><span class="go">3.787160682369948</span>
 
 <span class="gp">In [5]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">])</span>
 
 <span class="gp">In [6]: </span><span class="n">slopen</span>
-<span class="gh">Out[6]: </span><span class="go">5.035266693589696</span>
+<span class="gh">Out[6]: </span><span class="go">4.970962149238306</span>
 
 <span class="go"># Compute Multiscale Slope Entropy (MSSlopEn)</span>
 <span class="gp">In [7]: </span><span class="n">msslopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSlopEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3492,12 +3492,12 @@ or others. See <a class="reference internal" href="#neurokit2.complexity.complex
 <span class="gp">In [4]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;MEP&quot;</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">sydyen</span>
-<span class="gh">Out[5]: </span><span class="go">3.764738452375225</span>
+<span class="gh">Out[5]: </span><span class="go">3.7688999013548377</span>
 
 <span class="gp">In [6]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">sydyen</span>
-<span class="gh">Out[7]: </span><span class="go">3.3855602503902222</span>
+<span class="gh">Out[7]: </span><span class="go">3.499754966833589</span>
 
 <span class="go"># Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)</span>
 <span class="gp">In [8]: </span><span class="n">mssydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSyDyEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3568,17 +3568,17 @@ details.</p></li>
 <span class="gp">In [3]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">dispen</span>
-<span class="gh">Out[4]: </span><span class="go">1.4142196664608222</span>
+<span class="gh">Out[4]: </span><span class="go">1.3975065131905848</span>
 
 <span class="go"># Get Reverse Dispersion Entropy (RDEn)</span>
 <span class="gp">In [5]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RDEn&quot;</span><span class="p">]</span>
-<span class="gh">Out[5]: </span><span class="go">0.004977049919096838</span>
+<span class="gh">Out[5]: </span><span class="go">0.007337130181250278</span>
 
 <span class="go"># Fluctuation-based DispEn with &quot;finesort&quot;</span>
 <span class="gp">In [6]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolize</span><span class="o">=</span><span class="s2">&quot;finesort&quot;</span><span class="p">,</span> <span class="n">fluctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">dispen</span>
-<span class="gh">Out[7]: </span><span class="go">1.4142196664608222</span>
+<span class="gh">Out[7]: </span><span class="go">1.3975065131905848</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3632,7 +3632,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">enofen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_ofentropy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">enofen</span>
-<span class="gh">Out[4]: </span><span class="go">3.9061983328100958</span>
+<span class="gh">Out[4]: </span><span class="go">3.925070520364182</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3763,7 +3763,7 @@ to compute sample entropy.</p></li>
 
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="gp">In [3]: </span><span class="n">sampen</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_sample</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">sampen</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_sample</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">sampen</span>
 <span class="gh">Out[4]: </span><span class="go">0.07380851770121913</span>
@@ -3832,31 +3832,31 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [2]: </span><span class="n">pen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">pen</span>
-<span class="gh">Out[3]: </span><span class="go">2.57470188161651</span>
+<span class="gh">Out[3]: </span><span class="go">2.578663855829015</span>
 
 <span class="go"># Weighted Permutation Entropy (WPEn)</span>
 <span class="gp">In [4]: </span><span class="n">wpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">wpen</span>
-<span class="gh">Out[5]: </span><span class="go">0.9966341589626738</span>
+<span class="gh">Out[5]: </span><span class="go">0.9956684313530759</span>
 
 <span class="go"># Conditional Permutation Entropy (CPEn)</span>
 <span class="gp">In [6]: </span><span class="n">cpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">cpen</span>
-<span class="gh">Out[7]: </span><span class="go">0.42505171521165824</span>
+<span class="gh">Out[7]: </span><span class="go">0.42298867743719465</span>
 
 <span class="go"># Conditional Weighted Permutation Entropy (CWPEn)</span>
 <span class="gp">In [8]: </span><span class="n">cwpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">cwpen</span>
-<span class="gh">Out[9]: </span><span class="go">0.40885149796729914</span>
+<span class="gh">Out[9]: </span><span class="go">0.4180945551265702</span>
 
 <span class="go"># Conditional Renyi Permutation Entropy (CRPEn)</span>
 <span class="gp">In [10]: </span><span class="n">crpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">entropy_renyi</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">crpen</span>
-<span class="gh">Out[11]: </span><span class="go">0.28754997294730616</span>
+<span class="gh">Out[11]: </span><span class="go">0.28536980203868473</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -4428,7 +4428,7 @@ helping us by double-checking the code against the formulas in the references.</
 <span class="gp">In [3]: </span><span class="n">fsi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fishershannon_information</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">fsi</span>
-<span class="gh">Out[4]: </span><span class="go">0.00025645695740760275</span>
+<span class="gh">Out[4]: </span><span class="go">0.0004645226127774311</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -4750,13 +4750,13 @@ to compute LZC.</p></li>
 <span class="gp">In [3]: </span><span class="n">lzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">lzc</span>
-<span class="gh">Out[4]: </span><span class="go">1.0588723832474038</span>
+<span class="gh">Out[4]: </span><span class="go">1.0156531022985302</span>
 
 <span class="go"># PLZC</span>
 <span class="gp">In [5]: </span><span class="n">plzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plzc</span>
-<span class="gh">Out[6]: </span><span class="go">0.6883678475327589</span>
+<span class="gh">Out[6]: </span><span class="go">0.6967625773807192</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># MSLZC</span>
@@ -4903,7 +4903,7 @@ to compute LLE.</p></li>
 <span class="gp">In [3]: </span><span class="n">lle</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lyapunov</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rosenstein1993&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">lle</span>
-<span class="gh">Out[4]: </span><span class="go">0.04467356201528248</span>
+<span class="gh">Out[4]: </span><span class="go">0.049177550695696494</span>
 
 <span class="go"># Eckman&#39;s method is broken. Please help us fix-it!</span>
 <span class="go"># lle, info = nk.complexity_lyapunov(signal, dimension=2, method=&quot;eckmann1996&quot;)</span>
@@ -5000,8 +5000,8 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <a class="reference internal image-reference" href="../_images/p_complexity_rqa1.png"><img alt="../_images/p_complexity_rqa1.png" src="../_images/p_complexity_rqa1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">results</span>
 <span class="gh">Out[4]: </span>
-<span class="go">   RecurrenceRate   DiagRec  Determinism  ...         W  WMax       WEn</span>
-<span class="go">0        0.208795 -0.047212     0.828438  ...  9.204572   303  2.918303</span>
+<span class="go">   RecurrenceRate   DiagRec  Determinism  ...          W  WMax       WEn</span>
+<span class="go">0        0.207155 -0.051927     0.842838  ...  10.442249   346  3.063948</span>
 
 <span class="go">[1 rows x 14 columns]</span>
 
@@ -5071,7 +5071,7 @@ figure.</p></li>
 <span class="gp">In [5]: </span><span class="n">m</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_mandelbrot</span><span class="p">(</span><span class="n">real_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">imaginary_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">))</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x1e000a53250&gt;</span>
+<span class="gh">Out[6]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x20acd7e7250&gt;</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gh">Out[7]: </span><span class="go">(-0.5, 908.5, 999.5, -0.5)</span>
@@ -5084,7 +5084,7 @@ figure.</p></li>
 <span class="gp">   ...: </span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x1e000942290&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x20acdba5a50&gt;</span>
 
 <span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gh">Out[10]: </span><span class="go">(-0.5, 1363.5, 1499.5, -0.5)</span>
@@ -5099,7 +5099,7 @@ figure.</p></li>
 <span class="gp">In [13]: </span><span class="n">mixed</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">b</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mixed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x1e075e963e0&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.image.AxesImage at 0x20ad04d8910&gt;</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="gh">Out[15]: </span><span class="go">(-0.5, 999.5, 999.5, -0.5)</span>
@@ -5806,7 +5806,10 @@ to compute Shannon entropy.</p></li>
               
               
                 <footer class="bd-footer-article">
-                  <!-- Previous / next buttons -->
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="data.html"
@@ -5826,7 +5829,10 @@ to compute Shannon entropy.</p></li>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -6118,7 +6124,7 @@ to compute Shannon entropy.</p></li>
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner">
+            
 <div class="bd-footer-content__inner container">
   
   <div class="footer-item">
@@ -6148,7 +6154,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
     
   </div>
   
-</div></div>
+</div>
           </footer>
         
 
@@ -6157,8 +6163,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
   </footer>
