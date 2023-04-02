@@ -32,7 +32,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass", **kwargs):
 
       sparsEDA was newly added thanks to
       `this implementation <https://github.com/yskong224/SparsEDA-python>`_. Help is needed to
-      double-check it, improve it and make it more concise and efficient.
+      double-check it, improve it and make it more concise and efficient. Also, sometimes it errors
+      for unclear reasons. Please help.
 
 
     Parameters
@@ -502,12 +503,6 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
     solFreq = 0
     resStop2 = 0.0005
     lmbdaStop = 0
-
-    # Global var for linsolve functions..
-    # optsUT = True
-    # opts_trUT = True
-    # opts_trTRANSA = True
-
     zeroTol = 1e-5
 
     x = np.zeros(W)
@@ -705,9 +700,20 @@ def updateChol(R_I, n, N, R, explicitA, activeSet, newIndex, zeroTol):
                 )
 
         else:
+            # Original matlab code:
+
+            # Global var for linsolve functions..
+            # optsUT = True
+            # opts_trUT = True
+            # opts_trTRANSA = True
             # AnewVec = feval(R,2,n,length(activeSet),newVec,activeSet,N);
             # p = linsolve(R_I,AnewVec,opts_tr);
-            raise Exception("This part is not written. Need some works done")
+
+            # Translation by chatGPT-3, might be wrong
+            AnewVec = np.zeros((n, 1))
+            for i in range(len(activeSet)):
+                AnewVec += R[2, :, activeSet[i]] * newVec[i]
+            p = scipy.linalg.solve(R_I, AnewVec, transposed=True, lower=False)
 
         q = np.sum(newVec**2) - np.sum(p**2)
         if q <= zeroTol:

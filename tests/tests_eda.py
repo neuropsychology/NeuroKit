@@ -61,10 +61,10 @@ def test_eda_clean():
 
 
 def test_eda_phasic():
-    sampling_rate = 1000
+    sr = 100
     eda = nk.eda_simulate(
         duration=30,
-        sampling_rate=sampling_rate,
+        sampling_rate=sr,
         scr_number=6,
         noise=0.01,
         drift=0.01,
@@ -72,14 +72,18 @@ def test_eda_phasic():
     )
 
     if platform.system() == "Linux":
-        cvxEDA = nk.eda_phasic(nk.standardize(eda), method="cvxeda")
+        cvxEDA = nk.eda_phasic(eda, sampling_rate=sr, method="cvxeda")
         assert len(cvxEDA) == len(eda)
 
-    smoothMedian = nk.eda_phasic(nk.standardize(eda), method="smoothmedian")
+    smoothMedian = nk.eda_phasic(eda, sampling_rate=sr, method="smoothmedian")
     assert len(smoothMedian) == len(eda)
 
-    highpass = nk.eda_phasic(nk.standardize(eda), method="highpass")
+    highpass = nk.eda_phasic(eda, sampling_rate=sr, method="highpass")
     assert len(highpass) == len(eda)
+
+    # This fails unfortunately... need to fix the sparsEDA algorithm
+    # sparsEDA = nk.eda_phasic(eda, sampling_rate=sr, method="sparsEDA")
+    # assert len(highpass) == len(eda)
 
 
 def test_eda_peaks():
@@ -242,11 +246,13 @@ def test_eda_findpeaks():
         nabian2018["SCR_Peaks"][:min_n_peaks] - vanhalem2020["SCR_Peaks"][:min_n_peaks]
     ) < np.mean(eda_signal)
 
+
 @pytest.mark.parametrize(
     "method_cleaning, method_phasic, method_peaks",
-    [("none", "cvxeda", "gamboa2008"),
+    [
+        ("none", "cvxeda", "gamboa2008"),
         ("neurokit", "median", "nabian2018"),
-     ]
+    ],
 )
 def test_eda_report(tmp_path, method_cleaning, method_phasic, method_peaks):
 
