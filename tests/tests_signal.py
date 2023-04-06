@@ -8,6 +8,7 @@ import scipy.signal
 
 import neurokit2 as nk
 
+
 # =============================================================================
 # Signal
 # =============================================================================
@@ -393,3 +394,29 @@ def test_signal_distort():
         nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)
 
     signal2 = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)
+
+
+def test_signal_surrogate():
+    # Logistic map
+    r = 3.95
+    x = np.empty(450)
+    x[0] = 0.5
+    for i in range(1, len(x)):
+        x[i] = r * x[i - 1] * (1 - x[i - 1])
+    x = x[50:]
+    # Create surrogate
+    surrogate = nk.signal_surrogate(x, method="IAAFT", random_state=127)
+    # Check mean and variance
+    assert np.allclose(np.mean(x), np.mean(surrogate))
+    assert np.allclose(np.var(x), np.var(surrogate))
+    # Check distribution
+    assert np.allclose(
+        np.histogram(x, 10, (0, 1))[0],
+        np.histogram(surrogate, 10, (0, 1))[0],
+        atol=1
+    )
+    # Check spectrum
+    assert (
+        np.mean(np.abs(np.abs(np.fft.rfft(surrogate - np.mean(surrogate)))
+                       - np.abs(np.fft.rfft(x - np.mean(x))))) < 0.1
+    )

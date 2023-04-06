@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ..misc import check_random_state, check_random_state_children
 from ..signal import signal_distort, signal_merge
 
 
 def eda_simulate(
-    duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
+    duration=10,
+    length=None,
+    sampling_rate=1000,
+    noise=0.01,
+    scr_number=1,
+    drift=-0.01,
+    random_state=None,
+    random_state_distort="spawn",
 ):
     """**Simulate Electrodermal Activity (EDA) signal**
 
@@ -25,8 +33,14 @@ def eda_simulate(
         Desired number of skin conductance responses (SCRs), i.e., peaks. Defaults to 1.
     drift : float or list
         The slope of a linear drift of the signal. Defaults to -0.01.
-    random_state : int
-        Seed for the random number generator. Defaults to None.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
+    random_state_distort : {'legacy', 'spawn'}, None, int, numpy.random.RandomState or numpy.random.Generator
+        Random state to be used to distort the signal. If ``"legacy"``, use the same random state used to
+        generate the signal (discouraged as it creates dependent random streams). If ``"spawn"``, spawn
+        independent children random number generators from the random_state argument. If any of the other types,
+        generate independent children random number generators from the random_state_distort provided (this
+        allows generating multiple version of the same signal distorted by different random noise realizations).
 
     Returns
     ----------
@@ -59,7 +73,8 @@ def eda_simulate(
 
     """
     # Seed the random generator for reproducible results
-    np.random.seed(random_state)
+    rng = check_random_state(random_state)
+    random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=1)
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -72,7 +87,7 @@ def eda_simulate(
     start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
 
     for start_peak in start_peaks:
-        relative_time_peak = np.abs(np.random.normal(0, 5, size=1)) + 3.0745
+        relative_time_peak = np.abs(rng.normal(0, 5, size=1)) + 3.0745
         scr = _eda_simulate_scr(sampling_rate=sampling_rate, time_peak=relative_time_peak)
         time_scr = [start_peak, start_peak + 9]
         if time_scr[0] < 0:
@@ -93,9 +108,9 @@ def eda_simulate(
             noise_frequency=[5, 10, 100],
             noise_shape="laplace",
             silent=True,
+            random_state=random_state_distort[0],
         )
-    # Reset random seed (so it doesn't affect global)
-    np.random.seed(None)
+
     return eda
 
 

@@ -9,6 +9,7 @@ import pytest
 
 import neurokit2 as nk
 
+
 random.seed(a=13, version=2)
 
 
@@ -31,6 +32,60 @@ def test_rsp_simulate():
     )
 
 
+def test_rsp_simulate_legacy_rng():
+
+    rsp = nk.rsp_simulate(
+        duration=10,
+        sampling_rate=100,
+        noise=0.03,
+        respiratory_rate=12,
+        method="breathmetrics",
+        random_state=123,
+        random_state_distort="legacy",
+    )
+
+    # Run simple checks to verify that the signal is the same as that generated with version 0.2.3
+    # before the introduction of the new random number generation approach
+    assert np.allclose(np.mean(rsp), 0.03869389548166346)
+    assert np.allclose(np.std(rsp), 0.3140022628657376)
+    assert np.allclose(
+        np.mean(np.reshape(rsp, (-1, 200)), axis=1),
+        [0.2948574728, -0.2835745073, 0.2717568165, -0.2474764970, 0.1579061923],
+    )
+
+
+@pytest.mark.parametrize(
+    "random_state, random_state_distort",
+    [
+        (13579, "legacy"),
+        (13579, "spawn"),
+        (13579, 24680),
+        (13579, None),
+        (np.random.RandomState(33), "spawn"),
+        (np.random.SeedSequence(33), "spawn"),
+        (np.random.Generator(np.random.Philox(33)), "spawn"),
+        (None, "spawn"),
+    ],
+)
+def test_rsp_simulate_all_rng_types(random_state, random_state_distort):
+
+    # Run rsp_simulate to test for errors (e.g. using methods like randint that are only
+    # implemented for RandomState but not Generator, or vice versa)
+    rsp = nk.rsp_simulate(
+        duration=10,
+        sampling_rate=100,
+        noise=0.03,
+        respiratory_rate=12,
+        method="breathmetrics",
+        random_state=random_state,
+        random_state_distort=random_state_distort,
+    )
+
+    # Double check the signal is finite and of the right length
+    assert np.all(np.isfinite(rsp))
+    assert len(rsp) == 10 * 100
+
+
 def test_rsp_clean():
 
     sampling_rate = 100
@@ -43,7 +98,7 @@ def test_rsp_clean():
         random_state=42,
     )
     # Add linear drift (to test baseline removal).
-    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True)
+    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True, random_state=42)
 
     for method in ["khodadad2018", "biosppy", "hampel"]:
         cleaned = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method=method)
@@ -109,8 +164,8 @@ def test_rsp_peaks():
         assert signals["RSP_Troughs"].sum() in [28, 29]
         assert info["RSP_Peaks"].shape[0] in [28, 29]
         assert info["RSP_Troughs"].shape[0] in [28, 29]
-        assert info["RSP_Peaks"].sum() in [1643836, 1646425, 1762134]
-        assert info["RSP_Troughs"].sum() in [1586580, 1596825, 1702508]
+        assert 4010 < np.median(np.diff(info["RSP_Peaks"])) < 4070
+        assert 3800 < np.median(np.diff(info["RSP_Troughs"])) < 4010
         assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
         assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
 
@@ -287,3 +342,36 @@ def test_rsp_rvt():
         assert len(rsp20) == len(rvt20)
         assert min(rvt10[~np.isnan(rvt10)]) >= 0
         assert min(rvt20[~np.isnan(rvt20)]) >= 0
+
+
+@pytest.mark.parametrize(
+    "method_cleaning, method_peaks, method_rvt",
+    [("none", "scipy", "power2020"),
+     ("biosppy", "biosppy", "power2020"),
+     ("khodadad2018", "khodadad2018", "birn2006"),
+     ("power2020", "scipy", "harrison2021"),
+     ],
+)
+def test_rsp_report(tmp_path, method_cleaning, method_peaks, method_rvt):
+
+    sampling_rate = 100
+
+    rsp = nk.rsp_simulate(
+        duration=30,
+        sampling_rate=sampling_rate,
+        random_state=0,
+    )
+
+    d = tmp_path / "sub"
+    d.mkdir()
+    p = d / "myreport.html"
+
+    signals, _ = nk.rsp_process(
+        rsp,
+        sampling_rate=sampling_rate,
+        report=str(p),
+        method_cleaning=method_cleaning,
+        method_peaks=method_peaks,
+        method_rvt=method_rvt,
+    )
+    assert p.is_file()

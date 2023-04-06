@@ -8,6 +8,7 @@ from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
 from .complexity_rqa import complexity_rqa
+from .entropy_angular import entropy_angular
 from .entropy_approximate import entropy_approximate
 from .entropy_attention import entropy_attention
 from .entropy_bubble import entropy_bubble
@@ -155,6 +156,7 @@ __all__ = [
     "complexity_dfa",
     "complexity_relativeroughness",
     "complexity_rqa",
+    "entropy_angular",
     "entropy_maximum",
     "entropy_shannon",
     "entropy_shannon_joint",

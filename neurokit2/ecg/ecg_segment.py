@@ -59,6 +59,11 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
         epochs_end=epochs_end,
     )
 
+    # pad last heartbeat with nan so that segments are equal length
+    last_heartbeat_key = str(np.max(np.array(list(heartbeats.keys()), dtype=int)))
+    after_last_index = heartbeats[last_heartbeat_key]["Index"] < len(ecg_cleaned)
+    heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
+
     if show:
         heartbeats_plot = epochs_to_df(heartbeats)
         heartbeats_pivoted = heartbeats_plot.pivot(index="Time", columns="Label", values="Signal")
