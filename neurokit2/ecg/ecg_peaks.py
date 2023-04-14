@@ -13,11 +13,6 @@ def ecg_peaks(
 
     Different algorithms for peak-detection include:
 
-    .. note::
-
-      Please help us improve the methods' documentation by adding a small description.
-
-
     * **neurokit** (default): QRS complexes are detected based on the steepness of the absolute
       gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in
       the QRS complexes. Unpublished, but see https://github.com/neuropsychology/NeuroKit/issues/476
@@ -42,6 +37,11 @@ def ecg_peaks(
       signals are accumulated. Finally, a threshold is used to accept or reject the peak locations.
       See this discussion for more information on the origins of the method:
       https://github.com/neuropsychology/NeuroKit/issues/222
+
+
+    .. note::
+
+      Please help us improve the methods' documentation by adding a small description.
 
 
     Parameters

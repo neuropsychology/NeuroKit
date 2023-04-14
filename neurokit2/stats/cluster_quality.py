@@ -7,8 +7,10 @@ import sklearn.metrics
 import sklearn.mixture
 import sklearn.model_selection
 
+from ..misc import check_random_state
 
-def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **kwargs):
+
+def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, random_state=None, **kwargs):
     """**Assess Clustering Quality**
 
     Compute quality of the clustering using several metrics.
@@ -29,6 +31,8 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     n_random : int
         The number of random initializations to cluster random data for calculating the GAP
         statistic.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
     **kwargs
         Other argument to be passed on, for instance ``GFP`` as ``'sd'`` in microstates.
 
@@ -65,6 +69,9 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
       definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
 
     """
+    # Seed the random generator for reproducible results
+    rng = check_random_state(random_state)
+
     # Sanity checks
     if isinstance(clustering, tuple):
         clustering, clusters, info = clustering
@@ -92,7 +99,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     general["Dispersion"] = _cluster_quality_dispersion(data, clustering, **kwargs)
 
     # Gap statistic
-    general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random))
+    general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random, rng=rng))
 
     # Mixture models
     if "sklearn_model" in info:
@@ -183,7 +190,7 @@ def _cluster_quality_variance(data, clusters, clustering):
     return (sum_squares_total - sum_squares_within) / sum_squares_total
 
 
-def _cluster_quality_gap(data, clusters, clustering, info, n_random=10):
+def _cluster_quality_gap(data, clusters, clustering, info, n_random=10, rng=None):
     """GAP statistic and modified GAP statistic by Mohajer (2011).
 
     The GAP statistic compares the total within intra-cluster variation for different values of k
@@ -197,7 +204,7 @@ def _cluster_quality_gap(data, clusters, clustering, info, n_random=10):
     for i in range(n_random):
 
         # Random data
-        random_data = np.random.random_sample(size=data.shape)
+        random_data = rng.uniform(size=data.shape)
 
         # Rescale random
         m = (maxs - mins) / (np.max(random_data, axis=0) - np.min(random_data, axis=0))

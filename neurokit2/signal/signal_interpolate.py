@@ -97,10 +97,16 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
     if isinstance(x_new, int):
         if len(x_values) == x_new:
             return y_values
+        x_new = np.linspace(x_values[0], x_values[-1], x_new)
     else:
         # if x_values is identical to x_new, no need for interpolation
         if np.all(x_values == x_new):
             return y_values
+
+    # If only one value, return a constant signal
+    if len(x_values) == 1:
+        return np.ones(len(x_new)) * y_values[0]
+
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
             x_values, y_values, extrapolate=True
@@ -115,8 +121,7 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
             bounds_error=False,
             fill_value=fill_value,
         )
-    if isinstance(x_new, int):
-        x_new = np.linspace(x_values[0], x_values[-1], x_new)
+
     interpolated = interpolation_function(x_new)
 
     if method == "monotone_cubic" and fill_value != "extrapolate":

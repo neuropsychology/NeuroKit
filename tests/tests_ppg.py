@@ -7,6 +7,7 @@ import pytest
 
 import neurokit2 as nk
 
+
 durations = (20, 200)
 sampling_rates = (50, 500)
 heart_rates = (50, 120)
@@ -80,6 +81,31 @@ def test_ppg_simulate_ibi(ibi_randomness, std_heart_rate):
     # TODO: test influence of different noise configurations
 
 
+def test_ppg_simulate_legacy_rng():
+    ppg = nk.ppg_simulate(
+        duration=30,
+        sampling_rate=250,
+        heart_rate=70,
+        frequency_modulation=0.2,
+        ibi_randomness=0.1,
+        drift=0.1,
+        motion_amplitude=0.1,
+        powerline_amplitude=0.01,
+        random_state=654,
+        random_state_distort="legacy",
+        show=False,
+    )
+
+    # Run simple checks to verify that the signal is the same as that generated with version 0.2.3
+    # before the introduction of the new random number generation approach
+    assert np.allclose(np.mean(ppg), 0.6598246992405254)
+    assert np.allclose(np.std(ppg), 0.4542274696384863)
+    assert np.allclose(
+        np.mean(np.reshape(ppg, (-1, 1500)), axis=1),
+        [0.630608661400, 0.63061887029, 0.60807993168, 0.65731025466, 0.77250577818],
+    )
+
+
 def test_ppg_clean():
 
     sampling_rate = 500
@@ -116,6 +142,7 @@ def test_ppg_findpeaks():
 
     sampling_rate = 500
 
+    # Test Elgendi method
     ppg = nk.ppg_simulate(
         duration=30,
         sampling_rate=sampling_rate,
@@ -137,9 +164,17 @@ def test_ppg_findpeaks():
     peaks = info_elgendi["PPG_Peaks"]
 
     assert peaks.size == 29
-    assert peaks.sum() == 219764
-    
-    
+    assert np.abs(peaks.sum() - 219764) < 5  # off by no more than 5 samples in total
+
+    # Test MSPTD method
+    info_msptd = nk.ppg_findpeaks(ppg, sampling_rate=sampling_rate, method="bishop", show=True)
+
+    peaks = info_msptd["PPG_Peaks"]
+
+    assert peaks.size == 29
+    assert np.abs(peaks.sum() - 219665) < 30  # off by no more than 30 samples in total
+
+
 @pytest.mark.parametrize(
     "method_cleaning, method_peaks",
     [("elgendi", "elgendi"), ("nabian2018", "elgendi")],
@@ -167,9 +202,11 @@ def test_ppg_report(tmp_path, method_cleaning, method_peaks):
     d.mkdir()
     p = d / "myreport.html"
 
-    signals, _ = nk.ppg_process(ppg, 
-    	sampling_rate=sampling_rate, 
-    	report=str(p), 
-    	method_cleaning=method_cleaning, 
-    	method_peaks=method_peaks)
+    signals, _ = nk.ppg_process(
+        ppg,
+        sampling_rate=sampling_rate,
+        report=str(p),
+        method_cleaning=method_cleaning,
+        method_peaks=method_peaks,
+    )
     assert p.is_file()

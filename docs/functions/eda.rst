@@ -31,14 +31,6 @@ Preprocessing
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_phasic
 
-*eda_autocor()*
-"""""""""""""""
-.. autofunction:: neurokit2.eda.eda_autocor
-
-*eda_changepoints()*
-"""""""""""""""""""""
-.. autofunction:: neurokit2.eda.eda_changepoints
-
 *eda_peaks()*
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_peaks
@@ -47,9 +39,6 @@ Preprocessing
 """""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_fixpeaks
 
-*eda_sympathetic()*
-"""""""""""""""""""""
-.. autofunction:: neurokit2.eda.eda_sympathetic
 
 
 Analysis
@@ -61,6 +50,18 @@ Analysis
 *eda_intervalrelated()*
 """""""""""""""""""""""""
 .. autofunction:: neurokit2.eda.eda_intervalrelated
+
+*eda_sympathetic()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_sympathetic
+
+*eda_autocor()*
+"""""""""""""""
+.. autofunction:: neurokit2.eda.eda_autocor
+
+*eda_changepoints()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.eda.eda_changepoints
 
 
 

@@ -63,62 +63,62 @@ def signal_detrend(
     See Also
     --------
     signal_filter, fit_loess, signal_decompose
+
     Examples
     --------
     .. ipython:: python
 
-        import numpy as np
-        import pandas as pd
-        import neurokit2 as nk
-        import matplotlib.pyplot as plt
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+      import matplotlib.pyplot as plt
 
-        # Simulate signal with low and high frequency
-        sampling_rate = 100
-        signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=sampling_rate)
-        signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend
+      # Simulate signal with low and high frequency
+      signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=100)
+      signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend
 
-        # Apply detrending algorithms
-        # ---------------------------
+      # Apply detrending algorithms
+      # ---------------------------
 
-        # Method 1: Default Polynomial Detrending of a Given Order
-        # Constant detrend (removes the mean)
-        baseline = nk.signal_detrend(signal, order=0)
-        # Linear Detrend (removes the linear trend)
-        linear = nk.signal_detrend(signal, order=1)
-        # Polynomial Detrend (removes the polynomial trend)
-        quadratic = nk.signal_detrend(signal, order=2)  # Quadratic detrend
-        cubic = nk.signal_detrend(signal, order=3)  # Cubic detrend
-        poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)
+      # Method 1: Default Polynomial Detrending of a Given Order
+      # Constant detrend (removes the mean)
+      baseline = nk.signal_detrend(signal, order=0)
+      # Linear Detrend (removes the linear trend)
+      linear = nk.signal_detrend(signal, order=1)
+      # Polynomial Detrend (removes the polynomial trend)
+      quadratic = nk.signal_detrend(signal, order=2)  # Quadratic detrend
+      cubic = nk.signal_detrend(signal, order=3)  # Cubic detrend
+      poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)
 
-        # Method 2: Tarvainen's smoothness priors approach (Tarvainen et al., 2002)
-        tarvainen = nk.signal_detrend(signal, method="tarvainen2002")
+      # Method 2: Tarvainen's smoothness priors approach (Tarvainen et al., 2002)
+      tarvainen = nk.signal_detrend(signal, method="tarvainen2002")
 
-        # Method 3: LOESS smoothing trend removal
-        loess = nk.signal_detrend(signal, method="loess")
+      # Method 3: LOESS smoothing trend removal
+      loess = nk.signal_detrend(signal, method="loess")
 
-        # Method 4: Local linear regression (100Hz)
-        locreg = nk.signal_detrend(signal, method="locreg",
-                                   window=1.5, stepsize=0.02, sampling_rate=sampling_rate)
+      # Method 4: Local linear regression (100Hz)
+      locreg = nk.signal_detrend(signal, method="locreg",
+                                 window=1.5, stepsize=0.02, sampling_rate=100)
 
-        # Method 5: EMD
-        emd = nk.signal_detrend(signal, method="EMD", components=[-2, -1])
-        # Visualize different methods
-        @savefig signal_detrend1.png scale=100%
-        axes = pd.DataFrame({"Original signal": signal,
-                             "Baseline": baseline,
-                             "Linear": linear,
-                             "Quadratic": quadratic,
-                             "Cubic": cubic,
-                             "Polynomial (10th)": poly10,
-                             "Tarvainen": tarvainen,
-                             "LOESS": loess,
-                             "Local Regression": locreg,
-                             "EMD": emd}).plot(subplots=True)
-        # Plot horizontal lines to better visualize the detrending
-        for subplot in axes:
-            subplot.axhline(y=0, color="k", linestyle="--")
-        @suppress
-        plt.close()
+      # Method 5: EMD
+      emd = nk.signal_detrend(signal, method="EMD", components=[-2, -1])
+      # Visualize different methods
+      @savefig signal_detrend1.png scale=100%
+      axes = pd.DataFrame({"Original signal": signal,
+                          "Baseline": baseline,
+                          "Linear": linear,
+                          "Quadratic": quadratic,
+                          "Cubic": cubic,
+                          "Polynomial (10th)": poly10,
+                          "Tarvainen": tarvainen,
+                          "LOESS": loess,
+                          "Local Regression": locreg,
+                          "EMD": emd}).plot(subplots=True)
+      # Plot horizontal lines to better visualize the detrending
+      for subplot in axes:
+          subplot.axhline(y=0, color="k", linestyle="--")
+      @suppress
+      plt.close()
 
     References
     ----------

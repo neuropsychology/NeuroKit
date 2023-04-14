@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import scipy.stats
 
+from ..misc import check_random_state
 from .transition_matrix import _sanitize_tm_input
 
 
-def markov_simulate(tm, n=10):
+def markov_simulate(tm, n=10, random_state=None):
     """**Markov Chain Simulation**
 
     Given a :func:`transition_matrix`, this function simulates the corresponding sequence of states
@@ -17,6 +17,8 @@ def markov_simulate(tm, n=10):
         A probability matrix obtained from :func:`transition_matrix`.
     n : int
         Length of the simulated sequence.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See for ``misc.check_random_state`` for further information.
 
     Returns
     -------
@@ -51,13 +53,13 @@ def markov_simulate(tm, n=10):
     seq = np.zeros(n, dtype=int)
     seq[0] = _start
 
-    # random seeds
-    random_states = np.random.randint(0, n, n)
+    # Seed the random generator for reproducible results
+    rng = check_random_state(random_state)
 
     # simulation procedure
     for i in range(1, n):
         _ps = tm.values[seq[i - 1]]
-        _sample = np.argmax(scipy.stats.multinomial.rvs(1, _ps, 1, random_state=random_states[i]))
+        _sample = rng.choice(len(_ps), p=_ps)
         seq[i] = _sample
 
     return states[seq]

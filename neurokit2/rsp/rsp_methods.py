@@ -3,7 +3,7 @@ import numpy as np
 
 from ..misc.report import get_kwargs
 from .rsp_clean import rsp_clean
-from .rsp_findpeaks import rsp_findpeaks
+from .rsp_peaks import rsp_peaks
 from .rsp_rvt import rsp_rvt
 
 
@@ -16,10 +16,12 @@ def rsp_methods(
     **kwargs,
 ):
     """**RSP Preprocessing Methods**
+
     This function analyzes and specifies the methods used in the preprocessing, and create a
     textual description of the methods used. It is used by :func:`rsp_process()` to dispatch the
     correct methods to each subroutine of the pipeline and :func:`rsp_report()` to create a
     preprocessing report.
+
     Parameters
     ----------
     sampling_rate : int
@@ -37,33 +39,39 @@ def rsp_methods(
         The method used to find peaks. If ``"default"``,
         will be set to the value of ``"method"``. Defaults to ``"default"``.
         For more information, see the ``"method"`` argument
-        of :func:`.rsp_findpeaks`.
+        of :func:`.rsp_peaks`.
     method_rvt: str
         The method used to compute respiratory volume per time. Defaults to ``"harrison"``.
         For more information, see the ``"method"`` argument
         of :func:`.rsp_rvt`.
     **kwargs
-        Other arguments to be passed to :func:`.rsp_clean` and
-        :func:`.rsp_findpeaks`.
+        Other arguments to be passed to :func:`.rsp_clean`,
+        :func:`.rsp_peaks`, and :func:`.rsp_rvt`.
+
     Returns
     -------
     report_info : dict
         A dictionary containing the keyword arguments passed to the cleaning
         and peak finding functions, text describing the methods, and the corresponding
         references.
+
     See Also
     --------
     rsp_process, rsp_clean, rsp_findpeaks
+
     Examples
     --------
     .. ipython:: python
+
       import neurokit2 as nk
       methods = nk.rsp_methods(sampling_rate=100, method="Khodadad", method_cleaning="hampel")
       print(methods["text_cleaning"])
       print(methods["references"][0])
     """
     # Sanitize inputs
-    method_cleaning = str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
+    method_cleaning = (
+        str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
+    )
     method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
     method_rvt = str(method_rvt).lower()
 
@@ -79,7 +87,7 @@ def rsp_methods(
 
     # Get arguments to be passed to cleaning and peak finding functions
     kwargs_cleaning, report_info = get_kwargs(report_info, rsp_clean)
-    kwargs_peaks, report_info = get_kwargs(report_info, rsp_findpeaks)
+    kwargs_peaks, report_info = get_kwargs(report_info, rsp_peaks)
     kwargs_rvt, report_info = get_kwargs(report_info, rsp_rvt)
 
     # Save keyword arguments in dictionary
@@ -117,13 +125,15 @@ def rsp_methods(
             including systematic changes and “missed” deep breaths.
             NeuroImage, Volume 204, 116234"""
         )
-    elif method_cleaning in ["biossppy"]:
+    elif method_cleaning in ["biosppy"]:
         report_info["text_cleaning"] += (
             " was preprocessed using a second order 0.1-0.35 Hz bandpass "
             + "Butterworth filter followed by a constant detrending."
         )
-    elif method_cleaning is None or method_cleaning == "none":
-        report_info["text_cleaning"] += "was directly used for peak detection without preprocessing."
+    elif method_cleaning in ["none"]:
+        report_info[
+            "text_cleaning"
+        ] += "was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added
         report_info["text_cleaning"] += f"was cleaned following the {method} method."
@@ -150,7 +160,9 @@ def rsp_methods(
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
-        report_info["text_peaks"] = f"The peak detection was carried out using the method {method_peaks}."
+        report_info[
+            "text_peaks"
+        ] = f"The peak detection was carried out using the method {method_peaks}."
 
     # 3. RVT
     # ----------

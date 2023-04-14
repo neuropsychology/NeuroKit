@@ -2,13 +2,13 @@
 import pandas as pd
 
 from ..misc import as_vector
+from ..misc.report import create_report
 from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
 from .ppg_methods import ppg_methods
-from .ppg_report import ppg_report
-
+from .ppg_plot import ppg_plot
 
 def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs):
     """**Process a photoplethysmogram (PPG)  signal**
@@ -68,16 +68,13 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
     ppg_signal = as_vector(ppg_signal)
     methods = ppg_methods(sampling_rate=sampling_rate, method=method, **kwargs)
 
-    if methods["method_cleaning"] is None or methods["method_cleaning"].lower() == "none":
-        ppg_cleaned = ppg_signal
-    else:
-        # Clean signal
-        ppg_cleaned = ppg_clean(
-            ppg_signal,
-            sampling_rate=sampling_rate,
-            method=methods["method_cleaning"],
-            **methods["kwargs_cleaning"]
-        )
+    # Clean signal
+    ppg_cleaned = ppg_clean(
+        ppg_signal,
+        sampling_rate=sampling_rate,
+        method=methods["method_cleaning"],
+        **methods["kwargs_cleaning"]
+    )
 
     # Find peaks
     info = ppg_findpeaks(
@@ -109,6 +106,10 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", report=None, *
 
     if report is not None:
         # Generate report containing description and figures of processing
-        ppg_report(file=report, signals=signals, info=methods)
+        if ".html" in str(report):
+            fig = ppg_plot(signals, sampling_rate=sampling_rate)
+        else:
+            fig = None
+        create_report(file=report, signals=signals, info=methods, fig=fig)
 
     return signals, info
