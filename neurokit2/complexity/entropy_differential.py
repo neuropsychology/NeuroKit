@@ -17,7 +17,10 @@ def entropy_differential(signal, base=2, **kwargs):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-
+    base: float
+        The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.
+        stats.entropy()`` uses Euler's number (``np.e``) as default (the natural logarithm), giving
+        a measure of information expressed in *nats*.
     **kwargs : optional
         Other arguments passed to ``scipy.stats.differential_entropy()``.
 
@@ -25,10 +28,6 @@ def entropy_differential(signal, base=2, **kwargs):
     --------
     diffen : float
         The Differential entropy of the signal.
-    base: float
-        The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.
-        stats.entropy()`` uses Euler's number (``np.e``) as default (the natural logarithm), giving
-        a measure of information expressed in *nats*.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Differential entropy.

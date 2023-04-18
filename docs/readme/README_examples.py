@@ -10,6 +10,7 @@ import neurokit2 as nk
 # Setup matplotlib with Agg to run on server
 matplotlib.use("Agg")
 plt.rcParams["figure.figsize"] = (10, 6.5)
+plt.rcParams["savefig.facecolor"] = "white"
 
 # =============================================================================
 # Quick Example
