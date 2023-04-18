@@ -100,7 +100,7 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
         x_new = np.linspace(x_values[0], x_values[-1], x_new)
     else:
         # if x_values is identical to x_new, no need for interpolation
-        if np.all(x_values == x_new):
+        if np.array_equal(x_values, x_new):
             return y_values
 
     # If only one value, return a constant signal
