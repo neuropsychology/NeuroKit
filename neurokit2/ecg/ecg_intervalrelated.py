@@ -127,6 +127,7 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
 
     results = hrv(rpeaks, sampling_rate=sampling_rate)
     for column in results.columns:
-        output[column] = float(results[column])
+        # Add and convert to float
+        output[column] = results[[column]].values
 
     return output
