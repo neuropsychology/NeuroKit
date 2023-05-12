@@ -212,6 +212,7 @@ def hrv_frequency(
 
     # Normalized
     total_power = np.nansum(power.values)
+    out["TP"] = total_power
     out["LFHF"] = out["LF"] / out["HF"]
     out["LFn"] = out["LF"] / total_power
     out["HFn"] = out["HF"] / total_power
