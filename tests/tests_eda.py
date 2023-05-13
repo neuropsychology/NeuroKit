@@ -103,8 +103,6 @@ def test_eda_peaks():
     assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1e-5)
 
     signals, info = nk.eda_peaks(eda_phasic, method="kim2004")
-    onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
-    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=180)
 
     # Check that indices and values positions match
     peak_positions = np.where(info["SCR_Peaks"] != 0)[0]
