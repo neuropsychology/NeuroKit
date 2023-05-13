@@ -130,6 +130,6 @@ def _ppg_intervalrelated_hrv(data, sampling_rate, output={}):
 
     results = hrv(peaks, sampling_rate=sampling_rate)
     for column in results.columns:
-        output[column] = float(results[column])
+        output[column] = results[column].values.astype("float")
 
     return output
