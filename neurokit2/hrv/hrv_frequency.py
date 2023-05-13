@@ -39,6 +39,7 @@ def hrv_frequency(
     * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).
     * **HF**: The spectral power of high frequencies (by default, .15 to .4 Hz).
     * **VHF**: The spectral power of very high frequencies (by default, .4 to .5 Hz).
+    * **TP**: The total spectral power.
     * **LFHF**: The ratio obtained by dividing the low frequency power by the high frequency power.
     * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
       the total power.
