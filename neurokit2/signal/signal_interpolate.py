@@ -31,13 +31,15 @@ def signal_interpolate(
         first and the last values of x_values.
     method : str
         Method of interpolation. Can be ``"linear"``, ``"nearest"``, ``"zero"``, ``"slinear"``,
-        ``"quadratic"``, ``"cubic"``, ``"previous"``, ``"next"`` or ``"monotone_cubic"``. The
-        methods ``"zero"``, ``"slinear"``,``"quadratic"`` and ``"cubic"`` refer to a spline
+        ``"quadratic"``, ``"cubic"``, ``"previous"``, ``"next"``, ``"monotone_cubic"``, or ``"akima"``.
+        The methods ``"zero"``, ``"slinear"``,``"quadratic"`` and ``"cubic"`` refer to a spline
         interpolation of zeroth, first, second or third order; whereas ``"previous"`` and
         ``"next"`` simply return the previous or next value of the point. An integer specifying the
         order of the spline interpolator to use.
         See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
+        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
+        Akima1DInterpolator.html>`_ for details on the ``"akima"`` method.
     fill_value : float or tuple or str
         If a ndarray (or float), this value will be used to fill in for
         requested points outside of the data range.
@@ -125,6 +127,10 @@ def signal_interpolate(
 
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
+            x_values, y_values, extrapolate=True
+        )
+    elif method == "akima":
+        interpolation_function = scipy.interpolate.Akima1DInterpolator(
             x_values, y_values, extrapolate=True
         )
     else:
