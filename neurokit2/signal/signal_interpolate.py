@@ -112,7 +112,7 @@ def signal_interpolate(
         # if x_values is identical to x_new, no need for interpolation
         if np.array_equal(x_values, x_new):
             return y_values
-        elif np.any(x[1:] == x[:-1]):
+        elif np.any(x_values[1:] == x_values[:-1]):
             warn(
                 "Duplicate x values detected. Averaging their corresponding y values.",
                 category=NeuroKitWarning,
