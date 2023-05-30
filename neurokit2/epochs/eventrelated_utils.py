@@ -12,7 +12,14 @@ from .epochs_to_df import _df_to_epochs
 def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
+        if "Time" in epochs.columns.values:
+            # Assumpe it is a dataframe of epochs created by `epochs_to_df`
+            epochs = _df_to_epochs(epochs)  # Convert df back to dict
+        else:
+            raise ValueError(
+                "It seems that you are trying to pass a single epoch to an eventrelated function."
+                + 'If this is what you want, please wrap it in a dict: `{"0": epoch}` '
+            )
 
     if not isinstance(epochs, dict):
         raise ValueError(
@@ -37,7 +44,6 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
 
 
 def _eventrelated_addinfo(epoch, output={}):
-
     # Add label
     if "Index" in epoch.columns:
         output["Event_Onset"] = epoch.loc[np.min(np.abs(epoch.index))]["Index"]
@@ -58,7 +64,6 @@ def _eventrelated_addinfo(epoch, output={}):
 
 
 def _eventrelated_sanitizeoutput(data):
-
     df = pd.DataFrame.from_dict(data, orient="index")  # Convert to a dataframe
 
     colnames = df.columns.values
@@ -76,12 +81,12 @@ def _eventrelated_sanitizeoutput(data):
 
 
 def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
-
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if var in i]) == 0:
         warn(
-            "Input does not have an `" + var + "` column." " Will skip all rate-related features.",
+            "Input does not have an `" + var + "` column."
+            " Will skip all rate-related features.",
             category=NeuroKitWarning,
         )
         return output

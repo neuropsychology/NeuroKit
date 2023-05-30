@@ -383,12 +383,11 @@ def _dwt_delineate_tp_peaks(
         srch_idx_start = rpeak_ + srch_bndry
         srch_idx_end = rpeak_ + 2 * int(rt_duration * sampling_rate)
         dwt_local = dwtmatr[degree_tpeak + degree_add, srch_idx_start:srch_idx_end]
-        height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
-
         if len(dwt_local) == 0:
             tpeaks.append(np.nan)
             continue
 
+        height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
         ecg_local = ecg[srch_idx_start:srch_idx_end]
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
         peaks = list(
@@ -432,12 +431,11 @@ def _dwt_delineate_tp_peaks(
         srch_idx_start = rpeak - 2 * int(p2r_duration * sampling_rate)
         srch_idx_end = rpeak - srch_bndry
         dwt_local = dwtmatr[degree_ppeak + degree_add, srch_idx_start:srch_idx_end]
-        height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
-
         if len(dwt_local) == 0:
             ppeaks.append(np.nan)
             continue
-
+        
+        height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
         ecg_local = ecg[srch_idx_start:srch_idx_end]
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
         peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
