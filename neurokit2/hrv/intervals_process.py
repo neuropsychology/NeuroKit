@@ -51,6 +51,8 @@ def intervals_process(
         Preprocessed intervals, in milliseconds.
     np.ndarray
         Preprocessed timestamps corresponding to intervals, in seconds.
+    int
+        Sampling rate (Hz) of the interpolated interbeat intervals.
 
     Examples
     --------
