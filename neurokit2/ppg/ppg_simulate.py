@@ -2,7 +2,6 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.interpolate
 
 from ..misc import check_random_state, check_random_state_children
 from ..signal import signal_distort, signal_interpolate
