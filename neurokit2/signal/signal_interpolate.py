@@ -131,7 +131,7 @@ def signal_interpolate(
         )
     elif method == "akima":
         interpolation_function = scipy.interpolate.Akima1DInterpolator(
-            x_values, y_values, extrapolate=True
+            x_values, y_values
         )
     else:
         if fill_value is None:
