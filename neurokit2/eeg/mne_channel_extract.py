@@ -64,7 +64,7 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
                 "check channel names in raw.info['ch_names']. "
             )
 
-    channels, __ = raw.copy().pick_channels(what)[:]
+    channels, __ = raw.copy().pick_channels(what, ordered=False)[:]
     if len(what) > 1:
         channels = pd.DataFrame(channels.T, columns=what)
         if name is not None:
