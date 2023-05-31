@@ -109,7 +109,7 @@ def fractal_tmf(signal, n=40, show=False, **kwargs):
     w = np.zeros(n)
     for i in range(n):
         surro = signal_surrogate(signal, method="IAAFT")
-        w[i] = fractal_dfa(surro, multifractal=True, show=False)[0]["Width"]
+        w[i] = float(nk.fractal_dfa(surro, multifractal=True, show=False)[0]["Width"].iloc[0])
 
     # Run t-test
     # TODO: adjust in the future
