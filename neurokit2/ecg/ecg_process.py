@@ -60,7 +60,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
         * **This list is not up-to-date. Help us improve the documentation!**
     info : dict
         A dictionary containing the samples at which the R-peaks occur, accessible with the key
-        ``"ECG_Peaks"``, as well as the signals' sampling rate.
+        ``"ECG_R_Peaks"``, as well as the signals' sampling rate.
 
     See Also
     --------
