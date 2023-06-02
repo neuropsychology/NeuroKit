@@ -97,7 +97,9 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _ppg_intervalrelated_formatinput(data, output={}):
+def _ppg_intervalrelated_formatinput(data):
+
+    output={}
 
     # Sanitize input
     colnames = data.columns.values
@@ -113,7 +115,9 @@ def _ppg_intervalrelated_formatinput(data, output={}):
     return output
 
 
-def _ppg_intervalrelated_hrv(data, sampling_rate, output={}):
+def _ppg_intervalrelated_hrv(data, sampling_rate):
+
+    output={}
 
     # Sanitize input
     colnames = data.columns.values
