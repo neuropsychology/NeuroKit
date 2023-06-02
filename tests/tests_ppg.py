@@ -185,10 +185,10 @@ def test_ppg_findpeaks():
 
 @pytest.mark.parametrize(
     "method_cleaning, method_peaks",
-    [("elgendi", "elgendi"), ("nabian2018", "elgendi")],
+    [("elgendi", "elgendi"), ("nabian2018", "elgendi"), ("elgendi", "bishop")],
 )
 def test_ppg_report(tmp_path, method_cleaning, method_peaks):
-    sampling_rate = 500
+    sampling_rate = 100
 
     ppg = nk.ppg_simulate(
         duration=30,

@@ -93,7 +93,7 @@ def _rsp_intervalrelated_features(data, sampling_rate, output={}):
         output["RSP_Rate_Mean"] = np.nanmean(data["RSP_Rate"].values)
         rrv = rsp_rrv(data, sampling_rate=sampling_rate)
         for column in rrv.columns:
-            output[column] = float(rrv[column])
+            output[column] = rrv[column].values.astype("float")
 
     if "RSP_Amplitude" in colnames:
         output["RSP_Amplitude_Mean"] = np.nanmean(data["RSP_Amplitude"].values)
