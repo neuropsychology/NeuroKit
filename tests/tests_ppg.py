@@ -18,9 +18,10 @@ params = [durations, sampling_rates, heart_rates, freq_modulations]
 params_combis = list(itertools.product(*params))
 
 
-@pytest.mark.parametrize("duration, sampling_rate, heart_rate, freq_modulation", params_combis)
+@pytest.mark.parametrize(
+    "duration, sampling_rate, heart_rate, freq_modulation", params_combis
+)
 def test_ppg_simulate(duration, sampling_rate, heart_rate, freq_modulation):
-
     ppg = nk.ppg_simulate(
         duration=duration,
         sampling_rate=sampling_rate,
@@ -43,7 +44,9 @@ def test_ppg_simulate(duration, sampling_rate, heart_rate, freq_modulation):
 
     # Ensure that the heart rate fluctuates in the requested range.
     groundtruth_range = freq_modulation * heart_rate
-    observed_range = np.percentile(signals["PPG_Rate"], 90) - np.percentile(signals["PPG_Rate"], 10)
+    observed_range = np.percentile(signals["PPG_Rate"], 90) - np.percentile(
+        signals["PPG_Rate"], 10
+    )
     assert np.allclose(groundtruth_range, observed_range, atol=groundtruth_range * 0.15)
 
     # TODO: test influence of different noise configurations
@@ -54,7 +57,6 @@ def test_ppg_simulate(duration, sampling_rate, heart_rate, freq_modulation):
     [(0.1, 3), (0.2, 5), (0.3, 8), (0.4, 11), (0.5, 14), (0.6, 19)],
 )
 def test_ppg_simulate_ibi(ibi_randomness, std_heart_rate):
-
     ppg = nk.ppg_simulate(
         duration=20,
         sampling_rate=50,
@@ -107,7 +109,6 @@ def test_ppg_simulate_legacy_rng():
 
 
 def test_ppg_clean():
-
     sampling_rate = 500
 
     ppg = nk.ppg_simulate(
@@ -124,7 +125,9 @@ def test_ppg_clean():
         random_state=42,
         show=False,
     )
-    ppg_cleaned_elgendi = nk.ppg_clean(ppg, sampling_rate=sampling_rate, method="elgendi")
+    ppg_cleaned_elgendi = nk.ppg_clean(
+        ppg, sampling_rate=sampling_rate, method="elgendi"
+    )
 
     assert ppg.size == ppg_cleaned_elgendi.size
 
@@ -139,7 +142,6 @@ def test_ppg_clean():
 
 
 def test_ppg_findpeaks():
-
     sampling_rate = 500
 
     # Test Elgendi method
@@ -157,9 +159,13 @@ def test_ppg_findpeaks():
         random_state=42,
         show=True,
     )
-    ppg_cleaned_elgendi = nk.ppg_clean(ppg, sampling_rate=sampling_rate, method="elgendi")
+    ppg_cleaned_elgendi = nk.ppg_clean(
+        ppg, sampling_rate=sampling_rate, method="elgendi"
+    )
 
-    info_elgendi = nk.ppg_findpeaks(ppg_cleaned_elgendi, sampling_rate=sampling_rate, show=True)
+    info_elgendi = nk.ppg_findpeaks(
+        ppg_cleaned_elgendi, sampling_rate=sampling_rate, show=True
+    )
 
     peaks = info_elgendi["PPG_Peaks"]
 
@@ -167,7 +173,9 @@ def test_ppg_findpeaks():
     assert np.abs(peaks.sum() - 219764) < 5  # off by no more than 5 samples in total
 
     # Test MSPTD method
-    info_msptd = nk.ppg_findpeaks(ppg, sampling_rate=sampling_rate, method="bishop", show=True)
+    info_msptd = nk.ppg_findpeaks(
+        ppg, sampling_rate=sampling_rate, method="bishop", show=True
+    )
 
     peaks = info_msptd["PPG_Peaks"]
 
@@ -180,7 +188,6 @@ def test_ppg_findpeaks():
     [("elgendi", "elgendi"), ("nabian2018", "elgendi")],
 )
 def test_ppg_report(tmp_path, method_cleaning, method_peaks):
-
     sampling_rate = 500
 
     ppg = nk.ppg_simulate(
@@ -210,3 +217,29 @@ def test_ppg_report(tmp_path, method_cleaning, method_peaks):
         method_peaks=method_peaks,
     )
     assert p.is_file()
+
+
+def test_ppg_intervalrelated():
+    sampling_rate = 100
+
+    ppg = nk.ppg_simulate(
+        duration=500,
+        sampling_rate=sampling_rate,
+        heart_rate=70,
+        frequency_modulation=0.025,
+        ibi_randomness=0.15,
+        drift=0.5,
+        motion_amplitude=0.25,
+        powerline_amplitude=0.25,
+        burst_amplitude=0.5,
+        burst_number=3,
+        random_state=0,
+        show=True,
+    )
+    # Process the data
+    df, info = nk.ppg_process(ppg, sampling_rate=sampling_rate)
+    epochs = nk.epochs_create(
+        df, events=[0, 15000], sampling_rate=sampling_rate, epochs_end=150
+    )
+    ppg_intervals = nk.ppg_intervalrelated(epochs)
+    assert "PPG_Rate_Mean" in ppg_intervals.columns
