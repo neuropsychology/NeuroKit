@@ -61,7 +61,7 @@ def ppg_intervalrelated(data, sampling_rate=1000):
         rate_cols = [col for col in data.columns if "PPG_Rate" in col]
         if len(rate_cols) == 1:
             intervals.update(_ppg_intervalrelated_formatinput(data))
-            intervals.update(_ppg_intervalrelated_hrv(data, sampling_rate))
+            intervals.update(*_ppg_intervalrelated_hrv(data, sampling_rate))
         else:
             raise ValueError(
                 "NeuroKit error: ppg_intervalrelated(): Wrong input,"
@@ -84,7 +84,7 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 
             # HRV
             intervals[epoch].update(
-                _ppg_intervalrelated_hrv(data[epoch], sampling_rate))
+                *_ppg_intervalrelated_hrv(data[epoch], sampling_rate))
 
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
@@ -133,4 +133,4 @@ def _ppg_intervalrelated_hrv(data: pd.DataFrame,
 
     results = hrv(peaks, sampling_rate=sampling_rate)
     
-    return results.astype("float").to_dict()
+    return results.astype("float").to_dict('records')
