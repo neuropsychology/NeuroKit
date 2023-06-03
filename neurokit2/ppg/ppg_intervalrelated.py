@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-from typing import Union
 
 from ..hrv import hrv
 
@@ -102,7 +101,7 @@ def _ppg_intervalrelated_formatinput(data: pd.DataFrame):
     # Sanitize input
     colnames = data.columns.values
     
-    if not "PPG_Rate" in colnames:
+    if "PPG_Rate" not in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract heart rate. Please make sure"
@@ -121,7 +120,7 @@ def _ppg_intervalrelated_hrv(data: pd.DataFrame,
     # Sanitize input
     colnames = data.columns.values
 
-    if not "PPG_Peaks" in colnames:
+    if "PPG_Peaks" not in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract peaks. Please make sure"
