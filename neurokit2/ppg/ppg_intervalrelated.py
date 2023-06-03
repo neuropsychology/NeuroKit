@@ -79,12 +79,12 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 
             # Rate
             intervals[index] = _ppg_intervalrelated_formatinput(
-                data[index], intervals[index]
+                data[index]
             )
 
             # HRV
             intervals[index] = _ppg_intervalrelated_hrv(
-                data[index], sampling_rate, intervals[index]
+                data[index], sampling_rate
             )
 
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
