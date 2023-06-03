@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+from typing import Union
 
 from ..hrv import hrv
 
@@ -71,21 +72,20 @@ def ppg_intervalrelated(data, sampling_rate=1000):
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
     elif isinstance(data, dict):
-        for index in data:
-            intervals[index] = {}  # Initialize empty container
+        for epoch in data:
+
+            intervals[epoch] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]["Label"] = data[index]["Label"].iloc[0]
+            intervals[epoch]["Label"] = data[epoch]["Label"].iloc[0]
 
             # Rate
-            intervals[index] = _ppg_intervalrelated_formatinput(
-                data[index]
-            )
+            intervals[epoch].update(
+                _ppg_intervalrelated_formatinput(data[epoch]))
 
             # HRV
-            intervals[index] = _ppg_intervalrelated_hrv(
-                data[index], sampling_rate
-            )
+            intervals[epoch].update(
+                _ppg_intervalrelated_hrv(data[epoch], sampling_rate))
 
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
@@ -97,31 +97,31 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _ppg_intervalrelated_formatinput(data):
-
-    output={}
+def _ppg_intervalrelated_formatinput(data: pd.DataFrame):
 
     # Sanitize input
     colnames = data.columns.values
-    if len([i for i in colnames if "PPG_Rate" in i]) == 0:
+    
+    if not "PPG_Rate" in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract heart rate. Please make sure"
             "your DataFrame contains an `PPG_Rate` column."
         )
     signal = data["PPG_Rate"].values
-    output["PPG_Rate_Mean"] = np.mean(signal)
 
-    return output
+    PPG_Rate_Mean = np.mean(signal)
+
+    return {"PPG_Rate_Mean":PPG_Rate_Mean}
 
 
-def _ppg_intervalrelated_hrv(data, sampling_rate):
-
-    output={}
-
+def _ppg_intervalrelated_hrv(data: pd.DataFrame, 
+                             sampling_rate):
+    
     # Sanitize input
     colnames = data.columns.values
-    if len([i for i in colnames if "PPG_Peaks" in i]) == 0:
+
+    if not "PPG_Peaks" in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract peaks. Please make sure"
@@ -133,7 +133,5 @@ def _ppg_intervalrelated_hrv(data, sampling_rate):
     peaks = {"PPG_Peaks": peaks}
 
     results = hrv(peaks, sampling_rate=sampling_rate)
-    for column in results.columns:
-        output[column] = results[column].values.astype("float")
-
-    return output
+    
+    return results.astype("float").to_dict()
