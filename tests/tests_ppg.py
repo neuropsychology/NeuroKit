@@ -241,5 +241,8 @@ def test_ppg_intervalrelated():
     epochs = nk.epochs_create(
         df, events=[0, 15000], sampling_rate=sampling_rate, epochs_end=150
     )
-    ppg_intervals = nk.ppg_intervalrelated(epochs)
+    epochs_ppg_intervals = nk.ppg_intervalrelated(epochs)
+    assert "PPG_Rate_Mean" in epochs_ppg_intervals.columns
+
+    ppg_intervals = nk.ppg_intervalrelated(df)
     assert "PPG_Rate_Mean" in ppg_intervals.columns
