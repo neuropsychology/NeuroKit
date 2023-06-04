@@ -72,19 +72,18 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 
     elif isinstance(data, dict):
         for epoch in data:
-
             intervals[epoch] = {}  # Initialize empty container
 
             # Add label info
             intervals[epoch]["Label"] = data[epoch]["Label"].iloc[0]
 
             # Rate
-            intervals[epoch].update(
-                _ppg_intervalrelated_formatinput(data[epoch]))
+            intervals[epoch].update(_ppg_intervalrelated_formatinput(data[epoch]))
 
             # HRV
             intervals[epoch].update(
-                *_ppg_intervalrelated_hrv(data[epoch], sampling_rate))
+                *_ppg_intervalrelated_hrv(data[epoch], sampling_rate)
+            )
 
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
@@ -97,10 +96,9 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 
 
 def _ppg_intervalrelated_formatinput(data: pd.DataFrame):
-
     # Sanitize input
     colnames = data.columns.values
-    
+
     if "PPG_Rate" not in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
@@ -111,12 +109,10 @@ def _ppg_intervalrelated_formatinput(data: pd.DataFrame):
 
     PPG_Rate_Mean = np.mean(signal)
 
-    return {"PPG_Rate_Mean":PPG_Rate_Mean}
+    return {"PPG_Rate_Mean": PPG_Rate_Mean}
 
 
-def _ppg_intervalrelated_hrv(data: pd.DataFrame, 
-                             sampling_rate):
-    
+def _ppg_intervalrelated_hrv(data: pd.DataFrame, sampling_rate):
     # Sanitize input
     colnames = data.columns.values
 
@@ -132,5 +128,5 @@ def _ppg_intervalrelated_hrv(data: pd.DataFrame,
     peaks = {"PPG_Peaks": peaks}
 
     results = hrv(peaks, sampling_rate=sampling_rate)
-    
-    return results.astype("float").to_dict('records')
+
+    return results.astype("float").to_dict("records")
