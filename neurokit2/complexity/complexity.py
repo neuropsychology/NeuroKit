@@ -37,10 +37,10 @@ def complexity(signal, which="makowski2022", delay=1, dimension=2, tolerance="sd
         depending on what the literature suggests. We recommend using this function only for quick
         exploratory analyses, but then replacing it by the calls to the individual functions.
 
-        Check-out our open-access `study <https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800>`_
+        Check-out our `open-access study <https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800>`_
         explaining the selection of indices.
 
-    The categorization by "computation time" is based on our `study
+    The categorization by "computation time" is based on `our study
     <https://www.mdpi.com/1099-4300/24/8/1036>`_ results:
 
     .. figure:: https://raw.githubusercontent.com/DominiqueMakowski/ComplexityStructure/main/figures/time1-1.png
