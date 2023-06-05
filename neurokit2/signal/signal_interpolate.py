@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy.interpolate
 
+from ..misc import NeuroKitWarning
 
-def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", fill_value=None):
+
+def signal_interpolate(
+    x_values, y_values=None, x_new=None, method="quadratic", fill_value=None
+):
     """**Interpolate a signal**
 
     Interpolate a signal using different methods.
@@ -25,13 +31,15 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
         first and the last values of x_values.
     method : str
         Method of interpolation. Can be ``"linear"``, ``"nearest"``, ``"zero"``, ``"slinear"``,
-        ``"quadratic"``, ``"cubic"``, ``"previous"``, ``"next"`` or ``"monotone_cubic"``. The
-        methods ``"zero"``, ``"slinear"``,``"quadratic"`` and ``"cubic"`` refer to a spline
+        ``"quadratic"``, ``"cubic"``, ``"previous"``, ``"next"``, ``"monotone_cubic"``, or ``"akima"``.
+        The methods ``"zero"``, ``"slinear"``,``"quadratic"`` and ``"cubic"`` refer to a spline
         interpolation of zeroth, first, second or third order; whereas ``"previous"`` and
         ``"next"`` simply return the previous or next value of the point. An integer specifying the
         order of the spline interpolator to use.
         See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
+        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
+        Akima1DInterpolator.html>`_ for details on the ``"akima"`` method.
     fill_value : float or tuple or str
         If a ndarray (or float), this value will be used to fill in for
         requested points outside of the data range.
@@ -82,7 +90,9 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
     """
     # Sanity checks
     if x_values is None:
-        raise ValueError("NeuroKit error: signal_interpolate(): x_values must be provided.")
+        raise ValueError(
+            "NeuroKit error: signal_interpolate(): x_values must be provided."
+        )
     if y_values is None:
         # for interpolating NaNs
         return _signal_interpolate_nan(x_values, method=method, fill_value=fill_value)
@@ -102,6 +112,14 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
         # if x_values is identical to x_new, no need for interpolation
         if np.array_equal(x_values, x_new):
             return y_values
+        elif np.any(x_values[1:] == x_values[:-1]):
+            warn(
+                "Duplicate x values detected. Averaging their corresponding y values.",
+                category=NeuroKitWarning,
+            )
+            x_values, y_values = _signal_interpolate_average_duplicates(
+                x_values, y_values
+            )
 
     # If only one value, return a constant signal
     if len(x_values) == 1:
@@ -110,6 +128,10 @@ def signal_interpolate(x_values, y_values=None, x_new=None, method="quadratic", 
     if method == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(
             x_values, y_values, extrapolate=True
+        )
+    elif method == "akima":
+        interpolation_function = scipy.interpolate.Akima1DInterpolator(
+            x_values, y_values
         )
     else:
         if fill_value is None:
@@ -160,8 +182,18 @@ def _signal_interpolate_nan(values, method="quadratic", fill_value=None):
 
         # interpolate to get the values at the indices where they are missing
         return signal_interpolate(
-            x_values=x_values, y_values=y_values, x_new=x_new, method=method, fill_value=fill_value
+            x_values=x_values,
+            y_values=y_values,
+            x_new=x_new,
+            method=method,
+            fill_value=fill_value,
         )
     else:
         # if there are no missing values, return original values
         return values
+
+
+def _signal_interpolate_average_duplicates(x_values, y_values):
+    unique_x, indices = np.unique(x_values, return_inverse=True)
+    mean_y = np.bincount(indices, weights=y_values) / np.bincount(indices)
+    return unique_x, mean_y
