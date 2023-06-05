@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>HRV &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>HRV &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -539,7 +539,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="go">   HRV_MeanNN   HRV_SDNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
 <span class="go">0  694.756381  49.036043  ...            2.045955      0.156187</span>
 
-<span class="go">[1 rows x 97 columns]</span>
+<span class="go">[1 rows x 98 columns]</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -699,6 +699,7 @@ extracted, otherwise, will return NaN.</p></li>
 <li><p><strong>LF</strong>: The spectral power of low frequencies (by default, .04 to .15 Hz).</p></li>
 <li><p><strong>HF</strong>: The spectral power of high frequencies (by default, .15 to .4 Hz).</p></li>
 <li><p><strong>VHF</strong>: The spectral power of very high frequencies (by default, .4 to .5 Hz).</p></li>
+<li><p><strong>TP</strong>: The total spectral power.</p></li>
 <li><p><strong>LFHF</strong>: The ratio obtained by dividing the low frequency power by the high frequency power.</p></li>
 <li><p><strong>LFn</strong>: The normalized low frequency, obtained by dividing the low frequency power by
 the total power.</p></li>
@@ -1207,6 +1208,7 @@ algorithm from chronux). By default None such that there is no detrending.</p></
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>np.ndarray</em> – Preprocessed intervals, in milliseconds.</p></li>
 <li><p><em>np.ndarray</em> – Preprocessed timestamps corresponding to intervals, in seconds.</p></li>
+<li><p><em>int</em> – Sampling rate (Hz) of the interpolated interbeat intervals.</p></li>
 </ul>
 </p>
 </dd>
@@ -1258,8 +1260,9 @@ such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>intervals</strong> (<em>list or array</em>) – List or numpy array of intervals, in milliseconds.</p></li>
-<li><p><strong>intervals_time</strong> (<em>list or array, optional</em>) – List or numpy array of timestamps corresponding to intervals, in seconds.</p></li>
+<li><p><strong>intervals</strong> (<em>list or array</em>) – List of intervals (by default in milliseconds).</p></li>
+<li><p><strong>intervals_time</strong> (<em>list or array, optional</em>) – Optional list of timestamps corresponding to intervals, in seconds. If None (default), the
+cumulative sum of the intervals is used.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous signal in which the peaks occur.</p></li>
 </ul>
 </dd>
@@ -1271,10 +1274,12 @@ with the first peak occurring at sample point 0.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
+<span class="go"># Suppose we have a vector of RRi from data sampled at 1000 Hz</span>
 <span class="gp">In [2]: </span><span class="n">ibi</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">intervals_to_peaks</span><span class="p">(</span><span class="n">ibi</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">intervals_to_peaks</span><span class="p">(</span><span class="n">ibi</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
+<span class="go"># We can then use NeuroKit&#39;s functionalities to compute HRV indices</span>
 <span class="gp">In [4]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">hrv_indices</span>
@@ -1286,6 +1291,15 @@ with the first peak occurring at sample point 0.</p>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_intervals_to_peaks.png"><img alt="../_images/p_intervals_to_peaks.png" src="../_images/p_intervals_to_peaks.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># We can also use the timestamps of the intervals</span>
+<span class="gp">In [6]: </span><span class="n">rri</span> <span class="o">=</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">900</span><span class="p">]</span>
+
+<span class="gp">In [7]: </span><span class="n">rri_idx</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">]</span>
+
+<span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">intervals_to_peaks</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_idx</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gh">Out[8]: </span><span class="go">array([ 300,  700, 1200, 1800, 2500, 3300, 4200])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>

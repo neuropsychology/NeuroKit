@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Bio-related Functions &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>Bio-related Functions &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -518,11 +518,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.092478  -0.080845  69.955436  ...            0      0.0     7.9438</span>
-<span class="go">1  1.039004  -0.206546  69.955436  ...            0      0.0     7.9438</span>
-<span class="go">2  0.900126  -0.345798  69.955436  ...            0      0.0     7.9438</span>
-<span class="go">3  0.701682  -0.503615  69.955436  ...            0      0.0     7.9438</span>
-<span class="go">4  0.471332  -0.677201  69.955436  ...            0      0.0     7.9438</span>
+<span class="go">0  1.058647  -0.074481  70.006223  ...            0      8.0   7.948144</span>
+<span class="go">1  1.005810  -0.198256  70.006223  ...            0      8.0   7.948144</span>
+<span class="go">2  0.868784  -0.335038  70.006223  ...            0      8.0   7.948144</span>
+<span class="go">3  0.673628  -0.489459  70.006223  ...            0      8.0   7.948144</span>
+<span class="go">4  0.448163  -0.658517  70.006223  ...            0      8.0   7.948144</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -641,10 +641,10 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="go"># Analyze</span>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[9]: </span>
-<span class="go">   ECG_Rate_Mean  HRV_MeanNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
-<span class="go">0      86.392105  694.756381  ...            2.045955      0.156187</span>
+<span class="go">  ECG_Rate_Mean             HRV_MeanNN  ... RSA_Gates_Mean_log RSA_Gates_SD</span>
+<span class="go">0     86.392105  [[694.7563805104409]]  ...           2.045955     0.156187</span>
 
-<span class="go">[1 rows x 225 columns]</span>
+<span class="go">[1 rows x 227 columns]</span>
 </pre></div>
 </div>
 </dd></dl>

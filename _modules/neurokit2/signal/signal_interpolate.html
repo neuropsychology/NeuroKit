@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.signal.signal_interpolate &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.signal.signal_interpolate &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -351,12 +351,18 @@ document.write(`
                   
   <h1>Source code for neurokit2.signal.signal_interpolate</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">scipy.interpolate</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 
-<div class="viewcode-block" id="signal_interpolate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_interpolate">[docs]</a><span class="k">def</span> <span class="nf">signal_interpolate</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="signal_interpolate"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_interpolate">[docs]</a><span class="k">def</span> <span class="nf">signal_interpolate</span><span class="p">(</span>
+    <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Interpolate a signal**</span>
 
 <span class="sd">    Interpolate a signal using different methods.</span>
@@ -377,13 +383,15 @@ document.write(`
 <span class="sd">        first and the last values of x_values.</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Method of interpolation. Can be ``&quot;linear&quot;``, ``&quot;nearest&quot;``, ``&quot;zero&quot;``, ``&quot;slinear&quot;``,</span>
-<span class="sd">        ``&quot;quadratic&quot;``, ``&quot;cubic&quot;``, ``&quot;previous&quot;``, ``&quot;next&quot;`` or ``&quot;monotone_cubic&quot;``. The</span>
-<span class="sd">        methods ``&quot;zero&quot;``, ``&quot;slinear&quot;``,``&quot;quadratic&quot;`` and ``&quot;cubic&quot;`` refer to a spline</span>
+<span class="sd">        ``&quot;quadratic&quot;``, ``&quot;cubic&quot;``, ``&quot;previous&quot;``, ``&quot;next&quot;``, ``&quot;monotone_cubic&quot;``, or ``&quot;akima&quot;``.</span>
+<span class="sd">        The methods ``&quot;zero&quot;``, ``&quot;slinear&quot;``,``&quot;quadratic&quot;`` and ``&quot;cubic&quot;`` refer to a spline</span>
 <span class="sd">        interpolation of zeroth, first, second or third order; whereas ``&quot;previous&quot;`` and</span>
 <span class="sd">        ``&quot;next&quot;`` simply return the previous or next value of the point. An integer specifying the</span>
 <span class="sd">        order of the spline interpolator to use.</span>
 <span class="sd">        See `here &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
 <span class="sd">        PchipInterpolator.html&gt;`_ for details on the ``&quot;monotone_cubic&quot;`` method.</span>
+<span class="sd">        See `here &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
+<span class="sd">        Akima1DInterpolator.html&gt;`_ for details on the ``&quot;akima&quot;`` method.</span>
 <span class="sd">    fill_value : float or tuple or str</span>
 <span class="sd">        If a ndarray (or float), this value will be used to fill in for</span>
 <span class="sd">        requested points outside of the data range.</span>
@@ -434,7 +442,9 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanity checks</span>
     <span class="k">if</span> <span class="n">x_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: signal_interpolate(): x_values must be provided.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: signal_interpolate(): x_values must be provided.&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">y_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># for interpolating NaNs</span>
         <span class="k">return</span> <span class="n">_signal_interpolate_nan</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">)</span>
@@ -452,8 +462,16 @@ document.write(`
         <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_new</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># if x_values is identical to x_new, no need for interpolation</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x_values</span> <span class="o">==</span> <span class="n">x_new</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">x_new</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">y_values</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="n">x_values</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Duplicate x values detected. Averaging their corresponding y values.&quot;</span><span class="p">,</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span> <span class="o">=</span> <span class="n">_signal_interpolate_average_duplicates</span><span class="p">(</span>
+                <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span>
+            <span class="p">)</span>
 
     <span class="c1"># If only one value, return a constant signal</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -462,6 +480,10 @@ document.write(`
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;monotone_cubic&quot;</span><span class="p">:</span>
         <span class="n">interpolation_function</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">PchipInterpolator</span><span class="p">(</span>
             <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">extrapolate</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;akima&quot;</span><span class="p">:</span>
+        <span class="n">interpolation_function</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">Akima1DInterpolator</span><span class="p">(</span>
+            <span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -512,11 +534,21 @@ document.write(`
 
         <span class="c1"># interpolate to get the values at the indices where they are missing</span>
         <span class="k">return</span> <span class="n">signal_interpolate</span><span class="p">(</span>
-            <span class="n">x_values</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span>
+            <span class="n">x_values</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span>
+            <span class="n">y_values</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span>
+            <span class="n">x_new</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># if there are no missing values, return original values</span>
         <span class="k">return</span> <span class="n">values</span>
+
+
+<span class="k">def</span> <span class="nf">_signal_interpolate_average_duplicates</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">):</span>
+    <span class="n">unique_x</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">mean_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">y_values</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">unique_x</span><span class="p">,</span> <span class="n">mean_y</span>
 </pre></div>
 
                 </article>

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.hrv.hrv_frequency &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.hrv.hrv_frequency &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -391,6 +391,7 @@ document.write(`
 <span class="sd">    * **LF**: The spectral power of low frequencies (by default, .04 to .15 Hz).</span>
 <span class="sd">    * **HF**: The spectral power of high frequencies (by default, .15 to .4 Hz).</span>
 <span class="sd">    * **VHF**: The spectral power of very high frequencies (by default, .4 to .5 Hz).</span>
+<span class="sd">    * **TP**: The total spectral power.</span>
 <span class="sd">    * **LFHF**: The ratio obtained by dividing the low frequency power by the high frequency power.</span>
 <span class="sd">    * **LFn**: The normalized low frequency, obtained by dividing the low frequency power by</span>
 <span class="sd">      the total power.</span>
@@ -564,6 +565,7 @@ document.write(`
 
     <span class="c1"># Normalized</span>
     <span class="n">total_power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">power</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;TP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_power</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;LFHF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;LF&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HF&quot;</span><span class="p">]</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;LFn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;LF&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">total_power</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HFn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HF&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">total_power</span>

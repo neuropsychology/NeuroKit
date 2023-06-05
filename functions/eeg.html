@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>EEG &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>EEG &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -1104,8 +1104,10 @@ values instead. If it is set to <code class="docutils literal notranslate"><span
 <span class="gp">In [3]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">raw_channel</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_channel_extract</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;EEG 060&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 055&quot;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;060&#39;</span><span class="p">,</span> <span class="s1">&#39;055&#39;</span><span class="p">])</span>
+<span class="go">NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).</span>
 
 <span class="gp">In [5]: </span><span class="n">eeg_channels</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_channel_extract</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s2">&quot;EEG&quot;</span><span class="p">)</span>
+<span class="go">NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).</span>
 </pre></div>
 </div>
 </dd></dl>

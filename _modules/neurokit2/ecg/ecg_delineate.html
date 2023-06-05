@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.ecg.ecg_delineate &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.ecg.ecg_delineate &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -616,12 +616,13 @@ document.write(`
     <span class="c1"># plt.grid(True)</span>
     <span class="c1"># plt.show()</span>
     <span class="n">rpeaks_resampled</span> <span class="o">=</span> <span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">)</span>
+    <span class="n">qpeaks_resampled</span> <span class="o">=</span> <span class="n">_dwt_resample_points</span><span class="p">(</span><span class="n">qpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">analysis_sampling_rate</span><span class="p">)</span>
 
     <span class="n">tpeaks</span><span class="p">,</span> <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_peaks</span><span class="p">(</span>
         <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
     <span class="p">)</span>
     <span class="n">qrs_onsets</span><span class="p">,</span> <span class="n">qrs_offsets</span> <span class="o">=</span> <span class="n">_dwt_delineate_qrs_bounds</span><span class="p">(</span>
-        <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
+        <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">qpeaks_resampled</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
     <span class="p">)</span>
     <span class="n">ponsets</span><span class="p">,</span> <span class="n">poffsets</span> <span class="o">=</span> <span class="n">_dwt_delineate_tp_onsets_offsets</span><span class="p">(</span>
         <span class="n">ppeaks</span><span class="p">,</span> <span class="n">rpeaks_resampled</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">analysis_sampling_rate</span>
@@ -735,12 +736,11 @@ document.write(`
         <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">rpeak_</span> <span class="o">+</span> <span class="n">srch_bndry</span>
         <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">rpeak_</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">rt_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
         <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="n">degree_tpeak</span> <span class="o">+</span> <span class="n">degree_add</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">epsilon_T_weight</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)))</span>
-
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">tpeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">continue</span>
 
+        <span class="n">height</span> <span class="o">=</span> <span class="n">epsilon_T_weight</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)))</span>
         <span class="n">ecg_local</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
@@ -784,12 +784,11 @@ document.write(`
         <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">p2r_duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
         <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">rpeak</span> <span class="o">-</span> <span class="n">srch_bndry</span>
         <span class="n">dwt_local</span> <span class="o">=</span> <span class="n">dwtmatr</span><span class="p">[</span><span class="n">degree_ppeak</span> <span class="o">+</span> <span class="n">degree_add</span><span class="p">,</span> <span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">epsilon_P_weight</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)))</span>
-
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">ppeaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">continue</span>
-
+        
+        <span class="n">height</span> <span class="o">=</span> <span class="n">epsilon_P_weight</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">)))</span>
         <span class="n">ecg_local</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">srch_idx_start</span><span class="p">:</span><span class="n">srch_idx_end</span><span class="p">]</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">dwt_local</span><span class="p">),</span> <span class="n">peaks</span><span class="p">))</span>
@@ -900,13 +899,13 @@ document.write(`
     <span class="k">return</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">offsets</span>
 
 
-<span class="k">def</span> <span class="nf">_dwt_delineate_qrs_bounds</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_dwt_delineate_qrs_bounds</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">dwtmatr</span><span class="p">,</span> <span class="n">ppeaks</span><span class="p">,</span> <span class="n">tpeaks</span><span class="p">,</span> <span class="n">qpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">):</span>
     <span class="n">degree</span> <span class="o">=</span> <span class="n">_dwt_adjust_parameters</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
     <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qpeaks</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200</span>
         <span class="c1"># look for onsets</span>
         <span class="n">srch_idx_start</span> <span class="o">=</span> <span class="n">ppeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">srch_idx_end</span> <span class="o">=</span> <span class="n">qpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">srch_idx_start</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="ow">or</span> <span class="n">srch_idx_end</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">:</span>
             <span class="n">onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">continue</span>

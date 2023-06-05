@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.hrv.hrv_nonlinear &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.hrv.hrv_nonlinear &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -852,9 +852,9 @@ document.write(`
     <span class="n">sd1</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD1&quot;</span><span class="p">]</span>
     <span class="n">sd2</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD2&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sd1</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
-        <span class="n">sd1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sd1</span><span class="p">)</span>
+        <span class="n">sd1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sd1</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sd2</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
-        <span class="n">sd2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sd2</span><span class="p">)</span>
+        <span class="n">sd2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sd2</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="c1"># Poincare values</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">rri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>

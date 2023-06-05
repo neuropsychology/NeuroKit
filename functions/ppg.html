@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>PPG &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>PPG &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -581,9 +581,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.540661           0.901006</span>
-<span class="go">2     2        10000  ...                 -2.341717           0.880519</span>
-<span class="go">3     3        15000  ...                  1.084173           0.644276</span>
+<span class="go">1     1         5000  ...                  1.309699           0.836700</span>
+<span class="go">2     2        10000  ...                  0.079825           0.989106</span>
+<span class="go">3     3        15000  ...                  0.260243           0.922992</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -598,10 +598,10 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 
 <span class="gp">In [10]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[10]: </span>
-<span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
+<span class="go">  PPG_Rate_Mean  ...               HRV_LZC</span>
+<span class="go">0     86.401413  ...  [0.8528186786119307]</span>
 
-<span class="go">[1 rows x 90 columns]</span>
+<span class="go">[1 rows x 91 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -889,9 +889,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.467691           0.798604</span>
-<span class="go">2     2        10000  ...                  0.296906           0.982911</span>
-<span class="go">3     3        15000  ...                 -0.396524           0.779662</span>
+<span class="go">1     1         5000  ...                 -0.334581           0.933526</span>
+<span class="go">2     2        10000  ...                  1.416908           0.978286</span>
+<span class="go">3     3        15000  ...                  0.604108           0.685495</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -916,10 +916,10 @@ separately processed DataFrames.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed ECG features. The analyzed features consist of the following:</p>
+<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed PPG features. The analyzed features consist of the following:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Rate_Mean&quot;</span></code>: the mean heart rate.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_HRV&quot;</span></code>: the different heart rate variability metrices.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;HRV&quot;</span></code>: the different heart rate variability metrices.</p></li>
 </ul>
 <p>See <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv" title="neurokit2.hrv.hrv"><code class="xref py py-func docutils literal notranslate"><span class="pre">hrv()</span></code></a> docstrings for details.</p>
 </p>
@@ -941,10 +941,10 @@ separately processed DataFrames.</p></li>
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
+<span class="go">  PPG_Rate_Mean  ...               HRV_LZC</span>
+<span class="go">0     86.401413  ...  [0.8528186786119307]</span>
 
-<span class="go">[1 rows x 90 columns]</span>
+<span class="go">[1 rows x 91 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
 <span class="gp">   ...: </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
@@ -952,11 +952,11 @@ separately processed DataFrames.</p></li>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label  PPG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">1     1      86.483842   69.395349  ...  1.808904  2.306391  0.792838</span>
-<span class="go">2     2      86.318983   69.488372  ...  1.867149  3.207983  0.973029</span>
+<span class="go">  Label  PPG_Rate_Mean  ...               HRV_KFD               HRV_LZC</span>
+<span class="go">1     1      86.483842  ...  [2.3063905509614693]  [0.7928383380975262]</span>
+<span class="go">2     2      86.318983  ...   [3.207983296772063]  [0.9730288694833277]</span>
 
-<span class="go">[2 rows x 91 columns]</span>
+<span class="go">[2 rows x 92 columns]</span>
 </pre></div>
 </div>
 </dd></dl>

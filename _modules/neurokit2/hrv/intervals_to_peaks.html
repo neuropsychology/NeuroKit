@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.hrv.intervals_to_peaks &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.hrv.intervals_to_peaks &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -365,9 +365,10 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    intervals : list or array</span>
-<span class="sd">        List or numpy array of intervals, in milliseconds.</span>
+<span class="sd">        List of intervals (by default in milliseconds).</span>
 <span class="sd">    intervals_time : list or array, optional</span>
-<span class="sd">        List or numpy array of timestamps corresponding to intervals, in seconds.</span>
+<span class="sd">        Optional list of timestamps corresponding to intervals, in seconds. If None (default), the</span>
+<span class="sd">        cumulative sum of the intervals is used.</span>
 <span class="sd">    sampling_rate : int, optional</span>
 <span class="sd">        Sampling rate (Hz) of the continuous signal in which the peaks occur.</span>
 
@@ -383,15 +384,24 @@ document.write(`
 
 <span class="sd">      import neurokit2 as nk</span>
 
+<span class="sd">      # Suppose we have a vector of RRi from data sampled at 1000 Hz</span>
 <span class="sd">      ibi = [500, 400, 700, 500, 300, 800, 500]</span>
-<span class="sd">      peaks = nk.intervals_to_peaks(ibi)</span>
+<span class="sd">      peaks = nk.intervals_to_peaks(ibi, sampling_rate=1000)</span>
 
+<span class="sd">      # We can then use NeuroKit&#39;s functionalities to compute HRV indices</span>
 <span class="sd">      @savefig p_intervals_to_peaks.png scale=100%</span>
 <span class="sd">      hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">      hrv_indices</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">        # We can also use the timestamps of the intervals</span>
+<span class="sd">        rri = [400, 500, 700, 800, 900]</span>
+<span class="sd">        rri_idx = [0.7, 1.2, 2.5, 3.3, 4.2]</span>
+<span class="sd">        nk.intervals_to_peaks(rri, rri_idx, sampling_rate=1000)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">intervals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

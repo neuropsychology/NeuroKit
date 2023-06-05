@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.ecg.ecg_intervalrelated &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.ecg.ecg_intervalrelated &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -479,7 +479,8 @@ document.write(`
 
     <span class="n">results</span> <span class="o">=</span> <span class="n">hrv</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">output</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+        <span class="c1"># Add and convert to float</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[[</span><span class="n">column</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
 
     <span class="k">return</span> <span class="n">output</span>
 </pre></div>

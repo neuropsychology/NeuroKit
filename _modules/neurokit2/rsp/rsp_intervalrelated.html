@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.rsp.rsp_intervalrelated &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.rsp.rsp_intervalrelated &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -445,7 +445,7 @@ document.write(`
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Rate_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="n">rrv</span> <span class="o">=</span> <span class="n">rsp_rrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">rrv</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">output</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rrv</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+            <span class="n">output</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">rrv</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s2">&quot;RSP_Amplitude&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>

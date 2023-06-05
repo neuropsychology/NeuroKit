@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>EEG Power in Frequency Bands &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>EEG Power in Frequency Bands &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -502,14 +502,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Effective window size : 1.280 (s)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Effective window size : 10.240 (s)
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\hostedtoolcache\windows\Python\3.10.10\x64\lib\site-packages\mne\viz\utils.py:137: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\runneradmin\AppData\Local\Temp\ipykernel_5240\3777469918.py:3: RuntimeWarning: in version 1.5, the default behavior of Spectrum.plot() will change so that bad channels will be shown by default. To keep the old default behavior (and silence this warning), explicitly pass `picks=&#39;data&#39;, exclude=&#39;bads&#39;`.
+  fig = spectrum.plot()
+C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\mne\viz\utils.py:151: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
   (fig or plt).show(**kwargs)
 </pre></div>
 </div>
-<img alt="../../_images/d376145c60fd1278efbf5b6161dc5473e8a26611349acb4b5b9895fe1936d645.png" src="../../_images/d376145c60fd1278efbf5b6161dc5473e8a26611349acb4b5b9895fe1936d645.png" />
+<img alt="../../_images/372a549c67de8f86dd46bed4ca07e29c5e8001a876543a750f117e56a37e2b5a.png" src="../../_images/372a549c67de8f86dd46bed4ca07e29c5e8001a876543a750f117e56a37e2b5a.png" />
 </div>
 </div>
 </section>
@@ -544,7 +546,10 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Subtracting Evoked from Epochs
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 004, STI 001, STI 016, STI 006, STI 005, STI 002, EOG 061, STI 003, STI 015, STI 014
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 001, STI 004, STI 016, STI 005, EOG 061, STI 015, STI 003, STI 002, STI 014, STI 006
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[done]

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.eeg.mne_channel_extract &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.eeg.mne_channel_extract &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -416,7 +416,7 @@ document.write(`
                 <span class="s2">&quot;check channel names in raw.info[&#39;ch_names&#39;]. &quot;</span>
             <span class="p">)</span>
 
-    <span class="n">channels</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">pick_channels</span><span class="p">(</span><span class="n">what</span><span class="p">)[:]</span>
+    <span class="n">channels</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">pick_channels</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">what</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">channels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">channels</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">what</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

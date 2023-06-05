@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.ppg.ppg_simulate &#8212; NeuroKit2 0.2.4 documentation</title>
+    <title>neurokit2.ppg.ppg_simulate &#8212; NeuroKit2 0.2.5 documentation</title>
   
   
   
@@ -354,10 +354,9 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.interpolate</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span><span class="p">,</span> <span class="n">check_random_state_children</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_distort</span><span class="p">,</span> <span class="n">signal_interpolate</span>
 
 
 <div class="viewcode-block" id="ppg_simulate"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_simulate">[docs]</a><span class="k">def</span> <span class="nf">ppg_simulate</span><span class="p">(</span>
@@ -501,9 +500,8 @@ document.write(`
 
     <span class="c1"># Interpolate a continuous signal between the landmarks (i.e., Cartesian</span>
     <span class="c1"># coordinates).</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">Akima1DInterpolator</span><span class="p">(</span><span class="n">x_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">)</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)))</span>
-    <span class="n">ppg</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="n">ppg</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">x_values</span><span class="o">=</span><span class="n">x_all</span><span class="p">,</span> <span class="n">y_values</span><span class="o">=</span><span class="n">y_all</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;akima&quot;</span><span class="p">)</span>
     <span class="c1"># Remove NAN (values outside interpolation range, i.e., after last sample).</span>
     <span class="n">ppg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ppg</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">ppg</span><span class="p">)</span>
 
