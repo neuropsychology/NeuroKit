@@ -20,7 +20,8 @@ history = history.replace("\n-------------------", "\n^^^^^^^^^^^^^^^^^^^").repl
 
 def find_version():
     result = re.search(
-        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open("neurokit2/__init__.py").read()
+        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"),
+        open("neurokit2/__init__.py").read(),
     )
     return result.group(1)
 
@@ -77,9 +78,8 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
 )
