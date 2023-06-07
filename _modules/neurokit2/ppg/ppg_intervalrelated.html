@@ -413,7 +413,7 @@ document.write(`
         <span class="n">rate_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;PPG_Rate&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rate_cols</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">intervals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_ppg_intervalrelated_formatinput</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="n">intervals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_ppg_intervalrelated_hrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">))</span>
+            <span class="n">intervals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">_ppg_intervalrelated_hrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;NeuroKit error: ppg_intervalrelated(): Wrong input,&quot;</span>
@@ -423,20 +423,18 @@ document.write(`
         <span class="n">ppg_intervals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty container</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize empty container</span>
 
             <span class="c1"># Add label info</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">epoch</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">epoch</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Rate</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ppg_intervalrelated_formatinput</span><span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-            <span class="p">)</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_ppg_intervalrelated_formatinput</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">epoch</span><span class="p">]))</span>
 
             <span class="c1"># HRV</span>
-            <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ppg_intervalrelated_hrv</span><span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">intervals</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">intervals</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">_ppg_intervalrelated_hrv</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">epoch</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="p">)</span>
             <span class="p">)</span>
 
         <span class="n">ppg_intervals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
@@ -449,27 +447,28 @@ document.write(`
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_ppg_intervalrelated_formatinput</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{}):</span>
-
+<span class="k">def</span> <span class="nf">_ppg_intervalrelated_formatinput</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="c1"># Sanitize input</span>
     <span class="n">colnames</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">colnames</span> <span class="k">if</span> <span class="s2">&quot;PPG_Rate&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="s2">&quot;PPG_Rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: ppg_intervalrelated(): Wrong input,&quot;</span>
             <span class="s2">&quot;we couldn&#39;t extract heart rate. Please make sure&quot;</span>
             <span class="s2">&quot;your DataFrame contains a `PPG_Rate` column.&quot;</span>
         <span class="p">)</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;PPG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;PPG_Rate_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">output</span>
+    <span class="n">PPG_Rate_Mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;PPG_Rate_Mean&quot;</span><span class="p">:</span> <span class="n">PPG_Rate_Mean</span><span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">_ppg_intervalrelated_hrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{}):</span>
-
+<span class="k">def</span> <span class="nf">_ppg_intervalrelated_hrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
     <span class="c1"># Sanitize input</span>
     <span class="n">colnames</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">colnames</span> <span class="k">if</span> <span class="s2">&quot;PPG_Peaks&quot;</span> <span class="ow">in</span> <span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="s2">&quot;PPG_Peaks&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: ppg_intervalrelated(): Wrong input,&quot;</span>
             <span class="s2">&quot;we couldn&#39;t extract peaks. Please make sure&quot;</span>
@@ -481,10 +480,8 @@ document.write(`
     <span class="n">peaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">}</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="n">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">output</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">output</span>
+    <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
 </pre></div>
 
                 </article>

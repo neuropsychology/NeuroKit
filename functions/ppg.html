@@ -581,9 +581,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.860521           0.918552</span>
-<span class="go">2     2        10000  ...                 -0.671356           0.949635</span>
-<span class="go">3     3        15000  ...                 -0.524659           0.554317</span>
+<span class="go">1     1         5000  ...                  0.384934           0.955204</span>
+<span class="go">2     2        10000  ...                 -0.870585           0.912444</span>
+<span class="go">3     3        15000  ...                  0.526269           0.649287</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -598,8 +598,8 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 
 <span class="gp">In [10]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[10]: </span>
-<span class="go">  PPG_Rate_Mean  ...               HRV_LZC</span>
-<span class="go">0     86.401413  ...  [0.8528186786119307]</span>
+<span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
+<span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
 
 <span class="go">[1 rows x 91 columns]</span>
 </pre></div>
@@ -889,9 +889,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.074583           0.999613</span>
-<span class="go">2     2        10000  ...                  3.092683           0.843946</span>
-<span class="go">3     3        15000  ...                  0.678917           0.597596</span>
+<span class="go">1     1         5000  ...                 -0.381096           0.867981</span>
+<span class="go">2     2        10000  ...                  2.963000           0.886024</span>
+<span class="go">3     3        15000  ...                 -0.223955           0.934547</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -941,8 +941,8 @@ separately processed DataFrames.</p></li>
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">  PPG_Rate_Mean  ...               HRV_LZC</span>
-<span class="go">0     86.401413  ...  [0.8528186786119307]</span>
+<span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
+<span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
 
 <span class="go">[1 rows x 91 columns]</span>
 
@@ -952,9 +952,9 @@ separately processed DataFrames.</p></li>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label  PPG_Rate_Mean  ...               HRV_KFD               HRV_LZC</span>
-<span class="go">1     1      86.483842  ...  [2.3063905509614693]  [0.7928383380975262]</span>
-<span class="go">2     2      86.318983  ...   [3.207983296772063]  [0.9730288694833277]</span>
+<span class="go">  Label  PPG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
+<span class="go">1     1      86.483842   69.395349  ...  1.808904  2.306391  0.792838</span>
+<span class="go">2     2      86.318983   69.488372  ...  1.867149  3.207983  0.973029</span>
 
 <span class="go">[2 rows x 92 columns]</span>
 </pre></div>
