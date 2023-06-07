@@ -189,12 +189,12 @@ def test_signal_filter():
 def test_signal_filter_with_missing():
     sampling_rate = 100
     duration_not_missing = 10
-    noise = 0.0
+    frequency = 2
     signal = np.concatenate(
     [
-        nk.ecg_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, noise=noise, random_state=42),
+        nk.signal_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, frequency=frequency, random_state=42),
         [np.nan] * 1000,
-        nk.ecg_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, noise=noise, random_state=43),
+        nk.signal_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, frequency=frequency, random_state=43),
     ]
     )
     samples = np.arange(len(signal))
