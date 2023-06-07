@@ -2,10 +2,9 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.interpolate
 
 from ..misc import check_random_state, check_random_state_children
-from ..signal import signal_distort
+from ..signal import signal_distort, signal_interpolate
 
 
 def ppg_simulate(
@@ -149,9 +148,8 @@ def ppg_simulate(
 
     # Interpolate a continuous signal between the landmarks (i.e., Cartesian
     # coordinates).
-    f = scipy.interpolate.Akima1DInterpolator(x_all, y_all)
     samples = np.arange(int(np.ceil(duration * sampling_rate)))
-    ppg = f(samples)
+    ppg = signal_interpolate(x_values=x_all, y_values=y_all, x_new=samples, method="akima")
     # Remove NAN (values outside interpolation range, i.e., after last sample).
     ppg[np.isnan(ppg)] = np.nanmean(ppg)
 

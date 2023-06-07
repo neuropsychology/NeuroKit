@@ -500,9 +500,9 @@ def _hrv_nonlinear_show(rri, rri_time=None, rri_missing=False, out={}, ax=None, 
     sd1 = out["SD1"]
     sd2 = out["SD2"]
     if isinstance(sd1, pd.Series):
-        sd1 = float(sd1)
+        sd1 = float(sd1.iloc[0])
     if isinstance(sd2, pd.Series):
-        sd2 = float(sd2)
+        sd2 = float(sd2.iloc[0])
 
     # Poincare values
     ax1 = rri[:-1]

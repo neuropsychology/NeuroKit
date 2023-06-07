@@ -157,7 +157,7 @@ def complexity_tolerance(
 
     .. ipython:: python
 
-      @savefig p_complexity_tolerance4.png scale=100%
+      @savefig p_complexity_tolerance5.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=1, dimension=3,
                                         method = 'bin', show=True)
       @suppress
@@ -168,7 +168,7 @@ def complexity_tolerance(
     .. ipython:: python
 
       # Slow method
-      @savefig p_complexity_tolerance5.png scale=100%
+      @savefig p_complexity_tolerance6.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6,
                                         method = 'maxApEn', show=True)
       @suppress
@@ -184,7 +184,7 @@ def complexity_tolerance(
     .. ipython:: python
 
       # Narrower range
-      @savefig p_complexity_tolerance6.png scale=100%
+      @savefig p_complexity_tolerance7.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
                                         r_range=np.linspace(0.002, 0.8, 30), show=True)
       @suppress

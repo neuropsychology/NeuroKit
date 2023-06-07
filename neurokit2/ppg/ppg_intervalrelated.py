@@ -21,11 +21,11 @@ def ppg_intervalrelated(data, sampling_rate=1000):
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed ECG features. The analyzed features consist of the following:
+        A dataframe containing the analyzed PPG features. The analyzed features consist of the following:
 
         * ``"PPG_Rate_Mean"``: the mean heart rate.
 
-        * ``"ECG_HRV"``: the different heart rate variability metrices.
+        * ``"HRV"``: the different heart rate variability metrices.
 
         See :func:`.hrv` docstrings for details.
 
@@ -103,7 +103,7 @@ def _ppg_intervalrelated_formatinput(data):
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract heart rate. Please make sure"
-            "your DataFrame contains an `PPG_Rate` column."
+            "your DataFrame contains a `PPG_Rate` column."
         )
     signal = data["PPG_Rate"].values
 
@@ -120,7 +120,7 @@ def _ppg_intervalrelated_hrv(data, sampling_rate):
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract peaks. Please make sure"
-            "your DataFrame contains an `PPG_Peaks` column."
+            "your DataFrame contains a `PPG_Peaks` column."
         )
 
     # Transform rpeaks from "signal" format to "info" format.
