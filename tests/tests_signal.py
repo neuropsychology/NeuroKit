@@ -204,7 +204,7 @@ def test_signal_filter_with_missing():
         signal_corrupted, sampling_rate=sampling_rate, method="powerline"
     )
     assert signal_clean.size == signal.size
-    assert np.allclose(sum(signal_clean - signal), -2, atol=0.2, equal_nan=True)
+    assert np.allclose(signal_clean, signal, atol=0.2, equal_nan=True)
 
 def test_signal_interpolate():
 
