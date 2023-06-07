@@ -199,7 +199,7 @@ def test_signal_filter_with_missing():
     )
     filtered = nk.signal_filter(signal=signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
     filtered = nk.signal_filter(signal=filtered, sampling_rate=sampling_rate, method="powerline")
-    assert np.std(signal) > np.std(filtered)
+    assert np.nanstd(signal) > np.nanstd(filtered)
 
 def test_signal_interpolate():
 
