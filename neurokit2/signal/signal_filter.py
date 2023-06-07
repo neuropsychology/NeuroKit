@@ -364,6 +364,6 @@ def _signal_filter_missing(signal):
     """Interpolate missing data and save the indices of the missing data."""
     missing = np.where(np.isnan(signal))[0]
     if len(missing) > 0:
-        return signal_interpolate(signal), missing
+        return signal_interpolate(signal, method="linear"), missing
     else:
         return signal, missing
