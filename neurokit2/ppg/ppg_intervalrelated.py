@@ -95,7 +95,7 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _ppg_intervalrelated_formatinput(data: pd.DataFrame):
+def _ppg_intervalrelated_formatinput(data):
     # Sanitize input
     colnames = data.columns.values
 
@@ -112,7 +112,7 @@ def _ppg_intervalrelated_formatinput(data: pd.DataFrame):
     return {"PPG_Rate_Mean": PPG_Rate_Mean}
 
 
-def _ppg_intervalrelated_hrv(data: pd.DataFrame, sampling_rate):
+def _ppg_intervalrelated_hrv(data, sampling_rate):
     # Sanitize input
     colnames = data.columns.values
 
