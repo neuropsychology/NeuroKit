@@ -197,9 +197,14 @@ def test_signal_filter_with_missing():
         nk.ecg_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, noise=noise, random_state=43),
     ]
     )
-    filtered = nk.signal_filter(signal=signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
-    filtered = nk.signal_filter(signal=filtered, sampling_rate=sampling_rate, method="powerline")
-    assert filtered.size == signal.size
+    samples = np.arange(len(signal))
+    powerline = np.sin(2 * np.pi * 50 * (samples / sampling_rate))
+    signal_corrupted = signal + powerline
+    signal_clean = nk.signal_filter(
+        signal_corrupted, sampling_rate=sampling_rate, method="powerline"
+    )
+    assert signal_clean.size == signal.size
+    assert np.allclose(sum(signal_clean - signal), -2, atol=0.2, equal_nan=True)
 
 def test_signal_interpolate():
 
