@@ -186,6 +186,20 @@ def test_signal_filter():
 
     assert np.allclose(signal_bandstop, signal_bandstop_scipy, atol=0.2)
 
+def test_signal_filter_with_missing():
+    sampling_rate = 100
+    duration_not_missing = 10
+    noise = 0.5
+    signal = np.concatenate(
+    [
+        nk.ecg_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, noise=noise, random_state=42),
+        [np.nan] * 1000,
+        nk.ecg_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, noise=noise, random_state=43),
+    ]
+    )
+    filtered = nk.signal_filter(signal=signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
+    filtered = nk.signal_filter(signal=filtered, sampling_rate=sampling_rate, method="powerline")
+    assert np.std(signal) > np.std(filtered)
 
 def test_signal_interpolate():
 
