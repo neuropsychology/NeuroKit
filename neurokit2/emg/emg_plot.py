@@ -140,7 +140,7 @@ def _emg_plot_activity(emg_signals, onsets, offsets):
 
     if np.any(activity_signal.isna()):
         index = np.min(np.where(activity_signal.isna())) - 1
-    value_to_fill = activity_signal[index]
-    activity_signal = activity_signal.fillna(value_to_fill)
+        value_to_fill = activity_signal[index]
+        activity_signal = activity_signal.fillna(value_to_fill)
 
     return activity_signal
