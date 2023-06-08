@@ -209,22 +209,6 @@ def _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate):
         row=2,
         col=1,
     )
-    
-    # Shade activity regions.
-    activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
-    fig.add_trace(
-        go.Scatter(
-            x=x_axis,
-            y=activity_signal,
-            mode="lines",
-            name="Activity",
-            fill="tozeroy",
-            fillcolor="#f7c568",
-            line=dict(color="#f7c568"),
-        ),
-        row=2,
-        col=1,
-    )
 
     # Mark onsets and offsets.
     fig.add_trace(
