@@ -65,8 +65,14 @@ def ppg_methods(
 
     """
     # Sanitize inputs
-    method_cleaning = str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
-    method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    method_cleaning = (
+        str(method).lower()
+        if method_cleaning == "default"
+        else str(method_cleaning).lower()
+    )
+    method_peaks = (
+        str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    )
 
     # Create dictionary with all inputs
     report_info = {
@@ -121,10 +127,14 @@ def ppg_methods(
             IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11."""
         )
     elif method_cleaning in ["none"]:
-        report_info["text_cleaning"] += " was directly used for peak detection without preprocessing."
+        report_info[
+            "text_cleaning"
+        ] += " was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added
-        report_info["text_cleaning"] = "was cleaned following the " + method + " method."
+        report_info["text_cleaning"] = (
+            "was cleaned following the " + method + " method."
+        )
 
     # 2. Peaks
     # ----------
@@ -141,7 +151,9 @@ def ppg_methods(
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
-        report_info["text_peaks"] = f"The peak detection was carried out using the method {method_peaks}."
+        report_info[
+            "text_peaks"
+        ] = f"The peak detection was carried out using the method {method_peaks}."
 
     report_info["references"] = list(np.unique(refs))
     return report_info

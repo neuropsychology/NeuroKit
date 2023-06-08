@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
+from ..misc.report import create_report
 from ..signal import signal_sanitize
 from .emg_activation import emg_activation
 from .emg_amplitude import emg_amplitude
 from .emg_clean import emg_clean
+from .emg_methods import emg_methods
+from .emg_plot import emg_plot
 
 
-def emg_process(emg_signal, sampling_rate=1000):
+def emg_process(emg_signal, sampling_rate=1000, report=None, **kwargs):
     """**Process a electromyography (EMG) signal**
 
     Convenience function that automatically processes an electromyography signal.
@@ -18,6 +21,14 @@ def emg_process(emg_signal, sampling_rate=1000):
         The raw electromyography channel.
     sampling_rate : int
         The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
+    report : str
+        The filename of a report containing description and figures of processing
+        (e.g. ``"myreport.html"``). Needs to be supplied if a report file
+        should be generated. Defaults to ``None``. Can also be ``"text"`` to
+        just print the text in the console without saving anything.
+    **kwargs
+        Other arguments to be passed to specific methods. For more information,
+        see :func:`.emg_methods`.
 
     Returns
     -------
@@ -57,16 +68,23 @@ def emg_process(emg_signal, sampling_rate=1000):
     """
     # Sanitize input
     emg_signal = signal_sanitize(emg_signal)
+    methods = emg_methods(sampling_rate=sampling_rate, **kwargs)
 
     # Clean signal
-    emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate)
+    emg_cleaned = emg_clean(
+        emg_signal, sampling_rate=sampling_rate, method=methods["method_cleaning"]
+    )
 
     # Get amplitude
     amplitude = emg_amplitude(emg_cleaned)
 
     # Get onsets, offsets, and periods of activity
     activity_signal, info = emg_activation(
-        amplitude, sampling_rate=sampling_rate, threshold="default"
+        emg_amplitude=amplitude,
+        emg_cleaned=emg_cleaned,
+        sampling_rate=sampling_rate,
+        method=methods["method_activation"],
+        **methods["kwargs_activation"]
     )
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
@@ -76,5 +94,13 @@ def emg_process(emg_signal, sampling_rate=1000):
     )
 
     signals = pd.concat([signals, activity_signal], axis=1)
+
+    if report is not None:
+        # Generate report containing description and figures of processing
+        if ".html" in str(report):
+            fig = emg_plot(signals, sampling_rate=sampling_rate)
+        else:
+            fig = None
+        create_report(file=report, signals=signals, info=methods, fig=fig)
 
     return signals, info

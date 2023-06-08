@@ -9,7 +9,7 @@ from ..misc import NeuroKitWarning, as_vector
 from ..signal import signal_detrend
 
 
-def emg_clean(emg_signal, sampling_rate=1000):
+def emg_clean(emg_signal, sampling_rate=1000, method="biosppy"):
     """**Preprocess an electromyography (emg) signal**
 
     Clean an EMG signal using a set of parameters. Only one method is available at the moment.
@@ -24,6 +24,10 @@ def emg_clean(emg_signal, sampling_rate=1000):
     sampling_rate : int
         The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
         Defaults to 1000.
+    method : str
+        The processing pipeline to apply. Can be one of ``"biosppy"`` or ``"none"``.
+        Defaults to ``"biosppy"``. If ``"none"`` is passed, the raw signal will be returned without
+        any cleaning.
 
     Returns
     -------
@@ -61,6 +65,32 @@ def emg_clean(emg_signal, sampling_rate=1000):
         )
         emg_signal = _emg_clean_missing(emg_signal)
 
+    method = str(method).lower()
+    if method in ["none"]:
+        clean = emg_signal
+    elif method in ["biosppy"]:
+        clean = _emg_clean_biosppy(emg_signal, sampling_rate=sampling_rate)
+    else:
+        raise ValueError(
+            "NeuroKit error: emg_clean(): 'method' should be one of 'biosppy' or 'none'."
+        )
+    return clean
+
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _emg_clean_missing(emg_signal):
+
+    emg_signal = pd.DataFrame.pad(pd.Series(emg_signal))
+
+    return emg_signal
+
+
+# =============================================================================
+# BioSPPy
+# =============================================================================
+def _emg_clean_biosppy(emg_signal, sampling_rate=1000):
     # Parameters
     order = 4
     frequency = 100
@@ -76,13 +106,3 @@ def emg_clean(emg_signal, sampling_rate=1000):
     clean = signal_detrend(filtered, order=0)
 
     return clean
-
-
-# =============================================================================
-# Handle missing data
-# =============================================================================
-def _emg_clean_missing(emg_signal):
-
-    emg_signal = pd.DataFrame.pad(pd.Series(emg_signal))
-
-    return emg_signal
