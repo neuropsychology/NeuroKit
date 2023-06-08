@@ -82,8 +82,45 @@ def emg_methods(
     # 2. Activation
     # -------------
     report_info["text_activation"] = (
-        f"EMG activity was detected using the " + method_activation + " method."
+        f"EMG activity was detected using the " + method_activation + " method. "
     )
+    if method_activation in ["silva"]:
+        if str(kwargs_activation["threshold"]) == "default":
+            threshold_str = "0.05"
+        else:
+            threshold_str = str(kwargs_activation["threshold"])
+        report_info["text_activation"] += (
+            f"""The threshold was {threshold_str}. """
+        )
+        
+        refs.append(
+            """Silva H, Scherer R, Sousa J, Londral A , "Towards improving the ssability of
+            electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1-2, 2012.""")
+    if method_activation in ["mixture"]:
+        report_info["text_activation"] += (
+        """A Gaussian mixture model was used to discriminate between activity and baseline. """
+        )
+        if str(kwargs_activation["threshold"]) == "default":
+            threshold_str = "0.33"
+        else:
+            threshold_str = str(kwargs_activation["threshold"])
+        report_info["text_activation"] += (
+            f"""The minimum probability required to
+        be considered as activated was {threshold_str}. """
+        )
+    elif method_activation in ["threshold"]:
+        report_info["text_activation"] += (
+            """The signal was considered as activated when the amplitude exceeded a threshold. """
+        )
+    if str(kwargs_activation["duration_min"]) == "default":
+        duration_min_str = "0.05"
+    else:
+        duration_min_str = str(kwargs_activation["duration_min"])
+    report_info["text_activation"] += (
+        f"""The minimum duration of a period of 
+        activity or non-activity was {duration_min_str} seconds."""
+    )
+            
 
     # 3. References
     # -------------
