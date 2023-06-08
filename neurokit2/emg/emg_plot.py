@@ -155,6 +155,7 @@ def _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate):
         ax1.axvline(i, color="#4a4a4a", linestyle="--", label=None, zorder=2)
         ax1.axvline(j, color="#4a4a4a", linestyle="--", label=None, zorder=2)
     ax1.legend(loc="upper right")
+    plt.close()
     return fig
 
 
