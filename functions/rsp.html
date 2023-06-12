@@ -580,7 +580,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.0254 |        2.1623 |</span>
+<span class="go">|         14.5876 |       1.53362 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1329,7 +1329,7 @@ than 640 breath cycles in the signal.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  843.984909     4007.65  538.647847  ...     0.73817  0.014842    0.693147</span>
+<span class="go">0  776.727345      3958.0  481.522148  ...     0.67698  0.091859         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1473,9 +1473,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.180381      0.055599</span>
-<span class="go">2     2        10000  ...          0.213900      0.013350</span>
-<span class="go">3     3        15000  ...          0.199445     -0.001616</span>
+<span class="go">1     1         5000  ...          0.197533     -0.024863</span>
+<span class="go">2     2        10000  ...          0.213241      0.001476</span>
+<span class="go">3     3        15000  ...          0.195488     -0.024034</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
