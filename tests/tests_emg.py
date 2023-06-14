@@ -172,12 +172,12 @@ def test_emg_intervalrelated():
     [("none", "threshold", "default"),
      ("biosppy", "pelt", 0.5),
      ("biosppy", "mixture", 0.05),
-     ("biosspy", "biosspy", "default"),
-     ("biosspy", "silva", "default")],
+     ("biosppy", "biosppy", "default"),
+     ("biosppy", "silva", "default")],
 )
 def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
 
-    sampling_rate = 100
+    sampling_rate = 250
 
     emg = nk.emg_simulate(
         duration=30,
