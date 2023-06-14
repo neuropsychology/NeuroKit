@@ -86,10 +86,10 @@ def emg_methods(
         "EMG activity was detected using the " + method_activation + " method. "
     )
     if method_activation in ["silva"]:
-        if str(kwargs_activation["threshold"]) == "default":
+        if str(report_info["threshold"]) == "default":
             threshold_str = "0.05"
         else:
-            threshold_str = str(kwargs_activation["threshold"])
+            threshold_str = str(report_info["threshold"])
         report_info["text_activation"] += f"""The threshold was {threshold_str}. """
 
         refs.append(
@@ -100,10 +100,10 @@ def emg_methods(
         report_info[
             "text_activation"
         ] += """A Gaussian mixture model was used to discriminate between activity and baseline. """
-        if str(kwargs_activation["threshold"]) == "default":
+        if str(report_info["threshold"]) == "default":
             threshold_str = "0.33"
         else:
-            threshold_str = str(kwargs_activation["threshold"])
+            threshold_str = str(report_info["threshold"])
         report_info[
             "text_activation"
         ] += f"""The minimum probability required to
@@ -112,18 +112,18 @@ def emg_methods(
         report_info[
             "text_activation"
         ] += """The signal was considered as activated when the amplitude exceeded a threshold. """
-        if str(kwargs_activation["threshold"]) == "default":
+        if str(report_info["threshold"]) == "default":
             threshold_str = "one tenth of the standard deviation of emg_amplitude"
         else:
-            threshold_str = str(kwargs_activation["threshold"])
+            threshold_str = str(report_info["threshold"])
         report_info[
             "text_activation"
         ] += f"""The minimum amplitude to detect as onset was set to {threshold_str}."""
     elif method_activation in ["biosppy"]:
-        if str(kwargs_activation["threshold"]) == "default":
+        if str(report_info["threshold"]) == "default":
             threshold_str = "1.2 times of the mean of the absolute of the smoothed, full-wave-rectified signal"
         else:
-            threshold_str = str(kwargs_activation["threshold"])
+            threshold_str = str(report_info["threshold"])
         report_info[
             "text_activation"
         ] += f"""The threshold was set to {threshold_str}."""
