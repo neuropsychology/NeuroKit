@@ -3,7 +3,6 @@ import numpy as np
 
 from ..misc.report import get_kwargs
 from .emg_activation import emg_activation
-from .emg_clean import emg_clean
 
 
 def emg_methods(
@@ -84,7 +83,7 @@ def emg_methods(
     # 2. Activation
     # -------------
     report_info["text_activation"] = (
-        f"EMG activity was detected using the " + method_activation + " method. "
+        "EMG activity was detected using the " + method_activation + " method. "
     )
     if method_activation in ["silva"]:
         if str(kwargs_activation["threshold"]) == "default":
