@@ -169,7 +169,11 @@ def test_emg_intervalrelated():
 
 @pytest.mark.parametrize(
     "method_cleaning, method_activation, threshold",
-    [("none", "biosppy"), ("threshold", "pelt", "mixture", "biosppy", "silva"), ("default", 0.5, 0.05)],
+    [("none", "threshold", "default"),
+     ("biosppy", "pelt", 0.5),
+     ("biosppy", "mixture", 0.05),
+     ("biosspy", "biosspy", "default"),
+     ("biosspy", "silva", "default")],
 )
 def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
 
