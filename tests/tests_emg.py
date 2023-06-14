@@ -167,8 +167,11 @@ def test_emg_intervalrelated():
     )
     assert features_dict.shape[0] == 2  # Number of rows
 
-
-def test_emg_report(tmp_path):
+@pytest.mark.parametrize(
+    "method_cleaning, method_activation, threshold",
+    [("none", "biosppy"), ("threshold", "pelt", "mixture", "biosppy", "silva"), ("default", 0.5, 0.05)],
+)
+def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
 
     sampling_rate = 100
 
@@ -186,8 +189,9 @@ def test_emg_report(tmp_path):
         emg,
         sampling_rate=sampling_rate,
         report=str(p),
-        method_cleaning="none",
-        method_activation="pelt",
+        method_cleaning=method_cleaning,
+        method_activation=method_activation,
+        threshold=threshold
     )
     assert p.is_file()
     assert "EMG_Activity" in signals.columns
