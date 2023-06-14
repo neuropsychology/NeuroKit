@@ -63,10 +63,12 @@ def emg_methods(
     report_info["kwargs_activation"] = kwargs_activation
 
     # Initialize refs list with NeuroKit2 reference
-    refs = ["""Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+    refs = [
+        """Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
     Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
     Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
-    """]
+    """
+    ]
 
     # 1. Cleaning
     # ------------
@@ -89,38 +91,43 @@ def emg_methods(
             threshold_str = "0.05"
         else:
             threshold_str = str(kwargs_activation["threshold"])
-        report_info["text_activation"] += (
-            f"""The threshold was {threshold_str}. """
-        )
-        
+        report_info["text_activation"] += f"""The threshold was {threshold_str}. """
+
         refs.append(
             """Silva H, Scherer R, Sousa J, Londral A , "Towards improving the ssability of
-            electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1-2, 2012.""")
-    if method_activation in ["mixture"]:
-        report_info["text_activation"] += (
-        """A Gaussian mixture model was used to discriminate between activity and baseline. """
+            electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1-2, 2012."""
         )
+    if method_activation in ["mixture"]:
+        report_info[
+            "text_activation"
+        ] += """A Gaussian mixture model was used to discriminate between activity and baseline. """
         if str(kwargs_activation["threshold"]) == "default":
             threshold_str = "0.33"
         else:
             threshold_str = str(kwargs_activation["threshold"])
-        report_info["text_activation"] += (
-            f"""The minimum probability required to
+        report_info[
+            "text_activation"
+        ] += f"""The minimum probability required to
         be considered as activated was {threshold_str}. """
-        )
     elif method_activation in ["threshold"]:
-        report_info["text_activation"] += (
-            """The signal was considered as activated when the amplitude exceeded a threshold. """
-        )
-    if str(kwargs_activation["duration_min"]) == "default":
-        duration_min_str = "0.05"
-    else:
-        duration_min_str = str(kwargs_activation["duration_min"])
-    report_info["text_activation"] += (
-        f"""The minimum duration of a period of 
-        activity or non-activity was {duration_min_str} seconds."""
-    )
-            
+        report_info[
+            "text_activation"
+        ] += """The signal was considered as activated when the amplitude exceeded a threshold. """
+        if str(kwargs_activation["duration_min"]) == "default":
+            duration_min_str = "one tenth of the standard deviation of emg_amplitude"
+        else:
+            duration_min_str = str(kwargs_activation["duration_min"])
+        report_info[
+            "text_activation"
+        ] += f"""The minimum amplitude to detect as onset was set to {duration_min_str}."""
+    elif method_activation in ["biosppy"]:
+        if str(kwargs_activation["threshold"]) == "default":
+            duration_min_str = "1.2 times of the mean of the absolute of the smoothed, full-wave-rectified signal"
+        else:
+            duration_min_str = str(kwargs_activation["duration_min"])
+        report_info[
+            "text_activation"
+        ] += f"""The threshold was set to {duration_min_str}."""
 
     # 3. References
     # -------------
