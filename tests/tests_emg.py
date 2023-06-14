@@ -85,9 +85,7 @@ def test_emg_plot():
     plt.close(fig)
 
     # Plot data over time.
-    nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
-    # This will identify the latest figure.
-    fig = plt.gcf()
+    fig = nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
 
 
