@@ -112,21 +112,21 @@ def emg_methods(
         report_info[
             "text_activation"
         ] += """The signal was considered as activated when the amplitude exceeded a threshold. """
-        if str(kwargs_activation["duration_min"]) == "default":
-            duration_min_str = "one tenth of the standard deviation of emg_amplitude"
+        if str(kwargs_activation["threshold"]) == "default":
+            threshold_str = "one tenth of the standard deviation of emg_amplitude"
         else:
-            duration_min_str = str(kwargs_activation["duration_min"])
+            threshold_str = str(kwargs_activation["threshold"])
         report_info[
             "text_activation"
-        ] += f"""The minimum amplitude to detect as onset was set to {duration_min_str}."""
+        ] += f"""The minimum amplitude to detect as onset was set to {threshold_str}."""
     elif method_activation in ["biosppy"]:
         if str(kwargs_activation["threshold"]) == "default":
-            duration_min_str = "1.2 times of the mean of the absolute of the smoothed, full-wave-rectified signal"
+            threshold_str = "1.2 times of the mean of the absolute of the smoothed, full-wave-rectified signal"
         else:
-            duration_min_str = str(kwargs_activation["duration_min"])
+            threshold_str = str(kwargs_activation["threshold"])
         report_info[
             "text_activation"
-        ] += f"""The threshold was set to {duration_min_str}."""
+        ] += f"""The threshold was set to {threshold_str}."""
 
     # 3. References
     # -------------
