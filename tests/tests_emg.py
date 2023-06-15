@@ -73,9 +73,7 @@ def test_emg_plot():
     emg_summary, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
 
     # Plot data over samples.
-    nk.emg_plot(emg_summary)
-    # This will identify the latest figure.
-    fig = plt.gcf()
+    fig = nk.emg_plot(emg_summary)
     assert len(fig.axes) == 2
     titles = ["Raw and Cleaned Signal", "Muscle Activation"]
     for (ax, title) in zip(fig.get_axes(), titles):
