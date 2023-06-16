@@ -172,7 +172,7 @@ def signal_filter(
                 " one of 'butterworth', 'butterworth_ba', 'butterworth_zi', 'bessel',",
                 " 'savgol' or 'fir'.",
             )
-    
+
     filtered[missing] = np.nan
 
     if show is True:
