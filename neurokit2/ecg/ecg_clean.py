@@ -17,7 +17,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
 
     * ``'neurokit'`` (default): 0.5 Hz high-pass butterworth filter (order = 5), followed by
       powerline filtering (see ``signal_filter()``). By default, ``powerline = 50``.
-    * ``'biosppy'``: Same as in the biosppy package. **Please help providing a better description!**
+    * ``'biosppy'``: Method used in the BioSPPy package. A FIR filter ([0.67, 45] Hz; order = 1.5 *
+      SR). The 0.67 Hz cutoff value was selected based on the fact that there are no morphological
+      features below the heartrate (assuming a minimum heart rate of 40 bpm).
     * ``'pantompkins1985'``: Method used in Pan & Tompkins (1985). **Please help providing a better
       description!**
     * ``'hamilton2002'``: Method used in Hamilton (2002). **Please help providing a better
@@ -121,7 +123,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         "swt",
         "kalidas",
         "kalidastamil",
-        "kalidastamil2017"
+        "kalidastamil2017",
     ]:
         clean = ecg_signal
     else:
@@ -137,7 +139,6 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
 # Handle missing data
 # =============================================================================
 def _ecg_clean_missing(ecg_signal):
-
     ecg_signal = pd.DataFrame.pad(pd.Series(ecg_signal))
 
     return ecg_signal
@@ -147,11 +148,18 @@ def _ecg_clean_missing(ecg_signal):
 # NeuroKit
 # =============================================================================
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
-
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
+    clean = signal_filter(
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=0.5,
+        method="butterworth",
+        order=5,
+    )
 
-    clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs)
+    clean = signal_filter(
+        signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs
+    )
     return clean
 
 
@@ -160,18 +168,24 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
 # =============================================================================
 def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
+    """
 
-    order = int(0.3 * sampling_rate)
+    # The order and frequency was recently changed
+    # (see https://github.com/scientisst/BioSPPy/pull/12)
+
+    order = int(1.5 * sampling_rate)
     if order % 2 == 0:
         order += 1  # Enforce odd number
 
     # -> filter_signal()
-    frequency = [3, 45]
+    frequency = [0.67, 45]
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = (
+        2 * np.array(frequency) / sampling_rate
+    )  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
@@ -179,6 +193,9 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     # _filter_signal()
     filtered = scipy.signal.filtfilt(b, a, ecg_signal)
+
+    # DC offset
+    filtered -= np.mean(filtered)
 
     return filtered
 
@@ -188,11 +205,17 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
+    """
 
     order = 1
     clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=5, highcut=15, method="butterworth_zi", order=order
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=5,
+        highcut=15,
+        method="butterworth_zi",
+        order=order,
     )
 
     return clean  # Return filtered
@@ -212,7 +235,12 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 
     order = 2
     clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=8, highcut=20, method="butterworth_zi", order=order
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=8,
+        highcut=20,
+        method="butterworth_zi",
+        order=order,
     )
 
     return clean  # Return filtered
@@ -223,11 +251,17 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
+    """
 
     order = 1
     clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=8, highcut=16, method="butterworth_zi", order=order
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=8,
+        highcut=16,
+        method="butterworth_zi",
+        order=order,
     )
 
     return clean  # Return filtered
@@ -249,7 +283,12 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
 
     order = 4
     clean = signal_filter(
-        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=52, highcut=48, method="butterworth_zi", order=order
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=52,
+        highcut=48,
+        method="butterworth_zi",
+        order=order,
     )
 
     return clean  # Return filtered
@@ -270,6 +309,12 @@ def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
     """
 
     order = 2
-    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=4, method="butterworth", order=order)
+    clean = signal_filter(
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=4,
+        method="butterworth",
+        order=order,
+    )
 
     return clean  # Return filtered
