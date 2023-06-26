@@ -20,7 +20,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
     eda_signal : Union[list, np.array, pd.Series]
         The raw EDA signal.
     sampling_rate : int
-        The sampling frequency of ``"rsp_signal"`` (in Hz, i.e., samples/second).
+        The sampling frequency of ``"eda_signal"`` (in Hz, i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of ``"biosppy"`` or ``"neurokit"`` (default).
     report : str
