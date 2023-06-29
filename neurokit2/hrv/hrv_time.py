@@ -70,7 +70,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         * **MCVNN**: The median absolute deviation of the RR intervals (**MadNN**) divided by the
           median of the RR intervals (**MedianNN**).
         * **IQRNN**: The interquartile range (**IQR**) of the RR intervals.
-        * **RMSSDSD**: RMSSD / SDNN, a time-domain equivalent for the low Frequency-to-High
+        * **SDRMSSD**: SDNN / RMSSD, a time-domain equivalent for the low Frequency-to-High
           Frequency(LF/HF) Ratio (Sollers et al., 2007).
         * **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
@@ -172,7 +172,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]  # Normalized
     out["IQRNN"] = scipy.stats.iqr(rri)
-    out["RMSSDSD"] = out["RMSSD"] / out["SDNN"]  # Sollers (2007)
+    out["SDRMSSD"] = out["SDNN"] / out["RMSSD"]  # Sollers (2007)
     out["Prc20NN"] = np.nanpercentile(rri, q=20)
     out["Prc80NN"] = np.nanpercentile(rri, q=80)
 
