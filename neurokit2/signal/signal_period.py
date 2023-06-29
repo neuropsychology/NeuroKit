@@ -8,8 +8,16 @@ from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_interpolate import signal_interpolate
 
 
-def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
+def signal_period(
+    peaks,
+    sampling_rate=1000,
+    desired_length=None,
+    interpolation_method="monotone_cubic",
+):
     """**Calculate signal period from a series of peaks**
+
+    Calculate the period of a signal from a series of peaks. The period is defined as the time
+    in seconds between two consecutive peaks.
 
     Parameters
     ----------
@@ -51,12 +59,20 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
-      info = nk.signal_findpeaks(signal)
+      # Generate 2 signals (with fixed and variable period)
+      sig1 = nk.signal_simulate(duration=20, sampling_rate=200, frequency=1)
+      sig2 = nk.ecg_simulate(duration=20, sampling_rate=200, heart_rate=60)
 
-      period = nk.signal_period(peaks=info["Peaks"], desired_length=len(signal))
+      # Find peaks
+      info1 = nk.signal_findpeaks(sig1)
+      info2 = nk.ecg_findpeaks(sig2, sampling_rate=200)
+
+      # Compute period
+      period1 = nk.signal_period(peaks=info1["Peaks"], desired_length=len(sig1), sampling_rate=200)
+      period2 = nk.signal_period(peaks=info2["ECG_R_Peaks"], desired_length=len(sig2), sampling_rate=200)
+
       @savefig p_signal_period.png scale=100%
-      nk.signal_plot(period)
+      nk.signal_plot([period1, period2], subplots=True)
       @suppress
       plt.close()
 
@@ -67,13 +83,15 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     if np.size(peaks) <= 3:
         warn(
             "Too few peaks detected to compute the rate. Returning empty vector.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return np.full(desired_length, np.nan)
 
     if isinstance(desired_length, (int, float)):
         if desired_length <= peaks[-1]:
-            raise ValueError("NeuroKit error: desired_length must be None or larger than the index of the last peak.")
+            raise ValueError(
+                "NeuroKit error: desired_length must be None or larger than the index of the last peak."
+            )
 
     # Calculate period in sec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
@@ -83,6 +101,8 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
 
     # Interpolate all statistics to desired length.
     if desired_length is not None:
-        period = signal_interpolate(peaks, period, x_new=np.arange(desired_length), method=interpolation_method)
+        period = signal_interpolate(
+            peaks, period, x_new=np.arange(desired_length), method=interpolation_method
+        )
 
     return period
