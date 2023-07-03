@@ -65,8 +65,14 @@ def ppg_methods(
 
     """
     # Sanitize inputs
-    method_cleaning = str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
-    method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    method_cleaning = (
+        str(method).lower()
+        if method_cleaning == "default"
+        else str(method_cleaning).lower()
+    )
+    method_peaks = (
+        str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    )
 
     # Create dictionary with all inputs
     report_info = {
@@ -85,8 +91,11 @@ def ppg_methods(
     report_info["kwargs_cleaning"] = kwargs_cleaning
     report_info["kwargs_peaks"] = kwargs_peaks
 
-    # Initialize refs list
-    refs = []
+    # Initialize refs list with NeuroKit2 reference
+    refs = ["""Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+    Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
+    """]
 
     # 1. Cleaning
     # ------------
@@ -121,10 +130,14 @@ def ppg_methods(
             IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11."""
         )
     elif method_cleaning in ["none"]:
-        report_info["text_cleaning"] += " was directly used for peak detection without preprocessing."
+        report_info[
+            "text_cleaning"
+        ] += " was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added
-        report_info["text_cleaning"] = "was cleaned following the " + method + " method."
+        report_info["text_cleaning"] = (
+            "was cleaned following the " + method + " method."
+        )
 
     # 2. Peaks
     # ----------
@@ -141,7 +154,9 @@ def ppg_methods(
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
-        report_info["text_peaks"] = f"The peak detection was carried out using the method {method_peaks}."
+        report_info[
+            "text_peaks"
+        ] = f"The peak detection was carried out using the method {method_peaks}."
 
     report_info["references"] = list(np.unique(refs))
     return report_info

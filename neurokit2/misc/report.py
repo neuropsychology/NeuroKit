@@ -19,13 +19,14 @@ def create_report(file="myreport.html", signals=None, info={"sampling_rate": 100
         Name of the file to save the report to. Can also be ``"text"`` to simply print the text in
         the console.
     signals : pd.DataFrame
-        A DataFrame of signals. Usually obtained from :func:`.rsp_process` or :func:`.ppg_process`
+        A DataFrame of signals. Usually obtained from :func:`.rsp_process`, :func:`.ppg_process`, or
+            :func:`.emg_process`.
     info : dict
         A dictionary containing the information of peaks and the signals' sampling rate. Usually
         obtained from :func:`.rsp_process` or :func:`.ppg_process`.
     fig : matplotlib.figure.Figure or plotly.graph_objects.Figure
-        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot` or
-        :func:`.ppg_plot`.
+        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot`,
+        :func:`.ppg_plot`, or :func:`.emg_plot`.
 
     Returns
     -------
@@ -34,7 +35,7 @@ def create_report(file="myreport.html", signals=None, info={"sampling_rate": 100
 
     See Also
     --------
-    rsp_process, ppg_process
+    rsp_process, ppg_process, emg_process
 
     Examples
     --------
@@ -71,7 +72,7 @@ def create_report(file="myreport.html", signals=None, info={"sampling_rate": 100
 
 
 def summarize_table(signals):
-    """Create table to summarize statistics of a RSP signal."""
+    """Create table to summarize statistics of a signal."""
 
     # TODO: add more features
     summary = {}

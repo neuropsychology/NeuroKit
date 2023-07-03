@@ -18,7 +18,9 @@ def test_emg_simulate():
     assert len(emg1) == 5000
 
     emg2 = nk.emg_simulate(duration=20, length=5000, burst_number=15)
-    assert scipy.stats.median_abs_deviation(emg1) < scipy.stats.median_abs_deviation(emg2)
+    assert scipy.stats.median_abs_deviation(emg1) < scipy.stats.median_abs_deviation(
+        emg2
+    )
 
     emg3 = nk.emg_simulate(duration=20, length=5000, burst_number=1, burst_duration=2.0)
     #    pd.DataFrame({"EMG1":emg1, "EMG3": emg3}).plot()
@@ -71,9 +73,7 @@ def test_emg_plot():
     emg_summary, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
 
     # Plot data over samples.
-    nk.emg_plot(emg_summary)
-    # This will identify the latest figure.
-    fig = plt.gcf()
+    fig = nk.emg_plot(emg_summary)
     assert len(fig.axes) == 2
     titles = ["Raw and Cleaned Signal", "Muscle Activation"]
     for (ax, title) in zip(fig.get_axes(), titles):
@@ -83,9 +83,7 @@ def test_emg_plot():
     plt.close(fig)
 
     # Plot data over time.
-    nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
-    # This will identify the latest figure.
-    fig = plt.gcf()
+    fig = nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
 
 
@@ -114,19 +112,25 @@ def test_emg_eventrelated():
     assert len(emg_eventrelated["Label"]) == 3
 
     # Test warning on missing columns
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Onsets`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Onsets`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["EMG_Onsets"]
         nk.emg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Activity`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Activity`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["EMG_Activity"]
         nk.emg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an.*`EMG_Amplitude`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an.*`EMG_Amplitude`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["EMG_Amplitude"]
@@ -142,13 +146,52 @@ def test_emg_intervalrelated():
     # Test with signal dataframe
     features_df = nk.emg_intervalrelated(emg_signals)
 
-    assert all(elem in columns for elem in np.array(features_df.columns.values, dtype=str))
+    assert all(
+        elem in columns for elem in np.array(features_df.columns.values, dtype=str)
+    )
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
     columns.append("Label")
-    epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
+    epochs = nk.epochs_create(
+        emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20
+    )
     features_dict = nk.emg_intervalrelated(epochs)
 
-    assert all(elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
+    assert all(
+        elem in columns for elem in np.array(features_dict.columns.values, dtype=str)
+    )
     assert features_dict.shape[0] == 2  # Number of rows
+
+@pytest.mark.parametrize(
+    "method_cleaning, method_activation, threshold",
+    [("none", "threshold", "default"),
+     ("biosppy", "pelt", 0.5),
+     ("biosppy", "mixture", 0.05),
+     ("biosppy", "biosppy", "default"),
+     ("biosppy", "silva", "default")],
+)
+def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
+
+    sampling_rate = 250
+
+    emg = nk.emg_simulate(
+        duration=30,
+        sampling_rate=sampling_rate,
+        random_state=0,
+    )
+
+    d = tmp_path / "sub"
+    d.mkdir()
+    p = d / "myreport.html"
+
+    signals, _ = nk.emg_process(
+        emg,
+        sampling_rate=sampling_rate,
+        report=str(p),
+        method_cleaning=method_cleaning,
+        method_activation=method_activation,
+        threshold=threshold
+    )
+    assert p.is_file()
+    assert "EMG_Activity" in signals.columns
