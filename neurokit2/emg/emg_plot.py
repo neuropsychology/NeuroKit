@@ -78,7 +78,7 @@ def emg_plot(emg_signals, sampling_rate=None, static=True):
         return _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate)
     else:
         return _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate)
-    
+
 
 # =============================================================================
 # Internals
@@ -169,7 +169,7 @@ def _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate):
             "module is required for this feature."
             "Please install it first (`pip install plotly`)."
         )
-    
+
     # Prepare figure.
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
     fig.update_layout(title="Electromyography (EMG)", font=dict(size=18), height=600)
