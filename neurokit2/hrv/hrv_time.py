@@ -71,7 +71,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
           median of the RR intervals (**MedianNN**).
         * **IQRNN**: The interquartile range (**IQR**) of the RR intervals.
         * **SDRMSSD**: SDNN / RMSSD, a time-domain equivalent for the low Frequency-to-High
-          Frequency(LF/HF) Ratio (Sollers et al., 2007).
+          Frequency (LF/HF) Ratio (Sollers et al., 2007).
         * **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of
