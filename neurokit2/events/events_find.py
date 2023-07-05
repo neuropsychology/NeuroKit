@@ -36,8 +36,8 @@ def events_find(
     threshold_keep : str
         ``"above"`` or ``"below"``, define the events as above or under the threshold. For
         photosensors, a white screen corresponds usually to higher values. Therefore, if your
-        events are signaled by a black colour, events values are the lower ones, and you should set
-        the cut to ``"below"``.
+        events are signaled by a black colour, events values are the lower ones (i.e., the signal
+        "drops" when the events onset), and you should set the cut to ``"below"``.
     start_at : int
         Keep events which onset is after a particular time point.
     end_at : int
@@ -109,7 +109,9 @@ def events_find(
 
 
     """
-    events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
+    events = _events_find(
+        event_channel, threshold=threshold, threshold_keep=threshold_keep
+    )
 
     # Warning when no events detected
     if len(events["onset"]) == 0:
@@ -218,7 +220,12 @@ def _events_find_label(
 def _events_find(event_channel, threshold="auto", threshold_keep="above"):
     binary = signal_binarize(event_channel, threshold=threshold)
 
-    if threshold_keep.lower() != "above":
+    if threshold_keep not in ["above", "below"]:
+        raise ValueError(
+            "In events_find(), 'threshold_keep' must be one of 'above' or 'below'."
+        )
+
+    if threshold_keep != "above":
         binary = np.abs(binary - 1)  # Reverse if events are below
 
     # Initialize data
