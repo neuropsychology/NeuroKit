@@ -2,6 +2,7 @@
 import numpy as np
 import sklearn.metrics
 import sklearn.neighbors
+from packaging import version
 
 from .utils_complexity_embedding import complexity_embedding
 
@@ -109,11 +110,16 @@ def _get_count(
     # Get neighbors count
     # -------------------
     # Sanity checks
-    if distance not in sklearn.neighbors.KDTree.valid_metrics() + ["range"]:
+    sklearn_version = version.parse(sklearn.__version__)
+    if sklearn_version >= version.parse("1.3.0"):
+        valid_metrics = sklearn.neighbors.KDTree.valid_metrics() + ["range"]
+    else:
+        valid_metrics = sklearn.neighbors.KDTree.valid_metrics + ["range"]
+    if distance not in valid_metrics:
         raise ValueError(
             "The given metric (%s) is not valid."
             "The valid metric names are: %s"
-            % (distance, sklearn.neighbors.KDTree.valid_metrics + ["range"])
+            % (distance, valid_metrics)
         )
 
     if fuzzy is True:
