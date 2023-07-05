@@ -5,7 +5,8 @@ import nolds
 import numpy as np
 import pandas as pd
 from pyentrp import entropy as pyentrp
-from sklearn.neighbors import KDTree
+import sklearn.neighbors
+from packaging import version
 
 # import EntropyHub
 import neurokit2 as nk
@@ -340,7 +341,11 @@ def entropy_embed(x, order=3, delay=1):
 
 
 def entropy_app_samp_entropy(x, order, metric="chebyshev", approximate=True):
-    _all_metrics = KDTree.valid_metrics
+    sklearn_version = version.parse(sklearn.__version__)
+    if sklearn_version >= version.parse("1.3.0"):
+        _all_metrics = sklearn.neighbors.KDTree.valid_metrics()
+    else:
+        _all_metrics = sklearn.neighbors.KDTree.valid_metrics
     if metric not in _all_metrics:
         raise ValueError(
             "The given metric (%s) is not valid. The valid "  # pylint: disable=consider-using-f-string
@@ -356,14 +361,14 @@ def entropy_app_samp_entropy(x, order, metric="chebyshev", approximate=True):
     else:
         emb_data1 = _emb_data1[:-1]
     count1 = (
-        KDTree(emb_data1, metric=metric)
+        sklearn.neighbors.KDTree(emb_data1, metric=metric)
         .query_radius(emb_data1, r, count_only=True)
         .astype(np.float64)
     )
     # compute phi(order + 1, r)
     emb_data2 = entropy_embed(x, order + 1, 1)
     count2 = (
-        KDTree(emb_data2, metric=metric)
+        sklearn.neighbors.KDTree(emb_data2, metric=metric)
         .query_radius(emb_data2, r, count_only=True)
         .astype(np.float64)
     )
