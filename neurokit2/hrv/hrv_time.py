@@ -70,6 +70,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         * **MCVNN**: The median absolute deviation of the RR intervals (**MadNN**) divided by the
           median of the RR intervals (**MedianNN**).
         * **IQRNN**: The interquartile range (**IQR**) of the RR intervals.
+        * **SDRMSSD**: SDNN / RMSSD, a time-domain equivalent for the low Frequency-to-High
+          Frequency (LF/HF) Ratio (Sollers et al., 2007).
         * **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of
@@ -132,6 +134,10 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     * Subramaniam, S. D., & Dass, B. (2022). An Efficient Convolutional Neural Network for Acute
       Pain Recognition Using HRV Features. In Proceedings of the International e-Conference on
       Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.
+    * Sollers, J. J., Buchanan, T. W., Mowrer, S. M., Hill, L. K., & Thayer, J. F. (2007).
+      Comparison of the ratio of the standard deviation of the RR interval and the root mean
+      squared successive differences (SD/rMSSD) to the low frequency-to-high frequency (LF/HF)
+      ratio in a patient population and normal healthy controls. Biomed Sci Instrum, 43, 158-163.
 
     """
     # Sanitize input
@@ -166,6 +172,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]  # Normalized
     out["IQRNN"] = scipy.stats.iqr(rri)
+    out["SDRMSSD"] = out["SDNN"] / out["RMSSD"]  # Sollers (2007)
     out["Prc20NN"] = np.nanpercentile(rri, q=20)
     out["Prc80NN"] = np.nanpercentile(rri, q=80)
 
@@ -200,7 +207,6 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
 
 def _hrv_time_show(rri, **kwargs):
-
     fig = summary_plot(rri, **kwargs)
     plt.xlabel("R-R intervals (ms)")
     fig.suptitle("Distribution of R-R intervals")
@@ -209,7 +215,6 @@ def _hrv_time_show(rri, **kwargs):
 
 
 def _sdann(rri, rri_time=None, window=1):
-
     window_size = window * 60 * 1000  # Convert window in min to ms
     if rri_time is None:
         # Compute the timestamps of the R-R intervals in seconds
@@ -230,7 +235,6 @@ def _sdann(rri, rri_time=None, window=1):
 
 
 def _sdnni(rri, rri_time=None, window=1):
-
     window_size = window * 60 * 1000  # Convert window in min to ms
     if rri_time is None:
         # Compute the timestamps of the R-R intervals in seconds
@@ -267,10 +271,14 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
         while m < np.max(rri):
             n_start = np.where(bar_x == n)[0][0]
             n_end = np.where(bar_x == X)[0][0]
-            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start : n_end + 1])
+            qn = np.polyval(
+                np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start : n_end + 1]
+            )
             m_start = np.where(bar_x == X)[0][0]
             m_end = np.where(bar_x == m)[0][0]
-            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start : m_end + 1])
+            qm = np.polyval(
+                np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start : m_end + 1]
+            )
             q = np.zeros(len(bar_x))
             q[n_start : n_end + 1] = qn
             q[m_start : m_end + 1] = qm
