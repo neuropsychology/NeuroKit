@@ -109,7 +109,7 @@ def _get_count(
     # Get neighbors count
     # -------------------
     # Sanity checks
-    if distance not in sklearn.neighbors.KDTree.valid_metrics + ["range"]:
+    if distance not in sklearn.neighbors.KDTree.valid_metrics() + ["range"]:
         raise ValueError(
             "The given metric (%s) is not valid."
             "The valid metric names are: %s"
