@@ -30,7 +30,6 @@ jobs:
                   pip install ipython
                   pip install myst-parser
                   pip install myst-nb
-                  pip install tornado==6.1
                   pip install numpy
                   pip install pandas
                   pip install scipy
