@@ -360,8 +360,16 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.signal_interpolate</span> <span class="kn">import</span> <span class="n">signal_interpolate</span>
 
 
-<div class="viewcode-block" id="signal_period"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_period">[docs]</a><span class="k">def</span> <span class="nf">signal_period</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="signal_period"><a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_period">[docs]</a><span class="k">def</span> <span class="nf">signal_period</span><span class="p">(</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Calculate signal period from a series of peaks**</span>
+
+<span class="sd">    Calculate the period of a signal from a series of peaks. The period is defined as the time</span>
+<span class="sd">    in seconds between two consecutive peaks.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -403,12 +411,20 @@ document.write(`
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)</span>
-<span class="sd">      info = nk.signal_findpeaks(signal)</span>
+<span class="sd">      # Generate 2 signals (with fixed and variable period)</span>
+<span class="sd">      sig1 = nk.signal_simulate(duration=20, sampling_rate=200, frequency=1)</span>
+<span class="sd">      sig2 = nk.ecg_simulate(duration=20, sampling_rate=200, heart_rate=60)</span>
 
-<span class="sd">      period = nk.signal_period(peaks=info[&quot;Peaks&quot;], desired_length=len(signal))</span>
+<span class="sd">      # Find peaks</span>
+<span class="sd">      info1 = nk.signal_findpeaks(sig1)</span>
+<span class="sd">      info2 = nk.ecg_findpeaks(sig2, sampling_rate=200)</span>
+
+<span class="sd">      # Compute period</span>
+<span class="sd">      period1 = nk.signal_period(peaks=info1[&quot;Peaks&quot;], desired_length=len(sig1), sampling_rate=200)</span>
+<span class="sd">      period2 = nk.signal_period(peaks=info2[&quot;ECG_R_Peaks&quot;], desired_length=len(sig2), sampling_rate=200)</span>
+
 <span class="sd">      @savefig p_signal_period.png scale=100%</span>
-<span class="sd">      nk.signal_plot(period)</span>
+<span class="sd">      nk.signal_plot([period1, period2], subplots=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -419,13 +435,15 @@ document.write(`
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Too few peaks detected to compute the rate. Returning empty vector.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">desired_length</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">desired_length</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">desired_length</span> <span class="o">&lt;=</span> <span class="n">peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: desired_length must be None or larger than the index of the last peak.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: desired_length must be None or larger than the index of the last peak.&quot;</span>
+            <span class="p">)</span>
 
     <span class="c1"># Calculate period in sec, based on peak to peak difference and make sure</span>
     <span class="c1"># that rate has the same number of elements as peaks (important for</span>
@@ -435,7 +453,9 @@ document.write(`
 
     <span class="c1"># Interpolate all statistics to desired length.</span>
     <span class="k">if</span> <span class="n">desired_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">period</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">desired_length</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span><span class="p">)</span>
+        <span class="n">period</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">desired_length</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">period</span></div>
 </pre></div>

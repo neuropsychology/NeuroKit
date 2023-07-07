@@ -422,6 +422,8 @@ document.write(`
 <span class="sd">        * **MCVNN**: The median absolute deviation of the RR intervals (**MadNN**) divided by the</span>
 <span class="sd">          median of the RR intervals (**MedianNN**).</span>
 <span class="sd">        * **IQRNN**: The interquartile range (**IQR**) of the RR intervals.</span>
+<span class="sd">        * **SDRMSSD**: SDNN / RMSSD, a time-domain equivalent for the low Frequency-to-High</span>
+<span class="sd">          Frequency (LF/HF) Ratio (Sollers et al., 2007).</span>
 <span class="sd">        * **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</span>
 <span class="sd">        * **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</span>
 <span class="sd">        * **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of</span>
@@ -484,6 +486,10 @@ document.write(`
 <span class="sd">    * Subramaniam, S. D., &amp; Dass, B. (2022). An Efficient Convolutional Neural Network for Acute</span>
 <span class="sd">      Pain Recognition Using HRV Features. In Proceedings of the International e-Conference on</span>
 <span class="sd">      Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.</span>
+<span class="sd">    * Sollers, J. J., Buchanan, T. W., Mowrer, S. M., Hill, L. K., &amp; Thayer, J. F. (2007).</span>
+<span class="sd">      Comparison of the ratio of the standard deviation of the RR interval and the root mean</span>
+<span class="sd">      squared successive differences (SD/rMSSD) to the low frequency-to-high frequency (LF/HF)</span>
+<span class="sd">      ratio in a patient population and normal healthy controls. Biomed Sci Instrum, 43, 158-163.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
@@ -518,6 +524,7 @@ document.write(`
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MadNN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mad</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MCVNN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MadNN&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MedianNN&quot;</span><span class="p">]</span>  <span class="c1"># Normalized</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;IQRNN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">iqr</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDRMSSD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SDNN&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RMSSD&quot;</span><span class="p">]</span>  <span class="c1"># Sollers (2007)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Prc20NN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanpercentile</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Prc80NN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanpercentile</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 
@@ -552,7 +559,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_hrv_time_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
     <span class="n">fig</span> <span class="o">=</span> <span class="n">summary_plot</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;R-R intervals (ms)&quot;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Distribution of R-R intervals&quot;</span><span class="p">)</span>
@@ -561,7 +567,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_sdann</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-
     <span class="n">window_size</span> <span class="o">=</span> <span class="n">window</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># Convert window in min to ms</span>
     <span class="k">if</span> <span class="n">rri_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Compute the timestamps of the R-R intervals in seconds</span>
@@ -582,7 +587,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_sdnni</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-
     <span class="n">window_size</span> <span class="o">=</span> <span class="n">window</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># Convert window in min to ms</span>
     <span class="k">if</span> <span class="n">rri_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Compute the timestamps of the R-R intervals in seconds</span>
@@ -619,10 +623,14 @@ document.write(`
         <span class="k">while</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rri</span><span class="p">):</span>
             <span class="n">n_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bar_x</span> <span class="o">==</span> <span class="n">n</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">n_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bar_x</span> <span class="o">==</span> <span class="n">X</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">X</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y</span><span class="p">],</span> <span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bar_x</span><span class="p">[</span><span class="n">n_start</span> <span class="p">:</span> <span class="n">n_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">X</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y</span><span class="p">],</span> <span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bar_x</span><span class="p">[</span><span class="n">n_start</span> <span class="p">:</span> <span class="n">n_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="n">m_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bar_x</span> <span class="o">==</span> <span class="n">X</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">m_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bar_x</span> <span class="o">==</span> <span class="n">m</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">qm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">m</span><span class="p">],</span> <span class="p">[</span><span class="n">Y</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bar_x</span><span class="p">[</span><span class="n">m_start</span> <span class="p">:</span> <span class="n">m_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">qm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">m</span><span class="p">],</span> <span class="p">[</span><span class="n">Y</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">bar_x</span><span class="p">[</span><span class="n">m_start</span> <span class="p">:</span> <span class="n">m_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bar_x</span><span class="p">))</span>
             <span class="n">q</span><span class="p">[</span><span class="n">n_start</span> <span class="p">:</span> <span class="n">n_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">qn</span>
             <span class="n">q</span><span class="p">[</span><span class="n">m_start</span> <span class="p">:</span> <span class="n">m_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">qm</span>

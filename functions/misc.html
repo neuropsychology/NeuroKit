@@ -761,7 +761,7 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">33</span>
+<span class="gh">Out[6]: </span><span class="go">29</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -793,7 +793,7 @@ conservative.</p></li>
 <span class="gp">In [3]: </span><span class="n">y</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">find_knee</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">22</span>
+<span class="gh">Out[4]: </span><span class="go">20</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1001,16 +1001,21 @@ random_state_children provided.</p></li>
 <p>Create report containing description and figures of processing.
 This function is meant to be used via the <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a> or <a class="reference internal" href="ppg.html#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>
 functions.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<dd class="field-odd"><ul>
 <li><p><strong>file</strong> (<em>str</em>) – Name of the file to save the report to. Can also be <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code> to simply print the text in
 the console.</p></li>
-<li><p><strong>signals</strong> (<em>pd.DataFrame</em>) – A DataFrame of signals. Usually obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a> or <a class="reference internal" href="ppg.html#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a></p></li>
+<li><p><strong>signals</strong> (<em>pd.DataFrame</em>) –</p>
+<dl class="simple">
+<dt>A DataFrame of signals. Usually obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a>, <a class="reference internal" href="ppg.html#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>, or</dt><dd><p><a class="reference internal" href="emg.html#neurokit2.emg.emg_process" title="neurokit2.emg.emg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">emg_process()</span></code></a>.</p>
+</dd>
+</dl>
+</li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the information of peaks and the signals’ sampling rate. Usually
 obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a> or <a class="reference internal" href="ppg.html#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>.</p></li>
-<li><p><strong>fig</strong> (<em>matplotlib.figure.Figure or plotly.graph_objects.Figure</em>) – A figure containing the processed signals. Usually obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_plot()</span></code></a> or
-<a class="reference internal" href="ppg.html#neurokit2.ppg.ppg_plot" title="neurokit2.ppg.ppg_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_plot()</span></code></a>.</p></li>
+<li><p><strong>fig</strong> (<em>matplotlib.figure.Figure or plotly.graph_objects.Figure</em>) – A figure containing the processed signals. Usually obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_plot" title="neurokit2.rsp.rsp_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_plot()</span></code></a>,
+<a class="reference internal" href="ppg.html#neurokit2.ppg.ppg_plot" title="neurokit2.ppg.ppg_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_plot()</span></code></a>, or <a class="reference internal" href="emg.html#neurokit2.emg.emg_plot" title="neurokit2.emg.emg_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">emg_plot()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1019,7 +1024,7 @@ obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_pro
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">emg_process</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1047,6 +1052,9 @@ obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_pro
 <span class="go">- Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T.,... &amp; Bayford, R. (2018).</span>
 <span class="go">            Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="go">            Physiological measurement, 39(9), 094001.</span>
+<span class="go">- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,</span>
+<span class="go">    Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.</span>
+<span class="go">    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y</span>
 </pre></div>
 </div>
 </dd></dl>

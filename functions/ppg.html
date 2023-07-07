@@ -581,9 +581,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.946139           0.834451</span>
-<span class="go">2     2        10000  ...                 -3.802187           0.833323</span>
-<span class="go">3     3        15000  ...                  0.871080           0.904737</span>
+<span class="go">1     1         5000  ...                  0.090180           0.987253</span>
+<span class="go">2     2        10000  ...                 -0.210023           0.966667</span>
+<span class="go">3     3        15000  ...                  0.041731           0.900579</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -601,7 +601,7 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
 
-<span class="go">[1 rows x 91 columns]</span>
+<span class="go">[1 rows x 92 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -728,8 +728,9 @@ Defaults to True.</p></li>
 <li><p><strong>heart_rate</strong> (<em>Union[int, float]</em>) – The heart rate of the PPG signal. Applicable only if method is <code class="docutils literal notranslate"><span class="pre">&quot;nabian2018&quot;</span></code> to check
 that filter frequency is appropriate.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;nabian2018&quot;</span></code>. The
-default is <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nabian2018&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>.
+The default is <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> is passed, the raw signal will be returned without
+any cleaning.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -889,9 +890,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.228776           0.732908</span>
-<span class="go">2     2        10000  ...                 -1.833886           0.916060</span>
-<span class="go">3     3        15000  ...                 -0.049294           0.706187</span>
+<span class="go">1     1         5000  ...                  0.828537           0.714326</span>
+<span class="go">2     2        10000  ...                 -1.723939           0.945987</span>
+<span class="go">3     3        15000  ...                 -1.077435           0.957453</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -944,7 +945,7 @@ separately processed DataFrames.</p></li>
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
 <span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
 
-<span class="go">[1 rows x 91 columns]</span>
+<span class="go">[1 rows x 92 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
 <span class="gp">   ...: </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
@@ -956,7 +957,7 @@ separately processed DataFrames.</p></li>
 <span class="go">1     1      86.483842   69.395349  ...  1.808904  2.306391  0.792838</span>
 <span class="go">2     2      86.318983   69.488372  ...  1.867149  3.207983  0.973029</span>
 
-<span class="go">[2 rows x 92 columns]</span>
+<span class="go">[2 rows x 93 columns]</span>
 </pre></div>
 </div>
 </dd></dl>

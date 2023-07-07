@@ -361,7 +361,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_detrend</span>
 
 
-<div class="viewcode-block" id="emg_clean"><a class="viewcode-back" href="../../../functions/emg.html#neurokit2.emg.emg_clean">[docs]</a><span class="k">def</span> <span class="nf">emg_clean</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="emg_clean"><a class="viewcode-back" href="../../../functions/emg.html#neurokit2.emg.emg_clean">[docs]</a><span class="k">def</span> <span class="nf">emg_clean</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;biosppy&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Preprocess an electromyography (emg) signal**</span>
 
 <span class="sd">    Clean an EMG signal using a set of parameters. Only one method is available at the moment.</span>
@@ -376,6 +376,10 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).</span>
 <span class="sd">        Defaults to 1000.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;biosppy&quot;`` or ``&quot;none&quot;``.</span>
+<span class="sd">        Defaults to ``&quot;biosppy&quot;``. If ``&quot;none&quot;`` is passed, the raw signal will be returned without</span>
+<span class="sd">        any cleaning.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -413,6 +417,32 @@ document.write(`
         <span class="p">)</span>
         <span class="n">emg_signal</span> <span class="o">=</span> <span class="n">_emg_clean_missing</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">)</span>
 
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">emg_signal</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;biosppy&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_emg_clean_biosppy</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: emg_clean(): &#39;method&#39; should be one of &#39;biosppy&#39; or &#39;none&#39;.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">clean</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Handle missing data</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_emg_clean_missing</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">):</span>
+
+    <span class="n">emg_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">emg_signal</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># BioSPPy</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_emg_clean_biosppy</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="c1"># Parameters</span>
     <span class="n">order</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">frequency</span> <span class="o">=</span> <span class="mi">100</span>
@@ -427,17 +457,7 @@ document.write(`
     <span class="c1"># Baseline detrending</span>
     <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">clean</span></div>
-
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Handle missing data</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_emg_clean_missing</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">):</span>
-
-    <span class="n">emg_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">emg_signal</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">emg_signal</span>
+    <span class="k">return</span> <span class="n">clean</span>
 </pre></div>
 
                 </article>

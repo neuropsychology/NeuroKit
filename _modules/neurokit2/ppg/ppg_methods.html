@@ -417,8 +417,14 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize inputs</span>
-    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">method_peaks</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span>
+        <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">method_peaks</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
 
     <span class="c1"># Create dictionary with all inputs</span>
     <span class="n">report_info</span> <span class="o">=</span> <span class="p">{</span>
@@ -437,8 +443,11 @@ document.write(`
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_cleaning</span>
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_peaks</span>
 
-    <span class="c1"># Initialize refs list</span>
-    <span class="n">refs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Initialize refs list with NeuroKit2 reference</span>
+    <span class="n">refs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,</span>
+<span class="s2">    Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.</span>
+<span class="s2">    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">]</span>
 
     <span class="c1"># 1. Cleaning</span>
     <span class="c1"># ------------</span>
@@ -473,10 +482,14 @@ document.write(`
 <span class="sd">            IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.&quot;&quot;&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; was directly used for peak detection without preprocessing.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_cleaning&quot;</span>
+        <span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; was directly used for peak detection without preprocessing.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># just in case more methods are added</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;was cleaned following the &quot;</span> <span class="o">+</span> <span class="n">method</span> <span class="o">+</span> <span class="s2">&quot; method.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;was cleaned following the &quot;</span> <span class="o">+</span> <span class="n">method</span> <span class="o">+</span> <span class="s2">&quot; method.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># 2. Peaks</span>
     <span class="c1"># ----------</span>
@@ -493,7 +506,9 @@ document.write(`
     <span class="k">elif</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;There was no peak detection carried out.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_peaks&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">refs</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">report_info</span></div>

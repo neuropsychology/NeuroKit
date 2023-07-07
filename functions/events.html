@@ -518,8 +518,8 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 the max and the min.</p></li>
 <li><p><strong>threshold_keep</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">&quot;above&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;below&quot;</span></code>, define the events as above or under the threshold. For
 photosensors, a white screen corresponds usually to higher values. Therefore, if your
-events are signaled by a black colour, events values are the lower ones, and you should set
-the cut to <code class="docutils literal notranslate"><span class="pre">&quot;below&quot;</span></code>.</p></li>
+events are signaled by a black colour, events values are the lower ones (i.e., the signal
+“drops” when the events onset), and you should set the cut to <code class="docutils literal notranslate"><span class="pre">&quot;below&quot;</span></code>.</p></li>
 <li><p><strong>start_at</strong> (<em>int</em>) – Keep events which onset is after a particular time point.</p></li>
 <li><p><strong>end_at</strong> (<em>int</em>) – Keep events which onset is before a particular time point.</p></li>
 <li><p><strong>duration_min</strong> (<em>int</em>) – The minimum duration of an event to be considered as such (in time points).</p></li>

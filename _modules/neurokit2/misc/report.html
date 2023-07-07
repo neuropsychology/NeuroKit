@@ -371,13 +371,14 @@ document.write(`
 <span class="sd">        Name of the file to save the report to. Can also be ``&quot;text&quot;`` to simply print the text in</span>
 <span class="sd">        the console.</span>
 <span class="sd">    signals : pd.DataFrame</span>
-<span class="sd">        A DataFrame of signals. Usually obtained from :func:`.rsp_process` or :func:`.ppg_process`</span>
+<span class="sd">        A DataFrame of signals. Usually obtained from :func:`.rsp_process`, :func:`.ppg_process`, or</span>
+<span class="sd">            :func:`.emg_process`.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the information of peaks and the signals&#39; sampling rate. Usually</span>
 <span class="sd">        obtained from :func:`.rsp_process` or :func:`.ppg_process`.</span>
 <span class="sd">    fig : matplotlib.figure.Figure or plotly.graph_objects.Figure</span>
-<span class="sd">        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot` or</span>
-<span class="sd">        :func:`.ppg_plot`.</span>
+<span class="sd">        A figure containing the processed signals. Usually obtained from :func:`.rsp_plot`,</span>
+<span class="sd">        :func:`.ppg_plot`, or :func:`.emg_plot`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -386,7 +387,7 @@ document.write(`
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    rsp_process, ppg_process</span>
+<span class="sd">    rsp_process, ppg_process, emg_process</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -423,7 +424,7 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">summarize_table</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create table to summarize statistics of a RSP signal.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create table to summarize statistics of a signal.&quot;&quot;&quot;</span>
 
     <span class="c1"># TODO: add more features</span>
     <span class="n">summary</span> <span class="o">=</span> <span class="p">{}</span>

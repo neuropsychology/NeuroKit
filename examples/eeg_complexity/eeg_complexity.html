@@ -490,7 +490,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/eb9724ff16017e9d82f055ab98508c9b2b3afbc495bdcba5eb2cc180299fbbf4.png" src="../../_images/eb9724ff16017e9d82f055ab98508c9b2b3afbc495bdcba5eb2cc180299fbbf4.png" />
+<img alt="../../_images/1e031e86a8d575093368112cda8aa0c5e571506cf307a8606771f00309099571.png" src="../../_images/1e031e86a8d575093368112cda8aa0c5e571506cf307a8606771f00309099571.png" />
 </div>
 </div>
 </section>
@@ -515,7 +515,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/e497dab5505c9086f5c7f495248f9d2dc361a9cf9e32b022ebc31a360a2b417d.png" src="../../_images/e497dab5505c9086f5c7f495248f9d2dc361a9cf9e32b022ebc31a360a2b417d.png" />
+<img alt="../../_images/6d429a5fad8de36a57bf316b81e893ca085aa43f0f2fe843e399e30df8ab95b3.png" src="../../_images/6d429a5fad8de36a57bf316b81e893ca085aa43f0f2fe843e399e30df8ab95b3.png" />
 </div>
 </div>
 <p>Now, we can compute the complexity metrics of this signal.</p>
@@ -541,7 +541,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SVDEn score: 1.22
 </pre></div>
 </div>
-<img alt="../../_images/ebe8cd03a0599ac4bb62d4c5ce70b0c16e7f792b66d3411e83db5af7c21d04c0.png" src="../../_images/ebe8cd03a0599ac4bb62d4c5ce70b0c16e7f792b66d3411e83db5af7c21d04c0.png" />
+<img alt="../../_images/9ffe161d51b17b722a374ef1f80fb07e6fac3ddc48c18e368fbdb3a338a20238.png" src="../../_images/9ffe161d51b17b722a374ef1f80fb07e6fac3ddc48c18e368fbdb3a338a20238.png" />
 </div>
 </div>
 </section>
@@ -593,7 +593,58 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/46db4e9847553043b38a508051e0a3cbe02adc409b140edb66c6329fb6ee9dc2.png" src="../../_images/46db4e9847553043b38a508051e0a3cbe02adc409b140edb66c6329fb6ee9dc2.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\IPython\core\formatters.py:340,</span> in <span class="ni">BaseFormatter.__call__</span><span class="nt">(self, obj)</span>
+<span class="g g-Whitespace">    </span><span class="mi">338</span>     <span class="k">pass</span>
+<span class="g g-Whitespace">    </span><span class="mi">339</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">340</span>     <span class="k">return</span> <span class="n">printer</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">341</span> <span class="c1"># Finally look for special method names</span>
+<span class="g g-Whitespace">    </span><span class="mi">342</span> <span class="n">method</span> <span class="o">=</span> <span class="n">get_real_method</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_method</span><span class="p">)</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\IPython\core\pylabtools.py:152,</span> in <span class="ni">print_figure</span><span class="nt">(fig, fmt, bbox_inches, base64, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">149</span>     <span class="kn">from</span> <span class="nn">matplotlib.backend_bases</span> <span class="kn">import</span> <span class="n">FigureCanvasBase</span>
+<span class="g g-Whitespace">    </span><span class="mi">150</span>     <span class="n">FigureCanvasBase</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">152</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">print_figure</span><span class="p">(</span><span class="n">bytes_io</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">153</span> <span class="n">data</span> <span class="o">=</span> <span class="n">bytes_io</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">154</span> <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;svg&#39;</span><span class="p">:</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\matplotlib\backend_bases.py:2353,</span> in <span class="ni">FigureCanvasBase.print_figure</span><span class="nt">(self, filename, dpi, facecolor, edgecolor, orientation, format, bbox_inches, pad_inches, bbox_extra_artists, backend, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2350</span>         <span class="n">bbox_inches</span> <span class="o">=</span> <span class="n">bbox_inches</span><span class="o">.</span><span class="n">padded</span><span class="p">(</span><span class="n">pad_inches</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2352</span>     <span class="c1"># call adjust_bbox to save only the given area</span>
+<span class="ne">-&gt; </span><span class="mi">2353</span>     <span class="n">restore_bbox</span> <span class="o">=</span> <span class="n">_tight_bbox</span><span class="o">.</span><span class="n">adjust_bbox</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2354</span>         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">fixed_dpi</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2356</span>     <span class="n">_bbox_inches_restore</span> <span class="o">=</span> <span class="p">(</span><span class="n">bbox_inches</span><span class="p">,</span> <span class="n">restore_bbox</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2357</span> <span class="k">else</span><span class="p">:</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\matplotlib\_tight_bbox.py:28,</span> in <span class="ni">adjust_bbox</span><span class="nt">(fig, bbox_inches, fixed_dpi)</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="n">locator</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_axes_locator</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="k">if</span> <span class="n">locator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">28</span>     <span class="n">ax</span><span class="o">.</span><span class="n">apply_aspect</span><span class="p">(</span><span class="n">locator</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="n">locator_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">locator</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="n">current_pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">(</span><span class="n">original</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">frozen</span><span class="p">()</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\mpl_toolkits\axes_grid1\inset_locator.py:73,</span> in <span class="ni">AnchoredLocatorBase.__call__</span><span class="nt">(self, ax, renderer)</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">renderer</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span>     <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="n">ax</span>
+<span class="ne">---&gt; </span><span class="mi">73</span>     <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_window_extent</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_offset</span><span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">renderer</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="n">bbox_canvas</span> <span class="o">=</span> <span class="n">Bbox</span><span class="o">.</span><span class="n">from_bounds</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\matplotlib\offsetbox.py:399,</span> in <span class="ni">OffsetBox.get_window_extent</span><span class="nt">(self, renderer)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span> <span class="k">def</span> <span class="nf">get_window_extent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span>     <span class="c1"># docstring inherited</span>
+<span class="g g-Whitespace">    </span><span class="mi">398</span>     <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">399</span>         <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">_get_renderer</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bbox</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">401</span>     <span class="k">try</span><span class="p">:</span>  <span class="c1"># Some subclasses redefine get_offset to take no args.</span>
+
+<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;_get_renderer&#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 800x420 with 7 Axes&gt;
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
@@ -603,7 +654,58 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/1a0c1975137adfba1d8572a692e613075ff8ce46f4ac8b0cc443b1288e0f65de.png" src="../../_images/1a0c1975137adfba1d8572a692e613075ff8ce46f4ac8b0cc443b1288e0f65de.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\IPython\core\formatters.py:340,</span> in <span class="ni">BaseFormatter.__call__</span><span class="nt">(self, obj)</span>
+<span class="g g-Whitespace">    </span><span class="mi">338</span>     <span class="k">pass</span>
+<span class="g g-Whitespace">    </span><span class="mi">339</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">340</span>     <span class="k">return</span> <span class="n">printer</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">341</span> <span class="c1"># Finally look for special method names</span>
+<span class="g g-Whitespace">    </span><span class="mi">342</span> <span class="n">method</span> <span class="o">=</span> <span class="n">get_real_method</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_method</span><span class="p">)</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\IPython\core\pylabtools.py:152,</span> in <span class="ni">print_figure</span><span class="nt">(fig, fmt, bbox_inches, base64, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">149</span>     <span class="kn">from</span> <span class="nn">matplotlib.backend_bases</span> <span class="kn">import</span> <span class="n">FigureCanvasBase</span>
+<span class="g g-Whitespace">    </span><span class="mi">150</span>     <span class="n">FigureCanvasBase</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">152</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">print_figure</span><span class="p">(</span><span class="n">bytes_io</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">153</span> <span class="n">data</span> <span class="o">=</span> <span class="n">bytes_io</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">154</span> <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;svg&#39;</span><span class="p">:</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\matplotlib\backend_bases.py:2353,</span> in <span class="ni">FigureCanvasBase.print_figure</span><span class="nt">(self, filename, dpi, facecolor, edgecolor, orientation, format, bbox_inches, pad_inches, bbox_extra_artists, backend, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2350</span>         <span class="n">bbox_inches</span> <span class="o">=</span> <span class="n">bbox_inches</span><span class="o">.</span><span class="n">padded</span><span class="p">(</span><span class="n">pad_inches</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2352</span>     <span class="c1"># call adjust_bbox to save only the given area</span>
+<span class="ne">-&gt; </span><span class="mi">2353</span>     <span class="n">restore_bbox</span> <span class="o">=</span> <span class="n">_tight_bbox</span><span class="o">.</span><span class="n">adjust_bbox</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2354</span>         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">fixed_dpi</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2356</span>     <span class="n">_bbox_inches_restore</span> <span class="o">=</span> <span class="p">(</span><span class="n">bbox_inches</span><span class="p">,</span> <span class="n">restore_bbox</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2357</span> <span class="k">else</span><span class="p">:</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\matplotlib\_tight_bbox.py:28,</span> in <span class="ni">adjust_bbox</span><span class="nt">(fig, bbox_inches, fixed_dpi)</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="n">locator</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_axes_locator</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="k">if</span> <span class="n">locator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">28</span>     <span class="n">ax</span><span class="o">.</span><span class="n">apply_aspect</span><span class="p">(</span><span class="n">locator</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="n">locator_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">locator</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="n">current_pos</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">(</span><span class="n">original</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">frozen</span><span class="p">()</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\mpl_toolkits\axes_grid1\inset_locator.py:73,</span> in <span class="ni">AnchoredLocatorBase.__call__</span><span class="nt">(self, ax, renderer)</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">renderer</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span>     <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="n">ax</span>
+<span class="ne">---&gt; </span><span class="mi">73</span>     <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_window_extent</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_offset</span><span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">renderer</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="n">bbox_canvas</span> <span class="o">=</span> <span class="n">Bbox</span><span class="o">.</span><span class="n">from_bounds</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+<span class="nn">File C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\matplotlib\offsetbox.py:399,</span> in <span class="ni">OffsetBox.get_window_extent</span><span class="nt">(self, renderer)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span> <span class="k">def</span> <span class="nf">get_window_extent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span>     <span class="c1"># docstring inherited</span>
+<span class="g g-Whitespace">    </span><span class="mi">398</span>     <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">399</span>         <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">_get_renderer</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bbox</span><span class="p">(</span><span class="n">renderer</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">401</span>     <span class="k">try</span><span class="p">:</span>  <span class="c1"># Some subclasses redefine get_offset to take no args.</span>
+
+<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;_get_renderer&#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 800x420 with 7 Axes&gt;
+</pre></div>
+</div>
 </div>
 </div>
 <p>Now we are going to convert the data to a Pandas dataframe and concatenate the two groups of epochs. Next, we are going to average together the EEG channels.</p>
@@ -730,7 +832,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Event-related Attractors&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/ad1fda7e13a8d940731f904ba2a9e95b7b6abca55540d77fc7b471deac6ec6af.png" src="../../_images/ad1fda7e13a8d940731f904ba2a9e95b7b6abca55540d77fc7b471deac6ec6af.png" />
+<img alt="../../_images/8c4a6aad11486d0b029462664044f81d16905a285193e38d834b836ee9be750e.png" src="../../_images/8c4a6aad11486d0b029462664044f81d16905a285193e38d834b836ee9be750e.png" />
 </div>
 </div>
 </section>
@@ -835,7 +937,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ttest_indResult(statistic=0.3530201729161345, pvalue=0.7263454874826587)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=0.3530201729161345, pvalue=0.7263454874826587, df=32.60499213593565)
 </pre></div>
 </div>
 </div>
@@ -858,7 +960,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;variable&#39;, ylabel=&#39;value&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/f9364764ed5d337930dc54843fc4236877e1d7a3daca628104d999522bc0b96e.png" src="../../_images/f9364764ed5d337930dc54843fc4236877e1d7a3daca628104d999522bc0b96e.png" />
+<img alt="../../_images/50a6975506320e2140dd1a54cda482586064efdde3abad74caedade67c56a5c1.png" src="../../_images/50a6975506320e2140dd1a54cda482586064efdde3abad74caedade67c56a5c1.png" />
 </div>
 </div>
 </section>

@@ -539,7 +539,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="go">   HRV_MeanNN   HRV_SDNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
 <span class="go">0  694.756381  49.036043  ...            2.045955      0.156187</span>
 
-<span class="go">[1 rows x 98 columns]</span>
+<span class="go">[1 rows x 99 columns]</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -619,6 +619,8 @@ the mean of the RR intervals (<strong>MeanNN</strong>).</p></li>
 <li><p><strong>MCVNN</strong>: The median absolute deviation of the RR intervals (<strong>MadNN</strong>) divided by the
 median of the RR intervals (<strong>MedianNN</strong>).</p></li>
 <li><p><strong>IQRNN</strong>: The interquartile range (<strong>IQR</strong>) of the RR intervals.</p></li>
+<li><p><strong>SDRMSSD</strong>: SDNN / RMSSD, a time-domain equivalent for the low Frequency-to-High
+Frequency (LF/HF) Ratio (Sollers et al., 2007).</p></li>
 <li><p><strong>Prc20NN</strong>: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</p></li>
 <li><p><strong>Prc80NN</strong>: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</p></li>
 <li><p><strong>pNN50</strong>: The proportion of RR intervals greater than 50ms, out of the total number of
@@ -680,6 +682,10 @@ norms. Frontiers in public health, 5, 258.</p></li>
 <li><p>Subramaniam, S. D., &amp; Dass, B. (2022). An Efficient Convolutional Neural Network for Acute
 Pain Recognition Using HRV Features. In Proceedings of the International e-Conference on
 Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.</p></li>
+<li><p>Sollers, J. J., Buchanan, T. W., Mowrer, S. M., Hill, L. K., &amp; Thayer, J. F. (2007).
+Comparison of the ratio of the standard deviation of the RR interval and the root mean
+squared successive differences (SD/rMSSD) to the low frequency-to-high frequency (LF/HF)
+ratio in a patient population and normal healthy controls. Biomed Sci Instrum, 43, 158-163.</p></li>
 </ul>
 </dd></dl>
 
@@ -1069,7 +1075,7 @@ when the signal to noise ratio is low, in <code class="docutils literal notransl
 <span class="go"> &#39;RSA_PorgesBohrer&#39;: -5.6476187961354,</span>
 <span class="go"> &#39;RSA_Gates_Mean&#39;: 8.434240314518084,</span>
 <span class="go"> &#39;RSA_Gates_Mean_log&#39;: 2.1322996484586394,</span>
-<span class="go"> &#39;RSA_Gates_SD&#39;: 0.16772920880079192}</span>
+<span class="go"> &#39;RSA_Gates_SD&#39;: 0.1677292088007918}</span>
 
 <span class="go"># Get RSA as a continuous signal</span>
 <span class="gp">In [6]: </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_rsa</span><span class="p">(</span><span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1287,7 +1293,7 @@ with the first peak occurring at sample point 0.</p>
 <span class="go">    HRV_MeanNN     HRV_SDNN  HRV_SDANN1  ...  HRV_MaxNN   HRV_HTI  HRV_TINN</span>
 <span class="go">0  5285.714286  1704.336206         NaN  ...     8000.0  2.333333    2000.0</span>
 
-<span class="go">[1 rows x 24 columns]</span>
+<span class="go">[1 rows x 25 columns]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_intervals_to_peaks.png"><img alt="../_images/p_intervals_to_peaks.png" src="../_images/p_intervals_to_peaks.png" style="width: 640.0px; height: 480.0px;" /></a>

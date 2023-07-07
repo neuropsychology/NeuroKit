@@ -479,7 +479,7 @@ document.write(`
 <h3><em>emg_process()</em><a class="headerlink" href="#emg-process" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_process">
-<span class="sig-name descname"><span class="pre">emg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_process.html#emg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_process.html#emg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Process a electromyography (EMG) signal</strong></p>
 <p>Convenience function that automatically processes an electromyography signal.</p>
 <dl class="field-list simple">
@@ -487,6 +487,12 @@ document.write(`
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>emg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw electromyography channel.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>report</strong> (<em>str</em>) – The filename of a report containing description and figures of processing
+(e.g. <code class="docutils literal notranslate"><span class="pre">&quot;myreport.html&quot;</span></code>). Needs to be supplied if a report file
+should be generated. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can also be <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code> to
+just print the text in the console without saving anything.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to specific methods. For more information,
+see <code class="xref py py-func docutils literal notranslate"><span class="pre">emg_methods()</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -520,6 +526,7 @@ specified,marked as “1” in a list of zeros.</p></li>
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_emg_process1.png"><img alt="../_images/p_emg_process1.png" src="../_images/p_emg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -577,9 +584,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.781941         1.0</span>
+<span class="go">1     1         3000  ...                1.762931         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.960530         1.0</span>
+<span class="go">3     3         9000  ...                0.661381         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -589,7 +596,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.243309</span>
+<span class="go">0               3.0            0.247696</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -643,7 +650,7 @@ durations for each bursts.</p></li>
 <h3><em>emg_plot()</em><a class="headerlink" href="#emg-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_plot">
-<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>EMG Graph</strong></p>
 <p>Visualize electromyography (EMG) data.</p>
 <dl class="field-list simple">
@@ -653,6 +660,9 @@ durations for each bursts.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
 data should be plotted over time in seconds. Otherwise the data is plotted over samples.
 Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>static</strong> (<em>bool</em>) – If True, a static plot will be generated with matplotlib.
+If False, an interactive plot will be generated with plotly.
+Defaults to True.</p></li>
 </ul>
 </dd>
 </dl>
@@ -682,6 +692,7 @@ fig.savefig(“myfig.png”)</p></li>
 
 <span class="go"># Plot</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_emg_plot.png"><img alt="../_images/p_emg_plot.png" src="../_images/p_emg_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -695,7 +706,7 @@ fig.savefig(“myfig.png”)</p></li>
 <h3><em>emg_clean()</em><a class="headerlink" href="#emg-clean" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_clean">
-<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'biosppy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Preprocess an electromyography (emg) signal</strong></p>
 <p>Clean an EMG signal using a set of parameters. Only one method is available at the moment.</p>
 <ul class="simple">
@@ -708,6 +719,9 @@ detrending.</p></li>
 <li><p><strong>emg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw EMG channel.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> (in Hz, i.e., samples/second).
 Defaults to 1000.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> is passed, the raw signal will be returned without
+any cleaning.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -939,9 +953,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.363732         1.0</span>
+<span class="go">1     1         3000  ...                1.428764         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                1.296698         1.0</span>
+<span class="go">3     3         9000  ...                1.351726         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -984,15 +998,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.240887</span>
+<span class="go">0               3.0            0.237656</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.240024</span>
-<span class="go">2     2                 1            0.241749</span>
+<span class="go">1     1                 2            0.237407</span>
+<span class="go">2     2                 1            0.237905</span>
 </pre></div>
 </div>
 </dd></dl>
