@@ -12,6 +12,8 @@ import datetime
 import os
 import re
 import sys
+import asyncio
+import platform
 
 # -- Path setup --------------------------------------------------------------
 
@@ -105,6 +107,9 @@ nb_execution_raise_on_error = True
 
 # googleanalytics_id = "G-DVXSEGN5M9"
 
+# Address asyncio warning
+if platform.system() == "Windows":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 # NumPyDoc configuration -----------------------------------------------------
 
@@ -135,3 +140,4 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
