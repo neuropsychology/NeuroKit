@@ -22,10 +22,11 @@ jobs:
                   pip install sphinx-book-theme
                   pip install sphinxemoji
                   pip install sphinx-copybutton
+                  pip install ipykernel==6.23.2
                   pip install ipython
                   pip install myst-parser
                   pip install myst-nb
-                  pip install numpy
+                  pip install numpy==1.24.3
                   pip install pandas
                   pip install scipy
                   pip install scikit-learn
