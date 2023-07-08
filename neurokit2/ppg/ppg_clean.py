@@ -2,7 +2,6 @@
 from warnings import warn
 
 import numpy as np
-import pandas as pd
 
 from ..misc import NeuroKitWarning, as_vector
 from ..signal import signal_fillmissing, signal_filter
