@@ -19,6 +19,10 @@ Preprocessing
 """""""""""""""""""""
 .. autofunction:: neurokit2.signal_resample
 
+*signal_fillmissing()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_fillmissing
+
 
 Transformation
 ^^^^^^^^^^^^^^^^

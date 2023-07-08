@@ -357,7 +357,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">as_vector</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fillmissing</span><span class="p">,</span> <span class="n">signal_filter</span>
 
 
 <div class="viewcode-block" id="ppg_clean"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_clean">[docs]</a><span class="k">def</span> <span class="nf">ppg_clean</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">):</span>
@@ -425,10 +425,10 @@ document.write(`
     <span class="k">if</span> <span class="n">n_missing</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;There are &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_missing</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; missing data points in your signal.&quot;</span>
-            <span class="s2">&quot; Filling missing values by using the forward filling method.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot; Filling missing values using `signal_fillmissing`.&quot;</span><span class="p">,</span>
             <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">_ppg_clean_missing</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">)</span>
+        <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">signal_fillmissing</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span>
 
     <span class="n">method</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
@@ -446,22 +446,11 @@ document.write(`
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># Handle missing data</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_ppg_clean_missing</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">):</span>
-
-    <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">ppg_signal</span>
-
-
-<span class="c1"># =============================================================================</span>
 <span class="c1"># Methods</span>
 <span class="c1"># =============================================================================</span>
 
 
 <span class="k">def</span> <span class="nf">_ppg_clean_elgendi</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
-
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
         <span class="n">ppg_signal</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
