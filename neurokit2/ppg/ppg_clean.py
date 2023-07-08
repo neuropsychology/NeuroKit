@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning, as_vector
-from ..signal import signal_filter
+from ..signal import signal_fillmissing, signal_filter
 
 
 def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi"):
@@ -73,10 +73,10 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     if n_missing > 0:
         warn(
             "There are " + str(n_missing) + " missing data points in your signal."
-            " Filling missing values by using the forward filling method.",
+            " Filling missing values using `signal_fillmissing`.",
             category=NeuroKitWarning,
         )
-        ppg_signal = _ppg_clean_missing(ppg_signal)
+        ppg_signal = signal_fillmissing(ppg_signal, method="both")
 
     method = str(method).lower()
     if method in ["elgendi"]:
@@ -94,22 +94,11 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
 
 
 # =============================================================================
-# Handle missing data
-# =============================================================================
-def _ppg_clean_missing(ppg_signal):
-
-    ppg_signal = pd.DataFrame.pad(pd.Series(ppg_signal))
-
-    return ppg_signal
-
-
-# =============================================================================
 # Methods
 # =============================================================================
 
 
 def _ppg_clean_elgendi(ppg_signal, sampling_rate):
-
     filtered = signal_filter(
         ppg_signal,
         sampling_rate=sampling_rate,
