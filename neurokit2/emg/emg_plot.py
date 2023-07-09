@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-def emg_plot(emg_signals, sampling_rate=None):
+def emg_plot(emg_signals, sampling_rate=None, static=True):
     """**EMG Graph**
 
     Visualize electromyography (EMG) data.
@@ -17,6 +17,10 @@ def emg_plot(emg_signals, sampling_rate=None):
         The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
         Defaults to ``None``.
+    static : bool
+        If True, a static plot will be generated with matplotlib.
+        If False, an interactive plot will be generated with plotly.
+        Defaults to True.
 
     See Also
     --------
@@ -70,6 +74,31 @@ def emg_plot(emg_signals, sampling_rate=None):
     else:
         x_axis = np.arange(0, emg_signals.shape[0])
 
+    if static is True:
+        return _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate)
+    else:
+        return _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate)
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _emg_plot_activity(emg_signals, onsets, offsets):
+
+    activity_signal = pd.Series(np.full(len(emg_signals), np.nan))
+    activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
+    activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
+    activity_signal = activity_signal.fillna(method="backfill")
+
+    if np.any(activity_signal.isna()):
+        index = np.min(np.where(activity_signal.isna())) - 1
+        value_to_fill = activity_signal[index]
+        activity_signal = activity_signal.fillna(value_to_fill)
+
+    return activity_signal
+
+
+def _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate):
     # Prepare figure.
     fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
     if sampling_rate is not None:
@@ -126,21 +155,114 @@ def emg_plot(emg_signals, sampling_rate=None):
         ax1.axvline(i, color="#4a4a4a", linestyle="--", label=None, zorder=2)
         ax1.axvline(j, color="#4a4a4a", linestyle="--", label=None, zorder=2)
     ax1.legend(loc="upper right")
+    plt.close()
+    return fig
 
 
-# =============================================================================
-# Internals
-# =============================================================================
-def _emg_plot_activity(emg_signals, onsets, offsets):
+def _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate):
+    try:
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
+    except ImportError:
+        raise ImportError(
+            "NeuroKit error: emg_plot(): the 'plotly' "
+            "module is required for this feature."
+            "Please install it first (`pip install plotly`)."
+        )
 
-    activity_signal = pd.Series(np.full(len(emg_signals), np.nan))
-    activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
-    activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
-    activity_signal = activity_signal.fillna(method="backfill")
+    # Prepare figure.
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+    fig.update_layout(title="Electromyography (EMG)", font=dict(size=18), height=600)
 
-    if np.any(activity_signal.isna()):
-        index = np.min(np.where(activity_signal.isna())) - 1
-    value_to_fill = activity_signal[index]
-    activity_signal = activity_signal.fillna(value_to_fill)
+    # Plot cleaned and raw EMG.
+    fig.add_trace(
+        go.Scatter(
+            x=x_axis,
+            y=emg_signals["EMG_Raw"],
+            mode="lines",
+            name="Raw",
+            line=dict(color="#B0BEC5"),
+        ),
+        row=1,
+        col=1,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=x_axis,
+            y=emg_signals["EMG_Clean"],
+            mode="lines",
+            name="Cleaned",
+            line=dict(color="#FFC107"),
+        ),
+        row=1,
+        col=1,
+    )
 
-    return activity_signal
+    # Plot Amplitude.
+    fig.add_trace(
+        go.Scatter(
+            x=x_axis,
+            y=emg_signals["EMG_Amplitude"],
+            mode="lines",
+            name="Amplitude",
+            line=dict(color="#FF9800"),
+        ),
+        row=2,
+        col=1,
+    )
+
+    # Mark onsets and offsets.
+    fig.add_trace(
+        go.Scatter(
+            x=x_axis[onsets],
+            y=emg_signals["EMG_Amplitude"][onsets],
+            mode="markers",
+            name="Onsets",
+            marker=dict(color="#f03e65", size=10),
+        ),
+        row=2,
+        col=1,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=x_axis[offsets],
+            y=emg_signals["EMG_Amplitude"][offsets],
+            mode="markers",
+            name="Offsets",
+            marker=dict(color="#f03e65", size=10),
+        ),
+        row=2,
+        col=1,
+    )
+
+    if sampling_rate is not None:
+        onsets = onsets / sampling_rate
+        offsets = offsets / sampling_rate
+        fig.update_xaxes(title_text="Time (seconds)", row=2, col=1)
+    elif sampling_rate is None:
+        fig.update_xaxes(title_text="Samples", row=2, col=1)
+
+    for i, j in zip(list(onsets), list(offsets)):
+        fig.add_shape(
+            type="line",
+            x0=i,
+            y0=0,
+            x1=i,
+            y1=1,
+            line=dict(color="#4a4a4a", width=2, dash="dash"),
+            row=2,
+            col=1,
+        )
+        fig.add_shape(
+            type="line",
+            x0=j,
+            y0=0,
+            x1=j,
+            y1=1,
+            line=dict(color="#4a4a4a", width=2, dash="dash"),
+            row=2,
+            col=1,
+        )
+
+    fig.update_yaxes(title_text="Amplitude", row=2, col=1)
+    return fig

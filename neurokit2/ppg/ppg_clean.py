@@ -2,10 +2,9 @@
 from warnings import warn
 
 import numpy as np
-import pandas as pd
 
 from ..misc import NeuroKitWarning, as_vector
-from ..signal import signal_filter
+from ..signal import signal_fillmissing, signal_filter
 
 
 def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi"):
@@ -23,8 +22,9 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.
     method : str
-        The processing pipeline to apply. Can be one of ``"elgendi"`` or ``"nabian2018"``. The
-        default is ``"elgendi"``.
+        The processing pipeline to apply. Can be one of ``"elgendi"``, ``"nabian2018"``, or ``"none"``.
+        The default is ``"elgendi"``. If ``"none"`` is passed, the raw signal will be returned without
+        any cleaning.
 
     Returns
     -------
@@ -72,32 +72,24 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     if n_missing > 0:
         warn(
             "There are " + str(n_missing) + " missing data points in your signal."
-            " Filling missing values by using the forward filling method.",
+            " Filling missing values using `signal_fillmissing`.",
             category=NeuroKitWarning,
         )
-        ppg_signal = _ppg_clean_missing(ppg_signal)
+        ppg_signal = signal_fillmissing(ppg_signal, method="both")
 
-    method = method.lower()
+    method = str(method).lower()
     if method in ["elgendi"]:
         clean = _ppg_clean_elgendi(ppg_signal, sampling_rate)
     elif method in ["nabian2018"]:
         clean = _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=heart_rate)
-    elif method is None or method == "none":
+    elif method in ["none"]:
         clean = ppg_signal
     else:
-        raise ValueError("`method` not found. Must be one of 'elgendi' or 'nabian2018'.")
+        raise ValueError(
+            "`method` not found. Must be one of 'elgendi', 'nabian2018', or 'none'."
+        )
 
     return clean
-
-
-# =============================================================================
-# Handle missing data
-# =============================================================================
-def _ppg_clean_missing(ppg_signal):
-
-    ppg_signal = pd.DataFrame.pad(pd.Series(ppg_signal))
-
-    return ppg_signal
 
 
 # =============================================================================
@@ -106,7 +98,6 @@ def _ppg_clean_missing(ppg_signal):
 
 
 def _ppg_clean_elgendi(ppg_signal, sampling_rate):
-
     filtered = signal_filter(
         ppg_signal,
         sampling_rate=sampling_rate,

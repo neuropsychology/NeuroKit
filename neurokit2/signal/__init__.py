@@ -5,6 +5,7 @@ from .signal_changepoints import signal_changepoints
 from .signal_decompose import signal_decompose
 from .signal_detrend import signal_detrend
 from .signal_distort import signal_distort
+from .signal_fillmissing import signal_fillmissing
 from .signal_filter import signal_filter
 from .signal_findpeaks import signal_findpeaks
 from .signal_fixpeaks import signal_fixpeaks
@@ -59,4 +60,5 @@ __all__ = [
     "signal_timefrequency",
     "signal_sanitize",
     "signal_flatline",
+    "signal_fillmissing",
 ]

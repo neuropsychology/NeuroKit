@@ -13,9 +13,10 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     Parameters
     ----------
     intervals : list or array
-        List or numpy array of intervals, in milliseconds.
+        List of intervals (by default in milliseconds).
     intervals_time : list or array, optional
-        List or numpy array of timestamps corresponding to intervals, in seconds.
+        Optional list of timestamps corresponding to intervals, in seconds. If None (default), the
+        cumulative sum of the intervals is used.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous signal in which the peaks occur.
 
@@ -31,15 +32,24 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
 
       import neurokit2 as nk
 
+      # Suppose we have a vector of RRi from data sampled at 1000 Hz
       ibi = [500, 400, 700, 500, 300, 800, 500]
-      peaks = nk.intervals_to_peaks(ibi)
+      peaks = nk.intervals_to_peaks(ibi, sampling_rate=1000)
 
+      # We can then use NeuroKit's functionalities to compute HRV indices
       @savefig p_intervals_to_peaks.png scale=100%
       hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)
       @suppress
       plt.close()
 
       hrv_indices
+
+    .. ipython:: python
+
+        # We can also use the timestamps of the intervals
+        rri = [400, 500, 700, 800, 900]
+        rri_idx = [0.7, 1.2, 2.5, 3.3, 4.2]
+        nk.intervals_to_peaks(rri, rri_idx, sampling_rate=1000)
 
     """
     if intervals is None:

@@ -6,6 +6,7 @@ import numpy as np
 import scipy.signal
 
 from ..misc import NeuroKitWarning
+from .signal_interpolate import signal_interpolate
 
 
 def signal_filter(
@@ -143,10 +144,12 @@ def signal_filter(
     """
     method = method.lower()
 
+    signal_sanitized, missing = _signal_filter_missing(signal)
+
     if method in ["sg", "savgol", "savitzky-golay"]:
-        filtered = _signal_filter_savgol(signal, sampling_rate, order, window_size=window_size)
+        filtered = _signal_filter_savgol(signal_sanitized, sampling_rate, order, window_size=window_size)
     elif method in ["powerline"]:
-        filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
+        filtered = _signal_filter_powerline(signal_sanitized, sampling_rate, powerline)
     else:
 
         # Sanity checks
@@ -154,21 +157,23 @@ def signal_filter(
             raise ValueError("NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'.")
 
         if method in ["butter", "butterworth"]:
-            filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_butterworth(signal_sanitized, sampling_rate, lowcut, highcut, order)
         elif method in ["butter_ba", "butterworth_ba"]:
-            filtered = _signal_filter_butterworth_ba(signal, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_butterworth_ba(signal_sanitized, sampling_rate, lowcut, highcut, order)
         elif method in ["butter_zi", "butterworth_zi"]:
-            filtered = _signal_filter_butterworth_zi(signal, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_butterworth_zi(signal_sanitized, sampling_rate, lowcut, highcut, order)
         elif method in ["bessel"]:
-            filtered = _signal_filter_bessel(signal, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_bessel(signal_sanitized, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
-            filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_size=window_size)
+            filtered = _signal_filter_fir(signal_sanitized, sampling_rate, lowcut, highcut, window_size=window_size)
         else:
             raise ValueError(
                 "NeuroKit error: signal_filter(): 'method' should be",
                 " one of 'butterworth', 'butterworth_ba', 'butterworth_zi', 'bessel',",
                 " 'savgol' or 'fir'.",
             )
+
+    filtered[missing] = np.nan
 
     if show is True:
         plt.plot(signal, color="lightgrey")
@@ -353,3 +358,12 @@ def _signal_filter_windowsize(window_size="default", sampling_rate=1000):
         if (window_size % 2) == 0:
             window_size + 1  # pylint: disable=W0104
     return window_size
+
+
+def _signal_filter_missing(signal):
+    """Interpolate missing data and save the indices of the missing data."""
+    missing = np.where(np.isnan(signal))[0]
+    if len(missing) > 0:
+        return signal_interpolate(signal, method="linear"), missing
+    else:
+        return signal, missing

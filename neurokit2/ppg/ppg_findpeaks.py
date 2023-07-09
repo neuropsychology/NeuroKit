@@ -220,8 +220,8 @@ def _ppg_findpeaks_bishop(
     # - column-wise summation
     m_max_sum = np.sum(m_max == False, axis=0)
     m_min_sum = np.sum(m_min == False, axis=0)
-    peaks = np.asarray(np.where(m_max_sum == 0)).astype(int)
-    onsets = np.asarray(np.where(m_min_sum == 0)).astype(int)
+    peaks = np.where(m_max_sum == 0)[0].astype(int)
+    onsets = np.where(m_min_sum == 0)[0].astype(int)
 
     if show:
         _, ax0 = plt.subplots(nrows=1, ncols=1, sharex=True)

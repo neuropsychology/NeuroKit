@@ -21,11 +21,11 @@ def ppg_intervalrelated(data, sampling_rate=1000):
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed ECG features. The analyzed features consist of the following:
+        A dataframe containing the analyzed PPG features. The analyzed features consist of the following:
 
         * ``"PPG_Rate_Mean"``: the mean heart rate.
 
-        * ``"ECG_HRV"``: the different heart rate variability metrices.
+        * ``"HRV"``: the different heart rate variability metrices.
 
         See :func:`.hrv` docstrings for details.
 
@@ -61,7 +61,7 @@ def ppg_intervalrelated(data, sampling_rate=1000):
         rate_cols = [col for col in data.columns if "PPG_Rate" in col]
         if len(rate_cols) == 1:
             intervals.update(_ppg_intervalrelated_formatinput(data))
-            intervals.update(_ppg_intervalrelated_hrv(data, sampling_rate))
+            intervals.update(*_ppg_intervalrelated_hrv(data, sampling_rate))
         else:
             raise ValueError(
                 "NeuroKit error: ppg_intervalrelated(): Wrong input,"
@@ -71,20 +71,18 @@ def ppg_intervalrelated(data, sampling_rate=1000):
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
     elif isinstance(data, dict):
-        for index in data:
-            intervals[index] = {}  # Initialize empty container
+        for epoch in data:
+            intervals[epoch] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]["Label"] = data[index]["Label"].iloc[0]
+            intervals[epoch]["Label"] = data[epoch]["Label"].iloc[0]
 
             # Rate
-            intervals[index] = _ppg_intervalrelated_formatinput(
-                data[index], intervals[index]
-            )
+            intervals[epoch].update(_ppg_intervalrelated_formatinput(data[epoch]))
 
             # HRV
-            intervals[index] = _ppg_intervalrelated_hrv(
-                data[index], sampling_rate, intervals[index]
+            intervals[epoch].update(
+                *_ppg_intervalrelated_hrv(data[epoch], sampling_rate)
             )
 
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
@@ -97,31 +95,32 @@ def ppg_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _ppg_intervalrelated_formatinput(data, output={}):
-
+def _ppg_intervalrelated_formatinput(data):
     # Sanitize input
     colnames = data.columns.values
-    if len([i for i in colnames if "PPG_Rate" in i]) == 0:
+
+    if "PPG_Rate" not in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract heart rate. Please make sure"
-            "your DataFrame contains an `PPG_Rate` column."
+            "your DataFrame contains a `PPG_Rate` column."
         )
     signal = data["PPG_Rate"].values
-    output["PPG_Rate_Mean"] = np.mean(signal)
 
-    return output
+    PPG_Rate_Mean = np.mean(signal)
+
+    return {"PPG_Rate_Mean": PPG_Rate_Mean}
 
 
-def _ppg_intervalrelated_hrv(data, sampling_rate, output={}):
-
+def _ppg_intervalrelated_hrv(data, sampling_rate):
     # Sanitize input
     colnames = data.columns.values
-    if len([i for i in colnames if "PPG_Peaks" in i]) == 0:
+
+    if "PPG_Peaks" not in colnames:
         raise ValueError(
             "NeuroKit error: ppg_intervalrelated(): Wrong input,"
             "we couldn't extract peaks. Please make sure"
-            "your DataFrame contains an `PPG_Peaks` column."
+            "your DataFrame contains a `PPG_Peaks` column."
         )
 
     # Transform rpeaks from "signal" format to "info" format.
@@ -129,7 +128,5 @@ def _ppg_intervalrelated_hrv(data, sampling_rate, output={}):
     peaks = {"PPG_Peaks": peaks}
 
     results = hrv(peaks, sampling_rate=sampling_rate)
-    for column in results.columns:
-        output[column] = float(results[column])
 
-    return output
+    return results.astype("float").to_dict("records")

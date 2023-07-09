@@ -138,7 +138,7 @@ def signal_plot(
             vector = signal[col]
             events.append(np.where(vector == np.max(vector.unique()))[0])
         events_plot(events, signal=signal[continuous_columns])
-        if sampling_rate is None and signal.index.is_integer():
+        if sampling_rate is None and pd.api.types.is_integer_dtype(signal.index):
             plt.gca().set_xlabel("Samples")
         else:
             plt.gca().set_xlabel(title_x)
@@ -172,7 +172,7 @@ def signal_plot(
         else:
             _ = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
 
-        if sampling_rate is None and signal.index.is_integer():
+        if sampling_rate is None and pd.api.types.is_integer_dtype(signal.index):
             plt.xlabel("Samples")
         else:
             plt.xlabel(title_x)

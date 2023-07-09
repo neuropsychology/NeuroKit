@@ -12,6 +12,8 @@ import datetime
 import os
 import re
 import sys
+import asyncio
+import platform
 
 # -- Path setup --------------------------------------------------------------
 
@@ -105,6 +107,9 @@ nb_execution_raise_on_error = True
 
 # googleanalytics_id = "G-DVXSEGN5M9"
 
+# Address asyncio warning
+if platform.system() == "Windows":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 # NumPyDoc configuration -----------------------------------------------------
 

@@ -53,13 +53,15 @@ def _intervals_successive(intervals, intervals_time=None, thresh_unequal=10, n_d
     if intervals_time is None:
         intervals_time = np.nancumsum(intervals / 1000)
     else:
-        intervals_time = np.array(intervals_time)
+        intervals_time = np.array(intervals_time).astype(float)
 
     intervals_time[np.isnan(intervals)] = np.nan
 
     diff_intervals_time_ms = np.diff(intervals_time, n=n_diff) * 1000
 
-    abs_error_intervals_ref_time = abs(diff_intervals_time_ms - np.diff(intervals[1:], n=n_diff - 1))
+    abs_error_intervals_ref_time = abs(
+        diff_intervals_time_ms - np.diff(intervals[1:], n=n_diff - 1)
+    )
 
     successive_intervals = abs_error_intervals_ref_time <= thresh_unequal
 
@@ -125,7 +127,9 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
         intervals = np.array(intervals)
     if intervals_time is None:
         # Impute intervals with median in case of missing values to calculate timestamps
-        imputed_intervals = np.where(np.isnan(intervals), np.nanmedian(intervals, axis=0), intervals)
+        imputed_intervals = np.where(
+            np.isnan(intervals), np.nanmedian(intervals, axis=0), intervals
+        )
         # Compute the timestamps of the intervals in seconds
         intervals_time = np.nancumsum(imputed_intervals / 1000)
     else:
@@ -141,7 +145,9 @@ def _intervals_sanitize(intervals, intervals_time=None, remove_missing=True):
                 # If none of the differences between timestamps match
                 # the length of the R-R intervals in seconds,
                 # try converting milliseconds to seconds
-                converted_successive_intervals = _intervals_successive(intervals, intervals_time=intervals_time / 1000)
+                converted_successive_intervals = _intervals_successive(
+                    intervals, intervals_time=intervals_time / 1000
+                )
 
                 # Check if converting to seconds increased the number of differences
                 # between timestamps that match the length of the R-R intervals in seconds

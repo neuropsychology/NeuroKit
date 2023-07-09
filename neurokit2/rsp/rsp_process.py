@@ -66,7 +66,7 @@ def rsp_process(
         * ``"RSP_Rate"``: breathing rate interpolated between inhalation peaks.
         * ``"RSP_Amplitude"``: breathing amplitude interpolated between inhalation peaks.
         * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
-        * ``"RSP_PhaseCompletion"``: breathing phase completion, expressed in percentage (from 0 to
+        * ``"RSP_Phase_Completion"``: breathing phase completion, expressed in percentage (from 0 to
           1), representing the stage of the current respiratory phase.
          * ``"RSP_RVT"``: respiratory volume per time (RVT).
     info : dict

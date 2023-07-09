@@ -260,7 +260,7 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
 def _mandelbrot_optimize(c):
     # Optimizations: most of the mset points lie within the
     # within the cardioid or in the period-2 bulb. (The two most
-    # prominant shapes in the mandelbrot set. We can eliminate these
+    # prominent shapes in the mandelbrot set. We can eliminate these
     # from our search straight away and save alot of time.
     # see: http://en.wikipedia.org/wiki/Mandelbrot_set#Optimizations
 
