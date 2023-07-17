@@ -46,7 +46,7 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
 def _eventrelated_addinfo(epoch, output={}):
     # Add label
     if "Index" in epoch.columns:
-        output["Event_Onset"] = epoch.loc[np.min(np.abs(epoch.index))]["Index"]
+        output["Event_Onset"] = epoch.iloc[np.argmin(np.abs(epoch.index))]["Index"]
 
     # Add label
     if "Label" in epoch.columns and len(set(epoch["Label"])) == 1:
