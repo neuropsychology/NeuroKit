@@ -120,10 +120,9 @@ def read_xdf(filename):
         df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms"
     )
     # https://stackoverflow.com/questions/47148446/pandas-resample-interpolate-is-producing-nans
-    df = (
-        df.reindex(df.index.union(idx))
-        .interpolate(method="index")
-        .reindex(idx, "timestamps")
-    )
+    df = df.reindex(df.index.union(idx)).interpolate(method="index").reindex(idx)
+
+    # Index name
+    df.index.name = "timestamps"
 
     return df, info
