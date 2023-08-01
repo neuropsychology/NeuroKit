@@ -78,11 +78,14 @@ def read_xdf(filename):
 
             # Muse - PPG data has three channels: ambient, infrared, red
             if stream["info"]["type"][0] == "PPG":
-                dat["PPG2"] = dat["PPG2"].replace(0, value=np.nan)
                 dat = dat.rename(columns={"PPG1": "LUX", "PPG2": "PPG", "PPG3": "RED"})
+                # Zeros suggest interruptions, better to replace with NaNs (I think?)
+                dat["PPG"] = dat["PPG"].replace(0, value=np.nan)
+                dat["LUX"] = dat["LUX"].replace(0, value=np.nan)
 
         # Get time stamps and offset from minimum time stamp
-        dat["timestamps"] = pd.to_datetime(stream["time_stamps"] - min_ts, unit="s")
+        dat.index = pd.to_datetime(stream["time_stamps"] - min_ts, unit="s")
+        # dat["timestamps"] = pd.to_datetime(stream["time_stamps"] - min_ts, unit="s")
         dfs.append(dat)
 
     # Store info of each stream ----------------------------------------------------------------
@@ -102,19 +105,25 @@ def read_xdf(filename):
     # Synchronize ------------------------------------------------------------------------------
     # Merge all dataframes by timestamps
     # Note: this is a critical steps, as it inserts timestamps and makes it non-evenly spread
-    df = dfs[0]
-    for i in range(1, len(dfs)):
-        df = pd.merge(df, dfs[i], how="outer").sort_values(by="timestamps")
+    df = pd.concat(dfs, axis=0).sort_index()
 
+    # First, fill NaNs through linear (but based on the time-index) interpolation
+    df = df.interpolate(method="time")
+
+    # Resample and Interpolate -----------------------------------------------------------------
     # Final sampling rate will be 2 times the maximum sampling rate
     # (to minimize aliasing during interpolation)
     info["sampling_rate"] = int(np.max(info["sampling_rates_original"]) * 2)
 
-    # Resample and Interpolate -----------------------------------------------------------------
-    df = df.set_index("timestamps")
-    # pandas requires the SR in "ms"
-    df = df.resample(str(1000 / info["sampling_rate"]) + "ms").bfill()
-    # Interpolate (but leave holes longer than 1 second)
-    df = df.interpolate(method="linear", limit=info["sampling_rate"])
+    # Create new index with evenly spaced timestamps
+    idx = pd.date_range(
+        df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms"
+    )
+    # https://stackoverflow.com/questions/47148446/pandas-resample-interpolate-is-producing-nans
+    df = (
+        df.reindex(df.index.union(idx))
+        .interpolate(method="index")
+        .reindex(idx, "timestamps")
+    )
 
     return df, info
