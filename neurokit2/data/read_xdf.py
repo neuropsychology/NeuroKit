@@ -9,6 +9,10 @@ def read_xdf(filename):
     Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.
     The function outputs both the dataframe and the information (such as the sampling rate).
 
+    Note that, as XDF can store streams with different sampling rates and different time stamps,
+    **the function will resample all streams to 2 times the highest sampling rate** (to minimize
+    aliasing). The final sampling rate can be found in the ``info`` dictionary.
+
     .. note::
 
         This function requires the *pyxdf* module to be installed. You can install it with
@@ -49,7 +53,7 @@ def read_xdf(filename):
         )
 
     # Load file
-    # TODO: try streaming it from URL?
+    # TODO: would be nice to be able to stream a file from URL
     streams, header = pyxdf.load_xdf(filename)
 
     # Get smaller time stamp to later use as offset (zero point)
