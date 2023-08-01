@@ -85,7 +85,6 @@ def read_xdf(filename):
 
         # Get time stamps and offset from minimum time stamp
         dat.index = pd.to_datetime(stream["time_stamps"] - min_ts, unit="s")
-        # dat["timestamps"] = pd.to_datetime(stream["time_stamps"] - min_ts, unit="s")
         dfs.append(dat)
 
     # Store info of each stream ----------------------------------------------------------------
@@ -121,8 +120,5 @@ def read_xdf(filename):
     )
     # https://stackoverflow.com/questions/47148446/pandas-resample-interpolate-is-producing-nans
     df = df.reindex(df.index.union(idx)).interpolate(method="index").reindex(idx)
-
-    # Index name
-    df.index.name = "timestamps"
 
     return df, info
