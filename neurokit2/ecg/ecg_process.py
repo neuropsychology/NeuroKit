@@ -95,7 +95,9 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
 
     # Detect R-peaks
-    instant_peaks, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate, method, correct_artifacts=True)
+    instant_peaks, rpeaks = ecg_peaks(
+        ecg_cleaned=ecg_cleaned, sampling_rate=sampling_rate, method=method, correct_artifacts=True
+    )
 
     # Calculate heart rate
     rate = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned))
@@ -107,10 +109,12 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     signals = pd.DataFrame({"ECG_Raw": ecg_signal, "ECG_Clean": ecg_cleaned, "ECG_Rate": rate, "ECG_Quality": quality})
 
     # Delineate QRS complex
-    delineate_signal, delineate_info = ecg_delineate(ecg_cleaned, rpeaks, sampling_rate)
+    delineate_signal, delineate_info = ecg_delineate(
+        ecg_cleaned=ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate
+    )
 
     # Determine cardiac phases
-    cardiac_phase = ecg_phase(ecg_cleaned, rpeaks, delineate_info)
+    cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned, rpeaks=rpeaks, delineate_info=delineate_info)
 
     # Add additional information to signals DataFrame
     signals = pd.concat([signals, instant_peaks, delineate_signal, cardiac_phase], axis=1)
