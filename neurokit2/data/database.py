@@ -26,7 +26,7 @@ def download_zip(url, destination_directory):
     filename = Path(url_parts.path).name
 
     # Download the ZIP file
-    zip_filename = destination_directory / filename
+    zip_filename = Path(destination_directory) / filename
     response = requests.get(url)
 
     if response.status_code == 200:
