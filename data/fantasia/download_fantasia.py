@@ -13,7 +13,18 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
+import neurokit2 as nk
 
+# Check if expected folder exists
+if not os.path.exists("./fantasia-database-1.0.0/"):
+    url = "https://physionet.org/files/fantasia/1.0.0/fantasia-database-1.0.0.zip"
+    download_successful = nk.download_zip(url, "./")
+    if not download_successful:
+        raise ValueError(
+            "NeuroKit error: download of Fantasia database failed. "
+            "Please download it manually from https://physionet.org/content/fantasia/1.0.0/ "
+            "and unzip it in the same folder as this script."
+        )
 
 files = os.listdir("./fantasia-database-1.0.0/")
 files = [s.replace('.dat', '') for s in files if ".dat" in s]
