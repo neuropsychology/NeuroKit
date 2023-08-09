@@ -104,7 +104,10 @@ def read_xdf(filename):
     # Synchronize ------------------------------------------------------------------------------
     # Merge all dataframes by timestamps
     # Note: this is a critical steps, as it inserts timestamps and makes it non-evenly spread
-    df = pd.concat(dfs, axis=0).sort_index()
+    df = dfs[0]
+    for i in range(1, len(dfs)):
+        df = pd.merge(df, dfs[i], how="outer", left_index=True, right_index=True)
+    df = df.sort_index()
 
     # First, fill NaNs through linear (but based on the time-index) interpolation
     df = df.interpolate(method="time")
