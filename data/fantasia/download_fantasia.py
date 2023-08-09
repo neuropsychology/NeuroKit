@@ -13,12 +13,13 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
-import neurokit2 as nk
+
+from neurokit2.data import download_zip
 
 # Check if expected folder exists
 if not os.path.exists("./fantasia-database-1.0.0/"):
     url = "https://physionet.org/files/fantasia/1.0.0/fantasia-database-1.0.0.zip"
-    download_successful = nk.download_zip(url, "./")
+    download_successful = download_zip(url, "./")
     if not download_successful:
         raise ValueError(
             "NeuroKit error: download of Fantasia database failed. "
