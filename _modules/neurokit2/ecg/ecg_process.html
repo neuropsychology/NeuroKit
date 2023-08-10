@@ -364,19 +364,27 @@ document.write(`
 <div class="viewcode-block" id="ecg_process"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_process">[docs]</a><span class="k">def</span> <span class="nf">ecg_process</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Automated pipeline for preprocessing an ECG signal**</span>
 
-<span class="sd">    This function runs different preprocessing steps. **Help us improve the documentation of</span>
-<span class="sd">    this function by making it more tidy and useful!**</span>
+<span class="sd">    This function runs different preprocessing steps: Cleaning (using ``ecg_clean()``),</span>
+<span class="sd">    peak detection (using ``ecg_peaks()``), heart rate calculation (using ``signal_rate()``),</span>
+<span class="sd">    signal quality assessment (using ``ecg_quality()``),</span>
+<span class="sd">    QRS complex delineation (using ``ecg_delineate()``),</span>
+<span class="sd">    and cardiac phase determination (using ``ecg_phase()``).</span>
+
+<span class="sd">    **Help us improve the documentation of this function by making it more tidy and useful!**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ecg_signal : Union[list, np.array, pd.Series]</span>
-<span class="sd">        The raw ECG channel.</span>
+<span class="sd">        The raw single-channel ECG signal.</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Defaults to ``&quot;neurokit&quot;``. We aim at improving this</span>
-<span class="sd">        aspect to make the available methods more transparent, and be able to generate specific</span>
-<span class="sd">        reports. Please get in touch if you are interested in helping out with this.</span>
+<span class="sd">        The processing method used for signal cleaning (using ``ecg_clean()``) and peak detection</span>
+<span class="sd">        (using ``ecg_peaks()``). Defaults to ``&#39;neurokit&#39;``. Available methods are ``&#39;neurokit&#39;``,</span>
+<span class="sd">        ``&#39;pantompkins1985&#39;``, ``&#39;hamilton2002&#39;``, ``&#39;elgendi2010&#39;``, ``&#39;engzeemod2012&#39;``.</span>
+<span class="sd">        We aim at improving this aspect to make the available methods more transparent, and be able</span>
+<span class="sd">        to generate specific reports. Please get in touch if you are interested in helping out with</span>
+<span class="sd">        this.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -385,38 +393,34 @@ document.write(`
 
 <span class="sd">        * ``&quot;ECG_Raw&quot;``: the raw signal.</span>
 <span class="sd">        * ``&quot;ECG_Clean&quot;``: the cleaned signal.</span>
-<span class="sd">        * ``&quot;ECG_R_Peaks&quot;``: the R-peaks marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;ECG_Rate&quot;``: heart rate interpolated between R-peaks.</span>
+<span class="sd">        * ``&quot;ECG_Quality&quot;``: the quality of the cleaned signal</span>
+<span class="sd">        * ``&quot;ECG_R_Peaks&quot;``: the R-peaks marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;ECG_P_Peaks&quot;``: the P-peaks marked as &quot;1&quot; in a list of zeros</span>
+<span class="sd">        * ``&quot;ECG_P_Onsets&quot;``: the P-onsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">        * ``&quot;ECG_P_Offsets&quot;``: the P-offsets marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;ECG_Q_Peaks&quot;``: the Q-peaks marked as &quot;1&quot; in a list of zeros .</span>
+<span class="sd">        * ``&quot;ECG_R_Onsets&quot;``: the R-onsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">        * ``&quot;ECG_R_Offsets&quot;``: the R-offsets marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;ECG_S_Peaks&quot;``: the S-peaks marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;ECG_T_Peaks&quot;``: the T-peaks marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_P_Onsets&quot;``: the P-onsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_P_Offsets&quot;``: the P-offsets marked as &quot;1&quot; in a list of zeros (only when method in</span>
-<span class="sd">          ``ecg_delineate()`` is wavelet).</span>
-<span class="sd">        * ``&quot;ECG_T_Onsets&quot;``: the T-onsets marked as &quot;1&quot; in a list of zeros (only when method in</span>
-<span class="sd">          ``ecg_delineate()`` is wavelet).</span>
+<span class="sd">        * ``&quot;ECG_T_Onsets&quot;``: the T-onsets marked as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">        * ``&quot;ECG_T_Offsets&quot;``: the T-offsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_R_Onsets&quot;``: the R-onsets marked as &quot;1&quot; in a list of zeros (only when method in</span>
-<span class="sd">          ``ecg_delineate()`` is wavelet).</span>
-<span class="sd">        * ``&quot;ECG_R_Offsets&quot;``: the R-offsets marked as &quot;1&quot; in a list of zeros (only when method in</span>
-<span class="sd">          ``ecg_delineate()`` is wavelet).</span>
 <span class="sd">        * ``&quot;ECG_Phase_Atrial&quot;``: cardiac phase, marked by &quot;1&quot; for systole and &quot;0&quot; for diastole.</span>
+<span class="sd">        * ``&quot;ECG_Phase_Completion_Atrial&quot;``: cardiac phase (atrial) completion, expressed in</span>
+<span class="sd">          percentage (from 0 to 1), representing the stage of the current cardiac phase.</span>
 <span class="sd">        * ``&quot;ECG_Phase_Ventricular&quot;``: cardiac phase, marked by &quot;1&quot; for systole and &quot;0&quot; for</span>
 <span class="sd">          diastole.</span>
-<span class="sd">        * ``&quot;ECG_Atrial_PhaseCompletion&quot;``: cardiac phase (atrial) completion, expressed in</span>
-<span class="sd">          percentage</span>
-<span class="sd">          (from 0 to 1), representing the stage of the current cardiac phase.</span>
-<span class="sd">        * ``&quot;ECG_Ventricular_PhaseCompletion&quot;``: cardiac phase (ventricular) completion, expressed</span>
+<span class="sd">        * ``&quot;ECG_Phase_Completion_Ventricular&quot;``: cardiac phase (ventricular) completion, expressed</span>
 <span class="sd">          in percentage (from 0 to 1), representing the stage of the current cardiac phase.</span>
-<span class="sd">        * **This list is not up-to-date. Help us improve the documentation!**</span>
-<span class="sd">    info : dict</span>
+
+<span class="sd">    rpeaks : dict</span>
 <span class="sd">        A dictionary containing the samples at which the R-peaks occur, accessible with the key</span>
 <span class="sd">        ``&quot;ECG_R_Peaks&quot;``, as well as the signals&#39; sampling rate.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ecg_clean, ecg_peaks, ecg_delineate, ecg_phase, ecg_plot, .signal_rate</span>
+<span class="sd">    ecg_clean, ecg_peaks, ecg_quality, ecg_delineate, ecg_phase, ecg_plot, .signal_rate</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -437,37 +441,38 @@ document.write(`
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Sanitize input</span>
-    <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">signal_sanitize</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
 
+    <span class="c1"># Sanitize and clean input</span>
+    <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">signal_sanitize</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
     <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
-    <span class="c1"># R-peaks</span>
-    <span class="p">(</span><span class="n">instant_peaks</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span>
+
+    <span class="c1"># Detect R-peaks</span>
+    <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span>
         <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 
+    <span class="c1"># Calculate heart rate</span>
     <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">))</span>
 
+    <span class="c1"># Assess signal quality</span>
     <span class="n">quality</span> <span class="o">=</span> <span class="n">ecg_quality</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;ECG_Raw&quot;</span><span class="p">:</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">:</span> <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span> <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">}</span>
-    <span class="p">)</span>
+    <span class="c1"># Merge signals in a DataFrame</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;ECG_Raw&quot;</span><span class="p">:</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">:</span> <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span> <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">})</span>
 
-    <span class="c1"># Additional info of the ecg signal</span>
+    <span class="c1"># Delineate QRS complex</span>
     <span class="n">delineate_signal</span><span class="p">,</span> <span class="n">delineate_info</span> <span class="o">=</span> <span class="n">ecg_delineate</span><span class="p">(</span>
         <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
     <span class="p">)</span>
 
+    <span class="c1"># Determine cardiac phases</span>
     <span class="n">cardiac_phase</span> <span class="o">=</span> <span class="n">ecg_phase</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">delineate_info</span><span class="o">=</span><span class="n">delineate_info</span><span class="p">)</span>
 
+    <span class="c1"># Add additional information to signals DataFrame</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">delineate_signal</span><span class="p">,</span> <span class="n">cardiac_phase</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># Rpeaks location and sampling rate in dict info</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">rpeaks</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>
-
-    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
+    <span class="c1"># return signals DataFrame and R-peak locations</span>
+    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">rpeaks</span></div>
 </pre></div>
 
                 </article>

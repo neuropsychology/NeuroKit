@@ -512,16 +512,23 @@ document.write(`
 <dt class="sig sig-object py" id="neurokit2.ecg.ecg_process">
 <span class="sig-name descname"><span class="pre">ecg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ecg/ecg_process.html#ecg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ecg.ecg_process" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Automated pipeline for preprocessing an ECG signal</strong></p>
-<p>This function runs different preprocessing steps. <strong>Help us improve the documentation of
-this function by making it more tidy and useful!</strong></p>
+<p>This function runs different preprocessing steps: Cleaning (using <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>),
+peak detection (using <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>), heart rate calculation (using <code class="docutils literal notranslate"><span class="pre">signal_rate()</span></code>),
+signal quality assessment (using <code class="docutils literal notranslate"><span class="pre">ecg_quality()</span></code>),
+QRS complex delineation (using <code class="docutils literal notranslate"><span class="pre">ecg_delineate()</span></code>),
+and cardiac phase determination (using <code class="docutils literal notranslate"><span class="pre">ecg_phase()</span></code>).</p>
+<p><strong>Help us improve the documentation of this function by making it more tidy and useful!</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ecg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw ECG channel.</p></li>
+<li><p><strong>ecg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw single-channel ECG signal.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code>. We aim at improving this
-aspect to make the available methods more transparent, and be able to generate specific
-reports. Please get in touch if you are interested in helping out with this.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing method used for signal cleaning (using <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>) and peak detection
+(using <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">'neurokit'</span></code>. Available methods are <code class="docutils literal notranslate"><span class="pre">'neurokit'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'pantompkins1985'</span></code>, <code class="docutils literal notranslate"><span class="pre">'hamilton2002'</span></code>, <code class="docutils literal notranslate"><span class="pre">'elgendi2010'</span></code>, <code class="docutils literal notranslate"><span class="pre">'engzeemod2012'</span></code>.
+We aim at improving this aspect to make the available methods more transparent, and be able
+to generate specific reports. Please get in touch if you are interested in helping out with
+this.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -530,34 +537,29 @@ reports. Please get in touch if you are interested in helping out with this.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Raw&quot;</span></code>: the raw signal.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Clean&quot;</span></code>: the cleaned signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Peaks&quot;</span></code>: the R-peaks marked as “1” in a list of zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Rate&quot;</span></code>: heart rate interpolated between R-peaks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Quality&quot;</span></code>: the quality of the cleaned signal</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Peaks&quot;</span></code>: the R-peaks marked as “1” in a list of zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Peaks&quot;</span></code>: the P-peaks marked as “1” in a list of zeros</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Onsets&quot;</span></code>: the P-onsets marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Offsets&quot;</span></code>: the P-offsets marked as “1” in a list of zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Q_Peaks&quot;</span></code>: the Q-peaks marked as “1” in a list of zeros .</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Onsets&quot;</span></code>: the R-onsets marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Offsets&quot;</span></code>: the R-offsets marked as “1” in a list of zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_S_Peaks&quot;</span></code>: the S-peaks marked as “1” in a list of zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Peaks&quot;</span></code>: the T-peaks marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Onsets&quot;</span></code>: the P-onsets marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Offsets&quot;</span></code>: the P-offsets marked as “1” in a list of zeros (only when method in
-<code class="docutils literal notranslate"><span class="pre">ecg_delineate()</span></code> is wavelet).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Onsets&quot;</span></code>: the T-onsets marked as “1” in a list of zeros (only when method in
-<code class="docutils literal notranslate"><span class="pre">ecg_delineate()</span></code> is wavelet).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Onsets&quot;</span></code>: the T-onsets marked as “1” in a list of zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Offsets&quot;</span></code>: the T-offsets marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Onsets&quot;</span></code>: the R-onsets marked as “1” in a list of zeros (only when method in
-<code class="docutils literal notranslate"><span class="pre">ecg_delineate()</span></code> is wavelet).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Offsets&quot;</span></code>: the R-offsets marked as “1” in a list of zeros (only when method in
-<code class="docutils literal notranslate"><span class="pre">ecg_delineate()</span></code> is wavelet).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Phase_Atrial&quot;</span></code>: cardiac phase, marked by “1” for systole and “0” for diastole.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Phase_Completion_Atrial&quot;</span></code>: cardiac phase (atrial) completion, expressed in
+percentage (from 0 to 1), representing the stage of the current cardiac phase.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Phase_Ventricular&quot;</span></code>: cardiac phase, marked by “1” for systole and “0” for
 diastole.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Atrial_PhaseCompletion&quot;</span></code>: cardiac phase (atrial) completion, expressed in
-percentage
-(from 0 to 1), representing the stage of the current cardiac phase.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Ventricular_PhaseCompletion&quot;</span></code>: cardiac phase (ventricular) completion, expressed
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ECG_Phase_Completion_Ventricular&quot;</span></code>: cardiac phase (ventricular) completion, expressed
 in percentage (from 0 to 1), representing the stage of the current cardiac phase.</p></li>
-<li><p><strong>This list is not up-to-date. Help us improve the documentation!</strong></p></li>
 </ul>
 </li>
-<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the samples at which the R-peaks occur, accessible with the key
+<li><p><strong>rpeaks</strong> (<em>dict</em>) – A dictionary containing the samples at which the R-peaks occur, accessible with the key
 <code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Peaks&quot;</span></code>, as well as the signals’ sampling rate.</p></li>
 </ul>
 </p>
@@ -565,7 +567,7 @@ in percentage (from 0 to 1), representing the stage of the current cardiac phase
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ecg.ecg_clean" title="neurokit2.ecg.ecg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_delineate" title="neurokit2.ecg.ecg_delineate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_delineate</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_phase" title="neurokit2.ecg.ecg_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_phase</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_plot</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ecg.ecg_clean" title="neurokit2.ecg.ecg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_quality" title="neurokit2.ecg.ecg_quality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_quality</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_delineate" title="neurokit2.ecg.ecg_delineate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_delineate</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_phase" title="neurokit2.ecg.ecg_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_phase</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_plot</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1633,9 +1635,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.784232          0.948869</span>
-<span class="go">2     2        10000  ...                          0.453608          0.981001</span>
-<span class="go">3     3        15000  ...                          0.164300          0.937876</span>
+<span class="go">1     1         5000  ...                          0.695560          0.927013</span>
+<span class="go">2     2        10000  ...                          0.483607          0.924964</span>
+<span class="go">3     3        15000  ...                          0.102083          0.904446</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
