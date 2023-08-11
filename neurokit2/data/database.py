@@ -1,6 +1,6 @@
 import requests
 import zipfile
-from pathlib import Path
+import pathlib
 
 def download_zip(url, destination_path, unzip=True):
     """Download a ZIP file from a URL and extract it to a destination directory.
@@ -20,13 +20,13 @@ def download_zip(url, destination_path, unzip=True):
         True if the ZIP file was downloaded successfully, False otherwise.
     """
     # Ensure that the destination path is a Path object ending with ".zip"
-    zip_filepath = Path(destination_path)
+    zip_filepath = pathlib.Path(destination_path)
     if zip_filepath.suffix != ".zip":
-        zip_filepath = Path(zip_filepath.parent, zip_filepath.name + ".zip")
+        zip_filepath = pathlib.Path(zip_filepath.parent, zip_filepath.name + ".zip")
 
     # Create the destination directory if it does not exist
-    destination_directory = Path(destination_path).parent
-    Path(destination_directory).mkdir(parents=True, exist_ok=True)
+    destination_directory = pathlib.Path(destination_path).parent
+    pathlib.Path(destination_directory).mkdir(parents=True, exist_ok=True)
 
     # Download the ZIP file
     response = requests.get(url)
@@ -38,14 +38,14 @@ def download_zip(url, destination_path, unzip=True):
         if unzip:
             # Extract the ZIP file
             with zipfile.ZipFile(zip_filepath, "r") as zip_ref:
-                extracted_folder_name = Path(zip_ref.namelist()[0]).parts[0]
+                extracted_folder_name = pathlib.Path(zip_ref.namelist()[0]).parts[0]
                     
                 # Extract the contents
                 zip_ref.extractall(destination_directory)
                 
                 # Rename the extracted folder to the desired name
                 extracted_folder_path = destination_directory / extracted_folder_name
-                new_folder_path = destination_directory / Path(destination_path).name
+                new_folder_path = destination_directory / pathlib.Path(destination_path).name
                 extracted_folder_path.rename(new_folder_path)
 
             # Clean up by removing the downloaded ZIP file
