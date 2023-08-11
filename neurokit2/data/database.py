@@ -2,7 +2,7 @@ import requests
 import zipfile
 from pathlib import Path
 
-def download_zip(url, destination_path):
+def download_zip(url, destination_path, unzip=True):
     """Download a ZIP file from a URL and extract it to a destination directory.
     
     Parameters:
@@ -11,11 +11,13 @@ def download_zip(url, destination_path):
         The URL of the ZIP file to download.
     destination_path : str, Path
         The path to which the ZIP file will be extracted.
+    unzip : bool
+        Whether to unzip the file or not. Defaults to True.
 
     Returns:
     --------
     bool
-        True if the ZIP file was downloaded and extracted successfully, False otherwise.
+        True if the ZIP file was downloaded successfully, False otherwise.
     """
     # Ensure that the destination path is a Path object ending with ".zip"
     zip_filepath = Path(destination_path)
@@ -33,20 +35,21 @@ def download_zip(url, destination_path):
         with zip_filepath.open("wb") as zip_file:
             zip_file.write(response.content)
 
-        # Extract the ZIP file
-        with zipfile.ZipFile(zip_filepath, "r") as zip_ref:
-          extracted_folder_name = Path(zip_ref.namelist()[0]).parts[0]
-            
-          # Extract the contents
-          zip_ref.extractall(destination_directory)
-          
-          # Rename the extracted folder to the desired name
-          extracted_folder_path = destination_directory / extracted_folder_name
-          new_folder_path = destination_directory / Path(destination_path).name
-          extracted_folder_path.rename(new_folder_path)
+        if unzip:
+            # Extract the ZIP file
+            with zipfile.ZipFile(zip_filepath, "r") as zip_ref:
+                extracted_folder_name = Path(zip_ref.namelist()[0]).parts[0]
+                    
+                # Extract the contents
+                zip_ref.extractall(destination_directory)
+                
+                # Rename the extracted folder to the desired name
+                extracted_folder_path = destination_directory / extracted_folder_name
+                new_folder_path = destination_directory / Path(destination_path).name
+                extracted_folder_path.rename(new_folder_path)
 
-        # Clean up by removing the downloaded ZIP file
-        zip_filepath.unlink()
+            # Clean up by removing the downloaded ZIP file
+            zip_filepath.unlink()
 
         return True
     else:
