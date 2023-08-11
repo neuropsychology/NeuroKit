@@ -14,24 +14,9 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
-from pathlib import Path
 
-from neurokit2.data import download_zip
 
-database_path = "./ludb-1.0.0.physionet.org/"
-
-# Check if expected folder exists
-if not os.path.exists(database_path):
-    url = "https://physionet.org/static/published-projects/ludb/lobachevsky-university-electrocardiography-database-1.0.1.zip"
-    download_successful = download_zip(url, database_path)
-    if not download_successful:
-        raise ValueError(
-            "NeuroKit error: download of Lobachevsky University Electrocardiography database failed. "
-            "Please download it manually with gsutil:"
-            "'gsutil -m cp -r gs://ludb-1.0.0.physionet.org D:/YOURPATH/NeuroKit/data/ludb'"
-        )
-
-files = os.listdir(database_path)
+files = os.listdir("./ludb-1.0.0.physionet.org/")
 
 dfs_ecg = []
 dfs_rpeaks = []
@@ -40,7 +25,7 @@ dfs_rpeaks = []
 for participant in range(200):
     filename = str(participant + 1)
 
-    data, info = wfdb.rdsamp(str(Path(database_path, filename)))
+    data, info = wfdb.rdsamp("./ludb-1.0.0.physionet.org/" + filename)
 
     # Get signal
     data = pd.DataFrame(data, columns=info["sig_name"])
@@ -51,7 +36,7 @@ for participant in range(200):
     data["Database"] = "LUDB"
 
     # Get annotations
-    anno = wfdb.rdann(str(Path(database_path, filename)), 'atr_i')
+    anno = wfdb.rdann("./ludb-1.0.0.physionet.org/" + filename, 'atr_i')
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "LUDB_%.2i" %(participant + 1)
