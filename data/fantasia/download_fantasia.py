@@ -39,7 +39,7 @@ dfs_rpeaks = []
 
 for i, participant in enumerate(files):
 
-    data, info = wfdb.rdsamp(Path(database_path, participant))
+    data, info = wfdb.rdsamp(str(Path(database_path, participant)))
 
     # Get signal
     data = pd.DataFrame(data, columns=info["sig_name"])
@@ -50,7 +50,7 @@ for i, participant in enumerate(files):
     data["Database"] = "Fantasia"
 
     # Get annotations
-    anno = wfdb.rdann(Path(database_path, participant), 'ecg')
+    anno = wfdb.rdann(str(Path(database_path, participant)), 'ecg')
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "Fantasia_" + participant
@@ -64,4 +64,4 @@ for i, participant in enumerate(files):
 
 # Save
 df_ecg = pd.concat(dfs_ecg).to_csv("ECGs.csv", index=False)
-dfs_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
+df_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
