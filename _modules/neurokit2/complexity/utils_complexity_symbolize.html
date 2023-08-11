@@ -358,11 +358,12 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scipy.cluster.vq</span>
 <span class="kn">import</span> <span class="nn">scipy.special</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">standardize</span>
 <span class="kn">from</span> <span class="nn">.optim_complexity_tolerance</span> <span class="kn">import</span> <span class="n">complexity_tolerance</span>
 
 
-<div class="viewcode-block" id="complexity_symbolize"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_symbolize">[docs]</a><span class="k">def</span> <span class="nf">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="complexity_symbolize"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_symbolize">[docs]</a><span class="k">def</span> <span class="nf">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Signal Symbolization and Discretization**</span>
 
 <span class="sd">    Many complexity indices are made to assess the recurrence and predictability of discrete -</span>
@@ -406,6 +407,9 @@ document.write(`
 <span class="sd">        See :func:`complexity_symbolize` for details.</span>
 <span class="sd">    c : int</span>
 <span class="sd">        Number of symbols *c*, used in some algorithms.</span>
+<span class="sd">    random_state : None, int, numpy.random.RandomState or numpy.random.Generator</span>
+<span class="sd">        Seed for the random number generator. See :func:`misc.check_random_state` for further information.</span>
+<span class="sd">    </span>
 <span class="sd">    show : bool</span>
 <span class="sd">        Plot the reconstructed attractor. See :func:`complexity_attractor` for details.</span>
 <span class="sd">    **kwargs</span>
@@ -504,11 +508,14 @@ document.write(`
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      @savefig p_complexity_symbolize11.png scale=100%</span>
-<span class="sd">      symbolic = nk.complexity_symbolize(signal, method = &quot;kmeans&quot;, c=5, show=True)</span>
+<span class="sd">      symbolic = nk.complexity_symbolize(signal, method = &quot;kmeans&quot;, c=5, random_state=42, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Seed the random generator for reproducible results</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
     <span class="c1"># Do nothing</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">symbolic</span> <span class="o">=</span> <span class="n">signal</span>
@@ -605,7 +612,7 @@ document.write(`
                 <span class="n">symbolic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
                 <span class="n">symbolic</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">signal</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span> <span class="o">/</span> <span class="n">c</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span>
-                <span class="n">centroids</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">vq</span><span class="o">.</span><span class="n">kmeans2</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                <span class="n">centroids</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">vq</span><span class="o">.</span><span class="n">kmeans2</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
                 <span class="n">labels</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">centroids</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">symbolic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
