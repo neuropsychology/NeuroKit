@@ -35,7 +35,7 @@ def download_zip(url, destination_path):
 
         # Extract the ZIP file
         with zipfile.ZipFile(zip_filepath, "r") as zip_ref:
-          extracted_folder_name = zip_ref.namelist()[0]
+          extracted_folder_name = Path(zip_ref.namelist()[0]).parts[0]
             
           # Extract the contents
           zip_ref.extractall(destination_directory)
