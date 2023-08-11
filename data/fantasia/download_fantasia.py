@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
+from pathlib import Path
 
 from neurokit2.data import download_zip
 
@@ -38,7 +39,7 @@ dfs_rpeaks = []
 
 for i, participant in enumerate(files):
 
-    data, info = wfdb.rdsamp(database_path + participant)
+    data, info = wfdb.rdsamp(Path(database_path, participant))
 
     # Get signal
     data = pd.DataFrame(data, columns=info["sig_name"])
@@ -49,7 +50,7 @@ for i, participant in enumerate(files):
     data["Database"] = "Fantasia"
 
     # Get annotations
-    anno = wfdb.rdann(database_path + participant, 'ecg')
+    anno = wfdb.rdann(Path(database_path, participant), 'ecg')
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "Fantasia_" + participant
