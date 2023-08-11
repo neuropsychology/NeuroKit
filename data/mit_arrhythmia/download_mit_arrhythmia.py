@@ -14,9 +14,22 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
+from neurokit2.data import download_zip
 
-data_files = ["mit-bih-arrhythmia-database-1.0.0/" + file for file in os.listdir("mit-bih-arrhythmia-database-1.0.0") if ".dat" in file]
+database_path = "./mit-bih-arrhythmia-database-1.0.0/"
 
+# Check if expected folder exists
+if not os.path.exists(database_path):
+    url = "https://physionet.org/static/published-projects/mitdb/mit-bih-arrhythmia-database-1.0.0.zip"
+    download_successful = download_zip(url, database_path)
+    if not download_successful:
+        raise ValueError(
+            "NeuroKit error: download of MIT-Arrhythmia database failed. "
+            "Please download it manually from https://alpha.physionet.org/content/mitdb/1.0.0/ "
+            "and unzip it in the same folder as this script."
+        )
+
+data_files = [database_path + file for file in os.listdir(database_path) if ".dat" in file]
 
 def read_file(file, participant):
     """Utility function
@@ -55,9 +68,9 @@ for participant, file in enumerate(data_files):
     dfs_rpeaks.append(anno)
 
     # Store additional recording if available
-    if "x_" + file.replace("mit-bih-arrhythmia-database-1.0.0/", "") in os.listdir("mit-bih-arrhythmia-database-1.0.0/x_mitdb/"):
+    if "x_" + file.replace(database_path, "") in os.listdir(database_path + "x_mitdb/"):
         print("  - Additional recording detected.")
-        data, anno = read_file("mit-bih-arrhythmia-database-1.0.0/x_mitdb/" + "x_" + file.replace("mit-bih-arrhythmia-database-1.0.0/", ""), participant)
+        data, anno = read_file(database_path + "/x_mitdb/" + "x_" + file.replace(database_path, ""), participant)
         # Store with the rest
         dfs_ecg.append(data)
         dfs_rpeaks.append(anno)
