@@ -16,10 +16,12 @@ import os
 
 from neurokit2.data import download_zip
 
+database_path = "./fantasia-database-1.0.0/"
+
 # Check if expected folder exists
-if not os.path.exists("./fantasia-database-1.0.0/"):
+if not os.path.exists(database_path):
     url = "https://physionet.org/files/fantasia/1.0.0/fantasia-database-1.0.0.zip"
-    download_successful = download_zip(url, "./")
+    download_successful = download_zip(url, database_path)
     if not download_successful:
         raise ValueError(
             "NeuroKit error: download of Fantasia database failed. "
@@ -27,7 +29,7 @@ if not os.path.exists("./fantasia-database-1.0.0/"):
             "and unzip it in the same folder as this script."
         )
 
-files = os.listdir("./fantasia-database-1.0.0/")
+files = os.listdir(database_path)
 files = [s.replace('.dat', '') for s in files if ".dat" in s]
 
 dfs_ecg = []
@@ -36,7 +38,7 @@ dfs_rpeaks = []
 
 for i, participant in enumerate(files):
 
-    data, info = wfdb.rdsamp("./fantasia-database-1.0.0/" + participant)
+    data, info = wfdb.rdsamp(database_path + participant)
 
     # Get signal
     data = pd.DataFrame(data, columns=info["sig_name"])
@@ -47,7 +49,7 @@ for i, participant in enumerate(files):
     data["Database"] = "Fantasia"
 
     # Get annotations
-    anno = wfdb.rdann("./fantasia-database-1.0.0/" + participant, 'ecg')
+    anno = wfdb.rdann(database_path + participant, 'ecg')
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "Fantasia_" + participant
