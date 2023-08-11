@@ -14,14 +14,14 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
-from neurokit2.data import download_zip
+import neurokit2 as nk
 
 database_path = "./mit-bih-arrhythmia-database-1.0.0/"
 
 # Check if expected folder exists
 if not os.path.exists(database_path):
     url = "https://physionet.org/static/published-projects/mitdb/mit-bih-arrhythmia-database-1.0.0.zip"
-    download_successful = download_zip(url, database_path)
+    download_successful = nk.download_zip(url, database_path)
     if not download_successful:
         raise ValueError(
             "NeuroKit error: download of MIT-Arrhythmia database failed. "
