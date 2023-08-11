@@ -57,7 +57,6 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
         Number of symbols *c*, used in some algorithms.
     random_state : None, int, numpy.random.RandomState or numpy.random.Generator
         Seed for the random number generator. See :func:`misc.check_random_state` for further information.
-    
     show : bool
         Plot the reconstructed attractor. See :func:`complexity_attractor` for details.
     **kwargs
