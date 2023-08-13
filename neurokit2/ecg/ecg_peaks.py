@@ -3,13 +3,17 @@ from .ecg_findpeaks import ecg_findpeaks
 
 
 def ecg_peaks(
-    ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False, **kwargs
+    ecg_cleaned,
+    sampling_rate=1000,
+    method="neurokit",
+    correct_artifacts=False,
+    **kwargs
 ):
     """**Find R-peaks in an ECG signal**
 
-    Find R-peaks in an ECG signal using the specified method. The method accepts unfiltered ECG
-    signals as input, although it is expected that a filtered (cleaned) ECG will result in better
-    results.
+    Find R-peaks in an ECG signal using the specified method. You can pass an unfiltered ECG
+    signals as input, but typically a filtered ECG (cleaned using ``ecg_clean()``) will result in
+    better results.
 
     Different algorithms for peak-detection include:
 
@@ -49,7 +53,7 @@ def ecg_peaks(
     ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by ``ecg_clean()``.
     sampling_rate : int
-        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
+        The sampling frequency of ``ecg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection.
     correct_artifacts : bool
@@ -250,7 +254,9 @@ def ecg_peaks(
       engineering & technology, 43(3), 173-181.
 
     """
-    rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
+    rpeaks = ecg_findpeaks(
+        ecg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs
+    )
 
     if correct_artifacts:
         _, rpeaks = signal_fixpeaks(
@@ -259,7 +265,9 @@ def ecg_peaks(
 
         rpeaks = {"ECG_R_Peaks": rpeaks}
 
-    instant_peaks = signal_formatpeaks(rpeaks, desired_length=len(ecg_cleaned), peak_indices=rpeaks)
+    instant_peaks = signal_formatpeaks(
+        rpeaks, desired_length=len(ecg_cleaned), peak_indices=rpeaks
+    )
     signals = instant_peaks
     info = rpeaks
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
