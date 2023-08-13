@@ -6,8 +6,8 @@ from ..misc.report import create_report
 from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .ppg_clean import ppg_clean
-from .ppg_findpeaks import ppg_findpeaks
 from .ppg_methods import ppg_methods
+from .ppg_peaks import ppg_peaks
 from .ppg_plot import ppg_plot
 
 
@@ -80,7 +80,7 @@ def ppg_process(
     )
 
     # Find peaks
-    info = ppg_findpeaks(
+    peaks_signal, info = ppg_peaks(
         ppg_cleaned,
         sampling_rate=sampling_rate,
         method=methods["method_peaks"],
@@ -88,11 +88,6 @@ def ppg_process(
     )
 
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
-
-    # Mark peaks
-    peaks_signal = _signal_from_indices(
-        info["PPG_Peaks"], desired_length=len(ppg_cleaned)
-    )
 
     # Rate computation
     rate = signal_rate(
@@ -105,7 +100,7 @@ def ppg_process(
             "PPG_Raw": ppg_signal,
             "PPG_Clean": ppg_cleaned,
             "PPG_Rate": rate,
-            "PPG_Peaks": peaks_signal,
+            "PPG_Peaks": peaks_signal["PPG_Peaks"].values,
         }
     )
 
