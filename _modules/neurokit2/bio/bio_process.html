@@ -364,7 +364,14 @@ document.write(`
 
 
 <div class="viewcode-block" id="bio_process"><a class="viewcode-back" href="../../../functions/bio.html#neurokit2.bio_process">[docs]</a><span class="k">def</span> <span class="nf">bio_process</span><span class="p">(</span>
-    <span class="n">ecg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rsp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">emg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span>
+    <span class="n">ecg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rsp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">eda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">emg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ppg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">eog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Automated processing of bio signals**</span>
 
@@ -556,13 +563,21 @@ document.write(`
 
     <span class="c1"># Additional channels to keep</span>
     <span class="k">if</span> <span class="n">keep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">keep</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keep</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keep</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The &#39;keep&#39; argument must be a DataFrame or Series.&quot;</span><span class="p">)</span>
+
         <span class="n">bio_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">bio_df</span><span class="p">,</span> <span class="n">keep</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># RSA</span>
     <span class="k">if</span> <span class="n">ecg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rsp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rsa</span> <span class="o">=</span> <span class="n">hrv_rsa</span><span class="p">(</span>
-            <span class="n">ecg_signals</span><span class="p">,</span> <span class="n">rsp_signals</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">ecg_signals</span><span class="p">,</span>
+            <span class="n">rsp_signals</span><span class="p">,</span>
+            <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">bio_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">bio_df</span><span class="p">,</span> <span class="n">rsa</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
