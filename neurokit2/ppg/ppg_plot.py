@@ -55,14 +55,19 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
             "NeuroKit error: The `ppg_signals` argument must"
             " be the DataFrame returned by `ppg_process()`."
         )
+
+    # Extract Peaks.
+    peaks = None
+    if "PPG_Peaks" in ppg_signals.columns:
+        peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
+
     # X-axis
     if sampling_rate is not None:
-        x_axis = np.linspace(0, ppg_signals.shape[0] / sampling_rate, ppg_signals.shape[0])
+        x_axis = np.linspace(
+            0, ppg_signals.shape[0] / sampling_rate, ppg_signals.shape[0]
+        )
     else:
         x_axis = np.arange(0, ppg_signals.shape[0])
-
-    # Get peak indices
-    peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
 
     if static:
         # Prepare figure
@@ -131,7 +136,9 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         )
 
         # Plot cleaned and raw PPG
-        fig.add_trace(go.Scatter(x=x_axis, y=ppg_signals["PPG_Raw"], name="Raw"), row=1, col=1)
+        fig.add_trace(
+            go.Scatter(x=x_axis, y=ppg_signals["PPG_Raw"], name="Raw"), row=1, col=1
+        )
         fig.add_trace(
             go.Scatter(
                 x=x_axis,
