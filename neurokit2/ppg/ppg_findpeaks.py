@@ -7,8 +7,13 @@ import scipy.signal
 from ..signal import signal_smooth
 
 
-def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **kwargs):
+def ppg_findpeaks(
+    ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **kwargs
+):
     """**Find systolic peaks in a photoplethysmogram (PPG) signal**
+
+    Low-level function used by :func:`ppg_peaks` to identify peaks in a PPG signal using a
+    different set of algorithms. Use the main function and see its documentation for details.
 
     Parameters
     ----------
@@ -71,7 +76,9 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False,
     elif method in ["msptd", "bishop2018", "bishop"]:
         peaks, _ = _ppg_findpeaks_bishop(ppg_cleaned, show=show, **kwargs)
     else:
-        raise ValueError("`method` not found. Must be one of the following: 'elgendi', 'bishop'.")
+        raise ValueError(
+            "`method` not found. Must be one of the following: 'elgendi', 'bishop'."
+        )
 
     # Prepare output.
     info = {"PPG_Peaks": peaks}
@@ -130,12 +137,13 @@ def _ppg_findpeaks_elgendi(
 
     # Identify systolic peaks within waves (ignore waves that are too short).
     num_waves = min(beg_waves.size, end_waves.size)
-    min_len = int(np.rint(peakwindow * sampling_rate))  # this is threshold 2 in the paper
+    min_len = int(
+        np.rint(peakwindow * sampling_rate)
+    )  # this is threshold 2 in the paper
     min_delay = int(np.rint(mindelay * sampling_rate))
     peaks = [0]
 
     for i in range(num_waves):
-
         beg = beg_waves[i]
         end = end_waves[i]
         len_wave = end - beg
