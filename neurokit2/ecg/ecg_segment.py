@@ -99,7 +99,8 @@ def _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=0):
     plt.plot(mean_heartbeat.index, mean_heartbeat, color="red", linewidth=10)
 
     # Plot all heartbeats
-    plt.plot(df_pivoted, color="grey", linewidth=2 / 3)
+    alpha = 1 / np.log2(1 + df_pivoted.shape[1])  # alpha decreases with more heartbeats
+    plt.plot(df_pivoted, color="grey", linewidth=alpha)
 
     return fig
 
