@@ -12,7 +12,14 @@ from ..rsp import rsp_process
 
 
 def bio_process(
-    ecg=None, rsp=None, eda=None, emg=None, ppg=None, eog=None, keep=None, sampling_rate=1000
+    ecg=None,
+    rsp=None,
+    eda=None,
+    emg=None,
+    ppg=None,
+    eog=None,
+    keep=None,
+    sampling_rate=1000,
 ):
     """**Automated processing of bio signals**
 
@@ -204,13 +211,21 @@ def bio_process(
 
     # Additional channels to keep
     if keep is not None:
-        keep = keep.reset_index(drop=True)
+        if isinstance(keep, pd.DataFrame) or isinstance(keep, pd.Series):
+            keep = keep.reset_index(drop=True)
+        else:
+            raise ValueError("The 'keep' argument must be a DataFrame or Series.")
+
         bio_df = pd.concat([bio_df, keep], axis=1)
 
     # RSA
     if ecg is not None and rsp is not None:
         rsa = hrv_rsa(
-            ecg_signals, rsp_signals, rpeaks=None, sampling_rate=sampling_rate, continuous=True
+            ecg_signals,
+            rsp_signals,
+            rpeaks=None,
+            sampling_rate=sampling_rate,
+            continuous=True,
         )
         bio_df = pd.concat([bio_df, rsa], axis=1)
 
