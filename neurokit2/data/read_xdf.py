@@ -3,15 +3,15 @@ import numpy as np
 import pandas as pd
 
 
-def read_xdf(filename):
+def read_xdf(filename, upsample=2, fillmissing=None):
     """**Read and tidy an XDF file**
 
     Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.
     The function outputs both the dataframe and the information (such as the sampling rate).
 
     Note that, as XDF can store streams with different sampling rates and different time stamps,
-    **the function will resample all streams to 2 times the highest sampling rate** (to minimize
-    aliasing). The final sampling rate can be found in the ``info`` dictionary.
+    **the function will resample all streams to 2 times (default) the highest sampling rate** (to
+    minimize aliasing). The final sampling rate can be found in the ``info`` dictionary.
 
     .. note::
 
@@ -22,6 +22,16 @@ def read_xdf(filename):
     ----------
     filename :  str
         Path (with the extension) of an XDF file (e.g., ``"data.xdf"``).
+    upsample : float
+        Factor by which to upsample the data. Default is 2, which means that the data will be
+        resampled to 2 times the highest sampling rate. You can increase that to further reduce
+        edge-distortion, especially for high frequency signals like EEG.
+    fillmissing : float
+        The maximum duration in seconds of missing data to fill. ``None`` (default) will
+        interpolate all missing values and prevent issues with NaNs. However, it might be important
+        to keep the missing intervals (e.g., ``fillmissing=1`` to keep interruptions of more than
+        1 s) typically corresponding to signal loss or streaming interruptions and exclude them
+        from further analysis.
 
     Returns
     ----------
@@ -109,19 +119,22 @@ def read_xdf(filename):
         df = pd.merge(df, dfs[i], how="outer", left_index=True, right_index=True)
     df = df.sort_index()
 
-    # First, fill NaNs through linear (but based on the time-index) interpolation
-    df = df.interpolate(method="time")
-
     # Resample and Interpolate -----------------------------------------------------------------
     # Final sampling rate will be 2 times the maximum sampling rate
     # (to minimize aliasing during interpolation)
-    info["sampling_rate"] = int(np.max(info["sampling_rates_original"]) * 2)
+    info["sampling_rate"] = int(np.max(info["sampling_rates_original"]) * upsample)
+    if fillmissing is not None:
+        fillmissing = int(info["sampling_rate"] * fillmissing)
 
     # Create new index with evenly spaced timestamps
     idx = pd.date_range(
         df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms"
     )
     # https://stackoverflow.com/questions/47148446/pandas-resample-interpolate-is-producing-nans
-    df = df.reindex(df.index.union(idx)).interpolate(method="index").reindex(idx)
+    df = (
+        df.reindex(df.index.union(idx))
+        .interpolate(method="index", limit=fillmissing)
+        .reindex(idx)
+    )
 
     return df, info
