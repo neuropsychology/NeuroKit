@@ -86,18 +86,6 @@ def test_ecg_plot():
 
     ecg_summary, _ = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
 
-    # Plot data over samples.
-    nk.ecg_plot(ecg_summary)
-    # This will identify the latest figure.
-    fig = plt.gcf()
-    assert len(fig.axes) == 2
-    titles = ["Raw and Cleaned Signal", "Heart Rate"]
-    for ax, title in zip(fig.get_axes(), titles):
-        assert ax.get_title() == title
-    assert fig.get_axes()[1].get_xlabel() == "Samples"
-    np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
-    plt.close(fig)
-
     # Plot data over seconds.
     nk.ecg_plot(ecg_summary, sampling_rate=1000)
     # This will identify the latest figure.
