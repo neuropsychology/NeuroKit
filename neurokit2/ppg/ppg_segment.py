@@ -1,10 +1,8 @@
 # - * - coding: utf-8 - * -
-import matplotlib.pyplot as plt
 import numpy as np
 
 from ..ecg.ecg_segment import _ecg_segment_plot, _ecg_segment_window
-from ..epochs import epochs_create, epochs_to_df
-from ..signal import signal_rate
+from ..epochs import epochs_create
 from .ppg_peaks import ppg_peaks
 
 

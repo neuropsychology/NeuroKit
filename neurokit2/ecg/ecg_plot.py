@@ -8,7 +8,7 @@ from ..ecg import ecg_peaks
 from ..epochs import epochs_to_df
 from ..signal import signal_fixpeaks
 from ..stats import rescale
-from .ecg_segment import _ecg_segment_plot, ecg_segment
+from .ecg_segment import ecg_segment
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=1000, show_type="default"):
