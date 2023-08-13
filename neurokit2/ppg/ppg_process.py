@@ -4,7 +4,6 @@ import pandas as pd
 from ..misc import as_vector
 from ..misc.report import create_report
 from ..signal import signal_rate
-from ..signal.signal_formatpeaks import _signal_from_indices
 from .ppg_clean import ppg_clean
 from .ppg_methods import ppg_methods
 from .ppg_peaks import ppg_peaks
