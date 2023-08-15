@@ -82,9 +82,9 @@ NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#po
 
 - `Contributing to NeuroKit <https://neuropsychology.github.io/NeuroKit/resources/contributing.html>`_
 
-Also, if you have developed new signal processing methods or algorithms and you want to **increase its usage, popularity and citations**, get in touch with us to eventually add it to NeuroKit. A great opportunity for the users as well as the original developers!
+Also, if you have developed new signal processing methods or algorithms and you want to **increase their usage, popularity, and citations**, get in touch with us to eventually add them to NeuroKit. A great opportunity for the users as well as the original developers!
 
-You have spotted an **mistake**? An **error** in a formula or code? OR there is just a step that you seems strange and you don't understand? **Please let us know!** We are Human beings, and we'll appreciate any inquiry.
+You have spotted a **mistake**? An **error** in a formula or code? OR there is just a step that you seem strange and you don't understand? **Please let us know!** We are Human beings, and we'll appreciate any inquiry.
 
 Documentation
 ----------------
@@ -136,7 +136,7 @@ Examples
 -  `Analyze Electrodermal Activity (EDA) <https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html>`_
 -  `Analyze Respiratory Rate Variability (RRV) <https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neuropsychology.github.io/NeuroKit/examples/ecg_heartbeats/ecg_heartbeats.html>`_
--  `Locate P, Q, S and T waves in ECG <https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html>`_
+-  `Locate P, Q, S, and T waves in ECG <https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html>`_
 -  `Analyze Electrooculography EOG data <https://neuropsychology.github.io/NeuroKit/examples/eog_analyze/eog_analyze.html>`_
 
 .. *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
@@ -259,7 +259,7 @@ Cardiac activity (ECG)
 
 .. code-block:: python
 
-    # Generate 15 seconds of ECG signal (recorded at 250 samples / second)
+    # Generate 15 seconds of ECG signal (recorded at 250 samples/second)
     ecg = nk.ecg_simulate(duration=15, sampling_rate=250, heart_rate=70)
 
     # Process it
@@ -297,7 +297,7 @@ Electromyography (EMG)
 
 .. code-block:: python
 
-    # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
+    # Generate 10 seconds of EMG signal (recorded at 250 samples/second)
     emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
     # Process it
@@ -315,7 +315,7 @@ Photoplethysmography (PPG/BVP)
 
 .. code-block:: python
 
-    # Generate 15 seconds of PPG signal (recorded at 250 samples / second)
+    # Generate 15 seconds of PPG signal (recorded at 250 samples/second)
     ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70)
 
     # Process it
@@ -367,11 +367,11 @@ Event-related
 ^^^^^^^^^^^^^^
 
 This type of analysis refers to physiological changes immediately occurring in response to an event.
-For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus) indicated by
-the dotted lines in the figure above. In this situation the analysis is epoch-based.
+For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus) are indicated by
+the dotted lines in the figure above. In this situation, the analysis is epoch-based.
 An epoch is a short chunk of the physiological signal (usually < 10 seconds), that is locked to a specific stimulus and hence
 the physiological signals of interest are time-segmented accordingly. This is represented by the orange boxes in the figure above.
-In this case, using `bio_analyze()` will compute features like rate changes, peak characteristics and phase characteristics.
+In this case, using `bio_analyze()` will compute features like rate changes, peak characteristics, and phase characteristics.
 
 - `Event-related example <https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html>`_
 
@@ -380,14 +380,14 @@ Interval-related
 
 This type of analysis refers to the physiological characteristics and features that occur over
 longer periods of time (from a few seconds to days of activity). Typical use cases are either
-periods of resting-state, in which the activity is recorded for several minutes while the participant
+periods of resting state, in which the activity is recorded for several minutes while the participant
 is at rest, or during different conditions in which there is no specific time-locked event
 (e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance,
 this type of analysis is used when people want to compare the physiological activity under different
 intensities of physical exercise, different types of movies, or different intensities of
 stress. To compare event-related and interval-related analysis, we can refer to the example figure above.
 For example, a participant might be watching a 20s-long short film where particular stimuli of
-interest in the movie appears at certain time points (marked by the dotted lines). While
+interest in the movie appear at certain time points (marked by the dotted lines). While
 event-related analysis pertains to the segments of signals within the orange boxes (to understand the physiological
 changes pertaining to the appearance of stimuli), interval-related analysis can be
 applied on the entire 20s duration to investigate how physiology fluctuates in general.
@@ -420,7 +420,7 @@ Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices an
 
 - **Compute HRV indices using Python**
 
-  - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
+  - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN, etc.
   - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).
   - **Nonlinear domain**: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn).
 
@@ -484,7 +484,7 @@ Signal Processing
     # Generate original signal
     original = nk.signal_simulate(duration=6, frequency=1)
 
-    # Distort the signal (add noise, linear trend, artifacts etc.)
+    # Distort the signal (add noise, linear trend, artifacts, etc.)
     distorted = nk.signal_distort(original,
                                   noise_amplitude=0.1,
                                   noise_frequency=[5, 10, 20],
@@ -514,7 +514,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
     # Generate signal
     signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=200)
 
-    # Find optimal time delay, embedding dimension and r
+    # Find optimal time delay, embedding dimension, and r
     parameters = nk.complexity_optimize(signal, show=True)
 
 
@@ -604,7 +604,7 @@ Popularity
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
-NeuroKit2 is one of the most welcoming package for new contributors and users, as well as the fastest growing package. So stop hesitating and hop onboard 🤗
+NeuroKit2 is one of the most welcoming packages for new contributors and users, as well as the fastest-growing package. So stop hesitating and hop on board 🤗
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
