@@ -7,7 +7,7 @@ from ..signal import signal_rate
 from .ecg_peaks import ecg_peaks
 
 
-def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
+def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwargs):
     """**Segment an ECG signal into single heartbeats**
 
     Segment an ECG signal into single heartbeats. Convenient for visualizing all the heart beats.
@@ -21,7 +21,10 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     sampling_rate : int
         The sampling frequency of ``ecg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     show : bool
-        If ``True``, will return a plot of heartbeats. Defaults to ``False``.
+        If ``True``, will return a plot of heartbeats. Defaults to ``False``. If "return", returns
+        the axis of the plot.
+    **kwargs
+        Other arguments to be passed.
 
     Returns
     -------
@@ -69,9 +72,9 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
 
     if show is not False:
-        fig = _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=average_hr)
+        ax = _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=average_hr, **kwargs)
     if show == "return":
-        return fig
+        return ax
 
     return heartbeats
 
@@ -79,30 +82,34 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=0):
+def _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=0, ax=None):
     df = epochs_to_df(heartbeats)
     # Average heartbeat
     mean_heartbeat = df.drop(["Index", "Label"], axis=1).groupby("Time").mean()
     df_pivoted = df.pivot(index="Time", columns="Label", values="Signal")
 
     # Prepare plot
-    fig = plt.figure()
+    if ax is None:
+        fig, ax = plt.subplots()
 
-    plt.title(f"Individual Heart Beats (average heart rate: {heartrate:0.1f} bpm)")
-    plt.xlabel("Time (s)")
-    plt.ylabel(ytitle)
+    ax.set_title(f"Individual Heart Beats (average heart rate: {heartrate:0.1f} bpm)")
+    ax.set_xlabel("Time (seconds)")
+    ax.set_ylabel(ytitle)
 
     # Add Vertical line at 0
-    plt.axvline(x=0, color="grey", linestyle="--")
+    ax.axvline(x=0, color="grey", linestyle="--")
 
     # Plot average heartbeat
-    plt.plot(mean_heartbeat.index, mean_heartbeat, color="red", linewidth=10)
+    ax.plot(
+        mean_heartbeat.index, mean_heartbeat, color="red", linewidth=10, label="Average"
+    )
 
     # Plot all heartbeats
     alpha = 1 / np.log2(1 + df_pivoted.shape[1])  # alpha decreases with more heartbeats
-    plt.plot(df_pivoted, color="grey", linewidth=alpha)
+    ax.plot(df_pivoted, color="grey", linewidth=alpha)
+    ax.legend(loc="upper right")
 
-    return fig
+    return ax
 
 
 def _ecg_segment_window(

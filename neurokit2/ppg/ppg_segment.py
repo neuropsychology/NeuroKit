@@ -6,7 +6,7 @@ from ..epochs import epochs_create
 from .ppg_peaks import ppg_peaks
 
 
-def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False):
+def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwargs):
     """**Segment an PPG signal into single heartbeats**
 
     Segment a PPG signal into single heartbeats. Convenient for visualizing all the heart beats.
@@ -21,6 +21,8 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False):
         The sampling frequency of ``ppg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     show : bool
         If ``True``, will return a plot of heartbeats. Defaults to ``False``.
+    **kwargs
+        Other arguments to be passed.
 
     Returns
     -------
@@ -66,8 +68,8 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False):
     heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
 
     if show is not False:
-        fig = _ecg_segment_plot(heartbeats, ytitle="PPG", heartrate=average_hr)
+        ax = _ecg_segment_plot(heartbeats, ytitle="PPG", heartrate=average_hr, **kwargs)
     if show == "return":
-        return fig
+        return ax
 
     return heartbeats
