@@ -11,7 +11,7 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", **kwargs):
 
     .. note::
 
-      Please help us improve the methods' documentation by adding a small description.
+      Please help us improve the methods' documentation and features.
 
 
     Parameters

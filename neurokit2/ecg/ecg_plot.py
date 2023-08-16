@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 
 from ..ecg import ecg_peaks
-from ..epochs import epochs_to_df
 from ..signal import signal_fixpeaks
 from ..signal.signal_rate import _signal_rate_plot
 from ..stats import rescale

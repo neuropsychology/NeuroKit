@@ -127,16 +127,10 @@ def _ecg_segment_window(
 
     # Modulator
     # Note: this is based on quick internal testing but could be improved
-    m = heart_rate / 60
+    window_size = 60 / heart_rate  # Beats per second
 
     # Window
-    epochs_start = -0.35 / m
-    epochs_end = 0.5 / m
+    epochs_start = 1 / 3 * window_size
+    epochs_end = 2 / 3 * window_size
 
-    # Adjust for high heart rates
-    if heart_rate >= 80:
-        c = 0.1
-        epochs_start = epochs_start - c
-        epochs_end = epochs_end + c
-
-    return epochs_start, epochs_end, heart_rate
+    return -epochs_start, epochs_end, heart_rate
