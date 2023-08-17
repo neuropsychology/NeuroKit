@@ -84,7 +84,7 @@ NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#po
 
 Also, if you have developed new signal processing methods or algorithms and you want to **increase their usage, popularity, and citations**, get in touch with us to eventually add them to NeuroKit. A great opportunity for the users as well as the original developers!
 
-You have spotted a **mistake**? An **error** in a formula or code? OR there is just a step that you seem strange and you don't understand? **Please let us know!** We are Human beings, and we'll appreciate any inquiry.
+You have spotted a **mistake**? An **error** in a formula or code? OR there is just a step that seems strange and you don't understand? **Please let us know!** We are human beings, and we'll appreciate any inquiry.
 
 Documentation
 ----------------
