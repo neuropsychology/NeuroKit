@@ -514,8 +514,8 @@ can <strong>analyze physiological data with only two lines of code</strong>.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/resources/contributing.html">Contributing to NeuroKit</a></p></li>
 </ul>
-<p>Also, if you have developed new signal processing methods or algorithms and you want to <strong>increase its usage, popularity and citations</strong>, get in touch with us to eventually add it to NeuroKit. A great opportunity for the users as well as the original developers!</p>
-<p>You have spotted an <strong>mistake</strong>? An <strong>error</strong> in a formula or code? OR there is just a step that you seems strange and you don’t understand? <strong>Please let us know!</strong> We are Human beings, and we’ll appreciate any inquiry.</p>
+<p>Also, if you have developed new signal processing methods or algorithms and you want to <strong>increase their usage, popularity, and citations</strong>, get in touch with us to eventually add them to NeuroKit. A great opportunity for the users as well as the original developers!</p>
+<p>You have spotted a <strong>mistake</strong>? An <strong>error</strong> in a formula or code? OR there is just a step that seems strange and you don’t understand? <strong>Please let us know!</strong> We are human beings, and we’ll appreciate any inquiry.</p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h2>
@@ -543,7 +543,7 @@ can <strong>analyze physiological data with only two lines of code</strong>.</p>
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html">Analyze Electrodermal Activity (EDA)</a></p></li>
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html">Analyze Respiratory Rate Variability (RRV)</a></p></li>
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></p></li>
-<li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></p></li>
+<li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S, and T waves in ECG</a></p></li>
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/eog_analyze/eog_analyze.html">Analyze Electrooculography EOG data</a></p></li>
 </ul>
 <p><strong>Don’t know which tutorial is suited for your case?</strong> Follow this flowchart:</p>
@@ -626,7 +626,7 @@ Full bibtex reference:
 </section>
 <section id="cardiac-activity-ecg">
 <h3>Cardiac activity (ECG)<a class="headerlink" href="#cardiac-activity-ecg" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 15 seconds of ECG signal (recorded at 250 samples / second)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 15 seconds of ECG signal (recorded at 250 samples/second)</span>
 <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 
 <span class="c1"># Process it</span>
@@ -654,7 +654,7 @@ Full bibtex reference:
 </section>
 <section id="electromyography-emg">
 <h3>Electromyography (EMG)<a class="headerlink" href="#electromyography-emg" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 10 seconds of EMG signal (recorded at 250 samples / second)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 10 seconds of EMG signal (recorded at 250 samples/second)</span>
 <span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="c1"># Process it</span>
@@ -668,7 +668,7 @@ Full bibtex reference:
 </section>
 <section id="photoplethysmography-ppg-bvp">
 <h3>Photoplethysmography (PPG/BVP)<a class="headerlink" href="#photoplethysmography-ppg-bvp" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 15 seconds of PPG signal (recorded at 250 samples / second)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 15 seconds of PPG signal (recorded at 250 samples/second)</span>
 <span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 
 <span class="c1"># Process it</span>
@@ -706,11 +706,11 @@ Full bibtex reference:
 <section id="event-related">
 <h3>Event-related<a class="headerlink" href="#event-related" title="Permalink to this heading">#</a></h3>
 <p>This type of analysis refers to physiological changes immediately occurring in response to an event.
-For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus) indicated by
-the dotted lines in the figure above. In this situation the analysis is epoch-based.
+For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus) are indicated by
+the dotted lines in the figure above. In this situation, the analysis is epoch-based.
 An epoch is a short chunk of the physiological signal (usually &lt; 10 seconds), that is locked to a specific stimulus and hence
 the physiological signals of interest are time-segmented accordingly. This is represented by the orange boxes in the figure above.
-In this case, using <cite>bio_analyze()</cite> will compute features like rate changes, peak characteristics and phase characteristics.</p>
+In this case, using <cite>bio_analyze()</cite> will compute features like rate changes, peak characteristics, and phase characteristics.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/bio_eventrelated/bio_eventrelated.html">Event-related example</a></p></li>
 </ul>
@@ -719,14 +719,14 @@ In this case, using <cite>bio_analyze()</cite> will compute features like rate c
 <h3>Interval-related<a class="headerlink" href="#interval-related" title="Permalink to this heading">#</a></h3>
 <p>This type of analysis refers to the physiological characteristics and features that occur over
 longer periods of time (from a few seconds to days of activity). Typical use cases are either
-periods of resting-state, in which the activity is recorded for several minutes while the participant
+periods of resting state, in which the activity is recorded for several minutes while the participant
 is at rest, or during different conditions in which there is no specific time-locked event
 (e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance,
 this type of analysis is used when people want to compare the physiological activity under different
 intensities of physical exercise, different types of movies, or different intensities of
 stress. To compare event-related and interval-related analysis, we can refer to the example figure above.
 For example, a participant might be watching a 20s-long short film where particular stimuli of
-interest in the movie appears at certain time points (marked by the dotted lines). While
+interest in the movie appear at certain time points (marked by the dotted lines). While
 event-related analysis pertains to the segments of signals within the orange boxes (to understand the physiological
 changes pertaining to the appearance of stimuli), interval-related analysis can be
 applied on the entire 20s duration to investigate how physiology fluctuates in general.
@@ -756,7 +756,7 @@ Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 <ul class="simple">
 <li><p><strong>Compute HRV indices using Python</strong></p>
 <ul>
-<li><p><strong>Time domain</strong>: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.</p></li>
+<li><p><strong>Time domain</strong>: RMSSD, MeanNN, SDNN, SDSD, CVNN, etc.</p></li>
 <li><p><strong>Frequency domain</strong>: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).</p></li>
 <li><p><strong>Nonlinear domain</strong>: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn).</p></li>
 </ul>
@@ -809,7 +809,7 @@ Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate original signal</span>
 <span class="n">original</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="c1"># Distort the signal (add noise, linear trend, artifacts etc.)</span>
+<span class="c1"># Distort the signal (add noise, linear trend, artifacts, etc.)</span>
 <span class="n">distorted</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">original</span><span class="p">,</span>
                               <span class="n">noise_amplitude</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                               <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
@@ -836,7 +836,7 @@ Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate signal</span>
 <span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 
-<span class="c1"># Find optimal time delay, embedding dimension and r</span>
+<span class="c1"># Find optimal time delay, embedding dimension, and r</span>
 <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_optimize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -907,7 +907,7 @@ Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/neurokit2"><img alt="https://img.shields.io/pypi/dd/neurokit2" src="https://img.shields.io/pypi/dd/neurokit2" /></a>
 <a class="reference external image-reference" href="https://github.com/neuropsychology/NeuroKit/stargazers"><img alt="https://img.shields.io/github/stars/neuropsychology/NeuroKit" src="https://img.shields.io/github/stars/neuropsychology/NeuroKit" /></a>
 <a class="reference external image-reference" href="https://github.com/neuropsychology/NeuroKit/network"><img alt="https://img.shields.io/github/forks/neuropsychology/NeuroKit" src="https://img.shields.io/github/forks/neuropsychology/NeuroKit" /></a>
-<p>NeuroKit2 is one of the most welcoming package for new contributors and users, as well as the fastest growing package. So stop hesitating and hop onboard 🤗</p>
+<p>NeuroKit2 is one of the most welcoming packages for new contributors and users, as well as the fastest-growing package. So stop hesitating and hop on board 🤗</p>
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/neurokit2"><img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/README_popularity.png" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/README_popularity.png" /></a>
 </section>
 <section id="used-at">
