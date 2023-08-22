@@ -355,13 +355,17 @@ document.write(`
 
 
 <div class="viewcode-block" id="ecg_peaks"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_peaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_peaks</span><span class="p">(</span>
-    <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">ecg_cleaned</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
+    <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find R-peaks in an ECG signal**</span>
 
-<span class="sd">    Find R-peaks in an ECG signal using the specified method. The method accepts unfiltered ECG</span>
-<span class="sd">    signals as input, although it is expected that a filtered (cleaned) ECG will result in better</span>
-<span class="sd">    results.</span>
+<span class="sd">    Find R-peaks in an ECG signal using the specified method. You can pass an unfiltered ECG</span>
+<span class="sd">    signals as input, but typically a filtered ECG (cleaned using ``ecg_clean()``) will result in</span>
+<span class="sd">    better results.</span>
 
 <span class="sd">    Different algorithms for peak-detection include:</span>
 
@@ -401,7 +405,7 @@ document.write(`
 <span class="sd">    ecg_cleaned : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The cleaned ECG channel as returned by ``ecg_clean()``.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
+<span class="sd">        The sampling frequency of ``ecg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : string</span>
 <span class="sd">        The algorithm to be used for R-peak detection.</span>
 <span class="sd">    correct_artifacts : bool</span>
@@ -602,7 +606,9 @@ document.write(`
 <span class="sd">      engineering &amp; technology, 43(3), 173-181.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_findpeaks</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">correct_artifacts</span><span class="p">:</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
@@ -611,7 +617,9 @@ document.write(`
 
         <span class="n">rpeaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">:</span> <span class="n">rpeaks</span><span class="p">}</span>
 
-    <span class="n">instant_peaks</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">)</span>
+    <span class="n">instant_peaks</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
+        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">rpeaks</span>
+    <span class="p">)</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">instant_peaks</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rpeaks</span>
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>

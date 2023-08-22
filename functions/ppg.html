@@ -439,8 +439,8 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_clean"><code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-findpeaks"><em>ppg_findpeaks()</em></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_findpeaks"><code class="docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-peaks"><em>ppg_peaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_peaks"><code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -452,7 +452,14 @@ document.write(`
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-intervalrelated"><em>ppg_intervalrelated()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_intervalrelated"><code class="docutils literal notranslate"><span class="pre">ppg_intervalrelated()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-findpeaks"><em>ppg_findpeaks()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_methods"><code class="docutils literal notranslate"><span class="pre">ppg_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_segment"><code class="docutils literal notranslate"><span class="pre">ppg_segment()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -511,7 +518,7 @@ see <a class="reference internal" href="#neurokit2.ppg.ppg_methods" title="neuro
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -521,7 +528,6 @@ see <a class="reference internal" href="#neurokit2.ppg.ppg_methods" title="neuro
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_process1.png"><img alt="../_images/p_ppg_process1.png" src="../_images/p_ppg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -581,9 +587,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  1.578758           0.708754</span>
-<span class="go">2     2        10000  ...                  0.068011           0.962472</span>
-<span class="go">3     3        15000  ...                  0.765843           0.986082</span>
+<span class="go">1     1         5000  ...                 -0.858198           0.880092</span>
+<span class="go">2     2        10000  ...                  1.010103           0.181308</span>
+<span class="go">3     3        15000  ...                  0.557448           0.963207</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -670,16 +676,14 @@ allows generating multiple version of the same signal distorted by different ran
 <h3><em>ppg_plot()</em><a class="headerlink" href="#ppg-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_plot">
-<span class="sig-name descname"><span class="pre">ppg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_plot.html#ppg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_plot.html#ppg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize photoplethysmogram (PPG) data</strong></p>
 <p>Visualize the PPG signal processing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ppg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if
-the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
 <li><p><strong>static</strong> (<em>bool</em>) – If True, a static plot will be generated with matplotlib.
 If False, an interactive plot will be generated with plotly.
 Defaults to True.</p></li>
@@ -689,25 +693,24 @@ Defaults to True.</p></li>
 <dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed PPG signals.</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># Simulate data</span>
-<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
-
-<span class="go"># Process signal</span>
-<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-
-<span class="go"># Plot</span>
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" src="../_images/p_ppg_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a></p>
 </div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate data</span>
+<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="go"># Process signal</span>
+<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Plot</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" src="../_images/p_ppg_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -739,7 +742,7 @@ any cleaning.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_simulate" title="neurokit2.ppg.ppg_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_simulate" title="neurokit2.ppg.ppg_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_simulate</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -775,31 +778,44 @@ IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</p></
 </dd></dl>
 
 </section>
-<section id="ppg-findpeaks">
-<h3><em>ppg_findpeaks()</em><a class="headerlink" href="#ppg-findpeaks" title="Permalink to this heading">#</a></h3>
+<section id="ppg-peaks">
+<h3><em>ppg_peaks()</em><a class="headerlink" href="#ppg-peaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.ppg.ppg_findpeaks">
-<span class="sig-name descname"><span class="pre">ppg_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_findpeaks.html#ppg_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_findpeaks" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="neurokit2.ppg.ppg_peaks">
+<span class="sig-name descname"><span class="pre">ppg_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_peaks.html#ppg_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_peaks" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Find systolic peaks in a photoplethysmogram (PPG) signal</strong></p>
+<p>Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG
+signals as input, but typically a filtered PPG (cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>) will result in
+better results.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please help us improve the methods’ documentation and features.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG channel as returned by <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_clean()</span></code></a>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.</p></li>
+<li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG channel as returned by <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ppg_cleaned</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bishop&quot;</span></code>. The default is
 <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a plot of the thresholds used during peak detection. Useful for
-debugging. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments, usually specific for each method.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which systolic
-peaks occur, accessible with the key <code class="docutils literal notranslate"><span class="pre">&quot;PPG_Peaks&quot;</span></code>.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as the input signal in which occurrences of R-peaks marked as
+<code class="docutils literal notranslate"><span class="pre">1</span></code> in a list of zeros with the same length as <code class="docutils literal notranslate"><span class="pre">ppg_cleaned</span></code>. Accessible with the keys
+<code class="docutils literal notranslate"><span class="pre">&quot;PPG_Peaks&quot;</span></code>.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which R-peaks
+occur, accessible with the key <code class="docutils literal notranslate"><span class="pre">&quot;PPG_Peaks&quot;</span></code>, as well as the signals’ sampling rate,
+accessible with the key <code class="docutils literal notranslate"><span class="pre">&quot;sampling_rate&quot;</span></code>.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_simulate" title="neurokit2.ppg.ppg_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_segment" title="neurokit2.ppg.ppg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_segment</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -810,14 +826,17 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 
 <span class="gp">In [4]: </span><span class="n">ppg_clean</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go"># Default method (Elgendi et al., 2013)</span>
+<span class="gp">In [5]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">peaks_idx</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
-<span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [7]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks2.png"><img alt="../_images/p_ppg_findpeaks2.png" src="../_images/p_ppg_findpeaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_ppg_peaks1.png"><img alt="../_images/p_ppg_peaks1.png" src="../_images/p_ppg_peaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_ppg_peaks2.png"><img alt="../_images/p_ppg_peaks2.png" src="../_images/p_ppg_peaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Elgendi, M., Norton, I., Brearley, M., Abbott, D., &amp; Schuurmans, D. (2013). Systolic peak
@@ -890,9 +909,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.421063           0.830119</span>
-<span class="go">2     2        10000  ...                 -2.639959           0.905772</span>
-<span class="go">3     3        15000  ...                  0.304996           0.970028</span>
+<span class="go">1     1         5000  ...                  0.767455           0.870834</span>
+<span class="go">2     2        10000  ...                  2.793705           0.828370</span>
+<span class="go">3     3        15000  ...                  0.511643           0.653413</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -962,6 +981,12 @@ separately processed DataFrames.</p></li>
 </div>
 </dd></dl>
 
+</section>
+</section>
+<section id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this heading">#</a></h2>
+<section id="ppg-findpeaks">
+<h3><em>ppg_findpeaks()</em><a class="headerlink" href="#ppg-findpeaks" title="Permalink to this heading">#</a></h3>
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
 <span class="target" id="module-neurokit2.ppg"></span><p>Submodule for NeuroKit.</p>
 <dl class="py function">
@@ -986,9 +1011,9 @@ of <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit
 <li><p><strong>method_peaks</strong> (<em>str</em>) – The method used to find peaks. If <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>,
 will be set to the value of <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.
 For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
-of <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a>.</p></li>
+of <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_clean()</span></code></a> and
-<a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a>.</p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -999,7 +1024,7 @@ references.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1016,6 +1041,40 @@ references.</p>
 <span class="go">            PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ppg.ppg_segment">
+<span class="sig-name descname"><span class="pre">ppg_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_segment.html#ppg_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_segment" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Segment an PPG signal into single heartbeats</strong></p>
+<p>Segment a PPG signal into single heartbeats. Convenient for visualizing all the heart beats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG channel as returned by <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>.</p></li>
+<li><p><strong>peaks</strong> (<em>dict</em>) – The samples at which the R-peaks occur. Dict returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ppg_cleaned</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot of heartbeats. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all segmented heartbeats.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_plot" title="neurokit2.ppg.ppg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">ppg_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_segment</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_ppg_segment.png"><img alt="../_images/p_ppg_segment.png" src="../_images/p_ppg_segment.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -1094,8 +1153,8 @@ references.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_clean"><code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-findpeaks"><em>ppg_findpeaks()</em></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_findpeaks"><code class="docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-peaks"><em>ppg_peaks()</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_peaks"><code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1107,7 +1166,14 @@ references.</p>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-intervalrelated"><em>ppg_intervalrelated()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_intervalrelated"><code class="docutils literal notranslate"><span class="pre">ppg_intervalrelated()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-findpeaks"><em>ppg_findpeaks()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_methods"><code class="docutils literal notranslate"><span class="pre">ppg_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_segment"><code class="docutils literal notranslate"><span class="pre">ppg_segment()</span></code></a></li>
 </ul>
 </li>
 </ul>

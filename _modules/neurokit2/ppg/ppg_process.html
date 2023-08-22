@@ -356,10 +356,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span>
 <span class="kn">from</span> <span class="nn">..misc.report</span> <span class="kn">import</span> <span class="n">create_report</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_rate</span>
-<span class="kn">from</span> <span class="nn">..signal.signal_formatpeaks</span> <span class="kn">import</span> <span class="n">_signal_from_indices</span>
 <span class="kn">from</span> <span class="nn">.ppg_clean</span> <span class="kn">import</span> <span class="n">ppg_clean</span>
-<span class="kn">from</span> <span class="nn">.ppg_findpeaks</span> <span class="kn">import</span> <span class="n">ppg_findpeaks</span>
 <span class="kn">from</span> <span class="nn">.ppg_methods</span> <span class="kn">import</span> <span class="n">ppg_methods</span>
+<span class="kn">from</span> <span class="nn">.ppg_peaks</span> <span class="kn">import</span> <span class="n">ppg_peaks</span>
 <span class="kn">from</span> <span class="nn">.ppg_plot</span> <span class="kn">import</span> <span class="n">ppg_plot</span>
 
 
@@ -432,7 +431,7 @@ document.write(`
     <span class="p">)</span>
 
     <span class="c1"># Find peaks</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">ppg_findpeaks</span><span class="p">(</span>
+    <span class="n">peaks_signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span>
         <span class="n">ppg_cleaned</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">],</span>
@@ -440,11 +439,6 @@ document.write(`
     <span class="p">)</span>
 
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
-
-    <span class="c1"># Mark peaks</span>
-    <span class="n">peaks_signal</span> <span class="o">=</span> <span class="n">_signal_from_indices</span><span class="p">(</span>
-        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span>
-    <span class="p">)</span>
 
     <span class="c1"># Rate computation</span>
     <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
@@ -457,7 +451,7 @@ document.write(`
             <span class="s2">&quot;PPG_Raw&quot;</span><span class="p">:</span> <span class="n">ppg_signal</span><span class="p">,</span>
             <span class="s2">&quot;PPG_Clean&quot;</span><span class="p">:</span> <span class="n">ppg_cleaned</span><span class="p">,</span>
             <span class="s2">&quot;PPG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
-            <span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks_signal</span><span class="p">,</span>
+            <span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks_signal</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
 

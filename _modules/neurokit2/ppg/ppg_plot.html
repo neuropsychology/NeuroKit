@@ -351,12 +351,16 @@ document.write(`
                   
   <h1>Source code for neurokit2.ppg.ppg_plot</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">..signal.signal_rate</span> <span class="kn">import</span> <span class="n">_signal_rate_plot</span>
+<span class="kn">from</span> <span class="nn">.ppg_segment</span> <span class="kn">import</span> <span class="n">ppg_segment</span>
 
-<div class="viewcode-block" id="ppg_plot"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_plot">[docs]</a><span class="k">def</span> <span class="nf">ppg_plot</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ppg_plot"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_plot">[docs]</a><span class="k">def</span> <span class="nf">ppg_plot</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Visualize photoplethysmogram (PPG) data**</span>
 
 <span class="sd">    Visualize the PPG signal processing.</span>
@@ -366,9 +370,7 @@ document.write(`
 <span class="sd">    ppg_signals : DataFrame</span>
 <span class="sd">        DataFrame obtained from :func:`.ppg_process`.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if</span>
-<span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over samples.</span>
-<span class="sd">        Defaults to ``None``.</span>
+<span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    static : bool</span>
 <span class="sd">        If True, a static plot will be generated with matplotlib.</span>
 <span class="sd">        If False, an interactive plot will be generated with plotly.</span>
@@ -379,6 +381,10 @@ document.write(`
 <span class="sd">    fig</span>
 <span class="sd">        Figure representing a plot of the processed PPG signals.</span>
 
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ppg_process</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
@@ -386,19 +392,16 @@ document.write(`
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      # Simulate data</span>
-<span class="sd">      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)</span>
+<span class="sd">      ppg = nk.ppg_simulate(duration=10, sampling_rate=100, heart_rate=70)</span>
 <span class="sd">      # Process signal</span>
-<span class="sd">      signals, info = nk.ppg_process(ppg, sampling_rate=1000)</span>
+<span class="sd">      signals, info = nk.ppg_process(ppg, sampling_rate=100)</span>
 
 <span class="sd">      # Plot</span>
 <span class="sd">      @savefig p_ppg_plot1.png scale=100%</span>
-<span class="sd">      nk.ppg_plot(signals)</span>
+<span class="sd">      nk.ppg_plot(signals, sampling_rate=100)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    ppg_process</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Sanity-check input.</span>
@@ -407,26 +410,26 @@ document.write(`
             <span class="s2">&quot;NeuroKit error: The `ppg_signals` argument must&quot;</span>
             <span class="s2">&quot; be the DataFrame returned by `ppg_process()`.&quot;</span>
         <span class="p">)</span>
-    <span class="c1"># X-axis</span>
-    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ppg_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="c1"># Get peak indices</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Extract Peaks.</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s2">&quot;PPG_Peaks&quot;</span> <span class="ow">in</span> <span class="n">ppg_signals</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># X-axis</span>
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_signals</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">static</span><span class="p">:</span>
         <span class="c1"># Prepare figure</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
-            <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
-            <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">])</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">sharex</span><span class="o">=</span><span class="n">ax0</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
         <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Photoplethysmogram (PPG)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 
         <span class="c1"># Plot cleaned and raw PPG</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
@@ -434,7 +437,7 @@ document.write(`
         <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
             <span class="n">x_axis</span><span class="p">,</span>
             <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FB1CF0&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C27B0&quot;</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span>
             <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
@@ -444,25 +447,30 @@ document.write(`
         <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">x_axis</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span>
             <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">][</span><span class="n">peaks</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#D60574&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">,</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Peaks&quot;</span><span class="p">,</span>
             <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Rate</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Heart Rate&quot;</span><span class="p">)</span>
-        <span class="n">ppg_rate_mean</span> <span class="o">=</span> <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">x_axis</span><span class="p">,</span>
-            <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Rate&quot;</span><span class="p">],</span>
+        <span class="c1"># Plot Heart Rate</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">_signal_rate_plot</span><span class="p">(</span>
+            <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">peaks</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Heart Rate&quot;</span><span class="p">,</span>
+            <span class="n">ytitle</span><span class="o">=</span><span class="s2">&quot;Beats per minute (bpm)&quot;</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FB661C&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Rate&quot;</span><span class="p">,</span>
-            <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+            <span class="n">color_mean</span><span class="o">=</span><span class="s2">&quot;#FBB41C&quot;</span><span class="p">,</span>
+            <span class="n">color_points</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">ppg_rate_mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FBB41C&quot;</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fig</span>
+
+        <span class="c1"># Plot individual heart beats</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">ppg_segment</span><span class="p">(</span>
+            <span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Clean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="s2">&quot;return&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span>
+        <span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
@@ -483,7 +491,9 @@ document.write(`
         <span class="p">)</span>
 
         <span class="c1"># Plot cleaned and raw PPG</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Raw&quot;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">),</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">ppg_signals</span><span class="p">[</span><span class="s2">&quot;PPG_Raw&quot;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">),</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
             <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span>

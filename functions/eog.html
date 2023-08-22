@@ -1089,7 +1089,7 @@ if the method to be used is <code class="docutils literal notranslate"><span cla
 <span class="target" id="module-neurokit2.eog"></span><p>Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_rate">
-<span class="sig-name descname"><span class="pre">eog_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eog.eog_rate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eog.eog_rate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Compute Signal Rate</strong></p>
 <p>Calculate signal rate (per minute) from a series of peaks. It is a general function that works
 for any series of peaks (i.e., not specific to a particular type of signal). It is computed as
@@ -1098,7 +1098,7 @@ for any series of peaks (i.e., not specific to a particular type of signal). It 
 <p class="admonition-title">Note</p>
 <p>This function is implemented under <a class="reference internal" href="signal.html#neurokit2.signal_rate" title="neurokit2.signal_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_rate()</span></code></a>, but it also re-exported under
 different names, such as <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_rate" title="neurokit2.ecg.ecg_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_rate()</span></code></a>, or <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_rate" title="neurokit2.rsp.rsp_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rate()</span></code></a>. The
-aliases provided for consistency.</p>
+aliases are provided for consistency.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1115,11 +1115,16 @@ signal (i.e., <code class="docutils literal notranslate"><span class="pre">peaks
 <code class="docutils literal notranslate"><span class="pre">desired_length</span></code> samples. To interpolate the rate over the entire duration of the signal,
 set <code class="docutils literal notranslate"><span class="pre">desired_length</span></code> to the number of samples in the signal. Cannot be smaller than or
 equal to the sample at which the last peak occurs in the signal. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>interpolation_method</strong> (<em>str</em>) – Method used to interpolate the rate between peaks. See <a class="reference internal" href="signal.html#neurokit2.signal_interpolate" title="neurokit2.signal_interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_interpolate()</span></code></a>.
-<code class="docutils literal notranslate"><span class="pre">&quot;monotone_cubic&quot;</span></code> is chosen as the default interpolation method since it ensures monotone
+<li><dl class="simple">
+<dt><strong>interpolation_method</strong> (<em>str</em>) –    Method used to interpolate the rate between peaks. See <a class="reference internal" href="signal.html#neurokit2.signal_interpolate" title="neurokit2.signal_interpolate"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal_interpolate()</span></code></a>.</dt><dd><p><code class="docutils literal notranslate"><span class="pre">&quot;monotone_cubic&quot;</span></code> is chosen as the default interpolation method since it ensures monotone
 interpolation between data points (i.e., it prevents physiologically implausible
 “overshoots” or “undershoots” in the y-direction). In contrast, the widely used cubic
-spline interpolation does not ensure monotonicity.</p></li>
+spline interpolation does not ensure monotonicity.</p>
+</dd>
+<dt>show<span class="classifier">bool</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, shows a plot. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

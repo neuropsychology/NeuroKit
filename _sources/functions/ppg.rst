@@ -26,9 +26,9 @@ Preprocessing
 """""""""""""
 .. autofunction:: neurokit2.ppg.ppg_clean
 
-*ppg_findpeaks()*
+*ppg_peaks()*
 """""""""""""""""
-.. autofunction:: neurokit2.ppg.ppg_findpeaks
+.. autofunction:: neurokit2.ppg.ppg_peaks
 
 
 Analysis
@@ -42,9 +42,15 @@ Analysis
 .. autofunction:: neurokit2.ppg.ppg_intervalrelated
 
 
+Miscellaneous
+^^^^^^^^^^^^^^^^
+*ppg_findpeaks()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ppg_findpeaks
+
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.ppg
    :members:
-   :exclude-members: ppg_process, ppg_analyze, ppg_simulate, ppg_plot, ppg_clean, ppg_findpeaks, ppg_rate, ppg_eventrelated, ppg_intervalrelated
+   :exclude-members: ppg_process, ppg_analyze, ppg_simulate, ppg_plot, ppg_clean, ppg_peaks, ppg_findpeaks, ppg_rate, ppg_eventrelated, ppg_intervalrelated
