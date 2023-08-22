@@ -15,7 +15,7 @@ __all__ = [
     "read_xdf",
     "read_video",
     "data",
-    "write_csv", 
-    "download_from_url", 
+    "write_csv",
+    "download_from_url",
     "download_zip",
 ]

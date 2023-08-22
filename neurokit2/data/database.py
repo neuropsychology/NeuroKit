@@ -5,7 +5,7 @@ import urllib.parse
 
 def download_from_url(url, destination_path=None):
     """**Download Files from URLs**
-    
+
     Download a file from the given URL and save it to the destination path.
 
     Parameters
@@ -15,7 +15,7 @@ def download_from_url(url, destination_path=None):
     destination_path : str, Path
         The path to which the file will be downloaded. If None, the file name will be taken
         from the last part of the URL path and downloaded to the current working directory.
-    
+
     Returns
     -------
     bool
@@ -32,13 +32,13 @@ def download_from_url(url, destination_path=None):
         return True
     else:
         return False
-    
+
 
 def download_zip(url, destination_path=None, unzip=True):
     """**Download ZIP files**
-    
+
     Download a ZIP file from a URL and extract it to a destination directory.
-    
+
     Parameters
     ----------
     url : str
@@ -69,10 +69,10 @@ def download_zip(url, destination_path=None, unzip=True):
             # Extract the ZIP file
             with zipfile.ZipFile(zip_filepath, "r") as zip_ref:
                 extracted_folder_name = pathlib.Path(zip_ref.namelist()[0]).parts[0]
-                    
+
                 # Extract the contents
                 zip_ref.extractall(destination_directory)
-                
+
                 # Rename the extracted folder to the desired name
                 extracted_folder_path = destination_directory / extracted_folder_name
                 new_folder_path = destination_directory / pathlib.Path(destination_path).name
@@ -88,7 +88,7 @@ def download_zip(url, destination_path=None, unzip=True):
 
 def _download_path_sanitize(url, destination_path=None):
     """Sanitize the destination path of a file to be downloaded from a URL.
-    
+
     Parameters
     ----------
     url : str
@@ -96,7 +96,7 @@ def _download_path_sanitize(url, destination_path=None):
     destination_path : str, Path
         The path to which the file will be downloaded. If None, the file name will be taken
         from the last part of the URL path and downloaded to the current working directory.
-    
+
     Returns
     -------
     Path
