@@ -72,7 +72,7 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
     heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
 
     if show is not False:
-        ax = _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=average_hr, **kwargs)
+        ax = _ecg_segment_plot(heartbeats, heartrate=average_hr, ytitle="ECG", **kwargs)
     if show == "return":
         return ax
 
@@ -82,7 +82,7 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=0, ax=None):
+def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax=None):
     df = epochs_to_df(heartbeats)
     # Average heartbeat
     mean_heartbeat = df.drop(["Index", "Label"], axis=1).groupby("Time").mean()
@@ -101,7 +101,7 @@ def _ecg_segment_plot(heartbeats, ytitle="ECG", heartrate=0, ax=None):
 
     # Plot average heartbeat
     ax.plot(
-        mean_heartbeat.index, mean_heartbeat, color="red", linewidth=10, label="Average"
+        mean_heartbeat.index, mean_heartbeat, color=color, linewidth=10, label="Average"
     )
 
     # Plot all heartbeats

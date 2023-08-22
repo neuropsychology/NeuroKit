@@ -68,7 +68,9 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
     heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
 
     if show is not False:
-        ax = _ecg_segment_plot(heartbeats, ytitle="PPG", heartrate=average_hr, **kwargs)
+        ax = _ecg_segment_plot(
+            heartbeats, heartrate=average_hr, ytitle="PPG", color="#9C27B0", **kwargs
+        )
     if show == "return":
         return ax
 

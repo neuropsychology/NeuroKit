@@ -29,6 +29,10 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
     fig
         Figure representing a plot of the processed PPG signals.
 
+    See Also
+    --------
+    ppg_process
+
     Examples
     --------
     .. ipython:: python
@@ -36,19 +40,16 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
       import neurokit2 as nk
 
       # Simulate data
-      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
+      ppg = nk.ppg_simulate(duration=10, sampling_rate=100, heart_rate=70)
       # Process signal
-      signals, info = nk.ppg_process(ppg, sampling_rate=1000)
+      signals, info = nk.ppg_process(ppg, sampling_rate=100)
 
       # Plot
       @savefig p_ppg_plot1.png scale=100%
-      nk.ppg_plot(signals, sampling_rate=1000)
+      nk.ppg_plot(signals, sampling_rate=100)
       @suppress
       plt.close()
 
-    See Also
-    --------
-    ppg_process
     """
 
     # Sanity-check input.
@@ -77,7 +78,6 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
         ax2 = fig.add_subplot(gs[:, -1])
 
         fig.suptitle("Photoplethysmogram (PPG)", fontweight="bold")
-        plt.tight_layout(h_pad=0.4)
 
         # Plot cleaned and raw PPG
         ax0.set_title("Raw and Cleaned Signal")
@@ -85,7 +85,7 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
         ax0.plot(
             x_axis,
             ppg_signals["PPG_Clean"],
-            color="#FB1CF0",
+            color="#9C27B0",
             label="Cleaned",
             zorder=1,
             linewidth=1.5,
@@ -95,7 +95,7 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
         ax0.scatter(
             x_axis[peaks],
             ppg_signals["PPG_Clean"][peaks],
-            color="#D60574",
+            color="#FFC107",
             label="Peaks",
             zorder=2,
         )

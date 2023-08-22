@@ -84,7 +84,6 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=1000, show_type="default"):
         ax2 = fig.add_subplot(gs[:, -1])
 
         fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
-        plt.tight_layout(h_pad=0.3, w_pad=0.1)
 
         # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
@@ -112,7 +111,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=1000, show_type="default"):
         ax0.plot(
             x_axis,
             ecg_signals["ECG_Clean"],
-            color="#E91E63",
+            color="#F44336",
             label="Cleaned",
             zorder=1,
             linewidth=1.5,
