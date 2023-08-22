@@ -2,11 +2,16 @@
 import numpy as np
 import pandas as pd
 
+from .rsp_rav import rsp_rav
 from .rsp_rrv import rsp_rrv
 
 
 def rsp_intervalrelated(data, sampling_rate=1000):
-    """**Performs RSP analysis on longer periods of data (typically > 10 seconds), such as resting-state data**
+    """**State-related Respiration Indices**
+
+    Performs RSP analysis on longer periods of data (typically > 10 seconds), such as resting-state
+    data. It returns a dataframe containing features and characteristics of respiration in that
+    interval.
 
     Parameters
     ----------
@@ -33,7 +38,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 
     See Also
     --------
-    bio_process, rsp_eventrelated
+    bio_process, rsp_eventrelated, rsp_rrv, rsp_rav
 
     Examples
     ----------
@@ -51,13 +56,12 @@ def rsp_intervalrelated(data, sampling_rate=1000):
       nk.rsp_intervalrelated(df, sampling_rate=100)
 
       epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
-      nk.rsp_intervalrelated(epochs)
+      nk.rsp_intervalrelated(epochs, sampling_rate=100)
 
     """
 
     # If one interval dataframe
     if isinstance(data, pd.DataFrame):
-
         intervals = _rsp_intervalrelated_features(data, sampling_rate)
         intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
@@ -92,21 +96,24 @@ def _rsp_intervalrelated_features(data, sampling_rate, output={}):
     if "RSP_Rate" in colnames:
         output["RSP_Rate_Mean"] = np.nanmean(data["RSP_Rate"].values)
         rrv = rsp_rrv(data, sampling_rate=sampling_rate)
-        for column in rrv.columns:
-            output[column] = rrv[column].values.astype("float")
+        output.update(rrv.to_dict(orient="records")[0])
 
     if "RSP_Amplitude" in colnames:
-        output["RSP_Amplitude_Mean"] = np.nanmean(data["RSP_Amplitude"].values)
+        rav = rsp_rav(data["RSP_Amplitude"].values, peaks=data)
+        output.update(rav.to_dict(orient="records")[0])
 
     if "RSP_RVT" in colnames:
         output["RSP_RVT"] = np.nanmean(data["RSP_RVT"].values)
 
     if "RSP_Symmetry_PeakTrough" in colnames:
-        output["RSP_Symmetry_PeakTrough"] = np.nanmean(data["RSP_Symmetry_PeakTrough"].values)
-        output["RSP_Symmetry_RiseDecay"] = np.nanmean(data["RSP_Symmetry_RiseDecay"].values)
+        output["RSP_Symmetry_PeakTrough"] = np.nanmean(
+            data["RSP_Symmetry_PeakTrough"].values
+        )
+        output["RSP_Symmetry_RiseDecay"] = np.nanmean(
+            data["RSP_Symmetry_RiseDecay"].values
+        )
 
     if "RSP_Phase" in colnames:
-
         # Extract inspiration durations
         insp_phases = data[data["RSP_Phase"] == 1]
         insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
@@ -119,7 +126,9 @@ def _rsp_intervalrelated_features(data, sampling_rate, output={}):
         # Check for unequal lengths
         diff = abs(len(insp_start) - len(insp_end))
         if len(insp_start) > len(insp_end):
-            insp_start = insp_start[: len(insp_start) - diff]  # remove extra start points
+            insp_start = insp_start[
+                : len(insp_start) - diff
+            ]  # remove extra start points
         elif len(insp_end) > len(insp_start):
             insp_end = insp_end[: len(insp_end) - diff]  # remove extra end points
 
@@ -146,12 +155,8 @@ def _rsp_intervalrelated_features(data, sampling_rate, output={}):
         output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
         output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
         output["RSP_Phase_Duration_Ratio"] = (
-            output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
+            output["RSP_Phase_Duration_Inspiration"]
+            / output["RSP_Phase_Duration_Expiration"]
         )
-
-    return output
-
-
-def _rsp_intervalrelated_rrv(data, sampling_rate, output={}):
 
     return output
