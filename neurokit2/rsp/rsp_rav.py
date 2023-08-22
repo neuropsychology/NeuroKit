@@ -30,7 +30,8 @@ def rsp_rav(
         assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     troughs : list or array or DataFrame or Series or dict
         The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with :func:`.rsp_findpeaks`. This argument can be inferred from the ``peaks`` argument if the information.
+        assumed that these containers were obtained with :func:`.rsp_findpeaks`. This argument can
+        be inferred from the ``peaks`` argument if the information.
 
     Returns
     -------
@@ -84,5 +85,4 @@ def rsp_rav(
     # out["Mad"] = mad(amplitude_discrete)
     # out["MCV"] = out["Mad"] / out["Median"]
 
-    rav = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("RAV_")
-    return rav
+    return pd.DataFrame.from_dict(out, orient="index").T.add_prefix("RAV_")
