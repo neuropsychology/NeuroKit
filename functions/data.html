@@ -442,6 +442,8 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-neurokit2.data"><em>Other</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.data.download_from_url"><code class="docutils literal notranslate"><span class="pre">download_from_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.data.download_zip"><code class="docutils literal notranslate"><span class="pre">download_zip()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.data.read_xdf"><code class="docutils literal notranslate"><span class="pre">read_xdf()</span></code></a></li>
 </ul>
 </li>
@@ -782,6 +784,45 @@ be installed via the <code class="docutils literal notranslate"><span class="pre
 <span id="other"></span><h2><em>Other</em><a class="headerlink" href="#module-neurokit2.data" title="Permalink to this heading">#</a></h2>
 <p>Submodule for NeuroKit.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.data.download_from_url">
+<span class="sig-name descname"><span class="pre">download_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/database.html#download_from_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.download_from_url" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Download Files from URLs</strong></p>
+<p>Download a file from the given URL and save it to the destination path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The URL of the file to download.</p></li>
+<li><p><strong>destination_path</strong> (<em>str, Path</em>) – The path to which the file will be downloaded. If None, the file name will be taken
+from the last part of the URL path and downloaded to the current working directory.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bool</em> – True if the file was downloaded successfully, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.data.download_zip">
+<span class="sig-name descname"><span class="pre">download_zip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unzip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/database.html#download_zip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.download_zip" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Download ZIP files</strong></p>
+<p>Download a ZIP file from a URL and extract it to a destination directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The URL of the ZIP file to download.</p></li>
+<li><p><strong>destination_path</strong> (<em>str, Path</em>) – The path to which the ZIP file will be extracted. If None, the folder name will be taken
+from the last part of the URL path and downloaded to the current working directory.</p></li>
+<li><p><strong>unzip</strong> (<em>bool</em>) – Whether to unzip the file or not. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bool</em> – True if the ZIP file was downloaded successfully, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_xdf">
 <span class="sig-name descname"><span class="pre">read_xdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillmissing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_xdf.html#read_xdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_xdf" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Read and tidy an XDF file</strong></p>
@@ -909,6 +950,8 @@ of pandas dataframes (one dataframe per device) if multiple devices are read.</p
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-neurokit2.data"><em>Other</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.data.download_from_url"><code class="docutils literal notranslate"><span class="pre">download_from_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.data.download_zip"><code class="docutils literal notranslate"><span class="pre">download_zip()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.data.read_xdf"><code class="docutils literal notranslate"><span class="pre">read_xdf()</span></code></a></li>
 </ul>
 </li>
