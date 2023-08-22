@@ -96,7 +96,9 @@ def test_eda_peaks():
         drift=0.01,
         random_state=42,
     )
-    eda_phasic = nk.eda_phasic(nk.standardize(eda), method="highpass")["EDA_Phasic"].values
+    eda_phasic = nk.eda_phasic(nk.standardize(eda), method="highpass")[
+        "EDA_Phasic"
+    ].values
 
     signals, info = nk.eda_peaks(eda_phasic, method="gamboa2008")
     onsets, peaks, amplitudes = biosppy.eda.basic_scr(eda_phasic, sampling_rate=1000)
@@ -115,7 +117,9 @@ def test_eda_peaks():
 
 
 def test_eda_process():
-    eda = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
+    eda = nk.eda_simulate(
+        duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250
+    )
     signals, info = nk.eda_process(eda, sampling_rate=250)
 
     assert signals.shape == (7500, 11)
@@ -195,7 +199,7 @@ def test_eda_eventrelated():
     eda_eventrelated = nk.eda_eventrelated(epochs)
 
     no_activation = np.where(eda_eventrelated["EDA_SCR"] == 0)[0][0]
-    assert int(pd.DataFrame(eda_eventrelated.values[no_activation]).isna().sum()) == 4
+    assert pd.DataFrame(eda_eventrelated.values[no_activation]).isna().sum()[0] == 4
 
     assert len(eda_eventrelated["Label"]) == 3
 
@@ -238,7 +242,9 @@ def test_eda_findpeaks():
     nabian2018 = nk.eda_findpeaks(eda_phasic, sampling_rate=100, method="nabian2018")
     assert len(nabian2018["SCR_Peaks"]) == 9
 
-    vanhalem2020 = nk.eda_findpeaks(eda_phasic, sampling_rate=100, method="vanhalem2020")
+    vanhalem2020 = nk.eda_findpeaks(
+        eda_phasic, sampling_rate=100, method="vanhalem2020"
+    )
     min_n_peaks = min(len(vanhalem2020), len(nabian2018))
     assert any(
         nabian2018["SCR_Peaks"][:min_n_peaks] - vanhalem2020["SCR_Peaks"][:min_n_peaks]
@@ -253,7 +259,6 @@ def test_eda_findpeaks():
     ],
 )
 def test_eda_report(tmp_path, method_cleaning, method_phasic, method_peaks):
-
     sampling_rate = 100
 
     eda = nk.eda_simulate(

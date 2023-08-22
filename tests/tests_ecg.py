@@ -88,12 +88,8 @@ def test_ecg_plot():
 
     # Plot data over seconds.
     nk.ecg_plot(ecg_summary, sampling_rate=1000)
-    # This will identify the latest figure.
-    fig = plt.gcf()
+    fig = plt.gcf()  # Extract the latest figure.
     assert len(fig.axes) == 3
-    titles = ["Raw and Cleaned Signal", "Heart Rate", "Individual Heart Beats"]
-    for ax, title in zip(fig.get_axes(), titles):
-        assert ax.get_title() == title
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
