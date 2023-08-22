@@ -236,7 +236,7 @@ def _signal_fixpeaks_kubios(
     artifacts.update(subspaces)
 
     if show:
-        _plot_artifacts_lipponen2019(artifacts, subspaces)
+        _plot_artifacts_lipponen2019(artifacts)
 
     return artifacts, peaks_clean
 
@@ -499,33 +499,39 @@ def _update_indices(source_idcs, update_idcs, update):
     return list(np.unique(update_idcs))
 
 
-def _plot_artifacts_lipponen2019(artifacts, info):
-    # Extract parameters
-    longshort_idcs = artifacts["longshort"]
-    ectopic_idcs = artifacts["ectopic"]
-    extra_idcs = artifacts["extra"]
-    missed_idcs = artifacts["missed"]
+def _plot_artifacts_lipponen2019(info):
+    # Covnenience function to extract relevant stuff.
+    def _get_which_endswith(info, string):
+        return [s for key, s in info.items() if key.endswith(string)][0]
 
-    rr = info["rr"]
-    drrs = info["drrs"]
-    mrrs = info["mrrs"]
-    s12 = info["s12"]
-    s22 = info["s22"]
-    c1 = info["c1"]
-    c2 = info["c2"]
+    # Extract parameters
+    longshort_idcs = _get_which_endswith(info, "longshort")
+    ectopic_idcs = _get_which_endswith(info, "ectopic")
+    extra_idcs = _get_which_endswith(info, "extra")
+    missed_idcs = _get_which_endswith(info, "missed")
+
+    # Extract subspace info
+    rr = _get_which_endswith(info, "rr")
+    drrs = _get_which_endswith(info, "drrs")
+    mrrs = _get_which_endswith(info, "mrrs")
+    s12 = _get_which_endswith(info, "s12")
+    s22 = _get_which_endswith(info, "s22")
+    c1 = _get_which_endswith(info, "c1")
+    c2 = _get_which_endswith(info, "c2")
 
     # Visualize artifact type indices.
 
     # Set grids
-    gs = matplotlib.gridspec.GridSpec(ncols=4, nrows=3, width_ratios=[1, 2, 2, 2])
-    fig = plt.figure(constrained_layout=False, figsize=(15, 10))
-    ax0 = fig.add_subplot(gs[0, :-2])
-    ax1 = fig.add_subplot(gs[1, :-2])
-    ax2 = fig.add_subplot(gs[2, :-2])
-    ax3 = fig.add_subplot(gs[:, -1])
-    ax4 = fig.add_subplot(gs[:, -2])
+    gs = matplotlib.gridspec.GridSpec(ncols=2, nrows=6)
+    fig = plt.figure(constrained_layout=False, figsize=(17, 12))
+    fig.suptitle("Peak Correction", fontweight="bold")
+    ax0 = fig.add_subplot(gs[0:2, 0])
+    ax1 = fig.add_subplot(gs[2:4, 0])
+    ax2 = fig.add_subplot(gs[4:6, 0])
+    ax3 = fig.add_subplot(gs[0:3:, 1])
+    ax4 = fig.add_subplot(gs[3:6, 1])
 
-    ax0.set_title("Artifact types", fontweight="bold")
+    ax0.set_title("Artifact types")
     ax0.plot(rr, label="heart period")
     ax0.scatter(
         longshort_idcs,
@@ -566,21 +572,21 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax0.legend(loc="upper right")
 
     # Visualize first threshold.
-    ax1.set_title("Consecutive-difference criterion", fontweight="bold")
+    ax1.set_title("Consecutive-difference criterion")
     ax1.plot(np.abs(drrs), label="normalized difference consecutive heart periods")
     ax1.axhline(1, c="r", label="artifact threshold")
     ax1.legend(loc="upper right")
     ax1.set_ylim(0, 5)
 
     # Visualize second threshold.
-    ax2.set_title("Difference-from-median criterion", fontweight="bold")
+    ax2.set_title("Difference-from-median criterion")
     ax2.plot(np.abs(mrrs), label="difference from median over 11 periods")
     ax2.axhline(3, c="r", label="artifact threshold")
     ax2.legend(loc="upper right")
     ax2.set_ylim(0, 5)
 
     # Visualize subspaces.
-    ax4.set_title("Subspace 1", fontweight="bold")
+    ax4.set_title("Subspace 1")
     ax4.set_xlabel("S11")
     ax4.set_ylabel("S12")
     ax4.scatter(drrs, s12, marker="x", label="heart periods")
@@ -597,7 +603,7 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax4.add_patch(poly1)
     ax4.legend(loc="upper right")
 
-    ax3.set_title("Subspace 2", fontweight="bold")
+    ax3.set_title("Subspace 2")
     ax3.set_xlabel("S21")
     ax3.set_ylabel("S22")
     ax3.scatter(drrs, s22, marker="x", label="heart periods")

@@ -171,9 +171,9 @@ def ecg_peaks(
 
     .. ipython:: python
 
-      ecg = nk.ecg_simulate(duration=10, sampling_rate=250)
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
       ecg = nk.signal_distort(ecg,
-                              sampling_rate=250,
+                              sampling_rate=500,
                               noise_amplitude=0.05, noise_frequency=[25, 50],
                               artifacts_amplitude=0.05, artifacts_frequency=50)
       @savefig p_ecg_peaks3.png scale=100%
