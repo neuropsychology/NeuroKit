@@ -9,7 +9,6 @@ import pytest
 
 import neurokit2 as nk
 
-
 random.seed(a=13, version=2)
 
 
@@ -17,15 +16,21 @@ def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000, random_state=42)
     assert len(rsp1) == 3000
 
-    rsp2 = nk.rsp_simulate(duration=20, length=3000, respiratory_rate=80, random_state=42)
+    rsp2 = nk.rsp_simulate(
+        duration=20, length=3000, respiratory_rate=80, random_state=42
+    )
     #    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).plot()
     #    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).hist()
     assert len(nk.signal_findpeaks(rsp1, height_min=0.2)["Peaks"]) < len(
         nk.signal_findpeaks(rsp2, height_min=0.2)["Peaks"]
     )
 
-    rsp3 = nk.rsp_simulate(duration=20, length=3000, method="sinusoidal", random_state=42)
-    rsp4 = nk.rsp_simulate(duration=20, length=3000, method="breathmetrics", random_state=42)
+    rsp3 = nk.rsp_simulate(
+        duration=20, length=3000, method="sinusoidal", random_state=42
+    )
+    rsp4 = nk.rsp_simulate(
+        duration=20, length=3000, method="breathmetrics", random_state=42
+    )
     #    pd.DataFrame({"RSP3":rsp3, "RSP4":rsp4}).plot()
     assert len(nk.signal_findpeaks(rsp3, height_min=0.2)["Peaks"]) > len(
         nk.signal_findpeaks(rsp4, height_min=0.2)["Peaks"]
@@ -33,7 +38,6 @@ def test_rsp_simulate():
 
 
 def test_rsp_simulate_legacy_rng():
-
     rsp = nk.rsp_simulate(
         duration=10,
         sampling_rate=100,
@@ -68,7 +72,6 @@ def test_rsp_simulate_legacy_rng():
     ],
 )
 def test_rsp_simulate_all_rng_types(random_state, random_state_distort):
-
     # Run rsp_simulate to test for errors (e.g. using methods like randint that are only
     # implemented for RandomState but not Generator, or vice versa)
     rsp = nk.rsp_simulate(
@@ -87,7 +90,6 @@ def test_rsp_simulate_all_rng_types(random_state, random_state_distort):
 
 
 def test_rsp_clean():
-
     sampling_rate = 100
     duration = 120
     rsp = nk.rsp_simulate(
@@ -98,7 +100,9 @@ def test_rsp_clean():
         random_state=42,
     )
     # Add linear drift (to test baseline removal).
-    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True, random_state=42)
+    rsp += nk.signal_distort(
+        rsp, sampling_rate=sampling_rate, linear_drift=True, random_state=42
+    )
 
     for method in ["khodadad2018", "biosppy", "hampel"]:
         cleaned = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method=method)
@@ -146,7 +150,10 @@ def test_rsp_clean():
     distorted_sample[distort_locations] = 100
     assert np.allclose(
         nk.rsp_clean(
-            distorted_sample, sampling_rate=hampel_sampling_rate, method="hampel", window_length=1
+            distorted_sample,
+            sampling_rate=hampel_sampling_rate,
+            method="hampel",
+            window_length=1,
         ),
         hampel_sample,
         atol=1,
@@ -154,8 +161,9 @@ def test_rsp_clean():
 
 
 def test_rsp_peaks():
-
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, random_state=42)
+    rsp = nk.rsp_simulate(
+        duration=120, sampling_rate=1000, respiratory_rate=15, random_state=42
+    )
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     for method in ["khodadad2018", "biosppy", "scipy"]:
         signals, info = nk.rsp_peaks(rsp_cleaned, method=method)
@@ -171,7 +179,6 @@ def test_rsp_peaks():
 
 
 def test_rsp_amplitude():
-
     rsp = nk.rsp_simulate(
         duration=120,
         sampling_rate=1000,
@@ -194,9 +201,22 @@ def test_rsp_amplitude():
     assert np.abs(amplitude.mean() - 1) < 0.01
 
 
-def test_rsp_process():
+def test_rsp_rav():
+    rsp = nk.rsp_simulate(
+        duration=45, sampling_rate=50, respiratory_rate=15, random_state=42
+    )
+    peak_signal, _ = nk.rsp_peaks(rsp, sampling_rate=50)
+    amplitude = nk.rsp_amplitude(rsp, peaks=peak_signal)
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, random_state=2)
+    rav = nk.rsp_rav(amplitude, peaks=peak_signal)
+    assert rav.shape[0] == 1  # Number of rows
+    assert np.isclose(rav["RAV_RMSSD"][0], 0.065551)
+
+
+def test_rsp_process():
+    rsp = nk.rsp_simulate(
+        duration=120, sampling_rate=1000, respiratory_rate=15, random_state=2
+    )
     signals, _ = nk.rsp_process(rsp, sampling_rate=1000)
 
     # Only check array dimensions since functions called by rsp_process have
@@ -220,32 +240,36 @@ def test_rsp_process():
 
 
 def test_rsp_plot():
-
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, random_state=3)
+    rsp = nk.rsp_simulate(
+        duration=120, sampling_rate=1000, respiratory_rate=15, random_state=3
+    )
     rsp_summary, _ = nk.rsp_process(rsp, sampling_rate=1000)
     nk.rsp_plot(rsp_summary)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 5
     titles = ["Raw and Cleaned Signal", "Breathing Rate", "Breathing Amplitude"]
-    for (ax, title) in zip(fig.get_axes(), titles):
+    for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     plt.close(fig)
 
 
 def test_rsp_eventrelated():
-
     rsp, _ = nk.rsp_process(nk.rsp_simulate(duration=30, random_state=42))
-    epochs = nk.epochs_create(rsp, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    epochs = nk.epochs_create(
+        rsp, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9
+    )
     rsp_eventrelated = nk.rsp_eventrelated(epochs)
 
     # Test rate features
     assert np.alltrue(
-        np.array(rsp_eventrelated["RSP_Rate_Min"]) < np.array(rsp_eventrelated["RSP_Rate_Mean"])
+        np.array(rsp_eventrelated["RSP_Rate_Min"])
+        < np.array(rsp_eventrelated["RSP_Rate_Mean"])
     )
 
     assert np.alltrue(
-        np.array(rsp_eventrelated["RSP_Rate_Mean"]) < np.array(rsp_eventrelated["RSP_Rate_Max"])
+        np.array(rsp_eventrelated["RSP_Rate_Mean"])
+        < np.array(rsp_eventrelated["RSP_Rate_Max"])
     )
 
     # Test amplitude features
@@ -262,13 +286,17 @@ def test_rsp_eventrelated():
     assert len(rsp_eventrelated["Label"]) == 3
 
     # Test warning on missing columns
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `RSP_Amplitude`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an `RSP_Amplitude`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["RSP_Amplitude"]
         nk.rsp_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `RSP_Phase`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an `RSP_Phase`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["RSP_Phase"]
@@ -276,9 +304,12 @@ def test_rsp_eventrelated():
 
 
 def test_rsp_rrv():
-
-    rsp90 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=90, random_state=42)
-    rsp110 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=110, random_state=42)
+    rsp90 = nk.rsp_simulate(
+        duration=60, sampling_rate=1000, respiratory_rate=90, random_state=42
+    )
+    rsp110 = nk.rsp_simulate(
+        duration=60, sampling_rate=1000, respiratory_rate=110, random_state=42
+    )
 
     cleaned90 = nk.rsp_clean(rsp90, sampling_rate=1000)
     _, peaks90 = nk.rsp_peaks(cleaned90)
@@ -311,7 +342,6 @@ def test_rsp_rrv():
 
 
 def test_rsp_intervalrelated():
-
     data = nk.data("bio_resting_5min_100hz")
     df, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
 
@@ -346,14 +376,14 @@ def test_rsp_rvt():
 
 @pytest.mark.parametrize(
     "method_cleaning, method_peaks, method_rvt",
-    [("none", "scipy", "power2020"),
-     ("biosppy", "biosppy", "power2020"),
-     ("khodadad2018", "khodadad2018", "birn2006"),
-     ("power2020", "scipy", "harrison2021"),
-     ],
+    [
+        ("none", "scipy", "power2020"),
+        ("biosppy", "biosppy", "power2020"),
+        ("khodadad2018", "khodadad2018", "birn2006"),
+        ("power2020", "scipy", "harrison2021"),
+    ],
 )
 def test_rsp_report(tmp_path, method_cleaning, method_peaks, method_rvt):
-
     sampling_rate = 100
 
     rsp = nk.rsp_simulate(
