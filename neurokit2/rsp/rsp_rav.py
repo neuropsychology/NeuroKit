@@ -50,7 +50,7 @@ def rsp_rav(
 
       rsp = nk.rsp_simulate(duration=45, respiratory_rate=15)
       cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-      peak_signal, info = nk.rsp_peaks(cleaned)
+      peak_signal, info = nk.rsp_peaks(cleaned, sampling_rate=1000)
 
       amplitude = nk.rsp_amplitude(cleaned, peaks=peak_signal)
 
