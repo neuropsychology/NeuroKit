@@ -19,7 +19,7 @@ jobs:
                     - ubuntu-latest # ubuntu-18.04
                 #  - macos-latest  # macOS-10.14
                 #  - windows-latest  # windows-2019
-                python-version: ["3.9", "3.10", "3.11", "3.12"]
+                python-version: ["3.9", "3.10", "3.11"]
 
         steps:
             - uses: actions/checkout@v3
