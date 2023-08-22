@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..signal.signal_rate import _signal_rate_plot
+from .ppg_segment import ppg_segment
 
-def ppg_plot(ppg_signals, sampling_rate=None, static=True):
+
+def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
     """**Visualize photoplethysmogram (PPG) data**
 
     Visualize the PPG signal processing.
@@ -14,9 +18,7 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
     ppg_signals : DataFrame
         DataFrame obtained from :func:`.ppg_process`.
     sampling_rate : int
-        The sampling frequency of the PPG (in Hz, i.e., samples/second). Needs to be supplied if
-        the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to ``None``.
+        The sampling frequency of the PPG (in Hz, i.e., samples/second). Defaults to 1000.
     static : bool
         If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
@@ -27,6 +29,10 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
     fig
         Figure representing a plot of the processed PPG signals.
 
+    See Also
+    --------
+    ppg_process
+
     Examples
     --------
     .. ipython:: python
@@ -34,19 +40,16 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
       import neurokit2 as nk
 
       # Simulate data
-      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
+      ppg = nk.ppg_simulate(duration=10, sampling_rate=100, heart_rate=70)
       # Process signal
-      signals, info = nk.ppg_process(ppg, sampling_rate=1000)
+      signals, info = nk.ppg_process(ppg, sampling_rate=100)
 
       # Plot
       @savefig p_ppg_plot1.png scale=100%
-      nk.ppg_plot(signals)
+      nk.ppg_plot(signals, sampling_rate=100)
       @suppress
       plt.close()
 
-    See Also
-    --------
-    ppg_process
     """
 
     # Sanity-check input.
@@ -55,26 +58,26 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
             "NeuroKit error: The `ppg_signals` argument must"
             " be the DataFrame returned by `ppg_process()`."
         )
-    # X-axis
-    if sampling_rate is not None:
-        x_axis = np.linspace(0, ppg_signals.shape[0] / sampling_rate, ppg_signals.shape[0])
-    else:
-        x_axis = np.arange(0, ppg_signals.shape[0])
 
-    # Get peak indices
-    peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
+    # Extract Peaks.
+    peaks = None
+    if "PPG_Peaks" in ppg_signals.columns:
+        peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
+
+    # X-axis
+    x_axis = np.linspace(0, len(ppg_signals) / sampling_rate, len(ppg_signals))
 
     if static:
         # Prepare figure
-        fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
-        if sampling_rate is not None:
-            ax0.set_xlabel("Time (seconds)")
-            ax1.set_xlabel("Time (seconds)")
-        elif sampling_rate is None:
-            ax0.set_xlabel("Samples")
-            ax1.set_xlabel("Samples")
+        gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[2 / 3, 1 / 3])
+        fig = plt.figure(constrained_layout=False)
+        ax0 = fig.add_subplot(gs[0, :-1])
+        ax0.set_xlabel("Time (seconds)")
+
+        ax1 = fig.add_subplot(gs[1, :-1], sharex=ax0)
+        ax2 = fig.add_subplot(gs[:, -1])
+
         fig.suptitle("Photoplethysmogram (PPG)", fontweight="bold")
-        plt.tight_layout(h_pad=0.4)
 
         # Plot cleaned and raw PPG
         ax0.set_title("Raw and Cleaned Signal")
@@ -82,7 +85,7 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         ax0.plot(
             x_axis,
             ppg_signals["PPG_Clean"],
-            color="#FB1CF0",
+            color="#9C27B0",
             label="Cleaned",
             zorder=1,
             linewidth=1.5,
@@ -92,25 +95,30 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         ax0.scatter(
             x_axis[peaks],
             ppg_signals["PPG_Clean"][peaks],
-            color="#D60574",
+            color="#FFC107",
             label="Peaks",
             zorder=2,
         )
         ax0.legend(loc="upper right")
 
-        # Rate
-        ax1.set_title("Heart Rate")
-        ppg_rate_mean = ppg_signals["PPG_Rate"].mean()
-        ax1.plot(
-            x_axis,
-            ppg_signals["PPG_Rate"],
+        # Plot Heart Rate
+        ax1 = _signal_rate_plot(
+            ppg_signals["PPG_Rate"].values,
+            peaks,
+            sampling_rate=sampling_rate,
+            title="Heart Rate",
+            ytitle="Beats per minute (bpm)",
             color="#FB661C",
-            label="Rate",
-            linewidth=1.5,
+            color_mean="#FBB41C",
+            color_points="red",
+            ax=ax1,
         )
-        ax1.axhline(y=ppg_rate_mean, label="Mean", linestyle="--", color="#FBB41C")
-        ax1.legend(loc="upper right")
-        return fig
+
+        # Plot individual heart beats
+        ax2 = ppg_segment(
+            ppg_signals["PPG_Clean"].values, peaks, sampling_rate, show="return", ax=ax2
+        )
+
     else:
         try:
             import plotly.graph_objects as go
@@ -131,7 +139,9 @@ def ppg_plot(ppg_signals, sampling_rate=None, static=True):
         )
 
         # Plot cleaned and raw PPG
-        fig.add_trace(go.Scatter(x=x_axis, y=ppg_signals["PPG_Raw"], name="Raw"), row=1, col=1)
+        fig.add_trace(
+            go.Scatter(x=x_axis, y=ppg_signals["PPG_Raw"], name="Raw"), row=1, col=1
+        )
         fig.add_trace(
             go.Scatter(
                 x=x_axis,

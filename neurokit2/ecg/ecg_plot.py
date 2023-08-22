@@ -5,13 +5,13 @@ import numpy as np
 import pandas as pd
 
 from ..ecg import ecg_peaks
-from ..epochs import epochs_to_df
 from ..signal import signal_fixpeaks
+from ..signal.signal_rate import _signal_rate_plot
 from ..stats import rescale
 from .ecg_segment import ecg_segment
 
 
-def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
+def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=1000, show_type="default"):
     """**Visualize ECG data**
 
     Plot ECG signals and R-peaks.
@@ -24,9 +24,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         The samples at which the R-peak occur. Dict returned by
         ``ecg_process()``. Defaults to ``None``.
     sampling_rate : int
-        The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs to be supplied if the
-        data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to ``None``. Must be specified to plot artifacts.
+        The sampling frequency of ``ecg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     show_type : str
         Visualize the ECG data with ``"default"`` or visualize artifacts thresholds with
         ``"artifacts"`` produced by ``ecg_fixpeaks()``, or ``"full"`` to visualize both.
@@ -76,24 +74,16 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
 
     # Prepare figure and set axes.
     if show_type in ["default", "full"]:
-        if sampling_rate is not None:
-            x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate, ecg_signals.shape[0])
-            gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[1 - 1 / np.pi, 1 / np.pi])
-            fig = plt.figure(constrained_layout=False)
-            ax0 = fig.add_subplot(gs[0, :-1])
-            ax1 = fig.add_subplot(gs[1, :-1])
-            ax2 = fig.add_subplot(gs[:, -1])
-            ax0.set_xlabel("Time (seconds)")
-            ax1.set_xlabel("Time (seconds)")
-            ax2.set_xlabel("Time (seconds)")
-        else:
-            x_axis = np.arange(0, ecg_signals.shape[0])
-            fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
-            ax0.set_xlabel("Samples")
-            ax1.set_xlabel("Samples")
+        x_axis = np.linspace(0, len(ecg_signals) / sampling_rate, len(ecg_signals))
+        gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[2 / 3, 1 / 3])
+        fig = plt.figure(constrained_layout=False)
+        ax0 = fig.add_subplot(gs[0, :-1])
+        ax0.set_xlabel("Time (seconds)")
+
+        ax1 = fig.add_subplot(gs[1, :-1], sharex=ax0)
+        ax2 = fig.add_subplot(gs[:, -1])
 
         fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
-        plt.tight_layout(h_pad=0.3, w_pad=0.1)
 
         # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
@@ -121,7 +111,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         ax0.plot(
             x_axis,
             ecg_signals["ECG_Clean"],
-            color="#E91E63",
+            color="#F44336",
             label="Cleaned",
             zorder=1,
             linewidth=1.5,
@@ -138,40 +128,28 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         handles, labels = ax0.get_legend_handles_labels()
         order = [2, 0, 1, 3]
         ax0.legend(
-            [handles[idx] for idx in order], [labels[idx] for idx in order], loc="upper right"
+            [handles[idx] for idx in order],
+            [labels[idx] for idx in order],
+            loc="upper right",
         )
 
-        # Plot heart rate.
-        ax1.set_title("Heart Rate")
-        ax1.set_ylabel("Beats per minute (bpm)")
+        # Plot Heart Rate
+        ax1 = _signal_rate_plot(
+            ecg_signals["ECG_Rate"].values,
+            peaks,
+            sampling_rate=sampling_rate,
+            title="Heart Rate",
+            ytitle="Beats per minute (bpm)",
+            color="#FF5722",
+            color_mean="#FF9800",
+            color_points="red",
+            ax=ax1,
+        )
 
-        ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#FF5722", label="Rate", linewidth=1.5)
-        rate_mean = ecg_signals["ECG_Rate"].mean()
-        ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#FF9800")
-
-        ax1.legend(loc="upper right")
-
-        # Plot individual heart beats.
-        if sampling_rate is not None:
-            ax2.set_title("Individual Heart Beats")
-
-            heartbeats = ecg_segment(ecg_signals["ECG_Clean"], peaks, sampling_rate)
-            heartbeats = epochs_to_df(heartbeats)
-
-            heartbeats_pivoted = heartbeats.pivot(index="Time", columns="Label", values="Signal")
-
-            ax2.plot(heartbeats_pivoted)
-
-            cmap = iter(
-                plt.cm.YlOrRd(
-                    np.linspace(0, 1, num=int(heartbeats["Label"].nunique()))
-                )  # pylint: disable=E1101
-            )  # Aesthetics of heart beats
-
-            lines = []
-            for x, color in zip(heartbeats_pivoted, cmap):
-                (line,) = ax2.plot(heartbeats_pivoted[x], color=color)
-                lines.append(line)
+        # Plot individual heart beats
+        ax2 = ecg_segment(
+            ecg_signals["ECG_Clean"], peaks, sampling_rate, show="return", ax=ax2
+        )
 
     # Plot artifacts
     if show_type in ["artifacts", "full"]:
@@ -185,5 +163,9 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
             _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"], sampling_rate=sampling_rate)
 
         fig = signal_fixpeaks(
-            rpeaks, sampling_rate=sampling_rate, iterative=True, show=True, method="Kubios"
+            rpeaks,
+            sampling_rate=sampling_rate,
+            iterative=True,
+            show=True,
+            method="Kubios",
         )

@@ -4,7 +4,6 @@ import neurokit2 as nk
 
 
 def test_bio_process():
-
     sampling_rate = 1000
 
     # Create data
@@ -13,7 +12,9 @@ def test_bio_process():
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate, scr_number=3)
     emg = nk.emg_simulate(duration=30, sampling_rate=sampling_rate, burst_number=3)
 
-    bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, sampling_rate=sampling_rate)
+    bio_df, bio_info = nk.bio_process(
+        ecg=ecg, rsp=rsp, eda=eda, emg=emg, sampling_rate=sampling_rate
+    )
 
     # SCR components
     scr = [val for key, val in bio_info.items() if "SCR" in key]
@@ -31,16 +32,23 @@ def test_bio_process():
 
 
 def test_bio_analyze():
-
     # Example with event-related analysis
     data = nk.data("bio_eventrelated_100hz")
     df, info = nk.bio_process(
-        ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], keep=data["Photosensor"], sampling_rate=100
+        ecg=data["ECG"],
+        rsp=data["RSP"],
+        eda=data["EDA"],
+        keep=data["Photosensor"],
+        sampling_rate=100,
     )
     events = nk.events_find(
-        data["Photosensor"], threshold_keep="below", event_conditions=["Negative", "Neutral", "Neutral", "Negative"]
+        data["Photosensor"],
+        threshold_keep="below",
+        event_conditions=["Negative", "Neutral", "Neutral", "Negative"],
     )
-    epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
+    epochs = nk.epochs_create(
+        df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9
+    )
     event_related = nk.bio_analyze(epochs)
 
     assert len(event_related) == len(epochs)
@@ -49,7 +57,9 @@ def test_bio_analyze():
 
     # Example with interval-related analysis
     data = nk.data("bio_resting_8min_100hz")
-    df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+    df, info = nk.bio_process(
+        ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100
+    )
     interval_related = nk.bio_analyze(df)
 
     assert len(interval_related) == 1
