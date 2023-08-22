@@ -19,7 +19,7 @@ jobs:
                     - ubuntu-latest # ubuntu-18.04
                 #  - macos-latest  # macOS-10.14
                 #  - windows-latest  # windows-2019
-                python-version: ["3.9", "3.10", "3.11"]
+                python-version: ["3.9", "3.10", "3.11", "3.12"]
 
         steps:
             - uses: actions/checkout@v3
@@ -28,6 +28,7 @@ jobs:
               uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python-version }}
+                  allow-prereleases: true
 
             - name: Install dependencies
               run: |
