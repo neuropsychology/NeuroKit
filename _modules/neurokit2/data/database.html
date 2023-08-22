@@ -357,7 +357,7 @@ document.write(`
 
 <div class="viewcode-block" id="download_from_url"><a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.download_from_url">[docs]</a><span class="k">def</span> <span class="nf">download_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Download Files from URLs**</span>
-<span class="sd">    </span>
+
 <span class="sd">    Download a file from the given URL and save it to the destination path.</span>
 
 <span class="sd">    Parameters</span>
@@ -367,7 +367,7 @@ document.write(`
 <span class="sd">    destination_path : str, Path</span>
 <span class="sd">        The path to which the file will be downloaded. If None, the file name will be taken</span>
 <span class="sd">        from the last part of the URL path and downloaded to the current working directory.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    bool</span>
@@ -384,13 +384,13 @@ document.write(`
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span></div>
-    
+
 
 <div class="viewcode-block" id="download_zip"><a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.download_zip">[docs]</a><span class="k">def</span> <span class="nf">download_zip</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Download ZIP files**</span>
-<span class="sd">    </span>
+
 <span class="sd">    Download a ZIP file from a URL and extract it to a destination directory.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    url : str</span>
@@ -421,10 +421,10 @@ document.write(`
             <span class="c1"># Extract the ZIP file</span>
             <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
                 <span class="n">extracted_folder_name</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">zip_ref</span><span class="o">.</span><span class="n">namelist</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    
+
                 <span class="c1"># Extract the contents</span>
                 <span class="n">zip_ref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">destination_directory</span><span class="p">)</span>
-                
+
                 <span class="c1"># Rename the extracted folder to the desired name</span>
                 <span class="n">extracted_folder_path</span> <span class="o">=</span> <span class="n">destination_directory</span> <span class="o">/</span> <span class="n">extracted_folder_name</span>
                 <span class="n">new_folder_path</span> <span class="o">=</span> <span class="n">destination_directory</span> <span class="o">/</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">destination_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
@@ -440,7 +440,7 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_download_path_sanitize</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize the destination path of a file to be downloaded from a URL.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    url : str</span>
@@ -448,7 +448,7 @@ document.write(`
 <span class="sd">    destination_path : str, Path</span>
 <span class="sd">        The path to which the file will be downloaded. If None, the file name will be taken</span>
 <span class="sd">        from the last part of the URL path and downloaded to the current working directory.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Path</span>
