@@ -35,7 +35,9 @@ def download_from_url(url, destination_path=None):
     
 
 def download_zip(url, destination_path=None, unzip=True):
-    """Download a ZIP file from a URL and extract it to a destination directory.
+    """**Download ZIP files**
+    
+    Download a ZIP file from a URL and extract it to a destination directory.
     
     Parameters
     ----------
