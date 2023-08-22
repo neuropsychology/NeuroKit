@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-from warnings import warn
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning
-from ..stats import mad
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
@@ -14,11 +9,17 @@ def rsp_rav(
     amplitude,
     peaks,
     troughs=None,
-    show=False,
 ):
     """**Respiratory Amplitude Variability (RAV)**
 
-    TODO.
+    Computes indices of amplitude variability, such as the mean and SD of the amplitude, and the
+    RMSSD of the successive differences.
+
+    .. note::
+
+      This is an exploratory feature. If you manage to find studies and literature on RAV, please
+      let us know by opening an issue on GitHub. Adding more indices (similar to HRV) would be
+      trivial, but having some evidence as for its usefulness would be prerequisite.
 
     Parameters
     ----------
@@ -29,16 +30,12 @@ def rsp_rav(
         assumed that these containers were obtained with :func:`.rsp_findpeaks`.
     troughs : list or array or DataFrame or Series or dict
         The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with :func:`.rsp_findpeaks`.
-    show : bool
-        If True, show a plot of the symmetry features.
+        assumed that these containers were obtained with :func:`.rsp_findpeaks`. This argument can be inferred from the ``peaks`` argument if the information.
 
     Returns
     -------
     pd.DataFrame
-        A DataFrame of same length as :func:`.rsp_amplitude` containing the following columns:
-
-        TODO.
+        A DataFrame of containing the following columns with RAV indices.
 
     See Also
     --------
@@ -55,6 +52,9 @@ def rsp_rav(
       peak_signal, info = nk.rsp_peaks(cleaned)
 
       amplitude = nk.rsp_amplitude(cleaned, peaks=peak_signal)
+
+      rav = nk.rsp_rav(amplitude, peaks=peak_signal)
+      rav
 
 
     """
@@ -74,14 +74,15 @@ def rsp_rav(
     out["SD"] = np.nanstd(amplitude_discrete, ddof=1)
 
     out["RMSSD"] = np.sqrt(np.mean(diff_amp**2))
-    out["SDSD"] = np.nanstd(diff_amp, ddof=1)
+    # out["SDSD"] = np.nanstd(diff_amp, ddof=1)
 
-    out["CV"] = out["SD"] / out["Mean"]
+    # out["CV"] = out["SD"] / out["Mean"]
     out["CVSD"] = out["RMSSD"] / out["Mean"]
 
-    # Robust
-    out["Median"] = np.nanmedian(amplitude_discrete)
-    out["Mad"] = mad(amplitude_discrete)
-    out["MCV"] = out["Mad"] / out["Median"]
+    # # Robust
+    # out["Median"] = np.nanmedian(amplitude_discrete)
+    # out["Mad"] = mad(amplitude_discrete)
+    # out["MCV"] = out["Mad"] / out["Median"]
 
     rav = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("RAV_")
+    return rav
