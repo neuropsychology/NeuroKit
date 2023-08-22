@@ -13,9 +13,24 @@ import pandas as pd
 import numpy as np
 import wfdb
 import os
+import pathlib
 
+import neurokit2 as nk
 
-files = os.listdir("./fantasia-database-1.0.0/")
+database_path = "./fantasia-database-1.0.0/"
+
+# Check if expected folder exists
+if not os.path.exists(database_path):
+    url = "https://physionet.org/static/published-projects/fantasia/fantasia-database-1.0.0.zip"
+    download_successful = nk.download_zip(url, database_path)
+    if not download_successful:
+        raise ValueError(
+            "NeuroKit error: download of Fantasia database failed. "
+            "Please download it manually from https://physionet.org/content/fantasia/1.0.0/ "
+            "and unzip it in the same folder as this script."
+        )
+
+files = os.listdir(database_path)
 files = [s.replace('.dat', '') for s in files if ".dat" in s]
 
 dfs_ecg = []
@@ -24,7 +39,7 @@ dfs_rpeaks = []
 
 for i, participant in enumerate(files):
 
-    data, info = wfdb.rdsamp("./fantasia-database-1.0.0/" + participant)
+    data, info = wfdb.rdsamp(str(pathlib.Path(database_path, participant)))
 
     # Get signal
     data = pd.DataFrame(data, columns=info["sig_name"])
@@ -35,7 +50,7 @@ for i, participant in enumerate(files):
     data["Database"] = "Fantasia"
 
     # Get annotations
-    anno = wfdb.rdann("./fantasia-database-1.0.0/" + participant, 'ecg')
+    anno = wfdb.rdann(str(pathlib.Path(database_path, participant)), 'ecg')
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "Fantasia_" + participant
@@ -49,4 +64,4 @@ for i, participant in enumerate(files):
 
 # Save
 df_ecg = pd.concat(dfs_ecg).to_csv("ECGs.csv", index=False)
-dfs_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
+df_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
