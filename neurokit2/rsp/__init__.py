@@ -15,6 +15,7 @@ from .rsp_phase import rsp_phase
 from .rsp_plot import rsp_plot
 from .rsp_process import rsp_process
 from .rsp_rate import rsp_rate
+from .rsp_rav import rsp_rav
 from .rsp_rrv import rsp_rrv
 from .rsp_rvt import rsp_rvt
 from .rsp_simulate import rsp_simulate
@@ -31,6 +32,7 @@ __all__ = [
     "rsp_process",
     "rsp_plot",
     "rsp_eventrelated",
+    "rsp_rav",
     "rsp_rrv",
     "rsp_rvt",
     "rsp_intervalrelated",

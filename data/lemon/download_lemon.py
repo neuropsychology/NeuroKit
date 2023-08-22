@@ -3,12 +3,6 @@
 
 https://ftp.gwdg.de/pub/misc/MPI-Leipzig_Mind-Brain-Body-LEMON/EEG_MPILMBB_LEMON/EEG_Preprocessed_BIDS_ID/EEG_Preprocessed/
 
-Steps:
-    1. Download the ZIP database from https://physionet.org/content/nstdb/1.0.0/
-    2. Open it with a zip-opener (WinZip, 7zip).
-    3. Extract the folder of the same name (named 'mit-bih-noise-stress-test-database-1.0.0') to the same folder as this script.
-    4. Run this script.
-
 Credits:
     pycrostates package by Mathieu Scheltienne and Victor Férat
 """
