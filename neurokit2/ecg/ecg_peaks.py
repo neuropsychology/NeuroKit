@@ -85,8 +85,8 @@ def ecg_peaks(
 
       import neurokit2 as nk
 
-      ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-      signals, info = nk.ecg_peaks(ecg, correct_artifacts=True)
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=250)
+      signals, info = nk.ecg_peaks(ecg, sampling_rate=250, correct_artifacts=True)
 
       @savefig p_ecg_peaks1.png scale=100%
       nk.events_plot(info["ECG_R_Peaks"], ecg)
@@ -98,50 +98,50 @@ def ecg_peaks(
     .. ipython:: python
 
       # neurokit (default)
-      cleaned = nk.ecg_clean(ecg, method="neurokit")
-      _, neurokit = nk.ecg_peaks(cleaned, method="neurokit")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="neurokit")
+      _, neurokit = nk.ecg_peaks(cleaned, sampling_rate=250, method="neurokit")
 
       # pantompkins1985
-      cleaned = nk.ecg_clean(ecg, method="pantompkins1985")
-      _, pantompkins1985 = nk.ecg_peaks(cleaned, method="pantompkins1985")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="pantompkins1985")
+      _, pantompkins1985 = nk.ecg_peaks(cleaned, sampling_rate=250, method="pantompkins1985")
 
       # nabian2018
-      _, nabian2018 = nk.ecg_peaks(ecg, method="nabian2018")
+      _, nabian2018 = nk.ecg_peaks(ecg, sampling_rate=250, method="nabian2018")
 
       # hamilton2002
-      cleaned = nk.ecg_clean(ecg, method="hamilton2002")
-      _, hamilton2002 = nk.ecg_peaks(cleaned, method="hamilton2002")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="hamilton2002")
+      _, hamilton2002 = nk.ecg_peaks(cleaned, sampling_rate=250, method="hamilton2002")
 
       # martinez2004
-      _, martinez2004 = nk.ecg_peaks(ecg, method="martinez2004")
+      _, martinez2004 = nk.ecg_peaks(ecg, sampling_rate=250, method="martinez2004")
 
       # zong2003
-      _, zong2003 = nk.ecg_peaks(ecg, method="zong2003")
+      _, zong2003 = nk.ecg_peaks(ecg, sampling_rate=250, method="zong2003")
 
       # christov2004
-      _, christov2004 = nk.ecg_peaks(cleaned, method="christov2004")
+      _, christov2004 = nk.ecg_peaks(cleaned, sampling_rate=250, method="christov2004")
 
       # gamboa2008
-      cleaned = nk.ecg_clean(ecg, method="gamboa2008")
-      _, gamboa2008 = nk.ecg_peaks(cleaned, method="gamboa2008")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="gamboa2008")
+      _, gamboa2008 = nk.ecg_peaks(cleaned, sampling_rate=250, method="gamboa2008")
 
       # elgendi2010
-      cleaned = nk.ecg_clean(ecg, method="elgendi2010")
-      _, elgendi2010 = nk.ecg_peaks(cleaned, method="elgendi2010")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="elgendi2010")
+      _, elgendi2010 = nk.ecg_peaks(cleaned, sampling_rate=250, method="elgendi2010")
 
       # engzeemod2012
-      cleaned = nk.ecg_clean(ecg, method="engzeemod2012")
-      _, engzeemod2012 = nk.ecg_peaks(cleaned, method="engzeemod2012")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012")
+      _, engzeemod2012 = nk.ecg_peaks(cleaned, sampling_rate=250, method="engzeemod2012")
 
       # kalidas2017
-      cleaned = nk.ecg_clean(ecg, method="kalidas2017")
-      _, kalidas2017 = nk.ecg_peaks(cleaned, method="kalidas2017")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="kalidas2017")
+      _, kalidas2017 = nk.ecg_peaks(cleaned, sampling_rate=250, method="kalidas2017")
 
       # rodrigues2021
-      _, rodrigues2021 = nk.ecg_peaks(ecg, method="rodrigues2021")
+      _, rodrigues2021 = nk.ecg_peaks(ecg, sampling_rate=250, method="rodrigues2021")
 
       # koka2022
-      _, koka2022 = nk.ecg_peaks(ecg, method="koka2022")
+      _, koka2022 = nk.ecg_peaks(ecg, sampling_rate=250, method="koka2022")
 
       # Collect all R-peak lists by iterating through the result dicts
       rpeaks = [
@@ -171,13 +171,13 @@ def ecg_peaks(
 
     .. ipython:: python
 
-      ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=250)
       ecg = nk.signal_distort(ecg,
-                              sampling_rate=500,
+                              sampling_rate=250,
                               noise_amplitude=0.05, noise_frequency=[25, 50],
                               artifacts_amplitude=0.05, artifacts_frequency=50)
       @savefig p_ecg_peaks3.png scale=100%
-      info = nk.ecg_findpeaks(ecg, sampling_rate=500, method="promac", show=True)
+      info = nk.ecg_findpeaks(ecg, sampling_rate=250, method="promac", show=True)
       @suppress
       plt.close()
 
@@ -254,22 +254,38 @@ def ecg_peaks(
       engineering & technology, 43(3), 173-181.
 
     """
-    rpeaks = ecg_findpeaks(
-        ecg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs
+    # Store info
+    info = {"method_peaks": method.lower(), "method_fixpeaks": "None"}
+
+    # First peak detection
+    info.update(
+        ecg_findpeaks(
+            ecg_cleaned,
+            sampling_rate=sampling_rate,
+            method=info["method_peaks"],
+            **kwargs
+        )
     )
 
+    # Peak correction
     if correct_artifacts:
-        _, rpeaks = signal_fixpeaks(
-            rpeaks, sampling_rate=sampling_rate, iterative=True, method="Kubios"
+        info["ECG_R_Peaks_Uncorrected"] = info["ECG_R_Peaks"].copy()
+
+        fixpeaks, info["ECG_R_Peaks"] = signal_fixpeaks(
+            info["ECG_R_Peaks"], sampling_rate=sampling_rate, method="Kubios"
         )
 
-        rpeaks = {"ECG_R_Peaks": rpeaks}
+        # Add prefix and merge
+        fixpeaks = {"ECG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
+        info.update(fixpeaks)
 
-    instant_peaks = signal_formatpeaks(
-        rpeaks, desired_length=len(ecg_cleaned), peak_indices=rpeaks
+    # Format output
+    signals = signal_formatpeaks(
+        dict(ECG_R_Peaks=info["ECG_R_Peaks"]),  # Takes a dict as input
+        desired_length=len(ecg_cleaned),
+        peak_indices=info["ECG_R_Peaks"],
     )
-    signals = instant_peaks
-    info = rpeaks
+
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     return signals, info
