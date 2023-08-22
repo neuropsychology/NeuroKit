@@ -350,10 +350,12 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for neurokit2.data.database</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">zipfile</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
+<span></span><span class="kn">import</span> <span class="nn">pathlib</span>
 <span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
 
 <div class="viewcode-block" id="download_from_url"><a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.download_from_url">[docs]</a><span class="k">def</span> <span class="nf">download_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">destination_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Download Files from URLs**</span>
@@ -427,7 +429,9 @@ document.write(`
 
                 <span class="c1"># Rename the extracted folder to the desired name</span>
                 <span class="n">extracted_folder_path</span> <span class="o">=</span> <span class="n">destination_directory</span> <span class="o">/</span> <span class="n">extracted_folder_name</span>
-                <span class="n">new_folder_path</span> <span class="o">=</span> <span class="n">destination_directory</span> <span class="o">/</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">destination_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">new_folder_path</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">destination_directory</span> <span class="o">/</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">destination_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">)</span>
                 <span class="n">extracted_folder_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">new_folder_path</span><span class="p">)</span>
 
             <span class="c1"># Clean up by removing the downloaded ZIP file</span>
