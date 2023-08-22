@@ -354,11 +354,16 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">.rsp_rav</span> <span class="kn">import</span> <span class="n">rsp_rav</span>
 <span class="kn">from</span> <span class="nn">.rsp_rrv</span> <span class="kn">import</span> <span class="n">rsp_rrv</span>
 
 
 <div class="viewcode-block" id="rsp_intervalrelated"><a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_intervalrelated">[docs]</a><span class="k">def</span> <span class="nf">rsp_intervalrelated</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Performs RSP analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state data**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**State-related Respiration Indices**</span>
+
+<span class="sd">    Performs RSP analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state</span>
+<span class="sd">    data. It returns a dataframe containing features and characteristics of respiration in that</span>
+<span class="sd">    interval.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -385,7 +390,7 @@ document.write(`
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    bio_process, rsp_eventrelated</span>
+<span class="sd">    bio_process, rsp_eventrelated, rsp_rrv, rsp_rav</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    ----------</span>
@@ -403,13 +408,12 @@ document.write(`
 <span class="sd">      nk.rsp_intervalrelated(df, sampling_rate=100)</span>
 
 <span class="sd">      epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)</span>
-<span class="sd">      nk.rsp_intervalrelated(epochs)</span>
+<span class="sd">      nk.rsp_intervalrelated(epochs, sampling_rate=100)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># If one interval dataframe</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-
         <span class="n">intervals</span> <span class="o">=</span> <span class="n">_rsp_intervalrelated_features</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
         <span class="n">intervals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
@@ -444,21 +448,24 @@ document.write(`
     <span class="k">if</span> <span class="s2">&quot;RSP_Rate&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Rate_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="n">rrv</span> <span class="o">=</span> <span class="n">rsp_rrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">rrv</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">output</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">rrv</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rrv</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="s2">&quot;RSP_Amplitude&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
-        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">rav</span> <span class="o">=</span> <span class="n">rsp_rav</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Amplitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rav</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="s2">&quot;RSP_RVT&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_RVT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_RVT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
-        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_PeakTrough&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="p">)</span>
+        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Symmetry_RiseDecay&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="s2">&quot;RSP_Phase&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
-
         <span class="c1"># Extract inspiration durations</span>
         <span class="n">insp_phases</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP_Phase&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">insp_start</span> <span class="o">=</span> <span class="n">insp_phases</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">insp_phases</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Completion&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
@@ -471,7 +478,9 @@ document.write(`
         <span class="c1"># Check for unequal lengths</span>
         <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">insp_start</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_end</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_start</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_end</span><span class="p">):</span>
-            <span class="n">insp_start</span> <span class="o">=</span> <span class="n">insp_start</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_start</span><span class="p">)</span> <span class="o">-</span> <span class="n">diff</span><span class="p">]</span>  <span class="c1"># remove extra start points</span>
+            <span class="n">insp_start</span> <span class="o">=</span> <span class="n">insp_start</span><span class="p">[</span>
+                <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_start</span><span class="p">)</span> <span class="o">-</span> <span class="n">diff</span>
+            <span class="p">]</span>  <span class="c1"># remove extra start points</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_end</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_start</span><span class="p">):</span>
             <span class="n">insp_end</span> <span class="o">=</span> <span class="n">insp_end</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">insp_end</span><span class="p">)</span> <span class="o">-</span> <span class="n">diff</span><span class="p">]</span>  <span class="c1"># remove extra end points</span>
 
@@ -498,13 +507,9 @@ document.write(`
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Inspiration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">insp_times</span><span class="p">)</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Expiration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">exp_times</span><span class="p">)</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Inspiration&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Expiration&quot;</span><span class="p">]</span>
+            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Inspiration&quot;</span><span class="p">]</span>
+            <span class="o">/</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;RSP_Phase_Duration_Expiration&quot;</span><span class="p">]</span>
         <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">output</span>
-
-
-<span class="k">def</span> <span class="nf">_rsp_intervalrelated_rrv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{}):</span>
 
     <span class="k">return</span> <span class="n">output</span>
 </pre></div>

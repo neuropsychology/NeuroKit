@@ -485,6 +485,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-intervalrelated"><em>rsp_intervalrelated()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_intervalrelated"><code class="docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_methods"><code class="docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rav"><code class="docutils literal notranslate"><span class="pre">rsp_rav()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -580,7 +581,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         14.8728 |        1.1296 |</span>
+<span class="go">|         14.3693 |       1.47539 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -671,10 +672,10 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="go"># Analyze</span>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_analyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[9]: </span>
-<span class="go">  RSP_Rate_Mean  ... RSP_Phase_Duration_Ratio</span>
-<span class="go">0     15.860331  ...                 0.664482</span>
+<span class="go">   RSP_Rate_Mean  ...  RSP_Phase_Duration_Ratio</span>
+<span class="go">0      15.860331  ...                  0.664482</span>
 
-<span class="go">[1 rows x 37 columns]</span>
+<span class="go">[1 rows x 40 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1332,8 +1333,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">   RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  900.78311     3949.25  563.529841  ...    0.697545  0.091859         inf</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1146.144751     3910.95  730.063045  ...    0.738955  0.087805    0.693147</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1477,9 +1478,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.106290     -0.005129</span>
-<span class="go">2     2        10000  ...          0.270284     -0.031251</span>
-<span class="go">3     3        15000  ...          0.248375     -0.012011</span>
+<span class="go">1     1         5000  ...          0.244380     -0.012794</span>
+<span class="go">2     2        10000  ...          0.225210     -0.067187</span>
+<span class="go">3     3        15000  ...          0.278559     -0.029165</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1516,7 +1517,10 @@ inspiration (1) or expiration (0).</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_intervalrelated">
 <span class="sig-name descname"><span class="pre">rsp_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_intervalrelated.html#rsp_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_intervalrelated" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Performs RSP analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state data</strong></p>
+<dd><p><strong>State-related Respiration Indices</strong></p>
+<p>Performs RSP analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
+data. It returns a dataframe containing features and characteristics of respiration in that
+interval.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1543,7 +1547,7 @@ See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_eventrelated" title="neurokit2.rsp.rsp_eventrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_eventrelated</span></code></a></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_eventrelated" title="neurokit2.rsp.rsp_eventrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_eventrelated</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2.rsp.rsp_rrv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_rrv</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_rav" title="neurokit2.rsp.rsp_rav"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_rav</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1557,20 +1561,20 @@ See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">  RSP_Rate_Mean  ... RSP_Phase_Duration_Ratio</span>
-<span class="go">0     15.860331  ...                 0.664482</span>
+<span class="go">   RSP_Rate_Mean  ...  RSP_Phase_Duration_Ratio</span>
+<span class="go">0      15.860331  ...                  0.664482</span>
 
-<span class="go">[1 rows x 37 columns]</span>
+<span class="go">[1 rows x 40 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 
-<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label  RSP_Rate_Mean  ... RSP_Phase_Duration_Expiration RSP_Phase_Duration_Ratio</span>
-<span class="go">1     1      15.330861  ...                      0.002429                 0.617516</span>
-<span class="go">2     2      16.389802  ...                      0.002166                 0.716738</span>
+<span class="go">  Label  RSP_Rate_Mean  ...  RSP_Phase_Duration_Expiration  RSP_Phase_Duration_Ratio</span>
+<span class="go">1     1      15.330861  ...                       0.024288                  0.617516</span>
+<span class="go">2     2      16.389802  ...                       0.021663                  0.716738</span>
 
-<span class="go">[2 rows x 29 columns]</span>
+<span class="go">[2 rows x 32 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1629,6 +1633,58 @@ references.</p>
 <span class="go">Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford, R. (2018).</span>
 <span class="go">            Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="go">            Physiological measurement, 39(9), 094001.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.rsp.rsp_rav">
+<span class="sig-name descname"><span class="pre">rsp_rav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rav.html#rsp_rav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rav" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Respiratory Amplitude Variability (RAV)</strong></p>
+<p>Computes indices of amplitude variability, such as the mean and SD of the amplitude, and the
+RMSSD of the successive differences.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is an exploratory feature. If you manage to find studies and literature on RAV, please
+let us know by opening an issue on GitHub. Adding more indices (similar to HRV) would be
+trivial, but having some evidence as for its usefulness would be prerequisite.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amplitude</strong> (<em>Union[list, np.array, pd.Series]</em>) – The amplitude signal as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_amplitude()</span></code></a>.</p></li>
+<li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
+assumed that these containers were obtained with <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
+<li><p><strong>troughs</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
+assumed that these containers were obtained with <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>. This argument can
+be inferred from the <code class="docutils literal notranslate"><span class="pre">peaks</span></code> argument if the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>pd.DataFrame</em> – A DataFrame of containing the following columns with RAV indices.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_amplitude</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2.rsp.rsp_rrv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_rrv</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">peak_signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_amplitude</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="n">peak_signal</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">rav</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_rav</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="n">peak_signal</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">rav</span>
+<span class="gh">Out[7]: </span>
+<span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
+<span class="go">0   0.92536  0.077183   0.048726  0.052657</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1755,6 +1811,7 @@ references.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-intervalrelated"><em>rsp_intervalrelated()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_intervalrelated"><code class="docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_methods"><code class="docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rav"><code class="docutils literal notranslate"><span class="pre">rsp_rav()</span></code></a></li>
 </ul>
 </li>
 </ul>
