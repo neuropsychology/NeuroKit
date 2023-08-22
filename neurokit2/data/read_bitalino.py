@@ -14,12 +14,12 @@ def read_bitalino(filename):
 
     Reads and loads a BITalino file into a Pandas DataFrame.
     The function outputs both the dataframe and the information (such as the sampling rate)
-    retrieved from the OpenSignals file).
+    retrieved from the OpenSignals file.
 
     Parameters
     ----------
     filename :  str
-        Filename (with or without the extension) of an OpenSignals file (e.g., ``"data.txt"``).
+        Path (with or without the extension) of an OpenSignals file (e.g., ``"data.txt"``).
 
     Returns
     ----------

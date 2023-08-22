@@ -6,11 +6,12 @@ import pandas as pd
 import scipy.cluster.vq
 import scipy.special
 
+from ..misc import check_random_state
 from ..stats import standardize
 from .optim_complexity_tolerance import complexity_tolerance
 
 
-def complexity_symbolize(signal, method="mean", c=3, show=False, **kwargs):
+def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=False, **kwargs):
     """**Signal Symbolization and Discretization**
 
     Many complexity indices are made to assess the recurrence and predictability of discrete -
@@ -54,6 +55,8 @@ def complexity_symbolize(signal, method="mean", c=3, show=False, **kwargs):
         See :func:`complexity_symbolize` for details.
     c : int
         Number of symbols *c*, used in some algorithms.
+    random_state : None, int, numpy.random.RandomState or numpy.random.Generator
+        Seed for the random number generator. See :func:`misc.check_random_state` for further information.
     show : bool
         Plot the reconstructed attractor. See :func:`complexity_attractor` for details.
     **kwargs
@@ -152,11 +155,14 @@ def complexity_symbolize(signal, method="mean", c=3, show=False, **kwargs):
     .. ipython:: python
 
       @savefig p_complexity_symbolize11.png scale=100%
-      symbolic = nk.complexity_symbolize(signal, method = "kmeans", c=5, show=True)
+      symbolic = nk.complexity_symbolize(signal, method = "kmeans", c=5, random_state=42, show=True)
       @suppress
       plt.close()
 
     """
+    # Seed the random generator for reproducible results
+    rng = check_random_state(random_state)
+
     # Do nothing
     if method is None:
         symbolic = signal
@@ -253,7 +259,7 @@ def complexity_symbolize(signal, method="mean", c=3, show=False, **kwargs):
                 symbolic = np.zeros(len(signal))
                 symbolic[np.argsort(signal)] = np.digitize(np.arange(n), np.arange(0, 2 * n, n / c))
             elif method == "kmeans":
-                centroids, labels = scipy.cluster.vq.kmeans2(signal, c)
+                centroids, labels = scipy.cluster.vq.kmeans2(signal, c, seed=rng)
                 labels += 1
                 xx = np.argsort(centroids) + 1
                 symbolic = np.zeros(n)
