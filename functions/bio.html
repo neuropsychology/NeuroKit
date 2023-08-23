@@ -518,11 +518,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.082896  -0.072726  70.064355  ...            0     24.0   7.922586</span>
-<span class="go">1  1.029496  -0.197509  70.064355  ...            0     24.0   7.922586</span>
-<span class="go">2  0.891145  -0.335181  70.064355  ...            0     24.0   7.922586</span>
-<span class="go">3  0.694541  -0.490203  70.064355  ...            0     24.0   7.922586</span>
-<span class="go">4  0.468138  -0.659386  70.064355  ...            0     24.0   7.922586</span>
+<span class="go">0  1.071616  -0.070713  70.057084  ...            0     40.0   7.952982</span>
+<span class="go">1  1.018255  -0.195335  70.057084  ...            0     40.0   7.952982</span>
+<span class="go">2  0.880071  -0.332730  70.057084  ...            0     40.0   7.952982</span>
+<span class="go">3  0.683881  -0.487264  70.057084  ...            0     40.0   7.952982</span>
+<span class="go">4  0.458250  -0.655682  70.057084  ...            0     40.0   7.952982</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -622,11 +622,11 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="go"># Analyze</span>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T     RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN   7.111969  1.776357e-15</span>
-<span class="go">2     2   Neutral         4957  ...               NaN -15.476818  1.203761e-02</span>
-<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871  2.738234e-02</span>
-<span class="go">4     4  Negative        12984  ...               NaN  -0.397892 -5.451553e-03</span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T  RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN   7.111969   0.000000</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -15.476818   0.012038</span>
+<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871   0.027382</span>
+<span class="go">4     4  Negative        12984  ...               NaN  -0.397892  -0.005452</span>
 
 <span class="go">[4 rows x 46 columns]</span>
 </pre></div>
