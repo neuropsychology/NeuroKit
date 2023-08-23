@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..signal import signal_fixpeaks, signal_formatpeaks
+from ..stats import rescale
 from .ecg_findpeaks import ecg_findpeaks
 
 
@@ -63,6 +64,8 @@ def ecg_peaks(
     correct_artifacts : bool
         Whether or not to first identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).
+    show : bool
+        If ``True``, will return a plot of the signal with peaks. Defaults to ``False``.
     **kwargs
         Additional keyword arguments, usually specific for each method.
 
@@ -271,7 +274,7 @@ def ecg_peaks(
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     if show is True:
-        _ecg_peaks_plot(ecg_cleaned, sampling_rate, info)
+        _ecg_peaks_plot(ecg_cleaned, info, sampling_rate)
 
     return signals, info
 
@@ -279,19 +282,46 @@ def ecg_peaks(
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_peaks_plot(ecg_cleaned, sampling_rate=1000, info=None, raw=None, ax=None):
+def _ecg_peaks_plot(
+    ecg_cleaned, info=None, sampling_rate=1000, raw=None, quality=None, ax=None
+):
     x_axis = np.linspace(0, len(ecg_cleaned) / sampling_rate, len(ecg_cleaned))
 
     # Prepare plot
     if ax is None:
         fig, ax = plt.subplots()
 
-    # fig, ax = plt.subplots()
     ax.set_xlabel("Time (seconds)")
+
+    # Quality Area -------------------------------------------------------------
+    if quality is not None:
+        quality = rescale(
+            quality,
+            to=[
+                np.min([np.min(raw), np.min(ecg_cleaned)]),
+                np.max([np.max(raw), np.max(ecg_cleaned)]),
+            ],
+        )
+        minimum_line = np.full(len(x_axis), quality.min())
+
+        # Plot quality area first
+        ax.fill_between(
+            x_axis,
+            minimum_line,
+            quality,
+            alpha=0.12,
+            zorder=0,
+            interpolate=True,
+            facecolor="#4CAF50",
+            label="Signal quality",
+        )
 
     # Raw Signal ---------------------------------------------------------------
     if raw is not None:
         ax.plot(x_axis, raw, color="#B0BEC5", label="Raw signal", zorder=1)
+        ax.set_title("Raw and Cleaned Signal")
+    else:
+        ax.set_title("Signal and peaks")
 
     # Peaks -------------------------------------------------------------------
     ax.scatter(
@@ -323,8 +353,21 @@ def _ecg_peaks_plot(ecg_cleaned, sampling_rate=1000, info=None, raw=None, ax=Non
         x_axis,
         ecg_cleaned,
         color="#F44336",
-        label="Cleaned",
+        label="Cleaned signal",
         zorder=3,
         linewidth=1,
     )
-    ax.legend(loc="upper right")
+
+    # Optimize legend
+    if raw is not None:
+        handles, labels = ax.get_legend_handles_labels()
+        order = [2, 0, 1, 3]
+        ax.legend(
+            [handles[idx] for idx in order],
+            [labels[idx] for idx in order],
+            loc="upper right",
+        )
+    else:
+        ax.legend(loc="upper right")
+
+    return ax
