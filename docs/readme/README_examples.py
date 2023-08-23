@@ -75,9 +75,6 @@ eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2, drift=0.1)
 # Process it
 signals, info = nk.eda_process(eda, sampling_rate=250)
 
-# Visualise the processing
-nk.eda_plot(signals, info)
-
 # Save it
 nk.eda_plot(signals, info)
 plt.tight_layout()
@@ -92,9 +89,6 @@ ecg = nk.ecg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 
 # Process it
 signals, info = nk.ecg_process(ecg, sampling_rate=250)
-
-# Visualise the processing
-nk.ecg_plot(signals, info)
 
 # Save it
 nk.ecg_plot(signals, info)
@@ -111,15 +105,12 @@ rsp = nk.rsp_simulate(duration=60, sampling_rate=250, respiratory_rate=15)
 # Process it
 signals, info = nk.rsp_process(rsp, sampling_rate=250)
 
-# Visualise the processing
-nk.rsp_plot(signals, sampling_rate=250)
-
 # Save it
-nk.rsp_plot(signals, sampling_rate=250)
+nk.rsp_plot(signals, info)
 fig = plt.gcf()
 fig.set_size_inches(10, 12, forward=True)
 plt.tight_layout()
-plt.savefig("README_rsp.png", dpi=300)
+plt.savefig("README_rsp.png", dpi=150)
 
 # =============================================================================
 # Photoplethysmography (PPG/BVP)
@@ -131,13 +122,10 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 # Process it
 signals, info = nk.ppg_process(ppg, sampling_rate=250)
 
-# Visualize the processing
-nk.ppg_plot(signals, info)
-
 # Save it
 nk.ppg_plot(signals, info)
 plt.tight_layout()
-plt.savefig("README_ppg.png", dpi=300)
+plt.savefig("README_ppg.png", dpi=150)
 
 # =============================================================================
 # Electromyography (EMG) processing
@@ -149,13 +137,10 @@ emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 # Process it
 signals, info = nk.emg_process(emg, sampling_rate=250)
 
-# Visualise the processing
-nk.emg_plot(signals, sampling_rate=250)
-
 # Save it
-nk.emg_plot(signals, sampling_rate=250)
+nk.emg_plot(signals, info)
 plt.tight_layout()
-plt.savefig("README_emg.png", dpi=300)
+plt.savefig("README_emg.png", dpi=150)
 
 
 # =============================================================================
@@ -169,9 +154,9 @@ eog_signal = nk.data("eog_100hz")
 signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
 # Plot
-nk.eog_plot(signals, peaks=info, sampling_rate=100)
+nk.eog_plot(signals, info)
 plt.tight_layout()
-plt.savefig("README_eog.png", dpi=300)
+plt.savefig("README_eog.png", dpi=150)
 
 # =============================================================================
 # Signal Processing

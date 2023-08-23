@@ -25,8 +25,7 @@ def eda_plot(eda_signals, info=None, static=True):
 
     Returns
     -------
-    fig
-        Figure representing a plot of the processed EDA signals.
+    See :func:`.ecg_plot` for details on how to access the figure, modify the size and save it.
 
     Examples
     --------

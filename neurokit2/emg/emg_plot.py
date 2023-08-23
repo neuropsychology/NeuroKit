@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 
-def emg_plot(emg_signals, sampling_rate=None, static=True):
+
+def emg_plot(emg_signals, info=None, static=True):
     """**EMG Graph**
 
     Visualize electromyography (EMG) data.
@@ -13,10 +17,8 @@ def emg_plot(emg_signals, sampling_rate=None, static=True):
     ----------
     emg_signals : DataFrame
         DataFrame obtained from ``emg_process()``.
-    sampling_rate : int
-        The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
-        data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-        Defaults to ``None``.
+    info : dict
+        The information Dict returned by ``emg_process()``. Defaults to ``None``.
     static : bool
         If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
@@ -28,13 +30,7 @@ def emg_plot(emg_signals, sampling_rate=None, static=True):
 
     Returns
     -------
-    Though the function returns nothing, the figure can be retrieved and saved as follows:
-
-    .. code-block:: console
-
-        # To be run after emg_plot()
-        fig = plt.gcf()
-        fig.savefig("myfig.png")
+    See :func:`.ecg_plot` for details on how to access the figure, modify the size and save it.
 
     Examples
     --------
@@ -46,17 +42,26 @@ def emg_plot(emg_signals, sampling_rate=None, static=True):
       emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
 
       # Process signal
-      emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
+      emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
 
       # Plot
       @savefig p_emg_plot.png scale=100%
-      nk.emg_plot(emg_signals)
+      nk.emg_plot(emg_signals, info)
       @suppress
       plt.close()
 
-
-
     """
+    if info is None:
+        warn(
+            "'info' dict not provided. Some information might be missing."
+            + " Sampling rate will be set to 1000 Hz.",
+            category=NeuroKitWarning,
+        )
+
+        info = {
+            "sampling_rate": 1000,
+        }
+
     # Mark onsets, offsets, activity
     onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
     offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
@@ -69,22 +74,22 @@ def emg_plot(emg_signals, sampling_rate=None, static=True):
         )
 
     # Determine what to display on the x-axis, mark activity.
-    if sampling_rate is not None:
-        x_axis = np.linspace(0, emg_signals.shape[0] / sampling_rate, emg_signals.shape[0])
-    else:
-        x_axis = np.arange(0, emg_signals.shape[0])
+    x_axis = np.linspace(
+        0, emg_signals.shape[0] / info["sampling_rate"], emg_signals.shape[0]
+    )
 
     if static is True:
-        return _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate)
+        _emg_plot_static(emg_signals, x_axis, onsets, offsets, info["sampling_rate"])
     else:
-        return _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate)
+        return _emg_plot_interactive(
+            emg_signals, x_axis, onsets, offsets, info["sampling_rate"]
+        )
 
 
 # =============================================================================
 # Internals
 # =============================================================================
 def _emg_plot_activity(emg_signals, onsets, offsets):
-
     activity_signal = pd.Series(np.full(len(emg_signals), np.nan))
     activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
     activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
@@ -113,14 +118,23 @@ def _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate):
     ax0.set_title("Raw and Cleaned Signal")
     ax0.plot(x_axis, emg_signals["EMG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
     ax0.plot(
-        x_axis, emg_signals["EMG_Clean"], color="#FFC107", label="Cleaned", zorder=1, linewidth=1.5
+        x_axis,
+        emg_signals["EMG_Clean"],
+        color="#FFC107",
+        label="Cleaned",
+        zorder=1,
+        linewidth=1.5,
     )
     ax0.legend(loc="upper right")
 
     # Plot Amplitude.
     ax1.set_title("Muscle Activation")
     ax1.plot(
-        x_axis, emg_signals["EMG_Amplitude"], color="#FF9800", label="Amplitude", linewidth=1.5
+        x_axis,
+        emg_signals["EMG_Amplitude"],
+        color="#FF9800",
+        label="Amplitude",
+        linewidth=1.5,
     )
 
     # Shade activity regions.
@@ -137,7 +151,11 @@ def _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate):
 
     # Mark onsets and offsets.
     ax1.scatter(
-        x_axis[onsets], emg_signals["EMG_Amplitude"][onsets], color="#f03e65", label=None, zorder=3
+        x_axis[onsets],
+        emg_signals["EMG_Amplitude"][onsets],
+        color="#f03e65",
+        label=None,
+        zorder=3,
     )
     ax1.scatter(
         x_axis[offsets],
@@ -155,8 +173,6 @@ def _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate):
         ax1.axvline(i, color="#4a4a4a", linestyle="--", label=None, zorder=2)
         ax1.axvline(j, color="#4a4a4a", linestyle="--", label=None, zorder=2)
     ax1.legend(loc="upper right")
-    plt.close()
-    return fig
 
 
 def _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate):

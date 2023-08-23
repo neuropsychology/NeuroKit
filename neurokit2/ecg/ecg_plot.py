@@ -32,10 +32,11 @@ def ecg_plot(ecg_signals, info=None):
     -------
     Though the function returns nothing, the figure can be retrieved and saved as follows:
 
-    .. code-block:: console
+    .. code-block:: python
 
         # To be run after ecg_plot()
         fig = plt.gcf()
+        fig.set_size_inches(10, 12, forward=True)
         fig.savefig("myfig.png")
 
     Examples

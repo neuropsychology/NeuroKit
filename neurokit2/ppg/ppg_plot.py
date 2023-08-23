@@ -30,8 +30,7 @@ def ppg_plot(ppg_signals, info=None, static=True):
 
     Returns
     -------
-    fig
-        Figure representing a plot of the processed PPG signals.
+    See :func:`.ecg_plot` for details on how to access the figure, modify the size and save it.
 
     See Also
     --------
