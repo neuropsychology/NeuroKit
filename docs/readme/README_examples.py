@@ -9,7 +9,7 @@ import neurokit2 as nk
 
 # Setup matplotlib with Agg to run on server
 matplotlib.use("Agg")
-plt.rcParams["figure.figsize"] = (10, 6.5)
+plt.rcParams["figure.figsize"] = (2**0.5 * 10, 10)
 plt.rcParams["savefig.facecolor"] = "white"
 
 # =============================================================================
@@ -55,13 +55,15 @@ data = pd.DataFrame(
     }
 )
 plot = data.plot(
-    subplots=True, layout=(5, 1), color=["#f44336", "#E91E63", "#2196F3", "#9C27B0", "#FF9800"]
+    subplots=True,
+    layout=(5, 1),
+    color=["#f44336", "#E91E63", "#2196F3", "#9C27B0", "#FF9800"],
 )
 fig = plt.gcf()
 fig.set_size_inches(10, 6, forward=True)
 [ax.legend(loc=1) for ax in plt.gcf().axes]
 plt.tight_layout()
-fig.savefig("README_simulation.png", dpi=300)
+fig.savefig("README_simulation.png", dpi=150)
 
 # =============================================================================
 # Electrodermal Activity (EDA) processing
@@ -74,12 +76,12 @@ eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2, drift=0.1)
 signals, info = nk.eda_process(eda, sampling_rate=250)
 
 # Visualise the processing
-nk.eda_plot(signals, sampling_rate=None)
+nk.eda_plot(signals, sampling_rate=250)
 
 # Save it
-nk.eda_plot(signals, sampling_rate=None)
+nk.eda_plot(signals, sampling_rate=250)
 plt.tight_layout()
-plt.savefig("README_eda.png", dpi=300)
+plt.savefig("README_eda.png", dpi=150)
 
 # =============================================================================
 # Cardiac activity (ECG) processing
@@ -92,12 +94,12 @@ ecg = nk.ecg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 signals, info = nk.ecg_process(ecg, sampling_rate=250)
 
 # Visualise the processing
-nk.ecg_plot(signals, sampling_rate=250)
+nk.ecg_plot(signals, info)
 
 # Save it
-nk.ecg_plot(signals, sampling_rate=250)
+nk.ecg_plot(signals, info)
 plt.tight_layout()
-plt.savefig("README_ecg.png", dpi=300)
+plt.savefig("README_ecg.png", dpi=150)
 
 # =============================================================================
 # Respiration (RSP) processing
@@ -120,6 +122,24 @@ plt.tight_layout()
 plt.savefig("README_rsp.png", dpi=300)
 
 # =============================================================================
+# Photoplethysmography (PPG/BVP)
+# =============================================================================
+
+# Generate 15 seconds of PPG signal (recorded at 250 samples / second)
+ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)
+
+# Process it
+signals, info = nk.ppg_process(ppg, sampling_rate=250)
+
+# Visualize the processing
+nk.ppg_plot(signals, info)
+
+# Save it
+nk.ppg_plot(signals, info)
+plt.tight_layout()
+plt.savefig("README_ppg.png", dpi=300)
+
+# =============================================================================
 # Electromyography (EMG) processing
 # =============================================================================
 
@@ -137,23 +157,6 @@ nk.emg_plot(signals, sampling_rate=250)
 plt.tight_layout()
 plt.savefig("README_emg.png", dpi=300)
 
-# =============================================================================
-# Photoplethysmography (PPG/BVP)
-# =============================================================================
-
-# Generate 15 seconds of PPG signal (recorded at 250 samples / second)
-ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)
-
-# Process it
-signals, info = nk.ppg_process(ppg, sampling_rate=250)
-
-# Visualize the processing
-nk.ppg_plot(signals, sampling_rate=250)
-
-# Save it
-nk.ppg_plot(signals, sampling_rate=250)
-plt.tight_layout()
-plt.savefig("README_ppg.png", dpi=300)
 
 # =============================================================================
 # Electrooculography (EOG)
@@ -280,7 +283,9 @@ np.random.seed(333)
 signal = nk.signal_simulate(duration=10, frequency=1)  # High freq
 signal += 3 * nk.signal_simulate(duration=10, frequency=3)  # Higher freq
 signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and linear trend
-signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Non-linear trend
+signal += 2 * nk.signal_simulate(
+    duration=10, frequency=0.1, noise=0
+)  # Non-linear trend
 signal += np.random.normal(0, 0.02, len(signal))  # Add noise
 
 # Decompose signal using Empirical Mode Decomposition (EMD)
@@ -323,10 +328,16 @@ signal = nk.signal_simulate(
 )
 
 # Get the PSD using different methods
-welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=20, show=True)
+welch = nk.signal_psd(
+    signal, method="welch", min_frequency=1, max_frequency=20, show=True
+)
 multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=20, show=True)
-lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
-burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
+lomb = nk.signal_psd(
+    signal, method="lomb", min_frequency=1, max_frequency=20, show=True
+)
+burg = nk.signal_psd(
+    signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True
+)
 
 
 # Visualize the different methods together
@@ -337,7 +348,12 @@ axes[0].set_title("Original signal")
 axes[0].set_xlabel("Time (s)")
 
 axes[1].plot(
-    welch["Frequency"], welch["Power"], label="Welch", color="#E91E63", linewidth=2, zorder=1
+    welch["Frequency"],
+    welch["Power"],
+    label="Welch",
+    color="#E91E63",
+    linewidth=2,
+    zorder=1,
 )
 axes[1].plot(
     multitaper["Frequency"],
@@ -347,9 +363,21 @@ axes[1].plot(
     linewidth=2,
     zorder=2,
 )
-axes[1].plot(burg["Frequency"], burg["Power"], label="Burg", color="#4CAF50", linewidth=2, zorder=3)
 axes[1].plot(
-    lomb["Frequency"], lomb["Power"], label="Lomb", color="#FFC107", linewidth=0.5, zorder=4
+    burg["Frequency"],
+    burg["Power"],
+    label="Burg",
+    color="#4CAF50",
+    linewidth=2,
+    zorder=3,
+)
+axes[1].plot(
+    lomb["Frequency"],
+    lomb["Power"],
+    label="Lomb",
+    color="#FFC107",
+    linewidth=0.5,
+    zorder=4,
 )
 
 axes[1].set_title("Power Spectrum Density (PSD)")
