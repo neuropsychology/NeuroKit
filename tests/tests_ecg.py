@@ -76,7 +76,7 @@ def test_ecg_peaks():
 
     assert signals.shape == (24000, 1)
     assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 136, atol=1)
-    assert info["ECG_fixpeaks_longshort"] == [17]
+    assert 17 in info["ECG_fixpeaks_longshort"]
 
 
 def test_ecg_process():

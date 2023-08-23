@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 from ..signal import signal_fixpeaks, signal_formatpeaks
 from .ecg_findpeaks import ecg_findpeaks
 
@@ -7,6 +10,7 @@ def ecg_peaks(
     sampling_rate=1000,
     method="neurokit",
     correct_artifacts=False,
+    show=False,
     **kwargs
 ):
     """**Find R-peaks in an ECG signal**
@@ -86,10 +90,9 @@ def ecg_peaks(
       import neurokit2 as nk
 
       ecg = nk.ecg_simulate(duration=10, sampling_rate=250)
-      signals, info = nk.ecg_peaks(ecg, sampling_rate=250, correct_artifacts=True)
 
       @savefig p_ecg_peaks1.png scale=100%
-      nk.events_plot(info["ECG_R_Peaks"], ecg)
+      signals, info = nk.ecg_peaks(ecg, sampling_rate=250, correct_artifacts=True, show=True)
       @suppress
       plt.close()
 
@@ -224,27 +227,6 @@ def ecg_peaks(
     * T. Koka and M. Muma, "Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
       Visibility Graphs," 2022 44th Annual International Conference of the IEEE Engineering in
       Medicine & Biology Society (EMBC), 2022, pp. 121-126.
-
-    * ``nabian2018``
-
-    * ``gamboa2008``
-
-
-    * ``hamilton2002``
-
-    * ``christov2004``
-
-    * ``engzeemod2012``
-
-    * ``elgendi2010``
-
-    * ``kalidas2017``
-
-
-    * ``rodrigues2021``
-
-    * ``koka2022``
-
     * ``promac``
         * **Unpublished.** It runs different methods and derives a probability index using
           convolution. See this discussion for more information on the method:
@@ -288,4 +270,61 @@ def ecg_peaks(
 
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
+    if show is True:
+        _ecg_peaks_plot(ecg_cleaned, sampling_rate, info)
+
     return signals, info
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _ecg_peaks_plot(ecg_cleaned, sampling_rate=1000, info=None, raw=None, ax=None):
+    x_axis = np.linspace(0, len(ecg_cleaned) / sampling_rate, len(ecg_cleaned))
+
+    # Prepare plot
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    # fig, ax = plt.subplots()
+    ax.set_xlabel("Time (seconds)")
+
+    # Raw Signal ---------------------------------------------------------------
+    if raw is not None:
+        ax.plot(x_axis, raw, color="#B0BEC5", label="Raw signal", zorder=1)
+
+    # Peaks -------------------------------------------------------------------
+    ax.scatter(
+        x_axis[info["ECG_R_Peaks"]],
+        ecg_cleaned[info["ECG_R_Peaks"]],
+        color="#FFC107",
+        label="R-peaks",
+        zorder=2,
+    )
+
+    # TODO
+    # # Artifacts ---------------------------------------------------------------
+    # def _plot_artifact(artifact, color, label, ax):
+    #     if artifact in info.keys() and len(info[artifact]) > 0:
+    #         ax.scatter(
+    #             x_axis[info[artifact]],
+    #             ecg_cleaned[info[artifact]],
+    #             color=color,
+    #             label=label,
+    #             marker="x",
+    #             zorder=2,
+    #         )
+
+    # _plot_artifact("ECG_fixpeaks_missed", "#1E88E5", "Missed Peaks", ax)
+    # _plot_artifact("ECG_fixpeaks_longshort", "#1E88E5", "Long/Short", ax)
+
+    # Clean Signal ------------------------------------------------------------
+    ax.plot(
+        x_axis,
+        ecg_cleaned,
+        color="#F44336",
+        label="Cleaned",
+        zorder=3,
+        linewidth=1,
+    )
+    ax.legend(loc="upper right")

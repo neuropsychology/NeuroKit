@@ -85,7 +85,8 @@ def signal_fixpeaks(
 
       # Simulate ECG data and add noisy period
       ecg = nk.ecg_simulate(duration=240, sampling_rate=250, noise=2, random_state=42)
-      ecg[20000:30000] += np.random.normal(loc=0, scale=0.4, size=10000)
+      ecg[20000:30000] += np.random.uniform(size=10000)
+      ecg[40000:43000] = 0
 
       # Identify and Correct Peaks using "Kubios" Method
       rpeaks_uncorrected = nk.ecg_findpeaks(ecg, method="pantompkins", sampling_rate=250)
@@ -126,7 +127,7 @@ def signal_fixpeaks(
       peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
 
       # Identify and Correct Peaks using 'NeuroKit' Method
-      peaks_corrected = nk.signal_fixpeaks(
+      info, peaks_corrected = nk.signal_fixpeaks(
           peaks=peaks, interval_min=0.5, interval_max=1.5, method="neurokit"
       )
 
@@ -201,7 +202,11 @@ def _signal_fixpeaks_neurokit(
         )
         peaks_clean = valid_peaks
 
-    info = {"method": "neurokit"}
+    info = {
+        "method": "neurokit",
+        "extra": [i for i in peaks if i not in peaks_clean],
+        "missed": [i for i in peaks_clean if i not in peaks],
+    }
     return info, peaks_clean
 
 
@@ -620,6 +625,7 @@ def _plot_artifacts_lipponen2019(info):
     )
     ax3.add_patch(poly3)
     ax3.legend(loc="upper right")
+    plt.tight_layout()
 
 
 # =============================================================================
