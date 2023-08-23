@@ -90,10 +90,10 @@ def test_ecg_process():
 def test_ecg_plot():
     ecg = nk.ecg_simulate(duration=60, heart_rate=70, noise=0.05, random_state=5)
 
-    ecg_summary, _ = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
+    ecg_summary, info = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
 
     # Plot data over seconds.
-    nk.ecg_plot(ecg_summary, sampling_rate=1000)
+    nk.ecg_plot(ecg_summary, info)
     fig = plt.gcf()  # Extract the latest figure.
     assert len(fig.axes) == 3
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"

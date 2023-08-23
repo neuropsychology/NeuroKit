@@ -37,7 +37,7 @@ def eda_plot(eda_signals, info=None, static=True):
       eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)
 
       @savefig p_eda_plot1.png scale=100%
-      nk.eda_plot(eda_signals)
+      nk.eda_plot(eda_signals, info)
       @suppress
       plt.close()
 

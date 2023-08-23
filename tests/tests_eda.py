@@ -159,10 +159,10 @@ def test_eda_plot():
         drift=0.01,
         random_state=42,
     )
-    eda_summary, _ = nk.eda_process(eda, sampling_rate=sampling_rate)
+    eda_summary, info = nk.eda_process(eda, sampling_rate=sampling_rate)
 
     # Plot data over samples.
-    nk.eda_plot(eda_summary)
+    nk.eda_plot(eda_summary, info)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
@@ -180,7 +180,7 @@ def test_eda_plot():
     plt.close(fig)
 
     # Plot data over seconds.
-    nk.eda_plot(eda_summary, sampling_rate=sampling_rate)
+    nk.eda_plot(eda_summary, info)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert fig.get_axes()[2].get_xlabel() == "Seconds"

@@ -243,8 +243,8 @@ def test_rsp_plot():
     rsp = nk.rsp_simulate(
         duration=120, sampling_rate=1000, respiratory_rate=15, random_state=3
     )
-    rsp_summary, _ = nk.rsp_process(rsp, sampling_rate=1000)
-    nk.rsp_plot(rsp_summary)
+    rsp_summary, info = nk.rsp_process(rsp, sampling_rate=1000)
+    nk.rsp_plot(rsp_summary, info)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 5
