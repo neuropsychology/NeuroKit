@@ -6,7 +6,7 @@ import pandas as pd
 import scipy.signal
 
 from ..misc import NeuroKitWarning, as_vector
-from ..signal import signal_filter, signal_resample
+from ..signal import signal_filter
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
