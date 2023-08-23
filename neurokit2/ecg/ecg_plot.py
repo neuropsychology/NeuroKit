@@ -57,7 +57,7 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=None):
 
       # Plot
       @savefig p_ecg_plot.png scale=100%
-      nk.ecg_plot(signals, info, sampling_rate=1000)
+      nk.ecg_plot(signals, info)
       @suppress
       plt.close()
 
@@ -118,7 +118,7 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=None):
 
     # Plot individual heart beats
     ax2 = ecg_segment(
-        ecg_signals["ECG_Clean"],
+        ecg_signals,
         info["ECG_R_Peaks"],
         info["sampling_rate"],
         show="return",
