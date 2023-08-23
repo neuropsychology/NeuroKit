@@ -6,7 +6,7 @@ import pandas as pd
 import scipy.signal
 
 from ..misc import NeuroKitWarning, as_vector
-from ..signal import signal_filter
+from ..signal import signal_filter, signal_resample
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
@@ -57,19 +57,27 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     .. ipython:: python
 
       import pandas as pd
+      import numpy as np
       import neurokit2 as nk
-      import matplotlib.pyplot as plt
 
-      ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-      signals = pd.DataFrame({"ECG_Raw" : ecg,
-                              "ECG_NeuroKit" : nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"),
-                              "ECG_BioSPPy" : nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"),
-                              "ECG_PanTompkins" : nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985"),
-                              "ECG_Hamilton" : nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002"),
-                              "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"),
-                              "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=250, noise=0.2)
+      ecg += np.random.normal(0, 0.1, len(ecg))  # Add Gaussian noise
+
+      signals = pd.DataFrame({
+          "ECG_Raw" : ecg,
+          "ECG_NeuroKit" : nk.ecg_clean(ecg, sampling_rate=250, method="neurokit"),
+          "ECG_BioSPPy" : nk.ecg_clean(ecg, sampling_rate=250, method="biosppy"),
+          "ECG_PanTompkins" : nk.ecg_clean(ecg, sampling_rate=250, method="pantompkins1985"),
+          "ECG_Hamilton" : nk.ecg_clean(ecg, sampling_rate=250, method="hamilton2002"),
+          "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=250, method="elgendi2010"),
+          "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012"),
+          "ECG_TC" : nk.ecg_clean(ecg, sampling_rate=250, method="templateconvolution")
+      })
+
       @savefig p_ecg_clean.png scale=100%
-      signals.plot()
+      signals.plot(subplots=True)
+      @suppress
+      plt.close()
 
 
     References
@@ -112,6 +120,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
     elif method in ["vg", "vgraph", "koka2022"]:
         clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
+    elif method in ["templateconvolution"]:
+        clean = _ecg_clean_templateconvolution(ecg_signal, sampling_rate)
     elif method in [
         "christov",
         "christov2004",
@@ -130,7 +140,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         raise ValueError(
             "NeuroKit error: ecg_clean(): 'method' should be "
             "one of 'neurokit', 'biosppy', 'pantompkins1985',"
-            " 'hamilton2002', 'elgendi2010', 'engzeemod2012'."
+            " 'hamilton2002', 'elgendi2010', 'engzeemod2012',"
+            " 'templateconvolution'."
         )
     return clean
 
@@ -275,9 +286,8 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
 
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
       in Cardiology, vol. 6, pp. 37-42, 1979.
-
-    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation
-      for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram
+      Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
 
     """
 
@@ -300,8 +310,6 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
 def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
     """Filtering used by Taulant Koka and Michael Muma (2022).
 
-    References
-    ----------
     - T. Koka and M. Muma (2022), Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
       Visibility Graphs. In: 2022 44th Annual International Conference of the IEEE Engineering
       in Medicine & Biology Society (EMBC). Uses the Pan and Tompkins thresholding.
@@ -318,3 +326,54 @@ def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
     )
 
     return clean  # Return filtered
+
+
+# =============================================================================
+# Template Convolution (Exploratory)
+# =============================================================================
+def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
+    """Filter and Convolve ECG signal with QRS complex template.
+    Totally exploratory method by Dominique Makowski, use at your own risks.
+
+    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS features. However, it doens't work well and creates a lot of artifacts. If you have ideas for improvement please let me know!
+    """
+
+    window_size = int(np.round(sampling_rate / 4))
+    if (window_size % 2) == 0:
+        window_size + 1
+
+    # Filter out slow drifts and high freq noises
+    filtered = signal_filter(
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=1,
+        highcut=40,
+        method="butterworth",
+        window_size=window_size,
+    )
+
+    # Detect peaks
+    peaks, _ = scipy.signal.find_peaks(
+        filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered)
+    )
+    peaks = peaks[peaks + 0.6 * sampling_rate < len(ecg_signal)]
+
+    idx = [
+        np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks
+    ]
+    epochs = np.array([filtered[i] for i in idx])
+    qrs = np.mean(epochs, axis=0)
+
+    # # Create base QRS template using wavelets
+    # qrs = scipy.signal.ricker(600, a=16)
+
+    # # Adjust template
+    # qrs[100:220] = qrs[100:220] + 0.03 * np.sin(np.linspace(0, 1 * np.pi, 120))
+    # qrs[284:316] = qrs[284:316] + 0.2 * qrs[284:316]
+    # qrs[316:380] = qrs[316:380] + 0.5 * qrs[316:380]
+    # qrs[380:500] = qrs[380:500] + 0.05 * np.sin(np.linspace(0, 1 * np.pi, 120))
+
+    # # Resample
+    # qrs = signal_resample(qrs, desired_length=sampling_rate)
+
+    return scipy.signal.convolve(ecg_signal, qrs, mode="same")
