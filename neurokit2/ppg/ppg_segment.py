@@ -52,7 +52,10 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
         peaks = peaks["PPG_Peaks"]
 
     epochs_start, epochs_end, average_hr = _ecg_segment_window(
-        rpeaks=peaks, sampling_rate=sampling_rate, desired_length=len(ppg_cleaned)
+        rpeaks=peaks,
+        sampling_rate=sampling_rate,
+        desired_length=len(ppg_cleaned),
+        ratio_pre=0.3,
     )
     heartbeats = epochs_create(
         ppg_cleaned,

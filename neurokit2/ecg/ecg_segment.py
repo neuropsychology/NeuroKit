@@ -136,7 +136,7 @@ def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax
                 df[col][df[wave_col] == 1],
                 color=wave[1],
                 marker="+",
-                label=f"{wave[0]}-wave",
+                label=f"{wave[0]}-waves",
                 zorder=3,
             )
 
@@ -146,7 +146,11 @@ def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax
 
 
 def _ecg_segment_window(
-    heart_rate=None, rpeaks=None, sampling_rate=1000, desired_length=None
+    heart_rate=None,
+    rpeaks=None,
+    sampling_rate=1000,
+    desired_length=None,
+    ratio_pre=0.35,
 ):
     # Extract heart rate
     if heart_rate is not None:
@@ -163,7 +167,7 @@ def _ecg_segment_window(
     window_size = 60 / heart_rate  # Beats per second
 
     # Window
-    epochs_start = 0.35 * window_size
-    epochs_end = 0.65 * window_size
+    epochs_start = ratio_pre * window_size
+    epochs_end = (1 - ratio_pre) * window_size
 
     return -epochs_start, epochs_end, heart_rate

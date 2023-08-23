@@ -65,7 +65,7 @@ def ecg_peaks(
         Whether or not to first identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).
     show : bool
-        If ``True``, will return a plot of the signal with peaks. Defaults to ``False``.
+        If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.
     **kwargs
         Additional keyword arguments, usually specific for each method.
 
@@ -295,9 +295,10 @@ def _ecg_peaks_plot(
 
     # Prepare plot
     if ax is None:
-        fig, ax = plt.subplots()
+        _, ax = plt.subplots()
 
     ax.set_xlabel("Time (seconds)")
+    ax.set_title("ECG signal and peaks")
 
     # Quality Area -------------------------------------------------------------
     if quality is not None:
@@ -325,9 +326,9 @@ def _ecg_peaks_plot(
     # Raw Signal ---------------------------------------------------------------
     if raw is not None:
         ax.plot(x_axis, raw, color="#B0BEC5", label="Raw signal", zorder=1)
-        ax.set_title("Raw and Cleaned Signal")
+        label_clean = "Cleaned signal"
     else:
-        ax.set_title("Signal and peaks")
+        label_clean = "Signal"
 
     # Peaks -------------------------------------------------------------------
     ax.scatter(
@@ -369,7 +370,7 @@ def _ecg_peaks_plot(
             x_axis,
             diastole,
             color="#B71C1C",
-            label="Cleaned signal",
+            label=label_clean,
             zorder=3,
             linewidth=1,
         )
@@ -385,7 +386,7 @@ def _ecg_peaks_plot(
             x_axis,
             ecg_cleaned,
             color="#F44336",
-            label="Cleaned signal",
+            label=label_clean,
             zorder=3,
             linewidth=1,
         )

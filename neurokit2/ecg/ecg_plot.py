@@ -12,7 +12,7 @@ from .ecg_peaks import _ecg_peaks_plot
 from .ecg_segment import ecg_segment
 
 
-def ecg_plot(ecg_signals, info=None, sampling_rate=None):
+def ecg_plot(ecg_signals, info=None):
     """**Visualize ECG data**
 
     Plot ECG signals and R-peaks.
@@ -23,11 +23,6 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=None):
         DataFrame obtained from ``ecg_process()``.
     info : dict
         The information Dict returned by ``ecg_process()``. Defaults to ``None``.
-    sampling_rate : int
-        The sampling frequency of ``ecg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
-    show_type : str
-        Visualize the ECG data with ``"default"`` or visualize artifacts thresholds with
-        ``"artifacts"`` produced by ``ecg_fixpeaks()``, or ``"full"`` to visualize both.
 
     See Also
     --------

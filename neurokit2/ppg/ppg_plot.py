@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal.signal_rate import _signal_rate_plot
+from .ppg_peaks import _ppg_peaks_plot
 from .ppg_segment import ppg_segment
 
 
-def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
+def ppg_plot(ppg_signals, info, static=True):
     """**Visualize photoplethysmogram (PPG) data**
 
     Visualize the PPG signal processing.
@@ -17,8 +21,8 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
     ----------
     ppg_signals : DataFrame
         DataFrame obtained from :func:`.ppg_process`.
-    sampling_rate : int
-        The sampling frequency of the PPG (in Hz, i.e., samples/second). Defaults to 1000.
+    info : dict
+        The information Dict returned by ``ppg_process()``. Defaults to ``None``.
     static : bool
         If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
@@ -46,7 +50,7 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
 
       # Plot
       @savefig p_ppg_plot1.png scale=100%
-      nk.ppg_plot(signals, sampling_rate=100)
+      nk.ppg_plot(signals, info)
       @suppress
       plt.close()
 
@@ -60,63 +64,58 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
         )
 
     # Extract Peaks.
-    peaks = None
-    if "PPG_Peaks" in ppg_signals.columns:
-        peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
+    if info is None:
+        warn(
+            "'info' dict not provided. Some information might be missing."
+            + " Sampling rate will be set to 1000 Hz.",
+            category=NeuroKitWarning,
+        )
 
-    # X-axis
-    x_axis = np.linspace(0, len(ppg_signals) / sampling_rate, len(ppg_signals))
+        info = {
+            "PPG_Peaks": np.where(ppg_signals["PPG_Peaks"] == 1)[0],
+            "sampling_rate": 1000,
+        }
 
     if static:
         # Prepare figure
         gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[2 / 3, 1 / 3])
         fig = plt.figure(constrained_layout=False)
-        ax0 = fig.add_subplot(gs[0, :-1])
-        ax0.set_xlabel("Time (seconds)")
 
+        ax0 = fig.add_subplot(gs[0, :-1])
         ax1 = fig.add_subplot(gs[1, :-1], sharex=ax0)
         ax2 = fig.add_subplot(gs[:, -1])
 
         fig.suptitle("Photoplethysmogram (PPG)", fontweight="bold")
 
         # Plot cleaned and raw PPG
-        ax0.set_title("Raw and Cleaned Signal")
-        ax0.plot(x_axis, ppg_signals["PPG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
-        ax0.plot(
-            x_axis,
-            ppg_signals["PPG_Clean"],
-            color="#9C27B0",
-            label="Cleaned",
-            zorder=1,
-            linewidth=1.5,
+        ax0 = _ppg_peaks_plot(
+            ppg_signals["PPG_Clean"].values,
+            info=info,
+            sampling_rate=info["sampling_rate"],
+            raw=ppg_signals["PPG_Raw"].values,
+            ax=ax0,
         )
-
-        # Plot peaks
-        ax0.scatter(
-            x_axis[peaks],
-            ppg_signals["PPG_Clean"][peaks],
-            color="#FFC107",
-            label="Peaks",
-            zorder=2,
-        )
-        ax0.legend(loc="upper right")
 
         # Plot Heart Rate
         ax1 = _signal_rate_plot(
             ppg_signals["PPG_Rate"].values,
-            peaks,
-            sampling_rate=sampling_rate,
+            info["PPG_Peaks"],
+            sampling_rate=info["sampling_rate"],
             title="Heart Rate",
             ytitle="Beats per minute (bpm)",
             color="#FB661C",
             color_mean="#FBB41C",
-            color_points="red",
+            color_points="#FF9800",
             ax=ax1,
         )
 
         # Plot individual heart beats
         ax2 = ppg_segment(
-            ppg_signals["PPG_Clean"].values, peaks, sampling_rate, show="return", ax=ax2
+            ppg_signals["PPG_Clean"].values,
+            info["PPG_Peaks"],
+            info["sampling_rate"],
+            show="return",
+            ax=ax2,
         )
 
     else:
@@ -130,6 +129,11 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
                 " module is required when 'static' is False.",
                 " Please install it first (`pip install plotly`).",
             ) from e
+
+        # X-axis
+        x_axis = np.linspace(
+            0, len(ppg_signals) / info["sampling_rate"], len(ppg_signals)
+        )
 
         fig = make_subplots(
             rows=2,
@@ -156,8 +160,8 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
         # Plot peaks
         fig.add_trace(
             go.Scatter(
-                x=x_axis[peaks],
-                y=ppg_signals["PPG_Clean"][peaks],
+                x=x_axis[info["PPG_Peaks"]],
+                y=ppg_signals["PPG_Clean"][info["PPG_Peaks"]],
                 name="Peaks",
                 mode="markers",
                 marker_color="#D60574",
@@ -188,10 +192,10 @@ def ppg_plot(ppg_signals, sampling_rate=1000, static=True):
             col=1,
         )
         fig.update_layout(title_text="Photoplethysmogram (PPG)", height=500, width=750)
-        if sampling_rate is not None:
+        if info["sampling_rate"] is not None:
             fig.update_xaxes(title_text="Time (seconds)", row=1, col=1)
             fig.update_xaxes(title_text="Time (seconds)", row=2, col=1)
-        elif sampling_rate is None:
+        elif info["sampling_rate"] is None:
             fig.update_xaxes(title_text="Samples", row=1, col=1)
             fig.update_xaxes(title_text="Samples", row=2, col=1)
         return fig
