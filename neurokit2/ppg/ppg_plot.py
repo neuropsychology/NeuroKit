@@ -12,7 +12,7 @@ from .ppg_peaks import _ppg_peaks_plot
 from .ppg_segment import ppg_segment
 
 
-def ppg_plot(ppg_signals, info, static=True):
+def ppg_plot(ppg_signals, info=None, static=True):
     """**Visualize photoplethysmogram (PPG) data**
 
     Visualize the PPG signal processing.

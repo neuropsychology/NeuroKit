@@ -76,10 +76,10 @@ eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2, drift=0.1)
 signals, info = nk.eda_process(eda, sampling_rate=250)
 
 # Visualise the processing
-nk.eda_plot(signals, sampling_rate=250)
+nk.eda_plot(signals, info)
 
 # Save it
-nk.eda_plot(signals, sampling_rate=250)
+nk.eda_plot(signals, info)
 plt.tight_layout()
 plt.savefig("README_eda.png", dpi=150)
 
