@@ -1,8 +1,11 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 from ..signal import signal_formatpeaks
 from .ppg_findpeaks import ppg_findpeaks
 
 
-def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", **kwargs):
+def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **kwargs):
     """**Find systolic peaks in a photoplethysmogram (PPG) signal**
 
     Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG
@@ -23,6 +26,8 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", **kwargs):
     method : str
         The processing pipeline to apply. Can be one of ``"elgendi"``, ``"bishop"``. The default is
         ``"elgendi"``.
+    show : bool
+        If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.
     **kwargs
         Additional keyword arguments, usually specific for each method.
 
@@ -75,7 +80,7 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", **kwargs):
 
     """
     peaks = ppg_findpeaks(
-        ppg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs
+        ppg_cleaned, sampling_rate=sampling_rate, method=method, show=False, **kwargs
     )
 
     instant_peaks = signal_formatpeaks(
@@ -85,4 +90,58 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", **kwargs):
     info = peaks
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
+    if show is True:
+        _ppg_peaks_plot(ppg_cleaned, info, sampling_rate)
+
     return signals, info
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _ppg_peaks_plot(
+    ppg_cleaned,
+    info=None,
+    sampling_rate=1000,
+    raw=None,
+    ax=None,
+):
+    x_axis = np.linspace(0, len(ppg_cleaned) / sampling_rate, len(ppg_cleaned))
+
+    # Prepare plot
+    if ax is None:
+        _, ax = plt.subplots()
+
+    ax.set_xlabel("Time (seconds)")
+    ax.set_title("PPG signal and peaks")
+
+    # Raw Signal ---------------------------------------------------------------
+    if raw is not None:
+        ax.plot(x_axis, raw, color="#B0BEC5", label="Raw signal", zorder=1)
+        label_clean = "Cleaned signal"
+    else:
+        label_clean = "Signal"
+
+    # Peaks -------------------------------------------------------------------
+    ax.scatter(
+        x_axis[info["PPG_Peaks"]],
+        ppg_cleaned[info["PPG_Peaks"]],
+        color="#FFC107",
+        label="Systolic peaks",
+        zorder=2,
+    )
+
+    # Clean Signal ------------------------------------------------------------
+    ax.plot(
+        x_axis,
+        ppg_cleaned,
+        color="#E91E63",
+        label=label_clean,
+        zorder=3,
+        linewidth=1,
+    )
+
+    # Optimize legend
+    ax.legend(loc="upper right")
+
+    return ax

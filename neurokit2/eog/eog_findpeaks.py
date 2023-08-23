@@ -113,7 +113,9 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     elif method in ["blinker"]:
         peaks = _eog_findpeaks_blinker(eog_cleaned, sampling_rate=sampling_rate)
     elif method in ["neurokit", "nk"]:
-        peaks = _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=sampling_rate, **kwargs)
+        peaks = _eog_findpeaks_neurokit(
+            eog_cleaned, sampling_rate=sampling_rate, **kwargs
+        )
     #    elif method in ["jammes2008", "jammes"]:
     #        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)
     else:
@@ -131,7 +133,7 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.33, show=True):
     """In-house EOG blink detection."""
     peaks = signal_findpeaks(eog_cleaned, relative_height_min=1.25)["Peaks"]
-    peaks = signal_fixpeaks(
+    _, peaks = signal_fixpeaks(
         peaks=peaks, sampling_rate=sampling_rate, interval_min=0.2, method="neurokit"
     )
     peaks = _eog_findpeaks_neurokit_filterblinks(
@@ -146,7 +148,11 @@ def _eog_findpeaks_neurokit_filterblinks(
     """Compare each detected event to blink template and reject it if too different."""
     # Get epoch around each blink
     events = epochs_create(
-        eog_cleaned, peaks, sampling_rate=sampling_rate, epochs_start=-0.4, epochs_end=0.6
+        eog_cleaned,
+        peaks,
+        sampling_rate=sampling_rate,
+        epochs_start=-0.4,
+        epochs_end=0.6,
     )
     events = epochs_to_array(events)  # Convert to 2D array
 

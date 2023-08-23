@@ -4,13 +4,15 @@ import pandas as pd
 from ..misc.report import create_report
 from ..signal import signal_sanitize
 from .eda_clean import eda_clean
+from .eda_methods import eda_methods
 from .eda_peaks import eda_peaks
 from .eda_phasic import eda_phasic
-from .eda_methods import eda_methods
 from .eda_plot import eda_plot
 
 
-def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, **kwargs):
+def eda_process(
+    eda_signal, sampling_rate=1000, method="neurokit", report=None, **kwargs
+):
     """**Process Electrodermal Activity (EDA)**
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
@@ -79,8 +81,9 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
 
       eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
       signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
+
       @savefig p_eda_process.png scale=100%
-      nk.eda_plot(signals)
+      nk.eda_plot(signals, info)
       @suppress
       plt.close()
 
@@ -91,17 +94,21 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
 
     # Preprocess
     # Clean signal
-    eda_cleaned = eda_clean(eda_signal,
-                            sampling_rate=sampling_rate,
-                            method=methods["method_cleaning"],
-                            **methods["kwargs_cleaning"])
+    eda_cleaned = eda_clean(
+        eda_signal,
+        sampling_rate=sampling_rate,
+        method=methods["method_cleaning"],
+        **methods["kwargs_cleaning"],
+    )
     if methods["method_phasic"] is None or methods["method_phasic"].lower() == "none":
         eda_decomposed = pd.DataFrame({"EDA_Phasic": eda_cleaned})
     else:
-        eda_decomposed = eda_phasic(eda_cleaned,
-                                    sampling_rate=sampling_rate,
-                                    method=methods["method_phasic"],
-                                    **methods["kwargs_phasic"])
+        eda_decomposed = eda_phasic(
+            eda_cleaned,
+            sampling_rate=sampling_rate,
+            method=methods["method_phasic"],
+            **methods["kwargs_phasic"],
+        )
 
     # Find peaks
     peak_signal, info = eda_peaks(
@@ -121,7 +128,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
     if report is not None:
         # Generate report containing description and figures of processing
         if ".html" in str(report):
-            fig = eda_plot(signals, sampling_rate=sampling_rate, static=False)
+            fig = eda_plot(signals, info, static=False)
         else:
             fig = None
         create_report(file=report, signals=signals, info=methods, fig=fig)

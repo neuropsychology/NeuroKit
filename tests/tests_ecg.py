@@ -50,27 +50,33 @@ def test_ecg_clean():
 
 
 def test_ecg_peaks():
-    sampling_rate = 1000
-    noise = 0.15
+    sampling_rate = 200
+    noise = 1
 
     ecg = nk.ecg_simulate(
         duration=120, sampling_rate=sampling_rate, noise=noise, random_state=42
     )
-    ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="neurokit")
+    ecg[3000:3600] = 0
 
     # Test without request to correct artifacts.
     signals, _ = nk.ecg_peaks(
-        ecg_cleaned_nk, correct_artifacts=False, method="neurokit"
+        ecg, sampling_rate=sampling_rate, method="neurokit", correct_artifacts=False
     )
 
-    assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139, atol=1)
+    assert signals.shape == (24000, 1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 137, atol=1)
 
     # Test with request to correct artifacts.
-    signals, _ = nk.ecg_peaks(ecg_cleaned_nk, correct_artifacts=True, method="neurokit")
+    signals, info = nk.ecg_peaks(
+        ecg,
+        sampling_rate=sampling_rate,
+        correct_artifacts=True,
+        method="neurokit",
+    )
 
-    assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139, atol=1)
+    assert signals.shape == (24000, 1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 136, atol=1)
+    assert 17 in info["ECG_fixpeaks_longshort"]
 
 
 def test_ecg_process():
@@ -84,10 +90,10 @@ def test_ecg_process():
 def test_ecg_plot():
     ecg = nk.ecg_simulate(duration=60, heart_rate=70, noise=0.05, random_state=5)
 
-    ecg_summary, _ = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
+    ecg_summary, info = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
 
     # Plot data over seconds.
-    nk.ecg_plot(ecg_summary, sampling_rate=1000)
+    nk.ecg_plot(ecg_summary, info)
     fig = plt.gcf()  # Extract the latest figure.
     assert len(fig.axes) == 3
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"

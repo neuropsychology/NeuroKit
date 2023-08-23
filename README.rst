@@ -248,7 +248,7 @@ Electrodermal Activity (EDA/GSR)
     signals, info = nk.eda_process(eda, sampling_rate=250)
 
     # Visualise the processing
-    nk.eda_plot(signals, sampling_rate=250)
+    nk.eda_plot(signals, info)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png
         :target: https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html
@@ -266,7 +266,7 @@ Cardiac activity (ECG)
     signals, info = nk.ecg_process(ecg, sampling_rate=250)
 
     # Visualise the processing
-    nk.ecg_plot(signals, sampling_rate=250)
+    nk.ecg_plot(signals, info)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png
@@ -285,29 +285,11 @@ Respiration (RSP)
     signals, info = nk.rsp_process(rsp, sampling_rate=250)
 
     # Visualise the processing
-    nk.rsp_plot(signals, sampling_rate=250)
+    nk.rsp_plot(signals, info)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png
         :target: https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html
-
-
-Electromyography (EMG)
-^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    # Generate 10 seconds of EMG signal (recorded at 250 samples/second)
-    emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
-
-    # Process it
-    signals, info = nk.emg_process(emg, sampling_rate=250)
-
-    # Visualise the processing
-    nk.emg_plot(signals, sampling_rate=250)
-
-
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
 
 
 Photoplethysmography (PPG/BVP)
@@ -322,10 +304,29 @@ Photoplethysmography (PPG/BVP)
     signals, info = nk.ppg_process(ppg, sampling_rate=250)
 
     # Visualize the processing
-    nk.ppg_plot(signals, sampling_rate=250)
+    nk.ppg_plot(signals, info)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png
+
+
+Electromyography (EMG)
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Generate 10 seconds of EMG signal (recorded at 250 samples/second)
+    emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
+
+    # Process it
+    signals, info = nk.emg_process(emg, sampling_rate=250)
+
+    # Visualise the processing
+    nk.emg_plot(signals, info)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
+
 
 
 Electrooculography (EOG)
@@ -340,7 +341,7 @@ Electrooculography (EOG)
     signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     # Plot
-    nk.eog_plot(signals, info, sampling_rate=100)
+    nk.eog_plot(signals, info)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png

@@ -61,7 +61,7 @@ def emg_process(emg_signal, sampling_rate=1000, report=None, **kwargs):
       signals, info = nk.emg_process(emg, sampling_rate=1000)
 
       @savefig p_emg_process1.png scale=100%
-      nk.emg_plot(signals)
+      nk.emg_plot(signals, info)
       @suppress
       plt.close()
 
@@ -98,7 +98,7 @@ def emg_process(emg_signal, sampling_rate=1000, report=None, **kwargs):
     if report is not None:
         # Generate report containing description and figures of processing
         if ".html" in str(report):
-            fig = emg_plot(signals, sampling_rate=sampling_rate, static=False)
+            fig = emg_plot(signals, info, static=False)
         else:
             fig = None
         create_report(file=report, signals=signals, info=methods, fig=fig)

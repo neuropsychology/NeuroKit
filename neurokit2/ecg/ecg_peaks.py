@@ -1,4 +1,8 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 from ..signal import signal_fixpeaks, signal_formatpeaks
+from ..stats import rescale
 from .ecg_findpeaks import ecg_findpeaks
 
 
@@ -7,6 +11,7 @@ def ecg_peaks(
     sampling_rate=1000,
     method="neurokit",
     correct_artifacts=False,
+    show=False,
     **kwargs
 ):
     """**Find R-peaks in an ECG signal**
@@ -59,6 +64,8 @@ def ecg_peaks(
     correct_artifacts : bool
         Whether or not to first identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).
+    show : bool
+        If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.
     **kwargs
         Additional keyword arguments, usually specific for each method.
 
@@ -85,11 +92,10 @@ def ecg_peaks(
 
       import neurokit2 as nk
 
-      ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-      signals, info = nk.ecg_peaks(ecg, correct_artifacts=True)
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=250)
 
       @savefig p_ecg_peaks1.png scale=100%
-      nk.events_plot(info["ECG_R_Peaks"], ecg)
+      signals, info = nk.ecg_peaks(ecg, sampling_rate=250, correct_artifacts=True, show=True)
       @suppress
       plt.close()
 
@@ -98,50 +104,50 @@ def ecg_peaks(
     .. ipython:: python
 
       # neurokit (default)
-      cleaned = nk.ecg_clean(ecg, method="neurokit")
-      _, neurokit = nk.ecg_peaks(cleaned, method="neurokit")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="neurokit")
+      _, neurokit = nk.ecg_peaks(cleaned, sampling_rate=250, method="neurokit")
 
       # pantompkins1985
-      cleaned = nk.ecg_clean(ecg, method="pantompkins1985")
-      _, pantompkins1985 = nk.ecg_peaks(cleaned, method="pantompkins1985")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="pantompkins1985")
+      _, pantompkins1985 = nk.ecg_peaks(cleaned, sampling_rate=250, method="pantompkins1985")
 
       # nabian2018
-      _, nabian2018 = nk.ecg_peaks(ecg, method="nabian2018")
+      _, nabian2018 = nk.ecg_peaks(ecg, sampling_rate=250, method="nabian2018")
 
       # hamilton2002
-      cleaned = nk.ecg_clean(ecg, method="hamilton2002")
-      _, hamilton2002 = nk.ecg_peaks(cleaned, method="hamilton2002")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="hamilton2002")
+      _, hamilton2002 = nk.ecg_peaks(cleaned, sampling_rate=250, method="hamilton2002")
 
       # martinez2004
-      _, martinez2004 = nk.ecg_peaks(ecg, method="martinez2004")
+      _, martinez2004 = nk.ecg_peaks(ecg, sampling_rate=250, method="martinez2004")
 
       # zong2003
-      _, zong2003 = nk.ecg_peaks(ecg, method="zong2003")
+      _, zong2003 = nk.ecg_peaks(ecg, sampling_rate=250, method="zong2003")
 
       # christov2004
-      _, christov2004 = nk.ecg_peaks(cleaned, method="christov2004")
+      _, christov2004 = nk.ecg_peaks(cleaned, sampling_rate=250, method="christov2004")
 
       # gamboa2008
-      cleaned = nk.ecg_clean(ecg, method="gamboa2008")
-      _, gamboa2008 = nk.ecg_peaks(cleaned, method="gamboa2008")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="gamboa2008")
+      _, gamboa2008 = nk.ecg_peaks(cleaned, sampling_rate=250, method="gamboa2008")
 
       # elgendi2010
-      cleaned = nk.ecg_clean(ecg, method="elgendi2010")
-      _, elgendi2010 = nk.ecg_peaks(cleaned, method="elgendi2010")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="elgendi2010")
+      _, elgendi2010 = nk.ecg_peaks(cleaned, sampling_rate=250, method="elgendi2010")
 
       # engzeemod2012
-      cleaned = nk.ecg_clean(ecg, method="engzeemod2012")
-      _, engzeemod2012 = nk.ecg_peaks(cleaned, method="engzeemod2012")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012")
+      _, engzeemod2012 = nk.ecg_peaks(cleaned, sampling_rate=250, method="engzeemod2012")
 
       # kalidas2017
-      cleaned = nk.ecg_clean(ecg, method="kalidas2017")
-      _, kalidas2017 = nk.ecg_peaks(cleaned, method="kalidas2017")
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="kalidas2017")
+      _, kalidas2017 = nk.ecg_peaks(cleaned, sampling_rate=250, method="kalidas2017")
 
       # rodrigues2021
-      _, rodrigues2021 = nk.ecg_peaks(ecg, method="rodrigues2021")
+      _, rodrigues2021 = nk.ecg_peaks(ecg, sampling_rate=250, method="rodrigues2021")
 
       # koka2022
-      _, koka2022 = nk.ecg_peaks(ecg, method="koka2022")
+      _, koka2022 = nk.ecg_peaks(ecg, sampling_rate=250, method="koka2022")
 
       # Collect all R-peak lists by iterating through the result dicts
       rpeaks = [
@@ -177,7 +183,7 @@ def ecg_peaks(
                               noise_amplitude=0.05, noise_frequency=[25, 50],
                               artifacts_amplitude=0.05, artifacts_frequency=50)
       @savefig p_ecg_peaks3.png scale=100%
-      info = nk.ecg_findpeaks(ecg, sampling_rate=500, method="promac", show=True)
+      info = nk.ecg_findpeaks(ecg, sampling_rate=250, method="promac", show=True)
       @suppress
       plt.close()
 
@@ -224,27 +230,6 @@ def ecg_peaks(
     * T. Koka and M. Muma, "Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
       Visibility Graphs," 2022 44th Annual International Conference of the IEEE Engineering in
       Medicine & Biology Society (EMBC), 2022, pp. 121-126.
-
-    * ``nabian2018``
-
-    * ``gamboa2008``
-
-
-    * ``hamilton2002``
-
-    * ``christov2004``
-
-    * ``engzeemod2012``
-
-    * ``elgendi2010``
-
-    * ``kalidas2017``
-
-
-    * ``rodrigues2021``
-
-    * ``koka2022``
-
     * ``promac``
         * **Unpublished.** It runs different methods and derives a probability index using
           convolution. See this discussion for more information on the method:
@@ -254,22 +239,168 @@ def ecg_peaks(
       engineering & technology, 43(3), 173-181.
 
     """
-    rpeaks = ecg_findpeaks(
-        ecg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs
+    # Store info
+    info = {"method_peaks": method.lower(), "method_fixpeaks": "None"}
+
+    # First peak detection
+    info.update(
+        ecg_findpeaks(
+            ecg_cleaned,
+            sampling_rate=sampling_rate,
+            method=info["method_peaks"],
+            **kwargs
+        )
     )
 
+    # Peak correction
     if correct_artifacts:
-        _, rpeaks = signal_fixpeaks(
-            rpeaks, sampling_rate=sampling_rate, iterative=True, method="Kubios"
+        info["ECG_R_Peaks_Uncorrected"] = info["ECG_R_Peaks"].copy()
+
+        fixpeaks, info["ECG_R_Peaks"] = signal_fixpeaks(
+            info["ECG_R_Peaks"], sampling_rate=sampling_rate, method="Kubios"
         )
 
-        rpeaks = {"ECG_R_Peaks": rpeaks}
+        # Add prefix and merge
+        fixpeaks = {"ECG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
+        info.update(fixpeaks)
 
-    instant_peaks = signal_formatpeaks(
-        rpeaks, desired_length=len(ecg_cleaned), peak_indices=rpeaks
+    # Format output
+    signals = signal_formatpeaks(
+        dict(ECG_R_Peaks=info["ECG_R_Peaks"]),  # Takes a dict as input
+        desired_length=len(ecg_cleaned),
+        peak_indices=info["ECG_R_Peaks"],
     )
-    signals = instant_peaks
-    info = rpeaks
+
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
+    if show is True:
+        _ecg_peaks_plot(ecg_cleaned, info, sampling_rate)
+
     return signals, info
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _ecg_peaks_plot(
+    ecg_cleaned,
+    info=None,
+    sampling_rate=1000,
+    raw=None,
+    quality=None,
+    phase=None,
+    ax=None,
+):
+    x_axis = np.linspace(0, len(ecg_cleaned) / sampling_rate, len(ecg_cleaned))
+
+    # Prepare plot
+    if ax is None:
+        _, ax = plt.subplots()
+
+    ax.set_xlabel("Time (seconds)")
+    ax.set_title("ECG signal and peaks")
+
+    # Quality Area -------------------------------------------------------------
+    if quality is not None:
+        quality = rescale(
+            quality,
+            to=[
+                np.min([np.min(raw), np.min(ecg_cleaned)]),
+                np.max([np.max(raw), np.max(ecg_cleaned)]),
+            ],
+        )
+        minimum_line = np.full(len(x_axis), quality.min())
+
+        # Plot quality area first
+        ax.fill_between(
+            x_axis,
+            minimum_line,
+            quality,
+            alpha=0.12,
+            zorder=0,
+            interpolate=True,
+            facecolor="#4CAF50",
+            label="Signal quality",
+        )
+
+    # Raw Signal ---------------------------------------------------------------
+    if raw is not None:
+        ax.plot(x_axis, raw, color="#B0BEC5", label="Raw signal", zorder=1)
+        label_clean = "Cleaned signal"
+    else:
+        label_clean = "Signal"
+
+    # Peaks -------------------------------------------------------------------
+    ax.scatter(
+        x_axis[info["ECG_R_Peaks"]],
+        ecg_cleaned[info["ECG_R_Peaks"]],
+        color="#FFC107",
+        label="R-peaks",
+        zorder=2,
+    )
+
+    # TODO
+    # # Artifacts ---------------------------------------------------------------
+    # def _plot_artifact(artifact, color, label, ax):
+    #     if artifact in info.keys() and len(info[artifact]) > 0:
+    #         ax.scatter(
+    #             x_axis[info[artifact]],
+    #             ecg_cleaned[info[artifact]],
+    #             color=color,
+    #             label=label,
+    #             marker="x",
+    #             zorder=2,
+    #         )
+
+    # _plot_artifact("ECG_fixpeaks_missed", "#1E88E5", "Missed Peaks", ax)
+    # _plot_artifact("ECG_fixpeaks_longshort", "#1E88E5", "Long/Short", ax)
+
+    # Clean Signal ------------------------------------------------------------
+    if phase is not None:
+        mask = (phase == 0) | (np.isnan(phase))
+        diastole = ecg_cleaned.copy()
+        diastole[~mask] = np.nan
+
+        # Create overlap to avoid interuptions in signal
+        mask[np.where(np.diff(mask))[0] + 1] = True
+        systole = ecg_cleaned.copy()
+        systole[mask] = np.nan
+
+        ax.plot(
+            x_axis,
+            diastole,
+            color="#B71C1C",
+            label=label_clean,
+            zorder=3,
+            linewidth=1,
+        )
+        ax.plot(
+            x_axis,
+            systole,
+            color="#F44336",
+            zorder=3,
+            linewidth=1,
+        )
+    else:
+        ax.plot(
+            x_axis,
+            ecg_cleaned,
+            color="#F44336",
+            label=label_clean,
+            zorder=3,
+            linewidth=1,
+        )
+
+    # Optimize legend
+    if raw is not None:
+        handles, labels = ax.get_legend_handles_labels()
+        order = [2, 0, 1, 3]
+        ax.legend(
+            [handles[idx] for idx in order],
+            [labels[idx] for idx in order],
+            loc="upper right",
+        )
+    else:
+        ax.legend(loc="upper right")
+
+    return ax

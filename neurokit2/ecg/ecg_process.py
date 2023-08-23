@@ -84,7 +84,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
       # Visualize
       @savefig p_ecg_process.png scale=100%
-      nk.ecg_plot(signals)
+      nk.ecg_plot(signals, info)
       @suppress
       plt.close()
 
@@ -95,29 +95,50 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
 
     # Detect R-peaks
-    instant_peaks, rpeaks = ecg_peaks(
-        ecg_cleaned=ecg_cleaned, sampling_rate=sampling_rate, method=method, correct_artifacts=True
+    instant_peaks, info = ecg_peaks(
+        ecg_cleaned=ecg_cleaned,
+        sampling_rate=sampling_rate,
+        method=method,
+        correct_artifacts=True,
     )
 
     # Calculate heart rate
-    rate = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned))
+    rate = signal_rate(
+        info, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned)
+    )
 
     # Assess signal quality
-    quality = ecg_quality(ecg_cleaned, rpeaks=rpeaks["ECG_R_Peaks"], sampling_rate=sampling_rate)
+    quality = ecg_quality(
+        ecg_cleaned, rpeaks=info["ECG_R_Peaks"], sampling_rate=sampling_rate
+    )
 
     # Merge signals in a DataFrame
-    signals = pd.DataFrame({"ECG_Raw": ecg_signal, "ECG_Clean": ecg_cleaned, "ECG_Rate": rate, "ECG_Quality": quality})
+    signals = pd.DataFrame(
+        {
+            "ECG_Raw": ecg_signal,
+            "ECG_Clean": ecg_cleaned,
+            "ECG_Rate": rate,
+            "ECG_Quality": quality,
+        }
+    )
 
     # Delineate QRS complex
     delineate_signal, delineate_info = ecg_delineate(
-        ecg_cleaned=ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate
+        ecg_cleaned=ecg_cleaned, rpeaks=info["ECG_R_Peaks"], sampling_rate=sampling_rate
     )
+    info.update(delineate_info)  # Merge waves indices dict with info dict
 
     # Determine cardiac phases
-    cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned, rpeaks=rpeaks, delineate_info=delineate_info)
+    cardiac_phase = ecg_phase(
+        ecg_cleaned=ecg_cleaned,
+        rpeaks=info["ECG_R_Peaks"],
+        delineate_info=delineate_info,
+    )
 
     # Add additional information to signals DataFrame
-    signals = pd.concat([signals, instant_peaks, delineate_signal, cardiac_phase], axis=1)
+    signals = pd.concat(
+        [signals, instant_peaks, delineate_signal, cardiac_phase], axis=1
+    )
 
     # return signals DataFrame and R-peak locations
-    return signals, rpeaks
+    return signals, info

@@ -159,10 +159,10 @@ def test_eda_plot():
         drift=0.01,
         random_state=42,
     )
-    eda_summary, _ = nk.eda_process(eda, sampling_rate=sampling_rate)
+    eda_summary, info = nk.eda_process(eda, sampling_rate=sampling_rate)
 
     # Plot data over samples.
-    nk.eda_plot(eda_summary)
+    nk.eda_plot(eda_summary, info)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
@@ -173,17 +173,11 @@ def test_eda_plot():
     ]
     for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
-    assert fig.get_axes()[2].get_xlabel() == "Samples"
+    assert fig.get_axes()[2].get_xlabel() == "Time (seconds)"
     np.testing.assert_array_equal(
         fig.axes[0].get_xticks(), fig.axes[1].get_xticks(), fig.axes[2].get_xticks()
     )
     plt.close(fig)
-
-    # Plot data over seconds.
-    nk.eda_plot(eda_summary, sampling_rate=sampling_rate)
-    # This will identify the latest figure.
-    fig = plt.gcf()
-    assert fig.get_axes()[2].get_xlabel() == "Seconds"
 
 
 def test_eda_eventrelated():

@@ -13,7 +13,6 @@ import neurokit2 as nk
 
 
 def test_emg_simulate():
-
     emg1 = nk.emg_simulate(duration=20, length=5000, burst_number=1)
     assert len(emg1) == 5000
 
@@ -30,7 +29,6 @@ def test_emg_simulate():
 
 
 def test_emg_activation():
-
     emg = nk.emg_simulate(duration=10, burst_number=3)
     cleaned = nk.emg_clean(emg)
     emg_amplitude = nk.emg_amplitude(cleaned)
@@ -44,7 +42,6 @@ def test_emg_activation():
 
 
 def test_emg_clean():
-
     sampling_rate = 1000
 
     emg = nk.emg_simulate(duration=20, sampling_rate=sampling_rate)
@@ -66,29 +63,24 @@ def test_emg_clean():
 
 
 def test_emg_plot():
-
     sampling_rate = 1000
 
     emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
-    emg_summary, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
+    emg_summary, info = nk.emg_process(emg, sampling_rate=sampling_rate)
 
     # Plot data over samples.
-    fig = nk.emg_plot(emg_summary)
+    nk.emg_plot(emg_summary, info)
+    fig = plt.gcf()
     assert len(fig.axes) == 2
     titles = ["Raw and Cleaned Signal", "Muscle Activation"]
-    for (ax, title) in zip(fig.get_axes(), titles):
+    for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
-    assert fig.get_axes()[1].get_xlabel() == "Samples"
+    assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
 
-    # Plot data over time.
-    fig = nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
-    assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
-
 
 def test_emg_eventrelated():
-
     emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
     emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     epochs = nk.epochs_create(
@@ -138,7 +130,6 @@ def test_emg_eventrelated():
 
 
 def test_emg_intervalrelated():
-
     emg = nk.emg_simulate(duration=40, sampling_rate=1000, burst_number=3)
     emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     columns = ["EMG_Activation_N", "EMG_Amplitude_Mean"]
@@ -163,16 +154,18 @@ def test_emg_intervalrelated():
     )
     assert features_dict.shape[0] == 2  # Number of rows
 
+
 @pytest.mark.parametrize(
     "method_cleaning, method_activation, threshold",
-    [("none", "threshold", "default"),
-     ("biosppy", "pelt", 0.5),
-     ("biosppy", "mixture", 0.05),
-     ("biosppy", "biosppy", "default"),
-     ("biosppy", "silva", "default")],
+    [
+        ("none", "threshold", "default"),
+        ("biosppy", "pelt", 0.5),
+        ("biosppy", "mixture", 0.05),
+        ("biosppy", "biosppy", "default"),
+        ("biosppy", "silva", "default"),
+    ],
 )
 def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
-
     sampling_rate = 250
 
     emg = nk.emg_simulate(
@@ -191,7 +184,7 @@ def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
         report=str(p),
         method_cleaning=method_cleaning,
         method_activation=method_activation,
-        threshold=threshold
+        threshold=threshold,
     )
     assert p.is_file()
     assert "EMG_Activity" in signals.columns

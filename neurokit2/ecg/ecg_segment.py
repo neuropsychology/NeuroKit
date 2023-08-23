@@ -66,11 +66,14 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
         epochs_end=epochs_end,
     )
 
-    # pad last heartbeat with nan so that segments are equal length
+    # Pad last heartbeats with nan so that segments are equal length
     last_heartbeat_key = str(np.max(np.array(list(heartbeats.keys()), dtype=int)))
     after_last_index = heartbeats[last_heartbeat_key]["Index"] < len(ecg_cleaned)
-    heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
+    for col in ["Signal", "ECG_Raw", "ECG_Clean"]:
+        if col in heartbeats[last_heartbeat_key].columns:
+            heartbeats[last_heartbeat_key].loc[after_last_index, col] = np.nan
 
+    # Plot or return plot axis (feature meant to be used internally in ecg_plot)
     if show is not False:
         ax = _ecg_segment_plot(heartbeats, heartrate=average_hr, ytitle="ECG", **kwargs)
     if show == "return":
@@ -84,13 +87,17 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
 # =============================================================================
 def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax=None):
     df = epochs_to_df(heartbeats)
+
+    # Get main signal column name
+    col = [c for c in ["Signal", "ECG_Raw", "ECG_Clean"] if c in df.columns][-1]
+
     # Average heartbeat
-    mean_heartbeat = df.drop(["Index", "Label"], axis=1).groupby("Time").mean()
-    df_pivoted = df.pivot(index="Time", columns="Label", values="Signal")
+    mean_heartbeat = df.groupby("Time")[[col]].mean()
+    df_pivoted = df.pivot(index="Time", columns="Label", values=col)
 
     # Prepare plot
     if ax is None:
-        fig, ax = plt.subplots()
+        _, ax = plt.subplots()
 
     ax.set_title(f"Individual Heart Beats (average heart rate: {heartrate:0.1f} bpm)")
     ax.set_xlabel("Time (seconds)")
@@ -101,19 +108,49 @@ def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax
 
     # Plot average heartbeat
     ax.plot(
-        mean_heartbeat.index, mean_heartbeat, color=color, linewidth=10, label="Average"
+        mean_heartbeat.index,
+        mean_heartbeat,
+        color=color,
+        linewidth=7,
+        label="Average beat shape",
+        zorder=1,
     )
 
-    # Plot all heartbeats
-    alpha = 1 / np.log2(1 + df_pivoted.shape[1])  # alpha decreases with more heartbeats
-    ax.plot(df_pivoted, color="grey", linewidth=alpha)
-    ax.legend(loc="upper right")
+    # Alpha of individual beats decreases with more heartbeats
+    alpha = 1 / np.log1p(np.log2(1 + df_pivoted.shape[1]))
 
+    # Plot all heartbeats
+    ax.plot(df_pivoted, color="grey", linewidth=alpha, zorder=2)
+
+    # Plot individual waves
+    for wave in [
+        ("P", "#3949AB"),
+        ("Q", "#1E88E5"),
+        ("S", "#039BE5"),
+        ("T", "#00ACC1"),
+    ]:
+        wave_col = f"ECG_{wave[0]}_Peaks"
+        if wave_col in df.columns:
+            ax.scatter(
+                df["Time"][df[wave_col] == 1],
+                df[col][df[wave_col] == 1],
+                color=wave[1],
+                marker="+",
+                label=f"{wave[0]}-waves",
+                zorder=3,
+            )
+
+    # Legend
+    ax.legend(loc="upper right")
     return ax
 
 
 def _ecg_segment_window(
-    heart_rate=None, rpeaks=None, sampling_rate=1000, desired_length=None
+    heart_rate=None,
+    rpeaks=None,
+    sampling_rate=1000,
+    desired_length=None,
+    ratio_pre=0.35,
 ):
     # Extract heart rate
     if heart_rate is not None:
@@ -130,7 +167,7 @@ def _ecg_segment_window(
     window_size = 60 / heart_rate  # Beats per second
 
     # Window
-    epochs_start = 1 / 3 * window_size
-    epochs_end = 2 / 3 * window_size
+    epochs_start = ratio_pre * window_size
+    epochs_end = (1 - ratio_pre) * window_size
 
     return -epochs_start, epochs_end, heart_rate
