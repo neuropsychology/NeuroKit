@@ -50,9 +50,15 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
       import neurokit2 as nk
 
       # Get data
-      eog_signal = nk.data('eog_100hz')
+      eog = nk.data('eog_100hz')
 
-      signals, info = nk.eog_process(eog_signal, sampling_rate=100)
+      eog_signals, info = nk.eog_process(eog, sampling_rate=100)
+
+      # Plot
+      @savefig p_eog_process.png scale=100%
+      nk.eog_plot(eog_signals, info)
+      @suppress
+      plt.close()
 
     References
     ----------
@@ -71,17 +77,24 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
     peaks = eog_findpeaks(eog_cleaned, sampling_rate=sampling_rate, **kwargs)
 
     info = {"EOG_Blinks": peaks}
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark (potential) blink events
     signal_blinks = _signal_from_indices(peaks, desired_length=len(eog_cleaned))
 
     # Rate computation
-    rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(eog_cleaned))
+    rate = signal_rate(
+        peaks, sampling_rate=sampling_rate, desired_length=len(eog_cleaned)
+    )
 
     # Prepare output
     signals = pd.DataFrame(
-        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned, "EOG_Blinks": signal_blinks, "EOG_Rate": rate}
+        {
+            "EOG_Raw": eog_signal,
+            "EOG_Clean": eog_cleaned,
+            "EOG_Blinks": signal_blinks,
+            "EOG_Rate": rate,
+        }
     )
 
     return signals, info

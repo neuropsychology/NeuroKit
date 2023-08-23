@@ -88,7 +88,7 @@ def rsp_process(
       signals, info = nk.rsp_process(rsp, sampling_rate=1000, report="text")
 
       @savefig p_rsp_process_1.png scale=100%
-      fig = nk.rsp_plot(signals, sampling_rate=1000)
+      fig = nk.rsp_plot(signals, info)
       @suppress
       plt.close()
 

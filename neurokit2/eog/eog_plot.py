@@ -48,7 +48,7 @@ def eog_plot(eog_signals, info=None):
       eog_signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
       # Plot
-      @savefig p.eog_plot.png scale=100%
+      @savefig p_eog_plot.png scale=100%
       nk.eog_plot(eog_signals, info)
       @suppress
       plt.close()
