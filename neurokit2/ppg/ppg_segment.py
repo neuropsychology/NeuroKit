@@ -72,7 +72,7 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
 
     if show is not False:
         ax = _ecg_segment_plot(
-            heartbeats, heartrate=average_hr, ytitle="PPG", color="#9C27B0", **kwargs
+            heartbeats, heartrate=average_hr, ytitle="PPG", color="#E91E63", **kwargs
         )
     if show == "return":
         return ax

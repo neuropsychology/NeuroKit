@@ -135,7 +135,7 @@ def _ppg_peaks_plot(
     ax.plot(
         x_axis,
         ppg_cleaned,
-        color="#9C27B0",
+        color="#E91E63",
         label=label_clean,
         zorder=3,
         linewidth=1,
